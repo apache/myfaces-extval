@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+    <artifactId>myfaces-extval-cross-validation</artifactId>
+
+    <name>MyFaces Extensions-Validator Validation-Modules Crossval</name>
+    <version>${build.version}</version>
+
+    <parent>
+        <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+        <artifactId>validation-modules-project</artifactId>
+        <version>${build.version}</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator</groupId>
+            <artifactId>myfaces-extval-core</artifactId>
+            <version>${build.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+            <artifactId>myfaces-extval-base-validation</artifactId>
+            <version>${build.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/config</directory>
+                <includes>
+                    <include>**/*xml</include>
+                </includes>
+                <targetPath>/META-INF</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>LICENSE.txt</include>
+                    <include>NOTICE.txt</include>
+                </includes>
+                <targetPath>/META-INF</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
