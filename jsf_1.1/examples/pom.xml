@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>pom</packaging>
+
+    <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
+    <artifactId>examples-project</artifactId>
+
+    <name>MyFaces Extensions-Validator examples project</name>
+    <version>${build.version}</version>
+
+    <parent>
+        <groupId>org.apache.myfaces.extensions.validator</groupId>
+        <artifactId>validator-project</artifactId>
+        <version>${build.version}</version>
+    </parent>
+
+    <modules>
+        <module>hello_world</module>
+        <module>hello_jpa</module>
+        <module>feature-set_01</module>
+    </modules>
+
+    <properties>
+        <trinidad.version>1.0.5</trinidad.version>
+    </properties>
+
+</project>
