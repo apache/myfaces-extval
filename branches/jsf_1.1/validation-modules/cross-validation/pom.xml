@@ -23,12 +23,6 @@
             <version>${build.version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
-            <artifactId>myfaces-extval-base-validation</artifactId>
-            <version>${build.version}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
