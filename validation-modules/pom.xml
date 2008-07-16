@@ -18,8 +18,8 @@
     </parent>
 
     <modules>
-        <module>base-validation</module>
-        <module>cross-validation</module>
+        <module>property-validation</module>
+        <!--module>bean-validation</module-->
     </modules>
 
     <dependencies>

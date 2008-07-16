@@ -5,9 +5,9 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
-    <artifactId>myfaces-extval-cross-validation</artifactId>
+    <artifactId>myfaces-extval-property-validation</artifactId>
 
-    <name>MyFaces Extensions-Validator Validation-Modules Crossval</name>
+    <name>MyFaces Extensions-Validator Property-Validation-Module</name>
     <version>${build.version}</version>
 
     <parent>
@@ -21,6 +21,12 @@
             <groupId>org.apache.myfaces.extensions.validator</groupId>
             <artifactId>myfaces-extval-core</artifactId>
             <version>${build.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
