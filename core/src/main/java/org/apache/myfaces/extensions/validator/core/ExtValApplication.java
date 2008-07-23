@@ -64,11 +64,11 @@ public class ExtValApplication extends Application {
     }
 
     private UIComponent tryToSetExtValValidatingConverter(UIComponent component) {
+        //in order to access the wrapped application and and support other Application wrappers
+        ExtValUtils.setOriginalApplication(wrapped);
+
         //if no converter is used add sev-en converter - so it isn't necessary to add sev-en converter manually within the page
         if (component instanceof EditableValueHolder) {
-            //in order to access the wrapped application and and support other Application wrappers
-            ExtValUtils.setOriginalApplication(wrapped);
-
             ((EditableValueHolder) component).setConverter(new ExtValConverter());
         }
         return component;
