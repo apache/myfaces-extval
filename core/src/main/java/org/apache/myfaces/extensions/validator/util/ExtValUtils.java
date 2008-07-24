@@ -187,11 +187,16 @@ public class ExtValUtils {
             String key;
             Converter converter;
             Converter converterOfComponent;
-            UIComponent component;
+            UIComponent component = null;
             while (current.hasNext()) {
                 key = (String) current.next();
                 converter = (Converter) componentConverterMapping.get(key);
-                component = viewRoot.findComponent(key);
+
+                try {
+                    component = viewRoot.findComponent(key);
+                } catch (IllegalArgumentException e) {
+                    //do nothing - it's just a ri bug with complex components - resolveComponentInComplexComponent will return the correct component
+                }
 
                 if (component == null) {
                     component = resolveComponentInComplexComponent(viewRoot, component, key);
