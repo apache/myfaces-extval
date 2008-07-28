@@ -110,23 +110,47 @@ public class ExtValUtils {
 
     /*
      * workaround: mapping clientId -> proxy -> after restore view: find component + set converter of the mapping
-     * TODO: find a better solution
+     * TODO: find a better solution - multi-window-mode
      */
     public static final String PROXY_MAPPING_KEY = VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY + ":proxyMapping";
 
     public static Map<String, Object> getOrInitProxyMapping() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         //session scope is just the worst case - cleanup after restore view
-        Map sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+        Map sessionMap = facesContext.getExternalContext().getSessionMap();
 
-        if (!sessionMap.containsKey(PROXY_MAPPING_KEY)) {
-            resetProxyMapping();
+        String viewId = facesContext.getViewRoot().getViewId();
+
+        if (!sessionMap.containsKey(PROXY_MAPPING_KEY) || !((Map)sessionMap.get(PROXY_MAPPING_KEY)).containsKey(viewId)) {
+            resetProxyMapping(viewId);
         }
 
-        return (Map<String, Object>) sessionMap.get(PROXY_MAPPING_KEY);
+        return (Map<String, Object>) ((Map)sessionMap.get(PROXY_MAPPING_KEY)).get(viewId);
     }
 
-    public static void resetProxyMapping() {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(PROXY_MAPPING_KEY, new HashMap<String, Object>());
+    public static void resetProxyMapping(String viewId) {
+        Map sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+
+        Map<String, Map<String, Object>> storage;
+
+        if(sessionMap.containsKey(PROXY_MAPPING_KEY)) {
+            storage = (Map)sessionMap.get(PROXY_MAPPING_KEY);
+        } else {
+            storage = new HashMap<String, Map<String, Object>>();
+        }
+
+        Map<String, Object> map;
+        if(!storage.containsKey(viewId)) {
+            map = new HashMap<String, Object>();
+        } else {
+            //TODO cleanup session
+            map = storage.get(viewId);
+            //don't use the line below - a popup/new window would delete the mapping
+            //storage = new HashMap<String, Map<String, Object>>();
+        }
+        storage.put(viewId, map);
+
+        sessionMap.put(PROXY_MAPPING_KEY, storage);
     }
 
     public static final String PROCESSED_CONVERTER_COUNT_KEY = VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY + ":processedConverterCount";
@@ -220,7 +244,7 @@ public class ExtValUtils {
         }
 
         if (ExtValUtils.useProxyMapping()) {
-            ExtValUtils.resetProxyMapping();
+            ExtValUtils.resetProxyMapping(FacesContext.getCurrentInstance().getViewRoot().getViewId());
         }
     }
 
