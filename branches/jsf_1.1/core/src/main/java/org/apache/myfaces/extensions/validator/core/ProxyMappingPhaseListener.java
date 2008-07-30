@@ -27,7 +27,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.EditableValueHolder;
+import javax.faces.component.ValueHolder;
+import javax.faces.convert.Converter;
 import java.util.List;
 
 /**
@@ -90,9 +91,17 @@ public class ProxyMappingPhaseListener implements PhaseListener {
      * @param uiComponent reference to the current component
      */
     private void storeComponentConverterMappingForProxies(FacesContext facesContext, UIComponent uiComponent) {
+        //TODO use the following after the impl. of a better multi-window-mode solution
+        //if(!uiComponent.isRendered()) {
+        //    return;
+        //}
+
         for(UIComponent child : (List<UIComponent>)uiComponent.getChildren()) {
-            if(child instanceof EditableValueHolder) {
-                ExtValUtils.getOrInitProxyMapping().put(child.getClientId(facesContext), ((EditableValueHolder)child).getConverter());
+            if(child instanceof ValueHolder) {
+                Converter converter = ((ValueHolder)child).getConverter();
+                if(converter != null && converter.getClass().getName().contains("$$")) {
+                    ExtValUtils.getOrInitProxyMapping().put(child.getClientId(facesContext), child);
+                }
             }
             storeComponentConverterMappingForProxies(facesContext, child);
         }
