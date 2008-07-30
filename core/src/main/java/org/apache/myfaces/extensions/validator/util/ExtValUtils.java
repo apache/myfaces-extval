@@ -142,13 +142,8 @@ public class ExtValUtils {
         Map<String, Object> map;
         if(!storage.containsKey(viewId)) {
             map = new HashMap<String, Object>();
-        } else {
-            //TODO cleanup session
-            map = storage.get(viewId);
-            //don't use the line below - a popup/new window would delete the mapping
-            //storage = new HashMap<String, Map<String, Object>>();
+            storage.put(viewId, map);
         }
-        storage.put(viewId, map);
 
         sessionMap.put(PROXY_MAPPING_KEY, storage);
     }
