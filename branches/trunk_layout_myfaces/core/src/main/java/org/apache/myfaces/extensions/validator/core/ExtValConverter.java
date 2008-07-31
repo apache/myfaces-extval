@@ -1,20 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ * 
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
  */
 package org.apache.myfaces.extensions.validator.core;
 
@@ -43,13 +43,17 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class ExtValConverter implements Converter, MethodInterceptor, Serializable {
+public class ExtValConverter implements Converter, MethodInterceptor,
+        Serializable
+{
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public static Converter newInstance(Converter wrappedConverter) {
+    public static Converter newInstance(Converter wrappedConverter)
+    {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(wrappedConverter.getClass());
-        enhancer.setInterfaces(new Class[]{Converter.class, Serializable.class});
+        enhancer.setInterfaces(new Class[] { Converter.class,
+                Serializable.class });
         enhancer.setCallback(new ExtValConverter());
 
         ExtValUtils.increaseProcessedConverterCount();
@@ -57,107 +61,161 @@ public class ExtValConverter implements Converter, MethodInterceptor, Serializab
         return (Converter) enhancer.create();
     }
 
-    public ExtValConverter() {
+    public ExtValConverter()
+    {
         logger.trace("myfaces-extension-validator converter instantiated");
     }
 
-    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
+    public Object getAsObject(FacesContext facesContext,
+            UIComponent uiComponent, String s)
+    {
 
-        Object convertedObject = getConvertedObject(facesContext, uiComponent, s);
+        Object convertedObject = getConvertedObject(facesContext, uiComponent,
+                s);
 
         processExtValValidation(facesContext, uiComponent, convertedObject);
 
         return convertedObject;
     }
 
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
+    public String getAsString(FacesContext facesContext,
+            UIComponent uiComponent, Object o)
+    {
         //indirect approach for complex components
-        Converter converter = ExtValUtils.tryToCreateOriginalConverter(facesContext, uiComponent);
-        return (converter == null) ? (o == null) ? null : o.toString() : converter.getAsString(facesContext, uiComponent, o);
+        Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+                facesContext, uiComponent);
+        return (converter == null) ? (o == null) ? null : o.toString()
+                : converter.getAsString(facesContext, uiComponent, o);
     }
 
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+    public Object intercept(Object obj, Method method, Object[] args,
+            MethodProxy proxy) throws Throwable
+    {
         Object convertedObject = proxy.invokeSuper(obj, args);
 
-        if (method.getName().equals("getAsObject")) {
-            processExtValValidation((FacesContext) args[0], (UIComponent) args[1], convertedObject);
-        } else if (method.getName().equals("getAsString")) {
-            storeComponentConverterMappingForProxies((FacesContext) args[0], (UIComponent) args[1], (Converter)obj);
+        if (method.getName().equals("getAsObject"))
+        {
+            processExtValValidation((FacesContext) args[0],
+                    (UIComponent) args[1], convertedObject);
+        }
+        else if (method.getName().equals("getAsString"))
+        {
+            storeComponentConverterMappingForProxies((FacesContext) args[0],
+                    (UIComponent) args[1], (Converter) obj);
         }
         return convertedObject;
     }
 
-    protected Object getConvertedObject(FacesContext facesContext, UIComponent uiComponent, String s) {
+    protected Object getConvertedObject(FacesContext facesContext,
+            UIComponent uiComponent, String s)
+    {
         //indirect approach for complex components
         //TODO
-        Converter converter = ExtValUtils.tryToCreateOriginalConverter(facesContext, uiComponent);
-        return (converter != null) ? converter.getAsObject(facesContext, uiComponent, s) : s;
+        Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+                facesContext, uiComponent);
+        return (converter != null) ? converter.getAsObject(facesContext,
+                uiComponent, s) : s;
     }
 
     /*
      * private methods
      */
-    private void createValueBindingConvertedValueMapping(UIComponent uiComponent, Object convertedObject) {
+    private void createValueBindingConvertedValueMapping(
+            UIComponent uiComponent, Object convertedObject)
+    {
         //to support local cross-validation (within the same entity)
-        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = ExtValUtils.getOrInitValueBindingConvertedValueMapping();
+        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = ExtValUtils
+                .getOrInitValueBindingConvertedValueMapping();
 
         String valueBindingExpression;
         ProcessedInformationEntry entry;
 
-        valueBindingExpression = ELUtils.getReliableValueBindingExpression(uiComponent);
+        valueBindingExpression = ELUtils
+                .getReliableValueBindingExpression(uiComponent);
 
-        if (valueBindingExpression == null) {
+        if (valueBindingExpression == null)
+        {
             return;
         }
 
         entry = new ProcessedInformationEntry();
-        entry.setBean(ELUtils.getBeanObject(valueBindingExpression, uiComponent));
+        entry.setBean(ELUtils
+                .getBeanObject(valueBindingExpression, uiComponent));
         entry.setConvertedValue(convertedObject);
         entry.setComponent(uiComponent);
 
         //for local cross-validation
-        if (valueBindingConvertedValueMapping.containsKey(valueBindingExpression) && !valueBindingConvertedValueMapping.get(valueBindingExpression).getBean().equals(entry.getBean())) {
+        if (valueBindingConvertedValueMapping
+                .containsKey(valueBindingExpression)
+                && !valueBindingConvertedValueMapping.get(
+                        valueBindingExpression).getBean().equals(
+                        entry.getBean()))
+        {
             //for the validation within a complex component e.g. a table
             //don't override existing expression (style: #{entry.property}) - make a special mapping
 
-            List<ProcessedInformationEntry> furtherEntries = valueBindingConvertedValueMapping.get(valueBindingExpression).getFurtherEntries();
-            if (furtherEntries == null) {
+            List<ProcessedInformationEntry> furtherEntries = valueBindingConvertedValueMapping
+                    .get(valueBindingExpression).getFurtherEntries();
+            if (furtherEntries == null)
+            {
                 furtherEntries = new ArrayList<ProcessedInformationEntry>();
 
-                valueBindingConvertedValueMapping.get(valueBindingExpression).setFurtherEntries(furtherEntries);
+                valueBindingConvertedValueMapping.get(valueBindingExpression)
+                        .setFurtherEntries(furtherEntries);
             }
 
             furtherEntries.add(entry);
-        } else {
+        }
+        else
+        {
             //for normal validation
-            valueBindingConvertedValueMapping.put(valueBindingExpression, entry);
+            valueBindingConvertedValueMapping
+                    .put(valueBindingExpression, entry);
         }
     }
 
-    private void processExtValValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject) {
-        if (uiComponent instanceof EditableValueHolder) {
+    private void processExtValValidation(FacesContext facesContext,
+            UIComponent uiComponent, Object convertedObject)
+    {
+        if (uiComponent instanceof EditableValueHolder)
+        {
             ValidationStrategy validationStrategy;
 
-            AnnotationExtractor annotationExtractor = FactoryUtils.getAnnotationExtractorFactory().create();
-            for (AnnotationEntry entry : annotationExtractor.extractAnnotations(facesContext, uiComponent)) {
-                validationStrategy = FactoryUtils.getValidationStrategyFactory().create(entry.getAnnotation());
+            AnnotationExtractor annotationExtractor = FactoryUtils
+                    .getAnnotationExtractorFactory().create();
+            for (AnnotationEntry entry : annotationExtractor
+                    .extractAnnotations(facesContext, uiComponent))
+            {
+                validationStrategy = FactoryUtils
+                        .getValidationStrategyFactory().create(
+                                entry.getAnnotation());
 
-                if (validationStrategy != null) {
-                    validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
-                } else {
-                    logger.trace("no validation strategy found for " + entry.getAnnotation().annotationType().getName());
+                if (validationStrategy != null)
+                {
+                    validationStrategy.validate(facesContext, uiComponent,
+                            entry, convertedObject);
+                }
+                else
+                {
+                    logger.trace("no validation strategy found for "
+                            + entry.getAnnotation().annotationType().getName());
                 }
             }
 
             //build mapping value-binding -> processed information entry
-            createValueBindingConvertedValueMapping(uiComponent, convertedObject);
+            createValueBindingConvertedValueMapping(uiComponent,
+                    convertedObject);
         }
     }
 
-
-    private void storeComponentConverterMappingForProxies(FacesContext facesContext, UIComponent uiComponent, Converter converter) {
-        if (ExtValUtils.useProxyMapping()) {
-            ExtValUtils.getOrInitProxyMapping().put(uiComponent.getClientId(facesContext), converter);
+    private void storeComponentConverterMappingForProxies(
+            FacesContext facesContext, UIComponent uiComponent,
+            Converter converter)
+    {
+        if (ExtValUtils.useProxyMapping())
+        {
+            ExtValUtils.getOrInitProxyMapping().put(
+                    uiComponent.getClientId(facesContext), converter);
             ExtValUtils.decreaseProcessedConverterCount();
         }
     }

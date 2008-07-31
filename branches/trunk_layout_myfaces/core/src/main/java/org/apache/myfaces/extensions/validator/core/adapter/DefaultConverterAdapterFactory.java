@@ -1,20 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ * 
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
  */
 package org.apache.myfaces.extensions.validator.core.adapter;
 
@@ -40,11 +40,14 @@ import java.util.Map;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class DefaultConverterAdapterFactory implements ClassMappingFactory<Converter, Converter> {
+public class DefaultConverterAdapterFactory implements
+        ClassMappingFactory<Converter, Converter>
+{
     private static Map<String, String> converterAdapterMapping = new HashMap<String, String>();
     private static List<NameMapper<Converter>> nameMapperList = new ArrayList<NameMapper<Converter>>();
 
-    static {
+    static
+    {
         nameMapperList.add(new CustomConfiguredConverterToAdapterNameMapper());
         nameMapperList.add(new CustomConventionConverterToAdapterNameMapper());
         nameMapperList.add(new DefaultConverterToAdapterNameMapper());
@@ -53,32 +56,42 @@ public class DefaultConverterAdapterFactory implements ClassMappingFactory<Conve
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public Converter create(Converter converter) {
+    public Converter create(Converter converter)
+    {
         String converterName = converter.getClass().getName();
 
-        if (converterAdapterMapping.containsKey(converterName)) {
-            return (Converter) ClassUtils.tryToInstantiateClassForName(converterAdapterMapping.get(converterName));
+        if (converterAdapterMapping.containsKey(converterName))
+        {
+            return (Converter) ClassUtils
+                    .tryToInstantiateClassForName(converterAdapterMapping
+                            .get(converterName));
         }
 
         Converter adapter;
         String adapterName;
 
-        for (NameMapper<Converter> nameMapper : nameMapperList) {
+        for (NameMapper<Converter> nameMapper : nameMapperList)
+        {
             adapterName = nameMapper.createName(converter);
-            adapter = (Converter) ClassUtils.tryToInstantiateClassForName(adapterName);
+            adapter = (Converter) ClassUtils
+                    .tryToInstantiateClassForName(adapterName);
 
-            if (adapter != null) {
+            if (adapter != null)
+            {
                 addMapping(converterName, adapter.getClass().getName());
                 return adapter;
             }
         }
 
-        logger.debug("no adapter found for " + converterName + " -> converter itself is used -> no sev-en support");
+        logger.debug("no adapter found for " + converterName
+                + " -> converter itself is used -> no sev-en support");
         return converter;
     }
 
-    private void addMapping(String sourceConverter, String adapter) {
-        synchronized (DefaultConverterAdapterFactory.class) {
+    private void addMapping(String sourceConverter, String adapter)
+    {
+        synchronized (DefaultConverterAdapterFactory.class)
+        {
             converterAdapterMapping.put(sourceConverter, adapter);
         }
         //TODO logging
