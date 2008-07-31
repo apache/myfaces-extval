@@ -100,7 +100,7 @@ public class ProxyMappingPhaseListener implements PhaseListener {
             if(child instanceof ValueHolder) {
                 Converter converter = ((ValueHolder)child).getConverter();
                 if(converter != null && converter.getClass().getName().contains("$$")) {
-                    ExtValUtils.getOrInitProxyMapping().put(child.getClientId(facesContext), child);
+                    ExtValUtils.getOrInitProxyMapping().put(child.getClientId(facesContext), converter);
                 }
             }
             storeComponentConverterMappingForProxies(facesContext, child);
