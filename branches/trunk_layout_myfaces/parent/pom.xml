@@ -125,7 +125,7 @@
                 - projects may redeclare this plugin and provide different configuration settings
                 - to use different checks (more or less strict than the default).
             -->
-            <!--
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -144,7 +144,7 @@
                     <headerLocation>default/myfaces-header-spaces.txt</headerLocation>
                 </configuration>
             </plugin>
-            -->
+            
 
             <plugin>
                 <!-- Set compile source at 1.5, since the target JSF impl is 1.2 -->
