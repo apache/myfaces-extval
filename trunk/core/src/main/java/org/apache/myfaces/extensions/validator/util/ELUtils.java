@@ -41,36 +41,41 @@ public class ELUtils {
     }
 
     //TODO refactor - problem - static values - jsf 1.2 e.g.: ${value}
-    public static Object getBeanObject(String valueBindingExpression, UIComponent uiComponent) {
+    public static Object getBaseObject(String valueBindingExpression, UIComponent uiComponent) {
         if (valueBindingExpression.lastIndexOf(".") == -1) {
             return uiComponent.getValueExpression("value").getValue(FacesContext.getCurrentInstance().getELContext());
         }
-        return getBeanObject(valueBindingExpression);
+        return getBaseObject(valueBindingExpression);
     }
 
-    public static Object getBeanObject(String valueBindingExpression) {
+    public static Object getBaseObject(String valueBindingExpression) {
         String newExpression = valueBindingExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
 
         return getValueOfExpression(FacesContext.getCurrentInstance(), newExpression);
     }
 
     public static Object getValueOfExpression(FacesContext facesContext, String valueBindingExpression) {
-        return (valueBindingExpression != null) ? facesContext.getApplication().createValueBinding(valueBindingExpression).getValue(facesContext) : null;
+        return (valueBindingExpression != null) ? facesContext.getApplication().evaluateExpressionGet(facesContext, valueBindingExpression, Object.class) : null;
     }
 
     public static boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression) {
-        return facesContext.getApplication().createValueBinding(valueBindingExpression) != null;
+        try {
+            facesContext.getApplication().evaluateExpressionGet(facesContext, valueBindingExpression, Object.class);
+        } catch (Throwable t) {
+            return false;
+        }
+        return true;
     }
 
     public static String getReliableValueBindingExpression(UIComponent uiComponent) {
         String valueBindingExpression = getValueBindingExpression(uiComponent);
 
         String baseExpression = valueBindingExpression;
-        if(baseExpression.contains(".")) {
+        if (baseExpression.contains(".")) {
             baseExpression = baseExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
         }
 
-        if(getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), baseExpression) == null) {
+        if (getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), baseExpression) == null) {
             valueBindingExpression = FaceletsTaglibExpressionUtils.tryToCreateValueBindingForFaceletsBinding(uiComponent);
         }
         return valueBindingExpression;
