@@ -111,7 +111,7 @@ public class ExtValConverter implements Converter, MethodInterceptor, Serializab
         }
 
         entry = new ProcessedInformationEntry();
-        entry.setBean(ELUtils.getBeanObject(valueBindingExpression, uiComponent));
+        entry.setBean(ELUtils.getBaseObject(valueBindingExpression, uiComponent));
         entry.setConvertedValue(convertedObject);
         entry.setComponent(uiComponent);
 
