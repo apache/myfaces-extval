@@ -40,11 +40,14 @@ public class ELUtils {
     }
 
     //TODO refactor - problem - static values - jsf 1.2 e.g.: ${value}
-    public static Object getBeanObject(String valueBindingExpression, UIComponent uiComponent) {
-        return getBeanObject(valueBindingExpression);
+    public static Object getBaseObject(String valueBindingExpression, UIComponent uiComponent) {
+        if (valueBindingExpression.lastIndexOf(".") == -1) {
+            return uiComponent.getValueBinding("value").getValue(FacesContext.getCurrentInstance());
+        }
+        return getBaseObject(valueBindingExpression);
     }
 
-    public static Object getBeanObject(String valueBindingExpression) {
+    public static Object getBaseObject(String valueBindingExpression) {
         String newExpression = valueBindingExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
 
         return getValueOfExpression(FacesContext.getCurrentInstance(), newExpression);
