@@ -275,7 +275,7 @@ public class ExtValUtils {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String clientId = component.getClientId(facesContext);
 
-        if (clientId.substring(clientId.lastIndexOf(":")).endsWith(endOfKey)) {
+        if (clientId.contains(":") && clientId.substring(clientId.lastIndexOf(":")).endsWith(endOfKey)) {
             return component;
         }
 
