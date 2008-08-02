@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ELUtils;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -33,6 +34,9 @@ import java.util.ResourceBundle;
 public abstract class AbstractValidationErrorMessageResolver implements MessageResolver {
     private static String deactivateDefaultConvention = WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION;
     private static ResourceBundle defaultBundle = null;
+    private String messageBundleBaseName;
+    //with jsf 1.1 only available if there is a custom bean
+    private String messageBundleVarName;
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -41,7 +45,37 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             return null;
         }
 
-        String customMessage = tryToUseMessageBundleConvention(key, locale);
+        ResourceBundle resourceBundle = null;
+        String customMessage = null;
+
+        //only in case of a ValidationErrorMessageResolver which is configured as bean
+        if(this.messageBundleBaseName != null) {
+            resourceBundle = ResourceBundle.getBundle(this.messageBundleBaseName, locale);
+            if(resourceBundle != null) {
+                customMessage = resourceBundle.getString(key);
+            } else {
+                logger.warn("message bundle " + this.messageBundleBaseName + " not found");
+            }
+        }
+
+        //only in case of a ValidationErrorMessageResolver which is configured as bean
+        if(this.messageBundleVarName != null && customMessage == null) {
+            resourceBundle = (ResourceBundle)ELUtils.getBean(messageBundleVarName);
+            if(resourceBundle != null) {
+                customMessage = resourceBundle.getString(key);
+            } else {
+                logger.warn("message bundle var name " + this.messageBundleVarName + " not found");
+            }
+        }
+
+        if (customMessage != null) {
+            return customMessage;
+        }
+
+        /*
+         * try to use the convention for the message bundle
+         */
+        customMessage = tryToUseMessageBundleConvention(key, locale);
 
         if (customMessage != null) {
             return customMessage;
@@ -50,7 +84,6 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         /*
          * no message bundle or message found (with the convention)?
          */
-        ResourceBundle resourceBundle = null;
 
         //try to load custom messages
         try {
@@ -108,5 +141,13 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
     protected String getCustomBaseName() {
         return null;
+    }
+
+    public void setMessageBundleBaseName(String messageBundleBaseName) {
+        this.messageBundleBaseName = messageBundleBaseName;
+    }
+
+    public void setMessageBundleVarName(String messageBundleVarName) {
+        this.messageBundleVarName = messageBundleVarName;
     }
 }
