@@ -61,6 +61,15 @@ public class InformationProviderBean {
     }
 
     /*
+     * postfix used by the SimpleAnnotationToValidationStrategyNameMapper
+     * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies only (not for public validation modules)
+     * so it's fine to customize it
+     */
+    public String getValidationStrategyPostfix() {
+        return "ValidationStrategy";
+    }
+
+    /*
      * name mapper
      */
     public String getCustomValidationStrategyToMsgResolverNameMapper() {
