@@ -57,6 +57,12 @@ public class DefaultMessageResolverFactory implements ClassMappingFactory<Valida
         for (NameMapper<ValidationStrategy> nameMapper : nameMapperList) {
             //build convention (ValidationErrorMessageResolver)
             resolverName = nameMapper.createName(validationStrategy);
+
+            //name wasn't mapped
+            if(validationStrategy.getClass().getName().equals(resolverName)) {
+                continue;
+            }
+
             messageResolver = (MessageResolver) ClassUtils.tryToInstantiateClassForName(resolverName);
 
             if (messageResolver != null) {

@@ -21,12 +21,10 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.CustomConfiguredAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.CustomConventionAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.DefaultAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.SimpleAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.*;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ELUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -46,6 +44,10 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
         nameMapperList.add(new SimpleAnnotationToValidationStrategyNameMapper());
         //TODO if jsr 303 doesn't change:
         //nameMapperList.add(new BeanValidationAnnotationStrategyNameMapper());
+        nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
+        nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(new CustomConventionAnnotationToValidationStrategyNameMapper()));
+        nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(new DefaultAnnotationToValidationStrategyNameMapper()));
+        nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(new SimpleAnnotationToValidationStrategyNameMapper()));
     }
 
     public ValidationStrategy create(Annotation annotation) {
@@ -56,7 +58,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
         String annotationName = annotation.annotationType().getName();
 
         if (annotationStrategyMapping.containsKey(annotationName)) {
-            return (ValidationStrategy) ClassUtils.tryToInstantiateClassForName(annotationStrategyMapping.get(annotationName));
+            return (ValidationStrategy) getValidationStrategyInstance(annotationStrategyMapping.get(annotationName));
         }
 
         ValidationStrategy validationStrategy;
@@ -64,8 +66,12 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
         //null -> use name mappers
         for (NameMapper<Annotation> nameMapper : nameMapperList) {
             strategyName = nameMapper.createName(annotation);
-            //build convention (ValidationStrategy)
-            validationStrategy = (ValidationStrategy) ClassUtils.tryToInstantiateClassForName(strategyName);
+
+            if(strategyName == null) {
+                continue;
+            }
+
+            validationStrategy = getValidationStrategyInstance(strategyName);
 
             if (validationStrategy != null) {
                 addMapping(annotationName, strategyName);
@@ -74,6 +80,14 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
         }
 
         return null;
+    }
+
+    private ValidationStrategy getValidationStrategyInstance(String validationStrategyName) {
+        if(validationStrategyName.startsWith(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING)) {
+            return (ValidationStrategy) ELUtils.getBean(validationStrategyName.substring(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING.length()));
+        } else {
+            return (ValidationStrategy) ClassUtils.tryToInstantiateClassForName(validationStrategyName);
+        }
     }
 
     private void addMapping(String annotationName, String strategyName) {
