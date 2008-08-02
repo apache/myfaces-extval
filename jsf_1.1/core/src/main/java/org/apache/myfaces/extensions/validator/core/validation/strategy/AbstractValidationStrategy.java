@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -31,11 +32,12 @@ import java.util.MissingResourceException;
  */
 public abstract class AbstractValidationStrategy extends AbstractValidatorAdapter {
     protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_details";
+    private MessageResolver messageResolver;
 
     protected String resolveMessage(String key) {
         Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
-        return FactoryUtils.getMessageResolverFactory().create(this).getMessage(key, locale);
+        return this.messageResolver != null ? this.messageResolver.getMessage(key, locale) : FactoryUtils.getMessageResolverFactory().create(this).getMessage(key, locale);
     }
 
     protected String getErrorMessageSummary(Annotation annotation) {
@@ -57,4 +59,8 @@ public abstract class AbstractValidationStrategy extends AbstractValidatorAdapte
     }
 
     protected abstract String getValidationErrorMsgKey(Annotation annotation);
+
+    public void setMessageResolver(MessageResolver messageResolver) {
+        this.messageResolver = messageResolver;
+    }
 }
