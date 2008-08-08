@@ -26,7 +26,6 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-//TODO test custom message bundle
 public class EqualsStrategy extends AbstractCompareStrategy {
 
     public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry) {

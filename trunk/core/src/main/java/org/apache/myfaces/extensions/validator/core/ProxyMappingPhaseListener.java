@@ -49,8 +49,9 @@ public class ProxyMappingPhaseListener implements PhaseListener {
         if (!isInitialized) {
             //don't use DEACTIVATE_PROXY_MAPPING here to allow a different concept
             String initParam = WebXmlParameter.DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER;
+            String initAdapterParam = WebXmlParameter.USE_ADAPTERS;
 
-            if(initParam != null && initParam.equalsIgnoreCase("true")) {
+            if((initParam != null && initParam.equalsIgnoreCase("true")) || (initAdapterParam != null && initAdapterParam.equalsIgnoreCase("true"))) {
                 ExtValUtils.deregisterPhaseListener(this);
             }
             isInitialized = true;
