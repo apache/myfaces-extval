@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author Gerhard Petracek
  */
-public class AbstractLocalCompareStrategy implements ReferencingStrategy {
+public class LocalCompareStrategy implements ReferencingStrategy {
     protected final Log logger = LogFactory.getLog(getClass());
 
     public boolean evalReferenceAndValidate(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorage crossValidationStorage, String validationTarget, AbstractCompareStrategy compareStrategy) {
@@ -85,7 +85,7 @@ public class AbstractLocalCompareStrategy implements ReferencingStrategy {
             tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
             tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
 
-            compareStrategy.handleTargetViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
+            compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
 
             violationFound = true;
         }
