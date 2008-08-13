@@ -40,7 +40,7 @@ import java.lang.reflect.Field;
  *
  * @author Gerhard Petracek
  */
-public class AbstractAliasCompareStrategy implements ReferencingStrategy {
+public class AliasCompareStrategy implements ReferencingStrategy {
     protected final Log logger = LogFactory.getLog(getClass());
 
     public boolean evalReferenceAndValidate(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorage crossValidationStorage, String validationTarget, AbstractCompareStrategy compareStrategy) {
@@ -182,7 +182,8 @@ public class AbstractAliasCompareStrategy implements ReferencingStrategy {
         boolean violationFound = false;
 
         if (compareStrategy.isViolation(crossValidationStorageEntry.getConvertedObject(), validationTargetObject, crossValidationStorageEntry.getAnnotationEntry().getAnnotation())) {
-            compareStrategy.handleTargetViolation(crossValidationStorageEntry, null);
+            //TODO use compareStrategy#useTargetComponentToDisplayErrorMsg
+            compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, null);
 
             violationFound = true;
         }
@@ -210,7 +211,7 @@ public class AbstractAliasCompareStrategy implements ReferencingStrategy {
             if (compareStrategy.isViolation(crossValidationStorageEntry.getConvertedObject(), validationTargetObject, crossValidationStorageEntry.getAnnotationEntry().getAnnotation())) {
                 violationFound = true;
 
-                compareStrategy.handleTargetViolation(crossValidationStorageEntry, entry);
+                compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, entry);
             }
             validationExecuted = true;
         }
