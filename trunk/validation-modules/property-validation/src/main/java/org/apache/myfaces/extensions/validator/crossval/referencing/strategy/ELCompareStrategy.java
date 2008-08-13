@@ -36,7 +36,7 @@ import java.util.Map;
  *
  * @author Gerhard Petracek
  */
-public class AbstractELCompareStrategy implements ReferencingStrategy {
+public class ELCompareStrategy implements ReferencingStrategy {
     protected final Log logger = LogFactory.getLog(getClass());
 
     public boolean evalReferenceAndValidate(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorage crossValidationStorage, String validationTarget, AbstractCompareStrategy compareStrategy) {
@@ -67,12 +67,17 @@ public class AbstractELCompareStrategy implements ReferencingStrategy {
 
             if (validationTargetEntry != null) {
                 tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-                tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
+                //TODO test
+                if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry)) {
+                    tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
+                } else {
+                    tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
+                }
                 tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
                 tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
             }
 
-            compareStrategy.handleTargetViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
+            compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
 
             violationFound = true;
         }
