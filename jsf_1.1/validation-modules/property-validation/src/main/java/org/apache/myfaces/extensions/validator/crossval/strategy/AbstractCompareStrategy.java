@@ -21,9 +21,9 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.AbstractAliasCompareStrategy;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.AbstractELCompareStrategy;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.AbstractLocalCompareStrategy;
+import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.AliasCompareStrategy;
+import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ELCompareStrategy;
+import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ReferencingStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -56,14 +56,15 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
                 referencingStrategies.add(customReferencingStrategy);
             }
 
-            referencingStrategies.add(new AbstractELCompareStrategy());
-            referencingStrategies.add(new AbstractAliasCompareStrategy());
-            referencingStrategies.add(new AbstractLocalCompareStrategy());
+            referencingStrategies.add(new ELCompareStrategy());
+            referencingStrategies.add(new AliasCompareStrategy());
+            referencingStrategies.add(new LocalCompareStrategy());
         }
     }
 
     public void processCrossValidation(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorage crossValidationStorage) throws ValidatorException {
 
+        initValidation(crossValidationStorageEntry);
         String[] validationTargets = getValidationTargets(crossValidationStorageEntry.getAnnotationEntry().getAnnotation());
 
         for (String validationTarget : validationTargets) {
@@ -84,41 +85,49 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return false;
     }
 
+    //TODO
     //has to be public for custom referencing strategies!!!
-    public void handleTargetViolation(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorageEntry entry) {
+    public final void processTargetComponentAfterViolation(CrossValidationStorageEntry entryOfSource, CrossValidationStorageEntry entryOfTarget) {
+        if(!handleTargetViolation(entryOfSource, entryOfTarget)) {
+            return;
+        }
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         //get validation error messages for the target component
-        String summary = getErrorMessageSummary(crossValidationStorageEntry.getAnnotationEntry().getAnnotation(), true);
-        String details = getErrorMessageDetails(crossValidationStorageEntry.getAnnotationEntry().getAnnotation(), true);
+        String summary = getErrorMessageSummary(entryOfSource.getAnnotationEntry().getAnnotation(), true);
+        String details = getErrorMessageDetails(entryOfSource.getAnnotationEntry().getAnnotation(), true);
 
         //validation target isn't bound to a component withing the current page (see validateFoundEntry, tryToValidateLocally and tryToValidateBindingOnly)
-        if (entry == null) {
-            entry = crossValidationStorageEntry;
+        if (entryOfTarget == null) {
+            entryOfTarget = entryOfSource;
         }
 
         FacesMessage message;
-        if (entry.getAnnotationEntry() != null) {
-            message = getTargetComponentErrorMessage(entry.getAnnotationEntry().getAnnotation(), summary, details);
+        if (entryOfTarget.getAnnotationEntry() != null) {
+            message = getTargetComponentErrorMessage(entryOfTarget.getAnnotationEntry().getAnnotation(), summary, details);
         } else {
             //TODO document possible side effects
             //due to a missing target annotation (see: tryToValidateLocally)
-            message = getTargetComponentErrorMessage(crossValidationStorageEntry.getAnnotationEntry().getAnnotation(), summary, details);
+            message = getTargetComponentErrorMessage(entryOfSource.getAnnotationEntry().getAnnotation(), summary, details);
         }
 
         if (message.getSummary() != null || message.getDetail() != null) {
-            facesContext.addMessage(entry.getComponent().getClientId(facesContext), message);
+            facesContext.addMessage(entryOfTarget.getComponent().getClientId(facesContext), message);
         }
     }
 
     //has to be public for custom referencing strategies!!!
-    public void processSourceComponentAfterViolation(CrossValidationStorageEntry crossValidationStorageEntry) {
+    public final void processSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource) {
+        if(!handleSourceViolation(entryOfSource)) {
+            return;
+        }
 
         //get validation error messages for the current component
-        String summary = getErrorMessageSummary(crossValidationStorageEntry.getAnnotationEntry().getAnnotation(), false);
-        String details = getErrorMessageDetails(crossValidationStorageEntry.getAnnotationEntry().getAnnotation(), false);
+        String summary = getErrorMessageSummary(entryOfSource.getAnnotationEntry().getAnnotation(), false);
+        String details = getErrorMessageDetails(entryOfSource.getAnnotationEntry().getAnnotation(), false);
 
-        FacesMessage message = getSourceComponentErrorMessage(crossValidationStorageEntry.getAnnotationEntry().getAnnotation(), summary, details);
+        FacesMessage message = getSourceComponentErrorMessage(entryOfSource.getAnnotationEntry().getAnnotation(), summary, details);
 
         if (message.getSummary() != null || message.getDetail() != null) {
             //TODO
@@ -193,16 +202,32 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     }
 
     /*
-     * recommended methods to override - have to be public for custom referencing strategies!!!
+     * optional methods - recommended to override - have to be public for custom referencing strategies!!!
      */
+    /**
+     * the usage of this method requires a new instance
+     * -> in case of validation strategy beans application/singleton isn't allowed
+     */
+    protected void initValidation(CrossValidationStorageEntry crossValidationStorageEntry) {
+    }
+
+    protected boolean handleTargetViolation(CrossValidationStorageEntry entryOfSource, CrossValidationStorageEntry entryOfTarget) {
+        return true;
+    }
+
+    protected boolean handleSourceViolation(CrossValidationStorageEntry entryOfSource) {
+        return true;
+    }
+
+    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry) {
+        return handleTargetViolation(crossValidationStorageEntry, null);
+    }
 
     /*
      * abstract methods
      */
 
     protected abstract String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent);
-
-    public abstract boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry);
 
     /*
      * implements the specific validation logic
