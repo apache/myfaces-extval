@@ -30,15 +30,23 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class RequiredStrategy extends AbstractValidationStrategy {
+public class RequiredStrategy extends AbstractValidationStrategy
+{
 
-    public void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
-        if (convertedObject == null || convertedObject.equals("")) {
-            throw new ValidatorException(getValidationErrorFacesMassage(annotationEntry.getAnnotation()));
+    public void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
+        if (convertedObject == null || convertedObject.equals(""))
+        {
+            throw new ValidatorException(
+                    getValidationErrorFacesMassage(annotationEntry
+                            .getAnnotation()));
         }
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation) {
+    protected String getValidationErrorMsgKey(Annotation annotation)
+    {
         return ((Required) annotation).validationErrorMsgKey();
     }
 }

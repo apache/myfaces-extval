@@ -25,10 +25,14 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-public class WebXmlUtils {
+public class WebXmlUtils
+{
 
-    public static String getInitParameter(String key) {
-        String value = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + "." + key);
+    public static String getInitParameter(String key)
+    {
+        String value = FacesContext.getCurrentInstance().getExternalContext()
+                .getInitParameter(
+                        ExtValInformation.WEBXML_PARAM_PREFIX + "." + key);
         //TODO
         return (value != null) ? value.replace(" ", "").trim() : null;
     }

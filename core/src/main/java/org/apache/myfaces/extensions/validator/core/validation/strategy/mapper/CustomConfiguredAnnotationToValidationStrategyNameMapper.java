@@ -27,9 +27,12 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends AbstractCustomNameMapper<Annotation> {
+public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
+        AbstractCustomNameMapper<Annotation>
+{
 
-    protected String getCustomNameMapperClassName() {
+    protected String getCustomNameMapperClassName()
+    {
         return WebXmlParameter.CUSTOM_ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER;
     }
 }

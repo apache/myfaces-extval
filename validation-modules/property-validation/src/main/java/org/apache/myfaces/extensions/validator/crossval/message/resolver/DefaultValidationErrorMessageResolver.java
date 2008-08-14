@@ -21,15 +21,20 @@ package org.apache.myfaces.extensions.validator.crossval.message.resolver;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultValidationErrorMessageResolver extends org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultValidationErrorMessageResolver {
-    private static String BASE_NAME = null;
+public class DefaultValidationErrorMessageResolver
+        extends
+        org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultValidationErrorMessageResolver
+{
+    private static String baseName = null;
 
     @Override
-    protected String getBaseName() {
-        if (BASE_NAME == null) {
-            BASE_NAME = super.getBaseName();
+    protected String getBaseName()
+    {
+        if (baseName == null)
+        {
+            baseName = super.getBaseName();
         }
 
-        return BASE_NAME;
+        return baseName;
     }
 }

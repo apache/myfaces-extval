@@ -25,6 +25,11 @@ import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompare
 /**
  * @author Gerhard Petracek
  */
-public interface ReferencingStrategy {
-    boolean evalReferenceAndValidate(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorage crossValidationStorage, String validationTarget, AbstractCompareStrategy abstractCompareStrategy);
+public interface ReferencingStrategy
+{
+    boolean evalReferenceAndValidate(
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            CrossValidationStorage crossValidationStorage,
+            String validationTarget,
+            AbstractCompareStrategy abstractCompareStrategy);
 }
