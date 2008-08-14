@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.crossval.annotation;
 /**
  * @author Gerhard Petracek
  */
-public enum DateIsType {
-    before, after, same //TODO: beforeOrSame, afterOrSame
+public enum DateIsType
+{
+    before, after, same
+    //TODO: beforeOrSame, afterOrSame
 }

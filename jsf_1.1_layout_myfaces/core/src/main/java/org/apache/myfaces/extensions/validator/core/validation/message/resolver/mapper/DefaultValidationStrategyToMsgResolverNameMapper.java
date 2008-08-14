@@ -25,12 +25,21 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultValidationStrategyToMsgResolverNameMapper implements NameMapper<ValidationStrategy> {
-    public String createName(ValidationStrategy validationStrategy) {
-        return ExtValUtils.getInformationProviderBean().getConventionNameForMessageResolverPackage(validationStrategy.getClass(), getClassName(validationStrategy.getClass().getSimpleName()));
+public class DefaultValidationStrategyToMsgResolverNameMapper implements
+        NameMapper<ValidationStrategy>
+{
+    public String createName(ValidationStrategy validationStrategy)
+    {
+        return ExtValUtils.getInformationProviderBean()
+                .getConventionNameForMessageResolverPackage(
+                        validationStrategy.getClass(),
+                        getClassName(validationStrategy.getClass()
+                                .getSimpleName()));
     }
 
-    protected String getClassName(String strategyClassName) {
-        return ExtValUtils.getInformationProviderBean().getConventionNameForMessageResolverClass(strategyClassName);
+    protected String getClassName(String strategyClassName)
+    {
+        return ExtValUtils.getInformationProviderBean()
+                .getConventionNameForMessageResolverClass(strategyClassName);
     }
 }

@@ -25,20 +25,26 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class NotEqualsStrategy extends EqualsStrategy {
+public class NotEqualsStrategy extends EqualsStrategy
+{
 
     @Override
-    protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent) {
+    protected String getValidationErrorMsgKey(Annotation annotation,
+            boolean isTargetComponent)
+    {
         return ((NotEquals) annotation).validationErrorMsgKey();
     }
 
     @Override
-    public boolean isViolation(Object object1, Object object2, Annotation annotation) {
+    public boolean isViolation(Object object1, Object object2,
+            Annotation annotation)
+    {
         return !super.isViolation(object1, object2, annotation);
     }
 
     @Override
-    public String[] getValidationTargets(Annotation annotation) {
+    public String[] getValidationTargets(Annotation annotation)
+    {
         return ((NotEquals) annotation).value();
     }
 }

@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.mapper;
 /**
  * @author Gerhard Petracek
  */
-public interface NameMapper<T> {
+public interface NameMapper<T>
+{
     String createName(T source);
 }

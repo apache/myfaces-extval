@@ -23,7 +23,8 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class AnnotationEntry {
+public class AnnotationEntry
+{
     private Annotation annotation;
     private String valueBindingExpression;
     //e.g. valueBindingName, DefaultValueBindingScanningAnnotationExtractor uses it for the variable-/method-name
@@ -31,42 +32,51 @@ public class AnnotationEntry {
     private Class entityClass;
 
     //requested by bernhard huemer
-    public <T> T getAnnotation(Class<T> targetClass) {
+    public <T> T getAnnotation(Class<T> targetClass)
+    {
         return (T) annotation;
     }
 
     /*
      * generated
      */
-    public Annotation getAnnotation() {
+    public Annotation getAnnotation()
+    {
         return annotation;
     }
 
-    public void setAnnotation(Annotation annotation) {
+    public void setAnnotation(Annotation annotation)
+    {
         this.annotation = annotation;
     }
 
-    public String getValueBindingExpression() {
+    public String getValueBindingExpression()
+    {
         return valueBindingExpression;
     }
 
-    public void setValueBindingExpression(String valueBindingExpression) {
+    public void setValueBindingExpression(String valueBindingExpression)
+    {
         this.valueBindingExpression = valueBindingExpression;
     }
 
-    public String getBoundTo() {
+    public String getBoundTo()
+    {
         return boundTo;
     }
 
-    public void setBoundTo(String boundTo) {
+    public void setBoundTo(String boundTo)
+    {
         this.boundTo = boundTo;
     }
 
-    public Class getEntityClass() {
+    public Class getEntityClass()
+    {
         return entityClass;
     }
 
-    public void setEntityClass(Class entityClass) {
+    public void setEntityClass(Class entityClass)
+    {
         this.entityClass = entityClass;
     }
 }

@@ -24,18 +24,24 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public class CrossValidationStorage {
-    private List<CrossValidationStorageEntry> crossValidationStorageEntries = new ArrayList<CrossValidationStorageEntry>();
+public class CrossValidationStorage
+{
+    private List<CrossValidationStorageEntry> crossValidationStorageEntries = 
+        new ArrayList<CrossValidationStorageEntry>();
 
-    public void add(CrossValidationStorageEntry entry) {
+    public void add(CrossValidationStorageEntry entry)
+    {
         this.crossValidationStorageEntries.add(entry);
     }
 
-    public List<CrossValidationStorageEntry> getCrossValidationStorageEntries() {
+    public List<CrossValidationStorageEntry> getCrossValidationStorageEntries()
+    {
         return crossValidationStorageEntries;
     }
 
-    public void setCrossValidationStorageEntries(List<CrossValidationStorageEntry> crossValidationStorageEntries) {
+    public void setCrossValidationStorageEntries(
+            List<CrossValidationStorageEntry> crossValidationStorageEntries)
+    {
         this.crossValidationStorageEntries = crossValidationStorageEntries;
     }
 }

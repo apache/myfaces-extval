@@ -18,10 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -32,199 +31,255 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.el.*;
+import javax.faces.el.MethodBinding;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.ValueBinding;
+import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Locale;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 /**
  * @author Gerhard Petracek
  */
-public class ExtValApplication extends Application {
+public class ExtValApplication extends Application
+{
     protected final Log logger = LogFactory.getLog(getClass());
 
     private Application wrapped;
 
-    public ExtValApplication() {
+    public ExtValApplication()
+    {
     }
 
-    public ExtValApplication(Application wrapped) {
+    public ExtValApplication(Application wrapped)
+    {
         this.wrapped = wrapped;
     }
 
     public UIComponent createComponent(ValueBinding componentBinding,
-                                       FacesContext context, String componentType) throws FacesException {
-        UIComponent component = this.wrapped.createComponent(componentBinding, context, componentType);
+            FacesContext context, String componentType) throws FacesException
+    {
+        UIComponent component = this.wrapped.createComponent(componentBinding,
+                context, componentType);
         return tryToSetExtValValidatingConverter(component);
     }
 
-    private UIComponent tryToSetExtValValidatingConverter(UIComponent component) {
+    private UIComponent tryToSetExtValValidatingConverter(UIComponent component)
+    {
         //in order to access the wrapped application and and support other Application wrappers
         ExtValUtils.setOriginalApplication(wrapped);
 
-        //if no converter is used add sev-en converter - so it isn't necessary to add sev-en converter manually within the page
-        if (component instanceof EditableValueHolder) {
-            ((EditableValueHolder) component).setConverter(new ExtValConverter());
+        //if no converter is used add sev-en converter - so it isn't necessary 
+        //to add sev-en converter manually within the page
+        if (component instanceof EditableValueHolder)
+        {
+            ((EditableValueHolder) component)
+                    .setConverter(new ExtValConverter());
         }
         return component;
     }
 
-    public Converter createConverter(String converterId) throws FacesException {
+    public Converter createConverter(String converterId) throws FacesException
+    {
         Converter converter = this.wrapped.createConverter(converterId);
         return getExtValConverter(converter);
     }
 
-    public Converter createConverter(Class targetClass) throws FacesException {
+    public Converter createConverter(Class targetClass) throws FacesException
+    {
         Converter converter = this.wrapped.createConverter(targetClass);
 
         return getExtValConverter(converter);
     }
 
-    private Converter getExtValConverter(Converter converter) {
-        if (converter == null) {
+    private Converter getExtValConverter(Converter converter)
+    {
+        if (converter == null)
+        {
             return new ExtValConverter();
         }
 
-        if (!ExtValUtils.useFallbackAdapters()) {
+        if (!ExtValUtils.useFallbackAdapters())
+        {
             return ExtValConverter.newInstance(converter);
-        } else {
+        }
+        else
+        {
             //fallback adapter solution
-            //if there is a problem with the default approach (the phase-listener) or the alternative (the state-manager)
+            //if there is a problem with the default approach (the phase-listener) 
+            //or the alternative (the state-manager)
             return FactoryUtils.getConverterAdapterFactory().create(converter);
         }
     }
 
-    public Iterator getConverterIds() {
+    public Iterator getConverterIds()
+    {
         return this.wrapped.getConverterIds();
     }
 
-    public Iterator getConverterTypes() {
+    public Iterator getConverterTypes()
+    {
         return this.wrapped.getConverterTypes();
     }
 
-    public void addConverter(String converterId, String converterClass) {
+    public void addConverter(String converterId, String converterClass)
+    {
         this.wrapped.addConverter(converterId, converterClass);
     }
 
-    public void addConverter(Class targetClass, String converterClass) {
+    public void addConverter(Class targetClass, String converterClass)
+    {
         this.wrapped.addConverter(targetClass, converterClass);
     }
 
-    public Iterator getComponentTypes() {
+    public Iterator getComponentTypes()
+    {
         return this.wrapped.getComponentTypes();
     }
 
-    public ActionListener getActionListener() {
+    public ActionListener getActionListener()
+    {
         return this.wrapped.getActionListener();
     }
 
-    public void setActionListener(ActionListener listener) {
+    public void setActionListener(ActionListener listener)
+    {
         this.wrapped.setActionListener(listener);
     }
 
-    public Locale getDefaultLocale() {
+    public Locale getDefaultLocale()
+    {
         return this.wrapped.getDefaultLocale();
     }
 
-    public void setDefaultLocale(Locale locale) {
+    public void setDefaultLocale(Locale locale)
+    {
         this.wrapped.setDefaultLocale(locale);
     }
 
-    public String getDefaultRenderKitId() {
+    public String getDefaultRenderKitId()
+    {
         return this.wrapped.getDefaultRenderKitId();
     }
 
-    public void setDefaultRenderKitId(String renderKitId) {
+    public void setDefaultRenderKitId(String renderKitId)
+    {
         this.wrapped.setDefaultRenderKitId(renderKitId);
     }
 
-    public String getMessageBundle() {
+    public String getMessageBundle()
+    {
         return this.wrapped.getMessageBundle();
     }
 
-    public void setMessageBundle(String bundle) {
+    public void setMessageBundle(String bundle)
+    {
         this.wrapped.setMessageBundle(bundle);
     }
 
-    public NavigationHandler getNavigationHandler() {
+    public NavigationHandler getNavigationHandler()
+    {
         return this.wrapped.getNavigationHandler();
     }
 
-    public void setNavigationHandler(NavigationHandler handler) {
+    public void setNavigationHandler(NavigationHandler handler)
+    {
         this.wrapped.setNavigationHandler(handler);
     }
 
-    public PropertyResolver getPropertyResolver() {
+    public PropertyResolver getPropertyResolver()
+    {
         return this.wrapped.getPropertyResolver();
     }
 
-    public void setPropertyResolver(PropertyResolver resolver) {
+    public void setPropertyResolver(PropertyResolver resolver)
+    {
         this.wrapped.setPropertyResolver(resolver);
     }
 
-    public VariableResolver getVariableResolver() {
+    public VariableResolver getVariableResolver()
+    {
         return this.wrapped.getVariableResolver();
     }
 
-    public void setVariableResolver(VariableResolver resolver) {
+    public void setVariableResolver(VariableResolver resolver)
+    {
         this.wrapped.setVariableResolver(resolver);
     }
 
-    public ViewHandler getViewHandler() {
+    public ViewHandler getViewHandler()
+    {
         return this.wrapped.getViewHandler();
     }
 
-    public void setViewHandler(ViewHandler handler) {
+    public void setViewHandler(ViewHandler handler)
+    {
         this.wrapped.setViewHandler(handler);
     }
 
-    public StateManager getStateManager() {
+    public StateManager getStateManager()
+    {
         return this.wrapped.getStateManager();
     }
 
-    public void setStateManager(StateManager manager) {
+    public void setStateManager(StateManager manager)
+    {
         this.wrapped.setStateManager(manager);
     }
 
-    public void addComponent(String componentType, String componentClass) {
+    public void addComponent(String componentType, String componentClass)
+    {
         this.wrapped.addComponent(componentType, componentClass);
     }
 
-    public UIComponent createComponent(String componentType) throws FacesException {
+    public UIComponent createComponent(String componentType)
+            throws FacesException
+    {
         UIComponent component = this.wrapped.createComponent(componentType);
 
         return tryToSetExtValValidatingConverter(component);
     }
 
     public MethodBinding createMethodBinding(String ref, Class[] params)
-            throws ReferenceSyntaxException {
+            throws ReferenceSyntaxException
+    {
         return this.wrapped.createMethodBinding(ref, params);
     }
 
-    public Iterator getSupportedLocales() {
+    public Iterator getSupportedLocales()
+    {
         return this.wrapped.getSupportedLocales();
     }
 
-    public void setSupportedLocales(Collection locales) {
+    public void setSupportedLocales(Collection locales)
+    {
         this.wrapped.setSupportedLocales(locales);
     }
 
-    public void addValidator(String validatorId, String validatorClass) {
+    public void addValidator(String validatorId, String validatorClass)
+    {
         this.wrapped.addValidator(validatorId, validatorClass);
     }
 
-    public Validator createValidator(String validatorId) throws FacesException {
+    public Validator createValidator(String validatorId) throws FacesException
+    {
         return this.wrapped.createValidator(validatorId);
     }
 
-    public Iterator getValidatorIds() {
+    public Iterator getValidatorIds()
+    {
         return this.wrapped.getValidatorIds();
     }
 
     public ValueBinding createValueBinding(String ref)
-            throws ReferenceSyntaxException {
+            throws ReferenceSyntaxException
+    {
         return this.wrapped.createValueBinding(ref);
     }
 }

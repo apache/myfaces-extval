@@ -25,21 +25,30 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 /*generated code - don't change!*/
-public class FloatConverterAdapter extends org.apache.myfaces.trinidadinternal.convert.FloatConverter {
-	private Converter smartConverter;
+public class FloatConverterAdapter extends
+        org.apache.myfaces.trinidadinternal.convert.FloatConverter
+{
+    private Converter smartConverter;
 
-	public FloatConverterAdapter() {
-		this(new org.apache.myfaces.trinidadinternal.convert.FloatConverter());
-	}
+    public FloatConverterAdapter()
+    {
+        this(new org.apache.myfaces.trinidadinternal.convert.FloatConverter());
+    }
 
-	public FloatConverterAdapter(Converter converter) {
-		this.smartConverter = new ExtValFallbackConverter(converter);
-	}
+    public FloatConverterAdapter(Converter converter)
+    {
+        this.smartConverter = new ExtValFallbackConverter(converter);
+    }
 
-	public Object getAsObject(FacesContext context, UIComponent component, String value) throws ConverterException {
-		return this.smartConverter.getAsObject(context, component, value);
-	}
-	public String getAsString(FacesContext context, UIComponent component, Object value) throws ConverterException {
-		return this.smartConverter.getAsString(context, component, value);
-	}
+    public Object getAsObject(FacesContext context, UIComponent component,
+            String value) throws ConverterException
+    {
+        return this.smartConverter.getAsObject(context, component, value);
+    }
+
+    public String getAsString(FacesContext context, UIComponent component,
+            Object value) throws ConverterException
+    {
+        return this.smartConverter.getAsString(context, component, value);
+    }
 }
