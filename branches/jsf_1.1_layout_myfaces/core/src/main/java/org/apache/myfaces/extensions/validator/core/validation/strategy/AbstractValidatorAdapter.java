@@ -30,30 +30,47 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractValidatorAdapter implements ValidationStrategy {
+public abstract class AbstractValidatorAdapter implements ValidationStrategy
+{
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public void validate(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) {
-        initValidation(facesContext, uiComponent, annotationEntry, convertedObject);
+    public void validate(FacesContext facesContext, UIComponent uiComponent,
+            AnnotationEntry annotationEntry, Object convertedObject)
+    {
+        initValidation(facesContext, uiComponent, annotationEntry,
+                convertedObject);
 
-        try {
-            processValidation(facesContext, uiComponent, annotationEntry, convertedObject);
+        try
+        {
+            processValidation(facesContext, uiComponent, annotationEntry,
+                    convertedObject);
         }
-        catch (ValidatorException e) {
-            if (processAfterValidatorException(facesContext, uiComponent, annotationEntry, convertedObject, e)) {
+        catch (ValidatorException e)
+        {
+            if (processAfterValidatorException(facesContext, uiComponent,
+                    annotationEntry, convertedObject, e))
+            {
                 throw new ConverterException(e.getFacesMessage(), e);
             }
         }
     }
 
-    protected void initValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) {
+    protected void initValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject)
+    {
         //override if needed
     }
 
     //override if needed
-    protected boolean processAfterValidatorException(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject, ValidatorException e) {
+    protected boolean processAfterValidatorException(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject, ValidatorException e)
+    {
         return true;
     }
 
-    protected abstract void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException;
+    protected abstract void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException;
 }

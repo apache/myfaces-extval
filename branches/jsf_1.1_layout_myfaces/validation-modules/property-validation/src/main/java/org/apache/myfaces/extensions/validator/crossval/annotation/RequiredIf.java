@@ -27,10 +27,11 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
 //TODO DateIsEntry (value, type)
-public @interface RequiredIf {
+public @interface RequiredIf
+{
     String[] valueOf();
 
     /*

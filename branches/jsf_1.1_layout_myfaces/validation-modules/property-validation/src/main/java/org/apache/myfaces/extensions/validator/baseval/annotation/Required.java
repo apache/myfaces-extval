@@ -27,8 +27,9 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Required {
+public @interface Required
+{
     String validationErrorMsgKey() default "field_required";
 }

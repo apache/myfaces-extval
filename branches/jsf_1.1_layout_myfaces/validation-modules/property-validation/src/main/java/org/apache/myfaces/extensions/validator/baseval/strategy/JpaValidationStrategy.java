@@ -33,7 +33,8 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class JpaValidationStrategy extends AbstractValidationStrategy {
+public class JpaValidationStrategy extends AbstractValidationStrategy
+{
 
     private static final String VALIDATE_REQUIRED = "required";
     private static final String VALIDATE_LENGTH = "length";
@@ -41,76 +42,112 @@ public class JpaValidationStrategy extends AbstractValidationStrategy {
     private String violation;
     private int maxLength;
 
-    public void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
+    public void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
         Annotation annotation = annotationEntry.getAnnotation();
-        if (annotation instanceof Column) {
+        if (annotation instanceof Column)
+        {
             validateColumnAnnotation((Column) annotation, convertedObject);
-        } else if (annotation instanceof Basic) {
+        }
+        else if (annotation instanceof Basic)
+        {
             validateBasicAnnotation((Basic) annotation, convertedObject);
-        } else if (annotation instanceof OneToOne) {
+        }
+        else if (annotation instanceof OneToOne)
+        {
             validateOneToOneAnnotation((OneToOne) annotation, convertedObject);
-        } else if (annotation instanceof ManyToOne) {
+        }
+        else if (annotation instanceof ManyToOne)
+        {
             validateManyToOneAnnotation((ManyToOne) annotation, convertedObject);
         }
     }
 
-    private void validateColumnAnnotation(Column column, Object convertedObject) throws ValidatorException {
-        if (!column.nullable()) {
+    private void validateColumnAnnotation(Column column, Object convertedObject)
+            throws ValidatorException
+    {
+        if (!column.nullable())
+        {
             checkRequiredConvertedObject(convertedObject);
         }
 
-        if (convertedObject == null) {
+        if (convertedObject == null)
+        {
             return;
         }
 
-        if (convertedObject instanceof String && column.length() < ((String) convertedObject).length()) {
+        if (convertedObject instanceof String
+                && column.length() < ((String) convertedObject).length())
+        {
             this.violation = VALIDATE_LENGTH;
             this.maxLength = column.length();
             throw new ValidatorException(getValidationErrorFacesMassage(null));
         }
     }
 
-    private void validateBasicAnnotation(Basic basic, Object convertedObject) throws ValidatorException {
-        if (!basic.optional()) {
+    private void validateBasicAnnotation(Basic basic, Object convertedObject)
+            throws ValidatorException
+    {
+        if (!basic.optional())
+        {
             checkRequiredConvertedObject(convertedObject);
         }
     }
 
-    private void validateOneToOneAnnotation(OneToOne oneToOne, Object convertedObject) {
-        if (!oneToOne.optional()) {
+    private void validateOneToOneAnnotation(OneToOne oneToOne,
+            Object convertedObject)
+    {
+        if (!oneToOne.optional())
+        {
             //TODO
             checkRequiredConvertedObject(convertedObject);
         }
     }
 
-    private void validateManyToOneAnnotation(ManyToOne manyToOne, Object convertedObject) {
-        if (!manyToOne.optional()) {
+    private void validateManyToOneAnnotation(ManyToOne manyToOne,
+            Object convertedObject)
+    {
+        if (!manyToOne.optional())
+        {
             //TODO
             checkRequiredConvertedObject(convertedObject);
         }
     }
 
-    private void checkRequiredConvertedObject(Object convertedObject) throws ValidatorException {
-        if (convertedObject == null || convertedObject.equals("")) {
+    private void checkRequiredConvertedObject(Object convertedObject)
+            throws ValidatorException
+    {
+        if (convertedObject == null || convertedObject.equals(""))
+        {
             this.violation = VALIDATE_REQUIRED;
             throw new ValidatorException(getValidationErrorFacesMassage(null));
         }
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation) {
-        if (VALIDATE_LENGTH.equals(this.violation)) {
+    protected String getValidationErrorMsgKey(Annotation annotation)
+    {
+        if (VALIDATE_LENGTH.equals(this.violation))
+        {
             return "field_too_long";
-        } else {
+        }
+        else
+        {
             return "field_required";
         }
     }
 
-    protected String getErrorMessageDetails(Annotation annotation) {
+    protected String getErrorMessageDetails(Annotation annotation)
+    {
         String message = super.getErrorMessageDetails(annotation);
 
-        if (VALIDATE_LENGTH.equals(this.violation)) {
+        if (VALIDATE_LENGTH.equals(this.violation))
+        {
             return message.replace("{0}", "" + this.maxLength);
-        } else {
+        }
+        else
+        {
             return message;
         }
     }

@@ -26,7 +26,8 @@ import javax.faces.component.UIComponent;
 /**
  * @author Gerhard Petracek
  */
-public class CrossValidationStorageEntry {
+public class CrossValidationStorageEntry
+{
     private AnnotationEntry annotationEntry;
     //for complex components (e.g. a table) stores the object of entry (#{entry.property})
     private Object bean;
@@ -34,43 +35,53 @@ public class CrossValidationStorageEntry {
     private Object convertedObject;
     private CrossValidationStrategy validationStrategy;
 
-    public AnnotationEntry getAnnotationEntry() {
+    public AnnotationEntry getAnnotationEntry()
+    {
         return annotationEntry;
     }
 
-    public void setAnnotationEntry(AnnotationEntry annotationEntry) {
+    public void setAnnotationEntry(AnnotationEntry annotationEntry)
+    {
         this.annotationEntry = annotationEntry;
     }
 
-    public Object getBean() {
+    public Object getBean()
+    {
         return bean;
     }
 
-    public void setBean(Object bean) {
+    public void setBean(Object bean)
+    {
         this.bean = bean;
     }
 
-    public UIComponent getComponent() {
+    public UIComponent getComponent()
+    {
         return component;
     }
 
-    public void setComponent(UIComponent component) {
+    public void setComponent(UIComponent component)
+    {
         this.component = component;
     }
 
-    public Object getConvertedObject() {
+    public Object getConvertedObject()
+    {
         return convertedObject;
     }
 
-    public void setConvertedObject(Object convertedObject) {
+    public void setConvertedObject(Object convertedObject)
+    {
         this.convertedObject = convertedObject;
     }
 
-    public CrossValidationStrategy getValidationStrategy() {
+    public CrossValidationStrategy getValidationStrategy()
+    {
         return validationStrategy;
     }
 
-    public void setValidationStrategy(CrossValidationStrategy validationStrategy) {
+    public void setValidationStrategy(CrossValidationStrategy validationStrategy)
+    {
         this.validationStrategy = validationStrategy;
     }
 }
