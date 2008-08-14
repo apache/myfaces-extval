@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.util;
 import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
 import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -38,6 +40,7 @@ import java.util.*;
  * @author Gerhard Petracek
  */
 public class ExtValUtils {
+    private static final Log LOGGER = LogFactory.getLog(ExtValUtils.class);
 
     public static String getBasePackage() {
         return getInformationProviderBean().getBasePackage();
@@ -301,6 +304,10 @@ public class ExtValUtils {
         if (!applicationMap.containsKey(ORIGINAL_APPLICATION_KEY)) {
             synchronized (ExtValUtils.class) {
                 applicationMap.put(ORIGINAL_APPLICATION_KEY, application);
+
+                if(LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("the original application is " + application.getClass().getName());
+                }
             }
         }
     }
