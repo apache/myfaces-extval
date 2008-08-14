@@ -47,6 +47,13 @@ public class ExtValConverter implements Converter, MethodInterceptor, Serializab
     protected final Log logger = LogFactory.getLog(getClass());
 
     public static Converter newInstance(Converter wrappedConverter) {
+        Class currentClass = wrappedConverter.getClass();
+
+        //it's not possible to wrap the converter again - occurs e.g. under solaris + bea weblogic
+        if (currentClass.getName().contains("$$EnhancerByCGLIB$$") || currentClass.getName().contains("$$FastClassByCGLIB$$")) {
+            return wrappedConverter;
+        }
+
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(wrappedConverter.getClass());
         enhancer.setInterfaces(new Class[]{Converter.class, Serializable.class});

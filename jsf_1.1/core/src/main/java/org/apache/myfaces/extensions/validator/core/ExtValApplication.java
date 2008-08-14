@@ -51,6 +51,9 @@ public class ExtValApplication extends Application {
     }
 
     public ExtValApplication(Application wrapped) {
+        if (logger.isTraceEnabled()) {
+            logger.trace(getClass().getName() + " wraps " + wrapped.getClass().getName());
+        }
         this.wrapped = wrapped;
     }
 
@@ -85,6 +88,10 @@ public class ExtValApplication extends Application {
     private Converter getExtValConverter(Converter converter) {
         if (converter == null) {
             return new ExtValConverter();
+        }
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace("converter to wrap: " + converter.getClass().getName());
         }
 
         if (!ExtValUtils.useFallbackAdapters()) {

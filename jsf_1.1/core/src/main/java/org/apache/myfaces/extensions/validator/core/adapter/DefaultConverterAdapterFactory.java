@@ -69,11 +69,18 @@ public class DefaultConverterAdapterFactory implements ClassMappingFactory<Conve
 
             if (adapter != null) {
                 addMapping(converterName, adapter.getClass().getName());
+
+                if (this.logger.isTraceEnabled()) {
+                    this.logger.trace("used adapter: " + adapter.getClass().getName());
+                }
+
                 return adapter;
             }
         }
 
-        logger.debug("no adapter found for " + converterName + " -> converter itself is used -> no sev-en support");
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("no adapter found for " + converterName + " -> converter itself is used -> no sev-en support");
+        }
         return converter;
     }
 
