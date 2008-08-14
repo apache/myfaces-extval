@@ -23,10 +23,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
-    <artifactId>validator-project</artifactId>
+    <artifactId>myfaces-extval-module</artifactId>
     <version>${build.version}</version>
     <packaging>pom</packaging>
-    <name>Apache MyFaces Extensions-Validator Project</name>
+    <name>Apache MyFaces Extensions-Validator Module</name>
     <url>http://myfaces.apache.org/extensions/validator</url>
 
     <modules>
