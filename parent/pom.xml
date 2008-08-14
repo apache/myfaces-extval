@@ -141,7 +141,7 @@
                 </executions>
                 <configuration>
                     <configLocation>default/myfaces-checks-standard.xml</configLocation>
-                    <headerLocation>default/myfaces-header-spaces.txt</headerLocation>
+                    <headerLocation>default/myfaces-header.txt</headerLocation>
                 </configuration>
             </plugin>
             
@@ -193,7 +193,7 @@
                 <version>2.2</version>
                 <configuration>
                     <configLocation>default/myfaces-checks-normal.xml</configLocation>
-                    <headerLocation>default/myfaces-header-spaces.txt</headerLocation>
+                    <headerLocation>default/myfaces-header.txt</headerLocation>
                 </configuration>
             </plugin>
         </plugins>
