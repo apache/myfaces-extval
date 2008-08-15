@@ -26,8 +26,13 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class SimpleAnnotationToValidationStrategyNameMapper implements NameMapper<Annotation> {
-    public String createName(Annotation annotation) {
-        return annotation.annotationType().getName() + ExtValUtils.getInformationProviderBean().getValidationStrategyPostfix();
+public class SimpleAnnotationToValidationStrategyNameMapper implements
+        NameMapper<Annotation>
+{
+    public String createName(Annotation annotation)
+    {
+        return annotation.annotationType().getName()
+                + ExtValUtils.getInformationProviderBean()
+                        .getValidationStrategyPostfix();
     }
 }

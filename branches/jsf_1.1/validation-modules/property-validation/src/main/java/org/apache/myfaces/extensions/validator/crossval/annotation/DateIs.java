@@ -28,10 +28,11 @@ import java.text.DateFormat;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
 //TODO DateIsEntry (value, type)
-public @interface DateIs {
+public @interface DateIs
+{
     String[] valueOf();
 
     /*

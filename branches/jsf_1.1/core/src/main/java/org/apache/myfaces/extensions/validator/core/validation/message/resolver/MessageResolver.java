@@ -23,6 +23,7 @@ import java.util.Locale;
 /**
  * @author Gerhard Petracek
  */
-public interface MessageResolver {
+public interface MessageResolver
+{
     String getMessage(String key, Locale locale);
 }

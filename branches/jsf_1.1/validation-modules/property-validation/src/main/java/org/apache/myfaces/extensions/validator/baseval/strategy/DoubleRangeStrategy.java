@@ -30,16 +30,22 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public class DoubleRangeStrategy extends AbstractValidatorAdapter {
+public class DoubleRangeStrategy extends AbstractValidatorAdapter
+{
 
-    protected void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
+    protected void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
 
-        DoubleRange annotation = annotationEntry.getAnnotation(DoubleRange.class);
+        DoubleRange annotation = annotationEntry
+                .getAnnotation(DoubleRange.class);
         DoubleRangeValidator doubleRangeValidator = new DoubleRangeValidator();
 
         doubleRangeValidator.setMinimum(annotation.minimum());
         doubleRangeValidator.setMaximum(annotation.maximum());
 
-        doubleRangeValidator.validate(facesContext, uiComponent, convertedObject);
+        doubleRangeValidator.validate(facesContext, uiComponent,
+                convertedObject);
     }
 }

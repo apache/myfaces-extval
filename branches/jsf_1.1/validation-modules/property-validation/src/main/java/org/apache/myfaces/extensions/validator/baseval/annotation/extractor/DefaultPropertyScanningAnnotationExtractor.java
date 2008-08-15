@@ -29,25 +29,35 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultPropertyScanningAnnotationExtractor extends DefaultComponentAnnotationExtractor {
+public class DefaultPropertyScanningAnnotationExtractor extends
+        DefaultComponentAnnotationExtractor
+{
 
     @Override
-    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object) {
+    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
+            Object object)
+    {
         //should never occur
-        if (!(object instanceof String)) {
+        if (!(object instanceof String))
+        {
             return new ArrayList<AnnotationEntry>();
         }
 
         String valueBindingExpression = ((String) object).trim();
         int beanPropertyBorder = valueBindingExpression.lastIndexOf(".");
 
-        String property = valueBindingExpression.substring(beanPropertyBorder + 1, valueBindingExpression.lastIndexOf("}"));
+        String property = valueBindingExpression
+                .substring(beanPropertyBorder + 1, valueBindingExpression
+                        .lastIndexOf("}"));
 
-        valueBindingExpression = valueBindingExpression.substring(0, beanPropertyBorder) + "}";
+        valueBindingExpression = valueBindingExpression.substring(0,
+                beanPropertyBorder)
+                + "}";
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        Class entityClass = ELUtils.getTypeOfValueBindingForExpression(facesContext, valueBindingExpression);
+        Class entityClass = ELUtils.getTypeOfValueBindingForExpression(
+                facesContext, valueBindingExpression);
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();
@@ -59,9 +69,12 @@ public class DefaultPropertyScanningAnnotationExtractor extends DefaultComponent
         /*
          * find and add annotations
          */
-        if (entityClass != null) {
-            addPropertyAccessAnnotations(entityClass, property, annotationEntries, templateEntry);
-            addFieldAccessAnnotations(entityClass, property, annotationEntries, templateEntry);
+        if (entityClass != null)
+        {
+            addPropertyAccessAnnotations(entityClass, property,
+                    annotationEntries, templateEntry);
+            addFieldAccessAnnotations(entityClass, property, annotationEntries,
+                    templateEntry);
         }
 
         return annotationEntries;

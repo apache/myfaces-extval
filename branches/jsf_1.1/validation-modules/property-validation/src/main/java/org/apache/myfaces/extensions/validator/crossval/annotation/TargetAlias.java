@@ -27,8 +27,9 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface TargetAlias {
+public @interface TargetAlias
+{
     String value() default "";
 }

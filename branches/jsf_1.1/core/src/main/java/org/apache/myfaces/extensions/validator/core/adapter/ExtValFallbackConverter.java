@@ -31,37 +31,55 @@ import javax.faces.convert.Converter;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class ExtValFallbackConverter extends ExtValConverter {
+public class ExtValFallbackConverter extends ExtValConverter
+{
     private Converter wrapped;
 
-    public ExtValFallbackConverter(Converter converter) {
+    public ExtValFallbackConverter(Converter converter)
+    {
         this.wrapped = converter;
     }
 
     @Override
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
-        if (this.wrapped == null) {
+    public String getAsString(FacesContext facesContext,
+            UIComponent uiComponent, Object o)
+    {
+        if (this.wrapped == null)
+        {
             //indirect approach for complex components
-            Converter converter = ExtValUtils.tryToCreateOriginalConverter(facesContext, uiComponent);
-            if (converter == null) {
+            Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+                    facesContext, uiComponent);
+            if (converter == null)
+            {
                 return (o == null) ? null : o.toString();
-            } else {
+            }
+            else
+            {
                 return converter.getAsString(facesContext, uiComponent, o);
             }
-        } else {
+        }
+        else
+        {
             return this.wrapped.getAsString(facesContext, uiComponent, o);
         }
     }
 
     @Override
-    protected Object getConvertedObject(FacesContext facesContext, UIComponent uiComponent, String s) {
-        if (this.wrapped == null) {
+    protected Object getConvertedObject(FacesContext facesContext,
+            UIComponent uiComponent, String s)
+    {
+        if (this.wrapped == null)
+        {
             //indirect approach for complex components
             //TODO
-            Converter converter = ExtValUtils.tryToCreateOriginalConverter(facesContext, uiComponent);
+            Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+                    facesContext, uiComponent);
 
-            return (converter != null) ? converter.getAsObject(facesContext, uiComponent, s) : s;
-        } else {
+            return (converter != null) ? converter.getAsObject(facesContext,
+                    uiComponent, s) : s;
+        }
+        else
+        {
             return this.wrapped.getAsObject(facesContext, uiComponent, s);
         }
     }

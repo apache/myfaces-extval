@@ -27,9 +27,10 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Length {
+public @interface Length
+{
     int minimum() default 0;
 
     int maximum() default Integer.MAX_VALUE;

@@ -34,12 +34,17 @@ import java.util.List;
  *
  * @author Gerhard Petracek
  */
-public class DefaultValueBindingScanningAnnotationExtractor extends DefaultComponentAnnotationExtractor {
+public class DefaultValueBindingScanningAnnotationExtractor extends
+        DefaultComponentAnnotationExtractor
+{
 
     @Override
-    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object) {
+    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
+            Object object)
+    {
         //should never occur
-        if (!(object instanceof String)) {
+        if (!(object instanceof String))
+        {
             return new ArrayList<AnnotationEntry>();
         }
 
@@ -47,40 +52,54 @@ public class DefaultValueBindingScanningAnnotationExtractor extends DefaultCompo
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        Class entity = ELUtils.getTypeOfValueBindingForExpression(facesContext, valueBindingExpression);
+        Class entity = ELUtils.getTypeOfValueBindingForExpression(facesContext,
+                valueBindingExpression);
 
-        if (entity != null) {
+        if (entity != null)
+        {
             //find and add annotations
-            addPropertyAccessAnnotations(entity, annotationEntries, valueBindingExpression);
-            addFieldAccessAnnotations(entity, annotationEntries, valueBindingExpression);
+            addPropertyAccessAnnotations(entity, annotationEntries,
+                    valueBindingExpression);
+            addFieldAccessAnnotations(entity, annotationEntries,
+                    valueBindingExpression);
         }
 
         return annotationEntries;
     }
 
-    protected void addPropertyAccessAnnotations(Class entity, List<AnnotationEntry> annotationEntries, String valueBindingExpression) {
+    protected void addPropertyAccessAnnotations(Class entity,
+            List<AnnotationEntry> annotationEntries,
+            String valueBindingExpression)
+    {
         AnnotationEntry templateEntry;
 
-        for (Method method : entity.getDeclaredMethods()) {
+        for (Method method : entity.getDeclaredMethods())
+        {
             templateEntry = new AnnotationEntry();
             templateEntry.setEntityClass(entity.getClass());
             templateEntry.setValueBindingExpression(valueBindingExpression);
             templateEntry.setBoundTo("[method]:" + method.getName());
 
-            addAnnotationToAnnotationEntries(annotationEntries, Arrays.asList(method.getAnnotations()), templateEntry);
+            addAnnotationToAnnotationEntries(annotationEntries, Arrays
+                    .asList(method.getAnnotations()), templateEntry);
         }
     }
 
-    protected void addFieldAccessAnnotations(Class entity, List<AnnotationEntry> annotationEntries, String valueBindingExpression) {
+    protected void addFieldAccessAnnotations(Class entity,
+            List<AnnotationEntry> annotationEntries,
+            String valueBindingExpression)
+    {
         AnnotationEntry templateEntry;
 
-        for (Field field : entity.getDeclaredFields()) {
+        for (Field field : entity.getDeclaredFields())
+        {
             templateEntry = new AnnotationEntry();
             templateEntry.setEntityClass(entity.getClass());
             templateEntry.setValueBindingExpression(valueBindingExpression);
             templateEntry.setBoundTo("[field]:" + field.getName());
 
-            addAnnotationToAnnotationEntries(annotationEntries, Arrays.asList(field.getAnnotations()), templateEntry);
+            addAnnotationToAnnotationEntries(annotationEntries, Arrays
+                    .asList(field.getAnnotations()), templateEntry);
         }
     }
 }
