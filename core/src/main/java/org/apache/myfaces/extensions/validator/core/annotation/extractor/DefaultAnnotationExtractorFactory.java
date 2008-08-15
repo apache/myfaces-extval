@@ -28,22 +28,33 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultAnnotationExtractorFactory implements AnnotationExtractorFactory {
+public class DefaultAnnotationExtractorFactory implements
+        AnnotationExtractorFactory
+{
 
     private static AnnotationExtractor annotationExtractor = null;
 
-    public AnnotationExtractor create() {
-        if (annotationExtractor == null) {
+    public AnnotationExtractor create()
+    {
+        if (annotationExtractor == null)
+        {
             List<String> annotationExtractorClassNames = new ArrayList<String>();
 
-            annotationExtractorClassNames.add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR);
-            annotationExtractorClassNames.add(ExtValUtils.getInformationProviderBean().getCustomAnnotationExtractor());
-            annotationExtractorClassNames.add(DefaultComponentAnnotationExtractor.class.getName());
+            annotationExtractorClassNames
+                    .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR);
+            annotationExtractorClassNames.add(ExtValUtils
+                    .getInformationProviderBean()
+                    .getCustomAnnotationExtractor());
+            annotationExtractorClassNames
+                    .add(DefaultComponentAnnotationExtractor.class.getName());
 
-            for (String className : annotationExtractorClassNames) {
-                annotationExtractor = (AnnotationExtractor) ClassUtils.tryToInstantiateClassForName(className);
+            for (String className : annotationExtractorClassNames)
+            {
+                annotationExtractor = (AnnotationExtractor) ClassUtils
+                        .tryToInstantiateClassForName(className);
 
-                if (annotationExtractor != null) {
+                if (annotationExtractor != null)
+                {
                     //TODO logging
                     break;
                 }

@@ -27,64 +27,97 @@ import javax.faces.el.ValueBinding;
  *
  * @author Gerhard Petracek
  */
-public class ELUtils {
-    public static Class getTypeOfValueBindingForExpression(FacesContext facesContext, String valueBindingExpression) {
+public class ELUtils
+{
+    public static Class getTypeOfValueBindingForExpression(
+            FacesContext facesContext, String valueBindingExpression)
+    {
         //due to a restriction with the ri
-        Object bean = ELUtils.getValueOfExpression(facesContext, valueBindingExpression);
+        Object bean = ELUtils.getValueOfExpression(facesContext,
+                valueBindingExpression);
         return (bean != null) ? bean.getClass() : null;
     }
 
-    public static Object getBean(String beanName) {
+    public static Object getBean(String beanName)
+    {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        return facesContext.getApplication().getVariableResolver().resolveVariable(facesContext, beanName);
+        return facesContext.getApplication().getVariableResolver()
+                .resolveVariable(facesContext, beanName);
     }
 
     //TODO refactor - problem - static values - jsf 1.2 e.g.: ${value}
-    public static Object getBaseObject(String valueBindingExpression, UIComponent uiComponent) {
-        if (valueBindingExpression.lastIndexOf(".") == -1) {
-            return uiComponent.getValueBinding("value").getValue(FacesContext.getCurrentInstance());
+    public static Object getBaseObject(String valueBindingExpression,
+            UIComponent uiComponent)
+    {
+        if (valueBindingExpression.lastIndexOf(".") == -1)
+        {
+            return uiComponent.getValueBinding("value").getValue(
+                    FacesContext.getCurrentInstance());
         }
         return getBaseObject(valueBindingExpression);
     }
 
-    public static Object getBaseObject(String valueBindingExpression) {
-        String newExpression = valueBindingExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
+    public static Object getBaseObject(String valueBindingExpression)
+    {
+        String newExpression = valueBindingExpression.substring(0,
+                valueBindingExpression.lastIndexOf("."))
+                + "}";
 
-        return getValueOfExpression(FacesContext.getCurrentInstance(), newExpression);
+        return getValueOfExpression(FacesContext.getCurrentInstance(),
+                newExpression);
     }
 
-    public static Object getValueOfExpression(FacesContext facesContext, String valueBindingExpression) {
-        return (valueBindingExpression != null) ? facesContext.getApplication().createValueBinding(valueBindingExpression).getValue(facesContext) : null;
+    public static Object getValueOfExpression(FacesContext facesContext,
+            String valueBindingExpression)
+    {
+        return (valueBindingExpression != null) ? facesContext.getApplication()
+                .createValueBinding(valueBindingExpression).getValue(
+                        facesContext) : null;
     }
 
-    public static boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression) {
-        return facesContext.getApplication().createValueBinding(valueBindingExpression) != null;
+    public static boolean isExpressionValid(FacesContext facesContext,
+            String valueBindingExpression)
+    {
+        return facesContext.getApplication().createValueBinding(
+                valueBindingExpression) != null;
     }
 
-
-    public static String getReliableValueBindingExpression(UIComponent uiComponent) {
+    public static String getReliableValueBindingExpression(
+            UIComponent uiComponent)
+    {
         String valueBindingExpression = getValueBindingExpression(uiComponent);
 
         String baseExpression = valueBindingExpression;
-        if(baseExpression.contains(".")) {
-            baseExpression = baseExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
+        if (baseExpression.contains("."))
+        {
+            baseExpression = baseExpression.substring(0, valueBindingExpression
+                    .lastIndexOf("."))
+                    + "}";
         }
 
-        if(getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), baseExpression) == null) {
-            valueBindingExpression = FaceletsTaglibExpressionUtils.tryToCreateValueBindingForFaceletsBinding(uiComponent);
+        if (getTypeOfValueBindingForExpression(FacesContext
+                .getCurrentInstance(), baseExpression) == null)
+        {
+            valueBindingExpression = FaceletsTaglibExpressionUtils
+                    .tryToCreateValueBindingForFaceletsBinding(uiComponent);
         }
         return valueBindingExpression;
     }
 
-    public static String getValueBindingExpression(UIComponent uiComponent) {
+    public static String getValueBindingExpression(UIComponent uiComponent)
+    {
         ValueBinding valueExpression = uiComponent.getValueBinding("value");
 
-        return (valueExpression != null) ? valueExpression.getExpressionString() : null;
+        return (valueExpression != null) ? valueExpression
+                .getExpressionString() : null;
     }
 
-    public static Class getTypeOfValueBindingForComponent(FacesContext facesContext, UIComponent uiComponent) {
+    public static Class getTypeOfValueBindingForComponent(
+            FacesContext facesContext, UIComponent uiComponent)
+    {
         ValueBinding valueBinding = uiComponent.getValueBinding("value");
 
-        return (valueBinding != null) ? valueBinding.getType(facesContext) : null;
+        return (valueBinding != null) ? valueBinding.getType(facesContext)
+                : null;
     }
 }

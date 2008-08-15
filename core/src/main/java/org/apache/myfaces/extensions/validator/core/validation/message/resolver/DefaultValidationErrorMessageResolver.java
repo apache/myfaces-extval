@@ -24,15 +24,21 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver {
+public class DefaultValidationErrorMessageResolver extends
+        AbstractValidationErrorMessageResolver
+{
     private static final String CUSTOM_BUNDLE = WebXmlParameter.CUSTOM_MESSAGE_BUNDLE;
 
     //not used at the moment - just for a convention
-    protected String getBaseName() {
-        return ExtValUtils.getInformationProviderBean().getConventionForModuleMessageBundle(getClass().getPackage().getName());
+    protected String getBaseName()
+    {
+        return ExtValUtils.getInformationProviderBean()
+                .getConventionForModuleMessageBundle(
+                        getClass().getPackage().getName());
     }
 
-    protected String getCustomBaseName() {
+    protected String getCustomBaseName()
+    {
         return CUSTOM_BUNDLE;
     }
 }

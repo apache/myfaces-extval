@@ -26,8 +26,11 @@ import javax.faces.convert.Converter;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class DefaultConverterToAdapterNameMapper implements NameMapper<Converter> {
-    public String createName(Converter converter) {
+public class DefaultConverterToAdapterNameMapper implements
+        NameMapper<Converter>
+{
+    public String createName(Converter converter)
+    {
         return converter.getClass().getName() + "Adapter";
     }
 }

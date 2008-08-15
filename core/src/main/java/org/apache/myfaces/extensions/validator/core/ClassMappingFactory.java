@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core;
 /**
  * @author Gerhard Petracek
  */
-public interface ClassMappingFactory<P, R> {
+public interface ClassMappingFactory<P, R>
+{
     R create(P source);
 }

@@ -41,67 +41,90 @@ import java.util.List;
  *
  * @author Gerhard Petracek
  */
-public class ProxyMappingPhaseListener implements PhaseListener {
+public class ProxyMappingPhaseListener implements PhaseListener
+{
     private boolean isInitialized = false;
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public void afterPhase(PhaseEvent event) {
-        if (!isInitialized) {
+    public void afterPhase(PhaseEvent event)
+    {
+        if (!isInitialized)
+        {
             //don't use DEACTIVATE_PROXY_MAPPING here to allow a different concept
             String initParam = WebXmlParameter.DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER;
             String initAdapterParam = WebXmlParameter.USE_ADAPTERS;
- 
-            if((initParam != null && initParam.equalsIgnoreCase("true")) || (initAdapterParam != null && initAdapterParam.equalsIgnoreCase("true"))) {
+
+            if ((initParam != null && initParam.equalsIgnoreCase("true"))
+                    || (initAdapterParam != null && initAdapterParam
+                            .equalsIgnoreCase("true")))
+            {
                 ExtValUtils.deregisterPhaseListener(this);
             }
             isInitialized = true;
         }
 
-        if(!event.getPhaseId().equals(PhaseId.RENDER_RESPONSE)) {
+        if (!event.getPhaseId().equals(PhaseId.RENDER_RESPONSE))
+        {
             return;
         }
 
-        Integer processedConverterCount = ExtValUtils.getProcessedConverterCount();
+        Integer processedConverterCount = ExtValUtils
+                .getProcessedConverterCount();
         //don't change the comparison with 0 - in order to reduce the overhead.
         //if everything works correctly it's not necessary to inspact the full tree
         //it's just due to a ri bug - normally it's performed during ExtValConverter#intercept#getAsString
-        if(ExtValUtils.useProxyMapping() && (processedConverterCount != null && !processedConverterCount.equals(0))){
-            storeComponentConverterMappingForProxies(event.getFacesContext(), event.getFacesContext().getViewRoot());
+        if (ExtValUtils.useProxyMapping()
+                && (processedConverterCount != null && !processedConverterCount
+                        .equals(0)))
+        {
+            storeComponentConverterMappingForProxies(event.getFacesContext(),
+                    event.getFacesContext().getViewRoot());
         }
     }
 
-    public void beforePhase(PhaseEvent event) {
-        if(!event.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES)) {
+    public void beforePhase(PhaseEvent event)
+    {
+        if (!event.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES))
+        {
             return;
         }
 
         ExtValUtils.restoreProxies();
     }
 
-    public PhaseId getPhaseId() {
+    public PhaseId getPhaseId()
+    {
         return PhaseId.ANY_PHASE;
     }
 
     /**
      * there is a ri bug (at least with jsp's) -> sometimes getAsString of converters aren't called
-     * -> there is no mapping -> if it's the case and there are unhandled editable value hoder components within the page
+     * -> there is no mapping -> if it's the case and there are 
+     *                           unhandled editable value hoder components within the page
      * -> search all these components and add the equivalent converter to the mapping
      *
      * @param facesContext reference to the current faces context
      * @param uiComponent reference to the current component
      */
-    private void storeComponentConverterMappingForProxies(FacesContext facesContext, UIComponent uiComponent) {
+    private void storeComponentConverterMappingForProxies(
+            FacesContext facesContext, UIComponent uiComponent)
+    {
         //TODO use the following after the impl. of a better multi-window-mode solution
         //if(!uiComponent.isRendered()) {
         //    return;
         //}
 
-        for(UIComponent child : (List<UIComponent>)uiComponent.getChildren()) {
-            if(child instanceof ValueHolder) {
-                Converter converter = ((ValueHolder)child).getConverter();
-                if(converter != null && converter.getClass().getName().contains("$$")) {
-                    ExtValUtils.getOrInitProxyMapping().put(child.getClientId(facesContext), converter);
+        for (UIComponent child : (List<UIComponent>) uiComponent.getChildren())
+        {
+            if (child instanceof ValueHolder)
+            {
+                Converter converter = ((ValueHolder) child).getConverter();
+                if (converter != null
+                        && converter.getClass().getName().contains("$$"))
+                {
+                    ExtValUtils.getOrInitProxyMapping().put(
+                            child.getClientId(facesContext), converter);
                 }
             }
             storeComponentConverterMappingForProxies(facesContext, child);

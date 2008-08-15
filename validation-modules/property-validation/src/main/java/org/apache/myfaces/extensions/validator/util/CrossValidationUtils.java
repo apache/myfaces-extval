@@ -26,20 +26,31 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class CrossValidationUtils {
-    public static final String CROSS_VALIDATION_STORAGE_KEY = CrossValidationStorage.class.getName();
+public class CrossValidationUtils
+{
+    public static final String CROSS_VALIDATION_STORAGE_KEY = CrossValidationStorage.class
+            .getName();
 
-    public static CrossValidationStorage getOrInitCrossValidationStorage() {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+    public static CrossValidationStorage getOrInitCrossValidationStorage()
+    {
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext()
+                .getRequestMap();
 
-        if (!requestMap.containsKey(CROSS_VALIDATION_STORAGE_KEY)) {
+        if (!requestMap.containsKey(CROSS_VALIDATION_STORAGE_KEY))
+        {
             resetCrossValidationStorage();
         }
 
-        return (CrossValidationStorage) requestMap.get(CROSS_VALIDATION_STORAGE_KEY);
+        return (CrossValidationStorage) requestMap
+                .get(CROSS_VALIDATION_STORAGE_KEY);
     }
 
-    public static void resetCrossValidationStorage() {
-        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(CROSS_VALIDATION_STORAGE_KEY, new CrossValidationStorage());
+    public static void resetCrossValidationStorage()
+    {
+        FacesContext
+                .getCurrentInstance()
+                .getExternalContext()
+                .getRequestMap()
+                .put(CROSS_VALIDATION_STORAGE_KEY, new CrossValidationStorage());
     }
 }

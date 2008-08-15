@@ -15,20 +15,23 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-*/
+ */
 package org.apache.myfaces.blank.domain;
 
 import javax.persistence.Column;
 
-public class Person {
+public class Person
+{
     @Column(nullable = false, length = 10)
     private String name;
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 }

@@ -25,8 +25,11 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
  *
  * @author Gerhard Petracek
  */
-public interface WebXmlParameter {
+public interface WebXmlParameter
+{
     //TODO docu
-    static final String VALIDATION_MESSAGES_JPA = WebXmlUtils.getInitParameter("JPA_VALIDATION_ERROR_MESSAGES");
-    static final String DEACTIVATE_JPA_BASED_VALIDATION = WebXmlUtils.getInitParameter("DEACTIVATE_JPA_BASED_VALIDATION");
+    static final String VALIDATION_MESSAGES_JPA = WebXmlUtils
+            .getInitParameter("JPA_VALIDATION_ERROR_MESSAGES");
+    static final String DEACTIVATE_JPA_BASED_VALIDATION = WebXmlUtils
+            .getInitParameter("DEACTIVATE_JPA_BASED_VALIDATION");
 }
