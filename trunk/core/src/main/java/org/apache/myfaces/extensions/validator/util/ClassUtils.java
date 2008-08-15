@@ -21,41 +21,55 @@ package org.apache.myfaces.extensions.validator.util;
 /**
  * @author Gerhard Petracek
  */
-public class ClassUtils {
-    public static Class loadClassForName(String name) throws ClassNotFoundException {
-        try {
+public class ClassUtils
+{
+    public static Class loadClassForName(String name)
+            throws ClassNotFoundException
+    {
+        try
+        {
             // Try WebApp ClassLoader first
-            return Class.forName(name,
-                    false, // do not initialize for faster startup
+            return Class.forName(name, false, // do not initialize for faster startup
                     Thread.currentThread().getContextClassLoader());
         }
-        catch (ClassNotFoundException ignore) {
+        catch (ClassNotFoundException ignore)
+        {
             // fallback: Try ClassLoader for ClassUtils (i.e. the myfaces.jar lib)
-            return Class.forName(name,
-                    false, // do not initialize for faster startup
+            return Class.forName(name, false, // do not initialize for faster startup
                     ClassUtils.class.getClassLoader());
         }
     }
 
-    public static Object tryToInstantiateClass(Class targetClass) {
-        try {
+    public static Object tryToInstantiateClass(Class targetClass)
+    {
+        try
+        {
             return targetClass.newInstance();
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             //do nothing - it was just a try
         }
         return null;
     }
 
-    public static Object tryToInstantiateClassForName(String className) {
-        try {
+    public static Object tryToInstantiateClassForName(String className)
+    {
+        try
+        {
             return instantiateClassForName(className);
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             //do nothing - it was just a try
         }
         return null;
     }
 
-    public static Object instantiateClassForName(String className) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public static Object instantiateClassForName(String className)
+            throws ClassNotFoundException, IllegalAccessException,
+            InstantiationException
+    {
         return loadClassForName(className).newInstance();
     }
 }

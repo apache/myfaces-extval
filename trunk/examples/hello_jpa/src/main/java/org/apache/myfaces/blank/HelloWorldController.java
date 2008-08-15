@@ -15,42 +15,45 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-*/
+ */
 package org.apache.myfaces.blank;
 
-import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.blank.domain.Person;
 
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
  * 
  */
-public class HelloWorldController {
+public class HelloWorldController
+{
 
-    
     //properties
     private Person person;
-    
+
     /**
      * default empty constructor
      */
-    public HelloWorldController(){
+    public HelloWorldController()
+    {
     }
-    
+
     //-------------------getter & setter
 
-    public Person getPerson() {
+    public Person getPerson()
+    {
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(Person person)
+    {
         this.person = person;
     }
 
     /**
      * Method that is backed to a submit button of a form.
      */
-    public String send(){
+    public String send()
+    {
         //do real logic, return a string which will be used for the navigation system of JSF
         return "success";
     }

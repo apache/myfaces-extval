@@ -27,9 +27,10 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Equals {
+public @interface Equals
+{
     String[] value();
 
     String validationErrorMsgKey() default "duplicated_content_required";

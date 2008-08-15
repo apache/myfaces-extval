@@ -25,21 +25,30 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 /*generated code - don't change!*/
-public class DoubleConverterAdapter extends org.apache.myfaces.trinidadinternal.convert.DoubleConverter {
-	private Converter smartConverter;
+public class DoubleConverterAdapter extends
+        org.apache.myfaces.trinidadinternal.convert.DoubleConverter
+{
+    private Converter smartConverter;
 
-	public DoubleConverterAdapter() {
-		this(new org.apache.myfaces.trinidadinternal.convert.DoubleConverter());
-	}
+    public DoubleConverterAdapter()
+    {
+        this(new org.apache.myfaces.trinidadinternal.convert.DoubleConverter());
+    }
 
-	public DoubleConverterAdapter(Converter converter) {
-		this.smartConverter = new ExtValFallbackConverter(converter);
-	}
+    public DoubleConverterAdapter(Converter converter)
+    {
+        this.smartConverter = new ExtValFallbackConverter(converter);
+    }
 
-	public Object getAsObject(FacesContext context, UIComponent component, String value) throws ConverterException {
-		return this.smartConverter.getAsObject(context, component, value);
-	}
-	public String getAsString(FacesContext context, UIComponent component, Object value) throws ConverterException {
-		return this.smartConverter.getAsString(context, component, value);
-	}
+    public Object getAsObject(FacesContext context, UIComponent component,
+            String value) throws ConverterException
+    {
+        return this.smartConverter.getAsObject(context, component, value);
+    }
+
+    public String getAsString(FacesContext context, UIComponent component,
+            Object value) throws ConverterException
+    {
+        return this.smartConverter.getAsString(context, component, value);
+    }
 }

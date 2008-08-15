@@ -27,27 +27,35 @@ import javax.faces.application.ApplicationFactory;
 /**
  * @author Gerhard Petracek
  */
-public class ExtValApplicationFactory extends ApplicationFactory {
+public class ExtValApplicationFactory extends ApplicationFactory
+{
     protected final Log logger = LogFactory.getLog(getClass());
 
     private ApplicationFactory wrapped;
 
-    public ExtValApplicationFactory(ApplicationFactory applicationFactory) {
+    public ExtValApplicationFactory(ApplicationFactory applicationFactory)
+    {
         this.wrapped = applicationFactory;
         setApplication(applicationFactory.getApplication());
-        logger.trace("myfaces-extension-validator application factory instantiated");
+        logger
+                .trace("myfaces-extension-validator application factory instantiated");
     }
 
-    public Application getApplication() {
+    public Application getApplication()
+    {
         return this.wrapped.getApplication();
     }
 
-    public void setApplication(Application application) {
-        if (!(application instanceof ExtValApplication)) {
+    public void setApplication(Application application)
+    {
+        if (!(application instanceof ExtValApplication))
+        {
             logger.trace("myfaces-extension-validator application created");
 
             this.wrapped.setApplication(new ExtValApplication(application));
-        } else {
+        }
+        else
+        {
             this.wrapped.setApplication(application);
         }
     }

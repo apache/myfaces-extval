@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 /**
  * @author Gerhard Petracek
  */
-public interface AnnotationExtractorFactory {
+public interface AnnotationExtractorFactory
+{
     AnnotationExtractor create();
 }

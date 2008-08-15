@@ -27,9 +27,12 @@ import javax.faces.convert.Converter;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class CustomConfiguredConverterToAdapterNameMapper extends AbstractCustomNameMapper<Converter> {
+public class CustomConfiguredConverterToAdapterNameMapper extends
+        AbstractCustomNameMapper<Converter>
+{
 
-    protected String getCustomNameMapperClassName() {
+    protected String getCustomNameMapperClassName()
+    {
         return WebXmlParameter.CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER;
     }
 }

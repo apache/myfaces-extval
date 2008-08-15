@@ -40,11 +40,14 @@ import java.util.Map;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class DefaultConverterAdapterFactory implements ClassMappingFactory<Converter, Converter> {
+public class DefaultConverterAdapterFactory implements
+        ClassMappingFactory<Converter, Converter>
+{
     private static Map<String, String> converterAdapterMapping = new HashMap<String, String>();
     private static List<NameMapper<Converter>> nameMapperList = new ArrayList<NameMapper<Converter>>();
 
-    static {
+    static
+    {
         nameMapperList.add(new CustomConfiguredConverterToAdapterNameMapper());
         nameMapperList.add(new CustomConventionConverterToAdapterNameMapper());
         nameMapperList.add(new DefaultConverterToAdapterNameMapper());
@@ -53,24 +56,32 @@ public class DefaultConverterAdapterFactory implements ClassMappingFactory<Conve
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public Converter create(Converter converter) {
+    public Converter create(Converter converter)
+    {
         String converterName = converter.getClass().getName();
 
-        if (converterAdapterMapping.containsKey(converterName)) {
-            return (Converter) ClassUtils.tryToInstantiateClassForName(converterAdapterMapping.get(converterName));
+        if (converterAdapterMapping.containsKey(converterName))
+        {
+            return (Converter) ClassUtils
+                    .tryToInstantiateClassForName(converterAdapterMapping
+                            .get(converterName));
         }
 
         Converter adapter;
         String adapterName;
 
-        for (NameMapper<Converter> nameMapper : nameMapperList) {
+        for (NameMapper<Converter> nameMapper : nameMapperList)
+        {
             adapterName = nameMapper.createName(converter);
-            adapter = (Converter) ClassUtils.tryToInstantiateClassForName(adapterName);
+            adapter = (Converter) ClassUtils
+                    .tryToInstantiateClassForName(adapterName);
 
-            if (adapter != null) {
+            if (adapter != null)
+            {
                 addMapping(converterName, adapter.getClass().getName());
 
-                if (this.logger.isTraceEnabled()) {
+                if (this.logger.isTraceEnabled())
+                {
                     this.logger.trace("used adapter: " + adapter.getClass().getName());
                 }
 
@@ -78,14 +89,18 @@ public class DefaultConverterAdapterFactory implements ClassMappingFactory<Conve
             }
         }
 
-        if (this.logger.isDebugEnabled()) {
-            this.logger.debug("no adapter found for " + converterName + " -> converter itself is used -> no sev-en support");
+        if (this.logger.isDebugEnabled())
+        {
+            this.logger.debug("no adapter found for " + converterName 
+                    + " -> converter itself is used -> no sev-en support");
         }
         return converter;
     }
 
-    private void addMapping(String sourceConverter, String adapter) {
-        synchronized (DefaultConverterAdapterFactory.class) {
+    private void addMapping(String sourceConverter, String adapter)
+    {
+        synchronized (DefaultConverterAdapterFactory.class)
+        {
             converterAdapterMapping.put(sourceConverter, adapter);
         }
         //TODO logging
