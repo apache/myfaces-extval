@@ -27,8 +27,13 @@ import javax.faces.convert.Converter;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class SimpleConverterToAdapterNameMapper implements NameMapper<Converter> {
-    public String createName(Converter converter) {
-        return ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".adapter." + converter.getClass().getSimpleName() + "Adapter";
+public class SimpleConverterToAdapterNameMapper implements
+        NameMapper<Converter>
+{
+    public String createName(Converter converter)
+    {
+        return ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
+                + ".adapter." + converter.getClass().getSimpleName()
+                + "Adapter";
     }
 }

@@ -30,9 +30,13 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public class LengthStrategy extends AbstractValidatorAdapter {
+public class LengthStrategy extends AbstractValidatorAdapter
+{
 
-    protected void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
+    protected void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
 
         Length annotation = annotationEntry.getAnnotation(Length.class);
         LengthValidator lengthValidator = new LengthValidator();

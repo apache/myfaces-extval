@@ -25,21 +25,30 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 /*generated code - don't change!*/
-public class DateTimeConverterAdapter extends org.apache.myfaces.trinidad.convert.DateTimeConverter {
-	private Converter smartConverter;
+public class DateTimeConverterAdapter extends
+        org.apache.myfaces.trinidad.convert.DateTimeConverter
+{
+    private Converter smartConverter;
 
-	public DateTimeConverterAdapter() {
-		this(new org.apache.myfaces.trinidad.convert.DateTimeConverter());
-	}
+    public DateTimeConverterAdapter()
+    {
+        this(new org.apache.myfaces.trinidad.convert.DateTimeConverter());
+    }
 
-	public DateTimeConverterAdapter(Converter converter) {
-		this.smartConverter = new ExtValFallbackConverter(converter);
-	}
+    public DateTimeConverterAdapter(Converter converter)
+    {
+        this.smartConverter = new ExtValFallbackConverter(converter);
+    }
 
-	public Object getAsObject(FacesContext context, UIComponent component, String value) throws ConverterException {
-		return this.smartConverter.getAsObject(context, component, value);
-	}
-	public String getAsString(FacesContext context, UIComponent component, Object value) throws ConverterException {
-		return this.smartConverter.getAsString(context, component, value);
-	}
+    public Object getAsObject(FacesContext context, UIComponent component,
+            String value) throws ConverterException
+    {
+        return this.smartConverter.getAsObject(context, component, value);
+    }
+
+    public String getAsString(FacesContext context, UIComponent component,
+            Object value) throws ConverterException
+    {
+        return this.smartConverter.getAsString(context, component, value);
+    }
 }

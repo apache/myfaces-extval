@@ -27,77 +27,97 @@ import java.util.List;
 
 /**
  * centralized in order that these information arn't spread over the complete code base
- * + some of them can be customized within a custom impl. of the bean (extend this class and provide it via convention or web.xml)
+ * + some of them can be customized within a custom impl. of the bean 
+ * (extend this class and provide it via convention or web.xml)
  * <p/>
  * the static api should only be used
  *
  * @author Gerhard Petracek
  */
-public class InformationProviderBean {
-    public static final String BEAN_NAME = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + "." + InformationProviderBean.class.getSimpleName();
+public class InformationProviderBean
+{
+    public static final String BEAN_NAME = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
+            + "." + InformationProviderBean.class.getSimpleName();
     //custom class which is an optional replacement for this class (has to extend this class)
-    public static final String CUSTOM_BEAN = (ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom." + InformationProviderBean.class.getSimpleName()).replace(".", "_");
+    public static final String CUSTOM_BEAN = (ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
+            + ".custom." + InformationProviderBean.class.getSimpleName())
+            .replace(".", "_");
     private String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
 
-    public InformationProviderBean() {
-        if (this.basePackage == null) {
-            this.basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.";
+    public InformationProviderBean()
+    {
+        if (this.basePackage == null)
+        {
+            this.basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
+                    + ".custom.";
         }
-        if (!this.basePackage.endsWith(".")) {
+        if (!this.basePackage.endsWith("."))
+        {
             this.basePackage = this.basePackage + ".";
         }
     }
 
-    public String getBasePackage() {
+    public String getBasePackage()
+    {
         return basePackage;
     }
 
-    public String getCustomAnnotationExtractorFactory() {
+    public String getCustomAnnotationExtractorFactory()
+    {
         return this.basePackage + "AnnotationExtractorFactory";
     }
 
-    public String getCustomAnnotationExtractor() {
+    public String getCustomAnnotationExtractor()
+    {
         return this.basePackage + "AnnotationExtractor";
     }
 
     /*
      * postfix used by the SimpleAnnotationToValidationStrategyNameMapper
-     * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies only (not for public validation modules)
+     * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies only
+     * (not for public validation modules)
      * so it's fine to customize it
      */
-    public String getValidationStrategyPostfix() {
+    public String getValidationStrategyPostfix()
+    {
         return "ValidationStrategy";
     }
 
     /*
      * name mapper
      */
-    public String getCustomValidationStrategyToMsgResolverNameMapper() {
+    public String getCustomValidationStrategyToMsgResolverNameMapper()
+    {
         return this.basePackage + "ValidationStrategyToMsgResolverNameMapper";
     }
 
-    public String getCustomAnnotationToValidationStrategyNameMapper() {
+    public String getCustomAnnotationToValidationStrategyNameMapper()
+    {
         return this.basePackage + "AnnotationToValidationStrategyNameMapper";
     }
 
     @Deprecated
-    public String getCustomAdapterNameMapper() {
+    public String getCustomAdapterNameMapper()
+    {
         return this.basePackage + "AdapterNameMapper";
     }
 
     /*
      * factories
      */
-    public String getCustomMessageResolverFactory() {
+    public String getCustomMessageResolverFactory()
+    {
         return this.basePackage + "MessageResolverFactory";
     }
 
-    public String getCustomValidationStrategyFactory() {
+    public String getCustomValidationStrategyFactory()
+    {
         return this.basePackage + "ValidationStrategyFactory";
     }
 
     @Deprecated
-    public String getCustomConverterAdapterFactory() {
+    public String getCustomConverterAdapterFactory()
+    {
         return this.basePackage + "ConverterAdapterFactory";
     }
 
@@ -105,14 +125,16 @@ public class InformationProviderBean {
     /*
      * conventions (the rest of the conventions are built with the help of name mappers,...
      */
-    public String getConventionForMessageBundle() {
+    public String getConventionForMessageBundle()
+    {
         return this.basePackage + "validation_messages";
     }
 
     /*
      * static strategy mappings (name of property files)
      */
-    public String getCustomStaticStrategyMappingSource() {
+    public String getCustomStaticStrategyMappingSource()
+    {
         return this.basePackage + "strategy_mappings";
     }
 
@@ -122,54 +144,77 @@ public class InformationProviderBean {
      * final methods
      */
     //TODO
-    public final String getConventionForModuleMessageBundle(String packageName) {
+    public final String getConventionForModuleMessageBundle(String packageName)
+    {
         String newPackageName;
-        if (packageName.endsWith(".resolver")) {
+        if (packageName.endsWith(".resolver"))
+        {
             newPackageName = packageName.replace(".resolver", ".bundle");
-        } else {
+        }
+        else
+        {
             newPackageName = packageName.replace(".resolver.", ".bundle.");
         }
 
         return newPackageName + ".validation_messages";
     }
 
-    public final List<String> getStaticStrategyMappingSources() {
+    public final List<String> getStaticStrategyMappingSources()
+    {
         return this.staticStrategyMappings;
     }
 
-    public final void addStaticStrategyMappingSource(String resourceBundleName) {
-        synchronized (this) {
+    public final void addStaticStrategyMappingSource(String resourceBundleName)
+    {
+        synchronized (this)
+        {
             this.staticStrategyMappings.add(resourceBundleName);
         }
     }
 
-    public final boolean containsStaticStrategyMappingSource(String resourceBundleName) {
+    public final boolean containsStaticStrategyMappingSource(
+            String resourceBundleName)
+    {
         return this.staticStrategyMappings.contains(resourceBundleName);
     }
 
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public final String getConventionNameForMessageResolverPackage(Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName) {
+    public final String getConventionNameForMessageResolverPackage(
+            Class<? extends ValidationStrategy> validationStrategyClass,
+            String targetClassName)
+    {
         String resolverName = validationStrategyClass.getName();
 
         resolverName = resolverName.replace(".strategy.", ".message.resolver.");
 
-        if (targetClassName == null) {
+        if (targetClassName == null)
+        {
             //TODO
             return null;
         }
-        return resolverName.substring(0, resolverName.lastIndexOf(".")) + "." + targetClassName;
+        return resolverName.substring(0, resolverName.lastIndexOf(".")) + "."
+                + targetClassName;
     }
 
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public final String getConventionNameForMessageResolverClass(String strategyClassName) {
-        if (strategyClassName.endsWith("ValidationStrategy")) {
-            return strategyClassName.substring(0, strategyClassName.length() - 18) + "ValidationErrorMessageResolver";
-        } else if (strategyClassName.endsWith("Strategy")) {
-            return strategyClassName.substring(0, strategyClassName.length() - 8) + "ValidationErrorMessageResolver";
+    public final String getConventionNameForMessageResolverClass(
+            String strategyClassName)
+    {
+        if (strategyClassName.endsWith("ValidationStrategy"))
+        {
+            return strategyClassName.substring(0,
+                    strategyClassName.length() - 18)
+                    + "ValidationErrorMessageResolver";
+        }
+        else if (strategyClassName.endsWith("Strategy"))
+        {
+            return strategyClassName.substring(0,
+                    strategyClassName.length() - 8)
+                    + "ValidationErrorMessageResolver";
         }
         return strategyClassName;
     }
@@ -177,7 +222,11 @@ public class InformationProviderBean {
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public final String getConventionNameForValidationStrategy(Annotation annotation) {
-        return annotation.annotationType().getName().replace(".annotation.", ".strategy.") + "Strategy";
+    public final String getConventionNameForValidationStrategy(
+            Annotation annotation)
+    {
+        return annotation.annotationType().getName().replace(".annotation.",
+                ".strategy.")
+                + "Strategy";
     }
 }

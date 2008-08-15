@@ -26,6 +26,8 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-public interface ValidationStrategy {
-    void validate(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject);
+public interface ValidationStrategy
+{
+    void validate(FacesContext facesContext, UIComponent uiComponent,
+            AnnotationEntry annotationEntry, Object convertedObject);
 }

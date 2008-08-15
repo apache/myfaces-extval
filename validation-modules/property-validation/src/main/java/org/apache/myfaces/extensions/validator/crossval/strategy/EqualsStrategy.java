@@ -26,21 +26,29 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class EqualsStrategy extends AbstractCompareStrategy {
+public class EqualsStrategy extends AbstractCompareStrategy
+{
 
-    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry) {
+    public boolean useTargetComponentToDisplayErrorMsg(
+            CrossValidationStorageEntry crossValidationStorageEntry)
+    {
         return true;
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent) {
+    protected String getValidationErrorMsgKey(Annotation annotation,
+            boolean isTargetComponent)
+    {
         return ((Equals) annotation).validationErrorMsgKey();
     }
 
-    public boolean isViolation(Object object1, Object object2, Annotation annotation) {
+    public boolean isViolation(Object object1, Object object2,
+            Annotation annotation)
+    {
         return object1 != null && !object1.equals(object2);
     }
 
-    public String[] getValidationTargets(Annotation annotation) {
+    public String[] getValidationTargets(Annotation annotation)
+    {
         return ((Equals) annotation).value();
     }
 }

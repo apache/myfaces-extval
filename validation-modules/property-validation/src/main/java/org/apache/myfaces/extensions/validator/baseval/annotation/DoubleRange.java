@@ -27,9 +27,10 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface DoubleRange {
+public @interface DoubleRange
+{
     double minimum() default 0;
 
     double maximum() default Double.MAX_VALUE;

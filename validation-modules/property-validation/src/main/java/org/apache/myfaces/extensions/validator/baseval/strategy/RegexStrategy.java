@@ -32,28 +32,33 @@ import java.util.regex.Pattern;
 /**
  * @author Gerhard Petracek
  */
-public class RegexStrategy extends AbstractValidationStrategy {
+public class RegexStrategy extends AbstractValidationStrategy
+{
 
     protected void processValidation(FacesContext facesContext,
-                                     UIComponent uiComponent,
-                                     AnnotationEntry annotationEntry,
-                                     Object convertedObject) throws ValidatorException {
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
 
         Regex annotation = annotationEntry.getAnnotation(Regex.class);
 
-        for (String expression : annotation.value()) {
-            if (convertedObject == null || !Pattern.compile(expression).matcher(convertedObject.toString()).matches()) {
-                throw new ValidatorException(
-                        new FacesMessage(
-                                FacesMessage.SEVERITY_ERROR,
-                                getErrorMessageSummary(annotation),
-                                getErrorMessageDetails(annotation)
-                                        .replace("{0}", expression)));
+        for (String expression : annotation.value())
+        {
+            if (convertedObject == null
+                    || !Pattern.compile(expression).matcher(
+                            convertedObject.toString()).matches())
+            {
+                throw new ValidatorException(new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR,
+                        getErrorMessageSummary(annotation),
+                        getErrorMessageDetails(annotation).replace("{0}",
+                                expression)));
             }
         }
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation) {
+    protected String getValidationErrorMsgKey(Annotation annotation)
+    {
         return ((Regex) annotation).validationErrorMsgKey();
     }
 }

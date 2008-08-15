@@ -31,7 +31,9 @@ import java.util.ResourceBundle;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractValidationErrorMessageResolver implements MessageResolver {
+public abstract class AbstractValidationErrorMessageResolver implements
+        MessageResolver
+{
     private static String deactivateDefaultConvention = WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION;
     private static ResourceBundle defaultBundle = null;
     private String messageBundleBaseName;
@@ -40,8 +42,10 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public String getMessage(String key, Locale locale) {
-        if (key == null || key.equals("")) {
+    public String getMessage(String key, Locale locale)
+    {
+        if (key == null || key.equals(""))
+        {
             return null;
         }
 
@@ -49,26 +53,35 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         String customMessage = null;
 
         //only in case of a ValidationErrorMessageResolver which is configured as bean
-        if(this.messageBundleBaseName != null) {
+        if(this.messageBundleBaseName != null)
+        {
             resourceBundle = ResourceBundle.getBundle(this.messageBundleBaseName, locale);
-            if(resourceBundle != null) {
+            if(resourceBundle != null)
+            {
                 customMessage = resourceBundle.getString(key);
-            } else {
+            }
+            else
+            {
                 logger.warn("message bundle " + this.messageBundleBaseName + " not found");
             }
         }
 
         //only in case of a ValidationErrorMessageResolver which is configured as bean
-        if(this.messageBundleVarName != null && customMessage == null) {
+        if(this.messageBundleVarName != null && customMessage == null)
+        {
             resourceBundle = (ResourceBundle)ELUtils.getBean(messageBundleVarName);
-            if(resourceBundle != null) {
+            if(resourceBundle != null)
+            {
                 customMessage = resourceBundle.getString(key);
-            } else {
+            }
+            else
+            {
                 logger.warn("message bundle var name " + this.messageBundleVarName + " not found");
             }
         }
 
-        if (customMessage != null) {
+        if (customMessage != null)
+        {
             return customMessage;
         }
 
@@ -77,7 +90,8 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
          */
         customMessage = tryToUseMessageBundleConvention(key, locale);
 
-        if (customMessage != null) {
+        if (customMessage != null)
+        {
             return customMessage;
         }
 
@@ -86,45 +100,66 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
          */
 
         //try to load custom messages
-        try {
-            resourceBundle = ResourceBundle.getBundle(getCustomBaseName(), locale);
+        try
+        {
+            resourceBundle = ResourceBundle.getBundle(getCustomBaseName(),
+                    locale);
         }
-        catch (Throwable t) {
+        catch (Throwable t)
+        {
             //do nothing - it was just a try
         }
 
-        if (resourceBundle != null) {
-            try {
+        if (resourceBundle != null)
+        {
+            try
+            {
                 customMessage = resourceBundle.getString(key);
             }
-            catch (MissingResourceException e) {
-                logger.trace("no custom message for " + key + " within " + getCustomBaseName());
+            catch (MissingResourceException e)
+            {
+                logger.trace("no custom message for " + key + " within "
+                        + getCustomBaseName());
             }
         }
 
         //use custom name (if possible) otherwise: fallback to default message (if possible)
-        return (customMessage != null) ? customMessage : (getBaseName() != null) ? ResourceBundle.getBundle(getBaseName(), locale).getString(key) : null;
+        return (customMessage != null) ? customMessage
+                : (getBaseName() != null) ? ResourceBundle.getBundle(
+                        getBaseName(), locale).getString(key) : null;
     }
 
-    private String tryToUseMessageBundleConvention(String key, Locale locale) {
+    private String tryToUseMessageBundleConvention(String key, Locale locale)
+    {
         String customMessage = null;
 
-        if ((deactivateDefaultConvention == null || !deactivateDefaultConvention.equalsIgnoreCase("true")) &&
-                isDefaultMessageBundleConventionActive()) {
-            if (defaultBundle == null) {
-                try {
-                    defaultBundle = ResourceBundle.getBundle(ExtValUtils.getInformationProviderBean().getConventionForMessageBundle(), locale);
-                } catch (Throwable t) {
+        if ((deactivateDefaultConvention == null || !deactivateDefaultConvention
+                .equalsIgnoreCase("true"))
+                && isDefaultMessageBundleConventionActive())
+        {
+            if (defaultBundle == null)
+            {
+                try
+                {
+                    defaultBundle = ResourceBundle.getBundle(ExtValUtils
+                            .getInformationProviderBean()
+                            .getConventionForMessageBundle(), locale);
+                }
+                catch (Throwable t)
+                {
                     //do nothing
                     deactivateDefaultConvention = "true";
                 }
             }
 
-            if (defaultBundle != null) {
-                try {
+            if (defaultBundle != null)
+            {
+                try
+                {
                     customMessage = defaultBundle.getString(key);
                 }
-                catch (MissingResourceException e) {
+                catch (MissingResourceException e)
+                {
                     //do nothing
                 }
             }
@@ -133,21 +168,25 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         return customMessage;
     }
 
-    protected boolean isDefaultMessageBundleConventionActive() {
+    protected boolean isDefaultMessageBundleConventionActive()
+    {
         return true;
     }
 
     protected abstract String getBaseName();
 
-    protected String getCustomBaseName() {
+    protected String getCustomBaseName()
+    {
         return null;
     }
 
-    public void setMessageBundleBaseName(String messageBundleBaseName) {
+    public void setMessageBundleBaseName(String messageBundleBaseName)
+    {
         this.messageBundleBaseName = messageBundleBaseName;
     }
 
-    public void setMessageBundleVarName(String messageBundleVarName) {
+    public void setMessageBundleVarName(String messageBundleVarName)
+    {
         this.messageBundleVarName = messageBundleVarName;
     }
 }

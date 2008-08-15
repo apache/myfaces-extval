@@ -37,21 +37,31 @@ import java.util.List;
  * @author Gerhard Petracek
  */
 //TODO
-public class FactoryUtils {
+public class FactoryUtils
+{
     private static AnnotationExtractorFactory annotationExtractorFactory;
 
-    public static AnnotationExtractorFactory getAnnotationExtractorFactory() {
-        if (annotationExtractorFactory == null) {
+    public static AnnotationExtractorFactory getAnnotationExtractorFactory()
+    {
+        if (annotationExtractorFactory == null)
+        {
             List<String> annotationExtractorFactoryClassNames = new ArrayList<String>();
 
-            annotationExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR_FACTORY);
-            annotationExtractorFactoryClassNames.add(ExtValUtils.getInformationProviderBean().getCustomAnnotationExtractorFactory());
-            annotationExtractorFactoryClassNames.add(DefaultAnnotationExtractorFactory.class.getName());
+            annotationExtractorFactoryClassNames
+                    .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR_FACTORY);
+            annotationExtractorFactoryClassNames.add(ExtValUtils
+                    .getInformationProviderBean()
+                    .getCustomAnnotationExtractorFactory());
+            annotationExtractorFactoryClassNames
+                    .add(DefaultAnnotationExtractorFactory.class.getName());
 
-            for (String className : annotationExtractorFactoryClassNames) {
-                annotationExtractorFactory = (AnnotationExtractorFactory) ClassUtils.tryToInstantiateClassForName(className);
+            for (String className : annotationExtractorFactoryClassNames)
+            {
+                annotationExtractorFactory = (AnnotationExtractorFactory) ClassUtils
+                        .tryToInstantiateClassForName(className);
 
-                if (annotationExtractorFactory != null) {
+                if (annotationExtractorFactory != null)
+                {
                     //TODO logging
                     break;
                 }
@@ -63,18 +73,27 @@ public class FactoryUtils {
 
     private static ClassMappingFactory<Annotation, ValidationStrategy> validationStrategyFactory;
 
-    public static ClassMappingFactory<Annotation, ValidationStrategy> getValidationStrategyFactory() {
-        if (validationStrategyFactory == null) {
+    public static ClassMappingFactory<Annotation, ValidationStrategy> getValidationStrategyFactory()
+    {
+        if (validationStrategyFactory == null)
+        {
             List<String> validationStrategyFactoryClassNames = new ArrayList<String>();
 
-            validationStrategyFactoryClassNames.add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
-            validationStrategyFactoryClassNames.add(ExtValUtils.getInformationProviderBean().getCustomValidationStrategyFactory());
-            validationStrategyFactoryClassNames.add(DefaultValidationStrategyFactory.class.getName());
+            validationStrategyFactoryClassNames
+                    .add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
+            validationStrategyFactoryClassNames.add(ExtValUtils
+                    .getInformationProviderBean()
+                    .getCustomValidationStrategyFactory());
+            validationStrategyFactoryClassNames
+                    .add(DefaultValidationStrategyFactory.class.getName());
 
-            for (String className : validationStrategyFactoryClassNames) {
-                validationStrategyFactory = (ClassMappingFactory<Annotation, ValidationStrategy>) ClassUtils.tryToInstantiateClassForName(className);
+            for (String className : validationStrategyFactoryClassNames)
+            {
+                validationStrategyFactory = (ClassMappingFactory<Annotation, ValidationStrategy>) ClassUtils
+                        .tryToInstantiateClassForName(className);
 
-                if (validationStrategyFactory != null) {
+                if (validationStrategyFactory != null)
+                {
                     //TODO logging
                     break;
                 }
@@ -86,18 +105,27 @@ public class FactoryUtils {
 
     private static ClassMappingFactory<ValidationStrategy, MessageResolver> messageResolverFactory;
 
-    public static ClassMappingFactory<ValidationStrategy, MessageResolver> getMessageResolverFactory() {
-        if (messageResolverFactory == null) {
+    public static ClassMappingFactory<ValidationStrategy, MessageResolver> getMessageResolverFactory()
+    {
+        if (messageResolverFactory == null)
+        {
             List<String> messageResolverFactoryClassNames = new ArrayList<String>();
 
-            messageResolverFactoryClassNames.add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
-            messageResolverFactoryClassNames.add(ExtValUtils.getInformationProviderBean().getCustomMessageResolverFactory());
-            messageResolverFactoryClassNames.add(DefaultMessageResolverFactory.class.getName());
+            messageResolverFactoryClassNames
+                    .add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
+            messageResolverFactoryClassNames.add(ExtValUtils
+                    .getInformationProviderBean()
+                    .getCustomMessageResolverFactory());
+            messageResolverFactoryClassNames
+                    .add(DefaultMessageResolverFactory.class.getName());
 
-            for (String className : messageResolverFactoryClassNames) {
-                messageResolverFactory = (ClassMappingFactory<ValidationStrategy, MessageResolver>) ClassUtils.tryToInstantiateClassForName(className);
+            for (String className : messageResolverFactoryClassNames)
+            {
+                messageResolverFactory = (ClassMappingFactory<ValidationStrategy, MessageResolver>) ClassUtils
+                        .tryToInstantiateClassForName(className);
 
-                if (messageResolverFactory != null) {
+                if (messageResolverFactory != null)
+                {
                     //TODO logging
                     break;
                 }
@@ -110,18 +138,27 @@ public class FactoryUtils {
     private static ClassMappingFactory<Converter, Converter> converterAdapterFactory;
 
     @Deprecated
-    public static ClassMappingFactory<Converter, Converter> getConverterAdapterFactory() {
-        if (converterAdapterFactory == null) {
+    public static ClassMappingFactory<Converter, Converter> getConverterAdapterFactory()
+    {
+        if (converterAdapterFactory == null)
+        {
             List<String> converterAdapterFactoryClassNames = new ArrayList<String>();
 
-            converterAdapterFactoryClassNames.add(WebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
-            converterAdapterFactoryClassNames.add(ExtValUtils.getInformationProviderBean().getCustomConverterAdapterFactory());
-            converterAdapterFactoryClassNames.add(DefaultConverterAdapterFactory.class.getName());
+            converterAdapterFactoryClassNames
+                    .add(WebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
+            converterAdapterFactoryClassNames.add(ExtValUtils
+                    .getInformationProviderBean()
+                    .getCustomConverterAdapterFactory());
+            converterAdapterFactoryClassNames
+                    .add(DefaultConverterAdapterFactory.class.getName());
 
-            for (String className : converterAdapterFactoryClassNames) {
-                converterAdapterFactory = (ClassMappingFactory<Converter, Converter>) ClassUtils.tryToInstantiateClassForName(className);
+            for (String className : converterAdapterFactoryClassNames)
+            {
+                converterAdapterFactory = (ClassMappingFactory<Converter, Converter>) ClassUtils
+                        .tryToInstantiateClassForName(className);
 
-                if (converterAdapterFactory != null) {
+                if (converterAdapterFactory != null)
+                {
                     //TODO logging
                     break;
                 }

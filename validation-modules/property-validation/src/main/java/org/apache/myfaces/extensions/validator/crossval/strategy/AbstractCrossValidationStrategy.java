@@ -31,16 +31,25 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractCrossValidationStrategy extends AbstractValidationStrategy implements CrossValidationStrategy {
+public abstract class AbstractCrossValidationStrategy extends
+        AbstractValidationStrategy implements CrossValidationStrategy
+{
 
     //init cross-validation
-    public void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
-        CrossValidationStorageEntry entry = getCrossValidationStorageEntry(facesContext, uiComponent, annotationEntry, convertedObject);
+    public void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
+        CrossValidationStorageEntry entry = getCrossValidationStorageEntry(
+                facesContext, uiComponent, annotationEntry, convertedObject);
 
         CrossValidationUtils.getOrInitCrossValidationStorage().add(entry);
     }
 
-    public CrossValidationStorageEntry getCrossValidationStorageEntry(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) {
+    public CrossValidationStorageEntry getCrossValidationStorageEntry(
+            FacesContext facesContext, UIComponent uiComponent,
+            AnnotationEntry annotationEntry, Object convertedObject)
+    {
         CrossValidationStorageEntry entry = new CrossValidationStorageEntry();
 
         entry.setAnnotationEntry(annotationEntry);

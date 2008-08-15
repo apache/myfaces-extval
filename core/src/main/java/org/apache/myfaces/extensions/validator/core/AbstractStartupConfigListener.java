@@ -31,32 +31,50 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractStartupConfigListener implements PhaseListener {
+public abstract class AbstractStartupConfigListener implements PhaseListener
+{
     protected final Log logger = LogFactory.getLog(getClass());
     //don't remove - it's a fallback if there is a problem with deregistration
     //target: don't process init logic more than once
     private static List<Class> initializedListeners = new ArrayList<Class>();
 
-    public void afterPhase(PhaseEvent event) {
+    public void afterPhase(PhaseEvent event)
+    {
     }
 
-    public void beforePhase(PhaseEvent event) {
-        synchronized (AbstractStartupConfigListener.class) {
-            if (!initializedListeners.contains(getClass())) {
-                try {
+    public void beforePhase(PhaseEvent event)
+    {
+        synchronized (AbstractStartupConfigListener.class)
+        {
+            if (!initializedListeners.contains(getClass()))
+            {
+                try
+                {
                     init();
 
                     ExtValUtils.deregisterPhaseListener(this);
-                } catch (Throwable t) {
-                    this.logger.warn("an exception occurred while deregistering the phase-listener" + getClass().getName() + " -> there is just a little overhead, but everything else works correctly. however, please inform the community about your configuration", t);
-                } finally {
+                }
+                catch (Throwable t)
+                {
+                    this.logger
+                            .warn(
+                                    "an exception occurred while deregistering the phase-listener"
+                                            + getClass().getName()
+                                            + " -> there is just a little overhead,"
+                                            + " but everything else works correctly."
+                                            + " however, please inform the community about your configuration",
+                                    t);
+                }
+                finally
+                {
                     initializedListeners.add(getClass());
                 }
             }
         }
     }
 
-    public PhaseId getPhaseId() {
+    public PhaseId getPhaseId()
+    {
         return PhaseId.RESTORE_VIEW;
     }
 

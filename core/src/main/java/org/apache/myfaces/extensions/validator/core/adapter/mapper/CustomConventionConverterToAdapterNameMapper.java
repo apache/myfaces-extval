@@ -27,9 +27,13 @@ import javax.faces.convert.Converter;
  * @author Gerhard Petracek
  */
 @Deprecated
-public class CustomConventionConverterToAdapterNameMapper extends AbstractCustomNameMapper<Converter> {
+public class CustomConventionConverterToAdapterNameMapper extends
+        AbstractCustomNameMapper<Converter>
+{
 
-    protected String getCustomNameMapperClassName() {
-        return ExtValUtils.getInformationProviderBean().getCustomAdapterNameMapper();
+    protected String getCustomNameMapperClassName()
+    {
+        return ExtValUtils.getInformationProviderBean()
+                .getCustomAdapterNameMapper();
     }
 }

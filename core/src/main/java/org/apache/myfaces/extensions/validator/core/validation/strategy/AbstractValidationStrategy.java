@@ -30,37 +30,54 @@ import java.util.MissingResourceException;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractValidationStrategy extends AbstractValidatorAdapter {
+public abstract class AbstractValidationStrategy extends
+        AbstractValidatorAdapter
+{
     protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_details";
     private MessageResolver messageResolver;
 
-    protected String resolveMessage(String key) {
-        Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+    protected String resolveMessage(String key)
+    {
+        Locale locale = FacesContext.getCurrentInstance().getViewRoot()
+                .getLocale();
 
-        return this.messageResolver != null ? this.messageResolver.getMessage(key, locale) : FactoryUtils.getMessageResolverFactory().create(this).getMessage(key, locale);
+        return this.messageResolver != null ? this.messageResolver.getMessage(key, locale) : 
+            FactoryUtils.getMessageResolverFactory().create(this).getMessage(key, locale);
     }
 
-    protected String getErrorMessageSummary(Annotation annotation) {
+    protected String getErrorMessageSummary(Annotation annotation)
+    {
         return resolveMessage(getValidationErrorMsgKey(annotation));
     }
 
-    protected String getErrorMessageDetails(Annotation annotation) {
-        try {
+    protected String getErrorMessageDetails(Annotation annotation)
+    {
+        try
+        {
             String key = getValidationErrorMsgKey(annotation);
-            return (key != null) ? resolveMessage(key + DETAIL_MESSAGE_KEY_POSTFIX) : null;
-        } catch (MissingResourceException e) {
-            logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX, e);
+            return (key != null) ? resolveMessage(key
+                    + DETAIL_MESSAGE_KEY_POSTFIX) : null;
+        }
+        catch (MissingResourceException e)
+        {
+            logger.warn("couldn't find key "
+                    + getValidationErrorMsgKey(annotation)
+                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
         }
         return null;
     }
 
-    protected FacesMessage getValidationErrorFacesMassage(Annotation annotation) {
-        return new FacesMessage(FacesMessage.SEVERITY_ERROR, getErrorMessageSummary(annotation), getErrorMessageDetails(annotation));
+    protected FacesMessage getValidationErrorFacesMassage(Annotation annotation)
+    {
+        return new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                getErrorMessageSummary(annotation),
+                getErrorMessageDetails(annotation));
     }
 
     protected abstract String getValidationErrorMsgKey(Annotation annotation);
 
-    public void setMessageResolver(MessageResolver messageResolver) {
+    public void setMessageResolver(MessageResolver messageResolver)
+    {
         this.messageResolver = messageResolver;
     }
 }

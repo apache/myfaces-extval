@@ -25,12 +25,21 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 /**
  * @author Gerhard Petracek
  */
-public class InitStaticStrategyMappingsPhaseListener extends AbstractStartupConfigListener {
+public class InitStaticStrategyMappingsPhaseListener extends
+        AbstractStartupConfigListener
+{
 
-    protected void init() {
+    protected void init()
+    {
         String jpaBasedValidation = WebXmlParameter.DEACTIVATE_JPA_BASED_VALIDATION;
-        if (jpaBasedValidation == null || !jpaBasedValidation.equalsIgnoreCase("true")) {
-            ExtValUtils.getInformationProviderBean().addStaticStrategyMappingSource(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".jpa_strategy_mappings");
+        if (jpaBasedValidation == null
+                || !jpaBasedValidation.equalsIgnoreCase("true"))
+        {
+            ExtValUtils
+                    .getInformationProviderBean()
+                    .addStaticStrategyMappingSource(
+                            ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
+                                    + ".jpa_strategy_mappings");
         }
     }
 }
