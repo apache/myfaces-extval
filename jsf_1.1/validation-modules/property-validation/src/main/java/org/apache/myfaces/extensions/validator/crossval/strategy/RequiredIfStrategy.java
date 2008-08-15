@@ -27,29 +27,43 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class RequiredIfStrategy extends AbstractCompareStrategy {
+public class RequiredIfStrategy extends AbstractCompareStrategy
+{
 
-    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry) {
+    public boolean useTargetComponentToDisplayErrorMsg(
+            CrossValidationStorageEntry crossValidationStorageEntry)
+    {
         return false;
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent) {
+    protected String getValidationErrorMsgKey(Annotation annotation,
+            boolean isTargetComponent)
+    {
         return ((RequiredIf) annotation).validationErrorMsgKey();
     }
 
-    public boolean isViolation(Object object1, Object object2, Annotation annotation) {
+    public boolean isViolation(Object object1, Object object2,
+            Annotation annotation)
+    {
         boolean violationFound = false;
 
-        if (((RequiredIf) annotation).is().equals(RequiredIfType.empty)) {
-            violationFound = (object2 == null || object2.equals("")) && (object1 == null || object1.equals(""));
-        } else if (((RequiredIf) annotation).is().equals(RequiredIfType.not_empty)) {
-            violationFound = (object2 != null && !object2.equals("")) && (object1 == null || object1.equals(""));
+        if (((RequiredIf) annotation).is().equals(RequiredIfType.empty))
+        {
+            violationFound = (object2 == null || object2.equals(""))
+                    && (object1 == null || object1.equals(""));
+        }
+        else if (((RequiredIf) annotation).is()
+                .equals(RequiredIfType.not_empty))
+        {
+            violationFound = (object2 != null && !object2.equals(""))
+                    && (object1 == null || object1.equals(""));
         }
 
         return violationFound;
     }
 
-    public String[] getValidationTargets(Annotation annotation) {
+    public String[] getValidationTargets(Annotation annotation)
+    {
         return ((RequiredIf) annotation).valueOf();
     }
 }

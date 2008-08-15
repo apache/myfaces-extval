@@ -30,9 +30,13 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public class LongRangeStrategy extends AbstractValidatorAdapter {
+public class LongRangeStrategy extends AbstractValidatorAdapter
+{
 
-    protected void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
+    protected void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
 
         LongRange annotation = annotationEntry.getAnnotation(LongRange.class);
         LongRangeValidator longRangeValidator = new LongRangeValidator();

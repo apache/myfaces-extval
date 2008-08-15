@@ -33,22 +33,37 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public class JoinValidationStrategy extends AbstractValidatorAdapter {
-    public void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
+public class JoinValidationStrategy extends AbstractValidatorAdapter
+{
+    public void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 
-        String[] targetExpressions = annotationEntry.getAnnotation(JoinValidation.class).value();
+        String[] targetExpressions = annotationEntry.getAnnotation(
+                JoinValidation.class).value();
 
         ValidationStrategy validationStrategy;
 
-        for (String targetExpression : targetExpressions) {
-            for (AnnotationEntry entry : extractor.extractAnnotations(facesContext, targetExpression)) {
-                validationStrategy = FactoryUtils.getValidationStrategyFactory().create(entry.getAnnotation());
+        for (String targetExpression : targetExpressions)
+        {
+            for (AnnotationEntry entry : extractor.extractAnnotations(
+                    facesContext, targetExpression))
+            {
+                validationStrategy = FactoryUtils
+                        .getValidationStrategyFactory().create(
+                                entry.getAnnotation());
 
-                if (validationStrategy != null) {
-                    validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
-                } else {
-                    logger.trace("no validation strategy found for " + entry.getAnnotation().annotationType().getName());
+                if (validationStrategy != null)
+                {
+                    validationStrategy.validate(facesContext, uiComponent,
+                            entry, convertedObject);
+                }
+                else
+                {
+                    logger.trace("no validation strategy found for "
+                            + entry.getAnnotation().annotationType().getName());
                 }
             }
         }

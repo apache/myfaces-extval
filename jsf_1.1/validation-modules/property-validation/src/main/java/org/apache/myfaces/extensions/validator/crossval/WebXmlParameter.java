@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
  *
  * @author Gerhard Petracek
  */
-public interface WebXmlParameter {
-    static final String DEACTIVATE_CROSSVALIDATION = WebXmlUtils.getInitParameter("DEACTIVATE_CROSSVALIDATION");
+public interface WebXmlParameter
+{
+    static final String DEACTIVATE_CROSSVALIDATION = WebXmlUtils
+            .getInitParameter("DEACTIVATE_CROSSVALIDATION");
 }

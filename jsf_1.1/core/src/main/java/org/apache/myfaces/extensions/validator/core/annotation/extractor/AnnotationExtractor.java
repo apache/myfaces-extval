@@ -26,6 +26,8 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public interface AnnotationExtractor {
-    List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object);
+public interface AnnotationExtractor
+{
+    List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
+            Object object);
 }

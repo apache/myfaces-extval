@@ -25,19 +25,25 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractCustomNameMapper<T> implements NameMapper<T> {
+public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
+{
     private NameMapper<T> customNameMapper;
 
-    public String createName(T source) {
-        if (customNameMapper == null) {
+    public String createName(T source)
+    {
+        if (customNameMapper == null)
+        {
             String className = getCustomNameMapperClassName();
 
-            if (className != null) {
-                customNameMapper = (NameMapper<T>) ClassUtils.tryToInstantiateClassForName(className);
+            if (className != null)
+            {
+                customNameMapper = (NameMapper<T>) ClassUtils
+                        .tryToInstantiateClassForName(className);
             }
         }
 
-        return (customNameMapper != null) ? customNameMapper.createName(source) : null;
+        return (customNameMapper != null) ? customNameMapper.createName(source)
+                : null;
     }
 
     protected abstract String getCustomNameMapperClassName();

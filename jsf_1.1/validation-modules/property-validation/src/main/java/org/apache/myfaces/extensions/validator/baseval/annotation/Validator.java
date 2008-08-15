@@ -27,8 +27,9 @@ import java.lang.annotation.Target;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD, FIELD})
+@Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Validator {
+public @interface Validator
+{
     Class[] value();
 }

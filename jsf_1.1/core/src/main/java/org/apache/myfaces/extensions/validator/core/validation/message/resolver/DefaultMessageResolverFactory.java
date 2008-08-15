@@ -18,66 +18,97 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper.*;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+    resolver.mapper.CustomConfiguredValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+    resolver.mapper.CustomConventionValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+    resolver.mapper.DefaultModuleValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+    resolver.mapper.DefaultValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+    resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+
 /**
  * @author Gerhard Petracek
  */
 //TODO add generic java api (de-/register mapping)
-public class DefaultMessageResolverFactory implements ClassMappingFactory<ValidationStrategy, MessageResolver> {
-    private static Map<String, String> strategyMessageResolverMapping = new HashMap<String, String>();
-    private static List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
+public class DefaultMessageResolverFactory implements
+        ClassMappingFactory<ValidationStrategy, MessageResolver>
+{
+    private static Map<String, String> strategyMessageResolverMapping = 
+        new HashMap<String, String>();
+    private static List<NameMapper<ValidationStrategy>> nameMapperList = 
+        new ArrayList<NameMapper<ValidationStrategy>>();
 
-    static {
-        nameMapperList.add(new CustomConfiguredValidationStrategyToMsgResolverNameMapper());
-        nameMapperList.add(new CustomConventionValidationStrategyToMsgResolverNameMapper());
-        nameMapperList.add(new DefaultValidationStrategyToMsgResolverNameMapper());
-        nameMapperList.add(new DefaultModuleValidationStrategyToMsgResolverNameMapper());
-        nameMapperList.add(new SimpleValidationStrategyToMsgResolverNameMapper());
+    static
+    {
+        nameMapperList
+                .add(new CustomConfiguredValidationStrategyToMsgResolverNameMapper());
+        nameMapperList
+                .add(new CustomConventionValidationStrategyToMsgResolverNameMapper());
+        nameMapperList
+                .add(new DefaultValidationStrategyToMsgResolverNameMapper());
+        nameMapperList
+                .add(new DefaultModuleValidationStrategyToMsgResolverNameMapper());
+        nameMapperList
+                .add(new SimpleValidationStrategyToMsgResolverNameMapper());
     }
 
-    public MessageResolver create(ValidationStrategy validationStrategy) {
+    public MessageResolver create(ValidationStrategy validationStrategy)
+    {
         String strategyName = validationStrategy.getClass().getName();
 
-        if (strategyMessageResolverMapping.containsKey(strategyName)) {
-            return (MessageResolver) ClassUtils.tryToInstantiateClassForName(strategyMessageResolverMapping.get(strategyName));
+        if (strategyMessageResolverMapping.containsKey(strategyName))
+        {
+            return (MessageResolver) ClassUtils
+                    .tryToInstantiateClassForName(strategyMessageResolverMapping
+                            .get(strategyName));
         }
 
         MessageResolver messageResolver;
         String resolverName;
-        for (NameMapper<ValidationStrategy> nameMapper : nameMapperList) {
+        for (NameMapper<ValidationStrategy> nameMapper : nameMapperList)
+        {
             //build convention (ValidationErrorMessageResolver)
             resolverName = nameMapper.createName(validationStrategy);
 
             //name wasn't mapped
-            if(validationStrategy.getClass().getName().equals(resolverName)) {
+            if (validationStrategy.getClass().getName().equals(resolverName))
+            {
                 continue;
             }
 
-            messageResolver = (MessageResolver) ClassUtils.tryToInstantiateClassForName(resolverName);
+            messageResolver = (MessageResolver) ClassUtils
+                    .tryToInstantiateClassForName(resolverName);
 
-            if (messageResolver != null) {
+            if (messageResolver != null)
+            {
                 addMapping(strategyName, resolverName);
                 return messageResolver;
             }
         }
 
-        addMapping(strategyName, DefaultValidationErrorMessageResolver.class.getName());
+        addMapping(strategyName, DefaultValidationErrorMessageResolver.class
+                .getName());
         return new DefaultValidationErrorMessageResolver();
     }
 
-    private void addMapping(String strategyName, String messageResolverName) {
-        synchronized (DefaultMessageResolverFactory.class) {
-            strategyMessageResolverMapping.put(strategyName, messageResolverName);
+    private void addMapping(String strategyName, String messageResolverName)
+    {
+        synchronized (DefaultMessageResolverFactory.class)
+        {
+            strategyMessageResolverMapping.put(strategyName,
+                    messageResolverName);
         }
         //TODO logging
     }

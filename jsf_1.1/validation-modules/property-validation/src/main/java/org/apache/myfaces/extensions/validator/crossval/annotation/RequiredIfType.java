@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.annotation;
 /**
  * @author Gerhard Petracek
  */
-public enum RequiredIfType {
+public enum RequiredIfType
+{
     empty, not_empty
 }

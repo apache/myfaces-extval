@@ -30,17 +30,25 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-public class ValidatorStrategy extends AbstractValidatorAdapter {
+public class ValidatorStrategy extends AbstractValidatorAdapter
+{
 
-    protected void processValidation(FacesContext facesContext, UIComponent uiComponent, AnnotationEntry annotationEntry, Object convertedObject) throws ValidatorException {
+    protected void processValidation(FacesContext facesContext,
+            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            Object convertedObject) throws ValidatorException
+    {
 
-        Class[] validatorClasses = annotationEntry.getAnnotation(Validator.class).value();
+        Class[] validatorClasses = annotationEntry.getAnnotation(
+                Validator.class).value();
 
         javax.faces.validator.Validator validator;
-        for (Class validatorClassName : validatorClasses) {
-            validator = (javax.faces.validator.Validator) ClassUtils.tryToInstantiateClass(validatorClassName);
+        for (Class validatorClassName : validatorClasses)
+        {
+            validator = (javax.faces.validator.Validator) ClassUtils
+                    .tryToInstantiateClass(validatorClassName);
 
-            if (validator == null) {
+            if (validator == null)
+            {
                 logger.warn(validatorClassName.getName() + " not found");
                 continue;
             }

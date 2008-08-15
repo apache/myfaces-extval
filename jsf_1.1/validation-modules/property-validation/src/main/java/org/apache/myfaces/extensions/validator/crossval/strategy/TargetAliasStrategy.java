@@ -27,13 +27,19 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class TargetAliasStrategy extends AbstractCrossValidationStrategy {
-    public void processCrossValidation(CrossValidationStorageEntry crossValidationStorageEntry, CrossValidationStorage crossValidationStorage) throws ValidatorException {
+public class TargetAliasStrategy extends AbstractCrossValidationStrategy
+{
+    public void processCrossValidation(
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            CrossValidationStorage crossValidationStorage)
+            throws ValidatorException
+    {
         //do nothing - it's just a marker - the inherited functionality is required and enough
     }
 
     //TODO
-    protected String getValidationErrorMsgKey(Annotation annotation) {
+    protected String getValidationErrorMsgKey(Annotation annotation)
+    {
         //do nothing - it's just a marker - the inherited functionality is required and enough
         return null;
     }
