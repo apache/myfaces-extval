@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
  * @author Gerhard Petracek
  */
 public abstract class AbstractValidationErrorMessageResolver implements
-        MessageResolver
+    MessageResolver
 {
     private static String deactivateDefaultConvention = WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION;
     private static ResourceBundle defaultBundle = null;
@@ -55,32 +55,28 @@ public abstract class AbstractValidationErrorMessageResolver implements
         //only in case of a ValidationErrorMessageResolver which is configured as bean
         if (this.messageBundleBaseName != null)
         {
-            resourceBundle = ResourceBundle.getBundle(
-                    this.messageBundleBaseName, locale);
+            resourceBundle = ResourceBundle.getBundle(this.messageBundleBaseName, locale);
             if (resourceBundle != null)
             {
                 customMessage = resourceBundle.getString(key);
             }
             else
             {
-                logger.warn("message bundle " + this.messageBundleBaseName
-                        + " not found");
+                logger.warn("message bundle " + this.messageBundleBaseName + " not found");
             }
         }
 
         //only in case of a ValidationErrorMessageResolver which is configured as bean
         if (this.messageBundleVarName != null && customMessage == null)
         {
-            resourceBundle = (ResourceBundle) ELUtils
-                    .getBean(messageBundleVarName);
+            resourceBundle = (ResourceBundle) ELUtils.getBean(messageBundleVarName);
             if (resourceBundle != null)
             {
                 customMessage = resourceBundle.getString(key);
             }
             else
             {
-                logger.warn("message bundle var name "
-                        + this.messageBundleVarName + " not found");
+                logger.warn("message bundle var name " + this.messageBundleVarName + " not found");
             }
         }
 
@@ -107,7 +103,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
         try
         {
             resourceBundle = ResourceBundle.getBundle(getCustomBaseName(),
-                    locale);
+                locale);
         }
         catch (Throwable t)
         {
@@ -123,14 +119,14 @@ public abstract class AbstractValidationErrorMessageResolver implements
             catch (MissingResourceException e)
             {
                 logger.trace("no custom message for " + key + " within "
-                        + getCustomBaseName());
+                    + getCustomBaseName());
             }
         }
 
         //use custom name (if possible) otherwise: fallback to default message (if possible)
         return (customMessage != null) ? customMessage
-                : (getBaseName() != null) ? ResourceBundle.getBundle(
-                        getBaseName(), locale).getString(key) : null;
+            : (getBaseName() != null) ? ResourceBundle.getBundle(
+            getBaseName(), locale).getString(key) : null;
     }
 
     private String tryToUseMessageBundleConvention(String key, Locale locale)
@@ -138,16 +134,16 @@ public abstract class AbstractValidationErrorMessageResolver implements
         String customMessage = null;
 
         if ((deactivateDefaultConvention == null || !deactivateDefaultConvention
-                .equalsIgnoreCase("true"))
-                && isDefaultMessageBundleConventionActive())
+            .equalsIgnoreCase("true"))
+            && isDefaultMessageBundleConventionActive())
         {
             if (defaultBundle == null)
             {
                 try
                 {
                     defaultBundle = ResourceBundle.getBundle(ExtValUtils
-                            .getInformationProviderBean()
-                            .getConventionForMessageBundle(), locale);
+                        .getInformationProviderBean()
+                        .getConventionForMessageBundle(), locale);
                 }
                 catch (Throwable t)
                 {

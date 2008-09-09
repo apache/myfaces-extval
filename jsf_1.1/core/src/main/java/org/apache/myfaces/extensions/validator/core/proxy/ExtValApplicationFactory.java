@@ -16,10 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.proxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -27,18 +29,21 @@ import javax.faces.application.ApplicationFactory;
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
 public class ExtValApplicationFactory extends ApplicationFactory
 {
     protected final Log logger = LogFactory.getLog(getClass());
+    private static boolean active = false;
 
     private ApplicationFactory wrapped;
 
     public ExtValApplicationFactory(ApplicationFactory applicationFactory)
     {
+        active = true;
         this.wrapped = applicationFactory;
         setApplication(applicationFactory.getApplication());
         logger
-                .trace("myfaces-extension-validator application factory instantiated");
+            .trace("myfaces-extension-validator application factory instantiated");
     }
 
     public Application getApplication()
@@ -58,5 +63,10 @@ public class ExtValApplicationFactory extends ApplicationFactory
         {
             this.wrapped.setApplication(application);
         }
+    }
+
+    public static boolean isActive()
+    {
+        return active;
     }
 }

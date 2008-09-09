@@ -18,20 +18,19 @@
  */
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.util.ELUtils;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 
 /**
  * @author Gerhard Petracek
@@ -41,7 +40,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
     protected final Log logger = LogFactory.getLog(getClass());
 
     public List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
-            Object object)
+                                                    Object object)
     {
         //should never occur
         if (!(object instanceof UIComponent))
@@ -55,7 +54,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
         String valueBindingExpression = ELUtils
-                .getReliableValueBindingExpression(uiComponent);
+            .getReliableValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
@@ -73,13 +72,13 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         }
 
         String beans = valueBindingExpression.substring(valueBindingExpression
-                .indexOf('{') + 1, beanPropertyBorder);
+            .indexOf('{') + 1, beanPropertyBorder);
 
         String property = valueBindingExpression.substring(
-                beanPropertyBorder + 1, valueBindingExpression.indexOf('}'));
+            beanPropertyBorder + 1, valueBindingExpression.indexOf('}'));
 
         Class entityClass = ELUtils.getTypeOfValueBindingForExpression(
-                facesContext, "#{" + beans + "}");
+            facesContext, "#{" + beans + "}");
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();
@@ -97,9 +96,9 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         while (!Object.class.getName().equals(currentClass.getName()))
         {
             addPropertyAccessAnnotations(currentClass, property,
-                    annotationEntries, templateEntry);
+                annotationEntries, templateEntry);
             addFieldAccessAnnotations(currentClass, property,
-                    annotationEntries, templateEntry);
+                annotationEntries, templateEntry);
 
             currentClass = currentClass.getSuperclass();
         }
@@ -111,7 +110,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             while (currentClass != null)
             {
                 addPropertyAccessAnnotations(currentClass, property,
-                        annotationEntries, templateEntry);
+                    annotationEntries, templateEntry);
 
                 currentClass = currentClass.getSuperclass();
             }
@@ -121,11 +120,11 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
     }
 
     protected void addPropertyAccessAnnotations(Class entity, String property,
-            List<AnnotationEntry> annotationEntries,
-            AnnotationEntry templateEntry)
+                                                List<AnnotationEntry> annotationEntries,
+                                                AnnotationEntry templateEntry)
     {
         property = property.substring(0, 1).toUpperCase()
-                + property.substring(1);
+            + property.substring(1);
 
         Method method;
 
@@ -142,19 +141,19 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             catch (NoSuchMethodException e1)
             {
                 logger.debug("method not found - class: " + entity.getName()
-                        + " - methods: " + "get" + property + " " + "is"
-                        + property);
+                    + " - methods: " + "get" + property + " " + "is"
+                    + property);
                 return;
             }
         }
 
         addAnnotationToAnnotationEntries(annotationEntries, Arrays
-                .asList(method.getAnnotations()), templateEntry);
+            .asList(method.getAnnotations()), templateEntry);
     }
 
     protected void addFieldAccessAnnotations(Class entity, String property,
-            List<AnnotationEntry> annotationEntries,
-            AnnotationEntry templateEntry)
+                                             List<AnnotationEntry> annotationEntries,
+                                             AnnotationEntry templateEntry)
     {
         Field field;
 
@@ -171,28 +170,28 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             catch (NoSuchFieldException e1)
             {
                 logger.debug("field " + property + " or _" + property
-                        + " not found");
+                    + " not found");
                 return;
             }
         }
 
         addAnnotationToAnnotationEntries(annotationEntries, Arrays.asList(field
-                .getAnnotations()), templateEntry);
+            .getAnnotations()), templateEntry);
     }
 
     protected void addAnnotationToAnnotationEntries(
-            List<AnnotationEntry> annotationEntries,
-            List<Annotation> annotations, AnnotationEntry templateEntry)
+        List<AnnotationEntry> annotationEntries,
+        List<Annotation> annotations, AnnotationEntry templateEntry)
     {
         for (Annotation annotation : annotations)
         {
             annotationEntries.add(createAnnotationEntry(annotation,
-                    templateEntry));
+                templateEntry));
         }
     }
 
     protected AnnotationEntry createAnnotationEntry(Annotation foundAnnotation,
-            AnnotationEntry templateEntry)
+                                                    AnnotationEntry templateEntry)
     {
         AnnotationEntry entry = new AnnotationEntry();
 
@@ -200,7 +199,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         entry.setEntityClass(templateEntry.getEntityClass());
         entry.setValueBindingExpression(templateEntry
-                .getValueBindingExpression());
+            .getValueBindingExpression());
         entry.setBoundTo(templateEntry.getBoundTo());
 
         return entry;
