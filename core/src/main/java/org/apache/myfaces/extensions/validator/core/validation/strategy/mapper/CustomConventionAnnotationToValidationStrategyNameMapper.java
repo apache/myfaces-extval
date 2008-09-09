@@ -29,12 +29,12 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  */
 public class CustomConventionAnnotationToValidationStrategyNameMapper extends
-        AbstractCustomNameMapper<Annotation>
+    AbstractCustomNameMapper<Annotation>
 {
 
     protected String getCustomNameMapperClassName()
     {
         return ExtValUtils.getInformationProviderBean()
-                .getCustomAnnotationToValidationStrategyNameMapper();
+            .getCustomAnnotationToValidationStrategyNameMapper();
     }
 }

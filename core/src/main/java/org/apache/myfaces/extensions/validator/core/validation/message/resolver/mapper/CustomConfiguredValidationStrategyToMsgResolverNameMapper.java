@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
  * @author Gerhard Petracek
  */
 public class CustomConfiguredValidationStrategyToMsgResolverNameMapper extends
-        AbstractCustomNameMapper<ValidationStrategy>
+    AbstractCustomNameMapper<ValidationStrategy>
 {
 
     protected String getCustomNameMapperClassName()

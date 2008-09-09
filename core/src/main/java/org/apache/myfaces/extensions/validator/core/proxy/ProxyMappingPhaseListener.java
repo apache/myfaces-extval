@@ -16,19 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.proxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.convert.Converter;
 
 /**
  * due to a restriction at the state saving process
@@ -40,6 +43,7 @@ import javax.faces.convert.Converter;
  *
  * @author Gerhard Petracek
  */
+@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
 public class ProxyMappingPhaseListener implements PhaseListener
 {
     private boolean isInitialized = false;
@@ -54,8 +58,9 @@ public class ProxyMappingPhaseListener implements PhaseListener
             String initParam = WebXmlParameter.DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER;
             String initAdapterParam = WebXmlParameter.USE_ADAPTERS;
 
-            if((initParam != null && initParam.equalsIgnoreCase("true")) || 
-                    (initAdapterParam != null && initAdapterParam.equalsIgnoreCase("true")))
+            if ((initParam != null && initParam.equalsIgnoreCase("true"))
+                || (initAdapterParam != null && initAdapterParam
+                .equalsIgnoreCase("true")))
             {
                 ExtValUtils.deregisterPhaseListener(this);
             }
@@ -68,16 +73,16 @@ public class ProxyMappingPhaseListener implements PhaseListener
         }
 
         Integer processedConverterCount = ExtValUtils
-                .getProcessedConverterCount();
+            .getProcessedConverterCount();
         //don't change the comparison with 0 - in order to reduce the overhead.
         //if everything works correctly it's not necessary to inspact the full tree
         //it's just due to a ri bug - normally it's performed during ExtValConverter#intercept#getAsString
         if (ExtValUtils.useProxyMapping()
-                && (processedConverterCount != null && !processedConverterCount
-                        .equals(0)))
+            && (processedConverterCount != null && !processedConverterCount
+            .equals(0)))
         {
             storeComponentConverterMappingForProxies(event.getFacesContext(),
-                    event.getFacesContext().getViewRoot());
+                event.getFacesContext().getViewRoot());
         }
     }
 
@@ -98,29 +103,31 @@ public class ProxyMappingPhaseListener implements PhaseListener
 
     /**
      * there is a ri bug (at least with jsp's) -> sometimes getAsString of converters aren't called
-     * -> there is no mapping -> if it's the case and there are 
-     *                           unhandled editable value hoder components within the page
+     * -> there is no mapping -> if it's the case and there are
+     * unhandled editable value hoder components within the page
      * -> search all these components and add the equivalent converter to the mapping
      *
      * @param facesContext reference to the current faces context
-     * @param uiComponent reference to the current component
+     * @param uiComponent  reference to the current component
      */
     private void storeComponentConverterMappingForProxies(
-            FacesContext facesContext, UIComponent uiComponent)
+        FacesContext facesContext, UIComponent uiComponent)
     {
         //TODO use the following after the impl. of a better multi-window-mode solution
         //if(!uiComponent.isRendered()) {
         //    return;
         //}
-        
-        for(UIComponent child : uiComponent.getChildren())
+
+        for (UIComponent child : uiComponent.getChildren())
         {
-            if(child instanceof ValueHolder)
+            if (child instanceof ValueHolder)
             {
-                Converter converter = ((ValueHolder)child).getConverter();
-                if(converter != null && converter.getClass().getName().contains("$$"))
+                Converter converter = ((ValueHolder) child).getConverter();
+                if (converter != null
+                    && converter.getClass().getName().contains("$$"))
                 {
-                    ExtValUtils.getOrInitProxyMapping().put(child.getClientId(facesContext), converter);
+                    ExtValUtils.getOrInitProxyMapping().put(
+                        child.getClientId(facesContext), converter);
                 }
             }
             storeComponentConverterMappingForProxies(facesContext, child);

@@ -21,10 +21,17 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
               version="1.2">
+    <!-- optional approach for component libs which don't use delegation to renderer -->
+    <!--
     <factory>
-        <application-factory>org.apache.myfaces.extensions.validator.core.ExtValApplicationFactory</application-factory>
+        <application-factory>org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory</application-factory>
     </factory>
     <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.core.ProxyMappingPhaseListener</phase-listener>
+        <phase-listener>org.apache.myfaces.extensions.validator.core.proxy.ProxyMappingPhaseListener</phase-listener>
     </lifecycle>
+    -->
+    <lifecycle>
+        <phase-listener>org.apache.myfaces.extensions.validator.core.ExtValValidationPhaseListener</phase-listener>
+    </lifecycle>
+
 </faces-config>

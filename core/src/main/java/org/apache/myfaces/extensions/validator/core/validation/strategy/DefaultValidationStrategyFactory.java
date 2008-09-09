@@ -18,6 +18,23 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
+import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+    .AnnotationToValidationStrategyBeanNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+    .CustomConfiguredAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+    .CustomConventionAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+    .DefaultAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+    .SimpleAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -27,30 +44,13 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.
-        mapper.CustomConfiguredAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.
-        mapper.CustomConventionAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.
-        mapper.DefaultAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.
-        mapper.SimpleAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.
-        mapper.AnnotationToValidationStrategyBeanNameMapper;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
-
 
 /**
  * @author Gerhard Petracek
  */
 //TODO add generic java api (de-/register mapping)
 public class DefaultValidationStrategyFactory implements
-        ClassMappingFactory<Annotation, ValidationStrategy>
+    ClassMappingFactory<Annotation, ValidationStrategy>
 {
     private static Map<String, String> annotationStrategyMapping = null;
     private static List<NameMapper<Annotation>> nameMapperList = new ArrayList<NameMapper<Annotation>>();
@@ -58,25 +58,25 @@ public class DefaultValidationStrategyFactory implements
     static
     {
         nameMapperList
-                .add(new CustomConfiguredAnnotationToValidationStrategyNameMapper());
+            .add(new CustomConfiguredAnnotationToValidationStrategyNameMapper());
         nameMapperList
-                .add(new CustomConventionAnnotationToValidationStrategyNameMapper());
+            .add(new CustomConventionAnnotationToValidationStrategyNameMapper());
         nameMapperList
-                .add(new DefaultAnnotationToValidationStrategyNameMapper());
+            .add(new DefaultAnnotationToValidationStrategyNameMapper());
         nameMapperList
-                .add(new SimpleAnnotationToValidationStrategyNameMapper());
+            .add(new SimpleAnnotationToValidationStrategyNameMapper());
         //TODO if jsr 303 doesn't change:
         //nameMapperList.add(new BeanValidationAnnotationStrategyNameMapper());
         nameMapperList
-                .add(new AnnotationToValidationStrategyBeanNameMapper(
-                        new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
+            .add(new AnnotationToValidationStrategyBeanNameMapper(
+                new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
         nameMapperList
-                .add(new AnnotationToValidationStrategyBeanNameMapper(
-                        new CustomConventionAnnotationToValidationStrategyNameMapper()));
+            .add(new AnnotationToValidationStrategyBeanNameMapper(
+                new CustomConventionAnnotationToValidationStrategyNameMapper()));
         nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
-                new DefaultAnnotationToValidationStrategyNameMapper()));
+            new DefaultAnnotationToValidationStrategyNameMapper()));
         nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
-                new SimpleAnnotationToValidationStrategyNameMapper()));
+            new SimpleAnnotationToValidationStrategyNameMapper()));
     }
 
     public ValidationStrategy create(Annotation annotation)
@@ -91,7 +91,7 @@ public class DefaultValidationStrategyFactory implements
         if (annotationStrategyMapping.containsKey(annotationName))
         {
             return (ValidationStrategy) getValidationStrategyInstance(annotationStrategyMapping
-                    .get(annotationName));
+                .get(annotationName));
         }
 
         ValidationStrategy validationStrategy;
@@ -119,20 +119,20 @@ public class DefaultValidationStrategyFactory implements
     }
 
     private ValidationStrategy getValidationStrategyInstance(
-            String validationStrategyName)
+        String validationStrategyName)
     {
         if (validationStrategyName
-                .startsWith(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING))
+            .startsWith(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING))
         {
             return (ValidationStrategy) ELUtils
-                    .getBean(validationStrategyName
-                            .substring(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING
-                                    .length()));
+                .getBean(validationStrategyName
+                    .substring(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING
+                    .length()));
         }
         else
         {
             return (ValidationStrategy) ClassUtils
-                    .tryToInstantiateClassForName(validationStrategyName);
+                .tryToInstantiateClassForName(validationStrategyName);
         }
     }
 
@@ -153,8 +153,8 @@ public class DefaultValidationStrategyFactory implements
 
             //setup internal static mappings
             for (String internalMappingSource : ExtValUtils
-                    .getInformationProviderBean()
-                    .getStaticStrategyMappingSources())
+                .getInformationProviderBean()
+                .getStaticStrategyMappingSources())
             {
                 setupStrategyMappings(internalMappingSource);
             }
@@ -164,7 +164,7 @@ public class DefaultValidationStrategyFactory implements
             {
                 //build convention (strategy mapping)
                 setupStrategyMappings(ExtValUtils.getInformationProviderBean()
-                        .getCustomStaticStrategyMappingSource());
+                    .getCustomStaticStrategyMappingSource());
             }
             catch (Throwable t)
             {
@@ -206,7 +206,7 @@ public class DefaultValidationStrategyFactory implements
         {
             annotationClassName = (String) keys.nextElement();
             validationStrategyClassName = strategyMapping
-                    .getString(annotationClassName);
+                .getString(annotationClassName);
 
             addMapping(annotationClassName, validationStrategyClassName);
         }

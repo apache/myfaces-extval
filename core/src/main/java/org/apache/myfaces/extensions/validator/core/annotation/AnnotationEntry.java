@@ -18,11 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.core.annotation;
 
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+
 import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageEnum.API)
 public class AnnotationEntry
 {
     private Annotation annotation;

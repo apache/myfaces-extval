@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -31,7 +31,7 @@ import java.util.MissingResourceException;
  * @author Gerhard Petracek
  */
 public abstract class AbstractValidationStrategy extends
-        AbstractValidatorAdapter
+    AbstractValidatorAdapter
 {
     protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_details";
     private MessageResolver messageResolver;
@@ -39,9 +39,9 @@ public abstract class AbstractValidationStrategy extends
     protected String resolveMessage(String key)
     {
         Locale locale = FacesContext.getCurrentInstance().getViewRoot()
-                .getLocale();
+            .getLocale();
 
-        return this.messageResolver != null ? this.messageResolver.getMessage(key, locale) : 
+        return this.messageResolver != null ? this.messageResolver.getMessage(key, locale) :
             FactoryUtils.getMessageResolverFactory().create(this).getMessage(key, locale);
     }
 
@@ -56,13 +56,13 @@ public abstract class AbstractValidationStrategy extends
         {
             String key = getValidationErrorMsgKey(annotation);
             return (key != null) ? resolveMessage(key
-                    + DETAIL_MESSAGE_KEY_POSTFIX) : null;
+                + DETAIL_MESSAGE_KEY_POSTFIX) : null;
         }
         catch (MissingResourceException e)
         {
             logger.warn("couldn't find key "
-                    + getValidationErrorMsgKey(annotation)
-                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
+                + getValidationErrorMsgKey(annotation)
+                + DETAIL_MESSAGE_KEY_POSTFIX, e);
         }
         return null;
     }
@@ -70,8 +70,8 @@ public abstract class AbstractValidationStrategy extends
     protected FacesMessage getValidationErrorFacesMassage(Annotation annotation)
     {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                getErrorMessageSummary(annotation),
-                getErrorMessageDetails(annotation));
+            getErrorMessageSummary(annotation),
+            getErrorMessageDetails(annotation));
     }
 
     protected abstract String getValidationErrorMsgKey(Annotation annotation);
