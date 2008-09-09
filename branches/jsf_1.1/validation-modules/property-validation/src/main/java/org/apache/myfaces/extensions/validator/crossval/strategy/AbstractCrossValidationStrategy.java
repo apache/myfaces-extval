@@ -53,8 +53,7 @@ public abstract class AbstractCrossValidationStrategy extends
         CrossValidationStorageEntry entry = new CrossValidationStorageEntry();
 
         entry.setAnnotationEntry(annotationEntry);
-        entry.setBean(ELUtils.getBaseObject(annotationEntry
-                .getValueBindingExpression()));
+        entry.setBean(ELUtils.getBaseObject(annotationEntry.getValueBindingExpression()));
         entry.setComponent(uiComponent);
         entry.setConvertedObject(convertedObject);
         entry.setValidationStrategy(this);

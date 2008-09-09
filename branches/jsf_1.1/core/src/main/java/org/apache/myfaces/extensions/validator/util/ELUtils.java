@@ -30,11 +30,11 @@ import javax.faces.el.ValueBinding;
 public class ELUtils
 {
     public static Class getTypeOfValueBindingForExpression(
-            FacesContext facesContext, String valueBindingExpression)
+        FacesContext facesContext, String valueBindingExpression)
     {
         //due to a restriction with the ri
         Object bean = ELUtils.getValueOfExpression(facesContext,
-                valueBindingExpression);
+            valueBindingExpression);
         return (bean != null) ? bean.getClass() : null;
     }
 
@@ -42,17 +42,17 @@ public class ELUtils
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         return facesContext.getApplication().getVariableResolver()
-                .resolveVariable(facesContext, beanName);
+            .resolveVariable(facesContext, beanName);
     }
 
     //TODO refactor - problem - static values - jsf 1.2 e.g.: ${value}
     public static Object getBaseObject(String valueBindingExpression,
-            UIComponent uiComponent)
+                                       UIComponent uiComponent)
     {
         if (valueBindingExpression.lastIndexOf(".") == -1)
         {
             return uiComponent.getValueBinding("value").getValue(
-                    FacesContext.getCurrentInstance());
+                FacesContext.getCurrentInstance());
         }
         return getBaseObject(valueBindingExpression);
     }
@@ -60,30 +60,30 @@ public class ELUtils
     public static Object getBaseObject(String valueBindingExpression)
     {
         String newExpression = valueBindingExpression.substring(0,
-                valueBindingExpression.lastIndexOf("."))
-                + "}";
+            valueBindingExpression.lastIndexOf("."))
+            + "}";
 
         return getValueOfExpression(FacesContext.getCurrentInstance(),
-                newExpression);
+            newExpression);
     }
 
     public static Object getValueOfExpression(FacesContext facesContext,
-            String valueBindingExpression)
+                                              String valueBindingExpression)
     {
         return (valueBindingExpression != null) ? facesContext.getApplication()
-                .createValueBinding(valueBindingExpression).getValue(
-                        facesContext) : null;
+            .createValueBinding(valueBindingExpression).getValue(
+            facesContext) : null;
     }
 
     public static boolean isExpressionValid(FacesContext facesContext,
-            String valueBindingExpression)
+                                            String valueBindingExpression)
     {
         return facesContext.getApplication().createValueBinding(
-                valueBindingExpression) != null;
+            valueBindingExpression) != null;
     }
 
     public static String getReliableValueBindingExpression(
-            UIComponent uiComponent)
+        UIComponent uiComponent)
     {
         String valueBindingExpression = getValueBindingExpression(uiComponent);
 
@@ -91,15 +91,15 @@ public class ELUtils
         if (baseExpression.contains("."))
         {
             baseExpression = baseExpression.substring(0, valueBindingExpression
-                    .lastIndexOf("."))
-                    + "}";
+                .lastIndexOf("."))
+                + "}";
         }
 
         if (getTypeOfValueBindingForExpression(FacesContext
-                .getCurrentInstance(), baseExpression) == null)
+            .getCurrentInstance(), baseExpression) == null)
         {
             valueBindingExpression = FaceletsTaglibExpressionUtils
-                    .tryToCreateValueBindingForFaceletsBinding(uiComponent);
+                .tryToCreateValueBindingForFaceletsBinding(uiComponent);
         }
         return valueBindingExpression;
     }
@@ -109,15 +109,15 @@ public class ELUtils
         ValueBinding valueExpression = uiComponent.getValueBinding("value");
 
         return (valueExpression != null) ? valueExpression
-                .getExpressionString() : null;
+            .getExpressionString() : null;
     }
 
     public static Class getTypeOfValueBindingForComponent(
-            FacesContext facesContext, UIComponent uiComponent)
+        FacesContext facesContext, UIComponent uiComponent)
     {
         ValueBinding valueBinding = uiComponent.getValueBinding("value");
 
         return (valueBinding != null) ? valueBinding.getType(facesContext)
-                : null;
+            : null;
     }
 }

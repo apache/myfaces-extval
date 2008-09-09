@@ -18,50 +18,50 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
+import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+        resolver.mapper.CustomConfiguredValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+        resolver.mapper.CustomConventionValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+        resolver.mapper.DefaultModuleValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+        resolver.mapper.DefaultValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.
+        resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.message.
-    resolver.mapper.CustomConfiguredValidationStrategyToMsgResolverNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.message.
-    resolver.mapper.CustomConventionValidationStrategyToMsgResolverNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.message.
-    resolver.mapper.DefaultModuleValidationStrategyToMsgResolverNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.message.
-    resolver.mapper.DefaultValidationStrategyToMsgResolverNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.message.
-    resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
  * @author Gerhard Petracek
  */
 //TODO add generic java api (de-/register mapping)
 public class DefaultMessageResolverFactory implements
-        ClassMappingFactory<ValidationStrategy, MessageResolver>
+    ClassMappingFactory<ValidationStrategy, MessageResolver>
 {
-    private static Map<String, String> strategyMessageResolverMapping = 
+    private static Map<String, String> strategyMessageResolverMapping =
         new HashMap<String, String>();
-    private static List<NameMapper<ValidationStrategy>> nameMapperList = 
+    private static List<NameMapper<ValidationStrategy>> nameMapperList =
         new ArrayList<NameMapper<ValidationStrategy>>();
 
     static
     {
         nameMapperList
-                .add(new CustomConfiguredValidationStrategyToMsgResolverNameMapper());
+            .add(new CustomConfiguredValidationStrategyToMsgResolverNameMapper());
         nameMapperList
-                .add(new CustomConventionValidationStrategyToMsgResolverNameMapper());
+            .add(new CustomConventionValidationStrategyToMsgResolverNameMapper());
         nameMapperList
-                .add(new DefaultValidationStrategyToMsgResolverNameMapper());
+            .add(new DefaultValidationStrategyToMsgResolverNameMapper());
         nameMapperList
-                .add(new DefaultModuleValidationStrategyToMsgResolverNameMapper());
+            .add(new DefaultModuleValidationStrategyToMsgResolverNameMapper());
         nameMapperList
-                .add(new SimpleValidationStrategyToMsgResolverNameMapper());
+            .add(new SimpleValidationStrategyToMsgResolverNameMapper());
     }
 
     public MessageResolver create(ValidationStrategy validationStrategy)
@@ -71,8 +71,8 @@ public class DefaultMessageResolverFactory implements
         if (strategyMessageResolverMapping.containsKey(strategyName))
         {
             return (MessageResolver) ClassUtils
-                    .tryToInstantiateClassForName(strategyMessageResolverMapping
-                            .get(strategyName));
+                .tryToInstantiateClassForName(strategyMessageResolverMapping
+                    .get(strategyName));
         }
 
         MessageResolver messageResolver;
@@ -88,8 +88,7 @@ public class DefaultMessageResolverFactory implements
                 continue;
             }
 
-            messageResolver = (MessageResolver) ClassUtils
-                    .tryToInstantiateClassForName(resolverName);
+            messageResolver = (MessageResolver) ClassUtils.tryToInstantiateClassForName(resolverName);
 
             if (messageResolver != null)
             {
@@ -99,7 +98,7 @@ public class DefaultMessageResolverFactory implements
         }
 
         addMapping(strategyName, DefaultValidationErrorMessageResolver.class
-                .getName());
+            .getName());
         return new DefaultValidationErrorMessageResolver();
     }
 
@@ -108,7 +107,7 @@ public class DefaultMessageResolverFactory implements
         synchronized (DefaultMessageResolverFactory.class)
         {
             strategyMessageResolverMapping.put(strategyName,
-                    messageResolverName);
+                messageResolverName);
         }
         //TODO logging
     }

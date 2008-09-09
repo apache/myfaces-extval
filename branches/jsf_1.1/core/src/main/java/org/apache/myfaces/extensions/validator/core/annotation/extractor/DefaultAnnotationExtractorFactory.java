@@ -29,7 +29,7 @@ import java.util.List;
  * @author Gerhard Petracek
  */
 public class DefaultAnnotationExtractorFactory implements
-        AnnotationExtractorFactory
+    AnnotationExtractorFactory
 {
 
     private static AnnotationExtractor annotationExtractor = null;
@@ -41,17 +41,17 @@ public class DefaultAnnotationExtractorFactory implements
             List<String> annotationExtractorClassNames = new ArrayList<String>();
 
             annotationExtractorClassNames
-                    .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR);
+                .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR);
             annotationExtractorClassNames.add(ExtValUtils
-                    .getInformationProviderBean()
-                    .getCustomAnnotationExtractor());
+                .getInformationProviderBean()
+                .getCustomAnnotationExtractor());
             annotationExtractorClassNames
-                    .add(DefaultComponentAnnotationExtractor.class.getName());
+                .add(DefaultComponentAnnotationExtractor.class.getName());
 
             for (String className : annotationExtractorClassNames)
             {
                 annotationExtractor = (AnnotationExtractor) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    .tryToInstantiateClassForName(className);
 
                 if (annotationExtractor != null)
                 {

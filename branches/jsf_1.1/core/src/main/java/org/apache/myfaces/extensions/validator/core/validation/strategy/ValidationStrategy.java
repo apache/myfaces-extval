@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -26,8 +28,9 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageEnum.API)
 public interface ValidationStrategy
 {
     void validate(FacesContext facesContext, UIComponent uiComponent,
-            AnnotationEntry annotationEntry, Object convertedObject);
+                  AnnotationEntry annotationEntry, Object convertedObject);
 }

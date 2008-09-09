@@ -38,12 +38,12 @@ public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
             if (className != null)
             {
                 customNameMapper = (NameMapper<T>) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    .tryToInstantiateClassForName(className);
             }
         }
 
         return (customNameMapper != null) ? customNameMapper.createName(source)
-                : null;
+            : null;
     }
 
     protected abstract String getCustomNameMapperClassName();

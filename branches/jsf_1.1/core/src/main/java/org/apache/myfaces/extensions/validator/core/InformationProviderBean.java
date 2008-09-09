@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * centralized in order that these information arn't spread over the complete code base
- * + some of them can be customized within a custom impl. of the bean 
+ * + some of them can be customized within a custom impl. of the bean
  * (extend this class and provide it via convention or web.xml)
  * <p/>
  * the static api should only be used
@@ -37,11 +37,11 @@ import java.util.List;
 public class InformationProviderBean
 {
     public static final String BEAN_NAME = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-            + "." + InformationProviderBean.class.getSimpleName();
+        + "." + InformationProviderBean.class.getSimpleName();
     //custom class which is an optional replacement for this class (has to extend this class)
     public static final String CUSTOM_BEAN = (ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-            + ".custom." + InformationProviderBean.class.getSimpleName())
-            .replace(".", "_");
+        + ".custom." + InformationProviderBean.class.getSimpleName())
+        .replace(".", "_");
     private String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
 
     public InformationProviderBean()
@@ -49,7 +49,7 @@ public class InformationProviderBean
         if (this.basePackage == null)
         {
             this.basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-                    + ".custom.";
+                + ".custom.";
         }
         if (!this.basePackage.endsWith("."))
         {
@@ -74,8 +74,8 @@ public class InformationProviderBean
 
     /*
      * postfix used by the SimpleAnnotationToValidationStrategyNameMapper
-     * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies 
-     * only (not for public validation modules)
+     * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies only
+     * (not for public validation modules)
      * so it's fine to customize it
      */
     public String getValidationStrategyPostfix()
@@ -173,7 +173,7 @@ public class InformationProviderBean
     }
 
     public final boolean containsStaticStrategyMappingSource(
-            String resourceBundleName)
+        String resourceBundleName)
     {
         return this.staticStrategyMappings.contains(resourceBundleName);
     }
@@ -182,8 +182,8 @@ public class InformationProviderBean
      * use a custom name mapper to implement custom conventions
      */
     public final String getConventionNameForMessageResolverPackage(
-            Class<? extends ValidationStrategy> validationStrategyClass,
-            String targetClassName)
+        Class<? extends ValidationStrategy> validationStrategyClass,
+        String targetClassName)
     {
         String resolverName = validationStrategyClass.getName();
 
@@ -195,26 +195,26 @@ public class InformationProviderBean
             return null;
         }
         return resolverName.substring(0, resolverName.lastIndexOf(".")) + "."
-                + targetClassName;
+            + targetClassName;
     }
 
     /**
      * use a custom name mapper to implement custom conventions
      */
     public final String getConventionNameForMessageResolverClass(
-            String strategyClassName)
+        String strategyClassName)
     {
         if (strategyClassName.endsWith("ValidationStrategy"))
         {
             return strategyClassName.substring(0,
-                    strategyClassName.length() - 18)
-                    + "ValidationErrorMessageResolver";
+                strategyClassName.length() - 18)
+                + "ValidationErrorMessageResolver";
         }
         else if (strategyClassName.endsWith("Strategy"))
         {
             return strategyClassName.substring(0,
-                    strategyClassName.length() - 8)
-                    + "ValidationErrorMessageResolver";
+                strategyClassName.length() - 8)
+                + "ValidationErrorMessageResolver";
         }
         return strategyClassName;
     }
@@ -223,10 +223,10 @@ public class InformationProviderBean
      * use a custom name mapper to implement custom conventions
      */
     public final String getConventionNameForValidationStrategy(
-            Annotation annotation)
+        Annotation annotation)
     {
         return annotation.annotationType().getName().replace(".annotation.",
-                ".strategy.")
-                + "Strategy";
+            ".strategy.")
+            + "Strategy";
     }
 }

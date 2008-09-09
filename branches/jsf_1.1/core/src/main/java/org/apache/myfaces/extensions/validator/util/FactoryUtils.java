@@ -48,17 +48,17 @@ public class FactoryUtils
             List<String> annotationExtractorFactoryClassNames = new ArrayList<String>();
 
             annotationExtractorFactoryClassNames
-                    .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR_FACTORY);
+                .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR_FACTORY);
             annotationExtractorFactoryClassNames.add(ExtValUtils
-                    .getInformationProviderBean()
-                    .getCustomAnnotationExtractorFactory());
+                .getInformationProviderBean()
+                .getCustomAnnotationExtractorFactory());
             annotationExtractorFactoryClassNames
-                    .add(DefaultAnnotationExtractorFactory.class.getName());
+                .add(DefaultAnnotationExtractorFactory.class.getName());
 
             for (String className : annotationExtractorFactoryClassNames)
             {
                 annotationExtractorFactory = (AnnotationExtractorFactory) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    .tryToInstantiateClassForName(className);
 
                 if (annotationExtractorFactory != null)
                 {
@@ -80,17 +80,17 @@ public class FactoryUtils
             List<String> validationStrategyFactoryClassNames = new ArrayList<String>();
 
             validationStrategyFactoryClassNames
-                    .add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
+                .add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
             validationStrategyFactoryClassNames.add(ExtValUtils
-                    .getInformationProviderBean()
-                    .getCustomValidationStrategyFactory());
+                .getInformationProviderBean()
+                .getCustomValidationStrategyFactory());
             validationStrategyFactoryClassNames
-                    .add(DefaultValidationStrategyFactory.class.getName());
+                .add(DefaultValidationStrategyFactory.class.getName());
 
             for (String className : validationStrategyFactoryClassNames)
             {
                 validationStrategyFactory = (ClassMappingFactory<Annotation, ValidationStrategy>) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    .tryToInstantiateClassForName(className);
 
                 if (validationStrategyFactory != null)
                 {
@@ -112,17 +112,17 @@ public class FactoryUtils
             List<String> messageResolverFactoryClassNames = new ArrayList<String>();
 
             messageResolverFactoryClassNames
-                    .add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
+                .add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
             messageResolverFactoryClassNames.add(ExtValUtils
-                    .getInformationProviderBean()
-                    .getCustomMessageResolverFactory());
+                .getInformationProviderBean()
+                .getCustomMessageResolverFactory());
             messageResolverFactoryClassNames
-                    .add(DefaultMessageResolverFactory.class.getName());
+                .add(DefaultMessageResolverFactory.class.getName());
 
             for (String className : messageResolverFactoryClassNames)
             {
                 messageResolverFactory = (ClassMappingFactory<ValidationStrategy, MessageResolver>) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    .tryToInstantiateClassForName(className);
 
                 if (messageResolverFactory != null)
                 {
@@ -145,17 +145,17 @@ public class FactoryUtils
             List<String> converterAdapterFactoryClassNames = new ArrayList<String>();
 
             converterAdapterFactoryClassNames
-                    .add(WebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
+                .add(WebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
             converterAdapterFactoryClassNames.add(ExtValUtils
-                    .getInformationProviderBean()
-                    .getCustomConverterAdapterFactory());
+                .getInformationProviderBean()
+                .getCustomConverterAdapterFactory());
             converterAdapterFactoryClassNames
-                    .add(DefaultConverterAdapterFactory.class.getName());
+                .add(DefaultConverterAdapterFactory.class.getName());
 
             for (String className : converterAdapterFactoryClassNames)
             {
                 converterAdapterFactory = (ClassMappingFactory<Converter, Converter>) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    .tryToInstantiateClassForName(className);
 
                 if (converterAdapterFactory != null)
                 {

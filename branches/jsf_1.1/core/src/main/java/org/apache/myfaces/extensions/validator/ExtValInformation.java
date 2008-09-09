@@ -18,11 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+
 /**
  * dont't move to an other package!!!
  *
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageEnum.INTERNAL)
 public interface ExtValInformation
 {
     static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ExtValInformation.class
