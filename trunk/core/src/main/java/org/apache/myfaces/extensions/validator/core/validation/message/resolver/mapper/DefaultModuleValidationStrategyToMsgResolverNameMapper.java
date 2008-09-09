@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
  * @author Gerhard Petracek
  */
 public class DefaultModuleValidationStrategyToMsgResolverNameMapper extends
-        DefaultValidationStrategyToMsgResolverNameMapper
+    DefaultValidationStrategyToMsgResolverNameMapper
 {
 
     @Override

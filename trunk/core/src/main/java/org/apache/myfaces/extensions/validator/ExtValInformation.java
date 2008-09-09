@@ -18,14 +18,20 @@
  */
 package org.apache.myfaces.extensions.validator;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+
 /**
  * dont't move to an other package!!!
  *
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageEnum.INTERNAL)
 public interface ExtValInformation
 {
-    static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ExtValInformation.class.getPackage().getName();
-    static final String WEBXML_PARAM_PREFIX = ExtValInformation.class.getPackage().getName();
+    static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ExtValInformation.class
+            .getPackage().getName();
+    static final String WEBXML_PARAM_PREFIX = ExtValInformation.class
+            .getPackage().getName();
     static final String VERSION = "1.2.1";
 }

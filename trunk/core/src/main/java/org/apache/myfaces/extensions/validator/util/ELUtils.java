@@ -31,11 +31,11 @@ import javax.faces.context.FacesContext;
 public class ELUtils
 {
     public static Class getTypeOfValueBindingForExpression(
-            FacesContext facesContext, String valueBindingExpression)
+        FacesContext facesContext, String valueBindingExpression)
     {
         //due to a restriction with the ri
         Object bean = ELUtils.getValueOfExpression(facesContext,
-                valueBindingExpression);
+            valueBindingExpression);
         return (bean != null) ? bean.getClass() : null;
     }
 
@@ -43,7 +43,7 @@ public class ELUtils
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         return facesContext.getApplication().getELResolver().getValue(
-                facesContext.getELContext(), null, beanName);
+            facesContext.getELContext(), null, beanName);
     }
 
     //TODO refactor - problem - static values - jsf 1.2 e.g.: ${value}
@@ -61,13 +61,13 @@ public class ELUtils
         String newExpression = valueBindingExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
 
         return getValueOfExpression(FacesContext.getCurrentInstance(),
-                newExpression);
+            newExpression);
     }
 
     public static Object getValueOfExpression(FacesContext facesContext, String valueBindingExpression)
     {
-        return (valueBindingExpression != null) ? facesContext.getApplication().evaluateExpressionGet(facesContext, 
-                valueBindingExpression, Object.class) : null;
+        return (valueBindingExpression != null) ? facesContext.getApplication().evaluateExpressionGet(facesContext,
+            valueBindingExpression, Object.class) : null;
     }
 
     public static boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression)
@@ -84,7 +84,7 @@ public class ELUtils
     }
 
     public static String getReliableValueBindingExpression(
-            UIComponent uiComponent)
+        UIComponent uiComponent)
     {
         String valueBindingExpression = getValueBindingExpression(uiComponent);
 
@@ -105,19 +105,19 @@ public class ELUtils
     public static String getValueBindingExpression(UIComponent uiComponent)
     {
         ValueExpression valueExpression = uiComponent
-                .getValueExpression("value");
+            .getValueExpression("value");
 
         return (valueExpression != null) ? valueExpression
-                .getExpressionString() : null;
+            .getExpressionString() : null;
     }
 
     public static Class getTypeOfValueBindingForComponent(
-            FacesContext facesContext, UIComponent uiComponent)
+        FacesContext facesContext, UIComponent uiComponent)
     {
         ValueExpression valueExpression = uiComponent
-                .getValueExpression("value");
+            .getValueExpression("value");
 
         return (valueExpression != null) ? valueExpression.getType(facesContext
-                .getELContext()) : null;
+            .getELContext()) : null;
     }
 }

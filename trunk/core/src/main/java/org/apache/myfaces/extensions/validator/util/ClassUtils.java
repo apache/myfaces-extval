@@ -24,19 +24,19 @@ package org.apache.myfaces.extensions.validator.util;
 public class ClassUtils
 {
     public static Class loadClassForName(String name)
-            throws ClassNotFoundException
+        throws ClassNotFoundException
     {
         try
         {
             // Try WebApp ClassLoader first
             return Class.forName(name, false, // do not initialize for faster startup
-                    Thread.currentThread().getContextClassLoader());
+                Thread.currentThread().getContextClassLoader());
         }
         catch (ClassNotFoundException ignore)
         {
             // fallback: Try ClassLoader for ClassUtils (i.e. the myfaces.jar lib)
             return Class.forName(name, false, // do not initialize for faster startup
-                    ClassUtils.class.getClassLoader());
+                ClassUtils.class.getClassLoader());
         }
     }
 
@@ -67,8 +67,8 @@ public class ClassUtils
     }
 
     public static Object instantiateClassForName(String className)
-            throws ClassNotFoundException, IllegalAccessException,
-            InstantiationException
+        throws ClassNotFoundException, IllegalAccessException,
+        InstantiationException
     {
         return loadClassForName(className).newInstance();
     }

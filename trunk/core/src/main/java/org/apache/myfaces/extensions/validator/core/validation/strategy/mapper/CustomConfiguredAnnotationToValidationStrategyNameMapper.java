@@ -28,7 +28,7 @@ import java.lang.annotation.Annotation;
  */
 @Deprecated
 public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
-        AbstractCustomNameMapper<Annotation>
+    AbstractCustomNameMapper<Annotation>
 {
 
     protected String getCustomNameMapperClassName()

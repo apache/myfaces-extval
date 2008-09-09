@@ -26,12 +26,12 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
  * @author Gerhard Petracek
  */
 public class CustomConventionValidationStrategyToMsgResolverNameMapper extends
-        AbstractCustomNameMapper<ValidationStrategy>
+    AbstractCustomNameMapper<ValidationStrategy>
 {
 
     protected String getCustomNameMapperClassName()
     {
         return ExtValUtils.getInformationProviderBean()
-                .getCustomValidationStrategyToMsgResolverNameMapper();
+            .getCustomValidationStrategyToMsgResolverNameMapper();
     }
 }

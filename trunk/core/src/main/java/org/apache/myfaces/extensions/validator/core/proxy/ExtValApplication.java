@@ -16,12 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.proxy;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.el.ELContextListener;
 import javax.el.ELException;
@@ -44,16 +46,16 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * @author Gerhard Petracek
  */
 @SuppressWarnings("deprecation,unchecked")
+@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
 public class ExtValApplication extends Application
 {
     protected final Log logger = LogFactory.getLog(getClass());
@@ -74,10 +76,10 @@ public class ExtValApplication extends Application
     }
 
     public UIComponent createComponent(ValueBinding componentBinding,
-            FacesContext context, String componentType) throws FacesException
+                                       FacesContext context, String componentType) throws FacesException
     {
         UIComponent component = this.wrapped.createComponent(componentBinding,
-                context, componentType);
+            context, componentType);
         return tryToSetExtValValidatingConverter(component);
     }
 
@@ -91,7 +93,7 @@ public class ExtValApplication extends Application
         if (component instanceof EditableValueHolder)
         {
             ((EditableValueHolder) component)
-                    .setConverter(new ExtValConverter());
+                .setConverter(new ExtValConverter());
         }
         return component;
     }
@@ -255,7 +257,7 @@ public class ExtValApplication extends Application
     }
 
     public UIComponent createComponent(String componentType)
-            throws FacesException
+        throws FacesException
     {
         UIComponent component = this.wrapped.createComponent(componentType);
 
@@ -263,7 +265,7 @@ public class ExtValApplication extends Application
     }
 
     public MethodBinding createMethodBinding(String ref, Class[] params)
-            throws ReferenceSyntaxException
+        throws ReferenceSyntaxException
     {
         return this.wrapped.createMethodBinding(ref, params);
     }
@@ -294,7 +296,7 @@ public class ExtValApplication extends Application
     }
 
     public ValueBinding createValueBinding(String ref)
-            throws ReferenceSyntaxException
+        throws ReferenceSyntaxException
     {
         return this.wrapped.createValueBinding(ref);
     }
@@ -313,17 +315,17 @@ public class ExtValApplication extends Application
     }
 
     public ResourceBundle getResourceBundle(FacesContext facesContext, String s)
-            throws FacesException, NullPointerException
+        throws FacesException, NullPointerException
     {
         return this.wrapped.getResourceBundle(facesContext, s);
     }
 
     public UIComponent createComponent(ValueExpression valueExpression,
-            FacesContext facesContext, String s) throws FacesException,
-            NullPointerException
+                                       FacesContext facesContext, String s) throws FacesException,
+        NullPointerException
     {
         UIComponent component = this.wrapped.createComponent(valueExpression,
-                facesContext, s);
+            facesContext, s);
         return tryToSetExtValValidatingConverter(component);
     }
 
@@ -348,7 +350,7 @@ public class ExtValApplication extends Application
     }
 
     public Object evaluateExpressionGet(FacesContext facesContext, String s,
-            Class aClass) throws ELException
+                                        Class aClass) throws ELException
     {
         return this.wrapped.evaluateExpressionGet(facesContext, s, aClass);
     }

@@ -25,13 +25,13 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
  * @author Gerhard Petracek
  */
 public class SimpleValidationStrategyToMsgResolverNameMapper implements
-        NameMapper<ValidationStrategy>
+    NameMapper<ValidationStrategy>
 {
     public String createName(ValidationStrategy validationStrategy)
     {
         String resolverName = validationStrategy.getClass().getName();
 
         return resolverName.substring(0, resolverName.lastIndexOf("."))
-                + ".DefaultValidationErrorMessageResolver";
+            + ".DefaultValidationErrorMessageResolver";
     }
 }

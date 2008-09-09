@@ -20,20 +20,22 @@ package org.apache.myfaces.extensions.validator.core.adapter.mapper;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.convert.Converter;
 
 /**
  * @author Gerhard Petracek
  */
-@Deprecated
+@UsageInformation(UsageEnum.FALLBACK)
 public class SimpleConverterToAdapterNameMapper implements
-        NameMapper<Converter>
+    NameMapper<Converter>
 {
     public String createName(Converter converter)
     {
         return ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-                + ".adapter." + converter.getClass().getSimpleName()
-                + "Adapter";
+            + ".adapter." + converter.getClass().getSimpleName()
+            + "Adapter";
     }
 }

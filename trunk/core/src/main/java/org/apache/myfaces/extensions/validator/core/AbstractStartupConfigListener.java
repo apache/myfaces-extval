@@ -57,13 +57,13 @@ public abstract class AbstractStartupConfigListener implements PhaseListener
                 catch (Throwable t)
                 {
                     this.logger
-                            .warn(
-                                    "an exception occurred while deregistering the phase-listener"
-                                            + getClass().getName()
-                                            + " -> there is just a little overhead,"
-                                            + " but everything else works correctly."
-                                            + " however, please inform the community about your configuration",
-                                    t);
+                        .warn(
+                            "an exception occurred while deregistering the phase-listener"
+                                + getClass().getName()
+                                + " -> there is just a little overhead,"
+                                + " but everything else works correctly."
+                                + " however, please inform the community about your configuration",
+                            t);
                 }
                 finally
                 {

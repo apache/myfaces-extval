@@ -21,10 +21,13 @@ package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageEnum.API)
 public interface ReferencingStrategy
 {
     boolean evalReferenceAndValidate(
