@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.adapter;
 
-import org.apache.myfaces.extensions.validator.core.ExtValConverter;
+import org.apache.myfaces.extensions.validator.core.proxy.ExtValConverter;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
@@ -30,7 +32,7 @@ import javax.faces.convert.Converter;
  *
  * @author Gerhard Petracek
  */
-@Deprecated
+@UsageInformation(UsageEnum.FALLBACK)
 public class ExtValFallbackConverter extends ExtValConverter
 {
     private Converter wrapped;
@@ -42,13 +44,13 @@ public class ExtValFallbackConverter extends ExtValConverter
 
     @Override
     public String getAsString(FacesContext facesContext,
-            UIComponent uiComponent, Object o)
+                              UIComponent uiComponent, Object o)
     {
         if (this.wrapped == null)
         {
             //indirect approach for complex components
             Converter converter = ExtValUtils.tryToCreateOriginalConverter(
-                    facesContext, uiComponent);
+                facesContext, uiComponent);
             if (converter == null)
             {
                 return (o == null) ? null : o.toString();
@@ -66,17 +68,17 @@ public class ExtValFallbackConverter extends ExtValConverter
 
     @Override
     protected Object getConvertedObject(FacesContext facesContext,
-            UIComponent uiComponent, String s)
+                                        UIComponent uiComponent, String s)
     {
         if (this.wrapped == null)
         {
             //indirect approach for complex components
             //TODO
             Converter converter = ExtValUtils.tryToCreateOriginalConverter(
-                    facesContext, uiComponent);
+                facesContext, uiComponent);
 
             return (converter != null) ? converter.getAsObject(facesContext,
-                    uiComponent, s) : s;
+                uiComponent, s) : s;
         }
         else
         {

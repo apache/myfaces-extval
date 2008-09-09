@@ -18,16 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
+import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
@@ -36,10 +35,11 @@ import javax.faces.convert.Converter;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-
-import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
-import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -49,6 +49,65 @@ public class ExtValUtils
 {
     private static final Log LOGGER = LogFactory.getLog(ExtValUtils.class);
 
+    //TODO test
+    public static void createValueBindingConvertedValueMapping(
+        UIComponent uiComponent, Object convertedObject)
+    {
+        if (!(uiComponent instanceof EditableValueHolder))
+        {
+            return;
+        }
+
+        //to support local cross-validation (within the same entity)
+        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = ExtValUtils
+            .getOrInitValueBindingConvertedValueMapping();
+
+        String valueBindingExpression;
+        ProcessedInformationEntry entry;
+
+        valueBindingExpression = ELUtils
+            .getReliableValueBindingExpression(uiComponent);
+
+        if (valueBindingExpression == null)
+        {
+            return;
+        }
+
+        entry = new ProcessedInformationEntry();
+        entry.setBean(ELUtils.getBaseObject(valueBindingExpression, uiComponent));
+        entry.setConvertedValue(convertedObject);
+        entry.setComponent(uiComponent);
+
+        //for local cross-validation
+        if (valueBindingConvertedValueMapping
+            .containsKey(valueBindingExpression)
+            && !valueBindingConvertedValueMapping.get(
+            valueBindingExpression).getBean().equals(
+            entry.getBean()))
+        {
+            //for the validation within a complex component e.g. a table
+            //don't override existing expression (style: #{entry.property}) - make a special mapping
+
+            List<ProcessedInformationEntry> furtherEntries = valueBindingConvertedValueMapping
+                .get(valueBindingExpression).getFurtherEntries();
+            if (furtherEntries == null)
+            {
+                furtherEntries = new ArrayList<ProcessedInformationEntry>();
+
+                valueBindingConvertedValueMapping.get(valueBindingExpression)
+                    .setFurtherEntries(furtherEntries);
+            }
+
+            furtherEntries.add(entry);
+        }
+        else
+        {
+            //for normal validation
+            valueBindingConvertedValueMapping
+                .put(valueBindingExpression, entry);
+        }
+    }
+
     public static String getBasePackage()
     {
         return getInformationProviderBean().getBasePackage();
@@ -57,9 +116,9 @@ public class ExtValUtils
     public static InformationProviderBean getInformationProviderBean()
     {
         Map applicationMap = FacesContext.getCurrentInstance()
-                .getExternalContext().getApplicationMap();
+            .getExternalContext().getApplicationMap();
         InformationProviderBean bean = (InformationProviderBean) applicationMap
-                .get(InformationProviderBean.BEAN_NAME);
+            .get(InformationProviderBean.BEAN_NAME);
 
         if (bean == null)
         {
@@ -69,39 +128,39 @@ public class ExtValUtils
     }
 
     private static InformationProviderBean initInformationProviderBean(
-            Map applicationMap)
+        Map applicationMap)
     {
 
         List<String> informationProviderBeanClassNames = new ArrayList<String>();
 
         informationProviderBeanClassNames
-                .add(WebXmlParameter.CUSTOM_CONVENTION_INFO_PROVIDER_BEAN);
+            .add(WebXmlParameter.CUSTOM_CONVENTION_INFO_PROVIDER_BEAN);
         informationProviderBeanClassNames.add(ExtValUtils
-                .getCustomInformationProviderBeanClassName());
+            .getCustomInformationProviderBeanClassName());
         informationProviderBeanClassNames.add(InformationProviderBean.class
-                .getName());
+            .getName());
 
         InformationProviderBean informationProviderBean;
         for (String className : informationProviderBeanClassNames)
         {
             informationProviderBean = (InformationProviderBean) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                .tryToInstantiateClassForName(className);
 
             if (informationProviderBean != null)
             {
                 applicationMap.put(InformationProviderBean.BEAN_NAME,
-                        informationProviderBean);
+                    informationProviderBean);
                 return informationProviderBean;
             }
         }
         throw new IllegalStateException(InformationProviderBean.class.getName()
-                + " not found");
+            + " not found");
     }
 
     public static String getCustomInformationProviderBeanClassName()
     {
         InformationProviderBean bean = (InformationProviderBean) ELUtils
-                .getBean(InformationProviderBean.CUSTOM_BEAN);
+            .getBean(InformationProviderBean.CUSTOM_BEAN);
 
         return (bean != null) ? bean.getClass().getName() : null;
     }
@@ -109,7 +168,7 @@ public class ExtValUtils
     public static void deregisterPhaseListener(PhaseListener phaseListener)
     {
         LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder
-                .getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+            .getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
         String currentId;
         Lifecycle currentLifecycle;
@@ -123,12 +182,12 @@ public class ExtValUtils
     }
 
     public static final String VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY = ExtValUtils.class
-            .getName();
+        .getName();
 
     public static Map<String, ProcessedInformationEntry> getOrInitValueBindingConvertedValueMapping()
     {
         Map requestMap = FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestMap();
+            .getRequestMap();
 
         if (!requestMap.containsKey(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY))
         {
@@ -136,14 +195,14 @@ public class ExtValUtils
         }
 
         return (Map<String, ProcessedInformationEntry>) requestMap
-                .get(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY);
+            .get(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY);
     }
 
     public static void resetCrossValidationStorage()
     {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-                .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY,
-                        new HashMap<String, ProcessedInformationEntry>());
+            .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY,
+                new HashMap<String, ProcessedInformationEntry>());
     }
 
     /*
@@ -151,7 +210,7 @@ public class ExtValUtils
      * TODO: find a better solution - multi-window-mode
      */
     public static final String PROXY_MAPPING_KEY = VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY
-            + ":proxyMapping";
+        + ":proxyMapping";
 
     public static Map<String, Object> getOrInitProxyMapping()
     {
@@ -162,20 +221,20 @@ public class ExtValUtils
         String viewId = facesContext.getViewRoot().getViewId();
 
         if (!sessionMap.containsKey(PROXY_MAPPING_KEY)
-                || !((Map) sessionMap.get(PROXY_MAPPING_KEY))
-                        .containsKey(viewId))
+            || !((Map) sessionMap.get(PROXY_MAPPING_KEY))
+            .containsKey(viewId))
         {
             resetProxyMapping(viewId);
         }
 
         return (Map<String, Object>) ((Map) sessionMap.get(PROXY_MAPPING_KEY))
-                .get(viewId);
+            .get(viewId);
     }
 
     public static void resetProxyMapping(String viewId)
     {
         Map sessionMap = FacesContext.getCurrentInstance().getExternalContext()
-                .getSessionMap();
+            .getSessionMap();
 
         Map<String, Map<String, Object>> storage;
 
@@ -199,12 +258,12 @@ public class ExtValUtils
     }
 
     public static final String PROCESSED_CONVERTER_COUNT_KEY = VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY
-            + ":processedConverterCount";
+        + ":processedConverterCount";
 
     public static Integer getProcessedConverterCount()
     {
         Map requestMap = FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestMap();
+            .getRequestMap();
 
         if (!requestMap.containsKey(PROCESSED_CONVERTER_COUNT_KEY))
         {
@@ -217,7 +276,7 @@ public class ExtValUtils
     public static void setProcessedConverterCount(Integer count)
     {
         Map requestMap = FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestMap();
+            .getRequestMap();
 
         if (!requestMap.containsKey(PROCESSED_CONVERTER_COUNT_KEY))
         {
@@ -230,7 +289,7 @@ public class ExtValUtils
     public static void resetProcessedConverterMapping()
     {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-                .put(PROCESSED_CONVERTER_COUNT_KEY, 0);
+            .put(PROCESSED_CONVERTER_COUNT_KEY, 0);
     }
 
     public static void increaseProcessedConverterCount()
@@ -248,7 +307,7 @@ public class ExtValUtils
 
         String initParam = WebXmlParameter.DEACTIVATE_PROXY_MAPPING;
         boolean disableProxyMapping = (initParam != null && initParam.trim()
-                .equalsIgnoreCase("true"));
+            .equalsIgnoreCase("true"));
 
         return !(useFallbackAdapters() || disableProxyMapping);
     }
@@ -291,7 +350,7 @@ public class ExtValUtils
                 if (component == null)
                 {
                     component = resolveComponentInComplexComponent(viewRoot,
-                            component, key);
+                        component, key);
 
                     if (component == null)
                     {
@@ -308,8 +367,8 @@ public class ExtValUtils
 
                 //converterOfComponent lost callback during state-saving -> set converter of same type
                 if (converterOfComponent != null
-                        && converterOfComponent.getClass().getSuperclass()
-                                .equals(converter.getClass().getSuperclass()))
+                    && converterOfComponent.getClass().getSuperclass()
+                    .equals(converter.getClass().getSuperclass()))
                 {
                     ((ValueHolder) component).setConverter(converter);
                 }
@@ -319,13 +378,13 @@ public class ExtValUtils
         if (ExtValUtils.useProxyMapping())
         {
             ExtValUtils.resetProxyMapping(FacesContext.getCurrentInstance()
-                    .getViewRoot().getViewId());
+                .getViewRoot().getViewId());
         }
     }
 
     //TODO
     private static UIComponent resolveComponentInComplexComponent(
-            UIComponent viewRoot, UIComponent component, String key)
+        UIComponent viewRoot, UIComponent component, String key)
     {
         int index = key.lastIndexOf(":");
 
@@ -353,7 +412,7 @@ public class ExtValUtils
             else
             {
                 return tryToResolveChildComponent(component, key.substring(key
-                        .lastIndexOf(":")));
+                    .lastIndexOf(":")));
             }
         }
         return null;
@@ -361,7 +420,7 @@ public class ExtValUtils
 
     //TODO
     private static UIComponent tryToResolveChildComponent(
-            UIComponent component, String endOfKey)
+        UIComponent component, String endOfKey)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String clientId = component.getClientId(facesContext);
@@ -386,14 +445,14 @@ public class ExtValUtils
     }
 
     public static final String ORIGINAL_APPLICATION_KEY = VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY
-            + ":wrapped_application";
+        + ":wrapped_application";
 
     //in order to access the wrapped application and support other Application wrappers
     public static void setOriginalApplication(Application application)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Map applicationMap = facesContext.getExternalContext()
-                .getApplicationMap();
+            .getApplicationMap();
 
         if (!applicationMap.containsKey(ORIGINAL_APPLICATION_KEY))
         {
@@ -401,7 +460,7 @@ public class ExtValUtils
             {
                 applicationMap.put(ORIGINAL_APPLICATION_KEY, application);
 
-                if(LOGGER.isTraceEnabled())
+                if (LOGGER.isTraceEnabled())
                 {
                     LOGGER.trace("the original application is " + application.getClass().getName());
                 }
@@ -412,16 +471,16 @@ public class ExtValUtils
     public static Application getOriginalApplication()
     {
         return (Application) FacesContext.getCurrentInstance()
-                .getExternalContext().getApplicationMap().get(
-                        ORIGINAL_APPLICATION_KEY);
+            .getExternalContext().getApplicationMap().get(
+            ORIGINAL_APPLICATION_KEY);
     }
 
     public static Converter tryToCreateOriginalConverter(
-            FacesContext facesContext, UIComponent uiComponent)
+        FacesContext facesContext, UIComponent uiComponent)
     {
         //for backward compatibility: cross-validation workaround with hidden field and static value
         Class valueBindingType = ELUtils.getTypeOfValueBindingForComponent(
-                facesContext, uiComponent);
+            facesContext, uiComponent);
 
         if (valueBindingType == null)
         {

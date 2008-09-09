@@ -39,7 +39,6 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Ref
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
-
 /**
  * @author Gerhard Petracek
  */
@@ -134,8 +133,8 @@ public abstract class AbstractCompareStrategy extends
         String details = getErrorMessageDetails(entryOfSource
                 .getAnnotationEntry().getAnnotation(), true);
 
-        //validation target isn't bound to a component withing the current page (see 
-        //validateFoundEntry, tryToValidateLocally and tryToValidateBindingOnly)
+        //validation target isn't bound to a component withing the current page 
+        //(see validateFoundEntry, tryToValidateLocally and tryToValidateBindingOnly)
         if (entryOfTarget == null)
         {
             entryOfTarget = entryOfSource;

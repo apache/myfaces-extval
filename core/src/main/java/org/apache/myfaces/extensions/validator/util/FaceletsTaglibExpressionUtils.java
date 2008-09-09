@@ -36,18 +36,18 @@ import java.util.Map;
 public class FaceletsTaglibExpressionUtils
 {
     public static String tryToCreateValueBindingForFaceletsBinding(
-            UIComponent uiComponent)
+        UIComponent uiComponent)
     {
         String faceletsValueBindingExpression = ELUtils
-                .getValueBindingExpression(uiComponent);
+            .getValueBindingExpression(uiComponent);
 
         try
         {
             List<String> foundBindings = extractELTerms(uiComponent
-                    .getValueBinding("value"));
+                .getValueBinding("value"));
 
             return faceletsValueBindingExpression.substring(0, 1) + "{"
-                    + createBinding(foundBindings) + "}";
+                + createBinding(foundBindings) + "}";
         }
         catch (Throwable t)
         {
@@ -83,7 +83,7 @@ public class FaceletsTaglibExpressionUtils
             }
 
             bindingDetails = foundBindingDetails[indexOfBindingDetails]
-                    .split("=");
+                .split("=");
 
             if (bindingDetails.length < 2)
             {
@@ -94,16 +94,16 @@ public class FaceletsTaglibExpressionUtils
             if (prevFaceletsAttributeName != null)
             {
                 partOfBinding = currentBinding.substring(currentBinding
-                        .indexOf(prevFaceletsAttributeName)
-                        + prevFaceletsAttributeName.length(), currentBinding
-                        .indexOf("}"));
+                    .indexOf(prevFaceletsAttributeName)
+                    + prevFaceletsAttributeName.length(), currentBinding
+                    .indexOf("}"));
                 result = result + partOfBinding;
             }
             else
             {
                 result = currentBinding.substring(
-                        currentBinding.indexOf("{") + 1, currentBinding
-                                .indexOf("}"));
+                    currentBinding.indexOf("{") + 1, currentBinding
+                    .indexOf("}"));
             }
 
             prevFaceletsAttributeName = bindingDetails[0];
@@ -131,7 +131,7 @@ public class FaceletsTaglibExpressionUtils
         try
         {
             if (resolveELTerms(o, new HashMap<Object, Object>(), foundELTerms,
-                    0) > 0)
+                0) > 0)
             {
                 return foundELTerms;
             }
@@ -144,7 +144,7 @@ public class FaceletsTaglibExpressionUtils
     }
 
     private static int resolveELTerms(Object o, Map<Object, Object> visited,
-            List<String> foundELTerms, int count) throws Exception
+                                      List<String> foundELTerms, int count) throws Exception
     {
         if (o == null || visited.containsKey(o) || count > 50)
         {
@@ -163,7 +163,7 @@ public class FaceletsTaglibExpressionUtils
             for (Object entry : ((Map) o).values())
             {
                 elCount += resolveELTerms(entry, visited, foundELTerms,
-                        count + 1);
+                    count + 1);
             }
             return elCount;
         }
@@ -200,7 +200,7 @@ public class FaceletsTaglibExpressionUtils
                     else
                     {
                         elCount += resolveELTerms(Array.get(o, i), visited,
-                                foundELTerms, count + 1);
+                            foundELTerms, count + 1);
                     }
                 }
             }
@@ -209,7 +209,7 @@ public class FaceletsTaglibExpressionUtils
 
         List<Field> attributes = findAllAttributes(c, new ArrayList<Field>());
         Field[] fields = (Field[]) attributes.toArray(new Field[attributes
-                .size()]);
+            .size()]);
 
         AccessibleObject.setAccessible(fields, true);
         for (Field currentField : fields)
@@ -222,7 +222,7 @@ public class FaceletsTaglibExpressionUtils
             if (currentField.getType().equals(String.class))
             {
                 if (currentField.get(o) != null
-                        && isELTerm(currentField.get(o)))
+                    && isELTerm(currentField.get(o)))
                 {
                     if (foundELTerms != null)
                     {
@@ -234,7 +234,7 @@ public class FaceletsTaglibExpressionUtils
             else if (!currentField.getType().isPrimitive())
             {
                 elCount += resolveELTerms(currentField.get(o), visited,
-                        foundELTerms, count + 1);
+                    foundELTerms, count + 1);
             }
         }
         return elCount;
@@ -249,7 +249,7 @@ public class FaceletsTaglibExpressionUtils
 
         String s = o.toString();
         return ((s.contains("#") || s.contains("$")) && s.contains("{") && s
-                .contains("}"));
+            .contains("}"));
     }
 
     private static List<Field> findAllAttributes(Class c, List<Field> attributes)

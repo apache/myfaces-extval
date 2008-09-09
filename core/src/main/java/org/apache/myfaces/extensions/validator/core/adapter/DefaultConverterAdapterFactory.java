@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.core.adapter.mapper.CustomConvent
 import org.apache.myfaces.extensions.validator.core.adapter.mapper.DefaultConverterToAdapterNameMapper;
 import org.apache.myfaces.extensions.validator.core.adapter.mapper.SimpleConverterToAdapterNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.convert.Converter;
@@ -39,9 +41,9 @@ import java.util.Map;
  *
  * @author Gerhard Petracek
  */
-@Deprecated
+@UsageInformation(UsageEnum.FALLBACK)
 public class DefaultConverterAdapterFactory implements
-        ClassMappingFactory<Converter, Converter>
+    ClassMappingFactory<Converter, Converter>
 {
     private static Map<String, String> converterAdapterMapping = new HashMap<String, String>();
     private static List<NameMapper<Converter>> nameMapperList = new ArrayList<NameMapper<Converter>>();
@@ -63,8 +65,8 @@ public class DefaultConverterAdapterFactory implements
         if (converterAdapterMapping.containsKey(converterName))
         {
             return (Converter) ClassUtils
-                    .tryToInstantiateClassForName(converterAdapterMapping
-                            .get(converterName));
+                .tryToInstantiateClassForName(converterAdapterMapping
+                    .get(converterName));
         }
 
         Converter adapter;
@@ -74,7 +76,7 @@ public class DefaultConverterAdapterFactory implements
         {
             adapterName = nameMapper.createName(converter);
             adapter = (Converter) ClassUtils
-                    .tryToInstantiateClassForName(adapterName);
+                .tryToInstantiateClassForName(adapterName);
 
             if (adapter != null)
             {
@@ -91,8 +93,8 @@ public class DefaultConverterAdapterFactory implements
 
         if (this.logger.isDebugEnabled())
         {
-            this.logger.debug("no adapter found for " + converterName 
-                    + " -> converter itself is used -> no sev-en support");
+            this.logger.debug("no adapter found for " + converterName
+                + " -> converter itself is used -> no sev-en support");
         }
         return converter;
     }

@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.context.FacesContext;
 import java.util.List;
@@ -26,8 +28,9 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageEnum.API)
 public interface AnnotationExtractor
 {
     List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
-            Object object);
+                                             Object object);
 }
