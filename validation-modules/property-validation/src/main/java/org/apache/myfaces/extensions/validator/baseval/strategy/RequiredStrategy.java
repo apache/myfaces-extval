@@ -21,17 +21,30 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ClientSideValidationStrategy;
+import org.apache.myfaces.extensions.validator.util.ClientSideValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
  */
-public class RequiredStrategy extends AbstractValidationStrategy
+public class RequiredStrategy extends AbstractValidationStrategy implements ClientSideValidationStrategy
 {
+    //TODO
+    public List<String> extractMetaData(Annotation annotation)
+    {
+        List<String> metaData = new ArrayList<String>();
+        //annotation.annotationType().get
+        metaData.add(ClientSideValidationUtils
+            .generateSimpleKeyValuePair("validationErrorMsgKey", ((Required)annotation).validationErrorMsgKey()));
+        return metaData;
+    }
 
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,

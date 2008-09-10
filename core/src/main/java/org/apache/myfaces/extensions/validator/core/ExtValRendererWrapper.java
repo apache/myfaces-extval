@@ -18,14 +18,21 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
+import org.apache.myfaces.extensions.validator.core.client.HTML;
 import org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ClientSideValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import java.io.IOException;
@@ -81,14 +88,49 @@ public class ExtValRendererWrapper extends Renderer
             return;
         }
 
-        //        ResponseWriter responseWriter = facesContext.getResponseWriter();
-        //
-        //        responseWriter.startElement(HTML.INPUT_ELEM, uiComponent);
-        //        responseWriter.writeAttribute(HTML.TYPE_ATTR, HTML.INPUT_TYPE_HIDDEN, null);
-        //        responseWriter.writeAttribute(HTML.NAME_ATTR, uiComponent.getClientId(facesContext)
-        //            + HIDDEN_SUBMIT_INPUT_SUFFIX, null);
-        //        responseWriter.writeAttribute(HTML.VALUE_ATTR, "meta data of property", null);
-        //        responseWriter.endElement(HTML.INPUT_ELEM);
+        ValidationStrategy validationStrategy;
+        boolean firstEntry = true;
+
+        AnnotationExtractor annotationExtractor = FactoryUtils
+            .getAnnotationExtractorFactory().create();
+
+        StringBuffer metaData = new StringBuffer();
+        metaData.append("[");
+
+        for (AnnotationEntry entry : annotationExtractor
+            .extractAnnotations(facesContext, uiComponent))
+        {
+            validationStrategy = FactoryUtils
+                .getValidationStrategyFactory().create(entry.getAnnotation());
+
+            if (validationStrategy instanceof ClientSideValidationStrategy)
+            {
+                for (String currentMetaData : ((ClientSideValidationStrategy) validationStrategy)
+                    .extractMetaData(entry.getAnnotation()))
+                {
+                    metaData.append(currentMetaData);
+
+                    if (!firstEntry)
+                    {
+                        metaData.append(",");
+                    }
+                    else
+                    {
+                        firstEntry = false;
+                    }
+                }
+            }
+        }
+        metaData.append("]");
+
+        ResponseWriter responseWriter = facesContext.getResponseWriter();
+
+        responseWriter.startElement(HTML.INPUT_ELEM, uiComponent);
+        responseWriter.writeAttribute(HTML.TYPE_ATTR, HTML.INPUT_TYPE_HIDDEN, null);
+        responseWriter.writeAttribute(HTML.ID_ATTR, uiComponent.getClientId(facesContext)
+            + HIDDEN_SUBMIT_INPUT_SUFFIX, null);
+        responseWriter.writeAttribute(HTML.VALUE_ATTR, metaData, null);
+        responseWriter.endElement(HTML.INPUT_ELEM);
     }
 
     public String convertClientId(FacesContext facesContext, String s)
