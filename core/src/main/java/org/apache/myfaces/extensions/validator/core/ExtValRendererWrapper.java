@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
@@ -75,20 +74,6 @@ public class ExtValRendererWrapper extends Renderer
         throws IOException
     {
         wrapped.encodeEnd(facesContext, uiComponent);
-
-        if (!(uiComponent instanceof EditableValueHolder))
-        {
-            return;
-        }
-
-        //        ResponseWriter responseWriter = facesContext.getResponseWriter();
-        //
-        //        responseWriter.startElement(HTML.INPUT_ELEM, uiComponent);
-        //        responseWriter.writeAttribute(HTML.TYPE_ATTR, HTML.INPUT_TYPE_HIDDEN, null);
-        //        responseWriter.writeAttribute(HTML.NAME_ATTR, uiComponent.getClientId(facesContext)
-        //            + HIDDEN_SUBMIT_INPUT_SUFFIX, null);
-        //        responseWriter.writeAttribute(HTML.VALUE_ATTR, "meta data of property", null);
-        //        responseWriter.endElement(HTML.INPUT_ELEM);
     }
 
     public String convertClientId(FacesContext facesContext, String s)
