@@ -26,7 +26,6 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-@Deprecated
 public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
     AbstractCustomNameMapper<Annotation>
 {

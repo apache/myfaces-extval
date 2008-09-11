@@ -18,9 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
+import org.apache.myfaces.extensions.validator.core.AlternativeWebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.AlternativeInformationProviderBean;
 import org.apache.myfaces.extensions.validator.core.adapter.DefaultConverterAdapterFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 
 import javax.faces.convert.Converter;
 import java.util.ArrayList;
@@ -33,7 +36,7 @@ public class AdapterFactoryUtils
 {
     private static ClassMappingFactory<Converter, Converter> converterAdapterFactory;
 
-    @Deprecated
+    @UsageInformation(UsageEnum.FALLBACK)
     public static ClassMappingFactory<Converter, Converter> getConverterAdapterFactory()
     {
         if (converterAdapterFactory == null)
@@ -41,10 +44,15 @@ public class AdapterFactoryUtils
             List<String> converterAdapterFactoryClassNames = new ArrayList<String>();
 
             converterAdapterFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
-            converterAdapterFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
+                .add(AlternativeWebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
+
+            //TODO make it overrideable see InformationProviderBean
+            //converterAdapterFactoryClassNames.add(ExtValUtils
+            //    .getInformationProviderBean()
+            //    .getCustomConverterAdapterFactory());
+            converterAdapterFactoryClassNames.add(new AlternativeInformationProviderBean()
                 .getCustomConverterAdapterFactory());
+
             converterAdapterFactoryClassNames
                 .add(DefaultConverterAdapterFactory.class.getName());
 

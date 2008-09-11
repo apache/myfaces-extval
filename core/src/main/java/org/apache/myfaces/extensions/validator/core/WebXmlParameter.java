@@ -62,23 +62,6 @@ public interface WebXmlParameter
     /*
      * deactivate
      */
-    static final String DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER = WebXmlUtils
-        .getInitParameter("DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER");
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");
-    static final String DEACTIVATE_PROXY_MAPPING = WebXmlUtils
-        .getInitParameter("DEACTIVATE_PROXY_MAPPING");
-
-    /*
-     * fallback lib - if the usage of cglib is a problem
-     */
-    @Deprecated
-    static final String CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER = WebXmlUtils
-        .getInitParameter("CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER");
-    @Deprecated
-    static final String CUSTOM_CONVERTER_ADAPTER_FACTORY = WebXmlUtils
-        .getInitParameter("CUSTOM_CONVERTER_ADAPTER_FACTORY");
-    @Deprecated
-    static final String USE_ADAPTERS = WebXmlUtils
-        .getInitParameter("USE_ADAPTERS");
 }

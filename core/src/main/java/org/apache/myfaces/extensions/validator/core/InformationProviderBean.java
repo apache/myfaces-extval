@@ -96,12 +96,6 @@ public class InformationProviderBean
         return this.basePackage + "AnnotationToValidationStrategyNameMapper";
     }
 
-    @Deprecated
-    public String getCustomAdapterNameMapper()
-    {
-        return this.basePackage + "AdapterNameMapper";
-    }
-
     /*
      * factories
      */
@@ -113,12 +107,6 @@ public class InformationProviderBean
     public String getCustomValidationStrategyFactory()
     {
         return this.basePackage + "ValidationStrategyFactory";
-    }
-
-    @Deprecated
-    public String getCustomConverterAdapterFactory()
-    {
-        return this.basePackage + "ConverterAdapterFactory";
     }
 
     //TODO

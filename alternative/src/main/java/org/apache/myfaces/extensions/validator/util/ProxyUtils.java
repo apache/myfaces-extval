@@ -20,7 +20,9 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.AlternativeWebXmlParameter;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -140,7 +142,7 @@ public class ProxyUtils
     public static boolean useProxyMapping()
     {
 
-        String initParam = WebXmlParameter.DEACTIVATE_PROXY_MAPPING;
+        String initParam = AlternativeWebXmlParameter.DEACTIVATE_PROXY_MAPPING;
         boolean disableProxyMapping = (initParam != null && initParam.trim()
             .equalsIgnoreCase("true"));
 
@@ -318,10 +320,10 @@ public class ProxyUtils
         return getOriginalApplication().createConverter(valueBindingType);
     }
 
-    @Deprecated
+    @UsageInformation(UsageEnum.FALLBACK)
     public static boolean useFallbackAdapters()
     {
-        String initParam = WebXmlParameter.USE_ADAPTERS;
+        String initParam = AlternativeWebXmlParameter.USE_ADAPTERS;
         return (initParam != null && initParam.trim().equalsIgnoreCase("true"));
     }
 }
