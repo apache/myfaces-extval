@@ -23,6 +23,19 @@ package org.apache.myfaces.extensions.validator.util;
  */
 public class ClassUtils
 {
+    public static Class tryToLoadClassForName(String name)
+    {
+        try
+        {
+            return loadClassForName(name);
+        }
+        catch (ClassNotFoundException e)
+        {
+            //do nothing - it's just a try
+            return null;
+        }
+    }
+    
     public static Class loadClassForName(String name)
         throws ClassNotFoundException
     {

@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 
 import javax.faces.component.UIComponent;
@@ -60,7 +61,7 @@ public class ExtValConverter implements Converter, MethodInterceptor,
             Serializable.class});
         enhancer.setCallback(new ExtValConverter());
 
-        ExtValUtils.increaseProcessedConverterCount();
+        ProxyUtils.increaseProcessedConverterCount();
 
         return (Converter) enhancer.create();
     }
@@ -94,7 +95,7 @@ public class ExtValConverter implements Converter, MethodInterceptor,
                               UIComponent uiComponent, Object o)
     {
         //indirect approach for complex components
-        Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+        Converter converter = ProxyUtils.tryToCreateOriginalConverter(
             facesContext, uiComponent);
         return (converter == null) ? (o == null) ? null : o.toString()
             : converter.getAsString(facesContext, uiComponent, o);
@@ -131,7 +132,7 @@ public class ExtValConverter implements Converter, MethodInterceptor,
     {
         //indirect approach for complex components
         //TODO
-        Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+        Converter converter = ProxyUtils.tryToCreateOriginalConverter(
             facesContext, uiComponent);
         return (converter != null) ? converter.getAsObject(facesContext,
             uiComponent, s) : s;
@@ -145,11 +146,11 @@ public class ExtValConverter implements Converter, MethodInterceptor,
         FacesContext facesContext, UIComponent uiComponent,
         Converter converter)
     {
-        if (ExtValUtils.useProxyMapping())
+        if (ProxyUtils.useProxyMapping())
         {
-            ExtValUtils.getOrInitProxyMapping().put(
+            ProxyUtils.getOrInitProxyMapping().put(
                 uiComponent.getClientId(facesContext), converter);
-            ExtValUtils.decreaseProcessedConverterCount();
+            ProxyUtils.decreaseProcessedConverterCount();
         }
     }
 }

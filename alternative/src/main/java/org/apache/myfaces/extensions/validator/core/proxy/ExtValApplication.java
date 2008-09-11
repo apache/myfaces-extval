@@ -22,8 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import org.apache.myfaces.extensions.validator.util.AdapterFactoryUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -79,7 +79,7 @@ public class ExtValApplication extends Application
     private UIComponent tryToSetExtValValidatingConverter(UIComponent component)
     {
         //in order to access the wrapped application and and support other Application wrappers
-        ExtValUtils.setOriginalApplication(wrapped);
+        ProxyUtils.setOriginalApplication(wrapped);
 
         //if no converter is used add sev-en converter - so it isn't 
         //necessary to add sev-en converter manually within the page
@@ -116,7 +116,7 @@ public class ExtValApplication extends Application
             this.logger.trace("converter to wrap: " + converter.getClass().getName());
         }
 
-        if (!ExtValUtils.useFallbackAdapters())
+        if (!ProxyUtils.useFallbackAdapters())
         {
             return ExtValConverter.newInstance(converter);
         }
@@ -125,7 +125,7 @@ public class ExtValApplication extends Application
             //fallback adapter solution
             //if there is a problem with the default approach (the phase-listener)
             //or the alternative (the state-manager)
-            return FactoryUtils.getConverterAdapterFactory().create(converter);
+            return AdapterFactoryUtils.getConverterAdapterFactory().create(converter);
         }
     }
 
