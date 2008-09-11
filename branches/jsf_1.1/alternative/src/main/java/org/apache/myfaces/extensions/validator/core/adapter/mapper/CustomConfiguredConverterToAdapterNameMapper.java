@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.adapter.mapper;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.AlternativeWebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -35,6 +35,6 @@ public class CustomConfiguredConverterToAdapterNameMapper extends
 
     protected String getCustomNameMapperClassName()
     {
-        return WebXmlParameter.CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER;
+        return AlternativeWebXmlParameter.CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER;
     }
 }
