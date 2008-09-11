@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.proxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.AlternativeWebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -56,8 +56,8 @@ public class ProxyMappingPhaseListener implements PhaseListener
         if (!isInitialized)
         {
             //don't use DEACTIVATE_PROXY_MAPPING here to allow a different concept
-            String initParam = WebXmlParameter.DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER;
-            String initAdapterParam = WebXmlParameter.USE_ADAPTERS;
+            String initParam = AlternativeWebXmlParameter.DEACTIVATE_RESTORE_PROXY_PHASE_LISTENER;
+            String initAdapterParam = AlternativeWebXmlParameter.USE_ADAPTERS;
 
             if ((initParam != null && initParam.equalsIgnoreCase("true"))
                 || (initAdapterParam != null && initAdapterParam
