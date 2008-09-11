@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
@@ -73,12 +74,12 @@ public class ProxyMappingPhaseListener implements PhaseListener
             return;
         }
 
-        Integer processedConverterCount = ExtValUtils
+        Integer processedConverterCount = ProxyUtils
             .getProcessedConverterCount();
         //don't change the comparison with 0 - in order to reduce the overhead.
         //if everything works correctly it's not necessary to inspact the full tree
         //it's just due to a ri bug - normally it's performed during ExtValConverter#intercept#getAsString
-        if (ExtValUtils.useProxyMapping()
+        if (ProxyUtils.useProxyMapping()
             && (processedConverterCount != null && !processedConverterCount
             .equals(0)))
         {
@@ -94,7 +95,7 @@ public class ProxyMappingPhaseListener implements PhaseListener
             return;
         }
 
-        ExtValUtils.restoreProxies();
+        ProxyUtils.restoreProxies();
     }
 
     public PhaseId getPhaseId()
@@ -119,7 +120,7 @@ public class ProxyMappingPhaseListener implements PhaseListener
         //    return;
         //}
 
-        for (UIComponent child : (List<UIComponent>) uiComponent.getChildren())
+        for (UIComponent child : (List<UIComponent>)uiComponent.getChildren())
         {
             if (child instanceof ValueHolder)
             {
@@ -127,7 +128,7 @@ public class ProxyMappingPhaseListener implements PhaseListener
                 if (converter != null
                     && converter.getClass().getName().contains("$$"))
                 {
-                    ExtValUtils.getOrInitProxyMapping().put(
+                    ProxyUtils.getOrInitProxyMapping().put(
                         child.getClientId(facesContext), converter);
                 }
             }

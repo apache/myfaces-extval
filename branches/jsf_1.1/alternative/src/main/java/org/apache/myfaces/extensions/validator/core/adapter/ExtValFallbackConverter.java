@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.adapter;
 import org.apache.myfaces.extensions.validator.core.proxy.ExtValConverter;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -49,7 +49,7 @@ public class ExtValFallbackConverter extends ExtValConverter
         if (this.wrapped == null)
         {
             //indirect approach for complex components
-            Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+            Converter converter = ProxyUtils.tryToCreateOriginalConverter(
                 facesContext, uiComponent);
             if (converter == null)
             {
@@ -74,7 +74,7 @@ public class ExtValFallbackConverter extends ExtValConverter
         {
             //indirect approach for complex components
             //TODO
-            Converter converter = ExtValUtils.tryToCreateOriginalConverter(
+            Converter converter = ProxyUtils.tryToCreateOriginalConverter(
                 facesContext, uiComponent);
 
             return (converter != null) ? converter.getAsObject(facesContext,
