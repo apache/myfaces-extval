@@ -24,9 +24,9 @@
     <packaging>war</packaging>
 
     <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
-    <artifactId>examples-fallback_demo</artifactId>
+    <artifactId>examples-proxy_demo</artifactId>
 
-    <name>MyFaces Extensions-Validator examples demo without cglib</name>
+    <name>MyFaces Extensions-Validator examples hello world</name>
     <version>${build.version}</version>
 
     <parent>
@@ -44,79 +44,40 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
-            <artifactId>myfaces-extval-property-validation</artifactId>
+            <groupId>org.apache.myfaces.extensions.validator</groupId>
+            <artifactId>myfaces-extval-alternative</artifactId>
             <version>${build.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.sun.facelets</groupId>
-            <artifactId>jsf-facelets</artifactId>
-            <version>1.1.14</version>
+            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+            <artifactId>myfaces-extval-property-validation</artifactId>
+            <version>${build.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
             <version>${jsf.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-impl</artifactId>
             <version>${jsf.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        
         <dependency>
-            <groupId>org.apache.myfaces.trinidad</groupId>
-            <artifactId>trinidad-api</artifactId>
-            <version>${trinidad.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.myfaces.trinidad</groupId>
-            <artifactId>trinidad-impl</artifactId>
-            <version>${trinidad.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>el-api</artifactId>
-            <version>1.0</version>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>        
 
-        <dependency>
-            <groupId>org.apache.myfaces.tomahawk</groupId>
-            <artifactId>tomahawk</artifactId>
-            <version>1.1.6</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <inherited>true</inherited>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

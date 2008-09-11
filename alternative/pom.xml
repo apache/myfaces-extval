@@ -29,8 +29,8 @@
     </parent>
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
-    <artifactId>myfaces-extval-core</artifactId>
-    <name>MyFaces Extensions-Validator Core</name>
+    <artifactId>myfaces-extval-alternative</artifactId>
+    <name>MyFaces Extensions-Validator Alternative</name>
     <version>${build.version}</version>
     <packaging>jar</packaging>
     
@@ -39,6 +39,20 @@
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
             <version>${jsf.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator</groupId>
+            <artifactId>myfaces-extval-core</artifactId>
+            <version>${build.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.1_3</version>
             <scope>compile</scope>
         </dependency>
 
