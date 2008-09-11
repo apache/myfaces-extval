@@ -32,6 +32,8 @@ import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-//TODO add generic java api (de-/register mapping)
+@ToDo(Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
 public class DefaultMessageResolverFactory implements
     ClassMappingFactory<ValidationStrategy, MessageResolver>
 {
@@ -102,6 +104,7 @@ public class DefaultMessageResolverFactory implements
         return new DefaultValidationErrorMessageResolver();
     }
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     private void addMapping(String strategyName, String messageResolverName)
     {
         synchronized (DefaultMessageResolverFactory.class)
@@ -109,6 +112,5 @@ public class DefaultMessageResolverFactory implements
             strategyMessageResolverMapping.put(strategyName,
                 messageResolverName);
         }
-        //TODO logging
     }
 }

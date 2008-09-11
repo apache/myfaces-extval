@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.API)
+@UsageInformation(UsageCategory.API)
 public interface AnnotationExtractorFactory
 {
     AnnotationExtractor create();

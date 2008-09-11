@@ -18,8 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 
 /**
@@ -27,7 +29,7 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
  *
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.INTERNAL)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface WebXmlParameter
 {
     /*
@@ -55,7 +57,7 @@ public interface WebXmlParameter
     static final String CUSTOM_ANNOTATION_EXTRACTOR = WebXmlUtils
         .getInitParameter("CUSTOM_ANNOTATION_EXTRACTOR");
 
-    //TODO documentation
+    @ToDo(Priority.MEDIUM, description = "documentation")
     static final String CUSTOM_VALIDATIONSTRATEGY_MAPPING = WebXmlUtils
         .getInitParameter("CUSTOM_STATIC_VALIDATIONSTRATEGY_MAPPING");
 

@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -32,7 +32,7 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.API)
+@UsageInformation(UsageCategory.API)
 public interface CrossValidationStrategy extends ValidationStrategy
 {
     CrossValidationStorageEntry getCrossValidationStorageEntry(

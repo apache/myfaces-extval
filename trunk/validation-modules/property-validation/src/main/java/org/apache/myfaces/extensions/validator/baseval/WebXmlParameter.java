@@ -19,15 +19,17 @@
 package org.apache.myfaces.extensions.validator.baseval;
 
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 /**
  * centralized in order that these information arn't spread over the complete code base
  *
  * @author Gerhard Petracek
  */
+@ToDo(Priority.HIGH, description = "documentation")
 public interface WebXmlParameter
 {
-    //TODO docu
     static final String VALIDATION_MESSAGES_JPA = WebXmlUtils
             .getInitParameter("JPA_VALIDATION_ERROR_MESSAGES");
     static final String DEACTIVATE_JPA_BASED_VALIDATION = WebXmlUtils

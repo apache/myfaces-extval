@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 import java.io.Externalizable;
@@ -55,6 +58,7 @@ public class FaceletsTaglibExpressionUtils
         }
     }
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     private static String createBinding(List<String> expressions)
     {
         String result = "";
@@ -73,7 +77,6 @@ public class FaceletsTaglibExpressionUtils
             {
                 continue;
             }
-            //TODO log entry
 
             foundBindingDetails = entry.split(" ");
             indexOfBindingDetails = findIndexOfBindingDetails(foundBindingDetails);

@@ -29,7 +29,6 @@ import java.lang.annotation.Target;
  */
 @Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-//TODO DateIsEntry (value, type)
 public @interface RequiredIf
 {
     String[] valueOf();

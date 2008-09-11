@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.core.mapper;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.API)
+@UsageInformation(UsageCategory.API)
 public interface NameMapper<T>
 {
     String createName(T source);
