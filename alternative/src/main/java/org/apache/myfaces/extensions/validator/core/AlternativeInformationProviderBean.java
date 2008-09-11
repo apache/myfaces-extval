@@ -19,13 +19,16 @@
 package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.FALLBACK)
+@ToDo(Priority.LOW, description = "exceedable see usage of InformationProviderBean")
+@UsageInformation(UsageCategory.FALLBACK)
 public class AlternativeInformationProviderBean
 {
     private String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
@@ -43,14 +46,12 @@ public class AlternativeInformationProviderBean
         }
     }
 
-    //TODO move to alternative module
     public String getCustomAdapterNameMapper()
     {
         return this.basePackage + "AdapterNameMapper";
     }
 
-    //TODO move to alternative module
-    @UsageInformation(UsageEnum.FALLBACK)
+    @UsageInformation(UsageCategory.FALLBACK)
     public String getCustomConverterAdapterFactory()
     {
         return this.basePackage + "ConverterAdapterFactory";

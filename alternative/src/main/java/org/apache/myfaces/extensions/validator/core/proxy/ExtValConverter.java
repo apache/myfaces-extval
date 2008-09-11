@@ -23,7 +23,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
+@UsageInformation({UsageCategory.ALTERNATIVE, UsageCategory.INTERNAL})
 public class ExtValConverter implements Converter, MethodInterceptor,
     Serializable
 {
@@ -131,7 +131,6 @@ public class ExtValConverter implements Converter, MethodInterceptor,
                                         UIComponent uiComponent, String s)
     {
         //indirect approach for complex components
-        //TODO
         Converter converter = ProxyUtils.tryToCreateOriginalConverter(
             facesContext, uiComponent);
         return (converter != null) ? converter.getAsObject(facesContext,

@@ -114,7 +114,6 @@ public abstract class AbstractCompareStrategy extends
         return false;
     }
 
-    //TODO
     //has to be public for custom referencing strategies!!!
     public final void processTargetComponentAfterViolation(
             CrossValidationStorageEntry entryOfSource,

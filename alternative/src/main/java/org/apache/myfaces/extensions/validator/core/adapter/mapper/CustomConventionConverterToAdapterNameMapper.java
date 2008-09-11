@@ -20,22 +20,24 @@ package org.apache.myfaces.extensions.validator.core.adapter.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.AlternativeInformationProviderBean;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.convert.Converter;
 
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.FALLBACK)
+@UsageInformation(UsageCategory.FALLBACK)
 public class CustomConventionConverterToAdapterNameMapper extends
     AbstractCustomNameMapper<Converter>
 {
 
+    @ToDo(Priority.LOW, description = "make it overrideable see InformationProviderBean")
     protected String getCustomNameMapperClassName()
     {
-        //TODO make it overrideable see InformationProviderBean
         //return ExtValUtils.getInformationProviderBean()
         //    .getCustomAdapterNameMapper();
         return new AlternativeInformationProviderBean()

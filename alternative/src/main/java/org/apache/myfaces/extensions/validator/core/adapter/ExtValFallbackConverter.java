@@ -19,8 +19,10 @@
 package org.apache.myfaces.extensions.validator.core.adapter;
 
 import org.apache.myfaces.extensions.validator.core.proxy.ExtValConverter;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.component.UIComponent;
@@ -32,7 +34,7 @@ import javax.faces.convert.Converter;
  *
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.FALLBACK)
+@UsageInformation(UsageCategory.FALLBACK)
 public class ExtValFallbackConverter extends ExtValConverter
 {
     private Converter wrapped;
@@ -67,13 +69,13 @@ public class ExtValFallbackConverter extends ExtValConverter
     }
 
     @Override
+    @ToDo(Priority.LOW, description = "logging")
     protected Object getConvertedObject(FacesContext facesContext,
                                         UIComponent uiComponent, String s)
     {
         if (this.wrapped == null)
         {
             //indirect approach for complex components
-            //TODO
             Converter converter = ProxyUtils.tryToCreateOriginalConverter(
                 facesContext, uiComponent);
 

@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -34,11 +36,11 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-//TODO
 public class FactoryUtils
 {
     private static AnnotationExtractorFactory annotationExtractorFactory;
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     public static AnnotationExtractorFactory getAnnotationExtractorFactory()
     {
         if (annotationExtractorFactory == null)
@@ -60,7 +62,6 @@ public class FactoryUtils
 
                 if (annotationExtractorFactory != null)
                 {
-                    //TODO logging
                     break;
                 }
             }
@@ -92,7 +93,6 @@ public class FactoryUtils
 
                 if (validationStrategyFactory != null)
                 {
-                    //TODO logging
                     break;
                 }
             }
@@ -124,7 +124,6 @@ public class FactoryUtils
 
                 if (messageResolverFactory != null)
                 {
-                    //TODO logging
                     break;
                 }
             }

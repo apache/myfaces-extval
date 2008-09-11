@@ -22,12 +22,12 @@ import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.API)
+@UsageInformation(UsageCategory.API)
 public interface ReferencingStrategy
 {
     boolean evalReferenceAndValidate(

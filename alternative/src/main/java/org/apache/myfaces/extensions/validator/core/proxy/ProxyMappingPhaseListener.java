@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.proxy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.AlternativeWebXmlParameter;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
@@ -44,7 +44,7 @@ import javax.faces.event.PhaseListener;
  *
  * @author Gerhard Petracek
  */
-@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
+@UsageInformation({UsageCategory.ALTERNATIVE, UsageCategory.INTERNAL})
 public class ProxyMappingPhaseListener implements PhaseListener
 {
     private boolean isInitialized = false;
@@ -114,7 +114,7 @@ public class ProxyMappingPhaseListener implements PhaseListener
     private void storeComponentConverterMappingForProxies(
         FacesContext facesContext, UIComponent uiComponent)
     {
-        //TODO use the following after the impl. of a better multi-window-mode solution
+        //use the following after the impl. of a better multi-window-mode solution
         //if(!uiComponent.isRendered()) {
         //    return;
         //}
