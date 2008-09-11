@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.adapter.DefaultConverterAdapterFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultAnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
@@ -28,7 +27,6 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 
-import javax.faces.convert.Converter;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,37 +131,5 @@ public class FactoryUtils
         }
 
         return messageResolverFactory;
-    }
-
-    private static ClassMappingFactory<Converter, Converter> converterAdapterFactory;
-
-    @Deprecated
-    public static ClassMappingFactory<Converter, Converter> getConverterAdapterFactory()
-    {
-        if (converterAdapterFactory == null)
-        {
-            List<String> converterAdapterFactoryClassNames = new ArrayList<String>();
-
-            converterAdapterFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_CONVERTER_ADAPTER_FACTORY);
-            converterAdapterFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomConverterAdapterFactory());
-            converterAdapterFactoryClassNames
-                .add(DefaultConverterAdapterFactory.class.getName());
-
-            for (String className : converterAdapterFactoryClassNames)
-            {
-                converterAdapterFactory = (ClassMappingFactory<Converter, Converter>) ClassUtils
-                    .tryToInstantiateClassForName(className);
-
-                if (converterAdapterFactory != null)
-                {
-                    //TODO logging
-                    break;
-                }
-            }
-        }
-        return converterAdapterFactory;
     }
 }

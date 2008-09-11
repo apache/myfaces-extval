@@ -18,16 +18,18 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 /**
  * Default approach to avoid proxies for converters and the adapter fallback.
@@ -44,8 +46,7 @@ import java.io.IOException;
 @UsageInformation(UsageEnum.INTERNAL)
 public class ExtValRendererWrapper extends Renderer
 {
-    private static final String HIDDEN_SUBMIT_INPUT_SUFFIX = "_EXTVAL";
-
+    private static Boolean isAlternativeAvailable = null;
     private Renderer wrapped;
 
     public ExtValRendererWrapper(Renderer wrapped)
@@ -91,8 +92,10 @@ public class ExtValRendererWrapper extends Renderer
     {
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
 
+        checkProxyAlternative();
+
         //if the user activated the proxy mode cancel here
-        if (ExtValApplicationFactory.isActive())
+        if (Boolean.TRUE.equals(isAlternativeAvailable))
         {
             return convertedObject;
         }
@@ -100,5 +103,24 @@ public class ExtValRendererWrapper extends Renderer
         ValidationUtils.processExtValValidation(facesContext, uiComponent, convertedObject);
 
         return convertedObject;
+    }
+
+    private void checkProxyAlternative()
+    {
+        //to avoid a config parameter (but not nice)
+        if(isAlternativeAvailable == null)
+        {
+            Class extValApplicationFactoryClass = ClassUtils.tryToLoadClassForName(
+                "org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory");
+
+            Method isActiveMethod = ReflectionUtils.tryToGetMethod(extValApplicationFactoryClass, "isActive", null);
+            isAlternativeAvailable = (Boolean)ReflectionUtils
+                .tryToInvokeMethodOfClass(extValApplicationFactoryClass, isActiveMethod);
+
+            if(isAlternativeAvailable == null)
+            {
+                isAlternativeAvailable = false;
+            }
+        }
     }
 }

@@ -37,6 +37,10 @@ public class ExtValApplicationFactory extends ApplicationFactory
 
     private ApplicationFactory wrapped;
 
+    public ExtValApplicationFactory()
+    {
+    }
+
     public ExtValApplicationFactory(ApplicationFactory applicationFactory)
     {
         active = true;

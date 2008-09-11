@@ -34,6 +34,7 @@
         <module>core</module>
         <module>validation-modules</module>
         <module>examples</module>
+        <module>alternative</module>
     </modules>
 
     <properties>
