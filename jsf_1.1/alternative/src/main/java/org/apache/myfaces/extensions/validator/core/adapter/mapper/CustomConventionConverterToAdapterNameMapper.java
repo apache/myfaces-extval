@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.validator.core.adapter.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
+import org.apache.myfaces.extensions.validator.core.AlternativeInformationProviderBean;
 import org.apache.myfaces.extensions.validator.internal.UsageEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.convert.Converter;
 
@@ -35,7 +35,10 @@ public class CustomConventionConverterToAdapterNameMapper extends
 
     protected String getCustomNameMapperClassName()
     {
-        return ExtValUtils.getInformationProviderBean()
+        //TODO make it overrideable see InformationProviderBean
+        //return ExtValUtils.getInformationProviderBean()
+        //    .getCustomAdapterNameMapper();
+        return new AlternativeInformationProviderBean()
             .getCustomAdapterNameMapper();
     }
 }
