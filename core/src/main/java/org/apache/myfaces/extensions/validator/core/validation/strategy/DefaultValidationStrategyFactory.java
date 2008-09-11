@@ -34,6 +34,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ import java.util.ResourceBundle;
 /**
  * @author Gerhard Petracek
  */
-//TODO add generic java api (de-/register mapping)
+@ToDo(Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
 public class DefaultValidationStrategyFactory implements
     ClassMappingFactory<Annotation, ValidationStrategy>
 {
@@ -136,15 +138,16 @@ public class DefaultValidationStrategyFactory implements
         }
     }
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     private void addMapping(String annotationName, String strategyName)
     {
         synchronized (DefaultValidationStrategyFactory.class)
         {
             annotationStrategyMapping.put(annotationName, strategyName);
         }
-        //TODO logging
     }
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     private void initStaticStrategyMappings()
     {
         synchronized (DefaultValidationStrategyFactory.class)
@@ -181,7 +184,6 @@ public class DefaultValidationStrategyFactory implements
                 }
                 catch (MissingResourceException e)
                 {
-                    //TODO logging
                     e.printStackTrace();
                 }
             }

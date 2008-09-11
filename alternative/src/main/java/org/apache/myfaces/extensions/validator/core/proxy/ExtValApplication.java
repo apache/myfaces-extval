@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.proxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.AdapterFactoryUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
@@ -48,7 +48,7 @@ import java.util.Locale;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
+@UsageInformation({UsageCategory.ALTERNATIVE, UsageCategory.INTERNAL})
 public class ExtValApplication extends Application
 {
     protected final Log logger = LogFactory.getLog(getClass());

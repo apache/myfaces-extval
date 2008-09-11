@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.adapter.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.convert.Converter;
@@ -27,7 +27,7 @@ import javax.faces.convert.Converter;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.FALLBACK)
+@UsageInformation(UsageCategory.FALLBACK)
 public class DefaultConverterToAdapterNameMapper implements
     NameMapper<Converter>
 {

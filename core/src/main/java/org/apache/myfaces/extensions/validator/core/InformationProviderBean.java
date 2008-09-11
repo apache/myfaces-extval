@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 
 import java.lang.annotation.Annotation;
@@ -109,7 +111,6 @@ public class InformationProviderBean
         return this.basePackage + "ValidationStrategyFactory";
     }
 
-    //TODO
     /*
      * conventions (the rest of the conventions are built with the help of name mappers,...
      */
@@ -131,7 +132,6 @@ public class InformationProviderBean
     /*
      * final methods
      */
-    //TODO
     public final String getConventionForModuleMessageBundle(String packageName)
     {
         String newPackageName;
@@ -169,6 +169,7 @@ public class InformationProviderBean
     /**
      * use a custom name mapper to implement custom conventions
      */
+    @ToDo(Priority.MEDIUM, description = "logging")
     public final String getConventionNameForMessageResolverPackage(
         Class<? extends ValidationStrategy> validationStrategyClass,
         String targetClassName)
@@ -179,7 +180,6 @@ public class InformationProviderBean
 
         if (targetClassName == null)
         {
-            //TODO
             return null;
         }
         return resolverName.substring(0, resolverName.lastIndexOf(".")) + "."

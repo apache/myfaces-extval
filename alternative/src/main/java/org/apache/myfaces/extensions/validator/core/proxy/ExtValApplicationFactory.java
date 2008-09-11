@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.proxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.application.Application;
@@ -29,7 +29,7 @@ import javax.faces.application.ApplicationFactory;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation({UsageEnum.ALTERNATIVE, UsageEnum.INTERNAL})
+@UsageInformation({UsageCategory.ALTERNATIVE, UsageCategory.INTERNAL})
 public class ExtValApplicationFactory extends ApplicationFactory
 {
     protected final Log logger = LogFactory.getLog(getClass());

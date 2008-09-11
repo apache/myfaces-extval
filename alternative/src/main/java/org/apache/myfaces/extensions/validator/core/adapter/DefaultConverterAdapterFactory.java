@@ -26,8 +26,10 @@ import org.apache.myfaces.extensions.validator.core.adapter.mapper.CustomConvent
 import org.apache.myfaces.extensions.validator.core.adapter.mapper.DefaultConverterToAdapterNameMapper;
 import org.apache.myfaces.extensions.validator.core.adapter.mapper.SimpleConverterToAdapterNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.convert.Converter;
@@ -41,7 +43,7 @@ import java.util.Map;
  *
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.FALLBACK)
+@UsageInformation(UsageCategory.FALLBACK)
 public class DefaultConverterAdapterFactory implements
     ClassMappingFactory<Converter, Converter>
 {
@@ -99,12 +101,12 @@ public class DefaultConverterAdapterFactory implements
         return converter;
     }
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     private void addMapping(String sourceConverter, String adapter)
     {
         synchronized (DefaultConverterAdapterFactory.class)
         {
             converterAdapterMapping.put(sourceConverter, adapter);
         }
-        //TODO logging
     }
 }

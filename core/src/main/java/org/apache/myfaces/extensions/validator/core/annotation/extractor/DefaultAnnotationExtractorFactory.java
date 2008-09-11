@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class DefaultAnnotationExtractorFactory implements
 
     private static AnnotationExtractor annotationExtractor = null;
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     public AnnotationExtractor create()
     {
         if (annotationExtractor == null)
@@ -55,7 +58,6 @@ public class DefaultAnnotationExtractorFactory implements
 
                 if (annotationExtractor != null)
                 {
-                    //TODO logging
                     break;
                 }
             }

@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.util;
 import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
 import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.EditableValueHolder;
@@ -41,7 +43,7 @@ import java.util.Map;
  */
 public class ExtValUtils
 {
-    //TODO test
+    @ToDo(Priority.MEDIUM, description = "test")
     public static void createValueBindingConvertedValueMapping(
         UIComponent uiComponent, Object convertedObject)
     {
