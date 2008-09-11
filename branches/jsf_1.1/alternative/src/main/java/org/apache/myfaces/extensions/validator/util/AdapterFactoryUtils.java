@@ -23,7 +23,9 @@ import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.AlternativeInformationProviderBean;
 import org.apache.myfaces.extensions.validator.core.adapter.DefaultConverterAdapterFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.convert.Converter;
 import java.util.ArrayList;
@@ -36,7 +38,8 @@ public class AdapterFactoryUtils
 {
     private static ClassMappingFactory<Converter, Converter> converterAdapterFactory;
 
-    @UsageInformation(UsageEnum.FALLBACK)
+    @UsageInformation(UsageCategory.FALLBACK)
+    @ToDo(Priority.MEDIUM, description = "logging")
     public static ClassMappingFactory<Converter, Converter> getConverterAdapterFactory()
     {
         if (converterAdapterFactory == null)
@@ -63,7 +66,6 @@ public class AdapterFactoryUtils
 
                 if (converterAdapterFactory != null)
                 {
-                    //TODO logging
                     break;
                 }
             }

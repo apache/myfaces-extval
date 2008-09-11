@@ -22,6 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -39,13 +41,13 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
+    @ToDo(Priority.MEDIUM)
     public List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
                                                     Object object)
     {
         //should never occur
         if (!(object instanceof UIComponent))
         {
-            //TODO
             return new ArrayList<AnnotationEntry>();
         }
 
@@ -85,7 +87,6 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         //TODO test with complex components
         templateEntry.setValueBindingExpression(valueBindingExpression);
         templateEntry.setEntityClass(entityClass);
-        //TODO
         templateEntry.setBoundTo("value");
 
         /*

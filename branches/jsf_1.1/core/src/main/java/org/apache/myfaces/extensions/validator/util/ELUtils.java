@@ -18,6 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -27,6 +31,7 @@ import javax.faces.el.ValueBinding;
  *
  * @author Gerhard Petracek
  */
+@ToDo(Priority.MEDIUM)
 public class ELUtils
 {
     public static Class getTypeOfValueBindingForExpression(

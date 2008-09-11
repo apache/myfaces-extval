@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 
@@ -40,13 +40,13 @@ public interface AlternativeWebXmlParameter
     /*
      * fallback lib - if the usage of cglib is a problem
      */
-    @UsageInformation(UsageEnum.FALLBACK)
+    @UsageInformation(UsageCategory.FALLBACK)
     static final String CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER = WebXmlUtils
         .getInitParameter("CUSTOM_CONVERTER_TO_ADAPTER_NAME_MAPPER");
-    @UsageInformation(UsageEnum.FALLBACK)
+    @UsageInformation(UsageCategory.FALLBACK)
     static final String CUSTOM_CONVERTER_ADAPTER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_CONVERTER_ADAPTER_FACTORY");
-    @UsageInformation(UsageEnum.FALLBACK)
+    @UsageInformation(UsageCategory.FALLBACK)
     static final String USE_ADAPTERS = WebXmlUtils
         .getInitParameter("USE_ADAPTERS");
 }

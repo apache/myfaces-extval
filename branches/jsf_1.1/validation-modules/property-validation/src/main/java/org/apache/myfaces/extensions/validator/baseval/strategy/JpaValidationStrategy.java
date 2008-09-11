@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -101,7 +103,6 @@ public class JpaValidationStrategy extends AbstractValidationStrategy
     {
         if (!oneToOne.optional())
         {
-            //TODO
             checkRequiredConvertedObject(convertedObject);
         }
     }
@@ -111,11 +112,11 @@ public class JpaValidationStrategy extends AbstractValidationStrategy
     {
         if (!manyToOne.optional())
         {
-            //TODO
             checkRequiredConvertedObject(convertedObject);
         }
     }
 
+    @ToDo(Priority.MEDIUM)
     private void checkRequiredConvertedObject(Object convertedObject)
             throws ValidatorException
     {

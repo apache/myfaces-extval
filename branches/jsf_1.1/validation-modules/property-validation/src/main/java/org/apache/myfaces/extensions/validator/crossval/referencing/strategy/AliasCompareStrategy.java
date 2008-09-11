@@ -29,6 +29,8 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.extractor.
     DefaultValueBindingScanningAnnotationExtractor;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.context.FacesContext;
 import java.lang.reflect.Field;
@@ -203,6 +205,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
         return true;
     }
 
+    @ToDo(Priority.MEDIUM, description = "logging")
     protected Object getValidationTargetObject(
             CrossValidationStorageEntry crossValidationStorageEntry,
             AnnotationEntry foundAnnotationEntry, Object referencedBean,
@@ -212,7 +215,6 @@ public class AliasCompareStrategy implements ReferencingStrategy
                 || foundAnnotationEntry.getBoundTo() == null
                 || foundAnnotationEntry.getBoundTo().indexOf(":") < 0)
         {
-            //TODO logging
             return null;
         }
 
@@ -294,7 +296,6 @@ public class AliasCompareStrategy implements ReferencingStrategy
         }
     }
 
-    //TODO
     protected boolean validateTargetWithAlias(String validationTarget,
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorageEntry entry, boolean useModelValue,

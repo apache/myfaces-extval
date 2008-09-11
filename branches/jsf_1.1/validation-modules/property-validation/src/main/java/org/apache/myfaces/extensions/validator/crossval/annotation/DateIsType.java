@@ -18,11 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.annotation;
 
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+
 /**
  * @author Gerhard Petracek
  */
+@ToDo(Priority.MEDIUM, description = "beforeOrSame, afterOrSame")
 public enum DateIsType
 {
     before, after, same
-    //TODO: beforeOrSame, afterOrSame
 }

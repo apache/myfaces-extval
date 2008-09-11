@@ -18,26 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.internal;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Target;
-
 /**
- * it's an internal annotation to provide some information
- * <p/>
- * e.g.: some mechanisms aren't deprecated
- * they are e.g. fallbacks, alternatives,...
- * in order to avoid the deprecated annotation it's possible to use this one.
- * you can tell other developers:
- * this artifact isn't used for the desired approach, however, it's still essential to have it as ...
- * <p/>
- * idea: unify small parts of information which are frequently used
- *
  * @author Gerhard Petracek
  */
-@Target({TYPE, METHOD, FIELD})
-public @interface UsageInformation
+public enum Priority
 {
-    UsageCategory[] value();
+    BLOCKING,
+    HIGH,
+    MEDIUM,
+    LOW
 }

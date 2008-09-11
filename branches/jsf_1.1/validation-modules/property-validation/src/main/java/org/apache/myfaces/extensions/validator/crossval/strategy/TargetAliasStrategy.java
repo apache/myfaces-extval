@@ -37,7 +37,6 @@ public class TargetAliasStrategy extends AbstractCrossValidationStrategy
         //do nothing - it's just a marker - the inherited functionality is required and enough
     }
 
-    //TODO
     protected String getValidationErrorMsgKey(Annotation annotation)
     {
         //do nothing - it's just a marker - the inherited functionality is required and enough

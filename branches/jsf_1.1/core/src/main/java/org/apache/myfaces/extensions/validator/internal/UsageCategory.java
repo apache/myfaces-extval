@@ -42,7 +42,7 @@ package org.apache.myfaces.extensions.validator.internal;
  *
  * @author Gerhard Petracek
  */
-public enum UsageEnum
+public enum UsageCategory
 {
     API,
     INTERNAL,

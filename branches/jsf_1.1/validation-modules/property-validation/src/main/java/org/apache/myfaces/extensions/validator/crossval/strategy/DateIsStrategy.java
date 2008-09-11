@@ -33,7 +33,6 @@ import java.util.MissingResourceException;
  */
 public class DateIsStrategy extends AbstractCompareStrategy
 {
-    //TODO
     protected static final String TOO_EARLY = "early";
     protected static final String TOO_LATE = "late";
     protected static final String NOT_EQUAL_DATE_TIME = "not equal";
@@ -46,7 +45,6 @@ public class DateIsStrategy extends AbstractCompareStrategy
         return true;
     }
 
-    //TODO
     public boolean isViolation(Object object1, Object object2,
             Annotation annotation)
     {
@@ -163,7 +161,6 @@ public class DateIsStrategy extends AbstractCompareStrategy
         return null;
     }
 
-    //TODO
     protected String getErrorMessage(String key, Annotation annotation,
             boolean isTargetComponent)
     {

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.FactoryFinder;
@@ -32,7 +32,7 @@ import javax.faces.render.RenderKitFactory;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.INTERNAL)
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValValidationPhaseListener implements PhaseListener
 {
     public void afterPhase(PhaseEvent event)
