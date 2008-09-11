@@ -22,7 +22,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.AlternativeWebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -47,8 +49,8 @@ public class ProxyUtils
 
     /*
      * workaround: mapping clientId -> proxy -> after restore view: find component + set converter of the mapping
-     * TODO: find a better solution - multi-window-mode
      */
+    @ToDo(Priority.LOW, description = "find a better solution - multi-window-mode")
     public static final String PROXY_MAPPING_KEY = ExtValUtils.VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY
         + ":proxyMapping";
 
@@ -212,7 +214,6 @@ public class ProxyUtils
         }
     }
 
-    //TODO
     private static UIComponent resolveComponentInComplexComponent(
         UIComponent viewRoot, UIComponent component, String key)
     {
@@ -248,7 +249,6 @@ public class ProxyUtils
         return null;
     }
 
-    //TODO
     private static UIComponent tryToResolveChildComponent(
         UIComponent component, String endOfKey)
     {
@@ -320,7 +320,7 @@ public class ProxyUtils
         return getOriginalApplication().createConverter(valueBindingType);
     }
 
-    @UsageInformation(UsageEnum.FALLBACK)
+    @UsageInformation(UsageCategory.FALLBACK)
     public static boolean useFallbackAdapters()
     {
         String initParam = AlternativeWebXmlParameter.USE_ADAPTERS;

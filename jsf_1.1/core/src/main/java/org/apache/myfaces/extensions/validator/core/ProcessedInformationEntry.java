@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.component.UIComponent;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.INTERNAL)
+@UsageInformation(UsageCategory.INTERNAL)
 public class ProcessedInformationEntry
 {
     private Object bean;

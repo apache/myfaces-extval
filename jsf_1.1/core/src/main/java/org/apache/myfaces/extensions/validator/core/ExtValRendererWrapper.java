@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageEnum;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -43,7 +43,7 @@ import java.lang.reflect.Method;
  *
  * @author Gerhard Petracek
  */
-@UsageInformation(UsageEnum.INTERNAL)
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRendererWrapper extends Renderer
 {
     private static Boolean isAlternativeAvailable = null;

@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEn
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
@@ -47,7 +49,6 @@ public class LocalCompareStrategy implements ReferencingStrategy
         tryToValidateLocally(crossValidationStorageEntry, validationTarget,
                 compareStrategy);
 
-        //TODO
         return true;
     }
 
