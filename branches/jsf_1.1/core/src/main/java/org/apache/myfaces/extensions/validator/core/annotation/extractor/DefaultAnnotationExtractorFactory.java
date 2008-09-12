@@ -36,7 +36,7 @@ public class DefaultAnnotationExtractorFactory implements
 
     private static AnnotationExtractor annotationExtractor = null;
 
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     public AnnotationExtractor create()
     {
         if (annotationExtractor == null)

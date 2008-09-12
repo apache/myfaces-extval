@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.util;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
-import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -50,9 +49,8 @@ public class ELUtils
             .resolveVariable(facesContext, beanName);
     }
 
-    //TODO refactor - problem - static values - jsf 1.2 e.g.: ${value}
-    public static Object getBaseObject(String valueBindingExpression,
-                                       UIComponent uiComponent)
+    @ToDo(value = Priority.MEDIUM, description = "refactor - problem - static values - jsf 1.2 e.g.: ${value}")
+    public static Object getBaseObject(String valueBindingExpression, UIComponent uiComponent)
     {
         if (valueBindingExpression.lastIndexOf(".") == -1)
         {

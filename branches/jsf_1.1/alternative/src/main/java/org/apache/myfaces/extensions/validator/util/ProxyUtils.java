@@ -50,7 +50,7 @@ public class ProxyUtils
     /*
      * workaround: mapping clientId -> proxy -> after restore view: find component + set converter of the mapping
      */
-    @ToDo(Priority.LOW, description = "find a better solution - multi-window-mode")
+    @ToDo(value = Priority.LOW, description = "find a better solution - multi-window-mode")
     public static final String PROXY_MAPPING_KEY = ExtValUtils.VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY
         + ":proxyMapping";
 
