@@ -69,7 +69,7 @@ public class ExtValFallbackConverter extends ExtValConverter
     }
 
     @Override
-    @ToDo(Priority.LOW, description = "logging")
+    @ToDo(value = Priority.LOW, description = "logging")
     protected Object getConvertedObject(FacesContext facesContext,
                                         UIComponent uiComponent, String s)
     {

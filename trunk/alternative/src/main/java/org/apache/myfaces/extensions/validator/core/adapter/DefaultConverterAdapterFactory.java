@@ -101,7 +101,7 @@ public class DefaultConverterAdapterFactory implements
         return converter;
     }
 
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     private void addMapping(String sourceConverter, String adapter)
     {
         synchronized (DefaultConverterAdapterFactory.class)

@@ -57,7 +57,7 @@ public class ELCompareStrategy implements ReferencingStrategy
         return false;
     }
 
-    @ToDo(Priority.MEDIUM, description = "test")
+    @ToDo(value = Priority.MEDIUM, description = "test")
     protected boolean tryToValidateValueBinding(
             CrossValidationStorageEntry crossValidationStorageEntry,
             String validationTarget,

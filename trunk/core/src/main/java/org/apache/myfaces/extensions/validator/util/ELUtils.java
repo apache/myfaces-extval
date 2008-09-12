@@ -49,7 +49,7 @@ public class ELUtils
             facesContext.getELContext(), null, beanName);
     }
 
-    @ToDo(Priority.MEDIUM, description = "refactor - problem - static values - jsf 1.2 e.g.: ${value}")
+    @ToDo(value = Priority.MEDIUM, description = "refactor - problem - static values - jsf 1.2 e.g.: ${value}")
     public static Object getBaseObject(String valueBindingExpression, UIComponent uiComponent)
     {
         if (valueBindingExpression.lastIndexOf(".") == -1)

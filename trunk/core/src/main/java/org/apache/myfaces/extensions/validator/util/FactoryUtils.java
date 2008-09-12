@@ -40,7 +40,7 @@ public class FactoryUtils
 {
     private static AnnotationExtractorFactory annotationExtractorFactory;
 
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     public static AnnotationExtractorFactory getAnnotationExtractorFactory()
     {
         if (annotationExtractorFactory == null)
