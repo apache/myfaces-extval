@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 /**
  * @author Gerhard Petracek
  */
-@ToDo(Priority.MEDIUM, description = "beforeOrSame, afterOrSame")
+@ToDo(value = Priority.MEDIUM, description = "beforeOrSame, afterOrSame")
 public enum DateIsType
 {
     before, after, same

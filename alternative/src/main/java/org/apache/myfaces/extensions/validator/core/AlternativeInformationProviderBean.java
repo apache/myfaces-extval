@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.ExtValInformation;
 /**
  * @author Gerhard Petracek
  */
-@ToDo(Priority.LOW, description = "exceedable see usage of InformationProviderBean")
+@ToDo(value = Priority.LOW, description = "exceedable see usage of InformationProviderBean")
 @UsageInformation(UsageCategory.FALLBACK)
 public class AlternativeInformationProviderBean
 {

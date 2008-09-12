@@ -57,7 +57,7 @@ public interface WebXmlParameter
     static final String CUSTOM_ANNOTATION_EXTRACTOR = WebXmlUtils
         .getInitParameter("CUSTOM_ANNOTATION_EXTRACTOR");
 
-    @ToDo(Priority.MEDIUM, description = "documentation")
+    @ToDo(value = Priority.MEDIUM, description = "documentation")
     static final String CUSTOM_VALIDATIONSTRATEGY_MAPPING = WebXmlUtils
         .getInitParameter("CUSTOM_STATIC_VALIDATIONSTRATEGY_MAPPING");
 

@@ -205,7 +205,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
         return true;
     }
 
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     protected Object getValidationTargetObject(
             CrossValidationStorageEntry crossValidationStorageEntry,
             AnnotationEntry foundAnnotationEntry, Object referencedBean,

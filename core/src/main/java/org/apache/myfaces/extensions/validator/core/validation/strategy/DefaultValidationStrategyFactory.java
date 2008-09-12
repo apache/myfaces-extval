@@ -50,7 +50,7 @@ import java.util.ResourceBundle;
 /**
  * @author Gerhard Petracek
  */
-@ToDo(Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
+@ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
 public class DefaultValidationStrategyFactory implements
     ClassMappingFactory<Annotation, ValidationStrategy>
 {
@@ -138,7 +138,7 @@ public class DefaultValidationStrategyFactory implements
         }
     }
 
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     private void addMapping(String annotationName, String strategyName)
     {
         synchronized (DefaultValidationStrategyFactory.class)
@@ -147,7 +147,7 @@ public class DefaultValidationStrategyFactory implements
         }
     }
 
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     private void initStaticStrategyMappings()
     {
         synchronized (DefaultValidationStrategyFactory.class)
