@@ -35,7 +35,7 @@ public class CustomConventionConverterToAdapterNameMapper extends
     AbstractCustomNameMapper<Converter>
 {
 
-    @ToDo(Priority.LOW, description = "make it overrideable see InformationProviderBean")
+    @ToDo(value = Priority.LOW, description = "make it overrideable see InformationProviderBean")
     protected String getCustomNameMapperClassName()
     {
         //return ExtValUtils.getInformationProviderBean()

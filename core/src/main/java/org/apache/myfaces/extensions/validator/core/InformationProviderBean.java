@@ -169,7 +169,7 @@ public class InformationProviderBean
     /**
      * use a custom name mapper to implement custom conventions
      */
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     public final String getConventionNameForMessageResolverPackage(
         Class<? extends ValidationStrategy> validationStrategyClass,
         String targetClassName)

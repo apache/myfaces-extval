@@ -39,7 +39,7 @@ public class AdapterFactoryUtils
     private static ClassMappingFactory<Converter, Converter> converterAdapterFactory;
 
     @UsageInformation(UsageCategory.FALLBACK)
-    @ToDo(Priority.MEDIUM, description = "logging")
+    @ToDo(value = Priority.MEDIUM, description = "logging")
     public static ClassMappingFactory<Converter, Converter> getConverterAdapterFactory()
     {
         if (converterAdapterFactory == null)

@@ -35,7 +35,8 @@ import java.io.Writer;
 /**
  * @author Gerhard Petracek
  */
-@ToDo(Priority.HIGH, description = "constructor: impl. a hook to support similar mechanisms of other component libs")
+@ToDo(value = Priority.HIGH,
+      description = "constructor: impl. a hook to support similar mechanisms of other component libs")
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRenderKit extends RenderKit
 {
