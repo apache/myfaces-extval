@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
  *
  * @author Gerhard Petracek
  */
-@ToDo(Priority.HIGH, description = "documentation")
+@ToDo(value = Priority.HIGH, description = "documentation")
 public interface WebXmlParameter
 {
     static final String VALIDATION_MESSAGES_JPA = WebXmlUtils
