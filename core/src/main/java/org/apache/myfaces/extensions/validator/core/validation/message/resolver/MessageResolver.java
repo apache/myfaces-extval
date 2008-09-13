@@ -18,11 +18,18 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import java.util.Locale;
 
 /**
+ * Interface for MessageResolvers independent of the message source.
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.API)
 public interface MessageResolver
 {
     String getMessage(String key, Locale locale);

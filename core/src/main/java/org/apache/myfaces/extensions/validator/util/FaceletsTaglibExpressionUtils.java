@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
@@ -36,6 +38,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class FaceletsTaglibExpressionUtils
 {
     public static String tryToCreateValueBindingForFaceletsBinding(

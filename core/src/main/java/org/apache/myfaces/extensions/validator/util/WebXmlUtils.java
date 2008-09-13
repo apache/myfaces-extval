@@ -19,12 +19,15 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class WebXmlUtils
 {
     public static String getInitParameter(String key)

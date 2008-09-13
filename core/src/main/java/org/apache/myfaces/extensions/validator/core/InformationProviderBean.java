@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 
 import java.lang.annotation.Annotation;
@@ -28,14 +30,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * centralized in order that these information arn't spread over the complete code base
+ * centralized in order that these information aren't spread over the complete code base
  * + some of them can be customized within a custom impl. of the bean
  * (extend this class and provide it via convention or web.xml)
  * <p/>
  * the static api should only be used
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})
 public class InformationProviderBean
 {
     public static final String BEAN_NAME = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME

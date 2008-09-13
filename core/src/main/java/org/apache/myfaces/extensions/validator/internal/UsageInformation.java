@@ -35,6 +35,7 @@ import java.lang.annotation.Target;
  * idea: unify small parts of information which are frequently used
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @Target({TYPE, METHOD, FIELD})
 public @interface UsageInformation

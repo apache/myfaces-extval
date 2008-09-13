@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * dont't move to an other package!!!
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public interface ExtValInformation

@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
  * This wrapper will also implement client-side validation behaviour
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRendererWrapper extends Renderer
@@ -92,9 +93,9 @@ public class ExtValRendererWrapper extends Renderer
     {
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
 
-        checkProxyAlternative();
+        checkForAlternative();
 
-        //if the user activated the proxy mode cancel here
+        //if the user activated an alternative mode, cancel here (in order to avoid double validation)
         if (Boolean.TRUE.equals(isAlternativeAvailable))
         {
             return convertedObject;
@@ -105,7 +106,7 @@ public class ExtValRendererWrapper extends Renderer
         return convertedObject;
     }
 
-    private void checkProxyAlternative()
+    private void checkForAlternative()
     {
         //to avoid a config parameter (but not nice)
         if(isAlternativeAvailable == null)

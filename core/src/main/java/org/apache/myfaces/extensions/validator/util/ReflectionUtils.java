@@ -18,12 +18,16 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ReflectionUtils
 {
     public static Method tryToGetMethod(Class targetClass, String targetMethodName)

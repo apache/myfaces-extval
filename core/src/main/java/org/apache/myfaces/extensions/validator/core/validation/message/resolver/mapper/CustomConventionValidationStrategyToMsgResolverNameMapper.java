@@ -21,10 +21,19 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * To provide a custom NameMapper to map ValidationStrategy to MessageResolver.
+ * (configured via information provider bean)
+ * The bean provides the default name (convention).
+ * It's possible to provide a custom full qualified name. (= customizable convention)
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class CustomConventionValidationStrategyToMsgResolverNameMapper extends
     AbstractCustomNameMapper<ValidationStrategy>
 {
