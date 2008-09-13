@@ -24,7 +24,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import java.lang.annotation.Annotation;
 
 /**
+ * Data holder which stores the annotation and some information where the annotation was around.
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public class AnnotationEntry

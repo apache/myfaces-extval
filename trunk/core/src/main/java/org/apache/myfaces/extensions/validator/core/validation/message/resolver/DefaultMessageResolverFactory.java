@@ -34,6 +34,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,9 +43,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Factory which creates a MessageResolver for a given ValidationStrategy
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultMessageResolverFactory implements
     ClassMappingFactory<ValidationStrategy, MessageResolver>
 {

@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 public class JpaValidationErrorMessageResolver extends
         AbstractValidationErrorMessageResolver
 {
-
     private static final String CUSTOM_BASE_NAME = WebXmlParameter.VALIDATION_MESSAGES_JPA;
     private static final String BASE_NAME = JpaValidationErrorMessageResolver.class
             .getPackage().getName().replace(".message.resolver",

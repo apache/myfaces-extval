@@ -20,18 +20,24 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 
 /**
- * NameMappers are stateless
+ * To provide a custom NameMapper to map Annotations to ValidationStrategies.
+ * (configured via information provider bean)
+ * The bean provides the default name (convention).
+ * It's possible to provide a custom full qualified name. (= customizable convention)
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class CustomConventionAnnotationToValidationStrategyNameMapper extends
     AbstractCustomNameMapper<Annotation>
 {
-
     protected String getCustomNameMapperClassName()
     {
         return ExtValUtils.getInformationProviderBean()

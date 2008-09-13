@@ -18,9 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.API)
 public interface ClassMappingFactory<P, R>
 {
     R create(P source);

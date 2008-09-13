@@ -41,6 +41,7 @@ package org.apache.myfaces.extensions.validator.internal;
  * however, it's not the default approach
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 public enum UsageCategory
 {

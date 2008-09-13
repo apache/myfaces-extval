@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.internal;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 public enum Priority
 {
