@@ -22,7 +22,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
+ * Interface for name mappers.
+ * A name mapper calculates a name for a given source object.
+ * e.g. Annotation -> ValidationStrategy
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface NameMapper<T>

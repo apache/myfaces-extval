@@ -23,13 +23,27 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This factory creates an annotation extractor which extracts the annotation
+ * of the value binding of a component.
+ * <p/>
+ * order:<br/>
+ * <ol>
+ *   <li>configured annotation extractor (web.xml)</li>
+ *   <li>configured annotation extractor (information provider bean)</li>
+ *   <li>default implementation</li>
+ * </ol>
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultAnnotationExtractorFactory implements
     AnnotationExtractorFactory
 {

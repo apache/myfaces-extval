@@ -25,7 +25,10 @@ import javax.faces.component.UIComponent;
 import java.util.List;
 
 /**
+ * In order to build up a mapping which is used for cross-validation.
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class ProcessedInformationEntry

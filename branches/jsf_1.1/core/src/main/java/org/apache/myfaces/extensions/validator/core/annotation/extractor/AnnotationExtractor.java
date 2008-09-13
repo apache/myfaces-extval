@@ -26,7 +26,11 @@ import javax.faces.context.FacesContext;
 import java.util.List;
 
 /**
+ * An annotation extractor is responsible to analyze an object
+ * and returns all available annotations
+ * 
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface AnnotationExtractor

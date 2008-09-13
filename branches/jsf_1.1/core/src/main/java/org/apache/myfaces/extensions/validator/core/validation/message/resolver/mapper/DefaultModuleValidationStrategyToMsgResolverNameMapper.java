@@ -19,14 +19,19 @@
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
 
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultValidationErrorMessageResolver;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * In order to provide a NameMapper per validation module.
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultModuleValidationStrategyToMsgResolverNameMapper extends
     DefaultValidationStrategyToMsgResolverNameMapper
 {
-
     @Override
     protected String getClassName(String strategyClassName)
     {

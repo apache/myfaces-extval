@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -28,8 +30,15 @@ import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
 
 /**
+ * Provides the ability to use ValidatorException (as expected by the user) instead of ConverterException.
+ * Furthermore it provides:<br/>
+ * initValidation<br/>
+ * processAfterValidatorException
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
 public abstract class AbstractValidatorAdapter implements ValidationStrategy
 {
     protected final Log logger = LogFactory.getLog(getClass());

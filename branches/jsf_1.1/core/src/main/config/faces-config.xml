@@ -23,17 +23,7 @@
 -->
 
 <faces-config>
-    <!-- optional approach for component libs which don't use delegation to renderer -->
-    <!--
-    <factory>
-        <application-factory>org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory</application-factory>
-    </factory>
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.core.proxy.ProxyMappingPhaseListener</phase-listener>
-    </lifecycle>
-    -->
     <lifecycle>
         <phase-listener>org.apache.myfaces.extensions.validator.core.ExtValValidationPhaseListener</phase-listener>
     </lifecycle>
-
 </faces-config>
