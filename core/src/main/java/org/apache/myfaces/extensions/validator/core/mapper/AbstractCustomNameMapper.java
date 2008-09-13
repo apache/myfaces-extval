@@ -19,12 +19,18 @@
 package org.apache.myfaces.extensions.validator.core.mapper;
 
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * NameMappers are stateless
+ * A generic implementation. Subclasses just have to now the fully qualified name of the name mapper.
+ *
+ * NameMappers are stateless.
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
 {
     private NameMapper<T> customNameMapper;

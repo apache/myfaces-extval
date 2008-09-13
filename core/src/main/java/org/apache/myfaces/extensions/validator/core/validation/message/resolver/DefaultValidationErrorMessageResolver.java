@@ -20,10 +20,17 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * Default MessageResolver which uses the default convention for the message bundle.
+ * It's possible to provide a custom message bundle via web.xml
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultValidationErrorMessageResolver extends
     AbstractValidationErrorMessageResolver
 {

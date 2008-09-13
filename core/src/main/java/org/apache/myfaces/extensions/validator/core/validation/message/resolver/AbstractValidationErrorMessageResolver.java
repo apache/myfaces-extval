@@ -23,14 +23,22 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
+ * MessageResolver which uses property files.
+ * Subclasses just have to provide the package to look at.
+ * An implementation can also provide a custom name which is e.g. configured via web.xml.
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public abstract class AbstractValidationErrorMessageResolver implements
     MessageResolver
 {

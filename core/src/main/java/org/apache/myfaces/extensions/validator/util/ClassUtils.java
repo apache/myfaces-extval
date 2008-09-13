@@ -18,9 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ClassUtils
 {
     public static Class tryToLoadClassForName(String name)

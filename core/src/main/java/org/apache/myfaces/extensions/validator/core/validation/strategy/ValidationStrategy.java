@@ -26,7 +26,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
+ * Base interface for ValidationStrategies
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface ValidationStrategy

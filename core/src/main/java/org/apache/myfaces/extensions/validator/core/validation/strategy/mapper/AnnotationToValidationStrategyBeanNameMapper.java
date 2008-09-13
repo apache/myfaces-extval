@@ -19,21 +19,25 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 
 /**
+ * Name Mapper which delegates the name mapping, extract the name and convert it to a bean name + prefix
+ * target: configure a validation strategy via a managed bean facility -> allows to inject other beans
+ * instead of api calls + hardcoded bean names
+ * <p/>
+ * allowed bean scopes:
+ * the validation strategy is stateless: application/singleton
+ * the validation strategy is stateful: none/prototype
+ * don't use the session or a conversation scope
+ *
  * @author Gerhard Petracek
- *         <p/>
- *         Name Mapper which delegates the name mapping, extract the name and convert it to a bean name + prefix
- *         target: configure a validation strategy via a managed bean facility -> allows to inject other beans
- *         instead of api calls + hardcoded bean names
- *         <p/>
- *         allowed bean scopes:
- *         the validation strategy is stateless: application/singleton
- *         the validation strategy is stateful: none/prototype
- *         don't use the session or a conversation scope
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class AnnotationToValidationStrategyBeanNameMapper implements
     NameMapper<Annotation>
 {

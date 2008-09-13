@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -29,8 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * In order to execute logic just once.
+ * e.g. register artifacts via api
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractStartupConfigListener implements PhaseListener
 {
     protected final Log logger = LogFactory.getLog(getClass());

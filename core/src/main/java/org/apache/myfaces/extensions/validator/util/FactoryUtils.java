@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultV
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class FactoryUtils
 {
     private static AnnotationExtractorFactory annotationExtractorFactory;
