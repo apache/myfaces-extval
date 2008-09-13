@@ -20,16 +20,22 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 
 /**
+ * To provide a custom NameMapper to map Annotations to ValidationStrategies.
+ * (configured via web.xml)
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
     AbstractCustomNameMapper<Annotation>
 {
-
     protected String getCustomNameMapperClassName()
     {
         return WebXmlParameter.CUSTOM_ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER;

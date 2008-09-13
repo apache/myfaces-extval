@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -35,8 +37,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Default implementation which extracts the annotations of the value binding of a component.
+ * It extracts the annotation of the field and the property.
+ * (Also the annotations of super classes and interfaces.)
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 {
     protected final Log logger = LogFactory.getLog(getClass());

@@ -20,12 +20,18 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 
 /**
+ * It's a alternative Mapper to place Annotations and ValidationStrategies in the same package.
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
 public class SimpleAnnotationToValidationStrategyNameMapper implements
     NameMapper<Annotation>
 {

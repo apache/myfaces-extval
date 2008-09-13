@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 
 /**
- * centralized in order that these information arn't spread over the complete code base
+ * centralized in order that these information aren't spread over the complete code base
  *
  * @author Gerhard Petracek
  */

@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.EditableValueHolder;
@@ -41,6 +43,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
     @ToDo(value = Priority.MEDIUM, description = "test")

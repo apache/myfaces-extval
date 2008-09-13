@@ -36,6 +36,8 @@ import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -48,9 +50,13 @@ import java.util.ResourceBundle;
 
 
 /**
+ * Factory which creates the ValidationStrategy for a given annotation
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultValidationStrategyFactory implements
     ClassMappingFactory<Annotation, ValidationStrategy>
 {

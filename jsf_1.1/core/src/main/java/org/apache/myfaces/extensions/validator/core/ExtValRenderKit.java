@@ -34,6 +34,7 @@ import java.io.Writer;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @ToDo(value = Priority.HIGH,
       description = "constructor: impl. a hook to support similar mechanisms of other component libs")

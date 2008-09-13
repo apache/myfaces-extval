@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -28,8 +30,12 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 /**
+ * Provides the ability of message resolving to ValidationStrategies
+ *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
 public abstract class AbstractValidationStrategy extends
     AbstractValidatorAdapter
 {

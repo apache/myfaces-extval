@@ -31,6 +31,7 @@ import javax.faces.render.RenderKitFactory;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValValidationPhaseListener implements PhaseListener
