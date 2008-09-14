@@ -124,6 +124,14 @@ public class InformationProviderBean
     }
 
     /*
+     * init hook for component libs which use a rendering context (e.g. Trinidad)
+     */
+    public String getRenderingContextInitializerName()
+    {
+        return TrinidadRenderingContextInitializer.class.getName();
+    }
+
+    /*
      * static strategy mappings (name of property files)
      */
     public String getCustomStaticStrategyMappingSource()
