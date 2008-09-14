@@ -20,9 +20,8 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -36,8 +35,6 @@ import java.io.Writer;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ToDo(value = Priority.HIGH,
-      description = "constructor: impl. a hook to support similar mechanisms of other component libs")
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRenderKit extends RenderKit
 {
@@ -47,8 +44,12 @@ public class ExtValRenderKit extends RenderKit
 
     public ExtValRenderKit(RenderKit wrapped)
     {
-        ClassUtils.tryToInstantiateClassForName(
-            "org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext");
+        RenderingContextInitializer renderingContextInitializer =
+            (RenderingContextInitializer)ClassUtils.tryToInstantiateClassForName(
+                ExtValUtils.getInformationProviderBean().getRenderingContextInitializerName());
+
+        renderingContextInitializer.initContext();
+
         this.wrapped = wrapped;
     }
 
