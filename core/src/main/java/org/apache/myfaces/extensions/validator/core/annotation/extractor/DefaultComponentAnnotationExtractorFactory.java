@@ -44,7 +44,7 @@ import java.util.List;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultAnnotationExtractorFactory implements
+public class DefaultComponentAnnotationExtractorFactory implements
     AnnotationExtractorFactory
 {
 
@@ -58,10 +58,10 @@ public class DefaultAnnotationExtractorFactory implements
             List<String> annotationExtractorClassNames = new ArrayList<String>();
 
             annotationExtractorClassNames
-                .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR);
+                .add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR);
             annotationExtractorClassNames.add(ExtValUtils
                 .getInformationProviderBean()
-                .getCustomAnnotationExtractor());
+                .getCustomComponentAnnotationExtractor());
             annotationExtractorClassNames
                 .add(DefaultComponentAnnotationExtractor.class.getName());
 
