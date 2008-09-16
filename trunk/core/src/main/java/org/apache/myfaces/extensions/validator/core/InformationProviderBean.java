@@ -73,7 +73,7 @@ public class InformationProviderBean
         return this.basePackage + "AnnotationExtractorFactory";
     }
 
-    public String getCustomAnnotationExtractor()
+    public String getCustomComponentAnnotationExtractor()
     {
         return this.basePackage + "AnnotationExtractor";
     }
