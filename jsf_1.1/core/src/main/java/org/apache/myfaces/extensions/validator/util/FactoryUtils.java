@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.util;
 import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultAnnotationExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
@@ -56,7 +56,7 @@ public class FactoryUtils
                 .getInformationProviderBean()
                 .getCustomAnnotationExtractorFactory());
             annotationExtractorFactoryClassNames
-                .add(DefaultAnnotationExtractorFactory.class.getName());
+                .add(DefaultComponentAnnotationExtractorFactory.class.getName());
 
             for (String className : annotationExtractorFactoryClassNames)
             {
