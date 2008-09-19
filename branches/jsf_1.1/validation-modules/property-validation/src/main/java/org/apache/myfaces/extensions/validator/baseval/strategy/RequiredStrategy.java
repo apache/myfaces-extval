@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -30,9 +31,8 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class RequiredStrategy extends AbstractValidationStrategy
+public class RequiredStrategy extends AbstractValidationStrategy implements RequiredAttributeStrategy
 {
-
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
             Object convertedObject) throws ValidatorException
@@ -43,6 +43,11 @@ public class RequiredStrategy extends AbstractValidationStrategy
                     getValidationErrorFacesMassage(annotationEntry
                             .getAnnotation()));
         }
+    }
+
+    public boolean markedAsRequired(Annotation annotation)
+    {
+        return true;
     }
 
     protected String getValidationErrorMsgKey(Annotation annotation)
