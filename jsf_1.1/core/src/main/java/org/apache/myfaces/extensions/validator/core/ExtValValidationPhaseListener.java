@@ -47,10 +47,8 @@ public class ExtValValidationPhaseListener implements PhaseListener
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 
-        String renderKitId;
-        RenderKit renderKit;
-        renderKitId = facesContext.getViewRoot().getRenderKitId();
-        renderKit = renderKitFactory.getRenderKit(FacesContext.getCurrentInstance(), renderKitId);
+        String renderKitId = facesContext.getViewRoot().getRenderKitId();
+        RenderKit renderKit = renderKitFactory.getRenderKit(FacesContext.getCurrentInstance(), renderKitId);
         renderKitFactory.addRenderKit(ExtValRenderKit.ID, new ExtValRenderKit(renderKit));
         facesContext.getViewRoot().setRenderKitId(ExtValRenderKit.ID);
     }

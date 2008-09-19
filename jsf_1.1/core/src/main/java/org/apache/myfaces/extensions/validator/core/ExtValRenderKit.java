@@ -38,7 +38,7 @@ import java.io.Writer;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRenderKit extends RenderKit
 {
-    private RenderKit wrapped;
+    protected RenderKit wrapped;
 
     public static final String ID = "EXTVAL_RENDERKIT";
 
@@ -61,14 +61,14 @@ public class ExtValRenderKit extends RenderKit
         }
         else
         {
-            wrapped.addRenderer(family, rendererType, new ExtValRendererWrapper(renderer));
+            wrapped.addRenderer(family, rendererType, createWrapper(renderer));
         }
     }
 
     public Renderer getRenderer(String family, String rendererType)
     {
         Renderer renderer = wrapped.getRenderer(family, rendererType);
-        return renderer instanceof ExtValRendererWrapper ? renderer : new ExtValRendererWrapper(renderer);
+        return renderer instanceof ExtValRendererWrapper ? renderer : createWrapper(renderer);
     }
 
     public ResponseStateManager getResponseStateManager()
@@ -84,5 +84,11 @@ public class ExtValRenderKit extends RenderKit
     public ResponseStream createResponseStream(OutputStream outputStream)
     {
         return wrapped.createResponseStream(outputStream);
+    }
+
+    @UsageInformation({UsageCategory.REUSE, UsageCategory.CUSTOMIZABLE})
+    protected Renderer createWrapper(Renderer renderer)
+    {
+        return new ExtValRendererWrapper(renderer);
     }
 }
