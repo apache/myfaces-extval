@@ -42,7 +42,7 @@ public class RegistrationPage
     @Equals("passwordRepeated")
     private String password;
 
-    @Required(validationErrorMsgKey = "repeated_password_requried")
+    @Required(validationErrorMsgKey = "repeated_password_required")
     private String passwordRepeated;
 
     //use #{registrationPage.person.nickName}, #{person.nickName}
