@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
+import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
@@ -32,11 +32,13 @@ import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
-public class JpaValidationStrategy extends AbstractValidationStrategy implements RequiredAttributeStrategy
+public class JpaValidationStrategy extends AbstractValidationStrategy implements MetaDataExtractor
 {
 
     private static final String VALIDATE_REQUIRED = "required";
@@ -68,18 +70,27 @@ public class JpaValidationStrategy extends AbstractValidationStrategy implements
         }
     }
 
-    @ToDo(value = Priority.MEDIUM, description = "check")
-    public boolean markedAsRequired(Annotation annotation)
+    @ToDo(value = Priority.HIGH, description = "impl. the rest")
+    public Map<String, Object> extractMetaData(Annotation annotation)
     {
-        if(annotation instanceof Column && !((Column) annotation).nullable())
+        Map<String, Object> results = new HashMap<String, Object>();
+
+        if(annotation instanceof Column)
         {
-            return true;
+            if(!((Column) annotation).nullable())
+            {
+                results.put("required", true);
+            }
         }
-        else if(annotation instanceof Basic && !((Basic)annotation).optional())
+        else if(annotation instanceof Basic)
         {
-            return true;
+            if(!((Basic)annotation).optional())
+            {
+                results.put("required", true);
+            }
         }
-        return false;
+        //TODO impl. the rest!!!
+        return results;
     }
 
     private void validateColumnAnnotation(Column column, Object convertedObject)
