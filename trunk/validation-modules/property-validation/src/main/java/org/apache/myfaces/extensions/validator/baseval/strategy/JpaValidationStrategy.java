@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
@@ -35,7 +36,7 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class JpaValidationStrategy extends AbstractValidationStrategy
+public class JpaValidationStrategy extends AbstractValidationStrategy implements RequiredAttributeStrategy
 {
 
     private static final String VALIDATE_REQUIRED = "required";
@@ -65,6 +66,20 @@ public class JpaValidationStrategy extends AbstractValidationStrategy
         {
             validateManyToOneAnnotation((ManyToOne) annotation, convertedObject);
         }
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "check")
+    public boolean markedAsRequired(Annotation annotation)
+    {
+        if(annotation instanceof Column && !((Column) annotation).nullable())
+        {
+            return true;
+        }
+        else if(annotation instanceof Basic && !((Basic)annotation).optional())
+        {
+            return true;
+        }
+        return false;
     }
 
     private void validateColumnAnnotation(Column column, Object convertedObject)
