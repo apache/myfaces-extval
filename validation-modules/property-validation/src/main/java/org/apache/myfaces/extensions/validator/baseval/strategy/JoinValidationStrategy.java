@@ -24,16 +24,18 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
 import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
-public class JoinValidationStrategy extends AbstractValidatorAdapter
+public class JoinValidationStrategy extends AbstractValidatorAdapter implements RequiredAttributeStrategy
 {
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
@@ -67,5 +69,34 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
                 }
             }
         }
+    }
+
+    public boolean markedAsRequired(Annotation annotation)
+    {
+        AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
+
+        String[] targetExpressions = ((JoinValidation)annotation).value();
+
+        ValidationStrategy validationStrategy;
+
+        for (String targetExpression : targetExpressions)
+        {
+            for (AnnotationEntry entry : extractor.extractAnnotations(
+                FacesContext.getCurrentInstance(), targetExpression))
+            {
+                validationStrategy = FactoryUtils
+                        .getValidationStrategyFactory().create(
+                                entry.getAnnotation());
+
+                if (validationStrategy != null && validationStrategy instanceof RequiredAttributeStrategy)
+                {
+                    if(((RequiredAttributeStrategy)validationStrategy).markedAsRequired(entry.getAnnotation()))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

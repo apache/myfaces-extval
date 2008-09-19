@@ -21,18 +21,19 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.ValidatorException;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
-public class LengthStrategy extends AbstractValidatorAdapter
+public class LengthStrategy extends AbstractValidatorAdapter implements RequiredAttributeStrategy
 {
-
     protected void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
             Object convertedObject) throws ValidatorException
@@ -45,5 +46,10 @@ public class LengthStrategy extends AbstractValidatorAdapter
         lengthValidator.setMaximum(annotation.maximum());
 
         lengthValidator.validate(facesContext, uiComponent, convertedObject);
+    }
+
+    public boolean markedAsRequired(Annotation annotation)
+    {
+        return ((Length)annotation).minimum() > 0;
     }
 }

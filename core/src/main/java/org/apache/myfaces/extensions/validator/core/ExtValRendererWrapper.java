@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
@@ -48,7 +49,7 @@ import java.lang.reflect.Method;
 public class ExtValRendererWrapper extends Renderer
 {
     private static Boolean isAlternativeAvailable = null;
-    private Renderer wrapped;
+    protected Renderer wrapped;
 
     public ExtValRendererWrapper(Renderer wrapped)
     {
@@ -63,6 +64,11 @@ public class ExtValRendererWrapper extends Renderer
     public void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
+        if(ValidationUtils.isValueOfComponentRequired(facesContext, uiComponent))
+        {
+            ((EditableValueHolder)uiComponent).setRequired(true);
+        }
+
         wrapped.encodeBegin(facesContext, uiComponent);
     }
 
