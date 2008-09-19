@@ -21,18 +21,20 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
+import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
-public class LengthStrategy extends AbstractValidatorAdapter implements RequiredAttributeStrategy
+public class LengthStrategy extends AbstractValidatorAdapter implements MetaDataExtractor
 {
     protected void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
@@ -48,8 +50,17 @@ public class LengthStrategy extends AbstractValidatorAdapter implements Required
         lengthValidator.validate(facesContext, uiComponent, convertedObject);
     }
 
-    public boolean markedAsRequired(Annotation annotation)
+    public Map<String, Object> extractMetaData(Annotation annotation)
     {
-        return ((Length)annotation).minimum() > 0;
+        Map<String, Object> results = new HashMap<String, Object>();
+        int minimum = ((Length)annotation).minimum();
+        results.put("length", minimum);
+
+        if(minimum > 0)
+        {
+            results.put("required", true);
+        }
+
+        return results;
     }
 }

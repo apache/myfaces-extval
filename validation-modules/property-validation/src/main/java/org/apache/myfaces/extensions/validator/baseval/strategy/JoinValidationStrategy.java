@@ -24,18 +24,20 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
+import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
-public class JoinValidationStrategy extends AbstractValidatorAdapter implements RequiredAttributeStrategy
+public class JoinValidationStrategy extends AbstractValidatorAdapter implements MetaDataExtractor
 {
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
@@ -71,13 +73,15 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter implements 
         }
     }
 
-    public boolean markedAsRequired(Annotation annotation)
+    public Map<String, Object> extractMetaData(Annotation annotation)
     {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 
         String[] targetExpressions = ((JoinValidation)annotation).value();
 
         ValidationStrategy validationStrategy;
+
+        Map<String, Object> results = new HashMap<String, Object>();
 
         for (String targetExpression : targetExpressions)
         {
@@ -88,15 +92,12 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter implements 
                         .getValidationStrategyFactory().create(
                                 entry.getAnnotation());
 
-                if (validationStrategy != null && validationStrategy instanceof RequiredAttributeStrategy)
+                if (validationStrategy != null && validationStrategy instanceof MetaDataExtractor)
                 {
-                    if(((RequiredAttributeStrategy)validationStrategy).markedAsRequired(entry.getAnnotation()))
-                    {
-                        return true;
-                    }
+                    results.putAll(((MetaDataExtractor)validationStrategy).extractMetaData(entry.getAnnotation()));
                 }
             }
         }
-        return false;
+        return results;
     }
 }
