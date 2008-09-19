@@ -16,17 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy;
+package org.apache.myfaces.extensions.validator.core;
+
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
+import java.util.Map;
 
 /**
- * Interface for validation strategies which validate if an input is required
- *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public interface RequiredAttributeStrategy
+@UsageInformation(UsageCategory.API)
+public interface MetaDataExtractor
 {
-    boolean markedAsRequired(Annotation annotation);
+    Map<String, Object> extractMetaData(Annotation annotation);
 }

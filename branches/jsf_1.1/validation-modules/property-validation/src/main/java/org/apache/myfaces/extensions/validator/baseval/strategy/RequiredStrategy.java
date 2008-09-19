@@ -21,17 +21,19 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.RequiredAttributeStrategy;
+import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
-public class RequiredStrategy extends AbstractValidationStrategy implements RequiredAttributeStrategy
+public class RequiredStrategy extends AbstractValidationStrategy implements MetaDataExtractor
 {
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
@@ -45,9 +47,11 @@ public class RequiredStrategy extends AbstractValidationStrategy implements Requ
         }
     }
 
-    public boolean markedAsRequired(Annotation annotation)
+    public Map<String, Object> extractMetaData(Annotation annotation)
     {
-        return true;
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("required", true);
+        return results;
     }
 
     protected String getValidationErrorMsgKey(Annotation annotation)
