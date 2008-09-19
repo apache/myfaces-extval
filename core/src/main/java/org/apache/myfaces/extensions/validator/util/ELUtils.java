@@ -95,6 +95,15 @@ public class ELUtils
         String valueBindingExpression = getValueBindingExpression(uiComponent);
 
         String baseExpression = valueBindingExpression;
+
+        //for input components without value-binding
+        //(e.g. for special component libs -> issue with ExtValRendererWrapper#encodeBegin)
+        if(baseExpression == null)
+        {
+            //TODO logging
+            return null;
+        }
+
         if (baseExpression.contains("."))
         {
             baseExpression = baseExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
