@@ -52,8 +52,8 @@ public interface WebXmlParameter
         .getInitParameter("CUSTOM_MESSAGE_RESOLVER_FACTORY");
     static final String CUSTOM_VALIDATION_STRATEGY_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_VALIDATION_STRATEGY_FACTORY");
-    static final String CUSTOM_ANNOTATION_EXTRACTOR_FACTORY = WebXmlUtils
-        .getInitParameter("CUSTOM_ANNOTATION_EXTRACTOR_FACTORY");
+    static final String CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY");
 
     static final String CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR = WebXmlUtils
         .getInitParameter("CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR");
