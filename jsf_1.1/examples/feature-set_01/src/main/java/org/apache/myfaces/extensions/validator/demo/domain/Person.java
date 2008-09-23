@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.DateIs;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
 import org.apache.myfaces.extensions.validator.crossval.annotation.NotEquals;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
-import org.apache.myfaces.extensions.validator.baseval.annotation.Regex;
+import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 
 import javax.persistence.Column;
 import javax.persistence.Temporal;
@@ -34,7 +34,7 @@ public class Person
     @Length(minimum = 2)
     @Column(nullable = false, length = 20)
     @NotEquals("lastName")
-    @Regex("[A-Z][a-z]+")
+    @Pattern("[A-Z][a-z]+")
     private String firstName;
 
     @Length(minimum = 2)
