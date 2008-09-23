@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -32,19 +34,22 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentInitializer implements ComponentInitializer
 {
-    private static ComponentInitializer componentInitializer;
+    private static List<ComponentInitializer> componentInitializers = new ArrayList<ComponentInitializer>();
 
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(componentInitializer != null)
+        for(ComponentInitializer componentInitializer : componentInitializers)
         {
             componentInitializer.configureComponent(facesContext, uiComponent, metaData);
         }
     }
 
     @UsageInformation(UsageCategory.INTERNAL)
-    public static void setComponentInitializer(ComponentInitializer componentInitializer)
+    public static void addComponentInitializer(ComponentInitializer componentInitializer)
     {
-        DefaultComponentInitializer.componentInitializer = componentInitializer;
+        synchronized (DefaultComponentInitializer.class)
+        {
+            componentInitializers.add(componentInitializer);
+        }
     }
 }
