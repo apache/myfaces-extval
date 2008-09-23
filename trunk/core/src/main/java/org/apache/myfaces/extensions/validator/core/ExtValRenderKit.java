@@ -20,8 +20,7 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -44,11 +43,7 @@ public class ExtValRenderKit extends RenderKit
 
     public ExtValRenderKit(RenderKit wrapped)
     {
-        RenderingContextInitializer renderingContextInitializer =
-            (RenderingContextInitializer)ClassUtils.tryToInstantiateClassForName(
-                ExtValUtils.getInformationProviderBean().getRenderingContextInitializerName());
-
-        renderingContextInitializer.initContext();
+        FactoryUtils.getRenderingContextInitializerFactory().create(wrapped).initContext();
 
         this.wrapped = wrapped;
     }

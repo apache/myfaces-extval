@@ -98,7 +98,7 @@ public class DefaultValidationStrategyFactory implements
 
         if (annotationStrategyMapping.containsKey(annotationName))
         {
-            return (ValidationStrategy) getValidationStrategyInstance(annotationStrategyMapping
+            return getValidationStrategyInstance(annotationStrategyMapping
                 .get(annotationName));
         }
 
