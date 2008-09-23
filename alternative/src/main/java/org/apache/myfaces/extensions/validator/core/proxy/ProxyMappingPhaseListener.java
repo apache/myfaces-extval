@@ -33,6 +33,7 @@ import javax.faces.convert.Converter;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import java.util.List;
 
 /**
  * due to a restriction at the state saving process
@@ -119,7 +120,7 @@ public class ProxyMappingPhaseListener implements PhaseListener
         //    return;
         //}
 
-        for (UIComponent child : uiComponent.getChildren())
+        for (UIComponent child : (List<UIComponent>)uiComponent.getChildren())
         {
             if (child instanceof ValueHolder)
             {
