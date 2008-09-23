@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
-import org.apache.myfaces.extensions.validator.baseval.annotation.Regex;
+import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
 
@@ -27,12 +27,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
-import java.util.regex.Pattern;
 
 /**
  * @author Gerhard Petracek
  */
-public class RegexStrategy extends AbstractValidationStrategy
+public class PatternStrategy extends AbstractValidationStrategy
 {
 
     protected void processValidation(FacesContext facesContext,
@@ -40,12 +39,12 @@ public class RegexStrategy extends AbstractValidationStrategy
             Object convertedObject) throws ValidatorException
     {
 
-        Regex annotation = annotationEntry.getAnnotation(Regex.class);
+        Pattern annotation = annotationEntry.getAnnotation(Pattern.class);
 
         for (String expression : annotation.value())
         {
             if (convertedObject == null
-                    || !Pattern.compile(expression).matcher(
+                    || !java.util.regex.Pattern.compile(expression).matcher(
                             convertedObject.toString()).matches())
             {
                 throw new ValidatorException(new FacesMessage(
@@ -59,6 +58,6 @@ public class RegexStrategy extends AbstractValidationStrategy
 
     protected String getValidationErrorMsgKey(Annotation annotation)
     {
-        return ((Regex) annotation).validationErrorMsgKey();
+        return ((Pattern) annotation).validationErrorMsgKey();
     }
 }
