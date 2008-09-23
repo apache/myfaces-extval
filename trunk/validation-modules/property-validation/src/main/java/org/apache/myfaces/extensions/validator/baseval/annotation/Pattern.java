@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  */
 @Target( { METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Regex
+public @interface Pattern
 {
     String[] value();
 
