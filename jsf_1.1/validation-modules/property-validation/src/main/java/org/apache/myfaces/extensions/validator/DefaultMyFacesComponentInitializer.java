@@ -46,9 +46,9 @@ public class DefaultMyFacesComponentInitializer implements ComponentInitializer
                                               UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
-        if(metaData.containsKey("required"))
+        if(metaData.containsKey(MetaDataKeys.REQUIRED))
         {
-            if((Boolean)metaData.get("required") && isComponentRequired( uiComponent ))
+            if((Boolean)metaData.get(MetaDataKeys.REQUIRED) && isComponentRequired( uiComponent ))
             {
                 ((EditableValueHolder)uiComponent).setRequired(true);
             }
@@ -82,9 +82,9 @@ public class DefaultMyFacesComponentInitializer implements ComponentInitializer
                                              UIComponent uiComponent,
                                              Map<String, Object> metaData)
     {
-        if(metaData.containsKey("max_length"))
+        if(metaData.containsKey(MetaDataKeys.MAX_LENGTH))
         {
-            int maxLength = (Integer)metaData.get("max_length");
+            int maxLength = (Integer)metaData.get(MetaDataKeys.MAX_LENGTH);
 
             if(uiComponent instanceof HtmlInputText)
             {
