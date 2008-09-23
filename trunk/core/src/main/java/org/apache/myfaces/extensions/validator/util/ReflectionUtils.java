@@ -97,7 +97,7 @@ public class ReflectionUtils
     {
         Class targetClass = ClassUtils.tryToLoadClassForName(className);
         Method targetMethod = tryToGetMethod(targetClass, methodName, argTypes);
-        return tryToInvokeMethodOfClass(targetClass, targetMethod, args);                     
+        return tryToInvokeMethodOfClass(targetClass, targetMethod, args);
     }
 
     public static Object tryToInvokeMethodOfClass(Class target, Method method, Object[] args)
