@@ -18,19 +18,26 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 
-import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Default approach to avoid proxies for converters and the adapter fallback.
@@ -64,12 +71,45 @@ public class ExtValRendererWrapper extends Renderer
     public void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        if(ValidationUtils.isValueOfComponentRequired(facesContext, uiComponent))
+        initComponent(facesContext, uiComponent);
+        wrapped.encodeBegin(facesContext, uiComponent);
+    }
+
+    protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
+    {
+        if(!(uiComponent instanceof EditableValueHolder))
         {
-            ((EditableValueHolder)uiComponent).setRequired(true);
+            return;
         }
 
-        wrapped.encodeBegin(facesContext, uiComponent);
+        ValidationStrategy validationStrategy;
+
+        AnnotationExtractor annotationExtractor = FactoryUtils.getAnnotationExtractorFactory().create();
+
+        Map<String, Object> metaData;
+        for (AnnotationEntry entry : annotationExtractor.extractAnnotations(facesContext, uiComponent))
+        {
+            validationStrategy = FactoryUtils.getValidationStrategyFactory().create(entry.getAnnotation());
+
+            if (validationStrategy != null && validationStrategy instanceof ComponentInitializer)
+            {
+                if(validationStrategy instanceof MetaDataExtractor)
+                {
+                    metaData = ((MetaDataExtractor)validationStrategy).extractMetaData(entry.getAnnotation());
+                }
+                else
+                {
+                    metaData = null;
+                }
+
+                if(metaData == null)
+                {
+                    metaData = new HashMap<String, Object>();
+                }
+
+                ((ComponentInitializer)validationStrategy).configureComponent(facesContext, uiComponent, metaData);
+            }
+        }
     }
 
     public void encodeChildren(FacesContext facesContext, UIComponent uiComponent)

@@ -24,7 +24,7 @@
 
 <faces-config>
     <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.InitStaticStrategyMappingsPhaseListener</phase-listener>
+        <phase-listener>org.apache.myfaces.extensions.validator.InitPropertyValidationModulePhaseListener</phase-listener>
     </lifecycle>
 
     <lifecycle>

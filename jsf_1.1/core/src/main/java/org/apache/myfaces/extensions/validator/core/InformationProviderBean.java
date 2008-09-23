@@ -19,11 +19,11 @@
 package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -103,6 +103,19 @@ public class InformationProviderBean
     }
 
     /*
+     * initializer
+     */
+    public String getCustomRenderingContextInitializer()
+    {
+        return this.basePackage + "RenderingContextInitializer";
+    }
+
+    public String getCustomComponentInitializer()
+    {
+        return this.basePackage + "ComponentInitializer";
+    }
+
+    /*
      * factories
      */
     public String getCustomMessageResolverFactory()
@@ -113,6 +126,16 @@ public class InformationProviderBean
     public String getCustomValidationStrategyFactory()
     {
         return this.basePackage + "ValidationStrategyFactory";
+    }
+
+    public String getCustomRenderingContextInitializerFactory()
+    {
+        return this.basePackage + "RenderingContextInitializerFactory";
+    }
+
+    public String getCustomComponentInitializerFactory()
+    {
+        return this.basePackage + "ComponentInitializerFactory";
     }
 
     /*
@@ -126,10 +149,6 @@ public class InformationProviderBean
     /*
      * init hook for component libs which use a rendering context (e.g. Trinidad)
      */
-    public String getRenderingContextInitializerName()
-    {
-        return TrinidadRenderingContextInitializer.class.getName();
-    }
 
     /*
      * static strategy mappings (name of property files)

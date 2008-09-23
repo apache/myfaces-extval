@@ -54,7 +54,8 @@ public class LengthStrategy extends AbstractValidatorAdapter implements MetaData
     {
         Map<String, Object> results = new HashMap<String, Object>();
         int minimum = ((Length)annotation).minimum();
-        results.put("length", minimum);
+        results.put("min_length", minimum);
+        results.put("max_length", ((Length)annotation).maximum());
 
         if(minimum > 0)
         {

@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -68,6 +68,36 @@ public class ReflectionUtils
     public static Object tryToInvokeMethodOfClass(Class target, Method method)
     {
         return tryToInvokeMethodOfClass(target, method, null);
+    }
+
+    public static Object tryToInvokeMethodOfClassAndMethodName(String className, String methodName)
+    {
+        return tryToInvokeMethodOfClassAndMethodName(className, methodName, null);
+    }
+
+    public static Object tryToInvokeMethodOfClassAndMethodName(String className, String methodName, Object[] args)
+    {
+        Class[] targetArgs = new Class[0];
+
+        if(args != null)
+        {
+            targetArgs = new Class[args.length];
+
+            for(int i = 0; i < args.length; i++)
+            {
+                targetArgs[i] = args[i].getClass();
+            }
+        }
+
+        return tryToInvokeMethodOfClassAndMethodName(className, methodName, args, targetArgs);
+    }
+
+    public static Object tryToInvokeMethodOfClassAndMethodName(String className, String methodName,
+                                                               Object[] args, Class[] argTypes)
+    {
+        Class targetClass = ClassUtils.tryToLoadClassForName(className);
+        Method targetMethod = tryToGetMethod(targetClass, methodName, argTypes);
+        return tryToInvokeMethodOfClass(targetClass, targetMethod, args);
     }
 
     public static Object tryToInvokeMethodOfClass(Class target, Method method, Object[] args)
