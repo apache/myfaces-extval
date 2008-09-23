@@ -50,17 +50,17 @@ public class FactoryUtils
     private static AnnotationExtractorFactory annotationExtractorFactory;
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    public static AnnotationExtractorFactory getAnnotationExtractorFactory()
+    public static AnnotationExtractorFactory getComponentAnnotationExtractorFactory()
     {
         if (annotationExtractorFactory == null)
         {
             List<String> annotationExtractorFactoryClassNames = new ArrayList<String>();
 
             annotationExtractorFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_ANNOTATION_EXTRACTOR_FACTORY);
+                .add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY);
             annotationExtractorFactoryClassNames.add(ExtValUtils
                 .getInformationProviderBean()
-                .getCustomAnnotationExtractorFactory());
+                .getCustomComponentAnnotationExtractorFactory());
             annotationExtractorFactoryClassNames
                 .add(DefaultComponentAnnotationExtractorFactory.class.getName());
 

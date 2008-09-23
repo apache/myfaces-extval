@@ -50,7 +50,7 @@ public class ValidationUtils
         ValidationStrategy validationStrategy;
 
         AnnotationExtractor annotationExtractor = FactoryUtils
-            .getAnnotationExtractorFactory().create();
+            .getComponentAnnotationExtractorFactory().create();
         for (AnnotationEntry entry : annotationExtractor
             .extractAnnotations(facesContext, uiComponent))
         {
