@@ -22,15 +22,21 @@ import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializerFactory;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializerFactory;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
+import javax.faces.component.UIComponent;
+import javax.faces.render.RenderKit;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,5 +139,68 @@ public class FactoryUtils
         }
 
         return messageResolverFactory;
+    }
+
+    private static ClassMappingFactory<RenderKit, RenderingContextInitializer> renderingContextInitializerFactory;
+
+    public static ClassMappingFactory<RenderKit, RenderingContextInitializer> getRenderingContextInitializerFactory()
+    {
+        if (renderingContextInitializerFactory == null)
+        {
+            List<String> renderingContextInitializerFactoryClassNames = new ArrayList<String>();
+
+            renderingContextInitializerFactoryClassNames
+                .add(WebXmlParameter.CUSTOM_RENDERING_CONTEXT_INITIALIZER_FACTORY);
+            renderingContextInitializerFactoryClassNames.add(ExtValUtils
+                .getInformationProviderBean()
+                .getCustomRenderingContextInitializerFactory());
+            renderingContextInitializerFactoryClassNames
+                .add(DefaultRenderingContextInitializerFactory.class.getName());
+
+            for (String className : renderingContextInitializerFactoryClassNames)
+            {
+                renderingContextInitializerFactory =
+                    (ClassMappingFactory<RenderKit, RenderingContextInitializer>) ClassUtils
+                        .tryToInstantiateClassForName(className);
+
+                if (renderingContextInitializerFactory != null)
+                {
+                    break;
+                }
+            }
+        }
+
+        return renderingContextInitializerFactory;
+    }
+
+    private static ClassMappingFactory<UIComponent, ComponentInitializer> componentInitializerFactory;
+
+    public static ClassMappingFactory<UIComponent, ComponentInitializer> getComponentInitializerFactory()
+    {
+        if (componentInitializerFactory == null)
+        {
+            List<String> componentInitializerFactoryClassNames = new ArrayList<String>();
+
+            componentInitializerFactoryClassNames
+                .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER_FACTORY);
+            componentInitializerFactoryClassNames.add(ExtValUtils
+                .getInformationProviderBean()
+                .getCustomComponentInitializerFactory());
+            componentInitializerFactoryClassNames
+                .add(DefaultComponentInitializerFactory.class.getName());
+
+            for (String className : componentInitializerFactoryClassNames)
+            {
+                componentInitializerFactory = (ClassMappingFactory<UIComponent, ComponentInitializer>) ClassUtils
+                    .tryToInstantiateClassForName(className);
+
+                if (componentInitializerFactory != null)
+                {
+                    break;
+                }
+            }
+        }
+
+        return componentInitializerFactory;
     }
 }

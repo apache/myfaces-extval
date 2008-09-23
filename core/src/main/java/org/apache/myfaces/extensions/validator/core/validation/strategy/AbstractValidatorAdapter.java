@@ -21,13 +21,16 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
+import java.util.Map;
 
 /**
  * Provides the ability to use ValidatorException (as expected by the user) instead of ConverterException.
@@ -39,7 +42,7 @@ import javax.faces.validator.ValidatorException;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public abstract class AbstractValidatorAdapter implements ValidationStrategy
+public abstract class AbstractValidatorAdapter implements ValidationStrategy, ComponentInitializer
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -77,6 +80,18 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                                                      Object convertedObject, ValidatorException e)
     {
         return true;
+    }
+
+    public final void configureComponent(FacesContext facesContext,
+                                         UIComponent uiComponent,
+                                         Map<String, Object> metaData)
+    {
+        getComponentInitializer(uiComponent).configureComponent(facesContext, uiComponent, metaData);
+    }
+
+    protected ComponentInitializer getComponentInitializer(UIComponent uiComponent)
+    {
+        return FactoryUtils.getComponentInitializerFactory().create(uiComponent);
     }
 
     protected abstract void processValidation(FacesContext facesContext,

@@ -20,16 +20,23 @@ package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
  * @author Gerhard Petracek
  */
-public class InitStaticStrategyMappingsPhaseListener extends
+public class InitPropertyValidationModulePhaseListener extends
         AbstractStartupConfigListener
 {
 
     protected void init()
+    {
+        initStaticStrategyMappings();
+        initDefaultComponentInitializerName();
+    }
+
+    private void initStaticStrategyMappings()
     {
         String jpaBasedValidation = WebXmlParameter.DEACTIVATE_JPA_BASED_VALIDATION;
         if (jpaBasedValidation == null
@@ -41,5 +48,10 @@ public class InitStaticStrategyMappingsPhaseListener extends
                             ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
                                     + ".jpa_strategy_mappings");
         }
+    }
+
+    private void initDefaultComponentInitializerName()
+    {
+        DefaultComponentInitializer.setComponentInitializer(new DefaultMyFacesComponentInitializer());
     }
 }

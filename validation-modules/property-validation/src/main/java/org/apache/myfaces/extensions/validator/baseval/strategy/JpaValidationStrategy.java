@@ -81,6 +81,8 @@ public class JpaValidationStrategy extends AbstractValidationStrategy implements
             {
                 results.put("required", true);
             }
+
+            results.put("max_length", ((Column) annotation).length());
         }
         else if(annotation instanceof Basic)
         {

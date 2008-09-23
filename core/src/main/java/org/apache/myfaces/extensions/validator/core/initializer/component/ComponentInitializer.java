@@ -1,4 +1,4 @@
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,16 +15,22 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-              version="1.2">
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.InitPropertyValidationModulePhaseListener</phase-listener>
-    </lifecycle>
+ */
+package org.apache.myfaces.extensions.validator.core.initializer.component;
 
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener</phase-listener>
-    </lifecycle>
-</faces-config>
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import java.util.Map;
+
+/**
+ * @author Gerhard Petracek
+ * @since 1.x.1
+ */
+@UsageInformation(UsageCategory.API)
+public interface ComponentInitializer
+{
+    void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData);
+}
