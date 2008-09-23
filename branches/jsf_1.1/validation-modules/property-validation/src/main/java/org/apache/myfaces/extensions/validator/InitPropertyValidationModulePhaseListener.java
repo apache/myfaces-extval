@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 /**
  * @author Gerhard Petracek
@@ -50,6 +52,7 @@ public class InitPropertyValidationModulePhaseListener extends
         }
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     private void initDefaultComponentInitializerName()
     {
         DefaultComponentInitializer.setComponentInitializer(new DefaultMyFacesComponentInitializer());

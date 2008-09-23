@@ -91,7 +91,7 @@ public class ExtValRendererWrapper extends Renderer
         {
             validationStrategy = FactoryUtils.getValidationStrategyFactory().create(entry.getAnnotation());
 
-            if (validationStrategy != null && validationStrategy instanceof ComponentInitializer)
+            if (validationStrategy != null)
             {
                 if(validationStrategy instanceof MetaDataExtractor)
                 {
@@ -107,7 +107,8 @@ public class ExtValRendererWrapper extends Renderer
                     metaData = new HashMap<String, Object>();
                 }
 
-                ((ComponentInitializer)validationStrategy).configureComponent(facesContext, uiComponent, metaData);
+                FactoryUtils.getComponentInitializerFactory().create(uiComponent)
+                    .configureComponent(facesContext, uiComponent, metaData);
             }
         }
     }
