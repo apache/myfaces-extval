@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Abstract
 import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.MetaDataKeys;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -41,7 +42,6 @@ import java.util.HashMap;
 public class JpaValidationStrategy extends AbstractValidationStrategy implements MetaDataExtractor
 {
 
-    private static final String VALIDATE_REQUIRED = "required";
     private static final String VALIDATE_LENGTH = "length";
 
     private String violation;
@@ -79,16 +79,16 @@ public class JpaValidationStrategy extends AbstractValidationStrategy implements
         {
             if(!((Column) annotation).nullable())
             {
-                results.put("required", true);
+                results.put(MetaDataKeys.REQUIRED, true);
             }
 
-            results.put("max_length", ((Column) annotation).length());
+            results.put(MetaDataKeys.MAX_LENGTH, ((Column) annotation).length());
         }
         else if(annotation instanceof Basic)
         {
             if(!((Basic)annotation).optional())
             {
-                results.put("required", true);
+                results.put(MetaDataKeys.REQUIRED, true);
             }
         }
         //TODO impl. the rest!!!
@@ -150,7 +150,7 @@ public class JpaValidationStrategy extends AbstractValidationStrategy implements
     {
         if (convertedObject == null || convertedObject.equals(""))
         {
-            this.violation = VALIDATE_REQUIRED;
+            this.violation = MetaDataKeys.REQUIRED;
             throw new ValidatorException(getValidationErrorFacesMassage(null));
         }
     }

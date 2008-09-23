@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.MetaDataKeys;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -54,12 +55,13 @@ public class LengthStrategy extends AbstractValidatorAdapter implements MetaData
     {
         Map<String, Object> results = new HashMap<String, Object>();
         int minimum = ((Length)annotation).minimum();
-        results.put("min_length", minimum);
-        results.put("max_length", ((Length)annotation).maximum());
+
+        results.put(MetaDataKeys.MIM_LENGTH, minimum);
+        results.put(MetaDataKeys.MAX_LENGTH, ((Length)annotation).maximum());
 
         if(minimum > 0)
         {
-            results.put("required", true);
+            results.put(MetaDataKeys.REQUIRED, true);
         }
 
         return results;
