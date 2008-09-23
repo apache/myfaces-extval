@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 
 /**
@@ -61,6 +61,18 @@ public interface WebXmlParameter
     @ToDo(value = Priority.MEDIUM, description = "documentation")
     static final String CUSTOM_VALIDATIONSTRATEGY_MAPPING = WebXmlUtils
         .getInitParameter("CUSTOM_STATIC_VALIDATIONSTRATEGY_MAPPING");
+
+    static final String CUSTOM_RENDERING_CONTEXT_INITIALIZER_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_RENDERING_CONTEXT_INITIALIZER_FACTORY");
+
+    static final String CUSTOM_RENDERING_CONTEXT_INITIALIZER = WebXmlUtils
+        .getInitParameter("CUSTOM_RENDERING_CONTEXT_INITIALIZER");
+
+    static final String CUSTOM_COMPONENT_INITIALIZER_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_COMPONENT_INITIALIZER_FACTORY");
+
+    static final String CUSTOM_COMPONENT_INITIALIZER = WebXmlUtils
+        .getInitParameter("CUSTOM_COMPONENT_INITIALIZER");
 
     /*
      * deactivate

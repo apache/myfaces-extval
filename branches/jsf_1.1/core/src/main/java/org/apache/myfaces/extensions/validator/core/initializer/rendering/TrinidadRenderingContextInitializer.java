@@ -16,17 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.initializer.rendering;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.CUSTOMIZABLE)
-public interface RenderingContextInitializer
+@UsageInformation(UsageCategory.INTERNAL)
+public class TrinidadRenderingContextInitializer implements RenderingContextInitializer
 {
-    void initContext();
+    public void initContext()
+    {
+        ClassUtils.tryToInstantiateClassForName(
+            "org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext");
+    }
 }

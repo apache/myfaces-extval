@@ -16,22 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.initializer.component;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class TrinidadRenderingContextInitializer implements RenderingContextInitializer
+public class DefaultComponentInitializer implements ComponentInitializer
 {
-    public void initContext()
+    private static ComponentInitializer componentInitializer;
+
+    public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        ClassUtils.tryToInstantiateClassForName(
-            "org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext");
+        if(componentInitializer != null)
+        {
+            componentInitializer.configureComponent(facesContext, uiComponent, metaData);
+        }
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static void setComponentInitializer(ComponentInitializer componentInitializer)
+    {
+        DefaultComponentInitializer.componentInitializer = componentInitializer;
     }
 }

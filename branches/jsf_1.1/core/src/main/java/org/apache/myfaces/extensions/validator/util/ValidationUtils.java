@@ -23,17 +23,16 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class ValidationUtils
@@ -70,37 +69,5 @@ public class ValidationUtils
                     + entry.getAnnotation().annotationType().getName());
             }
         }
-    }
-
-    public static boolean isValueOfComponentRequired(FacesContext facesContext, UIComponent uiComponent)
-    {
-        if (!(uiComponent instanceof EditableValueHolder))
-        {
-            return false;
-        }
-
-        ValidationStrategy validationStrategy;
-
-        AnnotationExtractor annotationExtractor = FactoryUtils
-            .getAnnotationExtractorFactory().create();
-        for (AnnotationEntry entry : annotationExtractor
-            .extractAnnotations(facesContext, uiComponent))
-        {
-            validationStrategy = FactoryUtils
-                .getValidationStrategyFactory().create(
-                entry.getAnnotation());
-
-            if (validationStrategy != null && validationStrategy instanceof MetaDataExtractor)
-            {
-                Map<String, Object> metaData = ((MetaDataExtractor)validationStrategy)
-                                                    .extractMetaData(entry.getAnnotation());
-                if(metaData.containsKey("required"))
-                {
-                    return (Boolean)metaData.get("required");
-                }
-            }
-        }
-
-        return false;
     }
 }
