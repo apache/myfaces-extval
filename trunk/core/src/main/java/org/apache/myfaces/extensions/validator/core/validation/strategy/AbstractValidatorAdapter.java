@@ -42,7 +42,7 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public abstract class AbstractValidatorAdapter implements ValidationStrategy, ComponentInitializer
+public abstract class AbstractValidatorAdapter implements ValidationStrategy
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -80,18 +80,6 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy, Co
                                                      Object convertedObject, ValidatorException e)
     {
         return true;
-    }
-
-    public final void configureComponent(FacesContext facesContext,
-                                         UIComponent uiComponent,
-                                         Map<String, Object> metaData)
-    {
-        getComponentInitializer(uiComponent).configureComponent(facesContext, uiComponent, metaData);
-    }
-
-    protected ComponentInitializer getComponentInitializer(UIComponent uiComponent)
-    {
-        return FactoryUtils.getComponentInitializerFactory().create(uiComponent);
     }
 
     protected abstract void processValidation(FacesContext facesContext,
