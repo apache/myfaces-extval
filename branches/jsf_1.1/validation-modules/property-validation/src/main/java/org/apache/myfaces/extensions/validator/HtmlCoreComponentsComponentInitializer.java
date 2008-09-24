@@ -76,12 +76,16 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
     {
         if(metaData.containsKey(MetaDataKeys.MAX_LENGTH))
         {
-            int maxLength = (Integer)metaData.get(MetaDataKeys.MAX_LENGTH);
+            Object maxLength = metaData.get(MetaDataKeys.MAX_LENGTH);
 
+            if(!(maxLength instanceof Integer))
+            {
+                return;
+            }
             if(uiComponent instanceof HtmlInputText)
             {
                 HtmlInputText htmlInputText = (HtmlInputText)uiComponent;
-                htmlInputText.setMaxlength(maxLength);
+                htmlInputText.setMaxlength((Integer)maxLength);
             }
         }
     }
