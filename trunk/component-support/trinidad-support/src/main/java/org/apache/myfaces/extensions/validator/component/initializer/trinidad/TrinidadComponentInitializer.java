@@ -22,9 +22,9 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Compon
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -43,6 +43,10 @@ public class TrinidadComponentInitializer implements ComponentInitializer
     {
         componentInitializers.add(new RequiredInitializer());
         componentInitializers.add(new LengthInitializer());
+        componentInitializers.add(new LongRangeInitializer());
+        componentInitializers.add(new DoubleRangeInitializer());
+        componentInitializers.add(new PatternInitializer());
+        //componentInitializers.add(new ValidatorInitializer());
     }
 
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)

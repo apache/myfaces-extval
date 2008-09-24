@@ -18,8 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
 
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.trinidad.validator.RegExpValidator;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -30,27 +31,29 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class RequiredInitializer extends TrinidadComponentInitializer
+public class PatternInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(metaData.containsKey(MetaDataKeys.REQUIRED))
+        if(!metaData.containsKey(MetaDataKeys.PATTERN))
         {
-            if((Boolean)metaData.get(MetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
-            {
-                ((EditableValueHolder)uiComponent).setRequired(true);
-            }
+            return;
         }
-    }
 
-    protected Boolean isComponentRequired(UIComponent uiComponent)
-    {
-        //compare with false so true = true or null
-        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils
-            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isReadOnly"));
-        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils
-            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isDisabled"));
+        String[] patterns = (String[])metaData.get(MetaDataKeys.PATTERN);
 
-        return !(isReadOnly || isDisabled);
+        RegExpValidator regExpValidator;
+
+        for(String pattern : patterns)
+        {
+            regExpValidator = (RegExpValidator)facesContext.getApplication()
+                                                .createValidator("org.apache.myfaces.trinidad.RegExp");
+
+            regExpValidator.setPattern(pattern);
+            regExpValidator.setMessageDetailNoMatch((String)metaData.get(
+                MetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE));
+
+            ((EditableValueHolder)uiComponent).addValidator(regExpValidator);
+        }
     }
 }

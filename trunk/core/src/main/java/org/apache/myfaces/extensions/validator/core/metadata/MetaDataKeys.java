@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.metadata;
 
 /**
+ * helper for frequent meta-data keys
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -31,4 +33,13 @@ public interface MetaDataKeys
 
     static final String MIN_LENGTH = "min_length";
     static final String MAX_LENGTH = "max_length";
+
+    static final String RANGE_MIN = "range_min";
+    static final String RANGE_MAX = "range_max";
+
+    static final String PATTERN = "pattern";
+    static final String PATTERN_VALIDATION_ERROR_MESSAGE = "pattern_validation_error_message";
+    static final String EMAIL = "email";
+
+    static final String CUSTOM = "custom";
 }
