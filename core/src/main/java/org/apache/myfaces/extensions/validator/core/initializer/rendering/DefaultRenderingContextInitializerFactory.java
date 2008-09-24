@@ -50,7 +50,7 @@ public class DefaultRenderingContextInitializerFactory implements
         renderingContextClassNames
             .add(ExtValUtils.getInformationProviderBean().getCustomRenderingContextInitializer());
         renderingContextClassNames
-            .add(TrinidadRenderingContextInitializer.class.getName());
+            .add(DefaultRenderingContextInitializer.class.getName());
     }
 
     public RenderingContextInitializer create(RenderKit renderKit)

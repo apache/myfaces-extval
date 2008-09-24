@@ -1,4 +1,4 @@
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,14 +15,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-              version="1.2">
-    <lifecycle>
-        <phase-listener>
-            org.apache.myfaces.extensions.validator.initializer.trinidad.InitTrinidadModulePhaseListener
-        </phase-listener>
-    </lifecycle>
-</faces-config>
+ */
+package org.apache.myfaces.extensions.validator.initializer.trinidad;
+
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
+
+/**
+ * centralized in order that these information aren't spread over the complete code base
+ *
+ * @author Gerhard Petracek
+ * @since 1.x.1
+ */
+@UsageInformation(UsageCategory.API)
+public interface WebXmlParameter
+{
+    /*
+     * deactivate
+     */
+    static final String DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION = WebXmlUtils
+        .getInitParameter("DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION");
+}

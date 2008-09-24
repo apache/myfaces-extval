@@ -16,46 +16,53 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
+package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.trinidad.validator.DoubleRangeValidator;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.LengthValidator;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class DoubleRangeInitializer extends TrinidadComponentInitializer
+public class LengthInitializer extends TrinidadComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
         boolean informationAdded = false;
-        DoubleRangeValidator lengthValidator = (DoubleRangeValidator)facesContext.getApplication()
-                                            .createValidator("org.apache.myfaces.trinidad.DoubleRange");
+        LengthValidator lengthValidator = (LengthValidator)facesContext.getApplication()
+                                            .createValidator("org.apache.myfaces.trinidad.Length");
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
+        if(metaData.containsKey(MetaDataKeys.MIN_LENGTH))
         {
-            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
+            Object min = metaData.get(MetaDataKeys.MIN_LENGTH);
 
-            if(min instanceof Double)
+            if(min instanceof Integer)
             {
-                lengthValidator.setMinimum((Double)min);
+                lengthValidator.setMinimum((Integer)min);
                 informationAdded = true;
             }
         }
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
+        if(metaData.containsKey(MetaDataKeys.MAX_LENGTH))
         {
-            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+            Object maxLength = metaData.get(MetaDataKeys.MAX_LENGTH);
 
-            if(maxLength instanceof Double)
+            if(maxLength instanceof Integer)
             {
-                lengthValidator.setMaximum((Double)maxLength);
+                if(processComponent(uiComponent))
+                {
+                    ReflectionUtils
+                        .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "setMaximumLength",
+                            new Object[] {maxLength}, new Class[] {int.class});
+                }
+                lengthValidator.setMaximum((Integer)maxLength);
                 informationAdded = true;
             }
         }
