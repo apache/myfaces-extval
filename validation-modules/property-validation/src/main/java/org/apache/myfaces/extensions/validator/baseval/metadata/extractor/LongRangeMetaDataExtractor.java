@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.baseval.annotation.LongRange;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;

@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -200,6 +202,11 @@ public class ExtValUtils
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
             .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY,
                 new HashMap<String, ProcessedInformationEntry>());
+    }
+
+    public static void addRenderingContextInitializer(RenderingContextInitializer renderingContextInitializer)
+    {
+        DefaultRenderingContextInitializer.addRenderingContextInitializer(renderingContextInitializer);
     }
 
     public static void addComponentInitializer(ComponentInitializer componentInitializer)
