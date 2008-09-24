@@ -19,11 +19,17 @@
 package org.apache.myfaces.extensions.validator.initializer.trinidad;
 
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.core.ExtValValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.initializer.trinidad.component.TrinidadComponentInitializer;
-import org.apache.myfaces.extensions.validator.initializer.trinidad.rendering.TrinidadRenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.event.PhaseListener;
+import javax.faces.FactoryFinder;
+import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
@@ -33,8 +39,35 @@ public class InitTrinidadModulePhaseListener extends AbstractStartupConfigListen
     @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     protected void init()
     {
-        ExtValUtils.addRenderingContextInitializer(new TrinidadRenderingContextInitializer());
+        deregisterExtValValidationPhaseListener();
+        initTrinidadSupport();
+    }
 
+    private void deregisterExtValValidationPhaseListener()
+    {
+        LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder
+            .getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+
+        String currentId;
+        Lifecycle currentLifecycle;
+        Iterator lifecycleIds = lifecycleFactory.getLifecycleIds();
+
+        while (lifecycleIds.hasNext())
+        {
+            currentId = (String) lifecycleIds.next();
+            currentLifecycle = lifecycleFactory.getLifecycle(currentId);
+            for(PhaseListener currentPhaseListener : currentLifecycle.getPhaseListeners())
+            {
+                if(currentPhaseListener instanceof ExtValValidationPhaseListener)
+                {
+                    currentLifecycle.removePhaseListener(currentPhaseListener);
+                }
+            }
+        }
+    }
+
+    private void initTrinidadSupport()
+    {
         String deactivateClientSideValidation = WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION;
 
         if(deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true"))

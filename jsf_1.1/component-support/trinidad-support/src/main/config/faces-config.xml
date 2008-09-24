@@ -28,4 +28,10 @@
             org.apache.myfaces.extensions.validator.initializer.trinidad.InitTrinidadModulePhaseListener
         </phase-listener>
     </lifecycle>
+
+    <lifecycle>
+        <phase-listener>
+            org.apache.myfaces.extensions.validator.initializer.trinidad.ExtValTrinidadValidationPhaseListener
+        </phase-listener>
+    </lifecycle>
 </faces-config>
