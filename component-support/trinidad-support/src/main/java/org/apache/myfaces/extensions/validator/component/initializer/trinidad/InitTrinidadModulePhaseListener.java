@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
 
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
  * @author Gerhard Petracek
