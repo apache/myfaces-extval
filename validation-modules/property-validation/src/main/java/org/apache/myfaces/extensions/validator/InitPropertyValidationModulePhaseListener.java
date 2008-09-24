@@ -55,6 +55,5 @@ public class InitPropertyValidationModulePhaseListener extends
     private void initDefaultComponentInitializerName()
     {
         ExtValUtils.addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
-        ExtValUtils.addComponentInitializer(new TrinidadComponentInitializer());
     }
 }

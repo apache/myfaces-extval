@@ -16,58 +16,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator;
+package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
 
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
-import org.apache.myfaces.extensions.validator.baseval.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class TrinidadComponentInitializer extends HtmlCoreComponentsComponentInitializer
+public class TrinidadComponentInitializer implements ComponentInitializer
 {
     private static final String TRINIDAD_CORE_INPUT_TEXT
                                          = "org.apache.myfaces.trinidad.component.core.input.CoreInputText";
     private static final String TRINIDAD_CORE_INPUT_DATE
                                          = "org.apache.myfaces.trinidad.component.core.input.CoreInputDate";
-    @Override
-    protected Boolean isComponentRequired(UIComponent uiComponent)
+
+    private static List<ComponentInitializer> componentInitializers = new ArrayList<ComponentInitializer>();
+
+    static
     {
-        if(processComponent(uiComponent))
-        {
-            return !((Boolean) ReflectionUtils
-                .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isReadOnly") ||
-                     (Boolean) ReflectionUtils
-                .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isDisabled"));
-        }
-        //ToDo impl. the rest
-        return null;
+        componentInitializers.add(new RequiredInitializer());
+        componentInitializers.add(new LengthInitializer());
     }
 
-    @Override
-    protected void configureMaxLengthAttribute(FacesContext facesContext,
-                                               UIComponent uiComponent,
-                                               Map<String, Object> metaData)
+    public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(metaData.containsKey(MetaDataKeys.MAX_LENGTH))
+        for(ComponentInitializer componentInitializer : componentInitializers)
         {
-            int maxLength = (Integer)metaData.get(MetaDataKeys.MAX_LENGTH);
-
-            if(processComponent(uiComponent))
-            {
-                ReflectionUtils
-                    .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "setMaximumLength",
-                        new Object[] {maxLength}, new Class[] {int.class});
-            }
+            componentInitializer.configureComponent(facesContext, uiComponent, metaData);
         }
     }
 
-    private boolean processComponent(UIComponent uiComponent)
+    protected boolean processComponent(UIComponent uiComponent)
     {
         return TRINIDAD_CORE_INPUT_TEXT.equals(uiComponent.getClass().getName()) ||
                TRINIDAD_CORE_INPUT_DATE.equals(uiComponent.getClass().getName());

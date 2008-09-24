@@ -36,9 +36,9 @@ public class LengthStrategy extends AbstractValidatorAdapter
             UIComponent uiComponent, AnnotationEntry annotationEntry,
             Object convertedObject) throws ValidatorException
     {
-
         Length annotation = annotationEntry.getAnnotation(Length.class);
-        LengthValidator lengthValidator = new LengthValidator();
+        LengthValidator lengthValidator = (LengthValidator)facesContext.getApplication()
+                                            .createValidator("javax.faces.Length");
 
         lengthValidator.setMinimum(annotation.minimum());
         lengthValidator.setMaximum(annotation.maximum());
