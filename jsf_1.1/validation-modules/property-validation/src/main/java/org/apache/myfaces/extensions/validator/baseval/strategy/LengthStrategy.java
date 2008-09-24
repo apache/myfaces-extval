@@ -21,21 +21,16 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
-import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.MetaDataKeys;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.ValidatorException;
-import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
-public class LengthStrategy extends AbstractValidatorAdapter implements MetaDataExtractor
+public class LengthStrategy extends AbstractValidatorAdapter
 {
     protected void processValidation(FacesContext facesContext,
             UIComponent uiComponent, AnnotationEntry annotationEntry,
@@ -49,21 +44,5 @@ public class LengthStrategy extends AbstractValidatorAdapter implements MetaData
         lengthValidator.setMaximum(annotation.maximum());
 
         lengthValidator.validate(facesContext, uiComponent, convertedObject);
-    }
-
-    public Map<String, Object> extractMetaData(Annotation annotation)
-    {
-        Map<String, Object> results = new HashMap<String, Object>();
-        int minimum = ((Length)annotation).minimum();
-
-        results.put(MetaDataKeys.MIM_LENGTH, minimum);
-        results.put(MetaDataKeys.MAX_LENGTH, ((Length)annotation).maximum());
-
-        if(minimum > 0)
-        {
-            results.put(MetaDataKeys.REQUIRED, true);
-        }
-
-        return results;
     }
 }

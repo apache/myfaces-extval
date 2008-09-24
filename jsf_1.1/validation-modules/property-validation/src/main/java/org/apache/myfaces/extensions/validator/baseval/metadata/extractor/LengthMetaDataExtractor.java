@@ -16,20 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
+import org.apache.myfaces.extensions.validator.baseval.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
-public interface MetaDataExtractor
+public class LengthMetaDataExtractor implements MetaDataExtractor
 {
-    Map<String, Object> extractMetaData(Annotation annotation);
+    public Map<String, Object> extractMetaData(Annotation annotation)
+    {
+        Map<String, Object> results = new HashMap<String, Object>();
+        int minimum = ((Length)annotation).minimum();
+
+        results.put(MetaDataKeys.MIM_LENGTH, minimum);
+        results.put(MetaDataKeys.MAX_LENGTH, ((Length)annotation).maximum());
+
+        if(minimum > 0)
+        {
+            results.put(MetaDataKeys.REQUIRED, true);
+        }
+
+        return results;
+    }
 }
