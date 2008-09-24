@@ -68,11 +68,6 @@ public class InformationProviderBean
         return basePackage;
     }
 
-    public String getCustomComponentAnnotationExtractorFactory()
-    {
-        return this.basePackage + "AnnotationExtractorFactory";
-    }
-
     public String getCustomComponentAnnotationExtractor()
     {
         return this.basePackage + "AnnotationExtractor";
@@ -89,6 +84,11 @@ public class InformationProviderBean
         return "ValidationStrategy";
     }
 
+    public String getMetaDataExtractorPostfix()
+    {
+        return "MetaDataExtractor";
+    }
+
     /*
      * name mapper
      */
@@ -100,6 +100,11 @@ public class InformationProviderBean
     public String getCustomAnnotationToValidationStrategyNameMapper()
     {
         return this.basePackage + "AnnotationToValidationStrategyNameMapper";
+    }
+
+    public String getCustomValidationStrategyToMetaDataExtractorNameMapper()
+    {
+        return this.basePackage + "ValidationStrategyToMetaDataExtractorNameMapper";
     }
 
     /*
@@ -136,6 +141,16 @@ public class InformationProviderBean
     public String getCustomComponentInitializerFactory()
     {
         return this.basePackage + "ComponentInitializerFactory";
+    }
+
+    public String getCustomComponentAnnotationExtractorFactory()
+    {
+        return this.basePackage + "AnnotationExtractorFactory";
+    }
+
+    public String getCustomMetaDataExtractorFactory()
+    {
+        return this.basePackage + "MetaDataExtractorFactory";
     }
 
     /*
@@ -201,51 +216,63 @@ public class InformationProviderBean
      * use a custom name mapper to implement custom conventions
      */
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    public final String getConventionNameForMessageResolverPackage(
-        Class<? extends ValidationStrategy> validationStrategyClass,
-        String targetClassName)
+    public final String getConventionNameForMessageResolverName(
+        Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
     {
-        String resolverName = validationStrategyClass.getName();
+        return getValidationStrategyBasedName(validationStrategyClass, ".message.resolver.", targetClassName);
+    }
 
-        resolverName = resolverName.replace(".strategy.", ".message.resolver.");
+    public final String getConventionNameForMetaDataExtractorName(
+        Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
+    {
+        return getValidationStrategyBasedName(validationStrategyClass, ".metadata.extractor.", targetClassName);
+    }
+
+    private String getValidationStrategyBasedName(Class<? extends ValidationStrategy> validationStrategyClass,
+                                                  String targetPackageName, String targetClassName)
+    {
+        String extractorName = validationStrategyClass.getName();
+
+        extractorName = extractorName.replace(".strategy.", targetPackageName);
 
         if (targetClassName == null)
         {
             return null;
         }
-        return resolverName.substring(0, resolverName.lastIndexOf(".")) + "."
-            + targetClassName;
+        return extractorName.substring(0, extractorName.lastIndexOf(".")) + "." + targetClassName;
     }
 
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public final String getConventionNameForMessageResolverClass(
-        String strategyClassName)
+    public final String getConventionNameForMessageResolverClass(String validationStrategyName)
     {
-        if (strategyClassName.endsWith("ValidationStrategy"))
-        {
-            return strategyClassName.substring(0,
-                strategyClassName.length() - 18)
-                + "ValidationErrorMessageResolver";
-        }
-        else if (strategyClassName.endsWith("Strategy"))
-        {
-            return strategyClassName.substring(0,
-                strategyClassName.length() - 8)
-                + "ValidationErrorMessageResolver";
-        }
-        return strategyClassName;
+        return getValidationStrategyBasedName(validationStrategyName, "ValidationErrorMessageResolver");
     }
 
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public final String getConventionNameForValidationStrategy(
-        Annotation annotation)
+    public final String getConventionNameForValidationStrategy(Annotation annotation)
     {
-        return annotation.annotationType().getName().replace(".annotation.",
-            ".strategy.")
-            + "Strategy";
+        return annotation.annotationType().getName().replace(".annotation.", ".strategy.") + "Strategy";
+    }
+
+    public final String getConventionNameForMetaDataExtractorClass(String validationStrategyName)
+    {
+        return getValidationStrategyBasedName(validationStrategyName, "MetaDataExtractor");
+    }
+
+    private String getValidationStrategyBasedName(String validationStrategyName, String targetPostfix)
+    {
+        if (validationStrategyName.endsWith("ValidationStrategy"))
+        {
+            return validationStrategyName.substring(0, validationStrategyName.length() - 18) + targetPostfix;
+        }
+        else if (validationStrategyName.endsWith("Strategy"))
+        {
+            return validationStrategyName.substring(0, validationStrategyName.length() - 8) + targetPostfix;
+        }
+        return null;
     }
 }

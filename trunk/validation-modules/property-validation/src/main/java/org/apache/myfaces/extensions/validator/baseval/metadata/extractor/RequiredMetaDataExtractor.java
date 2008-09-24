@@ -16,16 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator;
+package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
+
+import org.apache.myfaces.extensions.validator.baseval.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public interface MetaDataKeys
+public class RequiredMetaDataExtractor implements MetaDataExtractor
 {
-    static final String REQUIRED = "required";
-
-    static final String MIM_LENGTH = "min_length";
-    static final String MAX_LENGTH = "max_length";
+    public Map<String, Object> extractMetaData(Annotation annotation)
+    {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put(MetaDataKeys.REQUIRED, true);
+        return results;
+    }
 }

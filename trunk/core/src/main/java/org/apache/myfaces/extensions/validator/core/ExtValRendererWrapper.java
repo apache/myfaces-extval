@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -82,6 +83,7 @@ public class ExtValRendererWrapper extends Renderer
         }
 
         ValidationStrategy validationStrategy;
+        MetaDataExtractor metaDataExtractor;
 
         AnnotationExtractor annotationExtractor = FactoryUtils.getComponentAnnotationExtractorFactory().create();
 
@@ -92,9 +94,11 @@ public class ExtValRendererWrapper extends Renderer
 
             if (validationStrategy != null)
             {
-                if(validationStrategy instanceof MetaDataExtractor)
+                metaDataExtractor = FactoryUtils.getMetaDataExtractorFactory().create(validationStrategy);
+
+                if(metaDataExtractor != null)
                 {
-                    metaData = ((MetaDataExtractor)validationStrategy).extractMetaData(entry.getAnnotation());
+                    metaData = metaDataExtractor.extractMetaData(entry.getAnnotation());
                 }
                 else
                 {

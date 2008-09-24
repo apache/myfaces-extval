@@ -16,56 +16,53 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.strategy;
+package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation;
 import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningAnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
-public class JoinValidationStrategy extends AbstractValidatorAdapter
+public class JoinMetaDataExtractor implements MetaDataExtractor
 {
-    public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
-            Object convertedObject) throws ValidatorException
+    public Map<String, Object> extractMetaData(Annotation annotation)
     {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 
-        String[] targetExpressions = annotationEntry.getAnnotation(
-                JoinValidation.class).value();
+        String[] targetExpressions = ((JoinValidation)annotation).value();
 
         ValidationStrategy validationStrategy;
+        MetaDataExtractor metaDataExtractor;
+
+        Map<String, Object> results = new HashMap<String, Object>();
 
         for (String targetExpression : targetExpressions)
         {
-            for (AnnotationEntry entry : extractor.extractAnnotations(
-                    facesContext, targetExpression))
+            for (AnnotationEntry entry : extractor
+                                            .extractAnnotations(FacesContext.getCurrentInstance(), targetExpression))
             {
-                validationStrategy = FactoryUtils
-                        .getValidationStrategyFactory().create(
-                                entry.getAnnotation());
+                validationStrategy = FactoryUtils .getValidationStrategyFactory().create(entry.getAnnotation());
 
-                if (validationStrategy != null)
+                metaDataExtractor = FactoryUtils.getMetaDataExtractorFactory().create(validationStrategy);
+
+                if (metaDataExtractor != null)
                 {
-                    validationStrategy.validate(facesContext, uiComponent,
-                            entry, convertedObject);
-                }
-                else
-                {
-                    logger.trace("no validation strategy found for "
-                            + entry.getAnnotation().annotationType().getName());
+                    results.putAll(metaDataExtractor.extractMetaData(entry.getAnnotation()));
                 }
             }
         }
+        return results;
     }
 }

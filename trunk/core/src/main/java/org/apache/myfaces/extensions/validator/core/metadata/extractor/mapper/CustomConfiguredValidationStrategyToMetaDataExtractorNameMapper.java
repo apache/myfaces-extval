@@ -16,34 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default implementation which maps ExtVal ValidationStrategies to ExtVal MessageResolvers.
+ * To provide a custom NameMapper to map ValidationStrategies to MetaDataExtractors.
+ * (configured via web.xml)
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultValidationStrategyToMsgResolverNameMapper implements
-    NameMapper<ValidationStrategy>
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
+public class CustomConfiguredValidationStrategyToMetaDataExtractorNameMapper extends
+    AbstractCustomNameMapper<ValidationStrategy>
 {
-    public String createName(ValidationStrategy validationStrategy)
+    protected String getCustomNameMapperClassName()
     {
-        return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverName(validationStrategy.getClass(),
-                                                     getClassName(validationStrategy.getClass().getSimpleName()));
-    }
-
-    protected String getClassName(String strategyClassName)
-    {
-        return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverClass(strategyClassName);
+        return WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_TO_META_DATA_EXTRACTOR_NAME_MAPPER;
     }
 }

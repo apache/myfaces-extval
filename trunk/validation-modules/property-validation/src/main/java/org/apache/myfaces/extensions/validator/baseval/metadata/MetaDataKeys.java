@@ -16,20 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
-
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.lang.annotation.Annotation;
-import java.util.Map;
+package org.apache.myfaces.extensions.validator.baseval.metadata;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
-public interface MetaDataExtractor
+public interface MetaDataKeys
 {
-    Map<String, Object> extractMetaData(Annotation annotation);
+    static final String REQUIRED = "required";
+
+    static final String MIM_LENGTH = "min_length";
+    static final String MAX_LENGTH = "max_length";
 }

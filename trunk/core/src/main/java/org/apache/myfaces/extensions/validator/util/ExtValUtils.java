@@ -49,8 +49,7 @@ import java.util.Map;
 public class ExtValUtils
 {
     @ToDo(value = Priority.MEDIUM, description = "test")
-    public static void createValueBindingConvertedValueMapping(
-        UIComponent uiComponent, Object convertedObject)
+    public static void createValueBindingConvertedValueMapping(UIComponent uiComponent, Object convertedObject)
     {
         if (!(uiComponent instanceof EditableValueHolder))
         {
@@ -64,8 +63,7 @@ public class ExtValUtils
         String valueBindingExpression;
         ProcessedInformationEntry entry;
 
-        valueBindingExpression = ELUtils
-            .getReliableValueBindingExpression(uiComponent);
+        valueBindingExpression = ELUtils.getReliableValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
