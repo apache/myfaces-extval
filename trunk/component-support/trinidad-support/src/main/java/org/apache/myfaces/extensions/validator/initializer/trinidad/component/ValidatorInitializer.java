@@ -16,52 +16,53 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
+package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
 
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.trinidad.validator.LongRangeValidator;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class LongRangeInitializer extends TrinidadComponentInitializer
+@UsageInformation(value = UsageCategory.INTERNAL)
+@ToDo(value = Priority.LOW, description = "impl. trinidad e-mail validator")
+public class ValidatorInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        boolean informationAdded = false;
-        LongRangeValidator lengthValidator = (LongRangeValidator)facesContext.getApplication()
-                                            .createValidator("org.apache.myfaces.trinidad.LongRange");
-
-        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
+        if(!metaData.containsKey(MetaDataKeys.CUSTOM))
         {
-            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
-
-            if(min instanceof Long)
-            {
-                lengthValidator.setMinimum((Long)min);
-                informationAdded = true;
-            }
+            return;
         }
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
-        {
-            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+        Object value = metaData.get(MetaDataKeys.CUSTOM);
 
-            if(maxLength instanceof Long)
-            {
-                lengthValidator.setMaximum((Long)maxLength);
-                informationAdded = true;
-            }
-        }
-        if(informationAdded)
+        if(!(value instanceof List))
         {
-            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            return;
+        }
+
+        for(Object currentValue : (List)value)
+        {
+            if(!(currentValue instanceof String))
+            {
+                continue;
+            }
+
+            if(MetaDataKeys.EMAIL.equals(currentValue))
+            {
+                //TODO
+            }
         }
     }
 }

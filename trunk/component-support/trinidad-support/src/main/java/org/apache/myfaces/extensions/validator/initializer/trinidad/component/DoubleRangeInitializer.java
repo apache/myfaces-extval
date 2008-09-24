@@ -16,53 +16,52 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
+package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
 
-import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.trinidad.validator.DoubleRangeValidator;
 
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(value = UsageCategory.INTERNAL)
-@ToDo(value = Priority.LOW, description = "impl. trinidad e-mail validator")
-public class ValidatorInitializer implements ComponentInitializer
+public class DoubleRangeInitializer extends TrinidadComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(!metaData.containsKey(MetaDataKeys.CUSTOM))
+        boolean informationAdded = false;
+        DoubleRangeValidator lengthValidator = (DoubleRangeValidator)facesContext.getApplication()
+                                            .createValidator("org.apache.myfaces.trinidad.DoubleRange");
+
+        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
         {
-            return;
+            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
+
+            if(min instanceof Double)
+            {
+                lengthValidator.setMinimum((Double)min);
+                informationAdded = true;
+            }
         }
 
-        Object value = metaData.get(MetaDataKeys.CUSTOM);
-
-        if(!(value instanceof List))
+        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
         {
-            return;
+            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+
+            if(maxLength instanceof Double)
+            {
+                lengthValidator.setMaximum((Double)maxLength);
+                informationAdded = true;
+            }
         }
-
-        for(Object currentValue : (List)value)
+        if(informationAdded)
         {
-            if(!(currentValue instanceof String))
-            {
-                continue;
-            }
-
-            if(MetaDataKeys.EMAIL.equals(currentValue))
-            {
-                //TODO
-            }
+            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
         }
     }
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
+package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;

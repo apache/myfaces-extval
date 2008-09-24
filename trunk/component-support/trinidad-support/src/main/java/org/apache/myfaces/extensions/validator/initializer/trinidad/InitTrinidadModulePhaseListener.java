@@ -16,9 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
+package org.apache.myfaces.extensions.validator.initializer.trinidad;
 
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.initializer.trinidad.component.TrinidadComponentInitializer;
+import org.apache.myfaces.extensions.validator.initializer.trinidad.rendering.TrinidadRenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -31,6 +33,13 @@ public class InitTrinidadModulePhaseListener extends AbstractStartupConfigListen
     @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     protected void init()
     {
-        ExtValUtils.addComponentInitializer(new TrinidadComponentInitializer());
+        ExtValUtils.addRenderingContextInitializer(new TrinidadRenderingContextInitializer());
+
+        String deactivateClientSideValidation = WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION;
+
+        if(deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true"))
+        {
+            ExtValUtils.addComponentInitializer(new TrinidadComponentInitializer());
+        }
     }
 }

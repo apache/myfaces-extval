@@ -18,20 +18,37 @@
  */
 package org.apache.myfaces.extensions.validator.core.initializer.rendering;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class TrinidadRenderingContextInitializer implements RenderingContextInitializer
+public class DefaultRenderingContextInitializer implements RenderingContextInitializer
 {
+    private static List<RenderingContextInitializer> renderingContextInitializers
+        = new ArrayList<RenderingContextInitializer>();
+
     public void initContext()
     {
-        ClassUtils.tryToInstantiateClassForName(
-            "org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext");
+        for(RenderingContextInitializer renderingContextInitializer : renderingContextInitializers)
+        {
+            renderingContextInitializer.initContext();
+        }
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static void addRenderingContextInitializer(RenderingContextInitializer renderingContextInitializer)
+    {
+        synchronized (DefaultComponentInitializer.class)
+        {
+            renderingContextInitializers.add(renderingContextInitializer);
+        }
     }
 }
