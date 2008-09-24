@@ -16,25 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
+package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-
-import java.lang.annotation.Annotation;
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
  */
-public class RequiredMetaDataExtractor implements MetaDataExtractor
+public class InitTrinidadModulePhaseListener extends AbstractStartupConfigListener
 {
-    public Map<String, Object> extractMetaData(Annotation annotation)
+    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
+    protected void init()
     {
-        Map<String, Object> results = new HashMap<String, Object>();
-        results.put(MetaDataKeys.REQUIRED, true);
-        return results;
+        ExtValUtils.addComponentInitializer(new TrinidadComponentInitializer());
     }
 }

@@ -40,7 +40,8 @@ public class DoubleRangeStrategy extends AbstractValidatorAdapter
 
         DoubleRange annotation = annotationEntry
                 .getAnnotation(DoubleRange.class);
-        DoubleRangeValidator doubleRangeValidator = new DoubleRangeValidator();
+        DoubleRangeValidator doubleRangeValidator = (DoubleRangeValidator)facesContext.getApplication()
+                                                        .createValidator("javax.faces.DoubleRange");
 
         doubleRangeValidator.setMinimum(annotation.minimum());
         doubleRangeValidator.setMaximum(annotation.maximum());
