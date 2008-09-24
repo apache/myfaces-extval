@@ -37,10 +37,8 @@ public class DefaultValidationStrategyToMsgResolverNameMapper implements
     public String createName(ValidationStrategy validationStrategy)
     {
         return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverPackage(
-                validationStrategy.getClass(),
-                getClassName(validationStrategy.getClass()
-                    .getSimpleName()));
+            .getConventionNameForMessageResolverName(validationStrategy.getClass(),
+                                                     getClassName(validationStrategy.getClass().getSimpleName()));
     }
 
     protected String getClassName(String strategyClassName)
