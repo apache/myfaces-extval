@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
-import org.apache.myfaces.extensions.validator.baseval.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
