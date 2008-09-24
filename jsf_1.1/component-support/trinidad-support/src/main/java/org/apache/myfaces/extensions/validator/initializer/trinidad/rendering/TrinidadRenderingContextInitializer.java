@@ -1,9 +1,4 @@
-<?xml version="1.0"?>
-<!DOCTYPE faces-config PUBLIC
-        "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-        "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" >
-
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -20,12 +15,24 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
+ */
+package org.apache.myfaces.extensions.validator.initializer.trinidad.rendering;
 
-<faces-config>
-    <lifecycle>
-        <phase-listener>
-            org.apache.myfaces.extensions.validator.initializer.trinidad.InitTrinidadModulePhaseListener
-        </phase-listener>
-    </lifecycle>
-</faces-config>
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+
+/**
+ * @author Gerhard Petracek
+ * @since 1.x.1
+ */
+@UsageInformation(UsageCategory.INTERNAL)
+public class TrinidadRenderingContextInitializer implements RenderingContextInitializer
+{
+    public void initContext()
+    {
+        ClassUtils.tryToInstantiateClassForName(
+            "org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext");
+    }
+}
