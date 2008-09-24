@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
+import org.apache.myfaces.extensions.validator.baseval.metadata.MetaDataKeys;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;

@@ -18,12 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
+import org.apache.myfaces.extensions.validator.baseval.metadata.MetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -33,13 +32,11 @@ import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import java.lang.annotation.Annotation;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
-public class JpaValidationStrategy extends AbstractValidationStrategy implements MetaDataExtractor
+public class JpaValidationStrategy extends AbstractValidationStrategy
 {
 
     private static final String VALIDATE_LENGTH = "length";
@@ -68,31 +65,6 @@ public class JpaValidationStrategy extends AbstractValidationStrategy implements
         {
             validateManyToOneAnnotation((ManyToOne) annotation, convertedObject);
         }
-    }
-
-    @ToDo(value = Priority.HIGH, description = "impl. the rest")
-    public Map<String, Object> extractMetaData(Annotation annotation)
-    {
-        Map<String, Object> results = new HashMap<String, Object>();
-
-        if(annotation instanceof Column)
-        {
-            if(!((Column) annotation).nullable())
-            {
-                results.put(MetaDataKeys.REQUIRED, true);
-            }
-
-            results.put(MetaDataKeys.MAX_LENGTH, ((Column) annotation).length());
-        }
-        else if(annotation instanceof Basic)
-        {
-            if(!((Basic)annotation).optional())
-            {
-                results.put(MetaDataKeys.REQUIRED, true);
-            }
-        }
-        //TODO impl. the rest!!!
-        return results;
     }
 
     private void validateColumnAnnotation(Column column, Object convertedObject)
