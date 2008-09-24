@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
@@ -25,25 +25,30 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default implementation which maps ExtVal ValidationStrategies to ExtVal MessageResolvers.
+ * It's a alternative Mapper to place ValidationStrategies and MetaDataExtractors in the same package.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultValidationStrategyToMsgResolverNameMapper implements
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
+public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements
     NameMapper<ValidationStrategy>
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverName(validationStrategy.getClass(),
-                                                     getClassName(validationStrategy.getClass().getSimpleName()));
+        return getSimpleMetaDataExtractorName(validationStrategy.getClass().getPackage().getName() + ".",
+                                                validationStrategy.getClass().getSimpleName());
     }
 
-    protected String getClassName(String strategyClassName)
+    public String getSimpleMetaDataExtractorName(String validationStrategyPackageName,
+                                                 String validationStrategyClassName)
     {
-        return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverClass(strategyClassName);
+        String postfix = ExtValUtils.getInformationProviderBean().getMetaDataExtractorPostfix();
+
+        return validationStrategyPackageName + validationStrategyClassName
+                .replace(ExtValUtils.getInformationProviderBean().getValidationStrategyPostfix(), postfix)
+                .replace("ValidationStrategy", postfix)
+                .replace("Strategy", postfix);
     }
+
 }

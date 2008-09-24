@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
@@ -25,25 +25,25 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default implementation which maps ExtVal ValidationStrategies to ExtVal MessageResolvers.
+ * Default implementation which maps ExtVal ValidationStrategies to MetaDataExtractors.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultValidationStrategyToMsgResolverNameMapper implements
+public class DefaultValidationStrategyToMetaDataExtractorNameMapper implements
     NameMapper<ValidationStrategy>
 {
     public String createName(ValidationStrategy validationStrategy)
     {
         return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverName(validationStrategy.getClass(),
-                                                     getClassName(validationStrategy.getClass().getSimpleName()));
+            .getConventionNameForMetaDataExtractorName(
+                validationStrategy.getClass(), getClassName(validationStrategy.getClass().getSimpleName()));
     }
 
-    protected String getClassName(String strategyClassName)
+    protected String getClassName(String validationStrategyClassName)
     {
         return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForMessageResolverClass(strategyClassName);
+            .getConventionNameForMetaDataExtractorClass(validationStrategyClassName);
     }
 }

@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
@@ -139,6 +141,34 @@ public class FactoryUtils
         }
 
         return messageResolverFactory;
+    }
+
+    private static ClassMappingFactory<ValidationStrategy, MetaDataExtractor> metaDataExtractorFactory;
+
+    public static ClassMappingFactory<ValidationStrategy, MetaDataExtractor> getMetaDataExtractorFactory()
+    {
+        if (metaDataExtractorFactory == null)
+        {
+            List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
+
+            metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTOR_FACTORY);
+            metaDataExtractorFactoryClassNames.add(ExtValUtils
+                .getInformationProviderBean().getCustomMetaDataExtractorFactory());
+            metaDataExtractorFactoryClassNames.add(DefaultMetaDataExtractorFactory.class.getName());
+
+            for (String className : metaDataExtractorFactoryClassNames)
+            {
+                metaDataExtractorFactory = (ClassMappingFactory<ValidationStrategy, MetaDataExtractor>) ClassUtils
+                    .tryToInstantiateClassForName(className);
+
+                if (metaDataExtractorFactory != null)
+                {
+                    break;
+                }
+            }
+        }
+
+        return metaDataExtractorFactory;
     }
 
     private static ClassMappingFactory<RenderKit, RenderingContextInitializer> renderingContextInitializerFactory;
