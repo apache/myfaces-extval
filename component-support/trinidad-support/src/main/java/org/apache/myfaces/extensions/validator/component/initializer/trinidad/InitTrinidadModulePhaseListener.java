@@ -16,9 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator;
+package org.apache.myfaces.extensions.validator.component.initializer.trinidad;
 
-import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -27,33 +26,11 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 /**
  * @author Gerhard Petracek
  */
-public class InitPropertyValidationModulePhaseListener extends
-        AbstractStartupConfigListener
+public class InitTrinidadModulePhaseListener extends AbstractStartupConfigListener
 {
-
+    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     protected void init()
     {
-        initStaticStrategyMappings();
-        initDefaultComponentInitializerName();
-    }
-
-    private void initStaticStrategyMappings()
-    {
-        String jpaBasedValidation = WebXmlParameter.DEACTIVATE_JPA_BASED_VALIDATION;
-        if (jpaBasedValidation == null
-                || !jpaBasedValidation.equalsIgnoreCase("true"))
-        {
-            ExtValUtils
-                    .getInformationProviderBean()
-                    .addStaticStrategyMappingSource(
-                            ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-                                    + ".jpa_strategy_mappings");
-        }
-    }
-
-    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
-    private void initDefaultComponentInitializerName()
-    {
-        ExtValUtils.addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
+        ExtValUtils.addComponentInitializer(new TrinidadComponentInitializer());
     }
 }
