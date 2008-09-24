@@ -51,6 +51,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
+            <artifactId>myfaces-extval-trinidad-support</artifactId>
+            <version>${build.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.sun.facelets</groupId>
             <artifactId>jsf-facelets</artifactId>
             <version>1.1.14</version>
