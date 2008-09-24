@@ -16,10 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
-
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+package org.apache.myfaces.extensions.validator.initializer.trinidad;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -31,10 +28,8 @@ import javax.faces.render.RenderKitFactory;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class ExtValValidationPhaseListener implements PhaseListener
+public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 {
     public void afterPhase(PhaseEvent event)
     {
@@ -42,6 +37,11 @@ public class ExtValValidationPhaseListener implements PhaseListener
 
     public void beforePhase(PhaseEvent event)
     {
+        if(event.getPhaseId() != PhaseId.APPLY_REQUEST_VALUES && event.getPhaseId() != PhaseId.RENDER_RESPONSE)
+        {
+            return;
+        }
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
@@ -49,14 +49,14 @@ public class ExtValValidationPhaseListener implements PhaseListener
 
         String renderKitId = facesContext.getViewRoot().getRenderKitId();
 
-        if(ExtValRenderKit.ID.equals(renderKitId))
+        if(ExtValTrinidadRenderKit.ID.equals(renderKitId))
         {
             return;
         }
 
         RenderKit renderKit = renderKitFactory.getRenderKit(FacesContext.getCurrentInstance(), renderKitId);
-        renderKitFactory.addRenderKit(ExtValRenderKit.ID, new ExtValRenderKit(renderKit));
-        facesContext.getViewRoot().setRenderKitId(ExtValRenderKit.ID);
+        renderKitFactory.addRenderKit(ExtValTrinidadRenderKit.ID, new ExtValTrinidadRenderKit(renderKit));
+        facesContext.getViewRoot().setRenderKitId(ExtValTrinidadRenderKit.ID);
     }
 
     public PhaseId getPhaseId()
