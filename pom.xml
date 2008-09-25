@@ -35,7 +35,6 @@
         <module>validation-modules</module>
         <module>component-support</module>
         <module>examples</module>
-        <module>alternative</module>
     </modules>
 
     <properties>
