@@ -53,7 +53,7 @@ public class ExtValContext
         return new ArrayList<RendererInterceptor>(rendererInterceptors.values());
     }
 
-    public boolean registerRendererInterceptors(RendererInterceptor rendererInterceptor)
+    public boolean registerRendererInterceptor(RendererInterceptor rendererInterceptor)
     {
         synchronized (ExtValContext.class)
         {

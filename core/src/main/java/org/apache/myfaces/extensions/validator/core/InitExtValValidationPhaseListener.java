@@ -30,6 +30,6 @@ public class InitExtValValidationPhaseListener extends AbstractStartupConfigList
 {
     protected void init()
     {
-        ExtValContext.getContext().registerRendererInterceptors(new ExtValValidationInterceptor());
+        ExtValContext.getContext().registerRendererInterceptor(new ExtValValidationInterceptor());
     }
 }
