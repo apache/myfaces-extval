@@ -20,38 +20,25 @@ package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * It's an alternative Mapper to place ValidationStrategies and MetaDataExtractors in the same package.
+ * It's an alternative Mapper - if there is a proxy around the validation strategy.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements NameMapper<ValidationStrategy>
+public class BeanValidationStrategyToMetaDataExtractorNameMapper implements NameMapper<ValidationStrategy>
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        if(validationStrategy.getClass().getPackage() == null)
+        if(validationStrategy instanceof BeanValidationStrategyAdapter)
         {
-            return null;
+            return ((BeanValidationStrategyAdapter)validationStrategy).getMetaDataExtractorClassName();
         }
-        return getSimpleMetaDataExtractorName(validationStrategy.getClass().getPackage().getName() + ".",
-                                                validationStrategy.getClass().getSimpleName());
+        return null;
     }
-
-    public String getSimpleMetaDataExtractorName(String validationStrategyPackageName,
-                                                 String validationStrategyClassName)
-    {
-        String postfix = ExtValUtils.getInformationProviderBean().getMetaDataExtractorPostfix();
-
-        return validationStrategyPackageName + validationStrategyClassName
-                .replace(ExtValUtils.getInformationProviderBean().getValidationStrategyPostfix(), postfix)
-                .replace("ValidationStrategy", postfix)
-                .replace("Strategy", postfix);
-    }
-
 }
