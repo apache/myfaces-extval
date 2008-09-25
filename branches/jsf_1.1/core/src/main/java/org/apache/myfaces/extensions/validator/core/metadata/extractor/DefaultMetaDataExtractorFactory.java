@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
 import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
     .CustomConfiguredValidationStrategyToMetaDataExtractorNameMapper;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
@@ -28,6 +29,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
     .DefaultValidationStrategyToMetaDataExtractorNameMapper;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
     .SimpleValidationStrategyToMetaDataExtractorNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
+    .BeanValidationStrategyToMetaDataExtractorNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -67,11 +70,25 @@ public class DefaultMetaDataExtractorFactory implements
             .add(new DefaultValidationStrategyToMetaDataExtractorNameMapper());
         nameMapperList
             .add(new SimpleValidationStrategyToMetaDataExtractorNameMapper());
+        nameMapperList
+            .add(new BeanValidationStrategyToMetaDataExtractorNameMapper());
     }
 
     public MetaDataExtractor create(ValidationStrategy validationStrategy)
     {
-        String validationStrategyName = validationStrategy.getClass().getName();
+        String validationStrategyName = null;
+
+        //proxy check
+        if(validationStrategy.getClass().getPackage() != null)
+        {
+            validationStrategyName = validationStrategy.getClass().getName();
+        }
+        //in case of a proxy and the usage of a BeanValidationStrategyAdapter
+        else if (validationStrategy instanceof BeanValidationStrategyAdapter)
+        {
+            validationStrategyName = ((BeanValidationStrategyAdapter)validationStrategy)
+                                        .getValidationStrategyClassName();
+        }
 
         if (validationStrategyToMetaDataExtractorMapping.containsKey(validationStrategyName))
         {
@@ -95,7 +112,10 @@ public class DefaultMetaDataExtractorFactory implements
 
             if (metaDataExtractor != null)
             {
-                validationStrategyToMetaDataExtractorMapping.put(validationStrategyName, extractorName);
+                if(validationStrategyName != null)
+                {
+                    validationStrategyToMetaDataExtractorMapping.put(validationStrategyName, extractorName);
+                }
                 return metaDataExtractor;
             }
         }
