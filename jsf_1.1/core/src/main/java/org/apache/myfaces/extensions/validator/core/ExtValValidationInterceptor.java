@@ -28,6 +28,7 @@ import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -109,6 +110,7 @@ public class ExtValValidationInterceptor extends AbstractRendererInterceptor
         }
 
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+        ExtValUtils.createValueBindingConvertedValueMapping(uiComponent, convertedObject);
         ValidationUtils.processExtValValidation(facesContext, uiComponent, convertedObject);
     }
 
