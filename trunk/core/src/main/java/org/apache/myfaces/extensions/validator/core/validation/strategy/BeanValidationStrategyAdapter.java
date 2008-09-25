@@ -16,28 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.lang.annotation.Annotation;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * It's an alternative Mapper to place Annotations and ValidationStrategies in the same package.
+ * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
+ * e.g. spring creates a proxy for it.
+
+ * adapter to connect validation strategies with meta-data extractors,
+ * if the validation strategy is defined as bean and e.g. spring creates a proxy
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleAnnotationToValidationStrategyNameMapper implements
-    NameMapper<Annotation>
+@UsageInformation({UsageCategory.REUSE})
+public interface BeanValidationStrategyAdapter extends ValidationStrategy
 {
-    public String createName(Annotation annotation)
-    {
-        return annotation.annotationType().getName() +
-            ExtValUtils.getInformationProviderBean().getValidationStrategyPostfix();
-    }
+    //to get back the internal cashing
+    String getValidationStrategyClassName();
+
+    String getMetaDataExtractorClassName();
 }
