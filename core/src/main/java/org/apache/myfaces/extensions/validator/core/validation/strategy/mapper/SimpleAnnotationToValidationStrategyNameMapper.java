@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import java.lang.annotation.Annotation;
 
 /**
- * It's a alternative Mapper to place Annotations and ValidationStrategies in the same package.
+ * It's an alternative Mapper to place Annotations and ValidationStrategies in the same package.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
