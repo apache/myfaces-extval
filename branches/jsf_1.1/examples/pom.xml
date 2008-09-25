@@ -40,8 +40,6 @@
         <module>hello_world</module>
         <module>hello_jpa</module>
         <module>feature-set_01</module>
-        <module>adapter_demo</module>
-        <module>proxy_demo</module>
     </modules>
 
     <properties>
