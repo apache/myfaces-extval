@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -54,6 +55,6 @@ public class InitPropertyValidationModulePhaseListener extends
     @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     private void initDefaultComponentInitializerName()
     {
-        ExtValUtils.addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
+        ExtValContext.getContext().addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
     }
 }
