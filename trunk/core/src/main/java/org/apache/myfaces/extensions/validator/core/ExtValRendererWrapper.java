@@ -18,26 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
-import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Default approach to avoid proxies for converters and the adapter fallback.
@@ -55,123 +43,132 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRendererWrapper extends Renderer
 {
-    private static Boolean isAlternativeAvailable = null;
     protected Renderer wrapped;
+    protected ExtValContext extValContext = ExtValContext.getContext();
 
     public ExtValRendererWrapper(Renderer wrapped)
     {
         this.wrapped = wrapped;
     }
 
-    public void decode(FacesContext facesContext, UIComponent uiComponent)
+    @Override
+    public final void decode(FacesContext facesContext, UIComponent uiComponent)
     {
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeDecode(facesContext, uiComponent, this.wrapped);
+        }
+
         wrapped.decode(facesContext, uiComponent);
+
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.afterDecode(facesContext, uiComponent, this.wrapped);
+        }
     }
 
-    public void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
+    @Override
+    public final void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        initComponent(facesContext, uiComponent);
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeEncodeBegin(facesContext, uiComponent, this.wrapped);
+        }
+
         wrapped.encodeBegin(facesContext, uiComponent);
-    }
 
-    protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
-    {
-        if(!(uiComponent instanceof EditableValueHolder))
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            return;
-        }
-
-        ValidationStrategy validationStrategy;
-        MetaDataExtractor metaDataExtractor;
-
-        AnnotationExtractor annotationExtractor = FactoryUtils.getComponentAnnotationExtractorFactory().create();
-
-        Map<String, Object> metaData;
-        for (AnnotationEntry entry : annotationExtractor.extractAnnotations(facesContext, uiComponent))
-        {
-            validationStrategy = FactoryUtils.getValidationStrategyFactory().create(entry.getAnnotation());
-
-            if (validationStrategy != null)
-            {
-                metaDataExtractor = FactoryUtils.getMetaDataExtractorFactory().create(validationStrategy);
-
-                if(metaDataExtractor != null)
-                {
-                    metaData = metaDataExtractor.extractMetaData(entry.getAnnotation());
-                }
-                else
-                {
-                    metaData = null;
-                }
-
-                if(metaData == null)
-                {
-                    metaData = new HashMap<String, Object>();
-                }
-
-                FactoryUtils.getComponentInitializerFactory().create(uiComponent)
-                    .configureComponent(facesContext, uiComponent, metaData);
-            }
+            rendererInterceptor.afterEncodeBegin(facesContext, uiComponent, this.wrapped);
         }
     }
 
-    public void encodeChildren(FacesContext facesContext, UIComponent uiComponent)
+    @Override
+    public final void encodeChildren(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeEncodeChildren(facesContext, uiComponent, this.wrapped);
+        }
+
         wrapped.encodeChildren(facesContext, uiComponent);
+
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.afterEncodeChildren(facesContext, uiComponent, this.wrapped);
+        }
     }
 
-    public void encodeEnd(FacesContext facesContext, UIComponent uiComponent)
+    @Override
+    public final void encodeEnd(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeEncodeEnd(facesContext, uiComponent, this.wrapped);
+        }
+
         wrapped.encodeEnd(facesContext, uiComponent);
+
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.afterEncodeEnd(facesContext, uiComponent, this.wrapped);
+        }
     }
 
-    public String convertClientId(FacesContext facesContext, String s)
+    @Override
+    public final String convertClientId(FacesContext facesContext, String s)
     {
-        return wrapped.convertClientId(facesContext, s);
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeConvertClientId(facesContext, s, this.wrapped);
+        }
+
+        String clientId = wrapped.convertClientId(facesContext, s);
+
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.afterConvertClientId(facesContext, s, this.wrapped);
+        }
+
+        return clientId;
     }
 
-    public boolean getRendersChildren()
+    @Override
+    public final boolean getRendersChildren()
     {
-        return wrapped.getRendersChildren();
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeGetRendersChildren(this.wrapped);
+        }
+
+        boolean rendersChildren = wrapped.getRendersChildren();
+
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.afterGetRendersChildren(this.wrapped);
+        }
+
+        return rendersChildren;
     }
 
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        {
+            rendererInterceptor.beforeGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
+        }
+
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
 
-        checkForAlternative();
-
-        //if the user activated an alternative mode, cancel here (in order to avoid double validation)
-        if (Boolean.TRUE.equals(isAlternativeAvailable))
+        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            return convertedObject;
+            rendererInterceptor.afterGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
         }
-
-        ValidationUtils.processExtValValidation(facesContext, uiComponent, convertedObject);
 
         return convertedObject;
-    }
-
-    private void checkForAlternative()
-    {
-        //to avoid a config parameter (but not nice)
-        if(isAlternativeAvailable == null)
-        {
-            Class extValApplicationFactoryClass = ClassUtils.tryToLoadClassForName(
-                "org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory");
-
-            Method isActiveMethod = ReflectionUtils.tryToGetMethod(extValApplicationFactoryClass, "isActive", null);
-            isAlternativeAvailable = (Boolean)ReflectionUtils
-                .tryToInvokeMethodOfClass(extValApplicationFactoryClass, isActiveMethod);
-
-            if(isAlternativeAvailable == null)
-            {
-                isAlternativeAvailable = false;
-            }
-        }
     }
 }
