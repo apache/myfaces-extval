@@ -44,7 +44,7 @@ class RendererProxy extends Renderer
 
     private Object convertedValue = null;
     private String clientId = null;
-    private Boolean rendersChildren;
+    private Boolean rendersChildren = null;
 
     public RendererProxy(Renderer renderer)
     {
@@ -55,6 +55,7 @@ class RendererProxy extends Renderer
     {
         if(!isDecodeCalled)
         {
+            isDecodeCalled = true;
             wrapped.decode(facesContext, uiComponent);
         }
     }
@@ -64,6 +65,7 @@ class RendererProxy extends Renderer
     {
         if(!isEncodeBeginCalled)
         {
+            isEncodeBeginCalled = true;
             wrapped.encodeBegin(facesContext, uiComponent);
         }
     }
@@ -73,6 +75,7 @@ class RendererProxy extends Renderer
     {
         if(!isEncodeChildrenCalled)
         {
+            isEncodeChildrenCalled = true;
             wrapped.encodeChildren(facesContext, uiComponent);
         }
     }
@@ -82,6 +85,7 @@ class RendererProxy extends Renderer
     {
         if(!isEncodeEndCalled)
         {
+            isEncodeEndCalled = true;
             wrapped.encodeEnd(facesContext, uiComponent);
         }
     }
