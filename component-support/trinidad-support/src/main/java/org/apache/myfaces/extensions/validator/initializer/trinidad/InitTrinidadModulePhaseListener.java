@@ -20,10 +20,10 @@ package org.apache.myfaces.extensions.validator.initializer.trinidad;
 
 import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
 import org.apache.myfaces.extensions.validator.core.ExtValValidationPhaseListener;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.initializer.trinidad.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -72,7 +72,7 @@ public class InitTrinidadModulePhaseListener extends AbstractStartupConfigListen
 
         if(deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true"))
         {
-            ExtValUtils.addComponentInitializer(new TrinidadComponentInitializer());
+            ExtValContext.getContext().addComponentInitializer(new TrinidadComponentInitializer());
         }
     }
 }
