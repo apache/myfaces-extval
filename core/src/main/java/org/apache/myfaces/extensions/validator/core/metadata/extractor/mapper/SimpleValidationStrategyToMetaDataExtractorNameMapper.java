@@ -25,17 +25,20 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * It's a alternative Mapper to place ValidationStrategies and MetaDataExtractors in the same package.
+ * It's an alternative Mapper to place ValidationStrategies and MetaDataExtractors in the same package.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements
-    NameMapper<ValidationStrategy>
+public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements NameMapper<ValidationStrategy>
 {
     public String createName(ValidationStrategy validationStrategy)
     {
+        if(validationStrategy.getClass().getPackage() == null)
+        {
+            return null;
+        }
         return getSimpleMetaDataExtractorName(validationStrategy.getClass().getPackage().getName() + ".",
                                                 validationStrategy.getClass().getSimpleName());
     }
