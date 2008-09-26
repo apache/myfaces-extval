@@ -58,18 +58,15 @@ public class FactoryUtils
         {
             List<String> annotationExtractorFactoryClassNames = new ArrayList<String>();
 
+            annotationExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY);
             annotationExtractorFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY);
-            annotationExtractorFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomComponentAnnotationExtractorFactory());
-            annotationExtractorFactoryClassNames
-                .add(DefaultComponentAnnotationExtractorFactory.class.getName());
+                .add(ExtValUtils.getInformationProviderBean().getCustomComponentAnnotationExtractorFactory());
+            annotationExtractorFactoryClassNames.add(DefaultComponentAnnotationExtractorFactory.class.getName());
 
             for (String className : annotationExtractorFactoryClassNames)
             {
-                annotationExtractorFactory = (AnnotationExtractorFactory) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                annotationExtractorFactory =
+                    (AnnotationExtractorFactory) ClassUtils.tryToInstantiateClassForName(className);
 
                 if (annotationExtractorFactory != null)
                 {
@@ -89,18 +86,16 @@ public class FactoryUtils
         {
             List<String> validationStrategyFactoryClassNames = new ArrayList<String>();
 
+            validationStrategyFactoryClassNames.add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
             validationStrategyFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
-            validationStrategyFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomValidationStrategyFactory());
-            validationStrategyFactoryClassNames
-                .add(DefaultValidationStrategyFactory.class.getName());
+                .add(ExtValUtils.getInformationProviderBean().getCustomValidationStrategyFactory());
+            validationStrategyFactoryClassNames.add(DefaultValidationStrategyFactory.class.getName());
 
             for (String className : validationStrategyFactoryClassNames)
             {
-                validationStrategyFactory = (ClassMappingFactory<Annotation, ValidationStrategy>) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                validationStrategyFactory =
+                    (ClassMappingFactory<Annotation, ValidationStrategy>)
+                        ClassUtils.tryToInstantiateClassForName(className);
 
                 if (validationStrategyFactory != null)
                 {
@@ -120,18 +115,17 @@ public class FactoryUtils
         {
             List<String> messageResolverFactoryClassNames = new ArrayList<String>();
 
+            messageResolverFactoryClassNames.add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
             messageResolverFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
-            messageResolverFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomMessageResolverFactory());
+                .add(ExtValUtils.getInformationProviderBean().getCustomMessageResolverFactory());
             messageResolverFactoryClassNames
                 .add(DefaultMessageResolverFactory.class.getName());
 
             for (String className : messageResolverFactoryClassNames)
             {
-                messageResolverFactory = (ClassMappingFactory<ValidationStrategy, MessageResolver>) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                messageResolverFactory =
+                    (ClassMappingFactory<ValidationStrategy, MessageResolver>)
+                        ClassUtils.tryToInstantiateClassForName(className);
 
                 if (messageResolverFactory != null)
                 {
@@ -152,14 +146,15 @@ public class FactoryUtils
             List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
 
             metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTOR_FACTORY);
-            metaDataExtractorFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean().getCustomMetaDataExtractorFactory());
+            metaDataExtractorFactoryClassNames
+                .add(ExtValUtils.getInformationProviderBean().getCustomMetaDataExtractorFactory());
             metaDataExtractorFactoryClassNames.add(DefaultMetaDataExtractorFactory.class.getName());
 
             for (String className : metaDataExtractorFactoryClassNames)
             {
-                metaDataExtractorFactory = (ClassMappingFactory<ValidationStrategy, MetaDataExtractor>) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                metaDataExtractorFactory =
+                    (ClassMappingFactory<ValidationStrategy, MetaDataExtractor>)
+                        ClassUtils.tryToInstantiateClassForName(className);
 
                 if (metaDataExtractorFactory != null)
                 {
@@ -181,17 +176,16 @@ public class FactoryUtils
 
             renderingContextInitializerFactoryClassNames
                 .add(WebXmlParameter.CUSTOM_RENDERING_CONTEXT_INITIALIZER_FACTORY);
-            renderingContextInitializerFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomRenderingContextInitializerFactory());
+            renderingContextInitializerFactoryClassNames
+                .add(ExtValUtils.getInformationProviderBean().getCustomRenderingContextInitializerFactory());
             renderingContextInitializerFactoryClassNames
                 .add(DefaultRenderingContextInitializerFactory.class.getName());
 
             for (String className : renderingContextInitializerFactoryClassNames)
             {
                 renderingContextInitializerFactory =
-                    (ClassMappingFactory<RenderKit, RenderingContextInitializer>) ClassUtils
-                        .tryToInstantiateClassForName(className);
+                    (ClassMappingFactory<RenderKit, RenderingContextInitializer>)
+                        ClassUtils.tryToInstantiateClassForName(className);
 
                 if (renderingContextInitializerFactory != null)
                 {
@@ -211,18 +205,16 @@ public class FactoryUtils
         {
             List<String> componentInitializerFactoryClassNames = new ArrayList<String>();
 
+            componentInitializerFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER_FACTORY);
             componentInitializerFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER_FACTORY);
-            componentInitializerFactoryClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomComponentInitializerFactory());
-            componentInitializerFactoryClassNames
-                .add(DefaultComponentInitializerFactory.class.getName());
+                .add(ExtValUtils.getInformationProviderBean().getCustomComponentInitializerFactory());
+            componentInitializerFactoryClassNames.add(DefaultComponentInitializerFactory.class.getName());
 
             for (String className : componentInitializerFactoryClassNames)
             {
-                componentInitializerFactory = (ClassMappingFactory<UIComponent, ComponentInitializer>) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                componentInitializerFactory =
+                    (ClassMappingFactory<UIComponent, ComponentInitializer>)
+                        ClassUtils.tryToInstantiateClassForName(className);
 
                 if (componentInitializerFactory != null)
                 {
