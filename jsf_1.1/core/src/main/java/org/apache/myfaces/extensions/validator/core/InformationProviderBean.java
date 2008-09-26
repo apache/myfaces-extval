@@ -46,16 +46,14 @@ public class InformationProviderBean
         + "." + InformationProviderBean.class.getSimpleName();
     //custom class which is an optional replacement for this class (has to extend this class)
     public static final String CUSTOM_BEAN = (ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-        + ".custom." + InformationProviderBean.class.getSimpleName())
-        .replace(".", "_");
+        + ".custom." + InformationProviderBean.class.getSimpleName()).replace(".", "_");
     private String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
 
     public InformationProviderBean()
     {
         if (this.basePackage == null)
         {
-            this.basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-                + ".custom.";
+            this.basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.";
         }
         if (!this.basePackage.endsWith("."))
         {

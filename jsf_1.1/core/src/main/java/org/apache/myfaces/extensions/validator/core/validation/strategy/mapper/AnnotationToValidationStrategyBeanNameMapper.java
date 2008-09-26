@@ -44,8 +44,7 @@ public class AnnotationToValidationStrategyBeanNameMapper implements
     public static final String PREFIX_FOR_BEAN_MAPPING = "bean:";
     private NameMapper<Annotation> wrapped;
 
-    public AnnotationToValidationStrategyBeanNameMapper(
-        NameMapper<Annotation> nameMapper)
+    public AnnotationToValidationStrategyBeanNameMapper(NameMapper<Annotation> nameMapper)
     {
         this.wrapped = nameMapper;
     }
@@ -60,7 +59,6 @@ public class AnnotationToValidationStrategyBeanNameMapper implements
         }
 
         name = name.substring(name.lastIndexOf(".") + 1);
-        return PREFIX_FOR_BEAN_MAPPING + name.substring(0, 1).toLowerCase()
-            + name.substring(1);
+        return PREFIX_FOR_BEAN_MAPPING + name.substring(0, 1).toLowerCase() + name.substring(1);
     }
 }

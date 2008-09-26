@@ -79,8 +79,7 @@ public class DefaultMessageResolverFactory implements
         if (strategyMessageResolverMapping.containsKey(strategyName))
         {
             return (MessageResolver) ClassUtils
-                .tryToInstantiateClassForName(strategyMessageResolverMapping
-                    .get(strategyName));
+                .tryToInstantiateClassForName(strategyMessageResolverMapping.get(strategyName));
         }
 
         MessageResolver messageResolver;
@@ -105,8 +104,7 @@ public class DefaultMessageResolverFactory implements
             }
         }
 
-        addMapping(strategyName, DefaultValidationErrorMessageResolver.class
-            .getName());
+        addMapping(strategyName, DefaultValidationErrorMessageResolver.class.getName());
         return new DefaultValidationErrorMessageResolver();
     }
 
@@ -115,8 +113,7 @@ public class DefaultMessageResolverFactory implements
     {
         synchronized (DefaultMessageResolverFactory.class)
         {
-            strategyMessageResolverMapping.put(strategyName,
-                messageResolverName);
+            strategyMessageResolverMapping.put(strategyName, messageResolverName);
         }
     }
 }

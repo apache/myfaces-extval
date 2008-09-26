@@ -50,8 +50,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
     protected final Log logger = LogFactory.getLog(getClass());
 
     @ToDo(Priority.MEDIUM)
-    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
-                                                    Object object)
+    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object)
     {
         //should never occur
         if (!(object instanceof UIComponent))
@@ -63,8 +62,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        String valueBindingExpression = ELUtils
-            .getReliableValueBindingExpression(uiComponent);
+        String valueBindingExpression = ELUtils.getReliableValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
@@ -81,14 +79,11 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             return new ArrayList<AnnotationEntry>();
         }
 
-        String beans = valueBindingExpression.substring(valueBindingExpression
-            .indexOf('{') + 1, beanPropertyBorder);
+        String beans = valueBindingExpression.substring(valueBindingExpression.indexOf('{') + 1, beanPropertyBorder);
 
-        String property = valueBindingExpression.substring(
-            beanPropertyBorder + 1, valueBindingExpression.indexOf('}'));
+        String property = valueBindingExpression.substring(beanPropertyBorder + 1, valueBindingExpression.indexOf('}'));
 
-        Class entityClass = ELUtils.getTypeOfValueBindingForExpression(
-            facesContext, "#{" + beans + "}");
+        Class entityClass = ELUtils.getTypeOfValueBindingForExpression(facesContext, "#{" + beans + "}");
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();
@@ -104,10 +99,8 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         while (!Object.class.getName().equals(currentClass.getName()))
         {
-            addPropertyAccessAnnotations(currentClass, property,
-                annotationEntries, templateEntry);
-            addFieldAccessAnnotations(currentClass, property,
-                annotationEntries, templateEntry);
+            addPropertyAccessAnnotations(currentClass, property, annotationEntries, templateEntry);
+            addFieldAccessAnnotations(currentClass, property, annotationEntries, templateEntry);
 
             currentClass = currentClass.getSuperclass();
         }
@@ -118,8 +111,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
             while (currentClass != null)
             {
-                addPropertyAccessAnnotations(currentClass, property,
-                    annotationEntries, templateEntry);
+                addPropertyAccessAnnotations(currentClass, property, annotationEntries, templateEntry);
 
                 currentClass = currentClass.getSuperclass();
             }
@@ -132,8 +124,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
                                                 List<AnnotationEntry> annotationEntries,
                                                 AnnotationEntry templateEntry)
     {
-        property = property.substring(0, 1).toUpperCase()
-            + property.substring(1);
+        property = property.substring(0, 1).toUpperCase() + property.substring(1);
 
         Method method;
 
@@ -150,14 +141,12 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             catch (NoSuchMethodException e1)
             {
                 logger.debug("method not found - class: " + entity.getName()
-                    + " - methods: " + "get" + property + " " + "is"
-                    + property);
+                    + " - methods: " + "get" + property + " " + "is" + property);
                 return;
             }
         }
 
-        addAnnotationToAnnotationEntries(annotationEntries, Arrays
-            .asList(method.getAnnotations()), templateEntry);
+        addAnnotationToAnnotationEntries(annotationEntries, Arrays.asList(method.getAnnotations()), templateEntry);
     }
 
     protected void addFieldAccessAnnotations(Class entity, String property,
@@ -178,14 +167,12 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
             catch (NoSuchFieldException e1)
             {
-                logger.debug("field " + property + " or _" + property
-                    + " not found");
+                logger.debug("field " + property + " or _" + property + " not found");
                 return;
             }
         }
 
-        addAnnotationToAnnotationEntries(annotationEntries, Arrays.asList(field
-            .getAnnotations()), templateEntry);
+        addAnnotationToAnnotationEntries(annotationEntries, Arrays.asList(field.getAnnotations()), templateEntry);
     }
 
     protected void addAnnotationToAnnotationEntries(
@@ -194,21 +181,18 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
     {
         for (Annotation annotation : annotations)
         {
-            annotationEntries.add(createAnnotationEntry(annotation,
-                templateEntry));
+            annotationEntries.add(createAnnotationEntry(annotation, templateEntry));
         }
     }
 
-    protected AnnotationEntry createAnnotationEntry(Annotation foundAnnotation,
-                                                    AnnotationEntry templateEntry)
+    protected AnnotationEntry createAnnotationEntry(Annotation foundAnnotation, AnnotationEntry templateEntry)
     {
         AnnotationEntry entry = new AnnotationEntry();
 
         entry.setAnnotation(foundAnnotation);
 
         entry.setEntityClass(templateEntry.getEntityClass());
-        entry.setValueBindingExpression(templateEntry
-            .getValueBindingExpression());
+        entry.setValueBindingExpression(templateEntry.getValueBindingExpression());
         entry.setBoundTo(templateEntry.getBoundTo());
 
         return entry;

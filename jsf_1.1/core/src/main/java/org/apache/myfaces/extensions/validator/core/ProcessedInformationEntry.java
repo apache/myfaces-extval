@@ -41,6 +41,9 @@ public class ProcessedInformationEntry
     //however, don't override the previous entry - they arn't the same;
     private List<ProcessedInformationEntry> furtherEntries;
 
+    /*
+     * generated
+     */
     public Object getBean()
     {
         return bean;

@@ -39,7 +39,6 @@ public class CustomConventionValidationStrategyToMetaDataExtractorNameMapper ext
 {
     protected String getCustomNameMapperClassName()
     {
-        return ExtValUtils.getInformationProviderBean()
-            .getCustomValidationStrategyToMetaDataExtractorNameMapper();
+        return ExtValUtils.getInformationProviderBean().getCustomValidationStrategyToMetaDataExtractorNameMapper();
     }
 }
