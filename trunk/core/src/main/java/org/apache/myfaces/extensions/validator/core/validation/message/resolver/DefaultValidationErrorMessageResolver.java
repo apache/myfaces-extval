@@ -40,8 +40,7 @@ public class DefaultValidationErrorMessageResolver extends
     protected String getBaseName()
     {
         return ExtValUtils.getInformationProviderBean()
-            .getConventionForModuleMessageBundle(
-                getClass().getPackage().getName());
+            .getConventionForModuleMessageBundle(getClass().getPackage().getName());
     }
 
     protected String getCustomBaseName()

@@ -81,6 +81,9 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
         return null;
     }
 
+    /*
+     * generated
+     */
     public MetaDataExtractor getMetaDataExtractor()
     {
         return metaDataExtractor;

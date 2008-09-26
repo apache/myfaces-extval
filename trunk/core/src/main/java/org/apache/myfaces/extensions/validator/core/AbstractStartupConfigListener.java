@@ -69,8 +69,7 @@ public abstract class AbstractStartupConfigListener implements PhaseListener
                                 + getClass().getName()
                                 + " -> there is just a little overhead,"
                                 + " but everything else works correctly."
-                                + " however, please inform the community about your configuration",
-                            t);
+                                + " however, please inform the community about your configuration", t);
                 }
                 finally
                 {

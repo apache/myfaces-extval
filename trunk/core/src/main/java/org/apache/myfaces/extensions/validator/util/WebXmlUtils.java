@@ -33,8 +33,7 @@ public class WebXmlUtils
     public static String getInitParameter(String key)
     {
         String value = FacesContext.getCurrentInstance().getExternalContext()
-            .getInitParameter(
-                ExtValInformation.WEBXML_PARAM_PREFIX + "." + key);
+            .getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + "." + key);
         return (value != null) ? value.replace(" ", "").trim() : null;
     }
 }

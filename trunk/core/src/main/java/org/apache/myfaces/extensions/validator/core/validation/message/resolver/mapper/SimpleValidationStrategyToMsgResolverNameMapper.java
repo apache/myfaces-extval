@@ -37,7 +37,6 @@ public class SimpleValidationStrategyToMsgResolverNameMapper implements
     {
         String resolverName = validationStrategy.getClass().getName();
 
-        return resolverName.substring(0, resolverName.lastIndexOf("."))
-            + ".DefaultValidationErrorMessageResolver";
+        return resolverName.substring(0, resolverName.lastIndexOf(".")) + ".DefaultValidationErrorMessageResolver";
     }
 }

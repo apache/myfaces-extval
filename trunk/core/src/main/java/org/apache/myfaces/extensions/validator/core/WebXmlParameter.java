@@ -83,6 +83,9 @@ public interface WebXmlParameter
     /*
      * deactivate
      */
+    static final String DEACTIVATE_RENDERKIT = WebXmlUtils
+        .getInitParameter("DEACTIVATE_RENDERKIT");
+
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");
 }
