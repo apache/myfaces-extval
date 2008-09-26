@@ -98,8 +98,7 @@ public class DefaultValidationStrategyFactory implements
 
         if (annotationStrategyMapping.containsKey(annotationName))
         {
-            return getValidationStrategyInstance(annotationStrategyMapping
-                .get(annotationName));
+            return getValidationStrategyInstance(annotationStrategyMapping.get(annotationName));
         }
 
         ValidationStrategy validationStrategy;
@@ -134,8 +133,7 @@ public class DefaultValidationStrategyFactory implements
         {
             return (ValidationStrategy) ELUtils
                 .getBean(validationStrategyName
-                    .substring(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING
-                    .length()));
+                    .substring(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING.length()));
         }
         else
         {
@@ -162,8 +160,7 @@ public class DefaultValidationStrategyFactory implements
 
             //setup internal static mappings
             for (String internalMappingSource : ExtValUtils
-                .getInformationProviderBean()
-                .getStaticStrategyMappingSources())
+                .getInformationProviderBean().getStaticStrategyMappingSources())
             {
                 setupStrategyMappings(internalMappingSource);
             }
@@ -213,8 +210,7 @@ public class DefaultValidationStrategyFactory implements
         while (keys.hasMoreElements())
         {
             annotationClassName = (String) keys.nextElement();
-            validationStrategyClassName = strategyMapping
-                .getString(annotationClassName);
+            validationStrategyClassName = strategyMapping.getString(annotationClassName);
 
             addMapping(annotationClassName, validationStrategyClassName);
         }

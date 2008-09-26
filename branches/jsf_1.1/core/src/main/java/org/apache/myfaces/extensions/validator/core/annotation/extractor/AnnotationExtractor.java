@@ -35,6 +35,5 @@ import java.util.List;
 @UsageInformation(UsageCategory.API)
 public interface AnnotationExtractor
 {
-    List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
-                                             Object object);
+    List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object);
 }

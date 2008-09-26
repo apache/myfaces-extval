@@ -49,19 +49,14 @@ public class ValidationUtils
 
         ValidationStrategy validationStrategy;
 
-        AnnotationExtractor annotationExtractor = FactoryUtils
-            .getComponentAnnotationExtractorFactory().create();
-        for (AnnotationEntry entry : annotationExtractor
-            .extractAnnotations(facesContext, uiComponent))
+        AnnotationExtractor annotationExtractor = FactoryUtils.getComponentAnnotationExtractorFactory().create();
+        for (AnnotationEntry entry : annotationExtractor.extractAnnotations(facesContext, uiComponent))
         {
-            validationStrategy = FactoryUtils
-                .getValidationStrategyFactory().create(
-                entry.getAnnotation());
+            validationStrategy = FactoryUtils.getValidationStrategyFactory().create(entry.getAnnotation());
 
             if (validationStrategy != null)
             {
-                validationStrategy.validate(facesContext, uiComponent,
-                    entry, convertedObject);
+                validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
             }
             else
             {

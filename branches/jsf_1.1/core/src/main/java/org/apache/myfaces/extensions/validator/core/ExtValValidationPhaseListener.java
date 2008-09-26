@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -36,12 +37,25 @@ import javax.faces.render.RenderKitFactory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValValidationPhaseListener implements PhaseListener
 {
+    private static String deactivateRenderKit = "init";
+
     public void afterPhase(PhaseEvent event)
     {
     }
 
     public void beforePhase(PhaseEvent event)
     {
+        if("init".equals(deactivateRenderKit))
+        {
+            deactivateRenderKit = WebXmlParameter.DEACTIVATE_RENDERKIT;
+        }
+
+        if(deactivateRenderKit != null && deactivateRenderKit.equalsIgnoreCase("true"))
+        {
+            ExtValUtils.deregisterPhaseListener(this);
+            return;
+        }
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)

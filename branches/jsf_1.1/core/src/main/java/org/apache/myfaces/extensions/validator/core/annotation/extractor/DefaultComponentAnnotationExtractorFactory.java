@@ -44,8 +44,7 @@ import java.util.List;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultComponentAnnotationExtractorFactory implements
-    AnnotationExtractorFactory
+public class DefaultComponentAnnotationExtractorFactory implements AnnotationExtractorFactory
 {
 
     private static AnnotationExtractor annotationExtractor = null;
@@ -57,18 +56,14 @@ public class DefaultComponentAnnotationExtractorFactory implements
         {
             List<String> annotationExtractorClassNames = new ArrayList<String>();
 
+            annotationExtractorClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR);
             annotationExtractorClassNames
-                .add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR);
-            annotationExtractorClassNames.add(ExtValUtils
-                .getInformationProviderBean()
-                .getCustomComponentAnnotationExtractor());
-            annotationExtractorClassNames
-                .add(DefaultComponentAnnotationExtractor.class.getName());
+                .add(ExtValUtils.getInformationProviderBean().getCustomComponentAnnotationExtractor());
+            annotationExtractorClassNames.add(DefaultComponentAnnotationExtractor.class.getName());
 
             for (String className : annotationExtractorClassNames)
             {
-                annotationExtractor = (AnnotationExtractor) ClassUtils
-                    .tryToInstantiateClassForName(className);
+                annotationExtractor = (AnnotationExtractor) ClassUtils.tryToInstantiateClassForName(className);
 
                 if (annotationExtractor != null)
                 {
