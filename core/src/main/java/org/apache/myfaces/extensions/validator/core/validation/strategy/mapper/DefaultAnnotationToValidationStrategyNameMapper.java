@@ -37,7 +37,6 @@ public class DefaultAnnotationToValidationStrategyNameMapper implements
 {
     public String createName(Annotation annotation)
     {
-        return ExtValUtils.getInformationProviderBean()
-            .getConventionNameForValidationStrategy(annotation);
+        return ExtValUtils.getInformationProviderBean().getConventionNameForValidationStrategy(annotation);
     }
 }

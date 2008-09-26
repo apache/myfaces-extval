@@ -36,20 +36,17 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ELUtils
 {
-    public static Class getTypeOfValueBindingForExpression(
-        FacesContext facesContext, String valueBindingExpression)
+    public static Class getTypeOfValueBindingForExpression(FacesContext facesContext, String valueBindingExpression)
     {
         //due to a restriction with the ri
-        Object bean = ELUtils.getValueOfExpression(facesContext,
-            valueBindingExpression);
+        Object bean = ELUtils.getValueOfExpression(facesContext, valueBindingExpression);
         return (bean != null) ? bean.getClass() : null;
     }
 
     public static Object getBean(String beanName)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        return facesContext.getApplication().getELResolver().getValue(
-            facesContext.getELContext(), null, beanName);
+        return facesContext.getApplication().getELResolver().getValue(facesContext.getELContext(), null, beanName);
     }
 
     @ToDo(value = Priority.MEDIUM, description = "refactor - problem - static values - jsf 1.2 e.g.: ${value}")
@@ -66,14 +63,13 @@ public class ELUtils
     {
         String newExpression = valueBindingExpression.substring(0, valueBindingExpression.lastIndexOf(".")) + "}";
 
-        return getValueOfExpression(FacesContext.getCurrentInstance(),
-            newExpression);
+        return getValueOfExpression(FacesContext.getCurrentInstance(), newExpression);
     }
 
     public static Object getValueOfExpression(FacesContext facesContext, String valueBindingExpression)
     {
-        return (valueBindingExpression != null) ? facesContext.getApplication().evaluateExpressionGet(facesContext,
-            valueBindingExpression, Object.class) : null;
+        return (valueBindingExpression != null) ? facesContext.getApplication().evaluateExpressionGet(
+            facesContext, valueBindingExpression, Object.class) : null;
     }
 
     public static boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression)
@@ -119,20 +115,15 @@ public class ELUtils
 
     public static String getValueBindingExpression(UIComponent uiComponent)
     {
-        ValueExpression valueExpression = uiComponent
-            .getValueExpression("value");
+        ValueExpression valueExpression = uiComponent.getValueExpression("value");
 
-        return (valueExpression != null) ? valueExpression
-            .getExpressionString() : null;
+        return (valueExpression != null) ? valueExpression.getExpressionString() : null;
     }
 
-    public static Class getTypeOfValueBindingForComponent(
-        FacesContext facesContext, UIComponent uiComponent)
+    public static Class getTypeOfValueBindingForComponent(FacesContext facesContext, UIComponent uiComponent)
     {
-        ValueExpression valueExpression = uiComponent
-            .getValueExpression("value");
+        ValueExpression valueExpression = uiComponent.getValueExpression("value");
 
-        return (valueExpression != null) ? valueExpression.getType(facesContext
-            .getELContext()) : null;
+        return (valueExpression != null) ? valueExpression.getType(facesContext.getELContext()) : null;
     }
 }

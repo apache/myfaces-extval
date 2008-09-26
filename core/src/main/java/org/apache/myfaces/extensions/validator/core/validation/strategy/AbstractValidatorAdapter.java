@@ -46,13 +46,11 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          AnnotationEntry annotationEntry, Object convertedObject)
     {
-        initValidation(facesContext, uiComponent, annotationEntry,
-            convertedObject);
+        initValidation(facesContext, uiComponent, annotationEntry, convertedObject);
 
         try
         {
-            processValidation(facesContext, uiComponent, annotationEntry,
-                convertedObject);
+            processValidation(facesContext, uiComponent, annotationEntry, convertedObject);
         }
         catch (ValidatorException e)
         {
@@ -65,7 +63,8 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
     }
 
     protected void initValidation(FacesContext facesContext,
-                                  UIComponent uiComponent, AnnotationEntry annotationEntry,
+                                  UIComponent uiComponent,
+                                  AnnotationEntry annotationEntry,
                                   Object convertedObject)
     {
         //override if needed

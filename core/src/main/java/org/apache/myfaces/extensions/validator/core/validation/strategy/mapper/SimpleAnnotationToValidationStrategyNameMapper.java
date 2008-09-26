@@ -32,8 +32,7 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleAnnotationToValidationStrategyNameMapper implements
-    NameMapper<Annotation>
+public class SimpleAnnotationToValidationStrategyNameMapper implements NameMapper<Annotation>
 {
     public String createName(Annotation annotation)
     {

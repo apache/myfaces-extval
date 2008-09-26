@@ -74,23 +74,20 @@ public class ExtValUtils
         entry.setComponent(uiComponent);
 
         //for local cross-validation
-        if (valueBindingConvertedValueMapping
-            .containsKey(valueBindingExpression)
-            && !valueBindingConvertedValueMapping.get(
-            valueBindingExpression).getBean().equals(
-            entry.getBean()))
+        if (valueBindingConvertedValueMapping.containsKey(valueBindingExpression) &&
+            !valueBindingConvertedValueMapping.get(valueBindingExpression).getBean().equals(entry.getBean()))
         {
             //for the validation within a complex component e.g. a table
             //don't override existing expression (style: #{entry.property}) - make a special mapping
 
-            List<ProcessedInformationEntry> furtherEntries = valueBindingConvertedValueMapping
-                .get(valueBindingExpression).getFurtherEntries();
+            List<ProcessedInformationEntry> furtherEntries =
+                valueBindingConvertedValueMapping.get(valueBindingExpression).getFurtherEntries();
+
             if (furtherEntries == null)
             {
                 furtherEntries = new ArrayList<ProcessedInformationEntry>();
 
-                valueBindingConvertedValueMapping.get(valueBindingExpression)
-                    .setFurtherEntries(furtherEntries);
+                valueBindingConvertedValueMapping.get(valueBindingExpression).setFurtherEntries(furtherEntries);
             }
 
             furtherEntries.add(entry);
@@ -98,8 +95,7 @@ public class ExtValUtils
         else
         {
             //for normal validation
-            valueBindingConvertedValueMapping
-                .put(valueBindingExpression, entry);
+            valueBindingConvertedValueMapping.put(valueBindingExpression, entry);
         }
     }
 
@@ -110,10 +106,8 @@ public class ExtValUtils
 
     public static InformationProviderBean getInformationProviderBean()
     {
-        Map applicationMap = FacesContext.getCurrentInstance()
-            .getExternalContext().getApplicationMap();
-        InformationProviderBean bean = (InformationProviderBean) applicationMap
-            .get(InformationProviderBean.BEAN_NAME);
+        Map applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        InformationProviderBean bean = (InformationProviderBean) applicationMap.get(InformationProviderBean.BEAN_NAME);
 
         if (bean == null)
         {
@@ -126,42 +120,34 @@ public class ExtValUtils
     {
         List<String> informationProviderBeanClassNames = new ArrayList<String>();
 
-        informationProviderBeanClassNames
-            .add(WebXmlParameter.CUSTOM_CONVENTION_INFO_PROVIDER_BEAN);
-        informationProviderBeanClassNames.add(ExtValUtils
-            .getCustomInformationProviderBeanClassName());
-        informationProviderBeanClassNames.add(InformationProviderBean.class
-            .getName());
+        informationProviderBeanClassNames.add(WebXmlParameter.CUSTOM_CONVENTION_INFO_PROVIDER_BEAN);
+        informationProviderBeanClassNames.add(ExtValUtils.getCustomInformationProviderBeanClassName());
+        informationProviderBeanClassNames.add(InformationProviderBean.class.getName());
 
         InformationProviderBean informationProviderBean;
         for (String className : informationProviderBeanClassNames)
         {
-            informationProviderBean = (InformationProviderBean) ClassUtils
-                .tryToInstantiateClassForName(className);
+            informationProviderBean = (InformationProviderBean) ClassUtils.tryToInstantiateClassForName(className);
 
             if (informationProviderBean != null)
             {
-                applicationMap.put(InformationProviderBean.BEAN_NAME,
-                    informationProviderBean);
+                applicationMap.put(InformationProviderBean.BEAN_NAME, informationProviderBean);
                 return informationProviderBean;
             }
         }
-        throw new IllegalStateException(InformationProviderBean.class.getName()
-            + " not found");
+        throw new IllegalStateException(InformationProviderBean.class.getName() + " not found");
     }
 
     public static String getCustomInformationProviderBeanClassName()
     {
-        InformationProviderBean bean = (InformationProviderBean) ELUtils
-            .getBean(InformationProviderBean.CUSTOM_BEAN);
+        InformationProviderBean bean = (InformationProviderBean) ELUtils.getBean(InformationProviderBean.CUSTOM_BEAN);
 
         return (bean != null) ? bean.getClass().getName() : null;
     }
 
     public static void deregisterPhaseListener(PhaseListener phaseListener)
     {
-        LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder
-            .getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        LifecycleFactory lifecycleFactory = (LifecycleFactory)FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
         String currentId;
         Lifecycle currentLifecycle;
@@ -179,22 +165,19 @@ public class ExtValUtils
 
     public static Map<String, ProcessedInformationEntry> getOrInitValueBindingConvertedValueMapping()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestMap();
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
 
         if (!requestMap.containsKey(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY))
         {
             resetCrossValidationStorage();
         }
 
-        return (Map<String, ProcessedInformationEntry>) requestMap
-            .get(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY);
+        return (Map<String, ProcessedInformationEntry>) requestMap.get(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY);
     }
 
     public static void resetCrossValidationStorage()
     {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-            .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY,
-                new HashMap<String, ProcessedInformationEntry>());
+            .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY, new HashMap<String, ProcessedInformationEntry>());
     }
 }

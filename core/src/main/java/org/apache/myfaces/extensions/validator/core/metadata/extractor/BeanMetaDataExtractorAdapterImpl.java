@@ -61,6 +61,9 @@ public class BeanMetaDataExtractorAdapterImpl implements BeanMetaDataExtractorAd
         return null;
     }
 
+    /*
+     * generated
+     */
     public void setMetaDataExtractorClassName(String metaDataExtractorClassName)
     {
         this.metaDataExtractorClassName = metaDataExtractorClassName;
