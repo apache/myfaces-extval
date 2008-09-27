@@ -33,7 +33,7 @@ import java.io.IOException;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-class RendererProxy extends Renderer
+public class RendererProxy extends Renderer
 {
     private Renderer wrapped;
 
