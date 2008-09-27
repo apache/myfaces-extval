@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.RendererProxy;
-import org.apache.myfaces.extensions.validator.util.ValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -50,7 +49,7 @@ public class ExtValGenericRendererWrapper extends Renderer implements MethodInte
     {
         Class currentClass = renderer.getClass();
 
-        //it's not possible to wrap the converter again - occurs e.g. under solaris + bea weblogic
+        //to avoid re-wrapping - occurs e.g. under solaris + bea weblogic
         if (currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
             currentClass.getName().contains("$$FastClassByCGLIB$$"))
         {
@@ -66,22 +65,39 @@ public class ExtValGenericRendererWrapper extends Renderer implements MethodInte
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable
     {
-        Object result = proxy.invokeSuper(obj, args);
-
         if (method.getName().equals("getConvertedValue"))
         {
-            try
-            {
-                ValidationUtils.processExtValValidation((FacesContext) args[0], (UIComponent) args[1], result);
-            }
-            finally
-            {
-                //TODO logging
-            }
+            return getConvertedValue((FacesContext)args[0], (UIComponent)args[1], args[2]);
         }
-        //TODO other methods
-
-        return result;
+        else if (method.getName().equals("decode"))
+        {
+            decode((FacesContext)args[0], (UIComponent)args[1]);
+        }
+        else if (method.getName().equals("encodeBegin"))
+        {
+            encodeBegin((FacesContext)args[0], (UIComponent)args[1]);
+        }
+        else if (method.getName().equals("encodeChildren"))
+        {
+            encodeChildren((FacesContext)args[0], (UIComponent)args[1]);
+        }
+        else if (method.getName().equals("encodeEnd"))
+        {
+            encodeEnd((FacesContext)args[0], (UIComponent)args[1]);
+        }
+        else if (method.getName().equals("convertClientId"))
+        {
+            return convertClientId((FacesContext)args[0], (String)args[1]);
+        }
+        else if (method.getName().equals("getRendersChildren"))
+        {
+            return getRendersChildren();
+        }
+        else
+        {
+            return proxy.invokeSuper(obj, args);
+        }
+        return null;
     }
 
     public ExtValGenericRendererWrapper(Renderer wrapped)
