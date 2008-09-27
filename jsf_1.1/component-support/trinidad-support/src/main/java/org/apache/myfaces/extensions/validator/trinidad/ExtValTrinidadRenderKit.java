@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.initializer.trinidad;
+package org.apache.myfaces.extensions.validator.trinidad;
 
 import org.apache.myfaces.extensions.validator.core.ExtValRenderKit;
 import org.apache.myfaces.trinidadinternal.renderkit.RenderKitDecorator;
