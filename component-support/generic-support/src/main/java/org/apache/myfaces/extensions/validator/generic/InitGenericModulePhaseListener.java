@@ -1,4 +1,4 @@
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,17 +15,19 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
+ */
+package org.apache.myfaces.extensions.validator.generic;
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-              version="1.2">
-    <factory>
-        <render-kit-factory>org.apache.myfaces.extensions.validator.core.ExtValRenderKitFactory</render-kit-factory>
-    </factory>
+import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.core.InitExtValValidationPhaseListener</phase-listener>
-    </lifecycle>
-</faces-config>
+/**
+ * @author Gerhard Petracek
+ */
+public class InitGenericModulePhaseListener extends AbstractStartupConfigListener
+{
+    protected void init()
+    {
+        ExtValContext.getContext().addRenderKitWrapperFactory(new ExtValGenericRenderKitWrapperFactory());
+    }
+}
