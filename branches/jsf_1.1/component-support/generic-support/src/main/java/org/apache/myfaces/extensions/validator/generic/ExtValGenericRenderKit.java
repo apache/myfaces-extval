@@ -86,7 +86,7 @@ public class ExtValGenericRenderKit extends RenderKit implements MethodIntercept
             }
         }
 
-        return proxy.invokeSuper(obj, args);
+        return result;
     }
 
     public ExtValGenericRenderKit(RenderKit wrapped)
