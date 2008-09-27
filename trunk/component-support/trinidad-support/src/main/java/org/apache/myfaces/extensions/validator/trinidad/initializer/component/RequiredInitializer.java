@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
+package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.trinidad.validator.DoubleRangeValidator;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -30,38 +30,27 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class DoubleRangeInitializer extends TrinidadComponentInitializer
+public class RequiredInitializer extends TrinidadComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        boolean informationAdded = false;
-        DoubleRangeValidator lengthValidator = (DoubleRangeValidator)facesContext.getApplication()
-                                            .createValidator("org.apache.myfaces.trinidad.DoubleRange");
-
-        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
+        if(metaData.containsKey(MetaDataKeys.REQUIRED))
         {
-            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
-
-            if(min instanceof Double)
+            if((Boolean)metaData.get(MetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
             {
-                lengthValidator.setMinimum((Double)min);
-                informationAdded = true;
+                ((EditableValueHolder)uiComponent).setRequired(true);
             }
         }
+    }
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
-        {
-            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+    protected Boolean isComponentRequired(UIComponent uiComponent)
+    {
+        //compare with false so true = true or null
+        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils
+            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isReadOnly"));
+        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils
+            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isDisabled"));
 
-            if(maxLength instanceof Double)
-            {
-                lengthValidator.setMaximum((Double)maxLength);
-                informationAdded = true;
-            }
-        }
-        if(informationAdded)
-        {
-            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
-        }
+        return !(isReadOnly || isDisabled);
     }
 }

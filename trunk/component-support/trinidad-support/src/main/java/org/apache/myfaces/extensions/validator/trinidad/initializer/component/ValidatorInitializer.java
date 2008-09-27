@@ -16,41 +16,53 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
+package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class RequiredInitializer extends TrinidadComponentInitializer
+@UsageInformation(value = UsageCategory.INTERNAL)
+@ToDo(value = Priority.LOW, description = "impl. trinidad e-mail validator")
+public class ValidatorInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(metaData.containsKey(MetaDataKeys.REQUIRED))
+        if(!metaData.containsKey(MetaDataKeys.CUSTOM))
         {
-            if((Boolean)metaData.get(MetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+            return;
+        }
+
+        Object value = metaData.get(MetaDataKeys.CUSTOM);
+
+        if(!(value instanceof List))
+        {
+            return;
+        }
+
+        for(Object currentValue : (List)value)
+        {
+            if(!(currentValue instanceof String))
             {
-                ((EditableValueHolder)uiComponent).setRequired(true);
+                continue;
+            }
+
+            if(MetaDataKeys.EMAIL.equals(currentValue))
+            {
+                //TODO
             }
         }
-    }
-
-    protected Boolean isComponentRequired(UIComponent uiComponent)
-    {
-        //compare with false so true = true or null
-        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils
-            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isReadOnly"));
-        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils
-            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isDisabled"));
-
-        return !(isReadOnly || isDisabled);
     }
 }
