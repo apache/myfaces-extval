@@ -38,6 +38,7 @@
 
     <modules>
         <module>trinidad-support</module>
+        <module>generic-support</module>
     </modules>
 
     <dependencies>

@@ -42,6 +42,7 @@ public class ExtValContext
 
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
     private List<String> deniedInterceptors = new ArrayList<String>();
+    private AbstractRenderKitWrapperFactory renderKitWrapperFactory = new DefaultRenderKitWrapperFactory();
 
     public static ExtValContext getContext()
     {
@@ -100,4 +101,20 @@ public class ExtValContext
     {
         DefaultComponentInitializer.addComponentInitializer(componentInitializer);
     }
+
+    public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
+    {
+        this.renderKitWrapperFactory.addRenderKitWrapperFactory(renderKitWrapperFactory);
+    }
+
+    public AbstractRenderKitWrapperFactory getRenderKitWrapperFactory()
+    {
+        return renderKitWrapperFactory;
+    }
+
+    public void resetRenderKitWrapperFactory()
+    {
+        this.renderKitWrapperFactory = null;
+    }
+
 }
