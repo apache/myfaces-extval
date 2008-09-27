@@ -16,10 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.initializer.trinidad.component;
+package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
+import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
-import org.apache.myfaces.trinidad.validator.LongRangeValidator;
+import org.apache.myfaces.trinidad.validator.RegExpValidator;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -30,38 +31,29 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class LongRangeInitializer extends TrinidadComponentInitializer
+public class PatternInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        boolean informationAdded = false;
-        LongRangeValidator lengthValidator = (LongRangeValidator)facesContext.getApplication()
-                                            .createValidator("org.apache.myfaces.trinidad.LongRange");
-
-        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
+        if(!metaData.containsKey(MetaDataKeys.PATTERN))
         {
-            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
-
-            if(min instanceof Long)
-            {
-                lengthValidator.setMinimum((Long)min);
-                informationAdded = true;
-            }
+            return;
         }
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
-        {
-            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+        String[] patterns = (String[])metaData.get(MetaDataKeys.PATTERN);
 
-            if(maxLength instanceof Long)
-            {
-                lengthValidator.setMaximum((Long)maxLength);
-                informationAdded = true;
-            }
-        }
-        if(informationAdded)
+        RegExpValidator regExpValidator;
+
+        for(String pattern : patterns)
         {
-            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            regExpValidator = (RegExpValidator)facesContext.getApplication()
+                                                .createValidator("org.apache.myfaces.trinidad.RegExp");
+
+            regExpValidator.setPattern(pattern);
+            regExpValidator.setMessageDetailNoMatch((String)metaData.get(
+                MetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE));
+
+            ((EditableValueHolder)uiComponent).addValidator(regExpValidator);
         }
     }
 }
