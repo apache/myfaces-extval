@@ -26,6 +26,6 @@
     </factory>
 
     <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.core.init.ExtValStartupListener</phase-listener>
+        <phase-listener>org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener</phase-listener>
     </lifecycle>
 </faces-config>
