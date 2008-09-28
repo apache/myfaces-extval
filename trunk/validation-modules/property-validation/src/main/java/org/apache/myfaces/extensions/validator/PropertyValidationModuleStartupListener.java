@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.init.AbstractStartupListener;
+import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;

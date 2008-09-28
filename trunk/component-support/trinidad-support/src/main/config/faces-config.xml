@@ -22,7 +22,7 @@
               version="1.2">
     <lifecycle>
         <phase-listener>
-            org.apache.myfaces.extensions.validator.trinidad.init.TrinidadModuleStartupListener
+            org.apache.myfaces.extensions.validator.trinidad.startup.TrinidadModuleStartupListener
         </phase-listener>
     </lifecycle>
 
