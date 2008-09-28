@@ -18,18 +18,21 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
-import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
+import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
+import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -58,7 +61,7 @@ public class ExtValContext
     {
         synchronized (ExtValContext.class)
         {
-            if(deniedInterceptors.contains(rendererInterceptor.getInterceptorId()))
+            if (deniedInterceptors.contains(rendererInterceptor.getInterceptorId()))
             {
                 return false;
             }

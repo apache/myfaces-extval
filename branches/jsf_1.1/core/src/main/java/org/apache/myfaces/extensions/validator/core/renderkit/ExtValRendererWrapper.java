@@ -16,10 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

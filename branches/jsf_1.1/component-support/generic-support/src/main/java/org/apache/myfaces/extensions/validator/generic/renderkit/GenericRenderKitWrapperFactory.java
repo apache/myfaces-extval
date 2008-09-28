@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.generic;
+package org.apache.myfaces.extensions.validator.generic.renderkit;
 
-import org.apache.myfaces.extensions.validator.core.AbstractRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
 
 import javax.faces.render.RenderKit;
 
