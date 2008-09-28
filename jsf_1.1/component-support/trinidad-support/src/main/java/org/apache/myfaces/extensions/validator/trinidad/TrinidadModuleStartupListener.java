@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad;
 
-import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.core.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 /**
  * @author Gerhard Petracek
  */
-public class InitTrinidadModulePhaseListener extends AbstractStartupConfigListener
+public class TrinidadModuleStartupListener extends AbstractStartupListener
 {
     @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     protected void init()

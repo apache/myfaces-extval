@@ -45,7 +45,7 @@ import java.lang.reflect.Method;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ExtValValidationInterceptor extends AbstractRendererInterceptor
+public class ValidationInterceptor extends AbstractRendererInterceptor
 {
     private static Boolean isAlternativeAvailable = null;
 

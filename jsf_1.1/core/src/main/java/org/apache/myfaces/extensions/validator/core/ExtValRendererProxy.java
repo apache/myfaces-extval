@@ -33,7 +33,7 @@ import java.io.IOException;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class RendererProxy extends Renderer
+public class ExtValRendererProxy extends Renderer
 {
     private Renderer wrapped;
 
@@ -46,7 +46,7 @@ public class RendererProxy extends Renderer
     private String clientId = null;
     private Boolean rendersChildren = null;
 
-    public RendererProxy(Renderer renderer)
+    public ExtValRendererProxy(Renderer renderer)
     {
         this.wrapped = renderer;
     }
