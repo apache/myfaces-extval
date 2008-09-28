@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -43,9 +43,10 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
                                               UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
-        if(metaData.containsKey(MetaDataKeys.REQUIRED))
+        if(metaData.containsKey(CommonMetaDataKeys.REQUIRED))
         {
-            if((Boolean)metaData.get(MetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+            if((Boolean)metaData.get(CommonMetaDataKeys.REQUIRED) &&
+                Boolean.TRUE.equals(isComponentRequired(uiComponent)))
             {
                 ((EditableValueHolder)uiComponent).setRequired(true);
             }
@@ -74,9 +75,9 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
                                              UIComponent uiComponent,
                                              Map<String, Object> metaData)
     {
-        if(metaData.containsKey(MetaDataKeys.MAX_LENGTH))
+        if(metaData.containsKey(CommonMetaDataKeys.MAX_LENGTH))
         {
-            Object maxLength = metaData.get(MetaDataKeys.MAX_LENGTH);
+            Object maxLength = metaData.get(CommonMetaDataKeys.MAX_LENGTH);
 
             if(!(maxLength instanceof Integer))
             {

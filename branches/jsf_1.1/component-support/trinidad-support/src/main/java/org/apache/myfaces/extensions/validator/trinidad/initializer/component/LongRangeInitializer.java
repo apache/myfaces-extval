@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.trinidad.validator.LongRangeValidator;
 
 import javax.faces.component.EditableValueHolder;
@@ -38,9 +38,9 @@ public class LongRangeInitializer extends TrinidadComponentInitializer
         LongRangeValidator lengthValidator = (LongRangeValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.LongRange");
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
+        if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN))
         {
-            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
+            Object min = metaData.get(CommonMetaDataKeys.RANGE_MIN);
 
             if(min instanceof Long)
             {
@@ -49,9 +49,9 @@ public class LongRangeInitializer extends TrinidadComponentInitializer
             }
         }
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
+        if(metaData.containsKey(CommonMetaDataKeys.RANGE_MAX))
         {
-            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+            Object maxLength = metaData.get(CommonMetaDataKeys.RANGE_MAX);
 
             if(maxLength instanceof Long)
             {

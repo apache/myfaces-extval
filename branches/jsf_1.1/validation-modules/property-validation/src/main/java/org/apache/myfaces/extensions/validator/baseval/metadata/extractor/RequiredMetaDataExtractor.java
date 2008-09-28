@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 
 import java.lang.annotation.Annotation;
@@ -34,7 +34,7 @@ public class RequiredMetaDataExtractor implements MetaDataExtractor
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        results.put(MetaDataKeys.REQUIRED, true);
+        results.put(CommonMetaDataKeys.REQUIRED, true);
         return results;
     }
 }

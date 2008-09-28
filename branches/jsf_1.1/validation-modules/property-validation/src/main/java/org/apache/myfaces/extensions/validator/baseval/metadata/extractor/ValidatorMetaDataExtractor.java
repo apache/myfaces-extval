@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 
 import java.lang.annotation.Annotation;
@@ -43,14 +43,14 @@ public class ValidatorMetaDataExtractor implements MetaDataExtractor
 
         for(Class currentClass : validators)
         {
-            if(currentClass.getSimpleName().toLowerCase().contains(MetaDataKeys.EMAIL))
+            if(currentClass.getSimpleName().toLowerCase().contains(CommonMetaDataKeys.EMAIL))
             {
-                value.add(MetaDataKeys.EMAIL);
+                value.add(CommonMetaDataKeys.EMAIL);
             }
             value.add(currentClass.getName());
         }
 
-        results.put(MetaDataKeys.CUSTOM, value);
+        results.put(CommonMetaDataKeys.CUSTOM, value);
 
         return results;
     }
