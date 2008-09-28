@@ -16,48 +16,50 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+
+import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
+import javax.faces.context.FacesContext;
+import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
-public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFactory<RenderKit, RenderKit>
+@UsageInformation(UsageCategory.INTERNAL)
+public class ExtValRenderKitFactory extends RenderKitFactory
 {
-    protected AbstractRenderKitWrapperFactory wrapped;
+    private RenderKitFactory wrapped;
 
-    public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
+    public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
     {
-        if(this.wrapped != null)
-        {
-            this.wrapped.addRenderKitWrapperFactory(renderKitWrapperFactory);
-            return;
-        }
-
-        this.wrapped = renderKitWrapperFactory;
+        this.wrapped = renderKitFactory;
     }
 
-    public final RenderKit create(RenderKit renderKit)
+    public void addRenderKit(String s, RenderKit renderKit)
     {
-        RenderKit result = null;
-
-        if(this.wrapped != null)
-        {
-            result = this.wrapped.create(renderKit);
-        }
-
-        if(result == null)
-        {
-            return createWrapper(renderKit);
-        }
-
-        return result;
+        wrapped.addRenderKit(s, renderKit);
     }
 
-    protected abstract RenderKit createWrapper(RenderKit renderKit);
+    public RenderKit getRenderKit(FacesContext facesContext, String s)
+    {
+        RenderKit renderKit = this.wrapped.getRenderKit(facesContext, s);
+        AbstractRenderKitWrapperFactory wrapperFactory = ExtValContext.getContext().getRenderKitWrapperFactory();
+
+        if(wrapperFactory == null)
+        {
+            return renderKit;
+        }
+        return wrapperFactory.create(renderKit);
+    }
+
+    public Iterator<String> getRenderKitIds()
+    {
+        return wrapped.getRenderKitIds();
+    }
 }
