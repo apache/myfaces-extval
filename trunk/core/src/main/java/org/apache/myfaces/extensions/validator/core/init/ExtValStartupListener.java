@@ -16,21 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.init;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import javax.faces.render.RenderKit;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
+public class ExtValStartupListener extends AbstractStartupListener
 {
-    protected RenderKit createWrapper(RenderKit renderKit)
+    protected void init()
     {
-        return new ExtValRenderKit(renderKit);
+        ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
     }
 }
