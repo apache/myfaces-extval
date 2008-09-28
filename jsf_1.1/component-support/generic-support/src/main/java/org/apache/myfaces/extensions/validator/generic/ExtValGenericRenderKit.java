@@ -63,24 +63,11 @@ public class ExtValGenericRenderKit extends RenderKit implements MethodIntercept
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable
     {
-        if (method.getName().equals("addRenderer"))
-        {
-            if (!((Renderer) args[2] instanceof ExtValRendererWrapper))
-            {
-                return proxy.invokeSuper(obj, args);
-            }
-            else
-            {
-                args[2] = ExtValGenericRendererWrapper.newInstance((Renderer)args[2]);
-                return proxy.invokeSuper(obj, args);
-            }
-        }
-
         Object result = proxy.invokeSuper(obj, args);
 
         if(method.getName().equals("getRenderer"))
         {
-            if(result instanceof Renderer && !(result instanceof ExtValGenericRendererWrapper))
+            if(result instanceof Renderer && !(result instanceof ExtValRendererWrapper))
             {
                 return ExtValGenericRendererWrapper.newInstance((Renderer)result);
             }

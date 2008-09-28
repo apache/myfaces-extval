@@ -154,7 +154,7 @@ public class ExtValRendererWrapper extends Renderer
         return rendersChildren;
     }
 
-    public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
+    public final Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
