@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.trinidad.validator.DoubleRangeValidator;
 
 import javax.faces.component.EditableValueHolder;
@@ -38,9 +38,9 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
         DoubleRangeValidator lengthValidator = (DoubleRangeValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.DoubleRange");
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MIN))
+        if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN))
         {
-            Object min = metaData.get(MetaDataKeys.RANGE_MIN);
+            Object min = metaData.get(CommonMetaDataKeys.RANGE_MIN);
 
             if(min instanceof Double)
             {
@@ -49,9 +49,9 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
             }
         }
 
-        if(metaData.containsKey(MetaDataKeys.RANGE_MAX))
+        if(metaData.containsKey(CommonMetaDataKeys.RANGE_MAX))
         {
-            Object maxLength = metaData.get(MetaDataKeys.RANGE_MAX);
+            Object maxLength = metaData.get(CommonMetaDataKeys.RANGE_MAX);
 
             if(maxLength instanceof Double)
             {

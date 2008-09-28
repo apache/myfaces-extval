@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -44,16 +44,16 @@ public class JpaMetaDataExtractor implements MetaDataExtractor
         {
             if(!((Column) annotation).nullable())
             {
-                results.put(MetaDataKeys.REQUIRED, true);
+                results.put(CommonMetaDataKeys.REQUIRED, true);
             }
 
-            results.put(MetaDataKeys.MAX_LENGTH, ((Column) annotation).length());
+            results.put(CommonMetaDataKeys.MAX_LENGTH, ((Column) annotation).length());
         }
         else if(annotation instanceof Basic)
         {
             if(!((Basic)annotation).optional())
             {
-                results.put(MetaDataKeys.REQUIRED, true);
+                results.put(CommonMetaDataKeys.REQUIRED, true);
             }
         }
         //TODO impl. the rest!!!
