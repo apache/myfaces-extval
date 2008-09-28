@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad;
 
+import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRenderKit;
+
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;

@@ -16,10 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.generic;
+package org.apache.myfaces.extensions.validator.generic.init;
 
-import org.apache.myfaces.extensions.validator.core.AbstractStartupListener;
+import org.apache.myfaces.extensions.validator.core.init.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.generic.renderkit.GenericRenderKitWrapperFactory;
 
 /**
  * @author Gerhard Petracek

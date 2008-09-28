@@ -22,7 +22,7 @@
               version="1.2">
     <lifecycle>
         <phase-listener>
-            org.apache.myfaces.extensions.validator.generic.GenericModuleStartupListener
+            org.apache.myfaces.extensions.validator.generic.init.GenericModuleStartupListener
         </phase-listener>
     </lifecycle>
 </faces-config>
