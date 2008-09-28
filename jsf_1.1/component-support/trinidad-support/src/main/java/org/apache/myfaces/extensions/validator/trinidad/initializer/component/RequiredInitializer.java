@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.EditableValueHolder;
@@ -34,9 +34,9 @@ public class RequiredInitializer extends TrinidadComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(metaData.containsKey(MetaDataKeys.REQUIRED))
+        if(metaData.containsKey(CommonMetaDataKeys.REQUIRED))
         {
-            if((Boolean)metaData.get(MetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+            if((Boolean)metaData.get(CommonMetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
             {
                 ((EditableValueHolder)uiComponent).setRequired(true);
             }

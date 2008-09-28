@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
@@ -39,7 +39,7 @@ public class PatternMetaDataExtractor implements MetaDataExtractor
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        results.put(MetaDataKeys.PATTERN, ((Pattern)annotation).value());
+        results.put(CommonMetaDataKeys.PATTERN, ((Pattern)annotation).value());
 
         String validationErrorMsgKey = ((Pattern)annotation).validationErrorMsgKey();
         Locale currentLocale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
@@ -48,7 +48,7 @@ public class PatternMetaDataExtractor implements MetaDataExtractor
 
         String validationErrorMsg = FactoryUtils.getMessageResolverFactory()
                                         .create(validationStrategy).getMessage(validationErrorMsgKey, currentLocale);
-        results.put(MetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE, validationErrorMsg);
+        results.put(CommonMetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE, validationErrorMsg);
         return results;
     }
 }

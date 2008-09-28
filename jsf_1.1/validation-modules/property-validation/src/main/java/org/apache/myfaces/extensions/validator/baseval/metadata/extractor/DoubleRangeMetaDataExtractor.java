@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.DoubleRange;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 
 import java.lang.annotation.Annotation;
@@ -37,12 +37,12 @@ public class DoubleRangeMetaDataExtractor implements MetaDataExtractor
         Map<String, Object> results = new HashMap<String, Object>();
         double minimum = ((DoubleRange)annotation).minimum();
 
-        results.put(MetaDataKeys.RANGE_MIN, minimum);
-        results.put(MetaDataKeys.RANGE_MAX, ((DoubleRange)annotation).maximum());
+        results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
+        results.put(CommonMetaDataKeys.RANGE_MAX, ((DoubleRange)annotation).maximum());
 
         if(minimum > 0)
         {
-            results.put(MetaDataKeys.REQUIRED, true);
+            results.put(CommonMetaDataKeys.REQUIRED, true);
         }
 
         return results;
