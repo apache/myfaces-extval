@@ -36,7 +36,8 @@ public class RequiredInitializer extends TrinidadComponentInitializer
     {
         if(metaData.containsKey(CommonMetaDataKeys.REQUIRED))
         {
-            if((Boolean)metaData.get(CommonMetaDataKeys.REQUIRED) && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+            if((Boolean)metaData.get(CommonMetaDataKeys.REQUIRED)
+                && Boolean.TRUE.equals(isComponentRequired(uiComponent)))
             {
                 ((EditableValueHolder)uiComponent).setRequired(true);
             }
