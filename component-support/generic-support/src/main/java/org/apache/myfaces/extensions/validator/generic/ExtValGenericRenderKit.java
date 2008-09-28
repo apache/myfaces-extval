@@ -19,15 +19,11 @@
 package org.apache.myfaces.extensions.validator.generic;
 
 import org.apache.myfaces.extensions.validator.core.ExtValRenderKit;
-import org.apache.myfaces.extensions.validator.core.ExtValRendererWrapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
-import javax.faces.render.ResponseStateManager;
-import javax.faces.context.ResponseWriter;
-import javax.faces.context.ResponseStream;
-import java.io.Writer;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -37,12 +33,8 @@ import net.sf.cglib.proxy.MethodProxy;
 /**
  * @author Gerhard Petracek
  */
-public class ExtValGenericRenderKit extends RenderKit implements MethodInterceptor
+public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInterceptor
 {
-    protected ExtValRenderKit extValRenderKit;
-
-    public static final String ID = "EXTVAL_GENERIC_RENDERKIT";
-
     public static RenderKit newInstance(RenderKit renderKit)
     {
         Class currentClass = renderKit.getClass();
@@ -63,51 +55,30 @@ public class ExtValGenericRenderKit extends RenderKit implements MethodIntercept
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable
     {
-        Object result = proxy.invokeSuper(obj, args);
-
         if(method.getName().equals("getRenderer"))
         {
-            if(result instanceof Renderer && !(result instanceof ExtValRendererWrapper))
-            {
-                return ExtValGenericRendererWrapper.newInstance((Renderer)result);
-            }
+            return getRenderer((String)args[0], (String)args[1]);
+        }
+        else if(method.getName().equals("addRenderer"))
+        {
+            addRenderer((String)args[0], (String)args[1], (Renderer)args[2]);
+        }
+        else
+        {
+            return proxy.invokeSuper(obj, args);
         }
 
-        return result;
+        return null;
     }
 
     public ExtValGenericRenderKit(RenderKit wrapped)
     {
-        this.extValRenderKit = new ExtValRenderKit(wrapped);
+        super(wrapped);
     }
 
-    @Override
-    public void addRenderer(String family, String rendererType, Renderer renderer)
+    @UsageInformation({UsageCategory.REUSE, UsageCategory.CUSTOMIZABLE})
+    protected Renderer createWrapper(Renderer renderer)
     {
-        this.extValRenderKit.addRenderer(family, rendererType, renderer);
-    }
-
-    @Override
-    public Renderer getRenderer(String family, String rendererType)
-    {
-        return this.extValRenderKit.getRenderer(family, rendererType);
-    }
-
-    @Override
-    public ResponseStateManager getResponseStateManager()
-    {
-        return this.extValRenderKit.getResponseStateManager();
-    }
-
-    @Override
-    public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
-    {
-        return this.extValRenderKit.createResponseWriter(writer, s, s1);
-    }
-
-    @Override
-    public ResponseStream createResponseStream(OutputStream outputStream)
-    {
-        return this.extValRenderKit.createResponseStream(outputStream);
+        return ExtValGenericRendererWrapper.newInstance(renderer);
     }
 }
