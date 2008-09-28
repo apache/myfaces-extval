@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
+import org.apache.myfaces.extensions.validator.core.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -28,10 +28,8 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 /**
  * @author Gerhard Petracek
  */
-public class InitPropertyValidationModulePhaseListener extends
-        AbstractStartupConfigListener
+public class PropertyValidationModuleStartupListener extends AbstractStartupListener
 {
-
     protected void init()
     {
         initStaticStrategyMappings();

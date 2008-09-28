@@ -38,7 +38,7 @@ import java.util.List;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.REUSE)
-public abstract class AbstractStartupConfigListener implements PhaseListener
+public abstract class AbstractStartupListener implements PhaseListener
 {
     protected final Log logger = LogFactory.getLog(getClass());
     //don't remove - it's a fallback if there is a problem with deregistration
@@ -51,7 +51,7 @@ public abstract class AbstractStartupConfigListener implements PhaseListener
 
     public void beforePhase(PhaseEvent event)
     {
-        synchronized (AbstractStartupConfigListener.class)
+        synchronized (AbstractStartupListener.class)
         {
             if (!initializedListeners.contains(getClass()))
             {
