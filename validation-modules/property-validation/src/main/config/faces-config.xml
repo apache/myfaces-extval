@@ -21,7 +21,7 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
               version="1.2">
     <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.InitPropertyValidationModulePhaseListener</phase-listener>
+        <phase-listener>org.apache.myfaces.extensions.validator.PropertyValidationModuleStartupListener</phase-listener>
     </lifecycle>
 
     <lifecycle>
