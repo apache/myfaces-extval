@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -122,7 +122,7 @@ public class JpaValidationStrategy extends AbstractValidationStrategy
     {
         if (convertedObject == null || convertedObject.equals(""))
         {
-            this.violation = MetaDataKeys.REQUIRED;
+            this.violation = CommonMetaDataKeys.REQUIRED;
             throw new ValidatorException(getValidationErrorFacesMassage(null));
         }
     }

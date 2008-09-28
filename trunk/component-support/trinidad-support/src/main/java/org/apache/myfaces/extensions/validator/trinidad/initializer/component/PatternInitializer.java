@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.trinidad.validator.RegExpValidator;
 
 import javax.faces.component.EditableValueHolder;
@@ -35,12 +35,12 @@ public class PatternInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(!metaData.containsKey(MetaDataKeys.PATTERN))
+        if(!metaData.containsKey(CommonMetaDataKeys.PATTERN))
         {
             return;
         }
 
-        String[] patterns = (String[])metaData.get(MetaDataKeys.PATTERN);
+        String[] patterns = (String[])metaData.get(CommonMetaDataKeys.PATTERN);
 
         RegExpValidator regExpValidator;
 
@@ -51,7 +51,7 @@ public class PatternInitializer implements ComponentInitializer
 
             regExpValidator.setPattern(pattern);
             regExpValidator.setMessageDetailNoMatch((String)metaData.get(
-                MetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE));
+                CommonMetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE));
 
             ((EditableValueHolder)uiComponent).addValidator(regExpValidator);
         }

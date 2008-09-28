@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.LongRange;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 
 import java.lang.annotation.Annotation;
@@ -37,12 +37,12 @@ public class LongRangeMetaDataExtractor implements MetaDataExtractor
         Map<String, Object> results = new HashMap<String, Object>();
         long minimum = ((LongRange)annotation).minimum();
 
-        results.put(MetaDataKeys.RANGE_MIN, minimum);
-        results.put(MetaDataKeys.RANGE_MAX, ((LongRange)annotation).maximum());
+        results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
+        results.put(CommonMetaDataKeys.RANGE_MAX, ((LongRange)annotation).maximum());
 
         if(minimum > 0)
         {
-            results.put(MetaDataKeys.REQUIRED, true);
+            results.put(CommonMetaDataKeys.REQUIRED, true);
         }
 
         return results;
