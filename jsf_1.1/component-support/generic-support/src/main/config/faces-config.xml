@@ -25,7 +25,7 @@
 <faces-config>
     <lifecycle>
         <phase-listener>
-            org.apache.myfaces.extensions.validator.generic.init.GenericModuleStartupListener
+            org.apache.myfaces.extensions.validator.generic.startup.GenericModuleStartupListener
         </phase-listener>
     </lifecycle>
 </faces-config>
