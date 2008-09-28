@@ -40,8 +40,6 @@ public class ExtValRenderKit extends RenderKit
 {
     protected RenderKit wrapped;
 
-    public static final String ID = "EXTVAL_RENDERKIT";
-
     public ExtValRenderKit(RenderKit wrapped)
     {
         //a4j workaround
