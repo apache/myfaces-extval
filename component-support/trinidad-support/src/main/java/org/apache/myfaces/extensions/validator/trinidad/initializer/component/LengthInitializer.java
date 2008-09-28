@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.EditableValueHolder;
@@ -39,9 +39,9 @@ public class LengthInitializer extends TrinidadComponentInitializer
         LengthValidator lengthValidator = (LengthValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.Length");
 
-        if(metaData.containsKey(MetaDataKeys.MIN_LENGTH))
+        if(metaData.containsKey(CommonMetaDataKeys.MIN_LENGTH))
         {
-            Object min = metaData.get(MetaDataKeys.MIN_LENGTH);
+            Object min = metaData.get(CommonMetaDataKeys.MIN_LENGTH);
 
             if(min instanceof Integer)
             {
@@ -50,9 +50,9 @@ public class LengthInitializer extends TrinidadComponentInitializer
             }
         }
 
-        if(metaData.containsKey(MetaDataKeys.MAX_LENGTH))
+        if(metaData.containsKey(CommonMetaDataKeys.MAX_LENGTH))
         {
-            Object maxLength = metaData.get(MetaDataKeys.MAX_LENGTH);
+            Object maxLength = metaData.get(CommonMetaDataKeys.MAX_LENGTH);
 
             if(maxLength instanceof Integer)
             {

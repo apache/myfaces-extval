@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -40,12 +40,12 @@ public class ValidatorInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
-        if(!metaData.containsKey(MetaDataKeys.CUSTOM))
+        if(!metaData.containsKey(CommonMetaDataKeys.CUSTOM))
         {
             return;
         }
 
-        Object value = metaData.get(MetaDataKeys.CUSTOM);
+        Object value = metaData.get(CommonMetaDataKeys.CUSTOM);
 
         if(!(value instanceof List))
         {
@@ -59,7 +59,7 @@ public class ValidatorInitializer implements ComponentInitializer
                 continue;
             }
 
-            if(MetaDataKeys.EMAIL.equals(currentValue))
+            if(CommonMetaDataKeys.EMAIL.equals(currentValue))
             {
                 //TODO
             }

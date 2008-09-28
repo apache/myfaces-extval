@@ -27,7 +27,7 @@ package org.apache.myfaces.extensions.validator.core.metadata;
 /*
  * placed in core to avoid duplicated information in multiple modules (validation module and component-support module)
  */
-public interface MetaDataKeys
+public interface CommonMetaDataKeys
 {
     static final String REQUIRED = "required";
 
