@@ -48,7 +48,7 @@ public class ExtValRendererWrapper extends Renderer
 
     public ExtValRendererWrapper(Renderer wrapped)
     {
-        this.wrapped = new RendererProxy(wrapped);
+        this.wrapped = new ExtValRendererProxy(wrapped);
     }
 
     @Override

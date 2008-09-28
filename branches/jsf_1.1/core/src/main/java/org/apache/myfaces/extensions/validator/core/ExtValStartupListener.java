@@ -26,10 +26,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class InitExtValValidationPhaseListener extends AbstractStartupConfigListener
+public class ExtValStartupListener extends AbstractStartupListener
 {
     protected void init()
     {
-        ExtValContext.getContext().registerRendererInterceptor(new ExtValValidationInterceptor());
+        ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
     }
 }

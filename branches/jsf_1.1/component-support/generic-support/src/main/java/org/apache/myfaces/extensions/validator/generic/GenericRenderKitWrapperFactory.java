@@ -18,16 +18,17 @@
  */
 package org.apache.myfaces.extensions.validator.generic;
 
-import org.apache.myfaces.extensions.validator.core.AbstractStartupConfigListener;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.AbstractRenderKitWrapperFactory;
+
+import javax.faces.render.RenderKit;
 
 /**
  * @author Gerhard Petracek
  */
-public class InitGenericModulePhaseListener extends AbstractStartupConfigListener
+public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
-    protected void init()
+    protected RenderKit createWrapper(RenderKit renderKit)
     {
-        ExtValContext.getContext().addRenderKitWrapperFactory(new ExtValGenericRenderKitWrapperFactory());
+        return ExtValGenericRenderKit.newInstance(renderKit);
     }
 }
