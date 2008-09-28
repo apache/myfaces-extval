@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -43,7 +44,11 @@ public class ExtValRenderKit extends RenderKit
 
     public ExtValRenderKit(RenderKit wrapped)
     {
-        FactoryUtils.getRenderingContextInitializerFactory().create(wrapped).initContext();
+        //a4j workaround
+        if(FacesContext.getCurrentInstance() != null)
+        {
+            FactoryUtils.getRenderingContextInitializerFactory().create(wrapped).initContext();
+        }
 
         this.wrapped = wrapped;
     }
