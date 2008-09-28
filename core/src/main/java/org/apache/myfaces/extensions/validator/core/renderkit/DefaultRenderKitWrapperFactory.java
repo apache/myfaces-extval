@@ -16,48 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
-import javax.faces.context.FacesContext;
-import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ExtValRenderKitFactory extends RenderKitFactory
+public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
-    private RenderKitFactory wrapped;
-
-    public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
+    protected RenderKit createWrapper(RenderKit renderKit)
     {
-        this.wrapped = renderKitFactory;
-    }
-
-    public void addRenderKit(String s, RenderKit renderKit)
-    {
-        wrapped.addRenderKit(s, renderKit);
-    }
-
-    public RenderKit getRenderKit(FacesContext facesContext, String s)
-    {
-        RenderKit renderKit = this.wrapped.getRenderKit(facesContext, s);
-        AbstractRenderKitWrapperFactory wrapperFactory = ExtValContext.getContext().getRenderKitWrapperFactory();
-
-        if(wrapperFactory == null)
-        {
-            return renderKit;
-        }
-        return wrapperFactory.create(renderKit);
-    }
-
-    public Iterator<String> getRenderKitIds()
-    {
-        return wrapped.getRenderKitIds();
+        return new ExtValRenderKit(renderKit);
     }
 }
