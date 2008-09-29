@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.rendering.Render
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -46,6 +47,8 @@ public class ExtValContext
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
     private List<String> deniedInterceptors = new ArrayList<String>();
     private AbstractRenderKitWrapperFactory renderKitWrapperFactory = new DefaultRenderKitWrapperFactory();
+    private List<ProcessedInformationRecorder> processedInformationRecorders =
+        new ArrayList<ProcessedInformationRecorder>();
 
     public static ExtValContext getContext()
     {
@@ -120,4 +123,13 @@ public class ExtValContext
         this.renderKitWrapperFactory = null;
     }
 
+    public List<ProcessedInformationRecorder> getProcessedInformationRecorders()
+    {
+        return processedInformationRecorders;
+    }
+
+    public void addProcessedInformationRecorder(ProcessedInformationRecorder processedInformationRecorder)
+    {
+        this.processedInformationRecorders.add(processedInformationRecorder);
+    }
 }

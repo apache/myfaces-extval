@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
 
 /**
  * @author Gerhard Petracek
@@ -32,6 +33,8 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 {
     protected void init()
     {
+        ExtValContext.getContext().addProcessedInformationRecorder(new CrossValidationUserInputRecorder());
+
         initStaticStrategyMappings();
         initDefaultComponentInitializerName();
     }
