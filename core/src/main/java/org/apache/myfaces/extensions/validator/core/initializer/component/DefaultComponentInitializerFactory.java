@@ -18,12 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.core.initializer.component;
 
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class DefaultComponentInitializerFactory implements
         componentInitializerClassNames
             .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER);
         componentInitializerClassNames
-            .add(ExtValUtils.getInformationProviderBean().getCustomComponentInitializer());
+            .add(ExtValContext.getContext().getInformationProviderBean().getCustomComponentInitializer());
         componentInitializerClassNames
             .add(DefaultComponentInitializer.class.getName());
     }

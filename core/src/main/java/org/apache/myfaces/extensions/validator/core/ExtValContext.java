@@ -23,13 +23,15 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Defaul
 import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
-import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
+import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ELUtils;
 
+import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,15 +46,28 @@ public class ExtValContext
 {
     private static ExtValContext extValContext = new ExtValContext();
 
+    private FactoryFinder factoryFinder = new DefaultFactoryFinder();
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
     private List<String> deniedInterceptors = new ArrayList<String>();
-    private AbstractRenderKitWrapperFactory renderKitWrapperFactory = new DefaultRenderKitWrapperFactory();
     private List<ProcessedInformationRecorder> processedInformationRecorders =
         new ArrayList<ProcessedInformationRecorder>();
 
     public static ExtValContext getContext()
     {
         return extValContext;
+    }
+
+    public FactoryFinder getFactoryFinder()
+    {
+        return factoryFinder;
+    }
+
+    public void setFactoryFinder(FactoryFinder factoryFinder)
+    {
+        if(factoryFinder != null)
+        {
+            this.factoryFinder = factoryFinder;
+        }
     }
 
     public List<RendererInterceptor> getRendererInterceptors()
@@ -98,7 +113,7 @@ public class ExtValContext
         deregisterRendererInterceptor(rendererInterceptorClass);
     }
 
-    public static void addRenderingContextInitializer(RenderingContextInitializer renderingContextInitializer)
+    public void addRenderingContextInitializer(RenderingContextInitializer renderingContextInitializer)
     {
         DefaultRenderingContextInitializer.addRenderingContextInitializer(renderingContextInitializer);
     }
@@ -106,21 +121,6 @@ public class ExtValContext
     public void addComponentInitializer(ComponentInitializer componentInitializer)
     {
         DefaultComponentInitializer.addComponentInitializer(componentInitializer);
-    }
-
-    public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
-    {
-        this.renderKitWrapperFactory.addRenderKitWrapperFactory(renderKitWrapperFactory);
-    }
-
-    public AbstractRenderKitWrapperFactory getRenderKitWrapperFactory()
-    {
-        return renderKitWrapperFactory;
-    }
-
-    public void resetRenderKitWrapperFactory()
-    {
-        this.renderKitWrapperFactory = null;
     }
 
     public List<ProcessedInformationRecorder> getProcessedInformationRecorders()
@@ -131,5 +131,46 @@ public class ExtValContext
     public void addProcessedInformationRecorder(ProcessedInformationRecorder processedInformationRecorder)
     {
         this.processedInformationRecorders.add(processedInformationRecorder);
+    }
+
+    public InformationProviderBean getInformationProviderBean()
+    {
+        Map applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        InformationProviderBean bean = (InformationProviderBean) applicationMap.get(InformationProviderBean.BEAN_NAME);
+
+        if (bean == null)
+        {
+            return initInformationProviderBean(applicationMap);
+        }
+        return bean;
+    }
+
+    private InformationProviderBean initInformationProviderBean(Map applicationMap)
+    {
+        List<String> informationProviderBeanClassNames = new ArrayList<String>();
+
+        informationProviderBeanClassNames.add(WebXmlParameter.CUSTOM_CONVENTION_INFO_PROVIDER_BEAN);
+        informationProviderBeanClassNames.add(getCustomInformationProviderBeanClassName());
+        informationProviderBeanClassNames.add(InformationProviderBean.class.getName());
+
+        InformationProviderBean informationProviderBean;
+        for (String className : informationProviderBeanClassNames)
+        {
+            informationProviderBean = (InformationProviderBean) ClassUtils.tryToInstantiateClassForName(className);
+
+            if (informationProviderBean != null)
+            {
+                applicationMap.put(InformationProviderBean.BEAN_NAME, informationProviderBean);
+                return informationProviderBean;
+            }
+        }
+        throw new IllegalStateException(InformationProviderBean.class.getName() + " not found");
+    }
+
+    private String getCustomInformationProviderBeanClassName()
+    {
+        InformationProviderBean bean = (InformationProviderBean) ELUtils.getBean(InformationProviderBean.CUSTOM_BEAN);
+
+        return (bean != null) ? bean.getClass().getName() : null;
     }
 }

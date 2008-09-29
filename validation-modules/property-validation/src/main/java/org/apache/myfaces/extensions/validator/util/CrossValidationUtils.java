@@ -56,7 +56,7 @@ public class CrossValidationUtils
                 .put(CROSS_VALIDATION_STORAGE_KEY, new CrossValidationStorage());
     }
 
-    public static final String VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY = ExtValUtils.class.getName();
+    public static final String VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY = JsfUtils.class.getName();
 
     public static Map<String, ProcessedInformationEntry> getOrInitValueBindingConvertedValueMapping()
     {

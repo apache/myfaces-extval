@@ -20,7 +20,10 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -45,7 +48,10 @@ public class ExtValRenderKit extends RenderKit
         //a4j workaround
         if(FacesContext.getCurrentInstance() != null)
         {
-            FactoryUtils.getRenderingContextInitializerFactory().create(wrapped).initContext();
+            ((ClassMappingFactory<RenderKit, RenderingContextInitializer>)ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNameEnum.RENDERING_CONTEXT_INITIALIZER_FACTORY, ClassMappingFactory.class))
+                .create(wrapped).initContext();
         }
 
         this.wrapped = wrapped;

@@ -16,27 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.util;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.lang.annotation.Annotation;
+import javax.faces.FactoryFinder;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import java.util.Iterator;
+
 
 /**
- * It's an alternative Mapper to place Annotations and ValidationStrategies in the same package.
- *
  * @author Gerhard Petracek
- * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleAnnotationToValidationStrategyNameMapper implements NameMapper<Annotation>
+@UsageInformation(UsageCategory.INTERNAL)
+public class JsfUtils
 {
-    public String createName(Annotation annotation)
+    public static void deregisterPhaseListener(PhaseListener phaseListener)
     {
-        return annotation.annotationType().getName() +
-            ExtValContext.getContext().getInformationProviderBean().getValidationStrategyPostfix();
+        LifecycleFactory lifecycleFactory = (LifecycleFactory)FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+
+        String currentId;
+        Lifecycle currentLifecycle;
+        Iterator lifecycleIds = lifecycleFactory.getLifecycleIds();
+        while (lifecycleIds.hasNext())
+        {
+            currentId = (String) lifecycleIds.next();
+            currentLifecycle = lifecycleFactory.getLifecycle(currentId);
+            currentLifecycle.removePhaseListener(phaseListener);
+        }
     }
 }

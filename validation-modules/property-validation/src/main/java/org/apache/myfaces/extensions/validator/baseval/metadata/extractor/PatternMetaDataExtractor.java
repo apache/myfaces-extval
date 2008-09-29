@@ -21,8 +21,11 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
@@ -44,10 +47,16 @@ public class PatternMetaDataExtractor implements MetaDataExtractor
         String validationErrorMsgKey = ((Pattern)annotation).validationErrorMsgKey();
         Locale currentLocale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
-        ValidationStrategy validationStrategy = FactoryUtils.getValidationStrategyFactory().create(annotation);
+        ValidationStrategy validationStrategy = ((ClassMappingFactory<Annotation, ValidationStrategy>)ExtValContext
+            .getContext().getFactoryFinder()
+            .getFactory(FactoryNameEnum.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
+            .create(annotation);
 
-        String validationErrorMsg = FactoryUtils.getMessageResolverFactory()
-                                        .create(validationStrategy).getMessage(validationErrorMsgKey, currentLocale);
+        String validationErrorMsg = ((ClassMappingFactory<ValidationStrategy, MessageResolver>)ExtValContext
+            .getContext()
+            .getFactoryFinder()
+            .getFactory(FactoryNameEnum.MESSAGE_RESOLVER_FACTORY, ClassMappingFactory.class))
+            .create(validationStrategy).getMessage(validationErrorMsgKey, currentLocale);
         results.put(CommonMetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE, validationErrorMsg);
         return results;
     }

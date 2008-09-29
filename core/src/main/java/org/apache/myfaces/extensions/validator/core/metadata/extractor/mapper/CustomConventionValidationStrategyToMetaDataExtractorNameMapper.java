@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -39,6 +39,7 @@ public class CustomConventionValidationStrategyToMetaDataExtractorNameMapper ext
 {
     protected String getCustomNameMapperClassName()
     {
-        return ExtValUtils.getInformationProviderBean().getCustomValidationStrategyToMetaDataExtractorNameMapper();
+        return ExtValContext.getContext().getInformationProviderBean()
+            .getCustomValidationStrategyToMetaDataExtractorNameMapper();
     }
 }

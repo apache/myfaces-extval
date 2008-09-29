@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -58,7 +58,7 @@ public class DefaultComponentAnnotationExtractorFactory implements AnnotationExt
 
             annotationExtractorClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR);
             annotationExtractorClassNames
-                .add(ExtValUtils.getInformationProviderBean().getCustomComponentAnnotationExtractor());
+                .add(ExtValContext.getContext().getInformationProviderBean().getCustomComponentAnnotationExtractor());
             annotationExtractorClassNames.add(DefaultComponentAnnotationExtractor.class.getName());
 
             for (String className : annotationExtractorClassNames)
