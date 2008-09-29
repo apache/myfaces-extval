@@ -49,16 +49,8 @@ public interface RendererInterceptor
     void beforeEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException;
 
-    void beforeConvertClientId(FacesContext facesContext, String s, Renderer renderer);
-
-    void beforeGetRendersChildren(Renderer renderer);
-
     void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer renderer)
         throws ConverterException;
-
-    /*
-     * before delegation
-     */
 
     /*
      * after
@@ -73,10 +65,6 @@ public interface RendererInterceptor
 
     void afterEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException;
-
-    void afterConvertClientId(FacesContext facesContext, String s, Renderer renderer);
-
-    void afterGetRendersChildren(Renderer renderer);
 
     void afterGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer renderer)
         throws ConverterException;

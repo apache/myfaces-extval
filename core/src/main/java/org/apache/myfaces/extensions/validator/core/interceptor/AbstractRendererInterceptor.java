@@ -61,19 +61,14 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
     {
     }
 
-    public void beforeConvertClientId(FacesContext facesContext, String s, Renderer wrapped)
-    {
-    }
-
-    public void beforeGetRendersChildren(Renderer wrapped)
-    {
-    }
-
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
         throws ConverterException
     {
     }
 
+    /*
+     * after
+     */
     public void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
     {
     }
@@ -90,14 +85,6 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
 
     public void afterEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException
-    {
-    }
-
-    public void afterConvertClientId(FacesContext facesContext, String s, Renderer wrapped)
-    {
-    }
-
-    public void afterGetRendersChildren(Renderer wrapped)
     {
     }
 
