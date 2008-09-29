@@ -125,27 +125,27 @@ public class ExtValRendererProxy extends Renderer
         return getOrInitComponentProxyMapping().get(clientId);
     }
 
-    private static final String BEAN_NAME = ExtValRendererProxy.class.getName() + ":BEAN";
+    private static final String PROXY_STORAGE_NAME = ExtValRendererProxy.class.getName() + ":STORAGE";
 
     private Map<String, RendererProxyEntry> getOrInitComponentProxyMapping()
     {
         Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
 
-        if(!requestMap.containsKey(BEAN_NAME))
+        if(!requestMap.containsKey(PROXY_STORAGE_NAME))
         {
-            requestMap.put(BEAN_NAME, new HashMap<String, Map<String, RendererProxyEntry>>());
+            requestMap.put(PROXY_STORAGE_NAME, new HashMap<String, Map<String, RendererProxyEntry>>());
         }
 
-        Map<String, Map<String, RendererProxyEntry>> map =
-            ((Map<String, Map<String, RendererProxyEntry>>)requestMap.get(BEAN_NAME));
+        Map<String, Map<String, RendererProxyEntry>> proxyStorage =
+            ((Map<String, Map<String, RendererProxyEntry>>)requestMap.get(PROXY_STORAGE_NAME));
 
-        String key = this.wrapped.toString();
+        String key = this.wrapped.getClass().getName();
 
-        if(!map.containsKey(key))
+        if(!proxyStorage.containsKey(key))
         {
-            map.put(key, new HashMap<String, RendererProxyEntry>());
+            proxyStorage.put(key, new HashMap<String, RendererProxyEntry>());
         }
 
-        return map.get(key);
+        return proxyStorage.get(key);
     }
 }
