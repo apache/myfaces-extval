@@ -28,5 +28,5 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.API)
 public interface FactoryFinder
 {
-    <T> T getFactory(FactoryNameEnum factoryNameEnum, Class<T> targetClass);
+    <T> T getFactory(FactoryNames factoryName, Class<T> targetClass);
 }

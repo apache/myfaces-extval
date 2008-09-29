@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.trinidad.startup;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -41,7 +41,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
     private void initTrinidadSupport()
     {
         ExtValContext.getContext().getFactoryFinder()
-            .getFactory(FactoryNameEnum.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class)
+            .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class)
             .deactivate();
         
         String deactivateClientSideValidation = WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION;

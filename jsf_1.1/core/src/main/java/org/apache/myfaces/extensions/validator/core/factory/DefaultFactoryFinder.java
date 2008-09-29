@@ -44,19 +44,19 @@ import java.util.ArrayList;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultFactoryFinder implements FactoryFinder
 {
-    Map<FactoryNameEnum, Object> factoryMap = new HashMap<FactoryNameEnum, Object>();
+    Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
 
-    public <T> T getFactory(FactoryNameEnum factoryNameEnum, Class<T> targetClass)
+    public <T> T getFactory(FactoryNames factoryName, Class<T> targetClass)
     {
-        if(!(factoryMap.containsKey(factoryNameEnum)))
+        if(!(factoryMap.containsKey(factoryName)))
         {
-            initFactory(factoryNameEnum);
+            initFactory(factoryName);
         }
 
-        return (T)factoryMap.get(factoryNameEnum);
+        return (T)factoryMap.get(factoryName);
     }
 
-    private void initFactory(FactoryNameEnum factoryName)
+    private void initFactory(FactoryNames factoryName)
     {
         Object factory = null;
         switch (factoryName)

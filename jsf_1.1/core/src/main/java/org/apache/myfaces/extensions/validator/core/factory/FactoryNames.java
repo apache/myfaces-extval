@@ -22,7 +22,7 @@ package org.apache.myfaces.extensions.validator.core.factory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public enum FactoryNameEnum
+public enum FactoryNames
 {
     COMPONENT_ANNOTATION_EXTRACTOR_FACTORY,
     VALIDATION_STRATEGY_FACTORY,
