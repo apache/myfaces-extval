@@ -89,6 +89,6 @@ public interface WebXmlParameter
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");
 
-    static final String DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR = WebXmlUtils
-        .getInitParameter("DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR");
+    //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
+    //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
 }
