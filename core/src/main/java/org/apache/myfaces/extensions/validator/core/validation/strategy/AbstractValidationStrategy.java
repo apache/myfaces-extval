@@ -19,7 +19,9 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -47,7 +49,11 @@ public abstract class AbstractValidationStrategy extends
         Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
         return this.messageResolver != null ? this.messageResolver.getMessage(key, locale) :
-            FactoryUtils.getMessageResolverFactory().create(this).getMessage(key, locale);
+            ((ClassMappingFactory<ValidationStrategy, MessageResolver>)ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNameEnum.MESSAGE_RESOLVER_FACTORY, ClassMappingFactory.class))
+                .create(this)
+                .getMessage(key, locale);
     }
 
     protected String getErrorMessageSummary(Annotation annotation)

@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.generic.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
 import org.apache.myfaces.extensions.validator.generic.renderkit.GenericRenderKitWrapperFactory;
 
 /**
@@ -29,6 +31,7 @@ public class GenericModuleStartupListener extends AbstractStartupListener
 {
     protected void init()
     {
-        ExtValContext.getContext().addRenderKitWrapperFactory(new GenericRenderKitWrapperFactory());
+        ExtValContext.getContext().getFactoryFinder().getFactory(FactoryNameEnum.RENDERKIT_WRAPPER_FACTORY,
+                AbstractRenderKitWrapperFactory.class).addRenderKitWrapperFactory(new GenericRenderKitWrapperFactory());
     }
 }

@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 
 import javax.faces.render.RenderKit;
 
@@ -32,6 +32,7 @@ import javax.faces.render.RenderKit;
 public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFactory<RenderKit, RenderKit>
 {
     protected AbstractRenderKitWrapperFactory wrapped;
+    private boolean deactivated = false;
 
     public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
     {
@@ -44,8 +45,23 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
         this.wrapped = renderKitWrapperFactory;
     }
 
+    public void deactivate()
+    {
+        this.deactivated = true;
+    }
+
+    public boolean isDeactivated()
+    {
+        return deactivated;
+    }
+
     public final RenderKit create(RenderKit renderKit)
     {
+        if(isDeactivated())
+        {
+            return null;
+        }
+
         RenderKit result = null;
 
         if(this.wrapped != null)

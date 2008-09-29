@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
@@ -45,11 +44,9 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         if (jpaBasedValidation == null
                 || !jpaBasedValidation.equalsIgnoreCase("true"))
         {
-            ExtValUtils
-                    .getInformationProviderBean()
+            ExtValContext.getContext().getInformationProviderBean()
                     .addStaticStrategyMappingSource(
-                            ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-                                    + ".jpa_strategy_mappings");
+                            ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".jpa_strategy_mappings");
         }
     }
 
