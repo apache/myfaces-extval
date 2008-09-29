@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * to avoid multiple class within renderer interceptors (e.g. for encode, decode,...
+ * to avoid multiple calls of renderer methods within renderer interceptors (e.g. for encode, decode,...)
  *
  * @author Gerhard Petracek
  * @since 1.x.1
