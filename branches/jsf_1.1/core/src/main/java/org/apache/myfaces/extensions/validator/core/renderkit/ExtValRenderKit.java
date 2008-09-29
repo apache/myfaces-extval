@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
 
@@ -50,7 +50,7 @@ public class ExtValRenderKit extends RenderKit
         {
             ((ClassMappingFactory<RenderKit, RenderingContextInitializer>)ExtValContext.getContext()
                 .getFactoryFinder()
-                .getFactory(FactoryNameEnum.RENDERING_CONTEXT_INITIALIZER_FACTORY, ClassMappingFactory.class))
+                .getFactory(FactoryNames.RENDERING_CONTEXT_INITIALIZER_FACTORY, ClassMappingFactory.class))
                 .create(wrapped).initContext();
         }
 
