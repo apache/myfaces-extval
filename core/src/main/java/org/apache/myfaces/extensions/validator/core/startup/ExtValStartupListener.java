@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 
 /**
  * @author Gerhard Petracek
@@ -33,12 +32,6 @@ public class ExtValStartupListener extends AbstractStartupListener
 {
     protected void init()
     {
-        String deactivateDefaultValidationInterceptor = WebXmlParameter.DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR;
-
-        if(deactivateDefaultValidationInterceptor == null ||
-            !deactivateDefaultValidationInterceptor.equalsIgnoreCase("true"))
-        {
-            ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
-        }
+        ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
     }
 }
