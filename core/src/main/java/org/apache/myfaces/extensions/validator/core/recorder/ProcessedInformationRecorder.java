@@ -16,29 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.startup;
+package org.apache.myfaces.extensions.validator.core.recorder;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
+import javax.faces.component.UIComponent;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class ExtValStartupListener extends AbstractStartupListener
+@UsageInformation(UsageCategory.API)
+public interface ProcessedInformationRecorder
 {
-    protected void init()
-    {
-        String deactivateDefaultValidationInterceptor = WebXmlParameter.DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR;
-
-        if(deactivateDefaultValidationInterceptor == null ||
-            !deactivateDefaultValidationInterceptor.equalsIgnoreCase("true"))
-        {
-            ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
-        }
-    }
+    void recordUserInput(UIComponent uiComponent, Object value);
 }
