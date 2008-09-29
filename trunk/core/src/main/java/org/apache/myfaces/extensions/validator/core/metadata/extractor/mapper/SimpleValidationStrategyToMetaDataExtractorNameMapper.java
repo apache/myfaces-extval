@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -46,10 +46,10 @@ public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements Na
     public String getSimpleMetaDataExtractorName(String validationStrategyPackageName,
                                                  String validationStrategyClassName)
     {
-        String postfix = ExtValUtils.getInformationProviderBean().getMetaDataExtractorPostfix();
+        String postfix = ExtValContext.getContext().getInformationProviderBean().getMetaDataExtractorPostfix();
 
         return validationStrategyPackageName + validationStrategyClassName
-                .replace(ExtValUtils.getInformationProviderBean().getValidationStrategyPostfix(), postfix)
+                .replace(ExtValContext.getContext().getInformationProviderBean().getValidationStrategyPostfix(),postfix)
                 .replace("ValidationStrategy", postfix)
                 .replace("Strategy", postfix);
     }

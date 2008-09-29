@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.startup;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -59,7 +59,7 @@ public abstract class AbstractStartupListener implements PhaseListener
                 {
                     init();
 
-                    ExtValUtils.deregisterPhaseListener(this);
+                    JsfUtils.deregisterPhaseListener(this);
                 }
                 catch (Throwable t)
                 {

@@ -18,12 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.core.initializer.rendering;
 
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.render.RenderKit;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class DefaultRenderingContextInitializerFactory implements
         renderingContextClassNames
             .add(WebXmlParameter.CUSTOM_RENDERING_CONTEXT_INITIALIZER);
         renderingContextClassNames
-            .add(ExtValUtils.getInformationProviderBean().getCustomRenderingContextInitializer());
+            .add(ExtValContext.getContext().getInformationProviderBean().getCustomRenderingContextInitializer());
         renderingContextClassNames
             .add(DefaultRenderingContextInitializer.class.getName());
     }

@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -36,14 +36,14 @@ public class DefaultValidationStrategyToMsgResolverNameMapper implements
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        return ExtValUtils.getInformationProviderBean()
+        return ExtValContext.getContext().getInformationProviderBean()
             .getConventionNameForMessageResolverName(validationStrategy.getClass(),
                                                      getClassName(validationStrategy.getClass().getSimpleName()));
     }
 
     protected String getClassName(String strategyClassName)
     {
-        return ExtValUtils.getInformationProviderBean()
+        return ExtValContext.getContext().getInformationProviderBean()
             .getConventionNameForMessageResolverClass(strategyClassName);
     }
 }

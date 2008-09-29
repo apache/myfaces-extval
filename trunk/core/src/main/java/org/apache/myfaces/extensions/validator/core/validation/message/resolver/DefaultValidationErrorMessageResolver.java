@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -39,7 +39,7 @@ public class DefaultValidationErrorMessageResolver extends
     //not used at the moment - just for a convention
     protected String getBaseName()
     {
-        return ExtValUtils.getInformationProviderBean()
+        return ExtValContext.getContext().getInformationProviderBean()
             .getConventionForModuleMessageBundle(getClass().getPackage().getName());
     }
 
