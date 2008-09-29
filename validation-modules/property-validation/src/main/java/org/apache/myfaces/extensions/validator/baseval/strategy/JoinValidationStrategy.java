@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Abstract
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -56,7 +56,7 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
             {
                 validationStrategy = ((ClassMappingFactory<Annotation, ValidationStrategy>) ExtValContext.getContext()
                     .getFactoryFinder()
-                    .getFactory(FactoryNameEnum.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
+                    .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
                     .create(entry.getAnnotation());
 
                 if (validationStrategy != null)
