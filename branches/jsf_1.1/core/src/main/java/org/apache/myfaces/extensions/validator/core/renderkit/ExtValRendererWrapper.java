@@ -123,37 +123,13 @@ public class ExtValRendererWrapper extends Renderer
     @Override
     public final String convertClientId(FacesContext facesContext, String s)
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
-        {
-            rendererInterceptor.beforeConvertClientId(facesContext, s, this.wrapped);
-        }
-
-        String clientId = wrapped.convertClientId(facesContext, s);
-
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
-        {
-            rendererInterceptor.afterConvertClientId(facesContext, s, this.wrapped);
-        }
-
-        return clientId;
+        return wrapped.convertClientId(facesContext, s);
     }
 
     @Override
     public final boolean getRendersChildren()
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
-        {
-            rendererInterceptor.beforeGetRendersChildren(this.wrapped);
-        }
-
-        boolean rendersChildren = wrapped.getRendersChildren();
-
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
-        {
-            rendererInterceptor.afterGetRendersChildren(this.wrapped);
-        }
-
-        return rendersChildren;
+        return wrapped.getRendersChildren();
     }
 
     public final Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)

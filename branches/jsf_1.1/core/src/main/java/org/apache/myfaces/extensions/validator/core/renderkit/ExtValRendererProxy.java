@@ -26,9 +26,12 @@ import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.ConverterException;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * to avoid multiple class within renderer interceptors (e.g. for encode, decode,...
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -37,15 +40,6 @@ public class ExtValRendererProxy extends Renderer
 {
     private Renderer wrapped;
 
-    private boolean isDecodeCalled = false;
-    private boolean isEncodeBeginCalled = false;
-    private boolean isEncodeChildrenCalled = false;
-    private boolean isEncodeEndCalled = false;
-
-    private Object convertedValue = null;
-    private String clientId = null;
-    private Boolean rendersChildren = null;
-
     public ExtValRendererProxy(Renderer renderer)
     {
         this.wrapped = renderer;
@@ -53,9 +47,11 @@ public class ExtValRendererProxy extends Renderer
 
     public void decode(FacesContext facesContext, UIComponent uiComponent)
     {
-        if(!isDecodeCalled)
+        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+
+        if (!entry.isDecodeCalled())
         {
-            isDecodeCalled = true;
+            entry.setDecodeCalled(true);
             wrapped.decode(facesContext, uiComponent);
         }
     }
@@ -63,9 +59,11 @@ public class ExtValRendererProxy extends Renderer
     public void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        if(!isEncodeBeginCalled)
+        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+
+        if (!entry.isEncodeBeginCalled())
         {
-            isEncodeBeginCalled = true;
+            entry.setEncodeBeginCalled(true);
             wrapped.encodeBegin(facesContext, uiComponent);
         }
     }
@@ -73,9 +71,11 @@ public class ExtValRendererProxy extends Renderer
     public void encodeChildren(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        if(!isEncodeChildrenCalled)
+        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+
+        if (!entry.isEncodeChildrenCalled())
         {
-            isEncodeChildrenCalled = true;
+            entry.setEncodeChildrenCalled(true);
             wrapped.encodeChildren(facesContext, uiComponent);
         }
     }
@@ -83,38 +83,69 @@ public class ExtValRendererProxy extends Renderer
     public void encodeEnd(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        if(!isEncodeEndCalled)
+        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+
+        if (!entry.isEncodeEndCalled())
         {
-            isEncodeEndCalled = true;
+            entry.setEncodeEndCalled(true);
             wrapped.encodeEnd(facesContext, uiComponent);
         }
     }
 
     public String convertClientId(FacesContext facesContext, String s)
     {
-        if(this.clientId == null)
-        {
-            this.clientId = wrapped.convertClientId(facesContext, s);
-        }
-        return this.clientId;
+        return wrapped.convertClientId(facesContext, s);
     }
 
     public boolean getRendersChildren()
     {
-        if(rendersChildren == null)
-        {
-            this.rendersChildren = wrapped.getRendersChildren();
-        }
-        return rendersChildren;
+        return wrapped.getRendersChildren();
     }
 
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
-        if(this.convertedValue == null)
+        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+
+        if (entry.getConvertedValue() == null)
         {
-            this.convertedValue = wrapped.getConvertedValue(facesContext, uiComponent, o);
+            entry.setConvertedValue(wrapped.getConvertedValue(facesContext, uiComponent, o));
         }
-        return this.convertedValue;
+        return entry.getConvertedValue();
+    }
+
+    private RendererProxyEntry getOrInitEntry(FacesContext facesContext, UIComponent uiComponent)
+    {
+        String clientId = uiComponent.getClientId(facesContext);
+
+        if (!getOrInitComponentProxyMapping().containsKey(clientId))
+        {
+            getOrInitComponentProxyMapping().put(clientId, new RendererProxyEntry());
+        }
+        return getOrInitComponentProxyMapping().get(clientId);
+    }
+
+    private static final String BEAN_NAME = ExtValRendererProxy.class.getName() + ":BEAN";
+
+    private Map<String, RendererProxyEntry> getOrInitComponentProxyMapping()
+    {
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+
+        if(!requestMap.containsKey(BEAN_NAME))
+        {
+            requestMap.put(BEAN_NAME, new HashMap<String, Map<String, RendererProxyEntry>>());
+        }
+
+        Map<String, Map<String, RendererProxyEntry>> map =
+            ((Map<String, Map<String, RendererProxyEntry>>)requestMap.get(BEAN_NAME));
+
+        String key = this.wrapped.toString();
+
+        if(!map.containsKey(key))
+        {
+            map.put(key, new HashMap<String, RendererProxyEntry>());
+        }
+
+        return map.get(key);
     }
 }
