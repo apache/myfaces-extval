@@ -20,12 +20,12 @@ package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
@@ -65,7 +65,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = ExtValUtils
+        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
                 .getOrInitValueBindingConvertedValueMapping();
         ProcessedInformationEntry validationTargetEntry;
 

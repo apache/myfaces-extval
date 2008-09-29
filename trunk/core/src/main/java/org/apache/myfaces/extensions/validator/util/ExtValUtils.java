@@ -19,22 +19,16 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
-import org.apache.myfaces.extensions.validator.core.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.FactoryFinder;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -46,59 +40,6 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
-    @ToDo(value = Priority.MEDIUM, description = "test")
-    public static void createValueBindingConvertedValueMapping(UIComponent uiComponent, Object convertedObject)
-    {
-        if (!(uiComponent instanceof EditableValueHolder))
-        {
-            return;
-        }
-
-        //to support local cross-validation (within the same entity)
-        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = ExtValUtils
-            .getOrInitValueBindingConvertedValueMapping();
-
-        String valueBindingExpression;
-        ProcessedInformationEntry entry;
-
-        valueBindingExpression = ELUtils.getReliableValueBindingExpression(uiComponent);
-
-        if (valueBindingExpression == null)
-        {
-            return;
-        }
-
-        entry = new ProcessedInformationEntry();
-        entry.setBean(ELUtils.getBaseObject(valueBindingExpression, uiComponent));
-        entry.setConvertedValue(convertedObject);
-        entry.setComponent(uiComponent);
-
-        //for local cross-validation
-        if (valueBindingConvertedValueMapping.containsKey(valueBindingExpression) &&
-            !valueBindingConvertedValueMapping.get(valueBindingExpression).getBean().equals(entry.getBean()))
-        {
-            //for the validation within a complex component e.g. a table
-            //don't override existing expression (style: #{entry.property}) - make a special mapping
-
-            List<ProcessedInformationEntry> furtherEntries =
-                valueBindingConvertedValueMapping.get(valueBindingExpression).getFurtherEntries();
-
-            if (furtherEntries == null)
-            {
-                furtherEntries = new ArrayList<ProcessedInformationEntry>();
-
-                valueBindingConvertedValueMapping.get(valueBindingExpression).setFurtherEntries(furtherEntries);
-            }
-
-            furtherEntries.add(entry);
-        }
-        else
-        {
-            //for normal validation
-            valueBindingConvertedValueMapping.put(valueBindingExpression, entry);
-        }
-    }
-
     public static String getBasePackage()
     {
         return getInformationProviderBean().getBasePackage();
@@ -158,26 +99,5 @@ public class ExtValUtils
             currentLifecycle = lifecycleFactory.getLifecycle(currentId);
             currentLifecycle.removePhaseListener(phaseListener);
         }
-    }
-
-    public static final String VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY = ExtValUtils.class
-        .getName();
-
-    public static Map<String, ProcessedInformationEntry> getOrInitValueBindingConvertedValueMapping()
-    {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-
-        if (!requestMap.containsKey(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY))
-        {
-            resetCrossValidationStorage();
-        }
-
-        return (Map<String, ProcessedInformationEntry>) requestMap.get(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY);
-    }
-
-    public static void resetCrossValidationStorage()
-    {
-        FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-            .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY, new HashMap<String, ProcessedInformationEntry>());
     }
 }
