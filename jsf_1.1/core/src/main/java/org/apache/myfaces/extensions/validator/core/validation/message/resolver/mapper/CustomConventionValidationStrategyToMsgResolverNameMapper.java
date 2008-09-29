@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -40,7 +40,7 @@ public class CustomConventionValidationStrategyToMsgResolverNameMapper extends
 
     protected String getCustomNameMapperClassName()
     {
-        return ExtValUtils.getInformationProviderBean()
+        return ExtValContext.getContext().getInformationProviderBean()
             .getCustomValidationStrategyToMsgResolverNameMapper();
     }
 }

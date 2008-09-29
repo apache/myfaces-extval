@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.CustomConfiguredValidationStrategyToMsgResolverNameMapper;
