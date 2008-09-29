@@ -24,11 +24,10 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.FactoryUtils;
 import org.apache.myfaces.extensions.validator.util.ValidationUtils;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -38,7 +37,6 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
-import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
@@ -47,8 +45,6 @@ import java.lang.reflect.Method;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ValidationInterceptor extends AbstractRendererInterceptor
 {
-    private static Boolean isAlternativeAvailable = null;
-
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException
@@ -101,35 +97,14 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
         throws ConverterException
     {
-        checkForAlternative();
-
-        //if the user activated an alternative mode, cancel here (in order to avoid double validation)
-        if (Boolean.TRUE.equals(isAlternativeAvailable))
-        {
-            return;
-        }
-
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
-        ExtValUtils.createValueBindingConvertedValueMapping(uiComponent, convertedObject);
-        ValidationUtils.processExtValValidation(facesContext, uiComponent, convertedObject);
-    }
 
-    private void checkForAlternative()
-    {
-        //to avoid a config parameter (but not nice)
-        if(isAlternativeAvailable == null)
+        //recorde user input e.g. for cross-component validation
+        for(ProcessedInformationRecorder recorder : ExtValContext.getContext().getProcessedInformationRecorders())
         {
-            Class extValApplicationFactoryClass = ClassUtils.tryToLoadClassForName(
-                "org.apache.myfaces.extensions.validator.core.proxy.ExtValApplicationFactory");
-
-            Method isActiveMethod = ReflectionUtils.tryToGetMethod(extValApplicationFactoryClass, "isActive", null);
-            isAlternativeAvailable = (Boolean)ReflectionUtils
-                .tryToInvokeMethodOfClass(extValApplicationFactoryClass, isActiveMethod);
-
-            if(isAlternativeAvailable == null)
-            {
-                isAlternativeAvailable = false;
-            }
+            recorder.recordUserInput(uiComponent, convertedObject);
         }
+
+        ValidationUtils.processExtValValidation(facesContext, uiComponent, convertedObject);
     }
 }
