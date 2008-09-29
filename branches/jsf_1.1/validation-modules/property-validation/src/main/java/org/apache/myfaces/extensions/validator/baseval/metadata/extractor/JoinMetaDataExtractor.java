@@ -24,7 +24,9 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.FactoryUtils;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNameEnum;
 
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
@@ -53,9 +55,15 @@ public class JoinMetaDataExtractor implements MetaDataExtractor
             for (AnnotationEntry entry : extractor
                                             .extractAnnotations(FacesContext.getCurrentInstance(), targetExpression))
             {
-                validationStrategy = FactoryUtils .getValidationStrategyFactory().create(entry.getAnnotation());
+                validationStrategy = ((ClassMappingFactory<Annotation, ValidationStrategy>) ExtValContext.getContext()
+                    .getFactoryFinder()
+                    .getFactory(FactoryNameEnum.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
+                    .create(entry.getAnnotation());
 
-                metaDataExtractor = FactoryUtils.getMetaDataExtractorFactory().create(validationStrategy);
+                metaDataExtractor = ((ClassMappingFactory<ValidationStrategy, MetaDataExtractor>) ExtValContext
+                    .getContext().getFactoryFinder()
+                    .getFactory(FactoryNameEnum.META_DATA_EXTRACTOR_FACTORY, ClassMappingFactory.class))
+                    .create(validationStrategy);
 
                 if (metaDataExtractor != null)
                 {

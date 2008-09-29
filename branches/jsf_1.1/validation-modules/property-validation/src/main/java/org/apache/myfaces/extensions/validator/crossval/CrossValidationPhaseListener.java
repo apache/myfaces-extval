@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.crossval;
 
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -102,7 +102,7 @@ public class CrossValidationPhaseListener implements PhaseListener
                     && WebXmlParameter.DEACTIVATE_CROSSVALIDATION
                             .equalsIgnoreCase("true"))
             {
-                ExtValUtils.deregisterPhaseListener(this);
+                JsfUtils.deregisterPhaseListener(this);
             }
             else
             {

@@ -18,8 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
@@ -33,7 +34,6 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .SimpleAnnotationToValidationStrategyNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -159,7 +159,7 @@ public class DefaultValidationStrategyFactory implements
             annotationStrategyMapping = new HashMap<String, String>();
 
             //setup internal static mappings
-            for (String internalMappingSource : ExtValUtils
+            for (String internalMappingSource : ExtValContext.getContext()
                 .getInformationProviderBean().getStaticStrategyMappingSources())
             {
                 setupStrategyMappings(internalMappingSource);
@@ -169,7 +169,7 @@ public class DefaultValidationStrategyFactory implements
             try
             {
                 //build convention (strategy mapping)
-                setupStrategyMappings(ExtValUtils.getInformationProviderBean()
+                setupStrategyMappings(ExtValContext.getContext().getInformationProviderBean()
                     .getCustomStaticStrategyMappingSource());
             }
             catch (Throwable t)
