@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -43,8 +44,11 @@ public class ExtValRendererProxy extends Renderer
     public ExtValRendererProxy(Renderer renderer)
     {
         this.wrapped = renderer;
+
+        LogUtils.trace("proxy created for " + renderer.getClass().getName(), getClass());
     }
 
+    @Override
     public void decode(FacesContext facesContext, UIComponent uiComponent)
     {
         RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
@@ -56,6 +60,7 @@ public class ExtValRendererProxy extends Renderer
         }
     }
 
+    @Override
     public void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
@@ -68,6 +73,7 @@ public class ExtValRendererProxy extends Renderer
         }
     }
 
+    @Override
     public void encodeChildren(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
@@ -80,6 +86,7 @@ public class ExtValRendererProxy extends Renderer
         }
     }
 
+    @Override
     public void encodeEnd(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
@@ -92,16 +99,19 @@ public class ExtValRendererProxy extends Renderer
         }
     }
 
+    @Override
     public String convertClientId(FacesContext facesContext, String s)
     {
         return wrapped.convertClientId(facesContext, s);
     }
 
+    @Override
     public boolean getRendersChildren()
     {
         return wrapped.getRendersChildren();
     }
 
+    @Override
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {

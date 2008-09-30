@@ -18,14 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
@@ -37,8 +36,6 @@ import java.util.Map;
  */
 public class LocalCompareStrategy implements ReferencingStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     public boolean evalReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,
@@ -90,8 +87,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
 
         if (validationTargetEntry == null)
         {
-            logger.warn("couldn't find converted object for "
-                    + targetValueBindingExpression);
+            LogUtils.warn("couldn't find converted object for " + targetValueBindingExpression, getClass());
             return;
         }
 
