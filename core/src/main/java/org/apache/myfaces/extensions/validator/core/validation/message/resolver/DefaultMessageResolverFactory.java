@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -100,6 +101,9 @@ public class DefaultMessageResolverFactory implements
             if (messageResolver != null)
             {
                 addMapping(strategyName, resolverName);
+
+                LogUtils.trace(resolverName + " used for " + strategyName, getClass());
+
                 return messageResolver;
             }
         }

@@ -18,10 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -47,8 +46,6 @@ import java.util.List;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     @ToDo(Priority.MEDIUM)
     public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object)
     {
@@ -59,6 +56,8 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         }
 
         UIComponent uiComponent = (UIComponent) object;
+
+        LogUtils.trace("start extracting annotations of " + uiComponent.getClass().getName(), getClass());
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
@@ -117,6 +116,8 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
         }
 
+        LogUtils.trace("extractAnnotations finished", getClass());
+
         return annotationEntries;
     }
 
@@ -140,8 +141,8 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
             catch (NoSuchMethodException e1)
             {
-                logger.debug("method not found - class: " + entity.getName()
-                    + " - methods: " + "get" + property + " " + "is" + property);
+                LogUtils.trace("method not found - class: " + entity.getName()
+                    + " - methods: " + "get" + property + " " + "is" + property, getClass());
                 return;
             }
         }
@@ -167,7 +168,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
             catch (NoSuchFieldException e1)
             {
-                logger.debug("field " + property + " or _" + property + " not found");
+                LogUtils.trace("field " + property + " or _" + property + " not found", getClass());
                 return;
             }
         }
@@ -182,6 +183,8 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         for (Annotation annotation : annotations)
         {
             annotationEntries.add(createAnnotationEntry(annotation, templateEntry));
+
+            LogUtils.trace(annotation.getClass().getName() + " found", getClass());
         }
     }
 

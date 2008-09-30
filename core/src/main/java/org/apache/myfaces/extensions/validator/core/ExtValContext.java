@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializer;
-import org.apache.myfaces.extensions.validator.core.initializer.rendering.RenderingContextInitializer;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
@@ -111,11 +109,6 @@ public class ExtValContext
             deniedInterceptors.add(rendererInterceptor.getInterceptorId());
         }
         deregisterRendererInterceptor(rendererInterceptorClass);
-    }
-
-    public void addRenderingContextInitializer(RenderingContextInitializer renderingContextInitializer)
-    {
-        DefaultRenderingContextInitializer.addRenderingContextInitializer(renderingContextInitializer);
     }
 
     public void addComponentInitializer(ComponentInitializer componentInitializer)

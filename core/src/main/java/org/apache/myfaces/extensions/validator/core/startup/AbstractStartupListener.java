@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.startup;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -40,7 +39,6 @@ import java.util.List;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractStartupListener implements PhaseListener
 {
-    protected final Log logger = LogFactory.getLog(getClass());
     //don't remove - it's a fallback if there is a problem with deregistration
     //target: don't process init logic more than once
     private static List<Class> initializedListeners = new ArrayList<Class>();
@@ -57,19 +55,21 @@ public abstract class AbstractStartupListener implements PhaseListener
             {
                 try
                 {
+                    LogUtils.info("start init of " + getClass().getName(), getClass());
+
                     init();
+
+                    LogUtils.info("init of " + getClass().getName() + " finished", getClass());
 
                     JsfUtils.deregisterPhaseListener(this);
                 }
                 catch (Throwable t)
                 {
-                    this.logger
-                        .warn(
-                            "an exception occurred while deregistering the phase-listener"
+                    LogUtils.warn("an exception occurred while deregistering the phase-listener"
                                 + getClass().getName()
                                 + " -> there is just a little overhead,"
                                 + " but everything else works correctly."
-                                + " however, please inform the community about your configuration", t);
+                                + " however, please inform the community about your configuration", t, getClass());
                 }
                 finally
                 {

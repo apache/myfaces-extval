@@ -21,8 +21,7 @@ package org.apache.myfaces.extensions.validator.generic.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererWrapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -40,8 +39,6 @@ import net.sf.cglib.proxy.MethodProxy;
 @UsageInformation(UsageCategory.INTERNAL)
 public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper implements MethodInterceptor
 {
-    private static final Log log = LogFactory.getLog(ExtValGenericRendererWrapper.class);
-
     public static Renderer newInstance(Renderer renderer)
     {
         Class currentClass = renderer.getClass();
@@ -92,10 +89,8 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         }
         else
         {
-            if(log.isTraceEnabled())
-            {
-                log.trace("method " + method.getName() + " called without rendering-interceptors");
-            }
+            LogUtils.trace("method " + method.getName() + " called without rendering-interceptors", getClass());
+
             return proxy.invokeSuper(obj, args);
         }
         return null;

@@ -16,23 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.generic.renderkit;
+package org.apache.myfaces.extensions.validator.core.logging;
 
-import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
-
-import javax.faces.render.RenderKit;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
-public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
+@UsageInformation(UsageCategory.API)
+public interface Logger
 {
-    protected RenderKit createWrapper(RenderKit renderKit)
-    {
-        LogUtils.trace("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib",
-            getClass());
-
-        return ExtValGenericRenderKit.newInstance(renderKit);
-    }
+    void log(Level level, String message);
+    void log(Level level, String message, Throwable throwable);
 }
