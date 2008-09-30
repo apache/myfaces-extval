@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 
 /**
+ * alternative approach for ExtValRenderKitFactory
+ * 
  * @author Gerhard Petracek
  */
 public class TrinidadModuleStartupListener extends AbstractStartupListener
@@ -40,6 +42,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     private void initTrinidadSupport()
     {
+        //deactivate default approach
         ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class)
             .deactivate();

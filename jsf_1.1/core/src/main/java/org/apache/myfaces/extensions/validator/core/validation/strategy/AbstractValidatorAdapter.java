@@ -18,11 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -41,24 +40,38 @@ import javax.faces.validator.ValidatorException;
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
 public abstract class AbstractValidatorAdapter implements ValidationStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          AnnotationEntry annotationEntry, Object convertedObject)
     {
+        LogUtils.trace("start initValidation of " + getClass().getName(), getClass());
+
         initValidation(facesContext, uiComponent, annotationEntry, convertedObject);
+
+        LogUtils.trace("initValidation of " + getClass().getName() + " finished", getClass());
 
         try
         {
+            LogUtils.trace("start processValidation of " + getClass().getName(), getClass());
+
             processValidation(facesContext, uiComponent, annotationEntry, convertedObject);
+
+            LogUtils.trace("processValidation of " + getClass().getName() + " finished", getClass());
         }
         catch (ValidatorException e)
         {
+            LogUtils.trace("start processAfterValidatorException of " + getClass().getName(), getClass());
+
             if (processAfterValidatorException(facesContext, uiComponent,
                 annotationEntry, convertedObject, e))
             {
+                LogUtils.trace(getClass().getName() +
+                    ": throw original exception after processAfterValidatorException", getClass());
+
                 throw new ConverterException(e.getFacesMessage(), e);
             }
+
+            LogUtils.trace(getClass().getName() +
+                ": original exception after processAfterValidatorException not thrown", getClass());
         }
     }
 

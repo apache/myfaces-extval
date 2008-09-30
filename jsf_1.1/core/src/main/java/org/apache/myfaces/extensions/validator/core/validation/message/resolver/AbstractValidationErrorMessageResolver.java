@@ -18,11 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -48,8 +47,6 @@ public abstract class AbstractValidationErrorMessageResolver implements
     //with jsf 1.1 only available if there is a custom bean
     private String messageBundleVarName;
 
-    protected final Log logger = LogFactory.getLog(getClass());
-
     public String getMessage(String key, Locale locale)
     {
         if (key == null || key.equals(""))
@@ -70,7 +67,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
             }
             else
             {
-                logger.warn("message bundle " + this.messageBundleBaseName + " not found");
+                LogUtils.warn("message bundle " + this.messageBundleBaseName + " not found", getClass());
             }
         }
 
@@ -85,7 +82,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
             }
             else
             {
-                logger.warn("message bundle var name " + this.messageBundleVarName + " not found");
+                LogUtils.warn("message bundle var name " + this.messageBundleVarName + " not found", getClass());
             }
         }
 
@@ -126,7 +123,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
             }
             catch (MissingResourceException e)
             {
-                logger.trace("no custom message for " + key + " within " + getCustomBaseName());
+                LogUtils.trace("no custom message for " + key + " within " + getCustomBaseName(), getClass());
             }
         }
 

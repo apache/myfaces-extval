@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.initializer.component;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -41,6 +42,7 @@ public class DefaultComponentInitializer implements ComponentInitializer
         for(ComponentInitializer componentInitializer : componentInitializers)
         {
             componentInitializer.configureComponent(facesContext, uiComponent, metaData);
+            LogUtils.trace("configureComponent of " + componentInitializer.getClass().getName() + " called",getClass());
         }
     }
 
