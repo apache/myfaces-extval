@@ -33,6 +33,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
     .BeanValidationStrategyToMetaDataExtractorNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -115,6 +116,8 @@ public class DefaultMetaDataExtractorFactory implements
                 if(validationStrategyName != null)
                 {
                     validationStrategyToMetaDataExtractorMapping.put(validationStrategyName, extractorName);
+
+                    LogUtils.trace(extractorName + " used for " + validationStrategyName , getClass());
                 }
                 return metaDataExtractor;
             }

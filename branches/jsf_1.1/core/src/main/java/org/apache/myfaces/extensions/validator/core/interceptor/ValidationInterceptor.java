@@ -30,8 +30,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Compon
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -50,8 +49,6 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ValidationInterceptor extends AbstractRendererInterceptor
 {
-    private final Log logger = LogFactory.getLog(getClass().getName());
-
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException
@@ -65,6 +62,8 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         {
             return;
         }
+
+        LogUtils.trace("start to init component " + uiComponent.getClass().getName(), getClass());
 
         ValidationStrategy validationStrategy;
         MetaDataExtractor metaDataExtractor;
@@ -102,12 +101,15 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                     metaData = new HashMap<String, Object>();
                 }
 
+                //get component initializer for the current component and configure it
                 ((ClassMappingFactory<UIComponent, ComponentInitializer>)ExtValContext.getContext().getFactoryFinder()
                     .getFactory(FactoryNames.COMPONENT_INITIALIZER_FACTORY, ClassMappingFactory.class))
                     .create(uiComponent)
                     .configureComponent(facesContext, uiComponent, metaData);
             }
         }
+
+        LogUtils.trace("init component of " + uiComponent.getClass().getName() + " finished", getClass());
     }
 
     @Override
@@ -120,6 +122,8 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         for(ProcessedInformationRecorder recorder : ExtValContext.getContext().getProcessedInformationRecorders())
         {
             recorder.recordUserInput(uiComponent, convertedObject);
+
+            LogUtils.trace(recorder.getClass().getName() + " called", getClass());
         }
 
         processValidation(facesContext, uiComponent, convertedObject);
@@ -131,10 +135,12 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         {
             return;
         }
+        LogUtils.trace("start validation", getClass());
 
         ValidationStrategy validationStrategy;
 
-        AnnotationExtractor annotationExtractor = ExtValContext.getContext().getFactoryFinder()
+        AnnotationExtractor annotationExtractor =
+            ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY, AnnotationExtractorFactory.class)
             .create();
 
@@ -147,13 +153,18 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
             if (validationStrategy != null)
             {
+                LogUtils.trace("validate " + entry.getAnnotation().getClass().getName() + " with " +
+                    validationStrategy.getClass().getName(), getClass());
+
                 validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
             }
             else
             {
-                logger.trace("no validation strategy found for "
-                    + entry.getAnnotation().annotationType().getName());
+                LogUtils.trace("no validation strategy found for " + entry.getAnnotation().annotationType().getName(),
+                    getClass());
             }
         }
+
+        LogUtils.trace("validation finished", getClass());
     }
 }

@@ -29,6 +29,8 @@ import javax.faces.context.FacesContext;
 import java.util.Iterator;
 
 /**
+ * central mechanism which is responsible to create a wrapper for a renderer - starting point of extval.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -50,13 +52,17 @@ public class ExtValRenderKitFactory extends RenderKitFactory
     public RenderKit getRenderKit(FacesContext facesContext, String s)
     {
         RenderKit renderKit = this.wrapped.getRenderKit(facesContext, s);
+
         AbstractRenderKitWrapperFactory wrapperFactory = ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class);
 
+        //some component libs e.g. myfaces-trinidad aren't compatible with this clean approach
+        //example see TrinidadModuleStartupListener
         if(wrapperFactory.isDeactivated())
         {
             return renderKit;
         }
+
         return wrapperFactory.create(renderKit);
     }
 

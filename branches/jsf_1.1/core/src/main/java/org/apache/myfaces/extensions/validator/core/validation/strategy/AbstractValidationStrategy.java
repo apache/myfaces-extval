@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -70,7 +71,8 @@ public abstract class AbstractValidationStrategy extends
         }
         catch (MissingResourceException e)
         {
-            logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX, e);
+            LogUtils.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX, e,
+                getClass());
         }
         return null;
     }

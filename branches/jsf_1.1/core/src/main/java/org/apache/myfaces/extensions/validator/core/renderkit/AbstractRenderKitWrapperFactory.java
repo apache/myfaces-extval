@@ -21,10 +21,13 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.render.RenderKit;
 
 /**
+ * Base for all RenderKitWrapperFactories to force a specific behaviour
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -36,6 +39,8 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
 
     public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
     {
+        LogUtils.trace(renderKitWrapperFactory.getClass().getName() + " added", getClass());
+
         if(this.wrapped != null)
         {
             this.wrapped.addRenderKitWrapperFactory(renderKitWrapperFactory);
@@ -47,6 +52,8 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
 
     public void deactivate()
     {
+        LogUtils.trace(getClass().getName() + " deactivated", getClass());
+
         this.deactivated = true;
     }
 

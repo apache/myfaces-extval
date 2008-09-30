@@ -23,8 +23,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.logging.CachingCommonsLoggingLoggerFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.core.initializer.rendering.DefaultRenderingContextInitializerFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializerFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
@@ -44,9 +44,9 @@ import java.util.ArrayList;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultFactoryFinder implements FactoryFinder
 {
-    Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
+    protected Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
 
-    public <T> T getFactory(FactoryNames factoryName, Class<T> targetClass)
+    public final <T> T getFactory(FactoryNames factoryName, Class<T> targetClass)
     {
         if(!(factoryMap.containsKey(factoryName)))
         {
@@ -85,10 +85,10 @@ public class DefaultFactoryFinder implements FactoryFinder
                 factory = createRenderKitWrapperFactory();
                 break;
 
-            case RENDERING_CONTEXT_INITIALIZER_FACTORY:
-                factory = createRenderingContextInitializerFactory();
+            case LOGGER_FACTORY:
+                factory = createLoggerFactory();
                 break;
-            
+
             default: //required by checkstyle
         }
 
@@ -100,7 +100,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         factoryMap.put(factoryName, factory);
     }
 
-    private Object createComponentAnnotationExtractorFactory()
+    protected Object createComponentAnnotationExtractorFactory()
     {
         Object factory = null;
 
@@ -124,7 +124,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
-    private Object createValidationStrategyFactory()
+    protected Object createValidationStrategyFactory()
     {
         Object factory = null;
 
@@ -148,54 +148,54 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
-    private Object createMessageResolverFactory()
+    protected Object createMessageResolverFactory()
     {
         Object factory = null;
-            List<String> messageResolverFactoryClassNames = new ArrayList<String>();
+        List<String> messageResolverFactoryClassNames = new ArrayList<String>();
 
-            messageResolverFactoryClassNames.add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
-            messageResolverFactoryClassNames
-                .add(ExtValContext.getContext().getInformationProviderBean().getCustomMessageResolverFactory());
-            messageResolverFactoryClassNames
-                .add(DefaultMessageResolverFactory.class.getName());
+        messageResolverFactoryClassNames.add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
+        messageResolverFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().getCustomMessageResolverFactory());
+        messageResolverFactoryClassNames
+            .add(DefaultMessageResolverFactory.class.getName());
 
-            for (String className : messageResolverFactoryClassNames)
+        for (String className : messageResolverFactoryClassNames)
+        {
+            factory = ClassUtils.tryToInstantiateClassForName(className);
+
+            if (factory != null)
             {
-                factory = ClassUtils.tryToInstantiateClassForName(className);
-
-                if (factory != null)
-                {
-                    break;
-                }
+                break;
             }
+        }
 
         return factory;
     }
 
-    private Object createMetaDataExtractorFactory()
+    protected Object createMetaDataExtractorFactory()
     {
         Object factory = null;
-            List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
+        List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
 
-            metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTOR_FACTORY);
-            metaDataExtractorFactoryClassNames
-                .add(ExtValContext.getContext().getInformationProviderBean().getCustomMetaDataExtractorFactory());
-            metaDataExtractorFactoryClassNames.add(DefaultMetaDataExtractorFactory.class.getName());
+        metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTOR_FACTORY);
+        metaDataExtractorFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().getCustomMetaDataExtractorFactory());
+        metaDataExtractorFactoryClassNames.add(DefaultMetaDataExtractorFactory.class.getName());
 
-            for (String className : metaDataExtractorFactoryClassNames)
+        for (String className : metaDataExtractorFactoryClassNames)
+        {
+            factory = ClassUtils.tryToInstantiateClassForName(className);
+
+            if (factory != null)
             {
-                factory = ClassUtils.tryToInstantiateClassForName(className);
-
-                if (factory != null)
-                {
-                    break;
-                }
+                break;
             }
+        }
 
         return factory;
     }
 
-    private Object createComponentInitializerFactory()
+    protected Object createComponentInitializerFactory()
     {
         Object factory = null;
         List<String> componentInitializerFactoryClassNames = new ArrayList<String>();
@@ -218,35 +218,14 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
-    private Object createRenderKitWrapperFactory()
+    protected Object createRenderKitWrapperFactory()
     {
         return new DefaultRenderKitWrapperFactory();
     }
 
-    private Object createRenderingContextInitializerFactory()
+    private Object createLoggerFactory()
     {
-        Object factory = null;
-
-            List<String> renderingContextInitializerFactoryClassNames = new ArrayList<String>();
-
-            renderingContextInitializerFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_RENDERING_CONTEXT_INITIALIZER_FACTORY);
-            renderingContextInitializerFactoryClassNames
-                .add(ExtValContext.getContext().getInformationProviderBean()
-                    .getCustomRenderingContextInitializerFactory());
-            renderingContextInitializerFactoryClassNames
-                .add(DefaultRenderingContextInitializerFactory.class.getName());
-
-            for (String className : renderingContextInitializerFactoryClassNames)
-            {
-                factory = ClassUtils.tryToInstantiateClassForName(className);
-
-                if (factory != null)
-                {
-                    break;
-                }
-            }
-
-        return factory;
+        return new CachingCommonsLoggingLoggerFactory();
     }
+
 }
