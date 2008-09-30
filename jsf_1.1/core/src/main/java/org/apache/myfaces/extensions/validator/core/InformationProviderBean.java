@@ -154,7 +154,7 @@ public class InformationProviderBean
     /*
      * conventions (the rest of the conventions are built with the help of name mappers,...
      */
-    public String getConventionForMessageBundle()
+    public String getConventionForCustomMessageBundle()
     {
         return this.basePackage + "validation_messages";
     }

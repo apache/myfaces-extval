@@ -144,7 +144,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
                 try
                 {
                     defaultBundle = ResourceBundle.getBundle(ExtValContext.getContext().getInformationProviderBean()
-                        .getConventionForMessageBundle(), locale);
+                        .getConventionForCustomMessageBundle(), locale);
                 }
                 catch (Throwable t)
                 {

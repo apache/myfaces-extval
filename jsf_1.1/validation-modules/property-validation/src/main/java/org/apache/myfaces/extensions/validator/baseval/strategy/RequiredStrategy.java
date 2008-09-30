@@ -26,7 +26,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Map;
 import java.util.Collection;
 
