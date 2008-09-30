@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
@@ -40,8 +38,6 @@ import java.util.Map;
  */
 public class ELCompareStrategy implements ReferencingStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     public boolean evalReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,

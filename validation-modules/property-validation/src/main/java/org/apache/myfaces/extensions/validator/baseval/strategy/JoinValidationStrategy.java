@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -66,8 +67,8 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
                 }
                 else
                 {
-                    logger.trace("no validation strategy found for "
-                            + entry.getAnnotation().annotationType().getName());
+                    LogUtils.trace("no validation strategy found for "
+                            + entry.getAnnotation().annotationType().getName(), getClass());
                 }
             }
         }

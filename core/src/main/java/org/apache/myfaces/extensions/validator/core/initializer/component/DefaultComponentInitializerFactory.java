@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import java.util.ArrayList;
@@ -72,6 +73,9 @@ public class DefaultComponentInitializerFactory implements
             if (componentInitializer != null)
             {
                 componentToComponentInitializerMapping.put(componentKey, componentInitializer);
+
+                LogUtils.trace(componentInitializer.getClass().getName() + " used for " + componentKey, getClass());
+
                 return componentInitializer;
             }
         }

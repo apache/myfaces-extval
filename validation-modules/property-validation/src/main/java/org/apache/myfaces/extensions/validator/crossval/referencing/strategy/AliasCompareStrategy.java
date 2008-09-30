@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
@@ -29,6 +27,7 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.extractor.
     DefaultValueBindingScanningAnnotationExtractor;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
@@ -45,8 +44,6 @@ import java.lang.reflect.Field;
  */
 public class AliasCompareStrategy implements ReferencingStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     public boolean evalReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,
@@ -260,8 +257,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
             }
             catch (Exception e)
             {
-                logger.warn("couldn't access field " + name
-                        + " details: boundTo=" + boundTo, e);
+                LogUtils.warn("couldn't access field " + name + " details: boundTo=" + boundTo, e, getClass());
             }
         }
 
