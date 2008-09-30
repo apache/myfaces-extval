@@ -26,6 +26,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.Map;
+import java.util.Collection;
 
 /**
  * @author Gerhard Petracek
@@ -36,7 +39,9 @@ public class RequiredStrategy extends AbstractValidationStrategy
             UIComponent uiComponent, AnnotationEntry annotationEntry,
             Object convertedObject) throws ValidatorException
     {
-        if (convertedObject == null || convertedObject.equals(""))
+        if (convertedObject == null || convertedObject.equals("") ||
+                (convertedObject instanceof Collection && ((Collection)convertedObject).isEmpty()) ||
+                (convertedObject instanceof Map && ((Map)convertedObject).isEmpty()))
         {
             throw new ValidatorException(
                     getValidationErrorFacesMassage(annotationEntry
