@@ -20,7 +20,8 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -39,13 +40,18 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRendererProxy extends Renderer
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+    
     private Renderer wrapped;
 
     public ExtValRendererProxy(Renderer renderer)
     {
         this.wrapped = renderer;
 
-        LogUtils.trace("proxy created for " + renderer.getClass().getName(), getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("proxy created for " + renderer.getClass().getName());
+        }
     }
 
     @Override

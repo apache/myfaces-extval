@@ -21,7 +21,8 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.render.RenderKit;
 
@@ -34,12 +35,17 @@ import javax.faces.render.RenderKit;
 @UsageInformation(UsageCategory.API)
 public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFactory<RenderKit, RenderKit>
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     protected AbstractRenderKitWrapperFactory wrapped;
     private boolean deactivated = false;
 
     public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
     {
-        LogUtils.trace(renderKitWrapperFactory.getClass().getName() + " added", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace(renderKitWrapperFactory.getClass().getName() + " added");
+        }
 
         if(this.wrapped != null)
         {
@@ -52,7 +58,10 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
 
     public void deactivate()
     {
-        LogUtils.trace(getClass().getName() + " deactivated", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace(getClass().getName() + " deactivated");
+        }
 
         this.deactivated = true;
     }

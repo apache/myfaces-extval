@@ -21,7 +21,8 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -40,38 +41,61 @@ import javax.faces.validator.ValidatorException;
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
 public abstract class AbstractValidatorAdapter implements ValidationStrategy
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          AnnotationEntry annotationEntry, Object convertedObject)
     {
-        LogUtils.trace("start initValidation of " + getClass().getName(), getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("start initValidation of " + getClass().getName());
+        }
 
         initValidation(facesContext, uiComponent, annotationEntry, convertedObject);
 
-        LogUtils.trace("initValidation of " + getClass().getName() + " finished", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("initValidation of " + getClass().getName() + " finished");
+        }
 
         try
         {
-            LogUtils.trace("start processValidation of " + getClass().getName(), getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start processValidation of " + getClass().getName());
+            }
 
             processValidation(facesContext, uiComponent, annotationEntry, convertedObject);
 
-            LogUtils.trace("processValidation of " + getClass().getName() + " finished", getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("processValidation of " + getClass().getName() + " finished");
+            }
         }
         catch (ValidatorException e)
         {
-            LogUtils.trace("start processAfterValidatorException of " + getClass().getName(), getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start processAfterValidatorException of " + getClass().getName());
+            }
 
             if (processAfterValidatorException(facesContext, uiComponent,
                 annotationEntry, convertedObject, e))
             {
-                LogUtils.trace(getClass().getName() +
-                    ": throw original exception after processAfterValidatorException", getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(getClass().getName() +
+                    ": throw original exception after processAfterValidatorException");
+                }
 
                 throw new ConverterException(e.getFacesMessage(), e);
             }
 
-            LogUtils.trace(getClass().getName() +
-                ": original exception after processAfterValidatorException not thrown", getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace(getClass().getName() +
+                    ": original exception after processAfterValidatorException not thrown");
+            }
         }
     }
 
