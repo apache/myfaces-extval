@@ -132,8 +132,6 @@ public class ExtValJdk14Logger implements Log, Serializable
             return result;
         }
 
-        result[0] = targetClass.getName();
-
         /*
          * the rest is to find the called method
          */
@@ -146,6 +144,7 @@ public class ExtValJdk14Logger implements Log, Serializable
         //most common case: LogUtils and there is no exception to log
         if(classToTest != null && classToTest.isAssignableFrom(targetClass))
         {
+            result[0] = locations[6].getClassName();
             result[1] = locations[6].getMethodName();
             return result;
         }
@@ -155,6 +154,7 @@ public class ExtValJdk14Logger implements Log, Serializable
         //common case: LogUtils and there is an exception to log
         if(classToTest != null && classToTest.isAssignableFrom(targetClass))
         {
+            result[0] = locations[5].getClassName();
             result[1] = locations[5].getMethodName();
             return result;
         }
@@ -175,6 +175,7 @@ public class ExtValJdk14Logger implements Log, Serializable
 
             if(classToTest.isAssignableFrom(targetClass))
             {
+                result[0] = locations[i].getClassName();
                 result[1] = locations[i].getMethodName();
                 return result;
             }
