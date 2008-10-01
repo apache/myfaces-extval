@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
- *
+ * 
  * <p/>
  * original impl. with dirty hack was implemented by:
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
@@ -122,7 +122,7 @@ public class ExtValJdk14Logger implements Log, Serializable
         Class targetClass = ClassUtils.tryToLoadClassForName(this.logger.getName());
         String result[] = new String[2];
 
-        //fallback
+        //fallback (= original hack of commons logging)
         result[0] = locations[2].getClassName();
         result[1] = locations[2].getMethodName();
 
@@ -144,7 +144,7 @@ public class ExtValJdk14Logger implements Log, Serializable
         classToTest = ClassUtils.tryToLoadClassForName(locations[6].getClassName());
 
         //most common case: LogUtils and there is no exception to log
-        if(classToTest.isAssignableFrom(targetClass))
+        if(classToTest != null && classToTest.isAssignableFrom(targetClass))
         {
             result[1] = locations[6].getMethodName();
             return result;
@@ -153,7 +153,7 @@ public class ExtValJdk14Logger implements Log, Serializable
         classToTest = ClassUtils.tryToLoadClassForName(locations[5].getClassName());
 
         //common case: LogUtils and there is an exception to log
-        if(classToTest.isAssignableFrom(targetClass))
+        if(classToTest != null && classToTest.isAssignableFrom(targetClass))
         {
             result[1] = locations[5].getMethodName();
             return result;
