@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
+package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation;
 import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningAnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class JoinMetaDataExtractor implements MetaDataExtractor
+public class JoinMetaDataTransformer implements MetaDataTransformer
 {
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
@@ -44,7 +44,7 @@ public class JoinMetaDataExtractor implements MetaDataExtractor
         String[] targetExpressions = ((JoinValidation)annotation).value();
 
         ValidationStrategy validationStrategy;
-        MetaDataExtractor metaDataExtractor;
+        MetaDataTransformer metaDataTransformer;
 
         Map<String, Object> results = new HashMap<String, Object>();
 
@@ -55,11 +55,11 @@ public class JoinMetaDataExtractor implements MetaDataExtractor
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
 
-                metaDataExtractor = ExtValUtils.getMetaDataExtractorForValidationStrategy(validationStrategy);
+                metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 
-                if (metaDataExtractor != null)
+                if (metaDataTransformer != null)
                 {
-                    results.putAll(metaDataExtractor.extractMetaData(entry.getAnnotation()));
+                    results.putAll( metaDataTransformer.extractMetaData(entry.getAnnotation()));
                 }
             }
         }

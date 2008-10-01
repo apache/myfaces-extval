@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
@@ -66,7 +66,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         }
 
         ValidationStrategy validationStrategy;
-        MetaDataExtractor metaDataExtractor;
+        MetaDataTransformer metaDataTransformer;
 
         AnnotationExtractor annotationExtractor = ExtValContext.getContext().getFactoryFinder().getFactory(
             FactoryNames.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY, AnnotationExtractorFactory.class).create();
@@ -79,11 +79,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
             if (validationStrategy != null)
             {
-                metaDataExtractor = ExtValUtils.getMetaDataExtractorForValidationStrategy(validationStrategy);
+                metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 
-                if(metaDataExtractor != null)
+                if(metaDataTransformer != null)
                 {
-                    metaData = metaDataExtractor.extractMetaData(entry.getAnnotation());
+                    metaData = metaDataTransformer.extractMetaData(entry.getAnnotation());
                 }
                 else
                 {

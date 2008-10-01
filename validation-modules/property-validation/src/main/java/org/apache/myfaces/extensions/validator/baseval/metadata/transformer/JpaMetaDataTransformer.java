@@ -16,12 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
+package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.baseval.annotation.DoubleRange;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,21 +33,30 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class DoubleRangeMetaDataExtractor implements MetaDataExtractor
+public class JpaMetaDataTransformer implements MetaDataTransformer
 {
+    @ToDo(value = Priority.HIGH, description = "impl. the rest")
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        double minimum = ((DoubleRange)annotation).minimum();
 
-        results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
-        results.put(CommonMetaDataKeys.RANGE_MAX, ((DoubleRange)annotation).maximum());
-
-        if(minimum > 0)
+        if(annotation instanceof Column)
         {
-            results.put(CommonMetaDataKeys.REQUIRED, true);
-        }
+            if(!((Column) annotation).nullable())
+            {
+                results.put(CommonMetaDataKeys.REQUIRED, true);
+            }
 
+            results.put(CommonMetaDataKeys.MAX_LENGTH, ((Column) annotation).length());
+        }
+        else if(annotation instanceof Basic)
+        {
+            if(!((Basic)annotation).optional())
+            {
+                results.put(CommonMetaDataKeys.REQUIRED, true);
+            }
+        }
+        //TODO impl. the rest!!!
         return results;
     }
 }

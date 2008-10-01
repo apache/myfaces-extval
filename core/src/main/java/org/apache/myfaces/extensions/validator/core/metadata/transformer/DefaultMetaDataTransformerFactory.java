@@ -16,21 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
-    .CustomConfiguredValidationStrategyToMetaDataExtractorNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
-    .CustomConventionValidationStrategyToMetaDataExtractorNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
-    .DefaultValidationStrategyToMetaDataExtractorNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
-    .SimpleValidationStrategyToMetaDataExtractorNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
-    .BeanValidationStrategyToMetaDataExtractorNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .CustomConventionValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .DefaultValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .SimpleValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .BeanValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -45,40 +45,40 @@ import java.util.Map;
 
 
 /**
- * Factory which creates the MetaDataExtractor for a given ValidationStrategy
+ * Factory which creates the MetaDataTransformer for a given ValidationStrategy
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 /*
- * ValidationStrategy -> MetaDataExtractor instead of Annotation -> MetaDataExtractor
+ * ValidationStrategy -> MetaDataTransformer instead of Annotation -> MetaDataTransformer
  * to avoid a second static mapping e.g. for jpa annotations
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultMetaDataExtractorFactory implements
-    ClassMappingFactory<ValidationStrategy, MetaDataExtractor>
+public class DefaultMetaDataTransformerFactory implements
+    ClassMappingFactory<ValidationStrategy, MetaDataTransformer>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private static Map<String, String> validationStrategyToMetaDataExtractorMapping = new HashMap<String, String>();
+    private static Map<String, String> validationStrategyToMetaDataTransformerMapping = new HashMap<String, String>();
     private static List<NameMapper<ValidationStrategy>> nameMapperList
         = new ArrayList<NameMapper<ValidationStrategy>>();
 
     static
     {
         nameMapperList
-            .add(new CustomConfiguredValidationStrategyToMetaDataExtractorNameMapper());
+            .add(new CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper());
         nameMapperList
-            .add(new CustomConventionValidationStrategyToMetaDataExtractorNameMapper());
+            .add(new CustomConventionValidationStrategyToMetaDataTransformerNameMapper());
         nameMapperList
-            .add(new DefaultValidationStrategyToMetaDataExtractorNameMapper());
+            .add(new DefaultValidationStrategyToMetaDataTransformerNameMapper());
         nameMapperList
-            .add(new SimpleValidationStrategyToMetaDataExtractorNameMapper());
+            .add(new SimpleValidationStrategyToMetaDataTransformerNameMapper());
         nameMapperList
-            .add(new BeanValidationStrategyToMetaDataExtractorNameMapper());
+            .add(new BeanValidationStrategyToMetaDataTransformerNameMapper());
     }
 
-    public MetaDataExtractor create(ValidationStrategy validationStrategy)
+    public MetaDataTransformer create(ValidationStrategy validationStrategy)
     {
         String validationStrategyName = null;
 
@@ -94,38 +94,38 @@ public class DefaultMetaDataExtractorFactory implements
                                         .getValidationStrategyClassName();
         }
 
-        if (validationStrategyToMetaDataExtractorMapping.containsKey(validationStrategyName))
+        if (validationStrategyToMetaDataTransformerMapping.containsKey(validationStrategyName))
         {
-            return (MetaDataExtractor)ClassUtils.tryToInstantiateClassForName(
-                validationStrategyToMetaDataExtractorMapping.get(validationStrategyName));
+            return (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(
+                validationStrategyToMetaDataTransformerMapping.get(validationStrategyName));
         }
 
-        MetaDataExtractor metaDataExtractor;
-        String extractorName;
+        MetaDataTransformer metaDataTransformer;
+        String transformerName;
         //null -> use name mappers
         for (NameMapper<ValidationStrategy> nameMapper : nameMapperList)
         {
-            extractorName = nameMapper.createName(validationStrategy);
+            transformerName = nameMapper.createName(validationStrategy);
 
-            if (extractorName == null)
+            if (transformerName == null)
             {
                 continue;
             }
 
-            metaDataExtractor = (MetaDataExtractor)ClassUtils.tryToInstantiateClassForName(extractorName);
+            metaDataTransformer = (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(transformerName);
 
-            if (metaDataExtractor != null)
+            if (metaDataTransformer != null)
             {
                 if(validationStrategyName != null)
                 {
-                    validationStrategyToMetaDataExtractorMapping.put(validationStrategyName, extractorName);
+                    validationStrategyToMetaDataTransformerMapping.put(validationStrategyName, transformerName);
 
                     if(logger.isTraceEnabled())
                     {
-                        logger.trace(extractorName + " used for " + validationStrategyName);
+                        logger.trace(transformerName + " used for " + validationStrategyName);
                     }
                 }
-                return metaDataExtractor;
+                return metaDataTransformer;
             }
         }
 

@@ -82,9 +82,9 @@ public class InformationProviderBean
         return "ValidationStrategy";
     }
 
-    public String getMetaDataExtractorPostfix()
+    public String getMetaDataTransformerPostfix()
     {
-        return "MetaDataExtractor";
+        return "MetaDataTransformer";
     }
 
     /*
@@ -100,9 +100,9 @@ public class InformationProviderBean
         return this.basePackage + "AnnotationToValidationStrategyNameMapper";
     }
 
-    public String getCustomValidationStrategyToMetaDataExtractorNameMapper()
+    public String getCustomValidationStrategyToMetaDataTransformerNameMapper()
     {
-        return this.basePackage + "ValidationStrategyToMetaDataExtractorNameMapper";
+        return this.basePackage + "ValidationStrategyToMetaDataTransformerNameMapper";
     }
 
     /*
@@ -146,9 +146,9 @@ public class InformationProviderBean
         return this.basePackage + "AnnotationExtractorFactory";
     }
 
-    public String getCustomMetaDataExtractorFactory()
+    public String getCustomMetaDataTransformerFactory()
     {
-        return this.basePackage + "MetaDataExtractorFactory";
+        return this.basePackage + "MetaDataTransformerFactory";
     }
 
     /*
@@ -220,24 +220,25 @@ public class InformationProviderBean
         return getValidationStrategyBasedName(validationStrategyClass, ".message.resolver.", targetClassName);
     }
 
-    public final String getConventionNameForMetaDataExtractorName(
+    public final String getConventionNameForMetaDataTransformerName(
         Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
     {
-        return getValidationStrategyBasedName(validationStrategyClass, ".metadata.extractor.", targetClassName);
+        return getValidationStrategyBasedName(validationStrategyClass, ".metadata.transformer.", targetClassName);
     }
 
     private String getValidationStrategyBasedName(Class<? extends ValidationStrategy> validationStrategyClass,
                                                   String targetPackageName, String targetClassName)
     {
-        String extractorName = validationStrategyClass.getName();
+        String validationStrategyClassName = validationStrategyClass.getName();
 
-        extractorName = extractorName.replace(".strategy.", targetPackageName);
+        validationStrategyClassName = validationStrategyClassName.replace(".strategy.", targetPackageName);
 
         if (targetClassName == null)
         {
             return null;
         }
-        return extractorName.substring(0, extractorName.lastIndexOf(".")) + "." + targetClassName;
+        return validationStrategyClassName
+                .substring(0, validationStrategyClassName.lastIndexOf(".")) + "." + targetClassName;
     }
 
     /**
@@ -256,9 +257,9 @@ public class InformationProviderBean
         return annotation.annotationType().getName().replace(".annotation.", ".strategy.") + "Strategy";
     }
 
-    public final String getConventionNameForMetaDataExtractorClass(String validationStrategyName)
+    public final String getConventionNameForMetaDataTransformerClass(String validationStrategyName)
     {
-        return getValidationStrategyBasedName(validationStrategyName, "MetaDataExtractor");
+        return getValidationStrategyBasedName(validationStrategyName, "MetaDataTransformer");
     }
 
     private String getValidationStrategyBasedName(String validationStrategyName, String targetPostfix)

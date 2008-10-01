@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
+package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -34,7 +34,7 @@ import java.util.Locale;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class PatternMetaDataExtractor implements MetaDataExtractor
+public class PatternMetaDataTransformer implements MetaDataTransformer
 {
     public Map<String, Object> extractMetaData(Annotation annotation)
     {

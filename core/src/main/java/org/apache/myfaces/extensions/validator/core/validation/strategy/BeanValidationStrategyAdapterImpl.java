@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.BeanMetaDataExtractorAdapter;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.BeanMetaDataTransformerAdapter;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -31,7 +31,7 @@ import javax.faces.context.FacesContext;
  * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
  * e.g. spring creates a proxy for it.
 
- * adapter to connect validation strategies with meta-data extractors,
+ * adapter to connect validation strategies with meta-data transformers,
  * if the validation strategy is defined as bean and e.g. spring creates a proxy
  *
  * @author Gerhard Petracek
@@ -40,7 +40,7 @@ import javax.faces.context.FacesContext;
 @UsageInformation({UsageCategory.REUSE})
 public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategyAdapter
 {
-    private MetaDataExtractor metaDataExtractor;
+    private MetaDataTransformer metaDataTransformer;
     private ValidationStrategy validationStrategy;
     //optional fallback for internal cashing
     private String validationStrategyClassName;
@@ -62,19 +62,19 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
         return validationStrategyClassName;
     }
 
-    public String getMetaDataExtractorClassName()
+    public String getMetaDataTransformerClassName()
     {
-        if(metaDataExtractor != null)
+        if(metaDataTransformer != null)
         {
-            if(metaDataExtractor.getClass().getPackage() != null)
+            if(metaDataTransformer.getClass().getPackage() != null)
             {
-                return metaDataExtractor.getClass().getName();
+                return metaDataTransformer.getClass().getName();
             }
             else
             {
-                if(metaDataExtractor instanceof BeanMetaDataExtractorAdapter)
+                if(metaDataTransformer instanceof BeanMetaDataTransformerAdapter)
                 {
-                    return ((BeanMetaDataExtractorAdapter)metaDataExtractor).getMetaDataExtractorClassName();
+                    return ((BeanMetaDataTransformerAdapter) metaDataTransformer ).getMetaDataTransformerClassName();
                 }
             }
         }
@@ -84,14 +84,14 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
     /*
      * generated
      */
-    public MetaDataExtractor getMetaDataExtractor()
+    public MetaDataTransformer getMetaDataTransformer()
     {
-        return metaDataExtractor;
+        return metaDataTransformer;
     }
 
-    public void setMetaDataExtractor(MetaDataExtractor metaDataExtractor)
+    public void setMetaDataTransformer(MetaDataTransformer metaDataTransformer)
     {
-        this.metaDataExtractor = metaDataExtractor;
+        this.metaDataTransformer = metaDataTransformer;
     }
 
     public ValidationStrategy getValidationStrategy()
