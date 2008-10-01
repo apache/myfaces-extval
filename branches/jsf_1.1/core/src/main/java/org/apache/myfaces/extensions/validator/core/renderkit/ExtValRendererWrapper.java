@@ -22,7 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -46,6 +47,8 @@ import java.io.IOException;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRendererWrapper extends Renderer
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     protected Renderer wrapped;
     protected ExtValContext extValContext = ExtValContext.getContext();
 
@@ -53,7 +56,10 @@ public class ExtValRendererWrapper extends Renderer
     {
         this.wrapped = new ExtValRendererProxy(renderer);
 
-        LogUtils.trace("extval renderer wrapper created for " + renderer.getClass().getName(), getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("extval renderer wrapper created for " + renderer.getClass().getName());
+        }
     }
 
     @Override
@@ -61,26 +67,34 @@ public class ExtValRendererWrapper extends Renderer
     {
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start beforeDecode of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start beforeDecode of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.beforeDecode(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("beforeDecode of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("beforeDecode of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
 
         wrapped.decode(facesContext, uiComponent);
 
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start afterDecode of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start afterDecode of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.afterDecode(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("afterDecode of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("afterDecode of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
     }
 
@@ -90,26 +104,34 @@ public class ExtValRendererWrapper extends Renderer
     {
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start beforeEncodeBegin of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start beforeEncodeBegin of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.beforeEncodeBegin(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("beforeEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("beforeEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
 
         wrapped.encodeBegin(facesContext, uiComponent);
 
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start afterEncodeBegin of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start afterEncodeBegin of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.afterEncodeBegin(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("afterEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("afterEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
     }
 
@@ -119,26 +141,34 @@ public class ExtValRendererWrapper extends Renderer
     {
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start beforeEncodeChildren of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start beforeEncodeChildren of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.beforeEncodeChildren(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("beforeEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("beforeEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
 
         wrapped.encodeChildren(facesContext, uiComponent);
 
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start afterEncodeChildren of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start afterEncodeChildren of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.afterEncodeChildren(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("afterEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("afterEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
     }
 
@@ -148,26 +178,34 @@ public class ExtValRendererWrapper extends Renderer
     {
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start beforeEncodeEnd of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start beforeEncodeEnd of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.beforeEncodeEnd(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("beforeEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("beforeEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
 
         wrapped.encodeEnd(facesContext, uiComponent);
 
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start afterEncodeEnd of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start afterEncodeEnd of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.afterEncodeEnd(facesContext, uiComponent, this.wrapped);
 
-            LogUtils.trace("afterEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("afterEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
     }
 
@@ -189,26 +227,34 @@ public class ExtValRendererWrapper extends Renderer
     {
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start beforeGetConvertedValue of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start beforeGetConvertedValue of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.beforeGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
 
-            LogUtils.trace("beforeGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("beforeGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
 
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
 
         for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
         {
-            LogUtils.trace("start afterGetConvertedValue of " + rendererInterceptor.getClass().getName(),
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start afterGetConvertedValue of " + rendererInterceptor.getClass().getName());
+            }
 
             rendererInterceptor.afterGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
 
-            LogUtils.trace("afterGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished",
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("afterGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+            }
         }
 
         return convertedObject;

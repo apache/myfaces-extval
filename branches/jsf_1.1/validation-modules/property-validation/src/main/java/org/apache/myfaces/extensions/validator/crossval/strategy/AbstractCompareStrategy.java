@@ -37,7 +37,6 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ELC
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ReferencingStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 
 /**
@@ -267,8 +266,11 @@ public abstract class AbstractCompareStrategy extends
         }
         catch (MissingResourceException e)
         {
-            LogUtils.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
-                    + DETAIL_MESSAGE_KEY_POSTFIX, e, getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
+                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
+            }
         }
         return null;
     }

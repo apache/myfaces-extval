@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -34,6 +36,8 @@ import java.io.IOException;
 @UsageInformation(UsageCategory.INTERNAL)
 public abstract class AbstractRendererInterceptor implements RendererInterceptor
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     public final String getInterceptorId()
     {
         return getClass().getName();

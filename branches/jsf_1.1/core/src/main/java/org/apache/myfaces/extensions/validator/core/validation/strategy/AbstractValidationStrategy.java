@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.application.FacesMessage;
@@ -65,8 +64,11 @@ public abstract class AbstractValidationStrategy extends
         }
         catch (MissingResourceException e)
         {
-            LogUtils.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX, e,
-                getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX,
+                        e);
+            }
         }
         return null;
     }

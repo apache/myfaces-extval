@@ -32,11 +32,12 @@ import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +55,8 @@ import java.util.Map;
 public class DefaultMessageResolverFactory implements
     ClassMappingFactory<ValidationStrategy, MessageResolver>
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private static Map<String, String> strategyMessageResolverMapping =
         new HashMap<String, String>();
     private static List<NameMapper<ValidationStrategy>> nameMapperList =
@@ -102,7 +105,10 @@ public class DefaultMessageResolverFactory implements
             {
                 addMapping(strategyName, resolverName);
 
-                LogUtils.trace(resolverName + " used for " + strategyName, getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(resolverName + " used for " + strategyName);
+                }
 
                 return messageResolver;
             }

@@ -20,7 +20,8 @@ package org.apache.myfaces.extensions.validator.core.initializer.component;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentInitializer implements ComponentInitializer
 {
+    protected final Log logger = LogFactory.getLog(getClass());
     private static List<ComponentInitializer> componentInitializers = new ArrayList<ComponentInitializer>();
 
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
@@ -42,7 +44,11 @@ public class DefaultComponentInitializer implements ComponentInitializer
         for(ComponentInitializer componentInitializer : componentInitializers)
         {
             componentInitializer.configureComponent(facesContext, uiComponent, metaData);
-            LogUtils.trace("configureComponent of " + componentInitializer.getClass().getName() + " called",getClass());
+
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("configureComponent of " + componentInitializer.getClass().getName() + " called");
+            }
         }
     }
 
