@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -28,7 +28,7 @@ import java.lang.annotation.Annotation;
  * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
  * e.g. spring creates a proxy for it.
  *
- * if there is also a proxy for the extractor you can use the className property to manually repeat the
+ * if there is also a proxy for the transformer you can use the className property to manually repeat the
  * full qualified class name.
  *
  * @see org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter
@@ -37,25 +37,25 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.REUSE})
-public class BeanMetaDataExtractorAdapterImpl implements BeanMetaDataExtractorAdapter
+public class BeanMetaDataTransformerAdapterImpl implements BeanMetaDataTransformerAdapter
 {
-    private MetaDataExtractor metaDataExtractor;
-    private String metaDataExtractorClassName;
+    private MetaDataTransformer metaDataTransformer;
+    private String metaDataTransformerClassName;
 
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
-        return this.metaDataExtractor.extractMetaData(annotation);
+        return this.metaDataTransformer.extractMetaData(annotation);
     }
 
-    public String getMetaDataExtractorClassName()
+    public String getMetaDataTransformerClassName()
     {
-        if(metaDataExtractorClassName != null)
+        if(metaDataTransformerClassName != null)
         {
-            return metaDataExtractorClassName;
+            return metaDataTransformerClassName;
         }
-        if(metaDataExtractor.getClass().getPackage() != null)
+        if(metaDataTransformer.getClass().getPackage() != null)
         {
-            metaDataExtractor.getClass();
+            metaDataTransformer.getClass();
         }
 
         return null;
@@ -64,18 +64,18 @@ public class BeanMetaDataExtractorAdapterImpl implements BeanMetaDataExtractorAd
     /*
      * generated
      */
-    public void setMetaDataExtractorClassName(String metaDataExtractorClassName)
+    public void setMetaDataTransformerClassName(String metaDataTransformerClassName)
     {
-        this.metaDataExtractorClassName = metaDataExtractorClassName;
+        this.metaDataTransformerClassName = metaDataTransformerClassName;
     }
 
-    public MetaDataExtractor getMetaDataExtractor()
+    public MetaDataTransformer getMetaDataTransformer()
     {
-        return metaDataExtractor;
+        return metaDataTransformer;
     }
 
-    public void setMetaDataExtractor(MetaDataExtractor metaDataExtractor)
+    public void setMetaDataTransformer(MetaDataTransformer metaDataTransformer)
     {
-        this.metaDataExtractor = metaDataExtractor;
+        this.metaDataTransformer = metaDataTransformer;
     }
 }

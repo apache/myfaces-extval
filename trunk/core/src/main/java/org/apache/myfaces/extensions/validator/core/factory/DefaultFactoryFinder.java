@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializerFactory;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultMetaDataExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -72,8 +72,8 @@ public class DefaultFactoryFinder implements FactoryFinder
                 factory = createMessageResolverFactory();
                 break;
 
-            case META_DATA_EXTRACTOR_FACTORY:
-                factory = createMetaDataExtractorFactory();
+            case META_DATA_TRANSFORMER_FACTORY:
+                factory = createMetaDataTransformerFactory();
                 break;
 
             case COMPONENT_INITIALIZER_FACTORY:
@@ -167,17 +167,17 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
-    protected Object createMetaDataExtractorFactory()
+    protected Object createMetaDataTransformerFactory()
     {
         Object factory = null;
-        List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
+        List<String> metaDataTransformerFactoryClassNames = new ArrayList<String>();
 
-        metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTOR_FACTORY);
-        metaDataExtractorFactoryClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().getCustomMetaDataExtractorFactory());
-        metaDataExtractorFactoryClassNames.add(DefaultMetaDataExtractorFactory.class.getName());
+        metaDataTransformerFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_TRANSFORMER_FACTORY );
+        metaDataTransformerFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().getCustomMetaDataTransformerFactory());
+        metaDataTransformerFactoryClassNames.add( DefaultMetaDataTransformerFactory.class.getName());
 
-        for (String className : metaDataExtractorFactoryClassNames)
+        for (String className : metaDataTransformerFactoryClassNames)
         {
             factory = ClassUtils.tryToInstantiateClassForName(className);
 

@@ -16,30 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * To provide a custom NameMapper to map ValidationStrategies to MetaDataExtractors.
- * (configured via information provider bean)
- * The bean provides the default name (convention).
- * It's possible to provide a custom full qualified name. (= customizable convention)
+ * Default implementation which maps ExtVal ValidationStrategies to MetaDataTransformers.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class CustomConventionValidationStrategyToMetaDataExtractorNameMapper extends
-    AbstractCustomNameMapper<ValidationStrategy>
+@UsageInformation(UsageCategory.INTERNAL)
+public class DefaultValidationStrategyToMetaDataTransformerNameMapper implements
+    NameMapper<ValidationStrategy>
 {
-    protected String getCustomNameMapperClassName()
+    public String createName(ValidationStrategy validationStrategy)
     {
         return ExtValContext.getContext().getInformationProviderBean()
-            .getCustomValidationStrategyToMetaDataExtractorNameMapper();
+            .getConventionNameForMetaDataTransformerName(
+                validationStrategy.getClass(), getClassName(validationStrategy.getClass().getSimpleName()));
+    }
+
+    protected String getClassName(String validationStrategyClassName)
+    {
+        return ExtValContext.getContext().getInformationProviderBean()
+            .getConventionNameForMetaDataTransformerClass(validationStrategyClassName);
     }
 }

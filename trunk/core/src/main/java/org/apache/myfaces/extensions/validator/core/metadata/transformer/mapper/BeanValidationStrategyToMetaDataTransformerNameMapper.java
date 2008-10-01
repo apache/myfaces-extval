@@ -16,27 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * To provide a custom NameMapper to map ValidationStrategies to MetaDataExtractors.
- * (configured via web.xml)
+ * It's an alternative Mapper - if there is a proxy around the validation strategy.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class CustomConfiguredValidationStrategyToMetaDataExtractorNameMapper extends
-    AbstractCustomNameMapper<ValidationStrategy>
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
+public class BeanValidationStrategyToMetaDataTransformerNameMapper implements NameMapper<ValidationStrategy>
 {
-    protected String getCustomNameMapperClassName()
+    public String createName(ValidationStrategy validationStrategy)
     {
-        return WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_TO_META_DATA_EXTRACTOR_NAME_MAPPER;
+        if(validationStrategy instanceof BeanValidationStrategyAdapter)
+        {
+            return ((BeanValidationStrategyAdapter)validationStrategy).getMetaDataTransformerClassName();
+        }
+        return null;
     }
 }

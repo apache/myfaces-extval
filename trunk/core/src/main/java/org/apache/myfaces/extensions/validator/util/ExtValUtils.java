@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 
 import javax.faces.component.UIComponent;
@@ -50,11 +50,11 @@ public class ExtValUtils
                 .create(annotation);
     }
 
-    public static MetaDataExtractor getMetaDataExtractorForValidationStrategy(ValidationStrategy validationStrategy)
+    public static MetaDataTransformer getMetaDataTransformerForValidationStrategy(ValidationStrategy validationStrategy)
     {
-        return ((ClassMappingFactory<ValidationStrategy, MetaDataExtractor>) ExtValContext
+        return ((ClassMappingFactory<ValidationStrategy, MetaDataTransformer>) ExtValContext
                     .getContext().getFactoryFinder()
-                    .getFactory(FactoryNames.META_DATA_EXTRACTOR_FACTORY, ClassMappingFactory.class))
+                    .getFactory(FactoryNames.META_DATA_TRANSFORMER_FACTORY, ClassMappingFactory.class))
                     .create(validationStrategy);
     }
 

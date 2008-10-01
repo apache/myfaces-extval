@@ -16,11 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.metadata.extractor;
+package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.baseval.annotation.LongRange;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -30,21 +29,12 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class LongRangeMetaDataExtractor implements MetaDataExtractor
+public class RequiredMetaDataTransformer implements MetaDataTransformer
 {
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        long minimum = ((LongRange)annotation).minimum();
-
-        results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
-        results.put(CommonMetaDataKeys.RANGE_MAX, ((LongRange)annotation).maximum());
-
-        if(minimum > 0)
-        {
-            results.put(CommonMetaDataKeys.REQUIRED, true);
-        }
-
+        results.put(CommonMetaDataKeys.REQUIRED, true);
         return results;
     }
 }

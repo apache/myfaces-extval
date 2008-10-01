@@ -16,34 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default implementation which maps ExtVal ValidationStrategies to MetaDataExtractors.
+ * To provide a custom NameMapper to map ValidationStrategies to MetaDataTransformers.
+ * (configured via information provider bean)
+ * The bean provides the default name (convention).
+ * It's possible to provide a custom full qualified name. (= customizable convention)
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultValidationStrategyToMetaDataExtractorNameMapper implements
-    NameMapper<ValidationStrategy>
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
+public class CustomConventionValidationStrategyToMetaDataTransformerNameMapper extends
+    AbstractCustomNameMapper<ValidationStrategy>
 {
-    public String createName(ValidationStrategy validationStrategy)
+    protected String getCustomNameMapperClassName()
     {
         return ExtValContext.getContext().getInformationProviderBean()
-            .getConventionNameForMetaDataExtractorName(
-                validationStrategy.getClass(), getClassName(validationStrategy.getClass().getSimpleName()));
-    }
-
-    protected String getClassName(String validationStrategyClassName)
-    {
-        return ExtValContext.getContext().getInformationProviderBean()
-            .getConventionNameForMetaDataExtractorClass(validationStrategyClassName);
+            .getCustomValidationStrategyToMetaDataTransformerNameMapper();
     }
 }

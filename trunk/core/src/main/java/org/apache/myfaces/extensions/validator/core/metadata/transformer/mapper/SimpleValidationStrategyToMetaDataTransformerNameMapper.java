@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
@@ -25,13 +25,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * It's an alternative Mapper to place ValidationStrategies and MetaDataExtractors in the same package.
+ * It's an alternative Mapper to place ValidationStrategies and MetaDataTransformers in the same package.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements NameMapper<ValidationStrategy>
+public class SimpleValidationStrategyToMetaDataTransformerNameMapper implements NameMapper<ValidationStrategy>
 {
     public String createName(ValidationStrategy validationStrategy)
     {
@@ -39,14 +39,14 @@ public class SimpleValidationStrategyToMetaDataExtractorNameMapper implements Na
         {
             return null;
         }
-        return getSimpleMetaDataExtractorName(validationStrategy.getClass().getPackage().getName() + ".",
+        return getSimpleMetaDataTransformerName(validationStrategy.getClass().getPackage().getName() + ".",
                                                 validationStrategy.getClass().getSimpleName());
     }
 
-    public String getSimpleMetaDataExtractorName(String validationStrategyPackageName,
+    public String getSimpleMetaDataTransformerName(String validationStrategyPackageName,
                                                  String validationStrategyClassName)
     {
-        String postfix = ExtValContext.getContext().getInformationProviderBean().getMetaDataExtractorPostfix();
+        String postfix = ExtValContext.getContext().getInformationProviderBean().getMetaDataTransformerPostfix();
 
         return validationStrategyPackageName + validationStrategyClassName
                 .replace(ExtValContext.getContext().getInformationProviderBean().getValidationStrategyPostfix(),postfix)

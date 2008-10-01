@@ -16,20 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.extractor;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.lang.annotation.Annotation;
-import java.util.Map;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
+ * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
+ * e.g. spring creates a proxy for it.
+ *
+ * if there is also a proxy for the extractor you can use the className property to manually repeat the
+ * full qualified class name.
+ *
+ * @see org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
-public interface MetaDataExtractor
+@UsageInformation({UsageCategory.REUSE})
+public interface BeanMetaDataTransformerAdapter extends MetaDataTransformer
 {
-    Map<String, Object> extractMetaData(Annotation annotation);
+    String getMetaDataTransformerClassName();
 }
