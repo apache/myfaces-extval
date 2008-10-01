@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
+ * 
  * <p/>
  * original impl. with dirty hack was implemented by:
  * @author <a href="mailto:sanders@apache.org">Scott Sanders</a>
@@ -45,7 +47,7 @@ public class ExtValJdk14Logger implements Log, Serializable
      * It must not be private, as an optimising compiler could detect that it
      * is not used and optimise it away.
      */
-    protected static final Level dummyLevel = Level.FINE;
+    protected static final Level DUMMY_LEVEL = Level.FINE;
 
     // ----------------------------------------------------------- Constructors
 
