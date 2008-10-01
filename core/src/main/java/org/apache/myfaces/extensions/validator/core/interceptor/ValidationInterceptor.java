@@ -26,11 +26,10 @@ import org.apache.myfaces.extensions.validator.core.annotation.extractor.Annotat
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -40,7 +39,6 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -75,17 +73,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         for (AnnotationEntry entry : annotationExtractor.extractAnnotations(facesContext, uiComponent))
         {
 
-            validationStrategy = ((ClassMappingFactory<Annotation, ValidationStrategy>)ExtValContext.getContext()
-                .getFactoryFinder()
-                .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
-                .create(entry.getAnnotation());
+            validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
 
             if (validationStrategy != null)
             {
-                metaDataExtractor = ((ClassMappingFactory<ValidationStrategy, MetaDataExtractor>) ExtValContext
-                    .getContext().getFactoryFinder()
-                    .getFactory(FactoryNames.META_DATA_EXTRACTOR_FACTORY, ClassMappingFactory.class))
-                    .create(validationStrategy);
+                metaDataExtractor = ExtValUtils.getMetaDataExtractorForValidationStrategy(validationStrategy);
 
                 if(metaDataExtractor != null)
                 {
@@ -102,10 +94,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                 }
 
                 //get component initializer for the current component and configure it
-                ((ClassMappingFactory<UIComponent, ComponentInitializer>)ExtValContext.getContext().getFactoryFinder()
-                    .getFactory(FactoryNames.COMPONENT_INITIALIZER_FACTORY, ClassMappingFactory.class))
-                    .create(uiComponent)
-                    .configureComponent(facesContext, uiComponent, metaData);
+                ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
             }
         }
 
@@ -139,17 +128,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         ValidationStrategy validationStrategy;
 
-        AnnotationExtractor annotationExtractor =
-            ExtValContext.getContext().getFactoryFinder()
-            .getFactory(FactoryNames.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY, AnnotationExtractorFactory.class)
-            .create();
+        AnnotationExtractor annotationExtractor = ExtValUtils.getAnnotationExtractor();
 
         for (AnnotationEntry entry : annotationExtractor.extractAnnotations(facesContext, uiComponent))
         {
-            validationStrategy = ((ClassMappingFactory<Annotation, ValidationStrategy>)ExtValContext.getContext()
-                .getFactoryFinder()
-                .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
-                .create(entry.getAnnotation());
+            validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
 
             if (validationStrategy != null)
             {
