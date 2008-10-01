@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -50,7 +49,11 @@ public class ValidatorStrategy extends AbstractValidatorAdapter
 
             if (validator == null)
             {
-                LogUtils.warn(validatorClassName.getName() + " not found", getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(validatorClassName.getName() + " not found");
+                }
+
                 continue;
             }
             validator.validate(facesContext, uiComponent, convertedObject);

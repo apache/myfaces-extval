@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIs;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
@@ -155,8 +154,11 @@ public class DateIsStrategy extends AbstractCompareStrategy
         }
         catch (MissingResourceException e)
         {
-            LogUtils.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
-                    + DETAIL_MESSAGE_KEY_POSTFIX, e, getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
+                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
+            }
         }
         return null;
     }

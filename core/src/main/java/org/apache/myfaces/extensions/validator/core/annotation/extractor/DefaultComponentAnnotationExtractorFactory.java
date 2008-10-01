@@ -21,11 +21,12 @@ package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ import java.util.List;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentAnnotationExtractorFactory implements AnnotationExtractorFactory
 {
+    private final Log logger = LogFactory.getLog(getClass());
 
     private static AnnotationExtractor annotationExtractor = null;
 
@@ -73,7 +75,10 @@ public class DefaultComponentAnnotationExtractorFactory implements AnnotationExt
             }
         }
 
-        LogUtils.trace(annotationExtractor.getClass().getName() + " created", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace(annotationExtractor.getClass().getName() + " created");
+        }
 
         return annotationExtractor;
     }
