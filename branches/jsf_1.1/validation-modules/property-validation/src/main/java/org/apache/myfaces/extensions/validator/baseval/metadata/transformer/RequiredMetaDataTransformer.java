@@ -16,26 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy;
+package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
- * e.g. spring creates a proxy for it.
-
- * adapter to connect validation strategies with meta-data transformers,
- * if the validation strategy is defined as bean and e.g. spring creates a proxy
- *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.REUSE})
-public interface BeanValidationStrategyAdapter extends ValidationStrategy
+public class RequiredMetaDataTransformer implements MetaDataTransformer
 {
-    //to get back the internal cashing
-    String getValidationStrategyClassName();
-
-    String getMetaDataTransformerClassName();
+    public Map<String, Object> extractMetaData(Annotation annotation)
+    {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put(CommonMetaDataKeys.REQUIRED, true);
+        return results;
+    }
 }

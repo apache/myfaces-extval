@@ -16,26 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
+ * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
  * e.g. spring creates a proxy for it.
-
- * adapter to connect validation strategies with meta-data transformers,
- * if the validation strategy is defined as bean and e.g. spring creates a proxy
+ *
+ * if there is also a proxy for the extractor you can use the className property to manually repeat the
+ * full qualified class name.
+ *
+ * @see org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.REUSE})
-public interface BeanValidationStrategyAdapter extends ValidationStrategy
+public interface BeanMetaDataTransformerAdapter extends MetaDataTransformer
 {
-    //to get back the internal cashing
-    String getValidationStrategyClassName();
-
     String getMetaDataTransformerClassName();
 }
