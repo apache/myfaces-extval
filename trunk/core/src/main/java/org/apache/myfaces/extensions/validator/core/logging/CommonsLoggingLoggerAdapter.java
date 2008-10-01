@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.logging;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.Jdk14Logger;
 
 /**
  * @author Gerhard Petracek
@@ -33,7 +34,14 @@ public class CommonsLoggingLoggerAdapter implements Logger
 
     public CommonsLoggingLoggerAdapter(Log logger)
     {
-        this.logger = logger;
+        if(!(logger instanceof Jdk14Logger))
+        {
+            this.logger = logger;
+        }
+        else
+        {
+            this.logger = new ExtValJdk14Logger(((Jdk14Logger)logger).getLogger().getName());
+        }
     }
 
     public void log(Level level, String message)
