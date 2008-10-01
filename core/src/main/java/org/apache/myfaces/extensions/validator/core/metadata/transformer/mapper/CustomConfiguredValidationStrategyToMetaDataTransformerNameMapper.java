@@ -16,26 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy;
+package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
- * e.g. spring creates a proxy for it.
-
- * adapter to connect validation strategies with meta-data transformers,
- * if the validation strategy is defined as bean and e.g. spring creates a proxy
+ * To provide a custom NameMapper to map ValidationStrategies to MetaDataTransformers.
+ * (configured via web.xml)
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.REUSE})
-public interface BeanValidationStrategyAdapter extends ValidationStrategy
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
+public class CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper extends
+    AbstractCustomNameMapper<ValidationStrategy>
 {
-    //to get back the internal cashing
-    String getValidationStrategyClassName();
-
-    String getMetaDataTransformerClassName();
+    protected String getCustomNameMapperClassName()
+    {
+        return WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER;
+    }
 }
