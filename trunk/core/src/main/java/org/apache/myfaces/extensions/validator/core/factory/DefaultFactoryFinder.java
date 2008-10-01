@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.logging.CachingCommonsLoggingLoggerFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializerFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultMetaDataExtractorFactory;
@@ -83,10 +82,6 @@ public class DefaultFactoryFinder implements FactoryFinder
 
             case RENDERKIT_WRAPPER_FACTORY:
                 factory = createRenderKitWrapperFactory();
-                break;
-
-            case LOGGER_FACTORY:
-                factory = createLoggerFactory();
                 break;
 
             default: //required by checkstyle
@@ -222,10 +217,4 @@ public class DefaultFactoryFinder implements FactoryFinder
     {
         return new DefaultRenderKitWrapperFactory();
     }
-
-    private Object createLoggerFactory()
-    {
-        return new CachingCommonsLoggingLoggerFactory();
-    }
-
 }

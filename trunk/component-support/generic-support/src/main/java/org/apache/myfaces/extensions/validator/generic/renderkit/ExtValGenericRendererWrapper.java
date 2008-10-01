@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.generic.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererWrapper;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -89,7 +88,10 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         }
         else
         {
-            LogUtils.trace("method " + method.getName() + " called without rendering-interceptors", getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("method " + method.getName() + " called without rendering-interceptors");
+            }
 
             return proxy.invokeSuper(obj, args);
         }

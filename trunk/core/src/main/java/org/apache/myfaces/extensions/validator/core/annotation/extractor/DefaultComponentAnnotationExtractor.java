@@ -20,11 +20,12 @@ package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -46,6 +47,8 @@ import java.util.List;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     @ToDo(Priority.MEDIUM)
     public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object)
     {
@@ -57,7 +60,10 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         UIComponent uiComponent = (UIComponent) object;
 
-        LogUtils.trace("start extracting annotations of " + uiComponent.getClass().getName(), getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("start extracting annotations of " + uiComponent.getClass().getName());
+        }
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
@@ -116,7 +122,10 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
         }
 
-        LogUtils.trace("extractAnnotations finished", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("extractAnnotations finished");
+        }
 
         return annotationEntries;
     }
@@ -141,8 +150,12 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
             catch (NoSuchMethodException e1)
             {
-                LogUtils.trace("method not found - class: " + entity.getName()
-                    + " - methods: " + "get" + property + " " + "is" + property, getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("method not found - class: " + entity.getName()
+                        + " - methods: " + "get" + property + " " + "is" + property);
+                }
+
                 return;
             }
         }
@@ -168,7 +181,11 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
             }
             catch (NoSuchFieldException e1)
             {
-                LogUtils.trace("field " + property + " or _" + property + " not found", getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("field " + property + " or _" + property + " not found", e1);
+                }
+
                 return;
             }
         }
@@ -184,7 +201,10 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         {
             annotationEntries.add(createAnnotationEntry(annotation, templateEntry));
 
-            LogUtils.trace(annotation.getClass().getName() + " found", getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace(annotation.getClass().getName() + " found");
+            }
         }
     }
 

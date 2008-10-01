@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.render.RenderKit;
 
@@ -33,7 +32,10 @@ public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
 {
     protected RenderKit createWrapper(RenderKit renderKit)
     {
-        LogUtils.trace("extval renderkit wrapper created for " + renderKit.getClass().getName(), getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("extval renderkit wrapper created for " + renderKit.getClass().getName());
+        }
 
         return new ExtValRenderKit(renderKit);
     }

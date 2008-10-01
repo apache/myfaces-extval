@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.generic.renderkit;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 
 import javax.faces.render.RenderKit;
 
@@ -30,8 +29,10 @@ public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
 {
     protected RenderKit createWrapper(RenderKit renderKit)
     {
-        LogUtils.trace("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib",
-            getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib");
+        }
 
         return ExtValGenericRenderKit.newInstance(renderKit);
     }

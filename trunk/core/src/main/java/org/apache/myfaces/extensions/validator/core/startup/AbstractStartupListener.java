@@ -19,9 +19,10 @@
 package org.apache.myfaces.extensions.validator.core.startup;
 
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -39,6 +40,8 @@ import java.util.List;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractStartupListener implements PhaseListener
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     //don't remove - it's a fallback if there is a problem with deregistration
     //target: don't process init logic more than once
     private static List<Class> initializedListeners = new ArrayList<Class>();
@@ -55,21 +58,30 @@ public abstract class AbstractStartupListener implements PhaseListener
             {
                 try
                 {
-                    LogUtils.info("start init of " + getClass().getName(), getClass());
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.info("start init of " + getClass().getName());
+                    }
 
                     init();
 
-                    LogUtils.info("init of " + getClass().getName() + " finished", getClass());
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.info("init of " + getClass().getName() + " finished");
+                    }
 
                     JsfUtils.deregisterPhaseListener(this);
                 }
                 catch (Throwable t)
                 {
-                    LogUtils.warn("an exception occurred while deregistering the phase-listener"
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.warn("an exception occurred while deregistering the phase-listener"
                                 + getClass().getName()
                                 + " -> there is just a little overhead,"
                                 + " but everything else works correctly."
-                                + " however, please inform the community about your configuration", t, getClass());
+                                + " however, please inform the community about your configuration", t);
+                    }
                 }
                 finally
                 {
