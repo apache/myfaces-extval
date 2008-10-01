@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.Jdk14Logger;
+import org.apache.commons.logging.impl.Log4JLogger;
 
 /**
  * @author Gerhard Petracek
@@ -34,13 +35,17 @@ public class CommonsLoggingLoggerAdapter implements Logger
 
     public CommonsLoggingLoggerAdapter(Log logger)
     {
-        if(!(logger instanceof Jdk14Logger))
+        if(logger instanceof Log4JLogger)
         {
-            this.logger = logger;
+            this.logger = new ExtValLog4JLogger(((Log4JLogger)logger).getLogger().getName());
+        }
+        else if(logger instanceof Jdk14Logger)
+        {
+            this.logger = new ExtValJdk14Logger(((Jdk14Logger)logger).getLogger().getName());
         }
         else
         {
-            this.logger = new ExtValJdk14Logger(((Jdk14Logger)logger).getLogger().getName());
+            this.logger = logger;
         }
     }
 

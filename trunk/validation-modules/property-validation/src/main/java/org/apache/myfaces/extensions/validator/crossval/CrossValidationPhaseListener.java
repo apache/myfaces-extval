@@ -38,7 +38,6 @@ public class CrossValidationPhaseListener implements PhaseListener
 
     public void afterPhase(PhaseEvent event)
     {
-
         try
         {
             CrossValidationStorage crossValidationStorage = CrossValidationUtils

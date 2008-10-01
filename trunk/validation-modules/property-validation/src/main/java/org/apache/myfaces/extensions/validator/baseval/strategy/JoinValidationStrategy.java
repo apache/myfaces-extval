@@ -24,15 +24,12 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -55,10 +52,7 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
             for (AnnotationEntry entry : extractor.extractAnnotations(
                     facesContext, targetExpression))
             {
-                validationStrategy = ((ClassMappingFactory<Annotation, ValidationStrategy>) ExtValContext.getContext()
-                    .getFactoryFinder()
-                    .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
-                    .create(entry.getAnnotation());
+                validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
 
                 if (validationStrategy != null)
                 {
