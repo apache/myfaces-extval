@@ -33,9 +33,10 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.mapper
     .BeanValidationStrategyToMetaDataExtractorNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +58,8 @@ import java.util.Map;
 public class DefaultMetaDataExtractorFactory implements
     ClassMappingFactory<ValidationStrategy, MetaDataExtractor>
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private static Map<String, String> validationStrategyToMetaDataExtractorMapping = new HashMap<String, String>();
     private static List<NameMapper<ValidationStrategy>> nameMapperList
         = new ArrayList<NameMapper<ValidationStrategy>>();
@@ -117,7 +120,10 @@ public class DefaultMetaDataExtractorFactory implements
                 {
                     validationStrategyToMetaDataExtractorMapping.put(validationStrategyName, extractorName);
 
-                    LogUtils.trace(extractorName + " used for " + validationStrategyName , getClass());
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.trace(extractorName + " used for " + validationStrategyName);
+                    }
                 }
                 return metaDataExtractor;
             }

@@ -24,7 +24,8 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import java.util.Map;
 public class DefaultComponentInitializerFactory implements
     ClassMappingFactory<UIComponent, ComponentInitializer>
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private static Map<String, ComponentInitializer> componentToComponentInitializerMapping
         = new HashMap<String, ComponentInitializer>();
     private static List<String> componentInitializerClassNames = new ArrayList<String>();
@@ -74,7 +77,10 @@ public class DefaultComponentInitializerFactory implements
             {
                 componentToComponentInitializerMapping.put(componentKey, componentInitializer);
 
-                LogUtils.trace(componentInitializer.getClass().getName() + " used for " + componentKey, getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(componentInitializer.getClass().getName() + " used for " + componentKey);
+                }
 
                 return componentInitializer;
             }

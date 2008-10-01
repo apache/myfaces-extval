@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
-import org.apache.myfaces.extensions.validator.util.LogUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
@@ -61,7 +60,10 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
             return;
         }
 
-        LogUtils.trace("start to init component " + uiComponent.getClass().getName(), getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("start to init component " + uiComponent.getClass().getName());
+        }
 
         ValidationStrategy validationStrategy;
         MetaDataExtractor metaDataExtractor;
@@ -98,7 +100,10 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
             }
         }
 
-        LogUtils.trace("init component of " + uiComponent.getClass().getName() + " finished", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
+        }
     }
 
     @Override
@@ -112,7 +117,10 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         {
             recorder.recordUserInput(uiComponent, convertedObject);
 
-            LogUtils.trace(recorder.getClass().getName() + " called", getClass());
+            if(logger.isTraceEnabled())
+            {
+                logger.trace(recorder.getClass().getName() + " called");
+            }
         }
 
         processValidation(facesContext, uiComponent, convertedObject);
@@ -124,7 +132,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         {
             return;
         }
-        LogUtils.trace("start validation", getClass());
+
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("start validation");
+        }
 
         ValidationStrategy validationStrategy;
 
@@ -136,18 +148,27 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
             if (validationStrategy != null)
             {
-                LogUtils.trace("validate " + entry.getAnnotation().getClass().getName() + " with " +
-                    validationStrategy.getClass().getName(), getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("validate " + entry.getAnnotation().getClass().getName() + " with " +
+                            validationStrategy.getClass().getName());
+                }
 
                 validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
             }
             else
             {
-                LogUtils.trace("no validation strategy found for " + entry.getAnnotation().annotationType().getName(),
-                    getClass());
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("no validation strategy found for "
+                            + entry.getAnnotation().annotationType().getName());
+                }
             }
         }
 
-        LogUtils.trace("validation finished", getClass());
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("validation finished");
+        }
     }
 }
