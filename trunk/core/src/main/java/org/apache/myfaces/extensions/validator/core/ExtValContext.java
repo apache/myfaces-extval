@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -164,7 +164,8 @@ public class ExtValContext
 
     private String getCustomInformationProviderBeanClassName()
     {
-        InformationProviderBean bean = (InformationProviderBean) ELUtils.getBean(InformationProviderBean.CUSTOM_BEAN);
+        InformationProviderBean bean = (InformationProviderBean) ExtValUtils.getELHelper()
+            .getBean(InformationProviderBean.CUSTOM_BEAN);
 
         return (bean != null) ? bean.getClass().getName() : null;
     }

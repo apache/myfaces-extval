@@ -16,12 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.util;
+package org.apache.myfaces.extensions.validator.core.el;
 
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import java.lang.reflect.AccessibleObject;
@@ -35,18 +36,20 @@ import java.util.Map;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class FaceletsTaglibExpressionUtils
+class FaceletsTaglibExpressionHelper
 {
     public static String tryToCreateValueBindingForFaceletsBinding(
         UIComponent uiComponent)
     {
-        String faceletsValueBindingExpression = ELUtils.getOriginalValueBindingExpression(uiComponent);
+        String faceletsValueBindingExpression = DefaultELHelper.getOriginalValueBindingExpression(uiComponent);
 
         try
         {
-            List<String> foundBindings = extractELTerms(ELUtils.getBindingOfComponent(uiComponent, "value"));
+            List<String> foundBindings = extractELTerms(
+                ExtValUtils.getELHelper().getBindingOfComponent(uiComponent, "value"));
 
             return faceletsValueBindingExpression.substring(0, 1) + "{" + createBinding(foundBindings) + "}";
         }
@@ -163,7 +166,7 @@ public class FaceletsTaglibExpressionUtils
             return elCount;
         }
 
-        if (ELUtils.isELTerm(o))
+        if (ExtValUtils.getELHelper().isELTerm(o))
         {
             if (foundELTerms != null)
             {
@@ -183,7 +186,7 @@ public class FaceletsTaglibExpressionUtils
                 {
                     if (o.toString().startsWith("[Ljava.lang.String"))
                     {
-                        if (ELUtils.isELTerm(Array.get(o, i)))
+                        if (ExtValUtils.getELHelper().isELTerm(Array.get(o, i)))
                         {
                             if (foundELTerms != null)
                             {
@@ -214,7 +217,7 @@ public class FaceletsTaglibExpressionUtils
 
             if (currentField.getType().equals(String.class))
             {
-                if (currentField.get(o) != null && ELUtils.isELTerm(currentField.get(o)))
+                if (currentField.get(o) != null && ExtValUtils.getELHelper().isELTerm(currentField.get(o)))
                 {
                     if (foundELTerms != null)
                     {
