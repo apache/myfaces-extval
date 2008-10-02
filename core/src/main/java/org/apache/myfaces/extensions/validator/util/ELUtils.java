@@ -79,9 +79,9 @@ public class ELUtils
         return facesContext.getApplication().createValueBinding(valueBindingExpression) != null;
     }
 
-    public static String getReliableValueBindingExpression(UIComponent uiComponent)
+    public static String getValueBindingExpression(UIComponent uiComponent)
     {
-        String valueBindingExpression = getValueBindingExpression(uiComponent);
+        String valueBindingExpression = getOriginalValueBindingExpression(uiComponent);
 
         String baseExpression = valueBindingExpression;
 
@@ -106,7 +106,7 @@ public class ELUtils
         return valueBindingExpression;
     }
 
-    public static String getValueBindingExpression(UIComponent uiComponent)
+    public static String getOriginalValueBindingExpression(UIComponent uiComponent)
     {
         ValueBinding valueExpression = uiComponent.getValueBinding("value");
 
