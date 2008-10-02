@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
@@ -159,8 +160,7 @@ public class DefaultValidationStrategyFactory implements
             annotationStrategyMapping = new HashMap<String, String>();
 
             //setup internal static mappings
-            for (String internalMappingSource : ExtValContext.getContext()
-                .getInformationProviderBean().getStaticStrategyMappingSources())
+            for (String internalMappingSource : ExtValContext.getContext().getStaticStrategyMappingSources())
             {
                 setupStrategyMappings(internalMappingSource);
             }
@@ -170,7 +170,7 @@ public class DefaultValidationStrategyFactory implements
             {
                 //build convention (strategy mapping)
                 setupStrategyMappings(ExtValContext.getContext().getInformationProviderBean()
-                    .getCustomStaticStrategyMappingSource());
+                    .get(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE));
             }
             catch (Throwable t)
             {

@@ -50,6 +50,8 @@ public class ExtValContext
     private List<ProcessedInformationRecorder> processedInformationRecorders =
         new ArrayList<ProcessedInformationRecorder>();
 
+    private List<String> staticStrategyMappings = new ArrayList<String>();
+
     public static ExtValContext getContext()
     {
         return extValContext;
@@ -165,5 +167,18 @@ public class ExtValContext
         InformationProviderBean bean = (InformationProviderBean) ELUtils.getBean(InformationProviderBean.CUSTOM_BEAN);
 
         return (bean != null) ? bean.getClass().getName() : null;
+    }
+
+    public List<String> getStaticStrategyMappingSources()
+    {
+        return this.staticStrategyMappings;
+    }
+
+    public void addStaticStrategyMappingSource(String resourceBundleName)
+    {
+        synchronized (this)
+        {
+            this.staticStrategyMappings.add(resourceBundleName);
+        }
     }
 }

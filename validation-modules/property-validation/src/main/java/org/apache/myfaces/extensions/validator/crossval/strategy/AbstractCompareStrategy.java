@@ -38,6 +38,7 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Loc
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ReferencingStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
 
 /**
  * @author Gerhard Petracek
@@ -60,7 +61,8 @@ public abstract class AbstractCompareStrategy extends
             referencingStrategies = new ArrayList<ReferencingStrategy>();
 
             String customReferencingStrategyClassName =
-                ExtValContext.getContext().getInformationProviderBean().getBasePackage() + "ReferencingStrategy";
+                ExtValContext.getContext().getInformationProviderBean()
+                    .get(CustomInfo.BASE_PACKAGE) + "ReferencingStrategy";
 
             ReferencingStrategy customReferencingStrategy = (ReferencingStrategy) ClassUtils
                     .tryToInstantiateClassForName(customReferencingStrategyClassName);
