@@ -40,6 +40,14 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     protected AbstractRenderKitWrapperFactory wrapped;
     private boolean deactivated = false;
 
+    protected AbstractRenderKitWrapperFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
     {
         if(logger.isTraceEnabled())

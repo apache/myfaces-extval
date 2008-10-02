@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -33,7 +32,8 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleAnnotationToValidationStrategyNameMapper implements NameMapper<Annotation>
+public class SimpleAnnotationToValidationStrategyNameMapper extends
+    AbstractAnnotationToValidationStrategyNameMapper
 {
     public String createName(Annotation annotation)
     {

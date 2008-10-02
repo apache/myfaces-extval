@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
@@ -32,7 +31,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class SimpleValidationStrategyToMetaDataTransformerNameMapper implements NameMapper<ValidationStrategy>
+public class SimpleValidationStrategyToMetaDataTransformerNameMapper extends
+    AbstractValidationStrategyToMetaDataTransformerNameMapper
 {
     public String createName(ValidationStrategy validationStrategy)
     {

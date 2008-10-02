@@ -76,6 +76,14 @@ public class DefaultMessageResolverFactory implements
             .add(new SimpleValidationStrategyToMsgResolverNameMapper());
     }
 
+    public DefaultMessageResolverFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public MessageResolver create(ValidationStrategy validationStrategy)
     {
         String strategyName = validationStrategy.getClass().getName();
