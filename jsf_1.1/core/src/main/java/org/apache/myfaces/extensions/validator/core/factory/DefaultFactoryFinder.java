@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.Default
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -45,7 +47,16 @@ import java.util.ArrayList;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultFactoryFinder implements FactoryFinder
 {
+    protected final Log logger = LogFactory.getLog(getClass());
     protected Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
+
+    public DefaultFactoryFinder()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
 
     public final <T> T getFactory(FactoryNames factoryName, Class<T> targetClass)
     {

@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -36,11 +38,17 @@ import java.io.Writer;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRenderKit extends RenderKit
 {
+    protected final Log logger = LogFactory.getLog(getClass());
     protected RenderKit wrapped;
 
     public ExtValRenderKit(RenderKit wrapped)
     {
         this.wrapped = wrapped;
+
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
     }
 
     public void addRenderer(String family, String rendererType, Renderer renderer)

@@ -43,6 +43,14 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
+    protected AbstractValidatorAdapter()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          AnnotationEntry annotationEntry, Object convertedObject)
     {
@@ -85,7 +93,7 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                 if(logger.isTraceEnabled())
                 {
                     logger.trace(getClass().getName() +
-                    ": throw original exception after processAfterValidatorException");
+                        ": throw original exception after processAfterValidatorException");
                 }
 
                 throw new ConverterException(e.getFacesMessage(), e);

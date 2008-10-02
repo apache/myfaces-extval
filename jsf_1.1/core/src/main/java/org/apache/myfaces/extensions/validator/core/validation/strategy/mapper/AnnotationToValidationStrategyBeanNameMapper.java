@@ -38,8 +38,8 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class AnnotationToValidationStrategyBeanNameMapper implements
-    NameMapper<Annotation>
+public class AnnotationToValidationStrategyBeanNameMapper extends
+    AbstractAnnotationToValidationStrategyNameMapper
 {
     public static final String PREFIX_FOR_BEAN_MAPPING = "bean:";
     private NameMapper<Annotation> wrapped;
