@@ -26,9 +26,9 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.TargetAlias;
 import org.apache.myfaces.extensions.validator.crossval.annotation.extractor.
     DefaultValueBindingScanningAnnotationExtractor;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -125,8 +125,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        if (!ELUtils.isExpressionValid(facesContext,
-                crossEntityReferenceWithBinding[0]))
+        if (!ExtValUtils.getELHelper().isExpressionValid(facesContext,crossEntityReferenceWithBinding[0]))
         {
             return false;
         }
@@ -171,7 +170,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
         Object validationTargetObject = null;
         if (useModelValue)
         {
-            referencedBean = ELUtils.getValueOfExpression(facesContext,
+            referencedBean = ExtValUtils.getELHelper().getValueOfExpression(facesContext,
                     crossEntityReferenceWithBinding[0]);
             validationTargetObject = getValidationTargetObject(
                     crossValidationStorageEntry, foundAnnotationEntry,
@@ -231,10 +230,9 @@ public class AliasCompareStrategy implements ReferencingStrategy
                     + "." + name + "}";
             FacesContext facesContext = FacesContext.getCurrentInstance();
 
-            if (ELUtils.isExpressionValid(facesContext,
-                    targetValueBindingExpression))
+            if (ExtValUtils.getELHelper().isExpressionValid(facesContext, targetValueBindingExpression))
             {
-                validationTargetObject = ELUtils.getValueOfExpression(
+                validationTargetObject = ExtValUtils.getELHelper().getValueOfExpression(
                         facesContext, targetValueBindingExpression);
             }
         }
@@ -315,10 +313,8 @@ public class AliasCompareStrategy implements ReferencingStrategy
 
             if (useModelValue)
             {
-                validationTargetObject = ELUtils.getValueOfExpression(
-                        FacesContext.getCurrentInstance(), entry
-                                .getAnnotationEntry()
-                                .getValueBindingExpression());
+                validationTargetObject = ExtValUtils.getELHelper().getValueOfExpression(
+                        FacesContext.getCurrentInstance(), entry.getAnnotationEntry().getValueBindingExpression());
             }
             else
             {
@@ -326,13 +322,11 @@ public class AliasCompareStrategy implements ReferencingStrategy
             }
             if (compareStrategy.isViolation(crossValidationStorageEntry
                     .getConvertedObject(), validationTargetObject,
-                    crossValidationStorageEntry.getAnnotationEntry()
-                            .getAnnotation()))
+                    crossValidationStorageEntry.getAnnotationEntry().getAnnotation()))
             {
                 violationFound = true;
 
-                compareStrategy.processTargetComponentAfterViolation(
-                        crossValidationStorageEntry, entry);
+                compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, entry);
             }
             validationExecuted = true;
         }
@@ -356,8 +350,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
                 && separatorIndex > -1 && bindingStartIndex < bindingEndIndex && bindingEndIndex < separatorIndex);
     }
 
-    protected String[] extractCrossEntityReferenceWithBinding(
-            String targetProperty)
+    protected String[] extractCrossEntityReferenceWithBinding(String targetProperty)
     {
         String[] result = new String[2];
 

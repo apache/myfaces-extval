@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -53,7 +53,7 @@ public abstract class AbstractCrossValidationStrategy extends
         CrossValidationStorageEntry entry = new CrossValidationStorageEntry();
 
         entry.setAnnotationEntry(annotationEntry);
-        entry.setBean(ELUtils.getBaseObject(annotationEntry.getValueBindingExpression()));
+        entry.setBean(ExtValUtils.getELHelper().getBaseObject(annotationEntry.getValueBindingExpression()));
         entry.setComponent(uiComponent);
         entry.setConvertedObject(convertedObject);
         entry.setValidationStrategy(this);

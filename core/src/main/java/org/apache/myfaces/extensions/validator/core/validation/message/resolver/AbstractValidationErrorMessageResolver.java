@@ -21,9 +21,9 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
@@ -81,7 +81,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
         //only in case of a ValidationErrorMessageResolver which is configured as bean
         if (this.messageBundleVarName != null && customMessage == null)
         {
-            resourceBundle = (ResourceBundle) ELUtils.getBean(messageBundleVarName);
+            resourceBundle = (ResourceBundle) ExtValUtils.getELHelper().getBean(messageBundleVarName);
 
             if (resourceBundle != null)
             {

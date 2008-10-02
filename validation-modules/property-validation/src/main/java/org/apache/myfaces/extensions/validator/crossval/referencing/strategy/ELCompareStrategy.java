@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntr
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
@@ -64,13 +64,13 @@ public class ELCompareStrategy implements ReferencingStrategy
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        if (!ELUtils.isExpressionValid(facesContext, validationTarget))
+        if (!ExtValUtils.getELHelper().isExpressionValid(facesContext, validationTarget))
         {
             return false;
         }
 
         if (compareStrategy.isViolation(crossValidationStorageEntry
-                .getConvertedObject(), ELUtils.getValueOfExpression(
+                .getConvertedObject(), ExtValUtils.getELHelper().getValueOfExpression(
                 facesContext, validationTarget), crossValidationStorageEntry
                 .getAnnotationEntry().getAnnotation()))
         {
