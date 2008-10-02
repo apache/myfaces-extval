@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import java.io.Externalizable;
 
 /**
  * in order to centralize the jsf version dependency within the core
@@ -125,5 +127,21 @@ public class ELUtils
         ValueExpression valueExpression = uiComponent.getValueExpression("value");
 
         return (valueExpression != null) ? valueExpression.getType(facesContext.getELContext()) : null;
+    }
+
+    public static boolean isELTerm(Object o)
+    {
+        if (o instanceof ValueBinding || o instanceof Externalizable)
+        {
+            return false;
+        }
+
+        String s = o.toString();
+        return ((s.contains("#") || s.contains("$")) && s.contains("{") && s.contains("}"));
+    }
+
+    public static Object getBindingOfComponent(UIComponent uiComponent, String name)
+    {
+        return uiComponent.getValueExpression(name);
     }
 }
