@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.annotation.extractor.Default
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.el.DefaultELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializerFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
@@ -85,6 +86,9 @@ public class DefaultFactoryFinder implements FactoryFinder
                 factory = createRenderKitWrapperFactory();
                 break;
 
+            case EL_HELPER_FACTORY:
+                factory = createELHelperFactory();
+                break;
             default: //required by checkstyle
         }
 
@@ -217,5 +221,10 @@ public class DefaultFactoryFinder implements FactoryFinder
     protected Object createRenderKitWrapperFactory()
     {
         return new DefaultRenderKitWrapperFactory();
+    }
+
+    private Object createELHelperFactory()
+    {
+        return new DefaultELHelperFactory();
     }
 }
