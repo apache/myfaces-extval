@@ -39,7 +39,7 @@ public class DefaultValidationErrorMessageResolver extends
     //not used at the moment - just for a convention
     protected String getBaseName()
     {
-        return InternalConventionProvider.getConventionForModuleMessageBundle(getClass().getPackage().getName());
+        return InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
     }
 
     protected String getCustomBaseName()
