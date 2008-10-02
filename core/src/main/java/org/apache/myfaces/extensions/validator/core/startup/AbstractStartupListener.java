@@ -46,6 +46,14 @@ public abstract class AbstractStartupListener implements PhaseListener
     //target: don't process init logic more than once
     private static List<Class> initializedListeners = new ArrayList<Class>();
 
+    protected AbstractStartupListener()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public void afterPhase(PhaseEvent event)
     {
     }
@@ -58,14 +66,14 @@ public abstract class AbstractStartupListener implements PhaseListener
             {
                 try
                 {
-                    if(logger.isTraceEnabled())
+                    if(logger.isInfoEnabled())
                     {
                         logger.info("start init of " + getClass().getName());
                     }
 
                     init();
 
-                    if(logger.isTraceEnabled())
+                    if(logger.isInfoEnabled())
                     {
                         logger.info("init of " + getClass().getName() + " finished");
                     }
@@ -74,7 +82,7 @@ public abstract class AbstractStartupListener implements PhaseListener
                 }
                 catch (Throwable t)
                 {
-                    if(logger.isTraceEnabled())
+                    if(logger.isWarnEnabled())
                     {
                         logger.warn("an exception occurred while deregistering the phase-listener"
                                 + getClass().getName()

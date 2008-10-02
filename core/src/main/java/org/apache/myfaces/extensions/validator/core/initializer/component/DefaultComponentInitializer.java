@@ -39,6 +39,14 @@ public class DefaultComponentInitializer implements ComponentInitializer
     protected final Log logger = LogFactory.getLog(getClass());
     private static List<ComponentInitializer> componentInitializers = new ArrayList<ComponentInitializer>();
 
+    public DefaultComponentInitializer()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
         for(ComponentInitializer componentInitializer : componentInitializers)

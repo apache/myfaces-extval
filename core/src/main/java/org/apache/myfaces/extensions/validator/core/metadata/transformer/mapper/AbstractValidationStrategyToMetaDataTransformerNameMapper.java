@@ -18,27 +18,28 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- * It's an alternative Mapper - if there is a proxy around the validation strategy.
- *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
-public class BeanValidationStrategyToMetaDataTransformerNameMapper extends
-    AbstractValidationStrategyToMetaDataTransformerNameMapper
+public abstract class AbstractValidationStrategyToMetaDataTransformerNameMapper
+    implements NameMapper<ValidationStrategy>
 {
-    public String createName(ValidationStrategy validationStrategy)
+    protected final Log logger = LogFactory.getLog(getClass());
+
+    public AbstractValidationStrategyToMetaDataTransformerNameMapper()
     {
-        if(validationStrategy instanceof BeanValidationStrategyAdapter)
+        if(logger.isDebugEnabled())
         {
-            return ((BeanValidationStrategyAdapter)validationStrategy).getMetaDataTransformerClassName();
+            logger.debug(getClass().getName() + " instantiated");
         }
-        return null;
     }
 }

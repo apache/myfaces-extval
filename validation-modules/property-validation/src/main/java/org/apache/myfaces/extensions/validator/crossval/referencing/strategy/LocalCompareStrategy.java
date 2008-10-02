@@ -87,7 +87,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
 
         if (validationTargetEntry == null)
         {
-            if(logger.isTraceEnabled())
+            if(logger.isWarnEnabled())
             {
                 logger.warn("couldn't find converted object for " + targetValueBindingExpression);
             }

@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.el;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * details
@@ -31,7 +33,16 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})
 public abstract class AbstractELHelperFactory
 {
+    protected final Log logger = LogFactory.getLog(getClass());
     protected AbstractELHelperFactory customELHelperFactory;
+
+    protected AbstractELHelperFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
 
     public void setCustomELHelperFactory(AbstractELHelperFactory elHelperFactory)
     {

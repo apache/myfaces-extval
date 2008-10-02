@@ -39,6 +39,8 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -58,9 +60,10 @@ import java.util.ResourceBundle;
  */
 @ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationStrategyFactory implements
-    ClassMappingFactory<Annotation, ValidationStrategy>
+public class DefaultValidationStrategyFactory implements ClassMappingFactory<Annotation, ValidationStrategy>
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private static Map<String, String> annotationStrategyMapping = null;
     private static List<NameMapper<Annotation>> nameMapperList = new ArrayList<NameMapper<Annotation>>();
 
@@ -74,8 +77,7 @@ public class DefaultValidationStrategyFactory implements
             .add(new DefaultAnnotationToValidationStrategyNameMapper());
         nameMapperList
             .add(new SimpleAnnotationToValidationStrategyNameMapper());
-        //TODO if jsr 303 doesn't change:
-        //nameMapperList.add(new BeanValidationAnnotationStrategyNameMapper());
+
         nameMapperList
             .add(new AnnotationToValidationStrategyBeanNameMapper(
                 new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
@@ -86,6 +88,14 @@ public class DefaultValidationStrategyFactory implements
             new DefaultAnnotationToValidationStrategyNameMapper()));
         nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
             new SimpleAnnotationToValidationStrategyNameMapper()));
+    }
+
+    public DefaultValidationStrategyFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
     }
 
     public ValidationStrategy create(Annotation annotation)

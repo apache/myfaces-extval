@@ -58,6 +58,14 @@ public class DefaultComponentInitializerFactory implements
             .add(DefaultComponentInitializer.class.getName());
     }
 
+    public DefaultComponentInitializerFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public ComponentInitializer create(UIComponent uiComponent)
     {
         String componentKey = uiComponent.getClass().getName();
