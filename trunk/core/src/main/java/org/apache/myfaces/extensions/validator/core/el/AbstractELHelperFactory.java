@@ -22,6 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * details
+ * @see DefaultELHelper
+ * 
  * @author Gerhard Petracek
  * @since 1.x.1
  */

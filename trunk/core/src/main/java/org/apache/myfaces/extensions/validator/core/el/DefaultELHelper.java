@@ -32,8 +32,15 @@ import java.io.Externalizable;
 /**
  * in order to centralize the jsf version dependency within the core
  *
+ * this el-helper supports jsp and facelets (tested with 1.1.14)
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
+ */
+/*
+ * there is a special facelets workaround for el-expressions of custom components
+ * it's pluggable in order to support special mechanisms of different technologies (than jsp and facelets)
+ * so you can plug in your own impl. which implements a custom workaround (like the facelets workaround of this impl.)
  */
 @ToDo(Priority.MEDIUM)
 @UsageInformation(UsageCategory.INTERNAL)
