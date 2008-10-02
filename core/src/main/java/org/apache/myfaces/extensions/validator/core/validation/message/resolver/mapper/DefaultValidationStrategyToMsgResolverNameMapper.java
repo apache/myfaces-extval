@@ -36,12 +36,12 @@ public class DefaultValidationStrategyToMsgResolverNameMapper implements
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        return InternalConventionProvider.getConventionNameForMessageResolverName(validationStrategy.getClass(),
+        return InternalConventionProvider.getMessageResolverClassName(validationStrategy.getClass(),
                                                      getClassName(validationStrategy.getClass().getSimpleName()));
     }
 
     protected String getClassName(String strategyClassName)
     {
-        return InternalConventionProvider.getConventionNameForMessageResolverClass(strategyClassName);
+        return InternalConventionProvider.getMessageResolverClassName(strategyClassName);
     }
 }
