@@ -19,11 +19,11 @@
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -67,7 +67,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        String valueBindingExpression = ELUtils.getValueBindingExpression(uiComponent);
+        String valueBindingExpression = ExtValUtils.getELHelper().getValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
@@ -88,7 +88,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         String property = valueBindingExpression.substring(beanPropertyBorder + 1, valueBindingExpression.indexOf('}'));
 
-        Class entityClass = ELUtils.getTypeOfValueBindingForExpression(facesContext, "#{" + beans + "}");
+        Class entityClass = ExtValUtils.getELHelper().getTypeOfValueBindingForExpression(facesContext, "#{"+beans+"}");
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();

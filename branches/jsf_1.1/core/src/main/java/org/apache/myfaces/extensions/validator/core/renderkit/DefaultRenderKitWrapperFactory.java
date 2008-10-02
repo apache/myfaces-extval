@@ -30,6 +30,8 @@ import javax.faces.render.RenderKit;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
+    private RenderKit renderKit;
+
     protected RenderKit createWrapper(RenderKit renderKit)
     {
         if(logger.isTraceEnabled())
@@ -37,6 +39,10 @@ public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
             logger.trace("extval renderkit wrapper created for " + renderKit.getClass().getName());
         }
 
-        return new ExtValRenderKit(renderKit);
+        if(this.renderKit == null)
+        {
+            this.renderKit = new ExtValRenderKit(renderKit);
+        }
+        return this.renderKit;
     }
 }

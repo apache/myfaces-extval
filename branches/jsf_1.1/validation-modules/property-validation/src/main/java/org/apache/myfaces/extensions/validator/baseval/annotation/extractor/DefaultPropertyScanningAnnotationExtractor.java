@@ -20,9 +20,9 @@ package org.apache.myfaces.extensions.validator.baseval.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractor;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class DefaultPropertyScanningAnnotationExtractor extends
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        Class entityClass = ELUtils.getTypeOfValueBindingForExpression(
+        Class entityClass = ExtValUtils.getELHelper().getTypeOfValueBindingForExpression(
                 facesContext, valueBindingExpression);
 
         //create template entry

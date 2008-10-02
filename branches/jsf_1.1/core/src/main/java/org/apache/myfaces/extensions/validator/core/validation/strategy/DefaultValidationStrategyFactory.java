@@ -34,7 +34,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .SimpleAnnotationToValidationStrategyNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -132,8 +132,7 @@ public class DefaultValidationStrategyFactory implements
         if (validationStrategyName
             .startsWith(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING))
         {
-            return (ValidationStrategy) ELUtils
-                .getBean(validationStrategyName
+            return (ValidationStrategy) ExtValUtils.getELHelper().getBean(validationStrategyName
                     .substring(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING.length()));
         }
         else

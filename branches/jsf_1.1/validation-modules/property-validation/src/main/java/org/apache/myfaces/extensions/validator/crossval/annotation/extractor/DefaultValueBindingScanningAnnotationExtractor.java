@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.crossval.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractor;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import java.lang.reflect.Field;
@@ -52,7 +52,7 @@ public class DefaultValueBindingScanningAnnotationExtractor extends
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        Class entity = ELUtils.getTypeOfValueBindingForExpression(facesContext,
+        Class entity = ExtValUtils.getELHelper().getTypeOfValueBindingForExpression(facesContext,
                 valueBindingExpression);
 
         if (entity != null)

@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
+import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
@@ -81,5 +83,11 @@ public class ExtValUtils
             .getFactoryFinder()
             .getFactory(FactoryNames.MESSAGE_RESOLVER_FACTORY, ClassMappingFactory.class))
             .create(validationStrategy);
+    }
+
+    public static ELHelper getELHelper()
+    {
+        return ExtValContext.getContext().getFactoryFinder()
+            .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class).create();
     }
 }
