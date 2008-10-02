@@ -48,7 +48,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         String valueBindingExpression;
         ProcessedInformationEntry entry;
 
-        valueBindingExpression = ELUtils.getReliableValueBindingExpression(uiComponent);
+        valueBindingExpression = ELUtils.getValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
