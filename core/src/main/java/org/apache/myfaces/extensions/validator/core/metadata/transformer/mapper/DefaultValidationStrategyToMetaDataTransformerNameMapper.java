@@ -36,12 +36,12 @@ public class DefaultValidationStrategyToMetaDataTransformerNameMapper implements
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        return InternalConventionProvider.getConventionNameForMetaDataTransformerName(
+        return InternalConventionProvider.getMetaDataTransformerClassName(
                 validationStrategy.getClass(), getClassName(validationStrategy.getClass().getSimpleName()));
     }
 
     protected String getClassName(String validationStrategyClassName)
     {
-        return InternalConventionProvider.getConventionNameForMetaDataTransformerClass(validationStrategyClassName);
+        return InternalConventionProvider.getMetaDataTransformerClassName(validationStrategyClassName);
     }
 }

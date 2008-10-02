@@ -33,7 +33,7 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class InternalConventionProvider
 {
-    public static String getConventionForModuleMessageBundle(String packageName)
+    public static String getModuleMessageBundleName(String packageName)
     {
         String newPackageName;
         if (packageName.endsWith(".resolver"))
@@ -52,13 +52,13 @@ public class InternalConventionProvider
      * use a custom name mapper to implement custom conventions
      */
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    public static String getConventionNameForMessageResolverName(
+    public static String getMessageResolverClassName(
         Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
     {
         return getValidationStrategyBasedName(validationStrategyClass, ".message.resolver.", targetClassName);
     }
 
-    public static String getConventionNameForMetaDataTransformerName(
+    public static String getMetaDataTransformerClassName(
         Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
     {
         return getValidationStrategyBasedName(validationStrategyClass, ".metadata.transformer.", targetClassName);
@@ -82,7 +82,7 @@ public class InternalConventionProvider
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public static String getConventionNameForMessageResolverClass(String validationStrategyName)
+    public static String getMessageResolverClassName(String validationStrategyName)
     {
         return getValidationStrategyBasedName(validationStrategyName, "ValidationErrorMessageResolver");
     }
@@ -90,12 +90,12 @@ public class InternalConventionProvider
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public static String getConventionNameForValidationStrategy(Annotation annotation)
+    public static String getValidationStrategyClassName(Annotation annotation)
     {
         return annotation.annotationType().getName().replace(".annotation.", ".strategy.") + "Strategy";
     }
 
-    public static String getConventionNameForMetaDataTransformerClass(String validationStrategyName)
+    public static String getMetaDataTransformerClassName(String validationStrategyName)
     {
         return getValidationStrategyBasedName(validationStrategyName, "MetaDataTransformer");
     }
