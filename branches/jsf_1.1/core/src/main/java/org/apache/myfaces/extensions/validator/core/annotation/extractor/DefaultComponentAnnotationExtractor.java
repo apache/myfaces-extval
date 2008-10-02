@@ -49,6 +49,14 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
+    public DefaultComponentAnnotationExtractor()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     @ToDo(Priority.MEDIUM)
     public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object)
     {

@@ -258,7 +258,7 @@ public class AliasCompareStrategy implements ReferencingStrategy
             }
             catch (Exception e)
             {
-                if(logger.isTraceEnabled())
+                if(logger.isWarnEnabled())
                 {
                     logger.warn("couldn't access field " + name + " details: boundTo=" + boundTo, e);
                 }

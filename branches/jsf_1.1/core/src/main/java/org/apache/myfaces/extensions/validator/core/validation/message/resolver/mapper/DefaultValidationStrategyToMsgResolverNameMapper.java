@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -31,8 +30,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultValidationStrategyToMsgResolverNameMapper implements
-    NameMapper<ValidationStrategy>
+public class DefaultValidationStrategyToMsgResolverNameMapper extends
+    AbstractValidationStrategyToMsgResolverNameMapper
 {
     public String createName(ValidationStrategy validationStrategy)
     {

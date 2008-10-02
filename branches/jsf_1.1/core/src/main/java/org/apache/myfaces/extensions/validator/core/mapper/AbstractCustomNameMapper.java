@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.mapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * A generic implementation. Subclasses just have to now the fully qualified name of the name mapper.
@@ -33,7 +35,16 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
 {
+    protected final Log logger = LogFactory.getLog(getClass());
     private NameMapper<T> customNameMapper;
+
+    protected AbstractCustomNameMapper()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
 
     public String createName(T source)
     {

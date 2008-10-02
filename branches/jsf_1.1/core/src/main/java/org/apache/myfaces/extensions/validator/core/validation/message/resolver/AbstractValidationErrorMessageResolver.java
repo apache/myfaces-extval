@@ -51,6 +51,14 @@ public abstract class AbstractValidationErrorMessageResolver implements
     //with jsf 1.1 only available if there is a custom bean
     private String messageBundleVarName;
 
+    protected AbstractValidationErrorMessageResolver()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public String getMessage(String key, Locale locale)
     {
         if (key == null || key.equals(""))
@@ -71,7 +79,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
             }
             else
             {
-                if(logger.isTraceEnabled())
+                if(logger.isWarnEnabled())
                 {
                     logger.warn("message bundle " + this.messageBundleBaseName + " not found");
                 }
@@ -89,7 +97,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
             }
             else
             {
-                if(logger.isTraceEnabled())
+                if(logger.isWarnEnabled())
                 {
                     logger.warn("message bundle var name " + this.messageBundleVarName + " not found");
                 }

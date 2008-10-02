@@ -78,6 +78,14 @@ public class DefaultMetaDataTransformerFactory implements
             .add(new BeanValidationStrategyToMetaDataTransformerNameMapper());
     }
 
+    public DefaultMetaDataTransformerFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public MetaDataTransformer create(ValidationStrategy validationStrategy)
     {
         String validationStrategyName = null;

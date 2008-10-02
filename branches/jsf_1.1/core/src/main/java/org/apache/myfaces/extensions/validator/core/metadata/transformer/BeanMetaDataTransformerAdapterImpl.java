@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.lang.annotation.Annotation;
@@ -39,8 +41,18 @@ import java.lang.annotation.Annotation;
 @UsageInformation({UsageCategory.REUSE})
 public class BeanMetaDataTransformerAdapterImpl implements BeanMetaDataTransformerAdapter
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
+
+    public BeanMetaDataTransformerAdapterImpl()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
 
     public Map<String, Object> extractMetaData(Annotation annotation)
     {
