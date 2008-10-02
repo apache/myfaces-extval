@@ -24,8 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
-import javax.faces.el.ValueBinding;
-import java.io.Externalizable;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -48,7 +46,7 @@ public class FaceletsTaglibExpressionUtils
 
         try
         {
-            List<String> foundBindings = extractELTerms(uiComponent.getValueBinding("value"));
+            List<String> foundBindings = extractELTerms(ELUtils.getBindingOfComponent(uiComponent, "value"));
 
             return faceletsValueBindingExpression.substring(0, 1) + "{" + createBinding(foundBindings) + "}";
         }
@@ -165,7 +163,7 @@ public class FaceletsTaglibExpressionUtils
             return elCount;
         }
 
-        if (isELTerm(o))
+        if (ELUtils.isELTerm(o))
         {
             if (foundELTerms != null)
             {
@@ -185,7 +183,7 @@ public class FaceletsTaglibExpressionUtils
                 {
                     if (o.toString().startsWith("[Ljava.lang.String"))
                     {
-                        if (isELTerm(Array.get(o, i)))
+                        if (ELUtils.isELTerm(Array.get(o, i)))
                         {
                             if (foundELTerms != null)
                             {
@@ -216,7 +214,7 @@ public class FaceletsTaglibExpressionUtils
 
             if (currentField.getType().equals(String.class))
             {
-                if (currentField.get(o) != null && isELTerm(currentField.get(o)))
+                if (currentField.get(o) != null && ELUtils.isELTerm(currentField.get(o)))
                 {
                     if (foundELTerms != null)
                     {
@@ -231,17 +229,6 @@ public class FaceletsTaglibExpressionUtils
             }
         }
         return elCount;
-    }
-
-    private static boolean isELTerm(Object o)
-    {
-        if (o instanceof ValueBinding || o instanceof Externalizable)
-        {
-            return false;
-        }
-
-        String s = o.toString();
-        return ((s.contains("#") || s.contains("$")) && s.contains("{") && s.contains("}"));
     }
 
     private static List<Field> findAllAttributes(Class c, List<Field> attributes)
