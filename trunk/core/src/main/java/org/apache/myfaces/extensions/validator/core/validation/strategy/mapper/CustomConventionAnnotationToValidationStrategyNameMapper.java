@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -41,6 +42,6 @@ public class CustomConventionAnnotationToValidationStrategyNameMapper extends
     protected String getCustomNameMapperClassName()
     {
         return ExtValContext.getContext().getInformationProviderBean()
-            .getCustomAnnotationToValidationStrategyNameMapper();
+            .get(CustomInfo.ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER);
     }
 }

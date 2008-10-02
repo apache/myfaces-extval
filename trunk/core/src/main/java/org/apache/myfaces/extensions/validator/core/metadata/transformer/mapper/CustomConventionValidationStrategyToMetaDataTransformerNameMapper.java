@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -40,6 +41,6 @@ public class CustomConventionValidationStrategyToMetaDataTransformerNameMapper e
     protected String getCustomNameMapperClassName()
     {
         return ExtValContext.getContext().getInformationProviderBean()
-            .getCustomValidationStrategyToMetaDataTransformerNameMapper();
+            .get(CustomInfo.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER);
     }
 }

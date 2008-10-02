@@ -16,27 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.lang.annotation.Annotation;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * Default implementation which maps ExtVal Annotations to ExtVal ValidationStrategies.
- *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultAnnotationToValidationStrategyNameMapper implements
-    NameMapper<Annotation>
+@UsageInformation({UsageCategory.API})
+public enum CustomInfo
 {
-    public String createName(Annotation annotation)
-    {
-        return InternalConventionProvider.getConventionNameForValidationStrategy(annotation);
-    }
+    BASE_PACKAGE,
+    COMPONENT_ANNOTATION_EXTRACTOR,
+
+    VALIDATION_STRATEGY_POSTFIX,
+    META_DATA_TRANSFORMER_POSTFIX,
+
+    VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
+    ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER,
+    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
+
+    COMPONENT_INITIALIZER,
+
+    MESSAGE_RESOLVER_FACTORY,
+    VALIDATION_STRATEGY_FACTORY,
+    COMPONENT_INITIALIZER_FACTORY,
+    COMPONENT_ANNOTATION_EXTRACTOR_FACTORY,
+    META_DATA_TRANSFORMER_FACTORY,
+
+    CONVENTION_FOR_CUSTOM_MESSAGE_BUNDLE,
+    STATIC_STRATEGY_MAPPING_SOURCE
 }

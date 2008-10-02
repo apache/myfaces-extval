@@ -44,8 +44,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         if (jpaBasedValidation == null
                 || !jpaBasedValidation.equalsIgnoreCase("true"))
         {
-            ExtValContext.getContext().getInformationProviderBean()
-                    .addStaticStrategyMappingSource(
+            ExtValContext.getContext().addStaticStrategyMappingSource(
                             ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".jpa_strategy_mappings");
         }
     }
