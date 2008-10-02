@@ -19,15 +19,11 @@
 package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * centralized in order that these information aren't spread over the complete code base
@@ -47,231 +43,84 @@ public class InformationProviderBean
     //custom class which is an optional replacement for this class (has to extend this class)
     public static final String CUSTOM_BEAN = (ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
         + ".custom." + InformationProviderBean.class.getSimpleName()).replace(".", "_");
-    private String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
 
     public InformationProviderBean()
     {
-        if (this.basePackage == null)
+        setupCustomizableInformation();
+        applyCustomValues(this.customizableInfos);
+    }
+
+    private Map<CustomInfo, String> customizableInfos = new HashMap<CustomInfo, String>();
+
+    private void setupCustomizableInformation()
+    {
+        String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
+
+        if (basePackage == null)
         {
-            this.basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.";
+            basePackage = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.";
         }
-        if (!this.basePackage.endsWith("."))
+        if (!basePackage.endsWith("."))
         {
-            this.basePackage = this.basePackage + ".";
-        }
-    }
-
-    public String getBasePackage()
-    {
-        return basePackage;
-    }
-
-    public String getCustomComponentAnnotationExtractor()
-    {
-        return this.basePackage + "AnnotationExtractor";
-    }
-
-    /*
-     * postfix used by the SimpleAnnotationToValidationStrategyNameMapper
-     * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies only
-     * (not for public validation modules)
-     * so it's fine to customize it
-     */
-    public String getValidationStrategyPostfix()
-    {
-        return "ValidationStrategy";
-    }
-
-    public String getMetaDataTransformerPostfix()
-    {
-        return "MetaDataTransformer";
-    }
-
-    /*
-     * name mapper
-     */
-    public String getCustomValidationStrategyToMsgResolverNameMapper()
-    {
-        return this.basePackage + "ValidationStrategyToMsgResolverNameMapper";
-    }
-
-    public String getCustomAnnotationToValidationStrategyNameMapper()
-    {
-        return this.basePackage + "AnnotationToValidationStrategyNameMapper";
-    }
-
-    public String getCustomValidationStrategyToMetaDataTransformerNameMapper()
-    {
-        return this.basePackage + "ValidationStrategyToMetaDataTransformerNameMapper";
-    }
-
-    /*
-     * initializer
-     */
-    public String getCustomRenderingContextInitializer()
-    {
-        return this.basePackage + "RenderingContextInitializer";
-    }
-
-    public String getCustomComponentInitializer()
-    {
-        return this.basePackage + "ComponentInitializer";
-    }
-
-    /*
-     * factories
-     */
-    public String getCustomMessageResolverFactory()
-    {
-        return this.basePackage + "MessageResolverFactory";
-    }
-
-    public String getCustomValidationStrategyFactory()
-    {
-        return this.basePackage + "ValidationStrategyFactory";
-    }
-
-    public String getCustomRenderingContextInitializerFactory()
-    {
-        return this.basePackage + "RenderingContextInitializerFactory";
-    }
-
-    public String getCustomComponentInitializerFactory()
-    {
-        return this.basePackage + "ComponentInitializerFactory";
-    }
-
-    public String getCustomComponentAnnotationExtractorFactory()
-    {
-        return this.basePackage + "AnnotationExtractorFactory";
-    }
-
-    public String getCustomMetaDataTransformerFactory()
-    {
-        return this.basePackage + "MetaDataTransformerFactory";
-    }
-
-    /*
-     * conventions (the rest of the conventions are built with the help of name mappers,...
-     */
-    public String getConventionForCustomMessageBundle()
-    {
-        return this.basePackage + "validation_messages";
-    }
-
-    /*
-     * init hook for component libs which use a rendering context (e.g. Trinidad)
-     */
-
-    /*
-     * static strategy mappings (name of property files)
-     */
-    public String getCustomStaticStrategyMappingSource()
-    {
-        return this.basePackage + "strategy_mappings";
-    }
-
-    private List<String> staticStrategyMappings = new ArrayList<String>();
-
-    /*
-     * final methods
-     */
-    public final String getConventionForModuleMessageBundle(String packageName)
-    {
-        String newPackageName;
-        if (packageName.endsWith(".resolver"))
-        {
-            newPackageName = packageName.replace(".resolver", ".bundle");
-        }
-        else
-        {
-            newPackageName = packageName.replace(".resolver.", ".bundle.");
+            basePackage = basePackage + ".";
         }
 
-        return newPackageName + ".validation_messages";
+        customizableInfos.put(CustomInfo.BASE_PACKAGE, basePackage);
+
+        customizableInfos.put(CustomInfo.COMPONENT_ANNOTATION_EXTRACTOR, "ComponentAnnotationExtractor");
+
+        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_POSTFIX, "ValidationStrategy");
+        customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_POSTFIX, "MetaDataTransformer");
+
+        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
+            "ValidationStrategyToMsgResolverNameMapper");
+        customizableInfos.put(CustomInfo.ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER,
+            "AnnotationToValidationStrategyNameMapper");
+        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
+            "ValidationStrategyToMetaDataTransformerNameMapper");
+
+        customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER, "ComponentInitializer");
+
+        customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
+        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
+        customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER_FACTORY, "ComponentInitializerFactory");
+        customizableInfos.put(CustomInfo.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY, "ComponentAnnotationExtractorFactory");
+        customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
+
+        //conventions (the rest of the conventions are built with the help of name mappers,...
+        customizableInfos.put(CustomInfo.CONVENTION_FOR_CUSTOM_MESSAGE_BUNDLE, "validation_messages");
+        //static strategy mappings (name of property files)
+        customizableInfos.put(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE, "strategy_mappings");
     }
 
-    public final List<String> getStaticStrategyMappingSources()
+    protected void applyCustomValues(Map<CustomInfo, String> map)
     {
-        return this.staticStrategyMappings;
+        //override to customize information
     }
 
-    public final void addStaticStrategyMappingSource(String resourceBundleName)
+    public final String get(CustomInfo customInfo)
     {
-        synchronized (this)
+        String value = customizableInfos.get(customInfo);
+
+        switch (customInfo)
         {
-            this.staticStrategyMappings.add(resourceBundleName);
+            case BASE_PACKAGE:
+                return value;
+
+            /*
+             * postfix used by the SimpleAnnotationToValidationStrategyNameMapper
+             * the SimpleAnnotationToValidationStrategyNameMapper is for custom strategies only
+             * (not for public validation modules)
+             * so it's fine to customize it
+             */
+            case VALIDATION_STRATEGY_POSTFIX:
+                return value;
+
+            case META_DATA_TRANSFORMER_POSTFIX:
+                return value;
+
+            default:
+                return customizableInfos.get(CustomInfo.BASE_PACKAGE) + value;
         }
-    }
-
-    public final boolean containsStaticStrategyMappingSource(
-        String resourceBundleName)
-    {
-        return this.staticStrategyMappings.contains(resourceBundleName);
-    }
-
-    /**
-     * use a custom name mapper to implement custom conventions
-     */
-    @ToDo(value = Priority.MEDIUM, description = "logging")
-    public final String getConventionNameForMessageResolverName(
-        Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
-    {
-        return getValidationStrategyBasedName(validationStrategyClass, ".message.resolver.", targetClassName);
-    }
-
-    public final String getConventionNameForMetaDataTransformerName(
-        Class<? extends ValidationStrategy> validationStrategyClass, String targetClassName)
-    {
-        return getValidationStrategyBasedName(validationStrategyClass, ".metadata.transformer.", targetClassName);
-    }
-
-    private String getValidationStrategyBasedName(Class<? extends ValidationStrategy> validationStrategyClass,
-                                                  String targetPackageName, String targetClassName)
-    {
-        String validationStrategyClassName = validationStrategyClass.getName();
-
-        validationStrategyClassName = validationStrategyClassName.replace(".strategy.", targetPackageName);
-
-        if (targetClassName == null)
-        {
-            return null;
-        }
-        return validationStrategyClassName
-                .substring(0, validationStrategyClassName.lastIndexOf(".")) + "." + targetClassName;
-    }
-
-    /**
-     * use a custom name mapper to implement custom conventions
-     */
-    public final String getConventionNameForMessageResolverClass(String validationStrategyName)
-    {
-        return getValidationStrategyBasedName(validationStrategyName, "ValidationErrorMessageResolver");
-    }
-
-    /**
-     * use a custom name mapper to implement custom conventions
-     */
-    public final String getConventionNameForValidationStrategy(Annotation annotation)
-    {
-        return annotation.annotationType().getName().replace(".annotation.", ".strategy.") + "Strategy";
-    }
-
-    public final String getConventionNameForMetaDataTransformerClass(String validationStrategyName)
-    {
-        return getValidationStrategyBasedName(validationStrategyName, "MetaDataTransformer");
-    }
-
-    private String getValidationStrategyBasedName(String validationStrategyName, String targetPostfix)
-    {
-        if (validationStrategyName.endsWith("ValidationStrategy"))
-        {
-            return validationStrategyName.substring(0, validationStrategyName.length() - 18) + targetPostfix;
-        }
-        else if (validationStrategyName.endsWith("Strategy"))
-        {
-            return validationStrategyName.substring(0, validationStrategyName.length() - 8) + targetPostfix;
-        }
-        return null;
     }
 }

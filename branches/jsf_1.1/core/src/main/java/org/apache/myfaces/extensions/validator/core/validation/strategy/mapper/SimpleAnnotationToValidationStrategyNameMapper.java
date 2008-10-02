@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -37,6 +38,6 @@ public class SimpleAnnotationToValidationStrategyNameMapper implements NameMappe
     public String createName(Annotation annotation)
     {
         return annotation.annotationType().getName() +
-            ExtValContext.getContext().getInformationProviderBean().getValidationStrategyPostfix();
+            ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.VALIDATION_STRATEGY_POSTFIX);
     }
 }
