@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.validator.crossval.recorder;
 
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
@@ -48,7 +48,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         String valueBindingExpression;
         ProcessedInformationEntry entry;
 
-        valueBindingExpression = ELUtils.getValueBindingExpression(uiComponent);
+        valueBindingExpression = ExtValUtils.getELHelper().getValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
@@ -56,7 +56,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         }
 
         entry = new ProcessedInformationEntry();
-        entry.setBean(ELUtils.getBaseObject(valueBindingExpression, uiComponent));
+        entry.setBean(ExtValUtils.getELHelper().getBaseObject(valueBindingExpression, uiComponent));
         entry.setConvertedValue(value);
         entry.setComponent(uiComponent);
 

@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntr
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
-import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -72,21 +72,18 @@ public class LocalCompareStrategy implements ReferencingStrategy
         targetValueBindingExpression = baseValueBindingExpression + "."
                 + validationTarget + "}";
 
-        if (!ELUtils.isExpressionValid(facesContext,
-                targetValueBindingExpression))
+        if (!ExtValUtils.getELHelper().isExpressionValid(facesContext, targetValueBindingExpression))
         {
             return;
         }
 
-        if (!valueBindingConvertedValueMapping
-                .containsKey(targetValueBindingExpression))
+        if (!valueBindingConvertedValueMapping.containsKey(targetValueBindingExpression))
         {
             return;
         }
         validationTargetEntry = compareStrategy.resolveValidationTargetEntry(
                 valueBindingConvertedValueMapping,
-                targetValueBindingExpression, crossValidationStorageEntry
-                        .getBean());
+                targetValueBindingExpression, crossValidationStorageEntry.getBean());
 
         if (validationTargetEntry == null)
         {
@@ -105,23 +102,16 @@ public class LocalCompareStrategy implements ReferencingStrategy
         {
 
             CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-            if (compareStrategy
-                    .useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
+            if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
             {
-                tmpCrossValidationStorageEntry
-                        .setComponent(validationTargetEntry.getComponent());
+                tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
             }
             else
             {
-                tmpCrossValidationStorageEntry
-                        .setComponent(crossValidationStorageEntry
-                                .getComponent());
+                tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
             }
-            tmpCrossValidationStorageEntry
-                    .setConvertedObject(validationTargetEntry
-                            .getConvertedValue());
-            tmpCrossValidationStorageEntry
-                    .setValidationStrategy(compareStrategy);
+            tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
+            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
 
             compareStrategy
                     .processTargetComponentAfterViolation(
@@ -133,8 +123,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
 
         if (violationFound)
         {
-            compareStrategy
-                    .processSourceComponentAfterViolation(crossValidationStorageEntry);
+            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
         }
     }
 }
