@@ -64,7 +64,7 @@ public abstract class AbstractValidationStrategy extends
         }
         catch (MissingResourceException e)
         {
-            if(logger.isTraceEnabled())
+            if(logger.isWarnEnabled())
             {
                 logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX,
                         e);

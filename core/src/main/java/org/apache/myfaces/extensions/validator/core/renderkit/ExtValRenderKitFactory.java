@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
@@ -37,11 +39,17 @@ import java.util.Iterator;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRenderKitFactory extends RenderKitFactory
 {
+    protected final Log logger = LogFactory.getLog(getClass());
     private RenderKitFactory wrapped;
 
     public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
     {
         this.wrapped = renderKitFactory;
+
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
     }
 
     public void addRenderKit(String s, RenderKit renderKit)

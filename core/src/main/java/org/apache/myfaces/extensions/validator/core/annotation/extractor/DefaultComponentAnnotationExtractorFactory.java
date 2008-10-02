@@ -53,6 +53,14 @@ public class DefaultComponentAnnotationExtractorFactory implements AnnotationExt
 
     private static AnnotationExtractor annotationExtractor = null;
 
+    public DefaultComponentAnnotationExtractorFactory()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     @ToDo(value = Priority.MEDIUM, description = "logging")
     public AnnotationExtractor create()
     {

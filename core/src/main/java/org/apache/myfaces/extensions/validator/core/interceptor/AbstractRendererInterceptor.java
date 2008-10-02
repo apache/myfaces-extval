@@ -38,6 +38,14 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
+    protected AbstractRendererInterceptor()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
+
     public final String getInterceptorId()
     {
         return getClass().getName();

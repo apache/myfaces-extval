@@ -154,7 +154,7 @@ public class DateIsStrategy extends AbstractCompareStrategy
         }
         catch (MissingResourceException e)
         {
-            if(logger.isTraceEnabled())
+            if(logger.isWarnEnabled())
             {
                 logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
                     + DETAIL_MESSAGE_KEY_POSTFIX, e);

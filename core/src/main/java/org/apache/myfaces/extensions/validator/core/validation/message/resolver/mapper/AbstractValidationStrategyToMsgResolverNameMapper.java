@@ -16,56 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.initializer.component;
+package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
 
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultComponentInitializer implements ComponentInitializer
+public abstract class AbstractValidationStrategyToMsgResolverNameMapper implements NameMapper<ValidationStrategy>
 {
     protected final Log logger = LogFactory.getLog(getClass());
-    private static List<ComponentInitializer> componentInitializers = new ArrayList<ComponentInitializer>();
 
-    public DefaultComponentInitializer()
+    public AbstractValidationStrategyToMsgResolverNameMapper()
     {
         if(logger.isDebugEnabled())
         {
             logger.debug(getClass().getName() + " instantiated");
-        }
-    }
-
-    public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
-    {
-        for(ComponentInitializer componentInitializer : componentInitializers)
-        {
-            componentInitializer.configureComponent(facesContext, uiComponent, metaData);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("configureComponent of " + componentInitializer.getClass().getName() + " called");
-            }
-        }
-    }
-
-    @UsageInformation(UsageCategory.INTERNAL)
-    public static void addComponentInitializer(ComponentInitializer componentInitializer)
-    {
-        synchronized (DefaultComponentInitializer.class)
-        {
-            componentInitializers.add(componentInitializer);
         }
     }
 }
