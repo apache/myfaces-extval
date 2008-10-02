@@ -67,7 +67,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        String valueBindingExpression = ELUtils.getReliableValueBindingExpression(uiComponent);
+        String valueBindingExpression = ELUtils.getValueBindingExpression(uiComponent);
 
         if (valueBindingExpression == null)
         {
