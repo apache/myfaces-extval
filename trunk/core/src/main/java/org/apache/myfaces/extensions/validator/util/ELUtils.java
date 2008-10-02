@@ -87,10 +87,10 @@ public class ELUtils
         return true;
     }
 
-    public static String getReliableValueBindingExpression(
+    public static String getValueBindingExpression(
         UIComponent uiComponent)
     {
-        String valueBindingExpression = getValueBindingExpression(uiComponent);
+        String valueBindingExpression = getOriginalValueBindingExpression(uiComponent);
 
         String baseExpression = valueBindingExpression;
 
@@ -115,7 +115,7 @@ public class ELUtils
         return valueBindingExpression;
     }
 
-    public static String getValueBindingExpression(UIComponent uiComponent)
+    static String getOriginalValueBindingExpression(UIComponent uiComponent)
     {
         ValueExpression valueExpression = uiComponent.getValueExpression("value");
 

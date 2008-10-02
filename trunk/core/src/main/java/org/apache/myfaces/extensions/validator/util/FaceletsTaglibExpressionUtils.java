@@ -42,7 +42,7 @@ public class FaceletsTaglibExpressionUtils
     public static String tryToCreateValueBindingForFaceletsBinding(
         UIComponent uiComponent)
     {
-        String faceletsValueBindingExpression = ELUtils.getValueBindingExpression(uiComponent);
+        String faceletsValueBindingExpression = ELUtils.getOriginalValueBindingExpression(uiComponent);
 
         try
         {
