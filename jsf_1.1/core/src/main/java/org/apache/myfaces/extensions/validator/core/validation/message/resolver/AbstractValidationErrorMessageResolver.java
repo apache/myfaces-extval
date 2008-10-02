@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.util.ELUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -156,7 +157,7 @@ public abstract class AbstractValidationErrorMessageResolver implements
                 try
                 {
                     defaultBundle = ResourceBundle.getBundle(ExtValContext.getContext().getInformationProviderBean()
-                        .getConventionForCustomMessageBundle(), locale);
+                        .get(CustomInfo.CONVENTION_FOR_CUSTOM_MESSAGE_BUNDLE), locale);
                 }
                 catch (Throwable t)
                 {
