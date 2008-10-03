@@ -26,6 +26,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
@@ -43,12 +44,22 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
                                               UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
-        if(metaData.containsKey(CommonMetaDataKeys.REQUIRED))
+        if(metaData.containsKey(CommonMetaDataKeys.REQUIRED) || metaData.containsKey(CommonMetaDataKeys.WEAK_REQUIRED)||
+           metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION))
         {
-            if((Boolean)metaData.get(CommonMetaDataKeys.REQUIRED) &&
+            if((Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED)) &&
                 Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+                ||
+                (Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)) &&
+                 Boolean.TRUE.equals(isComponentRequired(uiComponent))))
             {
                 ((EditableValueHolder)uiComponent).setRequired(true);
+            }
+            else if(metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION) &&
+                   ((List)metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)).contains(CommonMetaDataKeys.WEAK_REQUIRED)&&
+                   !Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
+            {
+                ((EditableValueHolder)uiComponent).setRequired(false);
             }
         }
     }

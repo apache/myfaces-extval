@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.trinidad.validator.DoubleRangeValidator;
 
 import javax.faces.component.EditableValueHolder;
@@ -30,9 +32,12 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
 public class DoubleRangeInitializer extends TrinidadComponentInitializer
 {
-    public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
+    @Override
+    public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
+                                              Map<String, Object> metaData)
     {
         boolean informationAdded = false;
         DoubleRangeValidator lengthValidator = (DoubleRangeValidator)facesContext.getApplication()
@@ -62,6 +67,8 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
         if(informationAdded)
         {
             ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            return true;
         }
+        return false;
     }
 }

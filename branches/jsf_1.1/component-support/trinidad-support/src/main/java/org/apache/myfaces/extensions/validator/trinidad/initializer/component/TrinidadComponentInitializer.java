@@ -19,6 +19,9 @@
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.trinidad.context.RequestContext;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -37,7 +40,8 @@ public class TrinidadComponentInitializer implements ComponentInitializer
     private static final String TRINIDAD_CORE_INPUT_DATE
                                          = "org.apache.myfaces.trinidad.component.core.input.CoreInputDate";
 
-    private static List<ComponentInitializer> componentInitializers = new ArrayList<ComponentInitializer>();
+    private static List<TrinidadComponentInitializer> componentInitializers =
+        new ArrayList<TrinidadComponentInitializer>();
 
     static
     {
@@ -49,17 +53,36 @@ public class TrinidadComponentInitializer implements ComponentInitializer
         //componentInitializers.add(new ValidatorInitializer());
     }
 
-    public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
+    @ToDo(value = Priority.LOW, description = "check ppr issue")
+    public final void configureComponent(FacesContext facesContext, UIComponent uiComponent,
+                                         Map<String, Object> metaData)
     {
-        for(ComponentInitializer componentInitializer : componentInitializers)
+        for(TrinidadComponentInitializer componentInitializer : componentInitializers)
         {
-            componentInitializer.configureComponent(facesContext, uiComponent, metaData);
+            if(componentInitializer.configureTrinidadComponent(facesContext, uiComponent, metaData))
+            {
+                updateComponent(facesContext, uiComponent);
+            }
         }
+    }
+
+    protected boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
+                                                 Map<String, Object> metaData)
+    {
+        return false;
     }
 
     protected boolean processComponent(UIComponent uiComponent)
     {
         return TRINIDAD_CORE_INPUT_TEXT.equals(uiComponent.getClass().getName()) ||
                TRINIDAD_CORE_INPUT_DATE.equals(uiComponent.getClass().getName());
+    }
+
+    private void updateComponent(FacesContext facesContext, UIComponent uiComponent)
+    {
+        if(RequestContext.getCurrentInstance().isPartialRequest(facesContext))
+        {
+            RequestContext.getCurrentInstance().addPartialTarget(uiComponent.getParent());
+        }
     }
 }

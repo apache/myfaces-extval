@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -31,11 +33,15 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
 public class LengthInitializer extends TrinidadComponentInitializer
 {
-    public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
+    @Override
+    public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
+                                              Map<String, Object> metaData)
     {
         boolean informationAdded = false;
+        //TODO
         LengthValidator lengthValidator = (LengthValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.Length");
 
@@ -66,9 +72,14 @@ public class LengthInitializer extends TrinidadComponentInitializer
                 informationAdded = true;
             }
         }
+
+        //reInitValidators((EditableValueHolder)uiComponent, metaData); //search wrappers and call .deactivate
+
         if(informationAdded)
         {
             ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            return true;
         }
+        return false;
     }
 }
