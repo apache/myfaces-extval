@@ -33,7 +33,7 @@ public class RegistrationPage
 
     //the old password of the person isn't used within the page
     //-> validate with value of the model
-    @Required
+    @Required(skipValidation = "#{person.role eq 'admin'}")
     @Equals("#{person.password}")
     @NotEquals("password")
     private String oldPassword;
@@ -64,6 +64,22 @@ public class RegistrationPage
     {
         this.person.setNickName(this.newNickName);
         return "home";
+    }
+
+    //just a quick illustration of skipValidation
+    public String switchMode()
+    {
+        String currentRole = this.person.getRole();
+
+        if(currentRole.equals("admin"))
+        {
+            this.person.setRole("user");
+        }
+        else
+        {
+            this.person.setRole("admin");
+        }
+        return "";
     }
 
     //combine gui related annotations with the annoations of the domain model

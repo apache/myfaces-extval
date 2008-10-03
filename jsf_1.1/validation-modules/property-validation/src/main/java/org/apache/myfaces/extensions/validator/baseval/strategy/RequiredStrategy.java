@@ -52,4 +52,10 @@ public class RequiredStrategy extends AbstractValidationStrategy
     {
         return ((Required) annotation).validationErrorMsgKey();
     }
+
+    @Override
+    protected String getSkipExpression(Annotation annotation)
+    {
+        return ((Required)annotation).skipValidation();
+    }
 }
