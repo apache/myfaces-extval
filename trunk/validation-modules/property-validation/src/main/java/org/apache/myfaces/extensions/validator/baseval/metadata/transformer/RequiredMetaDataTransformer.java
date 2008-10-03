@@ -19,22 +19,40 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
+import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class RequiredMetaDataTransformer implements MetaDataTransformer
+public class RequiredMetaDataTransformer extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> extractMetaData(Annotation annotation)
+    public Map<String, Object> processExtraction(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        results.put(CommonMetaDataKeys.REQUIRED, true);
+        results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
         return results;
+    }
+
+    @Override
+    protected String getSkipExpression(Annotation annotation)
+    {
+        return ((Required)annotation).skipValidation();
+    }
+
+    //returns the key of the skiped meta-data e.g.
+    @Override
+    protected List<String> getMetaDataKeys()
+    {
+        List<String> skippedMetaDataList = new ArrayList<String>();
+        skippedMetaDataList.add(CommonMetaDataKeys.WEAK_REQUIRED);
+        return skippedMetaDataList;
     }
 }

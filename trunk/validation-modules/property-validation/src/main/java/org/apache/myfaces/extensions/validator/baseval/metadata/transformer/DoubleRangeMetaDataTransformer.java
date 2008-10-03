@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.DoubleRange;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -30,9 +30,9 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class DoubleRangeMetaDataTransformer implements MetaDataTransformer
+public class DoubleRangeMetaDataTransformer extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> extractMetaData(Annotation annotation)
+    public Map<String, Object> processExtraction(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         double minimum = ((DoubleRange)annotation).minimum();

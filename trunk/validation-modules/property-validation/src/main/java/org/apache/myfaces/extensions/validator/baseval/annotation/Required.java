@@ -32,4 +32,6 @@ import java.lang.annotation.Target;
 public @interface Required
 {
     String validationErrorMsgKey() default "field_required";
+
+    String skipValidation() default "#{false}"; //default - don't skip
 }

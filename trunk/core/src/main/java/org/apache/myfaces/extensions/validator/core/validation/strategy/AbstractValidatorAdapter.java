@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,12 +29,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
+import java.lang.annotation.Annotation;
 
 /**
  * Provides the ability to use ValidatorException (as expected by the user) instead of ConverterException.
  * Furthermore it provides:<br/>
  * initValidation<br/>
  * processAfterValidatorException
+ * <p/>
+ * adds support for "skipable" validation strategies
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -42,6 +46,7 @@ import javax.faces.validator.ValidatorException;
 public abstract class AbstractValidatorAdapter implements ValidationStrategy
 {
     protected final Log logger = LogFactory.getLog(getClass());
+    private static final String DO_NOT_SKIP = "#{false}"; //don't skip
 
     protected AbstractValidatorAdapter()
     {
@@ -57,6 +62,15 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
         if(logger.isTraceEnabled())
         {
             logger.trace("start initValidation of " + getClass().getName());
+        }
+
+        if(skipValidation(facesContext, uiComponent, annotationEntry, convertedObject))
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace(getClass() + " validation skiped");
+            }
+            return;
         }
 
         initValidation(facesContext, uiComponent, annotationEntry, convertedObject);
@@ -105,6 +119,32 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                     ": original exception after processAfterValidatorException not thrown");
             }
         }
+    }
+
+    protected boolean skipValidation(FacesContext facesContext, UIComponent uiComponent,
+                                     AnnotationEntry annotationEntry, Object convertedObject)
+    {
+        String expression = getSkipExpression(annotationEntry.getAnnotation());
+
+        //just for a better performance for "none-skipable" strategies
+        if(DO_NOT_SKIP.equals(expression))
+        {
+            return false;
+        }
+
+        Boolean result = (Boolean)ExtValUtils.getELHelper().getValueOfExpression(facesContext, expression);
+
+        if(logger.isTraceEnabled())
+        {
+            logger.trace(getClass() + "#skipValidation result of getSkipExpression: " + expression);
+        }
+
+        return result;
+    }
+
+    protected String getSkipExpression(Annotation annotation)
+    {
+        return DO_NOT_SKIP;
     }
 
     protected void initValidation(FacesContext facesContext,
