@@ -44,6 +44,9 @@ public class Person
     @Column(nullable = false, length = 10)
     private String password;
 
+    @Column(nullable = false, length = 10)
+    private String role = "user";
+
     @DateIs(type = DateIsType.before, valueOf = "finalExam")
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
@@ -92,6 +95,16 @@ public class Person
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public String getRole()
+    {
+        return role;
+    }
+
+    public void setRole(String role)
+    {
+        this.role = role;
     }
 
     public Date getBirthday()
