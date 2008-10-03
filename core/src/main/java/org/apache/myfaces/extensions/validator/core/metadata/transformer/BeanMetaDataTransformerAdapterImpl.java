@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
+import java.util.List;
 import java.lang.annotation.Annotation;
 
 /**
@@ -39,24 +40,41 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.REUSE})
-public class BeanMetaDataTransformerAdapterImpl implements BeanMetaDataTransformerAdapter
+public class BeanMetaDataTransformerAdapterImpl extends AbstractMetaDataTransformer
+    implements BeanMetaDataTransformerAdapter
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
 
-    public BeanMetaDataTransformerAdapterImpl()
+    public Map<String, Object> processExtraction(Annotation annotation)
     {
-        if(logger.isDebugEnabled())
+        if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
         {
-            logger.debug(getClass().getName() + " instantiated");
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).processExtraction(annotation);
         }
+        return this.metaDataTransformer.extractMetaData(annotation);
     }
 
-    public Map<String, Object> extractMetaData(Annotation annotation)
+    @Override
+    protected String getSkipExpression(Annotation annotation)
     {
-        return this.metaDataTransformer.extractMetaData(annotation);
+        if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
+        {
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).getSkipExpression(annotation);
+        }
+        return super.getSkipExpression(annotation);
+    }
+
+    @Override
+    protected List<String> getMetaDataKeys()
+    {
+        if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
+        {
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).getMetaDataKeys();
+        }
+        return super.getMetaDataKeys();
     }
 
     public String getMetaDataTransformerClassName()

@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.Defa
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -35,9 +36,9 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class JoinMetaDataTransformer implements MetaDataTransformer
+public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> extractMetaData(Annotation annotation)
+    public Map<String, Object> processExtraction(Annotation annotation)
     {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 

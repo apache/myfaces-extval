@@ -30,6 +30,7 @@ package org.apache.myfaces.extensions.validator.core.metadata;
 public interface CommonMetaDataKeys
 {
     static final String REQUIRED = "required";
+    static final String WEAK_REQUIRED = "weak_required";
 
     static final String MIN_LENGTH = "min_length";
     static final String MAX_LENGTH = "max_length";
@@ -42,4 +43,5 @@ public interface CommonMetaDataKeys
     static final String EMAIL = "email";
 
     static final String CUSTOM = "custom";
+    static final String SKIP_VALIDATION = "skip_validation";
 }
