@@ -50,11 +50,18 @@ public class SimpleValidationStrategyToMetaDataTransformerNameMapper extends
         String postfix = ExtValContext.getContext().getInformationProviderBean()
             .get(CustomInfo.META_DATA_TRANSFORMER_POSTFIX);
 
-        return validationStrategyPackageName + validationStrategyClassName
-                .replace(ExtValContext.getContext().getInformationProviderBean()
-                    .get(CustomInfo.VALIDATION_STRATEGY_POSTFIX) ,postfix)
-                .replace("ValidationStrategy", postfix)
-                .replace("Strategy", postfix);
+        if(validationStrategyClassName.endsWith("ValidationStrategy") ||
+           validationStrategyClassName.endsWith("Strategy"))
+        {
+            return validationStrategyPackageName + validationStrategyClassName
+                    .replace(ExtValContext.getContext().getInformationProviderBean()
+                        .get(CustomInfo.VALIDATION_STRATEGY_POSTFIX) ,postfix)
+                    .replace("ValidationStrategy", postfix)
+                    .replace("Strategy", postfix);
+        }
+
+        //in case of a static validation strategy mapping
+        return validationStrategyClassName + postfix;
     }
 
 }

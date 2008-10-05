@@ -20,19 +20,31 @@ package org.apache.myfaces.extensions.validator.baseval.message.resolver;
 
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 
 /**
  * @author Gerhard Petracek
  */
+/*
+ * the jpa support is an exception in view of some mechanisms - so there's no convention for the message bundle.
+ * instead of the convention there is a global property to have an alternative to web.xml configuration
+ */
 public class JpaValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
 {
+    public static final String JPA_VALIDATION_ERROR_MESSAGES = "JPA_VALIDATION_ERROR_MESSAGES";
+
     private static final String CUSTOM_BASE_NAME = WebXmlParameter.VALIDATION_MESSAGES_JPA;
     private static final String BASE_NAME = JpaValidationErrorMessageResolver.class
             .getPackage().getName().replace(".message.resolver", ".message.bundle")+ ".jpa_messages";
 
     protected String getCustomBaseName()
     {
-        return CUSTOM_BASE_NAME;
+        if(CUSTOM_BASE_NAME != null)
+        {
+            return CUSTOM_BASE_NAME;
+        }
+
+        return (String)ExtValContext.getContext().getGlobalProperty(JPA_VALIDATION_ERROR_MESSAGES);
     }
 
     protected String getBaseName()
