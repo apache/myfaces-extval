@@ -88,6 +88,7 @@ public class InformationProviderBean
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
             "ValidationStrategyToMetaDataTransformerNameMapper");
 
+        customizableInfos.put(CustomInfo.STARTUP_LISTENER, "StartupListener");
         customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER, "ComponentInitializer");
 
         customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
