@@ -71,14 +71,19 @@ public abstract class AbstractStartupListener implements PhaseListener
                         logger.info("start init of " + getClass().getName());
                     }
 
-                    init();
-
-                    if(logger.isInfoEnabled())
+                    try
                     {
-                        logger.info("init of " + getClass().getName() + " finished");
-                    }
+                        init();
 
-                    JsfUtils.deregisterPhaseListener(this);
+                        if(logger.isInfoEnabled())
+                        {
+                            logger.info("init of " + getClass().getName() + " finished");
+                        }
+                    }
+                    finally
+                    {
+                        JsfUtils.deregisterPhaseListener(this);
+                    }
                 }
                 catch (Throwable t)
                 {
