@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ import java.util.Map;
 @UsageInformation(UsageCategory.API)
 public class ExtValContext
 {
+    private final Log logger = LogFactory.getLog(getClass());
+
     private static ExtValContext extValContext = new ExtValContext();
 
     private FactoryFinder factoryFinder = new DefaultFactoryFinder();
@@ -49,6 +53,8 @@ public class ExtValContext
     private List<String> deniedInterceptors = new ArrayList<String>();
     private List<ProcessedInformationRecorder> processedInformationRecorders =
         new ArrayList<ProcessedInformationRecorder>();
+
+    private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
     private List<String> staticStrategyMappings = new ArrayList<String>();
 
@@ -181,5 +187,33 @@ public class ExtValContext
         {
             this.staticStrategyMappings.add(resourceBundleName);
         }
+    }
+
+    public boolean addGlobalProperty(String name, Object value)
+    {
+        return addGlobalProperty(name , value, true);
+    }
+
+    public boolean addGlobalProperty(String name, Object value, boolean forceOverride)
+    {
+        if(this.globalProperties.containsKey(name))
+        {
+            if(!forceOverride)
+            {
+                return false;
+            }
+            else
+            {
+                logger.warn("override global property '" + name + "'");
+            }
+        }
+
+        this.globalProperties.put(name, value);
+        return true;
+    }
+
+    public Object getGlobalProperty(String name)
+    {
+        return this.globalProperties.get(name);
     }
 }
