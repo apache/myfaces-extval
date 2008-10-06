@@ -44,55 +44,85 @@ public class LocalCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             String validationTarget, AbstractCompareStrategy compareStrategy)
     {
-        tryToValidateLocally(crossValidationStorageEntry, validationTarget,
-                compareStrategy);
-
-        return true;
+        return tryToValidateLocally(
+            crossValidationStorageEntry,
+            crossValidationStorage,
+            validationTarget,
+            compareStrategy);
     }
 
-    protected void tryToValidateLocally(
+    protected boolean tryToValidateLocally(
             CrossValidationStorageEntry crossValidationStorageEntry,
-            String validationTarget, AbstractCompareStrategy compareStrategy)
+            CrossValidationStorage crossValidationStorage,
+            String validationTarget,
+            AbstractCompareStrategy compareStrategy)
     {
-        boolean violationFound = false;
+        String targetValueBindingExpression;
 
-        String baseValueBindingExpression = crossValidationStorageEntry
-                .getAnnotationEntry().getValueBindingExpression();
-        baseValueBindingExpression = baseValueBindingExpression.substring(0,
-                baseValueBindingExpression.lastIndexOf("."));
+        targetValueBindingExpression
+            = createTargetValueBindingExpression(crossValidationStorageEntry, validationTarget);
+
+        return targetValueBindingExpression != null &&
+            validateELExpression(crossValidationStorageEntry,
+                                 crossValidationStorage,
+                                 targetValueBindingExpression,
+                                 compareStrategy);
+
+    }
+
+    protected String createTargetValueBindingExpression(CrossValidationStorageEntry crossValidationStorageEntry,
+                                                        String validationTarget)
+    {
+        String baseValueBindingExpression =
+            crossValidationStorageEntry.getAnnotationEntry().getValueBindingExpression();
+
+        baseValueBindingExpression =
+            baseValueBindingExpression.substring(0, baseValueBindingExpression.lastIndexOf("."));
 
         String targetValueBindingExpression;
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
-                .getOrInitValueBindingConvertedValueMapping();
-        ProcessedInformationEntry validationTargetEntry;
 
         targetValueBindingExpression = baseValueBindingExpression + "."
                 + validationTarget + "}";
 
         if (!ExtValUtils.getELHelper().isExpressionValid(facesContext, targetValueBindingExpression))
         {
-            return;
+            throw new IllegalStateException(
+                "invalid reference used: "
+                + validationTarget
+                + " please check your extval annotations");
         }
 
-        if (!valueBindingConvertedValueMapping.containsKey(targetValueBindingExpression))
+        return targetValueBindingExpression;
+    }
+
+    protected boolean validateELExpression(CrossValidationStorageEntry crossValidationStorageEntry,
+                                           CrossValidationStorage crossValidationStorage,
+                                           String validationTarget,
+                                           AbstractCompareStrategy compareStrategy)
+    {
+        boolean violationFound = false;
+        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
+                .getOrInitValueBindingConvertedValueMapping();
+        ProcessedInformationEntry validationTargetEntry;
+
+        if (!valueBindingConvertedValueMapping.containsKey(validationTarget))
         {
-            return;
+            return false;
         }
         validationTargetEntry = compareStrategy.resolveValidationTargetEntry(
                 valueBindingConvertedValueMapping,
-                targetValueBindingExpression, crossValidationStorageEntry.getBean());
+                validationTarget, crossValidationStorageEntry.getBean());
 
         if (validationTargetEntry == null)
         {
             if(logger.isWarnEnabled())
             {
-                logger.warn("couldn't find converted object for " + targetValueBindingExpression);
+                logger.warn("couldn't find converted object for " + validationTarget);
             }
 
-            return;
+            return false;
         }
 
         if (compareStrategy.isViolation(crossValidationStorageEntry
@@ -114,9 +144,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
             tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
 
             compareStrategy
-                    .processTargetComponentAfterViolation(
-                            crossValidationStorageEntry,
-                            tmpCrossValidationStorageEntry);
+                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
 
             violationFound = true;
         }
@@ -125,5 +153,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
         {
             compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
         }
+
+        return true;
     }
 }

@@ -41,22 +41,19 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
     {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 
-        String[] targetExpressions = annotationEntry.getAnnotation(
-                JoinValidation.class).value();
+        String[] targetExpressions = annotationEntry.getAnnotation(JoinValidation.class).value();
 
         ValidationStrategy validationStrategy;
 
         for (String targetExpression : targetExpressions)
         {
-            for (AnnotationEntry entry : extractor.extractAnnotations(
-                    facesContext, targetExpression))
+            for (AnnotationEntry entry : extractor.extractAnnotations(facesContext, targetExpression))
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
 
                 if (validationStrategy != null)
                 {
-                    validationStrategy.validate(facesContext, uiComponent,
-                            entry, convertedObject);
+                    validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
                 }
                 else
                 {
