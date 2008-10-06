@@ -36,6 +36,7 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Ali
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ELCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ReferencingStrategy;
+import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalPropertyChainCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
@@ -75,6 +76,7 @@ public abstract class AbstractCompareStrategy extends
             referencingStrategies.add(new ELCompareStrategy());
             referencingStrategies.add(new AliasCompareStrategy());
             referencingStrategies.add(new LocalCompareStrategy());
+            referencingStrategies.add(new LocalPropertyChainCompareStrategy());
         }
     }
 
