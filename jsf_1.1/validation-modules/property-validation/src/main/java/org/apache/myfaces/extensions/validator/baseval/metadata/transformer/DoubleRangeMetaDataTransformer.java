@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class DoubleRangeMetaDataTransformer extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> processExtraction(Annotation annotation)
+    protected Map<String, Object> convert(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         double minimum = ((DoubleRange)annotation).minimum();

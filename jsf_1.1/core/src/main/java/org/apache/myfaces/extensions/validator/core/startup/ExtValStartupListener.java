@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterc
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 /**
  * @author Gerhard Petracek
@@ -34,6 +35,11 @@ public class ExtValStartupListener extends AbstractStartupListener
 {
     protected void init()
     {
+        if(logger.isInfoEnabled())
+        {
+            logger.info("starting up MyFaces Extensions Validator v" + ExtValInformation.VERSION);
+        }
+
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
 
         executeCustomStartupListener();

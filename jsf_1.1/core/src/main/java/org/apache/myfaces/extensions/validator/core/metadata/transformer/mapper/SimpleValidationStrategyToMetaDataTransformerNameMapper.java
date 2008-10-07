@@ -61,7 +61,7 @@ public class SimpleValidationStrategyToMetaDataTransformerNameMapper extends
         }
 
         //in case of a static validation strategy mapping
-        return validationStrategyClassName + postfix;
+        return validationStrategyPackageName + validationStrategyClassName + postfix;
     }
 
 }
