@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> convert(Annotation annotation)
+    protected Map<String, Object> convert(Annotation annotation)
     {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 

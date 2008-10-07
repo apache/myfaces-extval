@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class LengthMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> convert(Annotation annotation)
+    protected Map<String, Object> convert(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         int minimum = ((Length)annotation).minimum();
