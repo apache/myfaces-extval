@@ -100,7 +100,7 @@ public class InternalConventionProvider
         return getValidationStrategyBasedName(validationStrategyName, "MetaDataTransformer");
     }
 
-    private static String getValidationStrategyBasedName(String validationStrategyName, String targetPostfix)
+    public static String getValidationStrategyBasedName(String validationStrategyName, String targetPostfix)
     {
         if (validationStrategyName.endsWith("ValidationStrategy"))
         {
@@ -110,6 +110,6 @@ public class InternalConventionProvider
         {
             return validationStrategyName.substring(0, validationStrategyName.length() - 8) + targetPostfix;
         }
-        return null;
+        return validationStrategyName + targetPostfix;
     }
 }

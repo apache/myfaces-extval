@@ -36,7 +36,7 @@ import java.util.Map;
 public class JpaMetaDataTransformer implements MetaDataTransformer
 {
     @ToDo(value = Priority.HIGH, description = "impl. the rest")
-    public Map<String, Object> extractMetaData(Annotation annotation)
+    public Map<String, Object> convertMetaData(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
 

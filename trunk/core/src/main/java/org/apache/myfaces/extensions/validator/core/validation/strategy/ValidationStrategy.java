@@ -32,6 +32,7 @@ import javax.faces.context.FacesContext;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
+//*ValidationStrategy instead of *Validator to avoid naming confusion 
 public interface ValidationStrategy
 {
     void validate(FacesContext facesContext, UIComponent uiComponent,

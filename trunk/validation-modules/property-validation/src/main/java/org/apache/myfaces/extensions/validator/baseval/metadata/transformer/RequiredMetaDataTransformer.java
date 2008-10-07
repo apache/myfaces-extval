@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class RequiredMetaDataTransformer extends AbstractMetaDataTransformer
 {
-    public Map<String, Object> processExtraction(Annotation annotation)
+    public Map<String, Object> convert(Annotation annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
