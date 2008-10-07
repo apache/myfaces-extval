@@ -102,7 +102,7 @@ public class DefaultMessageResolverFactory implements
             resolverName = nameMapper.createName(validationStrategy);
 
             //name wasn't mapped
-            if (validationStrategy.getClass().getName().equals(resolverName))
+            if (resolverName == null || validationStrategy.getClass().getName().equals(resolverName))
             {
                 continue;
             }

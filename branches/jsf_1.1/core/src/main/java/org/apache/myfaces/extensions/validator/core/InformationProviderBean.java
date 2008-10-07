@@ -46,7 +46,7 @@ public class InformationProviderBean
         + "." + InformationProviderBean.class.getSimpleName();
     //custom class which is an optional replacement for this class (has to extend this class)
     public static final String CUSTOM_BEAN = (ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
-        + ".custom." + InformationProviderBean.class.getSimpleName()).replace(".", "_");
+        + ".custom." + InformationProviderBean.class.getSimpleName());
 
     public InformationProviderBean()
     {
@@ -63,7 +63,7 @@ public class InformationProviderBean
 
     private void setupCustomizableInformation()
     {
-        String basePackage = WebXmlParameter.CUSTOM_EXTENSION_BASE_PACKAGE;
+        String basePackage = WebXmlParameter.CUSTOM_BASE_PACKAGE;
 
         if (basePackage == null)
         {
@@ -80,6 +80,9 @@ public class InformationProviderBean
 
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_POSTFIX, "ValidationStrategy");
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_POSTFIX, "MetaDataTransformer");
+        customizableInfos.put(CustomInfo.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX, "ValidationErrorMessageResolver");
+
+        customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER, "ComponentInitializer");
 
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
             "ValidationStrategyToMsgResolverNameMapper");
@@ -89,7 +92,6 @@ public class InformationProviderBean
             "ValidationStrategyToMetaDataTransformerNameMapper");
 
         customizableInfos.put(CustomInfo.STARTUP_LISTENER, "StartupListener");
-        customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER, "ComponentInitializer");
 
         customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
@@ -124,6 +126,9 @@ public class InformationProviderBean
              * so it's fine to customize it
              */
             case VALIDATION_STRATEGY_POSTFIX:
+                return value;
+
+            case VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX:
                 return value;
 
             case META_DATA_TRANSFORMER_POSTFIX:
