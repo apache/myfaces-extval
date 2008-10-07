@@ -47,7 +47,7 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
         }
     }
 
-    public final Map<String, Object> extractMetaData(Annotation annotation)
+    public final Map<String, Object> convertMetaData(Annotation annotation)
     {
         if(skipValidation(annotation))
         {
@@ -60,7 +60,7 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
             return results;
         }
 
-        return processExtraction(annotation);
+        return convert(annotation);
     }
 
     protected boolean skipValidation(Annotation annotation)
@@ -93,5 +93,5 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
         return new ArrayList<String>();
     }
 
-    protected abstract Map<String, Object> processExtraction(Annotation annotation);
+    protected abstract Map<String, Object> convert(Annotation annotation);
 }

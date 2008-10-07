@@ -150,9 +150,8 @@ public class ExtValContext
     {
         List<String> informationProviderBeanClassNames = new ArrayList<String>();
 
-        informationProviderBeanClassNames.add(WebXmlParameter.CUSTOM_CONVENTION_INFO_PROVIDER_BEAN);
-        informationProviderBeanClassNames.add(getCustomInformationProviderBeanClassName());
-        informationProviderBeanClassNames.add(InformationProviderBean.class.getName());
+        informationProviderBeanClassNames.add(WebXmlParameter.CUSTOM_INFORMATION_PROVIDER_BEAN);
+        informationProviderBeanClassNames.add(InformationProviderBean.CUSTOM_BEAN);
 
         InformationProviderBean informationProviderBean;
         for (String className : informationProviderBeanClassNames)
@@ -165,15 +164,25 @@ public class ExtValContext
                 return informationProviderBean;
             }
         }
-        throw new IllegalStateException(InformationProviderBean.class.getName() + " not found");
+
+        tryToInitCustomConfiguredInformationProviderBeanClassName(applicationMap);
+
+        if(applicationMap.containsKey(InformationProviderBean.BEAN_NAME))
+        {
+            return (InformationProviderBean)applicationMap.get(InformationProviderBean.BEAN_NAME);
+        }
+        return new InformationProviderBean();
     }
 
-    private String getCustomInformationProviderBeanClassName()
+    private void tryToInitCustomConfiguredInformationProviderBeanClassName(Map applicationMap)
     {
         InformationProviderBean bean = (InformationProviderBean) ExtValUtils.getELHelper()
-            .getBean(InformationProviderBean.CUSTOM_BEAN);
+            .getBean(InformationProviderBean.CUSTOM_BEAN.replace(".", "_"));
 
-        return (bean != null) ? bean.getClass().getName() : null;
+        if(bean != null)
+        {
+            applicationMap.put(InformationProviderBean.BEAN_NAME, bean);
+        }
     }
 
     public List<String> getStaticStrategyMappingSources()

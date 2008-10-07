@@ -29,7 +29,8 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
+//*Transformer instead of *Converter to avoid naming confusion 
 public interface MetaDataTransformer
 {
-    Map<String, Object> extractMetaData(Annotation annotation);
+    Map<String, Object> convertMetaData(Annotation annotation);
 }

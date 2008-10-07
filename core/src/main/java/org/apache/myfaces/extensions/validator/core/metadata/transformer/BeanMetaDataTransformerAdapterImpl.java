@@ -48,13 +48,13 @@ public class BeanMetaDataTransformerAdapterImpl extends AbstractMetaDataTransfor
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
 
-    public Map<String, Object> processExtraction(Annotation annotation)
+    public Map<String, Object> convert(Annotation annotation)
     {
         if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
         {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).processExtraction(annotation);
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).convert(annotation);
         }
-        return this.metaDataTransformer.extractMetaData(annotation);
+        return this.metaDataTransformer.convertMetaData(annotation);
     }
 
     @Override

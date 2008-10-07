@@ -187,7 +187,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
             }
 
             //setup custom mapping - overrides all other mappings
-            String customMappingBaseName = WebXmlParameter.CUSTOM_VALIDATIONSTRATEGY_MAPPING;
+            String customMappingBaseName = WebXmlParameter.CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING;
             if (customMappingBaseName != null)
             {
                 try
