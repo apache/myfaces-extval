@@ -38,6 +38,6 @@ public class CustomConfiguredValidationStrategyToMsgResolverNameMapper extends
 
     protected String getCustomNameMapperClassName()
     {
-        return WebXmlParameter.CUSTOM_STRATEGY_TO_MESSAGE_RESOLVER_NAME_MAPPER;
+        return WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_NAME_MAPPER;
     }
 }

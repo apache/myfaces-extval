@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
 
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -30,12 +32,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
 public class SimpleValidationStrategyToMsgResolverNameMapper extends
-    AbstractValidationStrategyToMsgResolverNameMapper
+    DefaultValidationStrategyToMsgResolverNameMapper
 {
-    public String createName(ValidationStrategy validationStrategy)
+    protected String getClassName(String strategyClassName)
     {
-        String resolverName = validationStrategy.getClass().getName();
-
-        return resolverName.substring(0, resolverName.lastIndexOf(".")) + ".DefaultValidationErrorMessageResolver";
+        String customPostfix = ExtValContext.getContext().getInformationProviderBean()
+            .get(CustomInfo.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX);
+        return InternalConventionProvider.getValidationStrategyBasedName(strategyClassName, customPostfix);
     }
 }
