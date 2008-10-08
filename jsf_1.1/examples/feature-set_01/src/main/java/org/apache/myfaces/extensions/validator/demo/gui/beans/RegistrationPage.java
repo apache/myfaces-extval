@@ -47,10 +47,10 @@ public class RegistrationPage
     private String passwordRepeated;
 
     //use #{registrationPage.person.nickName}, #{person.nickName}
-    //or a global alias in connection with the TargetAlias annotation
     //use registrationPage to display the second error message at old nickname
-    @NotEquals("#{registrationPage.person.nickName}")
-    @JoinValidation("#{person.nickName}")
+    //or local property chaining (to avoid the usage of the bean name) - like:
+    @NotEquals("person.nickName")
+    @JoinValidation("person.nickName")
     private String newNickName;
 
     private Person person;

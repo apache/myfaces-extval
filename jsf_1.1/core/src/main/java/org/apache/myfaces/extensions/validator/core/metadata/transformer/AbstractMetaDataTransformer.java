@@ -20,11 +20,11 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
-import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +47,9 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
         }
     }
 
-    public final Map<String, Object> convertMetaData(Annotation annotation)
+    public final Map<String, Object> convertMetaData(AnnotationEntry annotationEntry)
     {
-        if(skipValidation(annotation))
+        if(skipValidation(annotationEntry))
         {
             if(logger.isTraceEnabled())
             {
@@ -60,26 +60,26 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
             return results;
         }
 
-        return convert(annotation);
+        return convert(annotationEntry);
     }
 
-    protected boolean skipValidation(Annotation annotation)
+    protected boolean skipValidation(AnnotationEntry annotationEntry)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Boolean result = (Boolean) ExtValUtils.getELHelper()
-            .getValueOfExpression(facesContext, getSkipExpression(annotation));
+            .getValueOfExpression(facesContext, getSkipExpression(annotationEntry));
 
         if(logger.isTraceEnabled())
         {
             logger.trace(getClass() + "#skipValidation result of getSkipExpression: "
-                + getSkipExpression(annotation));
+                + getSkipExpression(annotationEntry));
         }
 
         return result;
     }
 
-    protected String getSkipExpression(Annotation annotation)
+    protected String getSkipExpression(AnnotationEntry annotationEntry)
     {
         return "#{false}"; //default - don't skip
     }
@@ -93,5 +93,5 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
         return new ArrayList<String>();
     }
 
-    protected abstract Map<String, Object> convert(Annotation annotation);
+    protected abstract Map<String, Object> convert(AnnotationEntry annotation);
 }

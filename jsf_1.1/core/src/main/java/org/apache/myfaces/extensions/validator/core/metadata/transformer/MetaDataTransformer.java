@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
@@ -32,5 +32,5 @@ import java.util.Map;
 //*Transformer instead of *Converter to avoid naming confusion 
 public interface MetaDataTransformer
 {
-    Map<String, Object> convertMetaData(Annotation annotation);
+    Map<String, Object> convertMetaData(AnnotationEntry annotation);
 }
