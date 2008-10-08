@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.factory;
+package org.apache.myfaces.extensions.validator.core.loader;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -26,13 +26,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API})
-public enum FactoryNames
+public enum StaticMappingConfigLoaderNames
 {
-    COMPONENT_ANNOTATION_EXTRACTOR_FACTORY,
-    VALIDATION_STRATEGY_FACTORY,
-    MESSAGE_RESOLVER_FACTORY,
-    META_DATA_TRANSFORMER_FACTORY,
-    COMPONENT_INITIALIZER_FACTORY,
-    RENDERKIT_WRAPPER_FACTORY,
-    EL_HELPER_FACTORY
+    ANNOTATION_TO_VALIDATION_STRATEGY_CONFIG_LOADER,
+    VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG_LOADER,
+    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG_LOADER
 }
