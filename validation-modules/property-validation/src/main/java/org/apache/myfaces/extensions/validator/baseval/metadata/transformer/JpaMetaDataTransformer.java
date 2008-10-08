@@ -20,12 +20,12 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ import java.util.Map;
 public class JpaMetaDataTransformer implements MetaDataTransformer
 {
     @ToDo(value = Priority.HIGH, description = "impl. the rest")
-    public Map<String, Object> convertMetaData(Annotation annotation)
+    public Map<String, Object> convertMetaData(AnnotationEntry annotation)
     {
         Map<String, Object> results = new HashMap<String, Object>();
 

@@ -47,6 +47,8 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
 
         for (String targetExpression : targetExpressions)
         {
+            targetExpression = createValidBinding(annotationEntry, targetExpression);
+
             for (AnnotationEntry entry : extractor.extractAnnotations(facesContext, targetExpression))
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
@@ -65,5 +67,24 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
                 }
             }
         }
+    }
+
+    private String createValidBinding(AnnotationEntry annotationEntry, String targetExpression)
+    {
+        if(ExtValUtils.getELHelper().isELTerm(targetExpression))
+        {
+            return targetExpression;
+        }
+
+        String baseExpression = annotationEntry.getValueBindingExpression();
+        if(baseExpression.contains("."))
+        {
+            baseExpression = baseExpression.substring(0, baseExpression.lastIndexOf("."));
+        }
+        else
+        {
+            baseExpression = baseExpression.substring(0, baseExpression.length() - 1);
+        }
+        return baseExpression + "." + targetExpression + "}";
     }
 }
