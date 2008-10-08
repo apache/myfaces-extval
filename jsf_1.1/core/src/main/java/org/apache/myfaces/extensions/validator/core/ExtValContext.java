@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.core.interceptor.RendererIntercep
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -56,7 +58,9 @@ public class ExtValContext
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
-    private List<String> staticStrategyMappings = new ArrayList<String>();
+    private Map<StaticMappingConfigLoaderNames, List<StaticMappingConfigLoader<String, String>>>
+        staticMappingConfigLoaderMap
+        = new HashMap<StaticMappingConfigLoaderNames, List<StaticMappingConfigLoader<String, String>>>();
 
     public static ExtValContext getContext()
     {
@@ -185,16 +189,30 @@ public class ExtValContext
         }
     }
 
-    public List<String> getStaticStrategyMappingSources()
+    public List<StaticMappingConfigLoader<String, String>> getStaticMappingConfigLoaders(
+        StaticMappingConfigLoaderNames name)
     {
-        return this.staticStrategyMappings;
+        if(!this.staticMappingConfigLoaderMap.containsKey(name))
+        {
+            List<StaticMappingConfigLoader<String, String>> staticMappingConfigLoaderList
+                = new ArrayList<StaticMappingConfigLoader<String, String>>();
+            this.staticMappingConfigLoaderMap.put(name, staticMappingConfigLoaderList);
+        }
+        return this.staticMappingConfigLoaderMap.get(name);
     }
 
-    public void addStaticStrategyMappingSource(String resourceBundleName)
+    public void addStaticMappingConfigLoader(StaticMappingConfigLoaderNames name, StaticMappingConfigLoader<String,
+                                             String> staticMappingConfigLoader)
     {
         synchronized (this)
         {
-            this.staticStrategyMappings.add(resourceBundleName);
+            List<StaticMappingConfigLoader<String, String>> staticMappingConfigLoaderList;
+            if(!this.staticMappingConfigLoaderMap.containsKey(name))
+            {
+                staticMappingConfigLoaderList = new ArrayList<StaticMappingConfigLoader<String, String>>();
+                this.staticMappingConfigLoaderMap.put(name, staticMappingConfigLoaderList);
+            }
+            this.staticMappingConfigLoaderMap.get(name).add(staticMappingConfigLoader);
         }
     }
 

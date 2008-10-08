@@ -22,7 +22,11 @@ import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigEntry;
+import org.apache.myfaces.extensions.validator.core.loader.StaticResourceBundleLoader;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
@@ -44,12 +48,10 @@ import org.apache.commons.logging.LogFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -102,7 +104,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
     {
         if (annotationStrategyMapping == null)
         {
-            initStaticStrategyMappings();
+            initStaticMappings();
         }
 
         String annotationName = annotation.annotationType().getName();
@@ -153,33 +155,44 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    private void addMapping(String annotationName, String strategyName)
+    private void addMapping(String annotationName, String validationStrategyName)
     {
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("adding annotation to validation strategy mapping: "
+                + annotationName + " -> " + validationStrategyName);
+        }
+
         synchronized (DefaultValidationStrategyFactory.class)
         {
-            annotationStrategyMapping.put(annotationName, strategyName);
+            annotationStrategyMapping.put(annotationName, validationStrategyName);
         }
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    private void initStaticStrategyMappings()
+    private void initStaticMappings()
     {
         synchronized (DefaultValidationStrategyFactory.class)
         {
             annotationStrategyMapping = new HashMap<String, String>();
 
             //setup internal static mappings
-            for (String internalMappingSource : ExtValContext.getContext().getStaticStrategyMappingSources())
+            for (StaticMappingConfigLoader<String, String> staticMappingConfigLoader :
+                ExtValContext.getContext().getStaticMappingConfigLoaders(
+                    StaticMappingConfigLoaderNames.ANNOTATION_TO_VALIDATION_STRATEGY_CONFIG_LOADER))
             {
-                setupStrategyMappings(internalMappingSource);
+                setupStrategyMappings(staticMappingConfigLoader.getMapping());
             }
 
+            StaticMappingConfigLoader<String, String> staticMappingConfigLoader = new StaticResourceBundleLoader();
             //try to setup mapping with base name by convention - overrides default mapping
             try
             {
                 //build convention (strategy mapping)
-                setupStrategyMappings(ExtValContext.getContext().getInformationProviderBean()
+                staticMappingConfigLoader.setSourceOfMapping(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE));
+
+                setupStrategyMappings(staticMappingConfigLoader.getMapping());
             }
             catch (Throwable t)
             {
@@ -192,7 +205,9 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
             {
                 try
                 {
-                    setupStrategyMappings(customMappingBaseName);
+                    staticMappingConfigLoader = new StaticResourceBundleLoader();
+                    staticMappingConfigLoader.setSourceOfMapping(customMappingBaseName);
+                    setupStrategyMappings(staticMappingConfigLoader.getMapping());
                 }
                 catch (MissingResourceException e)
                 {
@@ -202,26 +217,11 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
         }
     }
 
-    private void setupStrategyMappings(String bundle)
+    private void setupStrategyMappings(List<StaticMappingConfigEntry<String,String>> mappings)
     {
-        ResourceBundle strategyMapping = ResourceBundle.getBundle(bundle);
-
-        if (strategyMapping == null)
+        for(StaticMappingConfigEntry<String, String> mapping : mappings)
         {
-            return;
-        }
-
-        Enumeration keys = strategyMapping.getKeys();
-
-        String annotationClassName;
-        String validationStrategyClassName;
-
-        while (keys.hasMoreElements())
-        {
-            annotationClassName = (String) keys.nextElement();
-            validationStrategyClassName = strategyMapping.getString(annotationClassName);
-
-            addMapping(annotationClassName, validationStrategyClassName);
+            addMapping(mapping.getSource(), mapping.getTarget());
         }
     }
 }
