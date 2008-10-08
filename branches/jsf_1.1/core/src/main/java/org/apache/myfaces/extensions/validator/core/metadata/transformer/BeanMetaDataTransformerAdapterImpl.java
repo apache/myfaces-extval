@@ -20,12 +20,12 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.List;
-import java.lang.annotation.Annotation;
 
 /**
  * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
@@ -48,17 +48,17 @@ public class BeanMetaDataTransformerAdapterImpl extends AbstractMetaDataTransfor
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
 
-    public Map<String, Object> convert(Annotation annotation)
+    public Map<String, Object> convert(AnnotationEntry annotationEntry)
     {
         if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
         {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).convert(annotation);
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).convert(annotationEntry);
         }
-        return this.metaDataTransformer.convertMetaData(annotation);
+        return this.metaDataTransformer.convertMetaData(annotationEntry);
     }
 
     @Override
-    protected String getSkipExpression(Annotation annotation)
+    protected String getSkipExpression(AnnotationEntry annotation)
     {
         if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
         {

@@ -83,7 +83,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
                 if(metaDataTransformer != null)
                 {
-                    metaData = metaDataTransformer.convertMetaData(entry.getAnnotation());
+                    metaData = metaDataTransformer.convertMetaData(entry);
                 }
                 else
                 {

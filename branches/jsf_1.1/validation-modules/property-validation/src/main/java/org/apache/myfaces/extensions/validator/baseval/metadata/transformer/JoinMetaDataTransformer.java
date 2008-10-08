@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,11 +37,11 @@ import java.util.Map;
  */
 public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(Annotation annotation)
+    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
     {
         AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
 
-        String[] targetExpressions = ((JoinValidation)annotation).value();
+        String[] targetExpressions = ((JoinValidation)(annotationEntry).getAnnotation()).value();
 
         ValidationStrategy validationStrategy;
         MetaDataTransformer metaDataTransformer;
@@ -51,6 +50,8 @@ public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 
         for (String targetExpression : targetExpressions)
         {
+            targetExpression = createValidBinding(annotationEntry, targetExpression);
+
             for (AnnotationEntry entry : extractor
                                             .extractAnnotations(FacesContext.getCurrentInstance(), targetExpression))
             {
@@ -60,10 +61,29 @@ public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 
                 if (metaDataTransformer != null)
                 {
-                    results.putAll( metaDataTransformer.convertMetaData(entry.getAnnotation()));
+                    results.putAll(metaDataTransformer.convertMetaData(entry));
                 }
             }
         }
         return results;
+    }
+
+    private String createValidBinding(AnnotationEntry annotationEntry, String targetExpression)
+    {
+        if(ExtValUtils.getELHelper().isELTerm(targetExpression))
+        {
+            return targetExpression;
+        }
+        
+        String baseExpression = annotationEntry.getValueBindingExpression();
+        if(baseExpression.contains("."))
+        {
+            baseExpression = baseExpression.substring(0, baseExpression.lastIndexOf("."));
+        }
+        else
+        {
+            baseExpression = baseExpression.substring(0, baseExpression.length() - 1);
+        }
+        return baseExpression + "." + targetExpression + "}";
     }
 }
