@@ -21,14 +21,15 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -36,9 +37,11 @@ import java.util.Locale;
  */
 public class PatternMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(Annotation annotation)
+    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
+        Annotation annotation = annotationEntry.getAnnotation();
+        
         results.put(CommonMetaDataKeys.PATTERN, ((Pattern)annotation).value());
 
         String validationErrorMsgKey = ((Pattern)annotation).validationErrorMsgKey();

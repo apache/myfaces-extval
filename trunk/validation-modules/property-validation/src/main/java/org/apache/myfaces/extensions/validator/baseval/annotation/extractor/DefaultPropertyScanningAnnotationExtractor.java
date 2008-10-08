@@ -31,14 +31,12 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultPropertyScanningAnnotationExtractor extends
-        DefaultComponentAnnotationExtractor
+public class DefaultPropertyScanningAnnotationExtractor extends DefaultComponentAnnotationExtractor
 {
 
     @Override
     @ToDo(Priority.MEDIUM)
-    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext,
-            Object object)
+    public List<AnnotationEntry> extractAnnotations(FacesContext facesContext, Object object)
     {
         //should never occur
         if (!(object instanceof String))
@@ -50,17 +48,13 @@ public class DefaultPropertyScanningAnnotationExtractor extends
         int beanPropertyBorder = valueBindingExpression.lastIndexOf(".");
 
         String property = valueBindingExpression
-                .substring(beanPropertyBorder + 1, valueBindingExpression
-                        .lastIndexOf("}"));
-
-        valueBindingExpression = valueBindingExpression.substring(0,
-                beanPropertyBorder)
-                + "}";
+                .substring(beanPropertyBorder + 1, valueBindingExpression.lastIndexOf("}"));
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        Class entityClass = ExtValUtils.getELHelper().getTypeOfValueBindingForExpression(
-                facesContext, valueBindingExpression);
+        Class entityClass = ExtValUtils.getELHelper()
+            .getTypeOfValueBindingForExpression(facesContext,
+                valueBindingExpression.substring(0, beanPropertyBorder) + "}");
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();
