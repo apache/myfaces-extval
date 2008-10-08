@@ -32,6 +32,10 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
         .BeanValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigEntry;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -60,7 +64,7 @@ public class DefaultMetaDataTransformerFactory implements
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private static Map<String, String> validationStrategyToMetaDataTransformerMapping = new HashMap<String, String>();
+    private static Map<String, String> validationStrategyToMetaDataTransformerMapping;
     private static List<NameMapper<ValidationStrategy>> nameMapperList
         = new ArrayList<NameMapper<ValidationStrategy>>();
 
@@ -102,6 +106,11 @@ public class DefaultMetaDataTransformerFactory implements
                                         .getValidationStrategyClassName();
         }
 
+        if (validationStrategyToMetaDataTransformerMapping == null)
+        {
+            initStaticMappings();
+        }
+
         if (validationStrategyToMetaDataTransformerMapping.containsKey(validationStrategyName))
         {
             return (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(
@@ -126,17 +135,50 @@ public class DefaultMetaDataTransformerFactory implements
             {
                 if(validationStrategyName != null)
                 {
-                    validationStrategyToMetaDataTransformerMapping.put(validationStrategyName, transformerName);
-
-                    if(logger.isTraceEnabled())
-                    {
-                        logger.trace(transformerName + " used for " + validationStrategyName);
-                    }
+                    addMapping(validationStrategyName, transformerName);
                 }
                 return metaDataTransformer;
             }
         }
 
         return null;
+    }
+
+    private void initStaticMappings()
+    {
+        synchronized (DefaultMetaDataTransformerFactory.class)
+        {
+            validationStrategyToMetaDataTransformerMapping = new HashMap<String, String>();
+
+            //setup internal static mappings
+            for (StaticMappingConfigLoader<String, String> staticMappingConfigLoader :
+                ExtValContext.getContext().getStaticMappingConfigLoaders(
+                    StaticMappingConfigLoaderNames.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG_LOADER))
+            {
+                setupStrategyMappings(staticMappingConfigLoader.getMapping());
+            }
+        }
+    }
+
+    private void setupStrategyMappings(List<StaticMappingConfigEntry<String, String>> mappings)
+    {
+        for(StaticMappingConfigEntry<String, String> mapping : mappings)
+        {
+            addMapping(mapping.getSource(), mapping.getTarget());
+        }
+    }
+
+    private void addMapping(String validationStrategyName, String transformerName)
+    {
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("adding validation strategy to meta-data transformer mapping: "
+                + validationStrategyName + " -> " + transformerName);
+        }
+
+        synchronized (DefaultMetaDataTransformerFactory.class)
+        {
+            validationStrategyToMetaDataTransformerMapping.put(validationStrategyName, transformerName);
+        }
     }
 }

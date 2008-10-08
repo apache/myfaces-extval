@@ -1,0 +1,85 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.myfaces.extensions.validator.core.loader;
+
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Enumeration;
+import java.util.ArrayList;
+
+/**
+ * @author Gerhard Petracek
+ * @since 1.x.1
+ */
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
+public class StaticResourceBundleLoader implements StaticMappingConfigLoader<String, String>
+{
+    private String path;
+    private List<StaticMappingConfigEntry<String, String>> mappings;
+
+    public void setSourceOfMapping(String path)
+    {
+        this.path = path;
+        //force reload
+        mappings = null;
+    }
+
+    public List<StaticMappingConfigEntry<String, String>> getMapping()
+    {
+        if(mappings != null)
+        {
+            return mappings;
+        }
+
+        mappings = new ArrayList<StaticMappingConfigEntry<String, String>>();
+
+        ResourceBundle mapping = ResourceBundle.getBundle(path);
+
+        if (mapping == null)
+        {
+            //logging
+            return new ArrayList<StaticMappingConfigEntry<String, String>>();
+        }
+
+        Enumeration keys = mapping.getKeys();
+
+        String annotationClassName;
+        String validationStrategyClassName;
+
+        while (keys.hasMoreElements())
+        {
+            annotationClassName = (String) keys.nextElement();
+            validationStrategyClassName = mapping.getString(annotationClassName);
+
+            addMapping(annotationClassName, validationStrategyClassName);
+        }
+        return mappings;
+    }
+
+    private void addMapping(String annotationClassName, String validationStrategyClassName)
+    {
+        StaticMappingConfigEntry<String, String> entry = new StaticMappingConfigEntry<String, String>();
+        entry.setSource(annotationClassName);
+        entry.setTarget(validationStrategyClassName);
+        this.mappings.add(entry);
+    }
+}
