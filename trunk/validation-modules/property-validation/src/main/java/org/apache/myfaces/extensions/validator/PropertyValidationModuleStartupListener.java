@@ -21,6 +21,9 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.loader.StaticResourceBundleLoader;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
@@ -44,8 +47,12 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         if (jpaBasedValidation == null
                 || !jpaBasedValidation.equalsIgnoreCase("true"))
         {
-            ExtValContext.getContext().addStaticStrategyMappingSource(
-                            ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".jpa_strategy_mappings");
+            StaticMappingConfigLoader<String, String> staticMappingConfigLoader = new StaticResourceBundleLoader();
+            staticMappingConfigLoader.setSourceOfMapping(
+                ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME +".jpa_strategy_mappings");
+
+            ExtValContext.getContext().addStaticMappingConfigLoader(
+             StaticMappingConfigLoaderNames.ANNOTATION_TO_VALIDATION_STRATEGY_CONFIG_LOADER, staticMappingConfigLoader);
         }
     }
 

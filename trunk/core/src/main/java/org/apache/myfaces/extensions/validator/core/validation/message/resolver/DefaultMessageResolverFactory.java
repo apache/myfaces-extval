@@ -31,6 +31,10 @@ import org.apache.myfaces.extensions.validator.core.validation.message.
 import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigEntry;
+import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -57,8 +61,7 @@ public class DefaultMessageResolverFactory implements
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private static Map<String, String> strategyMessageResolverMapping =
-        new HashMap<String, String>();
+    private static Map<String, String> strategyMessageResolverMapping;
     private static List<NameMapper<ValidationStrategy>> nameMapperList =
         new ArrayList<NameMapper<ValidationStrategy>>();
 
@@ -87,6 +90,11 @@ public class DefaultMessageResolverFactory implements
     public MessageResolver create(ValidationStrategy validationStrategy)
     {
         String strategyName = validationStrategy.getClass().getName();
+
+        if (strategyMessageResolverMapping == null)
+        {
+            initStaticMappings();
+        }
 
         if (strategyMessageResolverMapping.containsKey(strategyName))
         {
@@ -126,12 +134,42 @@ public class DefaultMessageResolverFactory implements
         return new DefaultValidationErrorMessageResolver();
     }
 
-    @ToDo(value = Priority.MEDIUM, description = "logging")
-    private void addMapping(String strategyName, String messageResolverName)
+    private void initStaticMappings()
     {
         synchronized (DefaultMessageResolverFactory.class)
         {
-            strategyMessageResolverMapping.put(strategyName, messageResolverName);
+            strategyMessageResolverMapping = new HashMap<String, String>();
+
+            //setup internal static mappings
+            for (StaticMappingConfigLoader<String, String> staticMappingConfigLoader :
+                ExtValContext.getContext().getStaticMappingConfigLoaders(
+                    StaticMappingConfigLoaderNames.VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG_LOADER))
+            {
+                setupStrategyMappings(staticMappingConfigLoader.getMapping());
+            }
+        }
+    }
+
+    private void setupStrategyMappings(List<StaticMappingConfigEntry<String,String>> mappings)
+    {
+        for(StaticMappingConfigEntry<String, String> mapping : mappings)
+        {
+            addMapping(mapping.getSource(), mapping.getTarget());
+        }
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "logging")
+    private void addMapping(String validationStrategyName, String messageResolverName)
+    {
+        if(logger.isTraceEnabled())
+        {
+            logger.trace("adding static validation strategy to message resolver mapping: "
+                + validationStrategyName + " -> " + messageResolverName);
+        }
+
+        synchronized (DefaultMessageResolverFactory.class)
+        {
+            strategyMessageResolverMapping.put(validationStrategyName, messageResolverName);
         }
     }
 }

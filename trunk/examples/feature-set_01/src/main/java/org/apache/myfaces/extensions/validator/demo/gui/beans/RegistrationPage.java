@@ -40,6 +40,7 @@ public class RegistrationPage
 
     @Required
     @Equals("passwordRepeated")
+    @JoinValidation(value = "#{registrationPage.person.password}")
     private String password;
 
     @Required(validationErrorMsgKey = "repeated_password_required")
