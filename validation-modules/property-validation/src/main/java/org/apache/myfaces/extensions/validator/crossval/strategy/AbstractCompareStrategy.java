@@ -32,7 +32,6 @@ import javax.faces.validator.ValidatorException;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.AliasCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ELCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalCompareStrategy;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ReferencingStrategy;
@@ -74,7 +73,7 @@ public abstract class AbstractCompareStrategy extends
             }
 
             referencingStrategies.add(new ELCompareStrategy());
-            referencingStrategies.add(new AliasCompareStrategy());
+            //referencingStrategies.add(new AliasCompareStrategy());
             referencingStrategies.add(new LocalCompareStrategy());
             referencingStrategies.add(new LocalPropertyChainCompareStrategy());
         }
