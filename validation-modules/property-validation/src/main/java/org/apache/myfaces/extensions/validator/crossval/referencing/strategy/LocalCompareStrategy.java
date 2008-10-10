@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEn
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -73,28 +74,9 @@ public class LocalCompareStrategy implements ReferencingStrategy
     protected String createTargetValueBindingExpression(CrossValidationStorageEntry crossValidationStorageEntry,
                                                         String validationTarget)
     {
-        String baseValueBindingExpression =
-            crossValidationStorageEntry.getAnnotationEntry().getValueBindingExpression();
-
-        baseValueBindingExpression =
-            baseValueBindingExpression.substring(0, baseValueBindingExpression.lastIndexOf("."));
-
-        String targetValueBindingExpression;
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        targetValueBindingExpression = baseValueBindingExpression + "."
-                + validationTarget + "}";
-
-        if (!ExtValUtils.getELHelper().isExpressionValid(facesContext, targetValueBindingExpression))
-        {
-            throw new IllegalStateException(
-                "invalid reference used: "
-                + validationTarget
-                + " please check your extval annotations");
-        }
-
-        return targetValueBindingExpression;
+        ValueBindingExpression baseExpression =
+            new ValueBindingExpression(crossValidationStorageEntry.getAnnotationEntry().getValueBindingExpression());
+        return ValueBindingExpression.replaceOrAddProperty(baseExpression, validationTarget).getExpressionString();
     }
 
     protected boolean validateELExpression(CrossValidationStorageEntry crossValidationStorageEntry,
@@ -102,6 +84,14 @@ public class LocalCompareStrategy implements ReferencingStrategy
                                            String validationTarget,
                                            AbstractCompareStrategy compareStrategy)
     {
+        if (!ExtValUtils.getELHelper().isExpressionValid(FacesContext.getCurrentInstance(), validationTarget))
+        {
+            throw new IllegalStateException(
+                "invalid reference used: "
+                + validationTarget
+                + " please check your extval annotations");
+        }
+
         boolean violationFound = false;
         Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
                 .getOrInitValueBindingConvertedValueMapping();
