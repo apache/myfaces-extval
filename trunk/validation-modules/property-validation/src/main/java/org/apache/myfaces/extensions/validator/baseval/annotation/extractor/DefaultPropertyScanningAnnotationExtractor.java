@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.baseval.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractor;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -44,23 +45,18 @@ public class DefaultPropertyScanningAnnotationExtractor extends DefaultComponent
             return new ArrayList<AnnotationEntry>();
         }
 
-        String valueBindingExpression = ((String) object).trim();
-        int beanPropertyBorder = valueBindingExpression.lastIndexOf(".");
-
-        String property = valueBindingExpression
-                .substring(beanPropertyBorder + 1, valueBindingExpression.lastIndexOf("}"));
+        ValueBindingExpression valueBindingExpression = new ValueBindingExpression(((String) object).trim());
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
         Class entityClass = ExtValUtils.getELHelper()
-            .getTypeOfValueBindingForExpression(facesContext,
-                valueBindingExpression.substring(0, beanPropertyBorder) + "}");
+            .getTypeOfValueBindingForExpression(facesContext, valueBindingExpression.getBaseExpression());
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();
         templateEntry.setEntityClass(entityClass);
         //TODO complex components
-        templateEntry.setValueBindingExpression(valueBindingExpression);
+        templateEntry.setValueBindingExpression(valueBindingExpression.getExpressionString());
         templateEntry.setBoundTo("value");
 
         /*
@@ -68,9 +64,10 @@ public class DefaultPropertyScanningAnnotationExtractor extends DefaultComponent
          */
         if (entityClass != null)
         {
-            addPropertyAccessAnnotations(entityClass, property,
+            //TODO map syntax support
+            addPropertyAccessAnnotations(entityClass, valueBindingExpression.getProperty(),
                     annotationEntries, templateEntry);
-            addFieldAccessAnnotations(entityClass, property, annotationEntries,
+            addFieldAccessAnnotations(entityClass, valueBindingExpression.getProperty(), annotationEntries,
                     templateEntry);
         }
 

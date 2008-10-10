@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -75,9 +76,10 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         List<AnnotationEntry> annotationEntries = new ArrayList<AnnotationEntry>();
 
-        String valueBindingExpression = ExtValUtils.getELHelper().getValueBindingExpression(uiComponent);
+        ValueBindingExpression vbe =
+            ExtValUtils.getELHelper().getValueBindingExpression(uiComponent);
 
-        if (valueBindingExpression == null)
+        if (vbe == null)
         {
             return new ArrayList<AnnotationEntry>();
         }
@@ -85,23 +87,13 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
         /*
          * get bean class and property name
          */
-        int beanPropertyBorder = valueBindingExpression.lastIndexOf('.');
-
-        if (beanPropertyBorder < 0)
-        {
-            return new ArrayList<AnnotationEntry>();
-        }
-
-        String beans = valueBindingExpression.substring(valueBindingExpression.indexOf('{') + 1, beanPropertyBorder);
-
-        String property = valueBindingExpression.substring(beanPropertyBorder + 1, valueBindingExpression.indexOf('}'));
-
-        Class entityClass = ExtValUtils.getELHelper().getTypeOfValueBindingForExpression(facesContext, "#{"+beans+"}");
+        Class entityClass = ExtValUtils.getELHelper()
+            .getTypeOfValueBindingForExpression(facesContext, vbe.getBaseExpression());
 
         //create template entry
         AnnotationEntry templateEntry = new AnnotationEntry();
         //TODO test with complex components
-        templateEntry.setValueBindingExpression(valueBindingExpression);
+        templateEntry.setValueBindingExpression(vbe.getExpressionString());
         templateEntry.setEntityClass(entityClass);
         templateEntry.setBoundTo("value");
 
@@ -112,8 +104,9 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
         while (!Object.class.getName().equals(currentClass.getName()))
         {
-            addPropertyAccessAnnotations(currentClass, property, annotationEntries, templateEntry);
-            addFieldAccessAnnotations(currentClass, property, annotationEntries, templateEntry);
+            //TODO map syntax support
+            addPropertyAccessAnnotations(currentClass, vbe.getProperty(), annotationEntries, templateEntry);
+            addFieldAccessAnnotations(currentClass, vbe.getProperty(), annotationEntries, templateEntry);
 
             currentClass = currentClass.getSuperclass();
         }
@@ -124,7 +117,7 @@ public class DefaultComponentAnnotationExtractor implements AnnotationExtractor
 
             while (currentClass != null)
             {
-                addPropertyAccessAnnotations(currentClass, property, annotationEntries, templateEntry);
+                addPropertyAccessAnnotations(currentClass, vbe.getProperty(), annotationEntries, templateEntry);
 
                 currentClass = currentClass.getSuperclass();
             }
