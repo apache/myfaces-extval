@@ -33,7 +33,6 @@ public class RegistrationPage
 
     //the old password of the person isn't used within the page
     //-> validate with value of the model
-    @Required(skipValidation = "#{person.role eq 'admin'}")
     @Equals("person.password")
     @NotEquals("password")
     private String oldPassword;

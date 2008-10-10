@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
@@ -43,11 +44,11 @@ public class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             String validationTarget, AbstractCompareStrategy compareStrategy)
     {
-        if (validationTarget.startsWith("#{") && validationTarget.endsWith("}")
-                && validateValueBindingFormat(validationTarget))
+        if (ExtValUtils.getELHelper().isELTerm(validationTarget) &&
+            ExtValUtils.getELHelper().isExpressionValid(FacesContext.getCurrentInstance(), validationTarget))
         {
             tryToValidateValueBinding(crossValidationStorageEntry,
-                    validationTarget, crossValidationStorage, compareStrategy);
+                new ValueBindingExpression(validationTarget), crossValidationStorage, compareStrategy);
             return true;
         }
         return false;
@@ -56,18 +57,13 @@ public class ELCompareStrategy implements ReferencingStrategy
     @ToDo(value = Priority.MEDIUM, description = "test")
     protected boolean tryToValidateValueBinding(
             CrossValidationStorageEntry crossValidationStorageEntry,
-            String validationTarget,
+            ValueBindingExpression validationTarget,
             CrossValidationStorage crossValidationStorage,
             AbstractCompareStrategy compareStrategy)
     {
         boolean violationFound = false;
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        if (!ExtValUtils.getELHelper().isExpressionValid(facesContext, validationTarget))
-        {
-            return false;
-        }
 
         if (compareStrategy.isViolation(crossValidationStorageEntry
                 .getConvertedObject(), ExtValUtils.getELHelper().getValueOfExpression(
@@ -122,15 +118,5 @@ public class ELCompareStrategy implements ReferencingStrategy
         }
 
         return true;
-    }
-
-    protected boolean validateValueBindingFormat(String targetProperty)
-    {
-        int bindingStartIndex = targetProperty.indexOf("#{");
-        int bindingEndIndex = targetProperty.indexOf("}");
-        int separatorIndex = targetProperty.indexOf(".");
-
-        return (bindingStartIndex > -1 && bindingEndIndex > -1
-                && separatorIndex > -1 && bindingStartIndex < bindingEndIndex && bindingEndIndex > separatorIndex);
     }
 }
