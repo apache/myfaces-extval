@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -68,7 +69,7 @@ public abstract class AbstractMetaDataTransformer implements MetaDataTransformer
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Boolean result = (Boolean) ExtValUtils.getELHelper()
-            .getValueOfExpression(facesContext, getSkipExpression(annotationEntry));
+            .getValueOfExpression(facesContext, new ValueBindingExpression(getSkipExpression(annotationEntry)));
 
         if(logger.isTraceEnabled())
         {
