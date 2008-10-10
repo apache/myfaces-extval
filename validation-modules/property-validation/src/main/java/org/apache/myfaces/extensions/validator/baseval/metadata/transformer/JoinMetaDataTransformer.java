@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.annotation.extractor.Annotat
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
@@ -75,15 +76,7 @@ public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
             return targetExpression;
         }
         
-        String baseExpression = annotationEntry.getValueBindingExpression();
-        if(baseExpression.contains("."))
-        {
-            baseExpression = baseExpression.substring(0, baseExpression.lastIndexOf("."));
-        }
-        else
-        {
-            baseExpression = baseExpression.substring(0, baseExpression.length() - 1);
-        }
-        return baseExpression + "." + targetExpression + "}";
+        ValueBindingExpression baseExpression = new ValueBindingExpression(annotationEntry.getValueBindingExpression());
+        return ValueBindingExpression.replaceOrAddProperty(baseExpression, targetExpression).getExpressionString();
     }
 }

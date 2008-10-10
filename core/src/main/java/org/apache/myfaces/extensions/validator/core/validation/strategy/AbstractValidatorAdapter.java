@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -132,7 +133,8 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
             return false;
         }
 
-        Boolean result = (Boolean)ExtValUtils.getELHelper().getValueOfExpression(facesContext, expression);
+        Boolean result = (Boolean)ExtValUtils.getELHelper()
+            .getValueOfExpression(facesContext, new ValueBindingExpression(expression));
 
         if(logger.isTraceEnabled())
         {

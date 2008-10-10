@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
@@ -76,15 +77,7 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
             return targetExpression;
         }
 
-        String baseExpression = annotationEntry.getValueBindingExpression();
-        if(baseExpression.contains("."))
-        {
-            baseExpression = baseExpression.substring(0, baseExpression.lastIndexOf("."));
-        }
-        else
-        {
-            baseExpression = baseExpression.substring(0, baseExpression.length() - 1);
-        }
-        return baseExpression + "." + targetExpression + "}";
+        ValueBindingExpression baseExpression = new ValueBindingExpression(annotationEntry.getValueBindingExpression());
+        return ValueBindingExpression.replaceOrAddProperty(baseExpression, targetExpression).getExpressionString();
     }
 }
