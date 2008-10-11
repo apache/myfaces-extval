@@ -55,7 +55,7 @@ import java.util.Map;
  * @since 1.x.1
  */
 /*
- * ValidationStrategy -> MetaDataTransformer instead of Annotation -> MetaDataTransformer
+ * ValidationStrategy -> MetaDataTransformer instead of Meta-Data -> MetaDataTransformer
  * to avoid a second static mapping e.g. for jpa annotations
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})

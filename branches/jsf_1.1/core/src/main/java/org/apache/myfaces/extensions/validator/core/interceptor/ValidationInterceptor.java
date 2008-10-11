@@ -22,9 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
@@ -139,7 +139,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         ValidationStrategy validationStrategy;
 
-        MetaDataExtractor metaDataExtractor = ExtValUtils.getAnnotationExtractor();
+        MetaDataExtractor metaDataExtractor = ExtValUtils.getMetaDataExtractor();
 
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {

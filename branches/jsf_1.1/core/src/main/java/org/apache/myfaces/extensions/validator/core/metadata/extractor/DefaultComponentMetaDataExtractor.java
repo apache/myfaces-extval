@@ -40,8 +40,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Default implementation which extracts the annotations of the value binding of a component.
- * It extracts the annotation of the field and the property.
+ * Default implementation which extracts meta-data (e.g. the annotations) of the value binding of a component.
+ * It extracts the meta-data of the field and the property.
  * (Also the annotations of super classes and interfaces.)
  *
  * @author Gerhard Petracek
@@ -197,7 +197,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
     {
         for (Annotation annotation : annotations)
         {
-            sourceInformation.addMetaDataEntry(createAnnotationEntry(annotation));
+            sourceInformation.addMetaDataEntry(createMetaDataEntryForAnnotation(annotation));
 
             if(logger.isTraceEnabled())
             {
@@ -206,7 +206,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         }
     }
 
-    protected MetaDataEntry createAnnotationEntry(Annotation foundAnnotation)
+    protected MetaDataEntry createMetaDataEntryForAnnotation(Annotation foundAnnotation)
     {
         MetaDataEntry entry = new MetaDataEntry();
 

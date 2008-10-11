@@ -33,13 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This factory creates an annotation extractor which extracts the annotation
+ * This factory creates a meta-data extractor which extracts the meta-data
  * of the value binding of a component.
  * <p/>
  * order:<br/>
  * <ol>
- *   <li>configured annotation extractor (web.xml)</li>
- *   <li>configured annotation extractor (information provider bean)</li>
+ *   <li>configured meta-data extractor (web.xml)</li>
+ *   <li>configured meta-data extractor (information provider bean)</li>
  *   <li>default implementation</li>
  * </ol>
  *

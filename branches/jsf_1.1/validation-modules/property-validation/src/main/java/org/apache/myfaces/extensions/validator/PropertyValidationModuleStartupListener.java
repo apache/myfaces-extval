@@ -52,7 +52,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
                 ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME +".jpa_strategy_mappings");
 
             ExtValContext.getContext().addStaticMappingConfigLoader(
-             StaticMappingConfigLoaderNames.ANNOTATION_TO_VALIDATION_STRATEGY_CONFIG_LOADER, staticMappingConfigLoader);
+             StaticMappingConfigLoaderNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG_LOADER, staticMappingConfigLoader);
         }
     }
 
