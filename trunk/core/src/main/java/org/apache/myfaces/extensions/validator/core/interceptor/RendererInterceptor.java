@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -35,37 +38,43 @@ import java.io.IOException;
 public interface RendererInterceptor
 {
     String getInterceptorId();
+
+    Object getReturnValueOnSkipRendererDelegationException(
+        SkipRendererDelegationException skipRendererDelegationException, Object currentReturnValue);
+
     /*
      * before
      */
-    void beforeDecode(FacesContext facesContext, UIComponent uiComponent, Renderer renderer);
+    void beforeDecode(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
+        throws SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
-        throws IOException;
+        throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     void beforeEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
-        throws IOException;
+        throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     void beforeEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
-        throws IOException;
+        throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer renderer)
-        throws ConverterException;
+        throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     /*
      * after
      */
-    void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer renderer);
+    void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
+        throws SkipAfterInterceptorsException;
 
     void afterEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
-        throws IOException;
+        throws IOException, SkipAfterInterceptorsException;
 
     void afterEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
-        throws IOException;
+        throws IOException, SkipAfterInterceptorsException;
 
     void afterEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
-        throws IOException;
+        throws IOException, SkipAfterInterceptorsException;
 
     void afterGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer renderer)
-        throws ConverterException;
+        throws ConverterException, SkipAfterInterceptorsException;
 }
