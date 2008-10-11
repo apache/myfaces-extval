@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.lang.annotation.Annotation;
-
 /**
  * It's an alternative Mapper to place Annotations and ValidationStrategies in the same package.
  *
@@ -35,9 +33,9 @@ import java.lang.annotation.Annotation;
 public class SimpleAnnotationToValidationStrategyNameMapper extends
     AbstractAnnotationToValidationStrategyNameMapper
 {
-    public String createName(Annotation annotation)
+    public String createName(String metaDataKey)
     {
-        return annotation.annotationType().getName() +
+        return metaDataKey +
             ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.VALIDATION_STRATEGY_POSTFIX);
     }
 }

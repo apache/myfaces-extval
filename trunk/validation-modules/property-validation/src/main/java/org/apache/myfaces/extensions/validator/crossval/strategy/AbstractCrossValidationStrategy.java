@@ -18,8 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
@@ -33,28 +34,28 @@ import javax.faces.validator.ValidatorException;
  * @author Gerhard Petracek
  */
 public abstract class AbstractCrossValidationStrategy extends
-        AbstractValidationStrategy implements CrossValidationStrategy
+    AbstractAnnotationValidationStrategy implements CrossValidationStrategy
 {
 
     //init cross-validation
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
         CrossValidationStorageEntry entry = getCrossValidationStorageEntry(
-                facesContext, uiComponent, annotationEntry, convertedObject);
+                facesContext, uiComponent, metaDataEntry, convertedObject);
 
         CrossValidationUtils.getOrInitCrossValidationStorage().add(entry);
     }
 
     public CrossValidationStorageEntry getCrossValidationStorageEntry(
             FacesContext facesContext, UIComponent uiComponent,
-            AnnotationEntry annotationEntry, Object convertedObject)
+            MetaDataEntry metaDataEntry, Object convertedObject)
     {
         CrossValidationStorageEntry entry = new CrossValidationStorageEntry();
 
-        entry.setAnnotationEntry(annotationEntry);
-        String vbe = annotationEntry.getValueBindingExpression();
+        entry.setAnnotationEntry(metaDataEntry);
+        String vbe = metaDataEntry.getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class);
         entry.setBean(ExtValUtils.getELHelper().getBaseObject(new ValueBindingExpression(vbe)));
         entry.setComponent(uiComponent);
         entry.setConvertedObject(convertedObject);

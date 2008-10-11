@@ -20,12 +20,11 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.LongRange;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -33,15 +32,15 @@ import java.lang.annotation.Annotation;
  */
 public class LongRangeMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
+    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        Annotation annotation = annotationEntry.getAnnotation();
+        LongRange annotation = metaDataEntry.getValue(LongRange.class);
 
-        long minimum = ((LongRange)annotation).minimum();
+        long minimum = annotation.minimum();
 
         results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
-        results.put(CommonMetaDataKeys.RANGE_MAX, ((LongRange)annotation).maximum());
+        results.put(CommonMetaDataKeys.RANGE_MAX, annotation.maximum());
 
         if(minimum > 0)
         {

@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.factory;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.DefaultComponentAnnotationExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
@@ -73,8 +73,8 @@ public class DefaultFactoryFinder implements FactoryFinder
         Object factory = null;
         switch (factoryName)
         {
-            case COMPONENT_ANNOTATION_EXTRACTOR_FACTORY:
-                factory = createComponentAnnotationExtractorFactory();
+            case COMPONENT_META_DATA_EXTRACTOR_FACTORY:
+                factory = createComponentMetaDataExtractorFactory();
                 break;
 
             case VALIDATION_STRATEGY_FACTORY:
@@ -111,19 +111,19 @@ public class DefaultFactoryFinder implements FactoryFinder
         factoryMap.put(factoryName, factory);
     }
 
-    protected Object createComponentAnnotationExtractorFactory()
+    protected Object createComponentMetaDataExtractorFactory()
     {
         Object factory = null;
 
-        List<String> annotationExtractorFactoryClassNames = new ArrayList<String>();
+        List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
 
-        annotationExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY);
-        annotationExtractorFactoryClassNames
+        metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY);
+        metaDataExtractorFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
-                .get(CustomInfo.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY));
-        annotationExtractorFactoryClassNames.add(DefaultComponentAnnotationExtractorFactory.class.getName());
+                .get(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY));
+        metaDataExtractorFactoryClassNames.add(DefaultComponentMetaDataExtractorFactory.class.getName());
 
-        for (String className : annotationExtractorFactoryClassNames)
+        for (String className : metaDataExtractorFactoryClassNames)
         {
             factory = ClassUtils.tryToInstantiateClassForName(className);
 

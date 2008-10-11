@@ -16,23 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.factory;
+package org.apache.myfaces.extensions.validator.core.metadata;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.API})
-public enum FactoryNames
+@UsageInformation(UsageCategory.INTERNAL)
+public interface PropertySourceInformationKeys
 {
-    COMPONENT_META_DATA_EXTRACTOR_FACTORY,
-    VALIDATION_STRATEGY_FACTORY,
-    MESSAGE_RESOLVER_FACTORY,
-    META_DATA_TRANSFORMER_FACTORY,
-    COMPONENT_INITIALIZER_FACTORY,
-    RENDERKIT_WRAPPER_FACTORY,
-    EL_HELPER_FACTORY
+    static final String VALUE_BINDING_EXPRESSION = "value_binding_expression";
 }

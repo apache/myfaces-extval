@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -29,7 +29,6 @@ import javax.faces.context.FacesContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -37,17 +36,18 @@ import java.lang.annotation.Annotation;
  */
 public class PatternMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
+    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        Annotation annotation = annotationEntry.getAnnotation();
+        Pattern annotation = metaDataEntry.getValue(Pattern.class);
         
-        results.put(CommonMetaDataKeys.PATTERN, ((Pattern)annotation).value());
+        results.put(CommonMetaDataKeys.PATTERN, (annotation).value());
 
-        String validationErrorMsgKey = ((Pattern)annotation).validationErrorMsgKey();
+        String validationErrorMsgKey = (annotation).validationErrorMsgKey();
         Locale currentLocale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
-        ValidationStrategy validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(annotation);
+        ValidationStrategy validationStrategy =
+            ExtValUtils.getValidationStrategyForMetaData(annotation.annotationType().getName());
 
         String validationErrorMsg = ExtValUtils.getMessageResolverForValidationStrategy(validationStrategy)
             .getMessage(validationErrorMsgKey, currentLocale);

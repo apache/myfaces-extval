@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -48,23 +48,23 @@ public class BeanMetaDataTransformerAdapterImpl extends AbstractMetaDataTransfor
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
 
-    public Map<String, Object> convert(AnnotationEntry annotationEntry)
+    public Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
         {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).convert(annotationEntry);
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).convert(metaDataEntry);
         }
-        return this.metaDataTransformer.convertMetaData(annotationEntry);
+        return this.metaDataTransformer.convertMetaData(metaDataEntry);
     }
 
     @Override
-    protected String getSkipExpression(AnnotationEntry annotation)
+    protected String getSkipExpression(MetaDataEntry metaData)
     {
         if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
         {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).getSkipExpression(annotation);
+            return ((AbstractMetaDataTransformer)this.metaDataTransformer).getSkipExpression(metaData);
         }
-        return super.getSkipExpression(annotation);
+        return super.getSkipExpression(metaData);
     }
 
     @Override

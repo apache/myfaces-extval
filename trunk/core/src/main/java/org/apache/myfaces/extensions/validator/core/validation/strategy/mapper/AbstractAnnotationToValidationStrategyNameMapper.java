@@ -24,14 +24,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.lang.annotation.Annotation;
-
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractAnnotationToValidationStrategyNameMapper implements NameMapper<Annotation>
+public abstract class AbstractAnnotationToValidationStrategyNameMapper implements NameMapper<String>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 

@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.lang.annotation.Annotation;
-
 /**
  * Name Mapper which delegates the name mapping, extract the name and convert it to a bean name + prefix
  * target: configure a validation strategy via a managed bean facility -> allows to inject other beans
@@ -42,14 +40,14 @@ public class AnnotationToValidationStrategyBeanNameMapper extends
     AbstractAnnotationToValidationStrategyNameMapper
 {
     public static final String PREFIX_FOR_BEAN_MAPPING = "bean:";
-    private NameMapper<Annotation> wrapped;
+    private NameMapper<String> wrapped;
 
-    public AnnotationToValidationStrategyBeanNameMapper(NameMapper<Annotation> nameMapper)
+    public AnnotationToValidationStrategyBeanNameMapper(NameMapper<String> nameMapper)
     {
         this.wrapped = nameMapper;
     }
 
-    public String createName(Annotation source)
+    public String createName(String source)
     {
         String name = wrapped.createName(source);
 
