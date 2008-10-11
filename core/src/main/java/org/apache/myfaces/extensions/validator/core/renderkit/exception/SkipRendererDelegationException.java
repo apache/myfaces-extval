@@ -30,6 +30,10 @@ public class SkipRendererDelegationException extends Exception
     protected Object information;
     boolean skipOtherInterceptors = false;
 
+    public SkipRendererDelegationException()
+    {
+    }
+
     public SkipRendererDelegationException(boolean skipOtherInterceptors)
     {
         this.skipOtherInterceptors = skipOtherInterceptors;
@@ -62,6 +66,6 @@ public class SkipRendererDelegationException extends Exception
         {
             return this.exceptionSource.getReturnValueOnSkipRendererDelegationException(this, currentReturnValue);
         }
-        return null;
+        return currentReturnValue;
     }
 }
