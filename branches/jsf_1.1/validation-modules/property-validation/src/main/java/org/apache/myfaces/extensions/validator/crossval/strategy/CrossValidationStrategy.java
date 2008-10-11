@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
@@ -37,7 +37,7 @@ public interface CrossValidationStrategy extends ValidationStrategy
 {
     CrossValidationStorageEntry getCrossValidationStorageEntry(
             FacesContext facesContext, UIComponent uiComponent,
-            AnnotationEntry annotationEntry, Object convertedObject);
+            MetaDataEntry metaDataEntry, Object convertedObject);
 
     void processCrossValidation(
             CrossValidationStorageEntry crossValidationStorageEntry,

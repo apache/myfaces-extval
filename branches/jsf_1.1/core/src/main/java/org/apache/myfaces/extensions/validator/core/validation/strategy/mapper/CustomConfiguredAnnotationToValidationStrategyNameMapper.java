@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMap
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.lang.annotation.Annotation;
-
 /**
  * To provide a custom NameMapper to map Annotations to ValidationStrategies.
  * (configured via web.xml)
@@ -34,7 +32,7 @@ import java.lang.annotation.Annotation;
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
-    AbstractCustomNameMapper<Annotation>
+    AbstractCustomNameMapper<String>
 {
     protected String getCustomNameMapperClassName()
     {

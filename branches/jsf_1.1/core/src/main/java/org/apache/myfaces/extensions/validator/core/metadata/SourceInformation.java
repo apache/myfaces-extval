@@ -16,28 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractAnnotationToValidationStrategyNameMapper implements NameMapper<String>
+@UsageInformation(UsageCategory.API)
+public interface SourceInformation
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    boolean containsProperty(String key);
+    Object getProperty(String key);
+    <T> T getProperty(String key, Class<T> targetClass);
+    void setProperty(String key, Object value);
 
-    public AbstractAnnotationToValidationStrategyNameMapper()
-    {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
-    }
+    MetaDataEntry[] getMetaDataEntries();
+    void addMetaDataEntry(MetaDataEntry metaDataEntry);
 }

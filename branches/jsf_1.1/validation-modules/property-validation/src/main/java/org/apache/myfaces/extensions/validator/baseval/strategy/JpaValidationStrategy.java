@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 
@@ -36,7 +36,7 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class JpaValidationStrategy extends AbstractValidationStrategy
+public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
 {
 
     private static final String VALIDATE_LENGTH = "length";
@@ -45,10 +45,10 @@ public class JpaValidationStrategy extends AbstractValidationStrategy
     private int maxLength;
 
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
-        Annotation annotation = annotationEntry.getAnnotation();
+        Annotation annotation = metaDataEntry.getValue(Annotation.class);
         if (annotation instanceof Column)
         {
             validateColumnAnnotation((Column) annotation, convertedObject);

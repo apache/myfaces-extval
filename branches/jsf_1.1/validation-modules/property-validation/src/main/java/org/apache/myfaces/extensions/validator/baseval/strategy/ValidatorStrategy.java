@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
@@ -34,12 +34,11 @@ public class ValidatorStrategy extends AbstractValidatorAdapter
 {
 
     protected void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
 
-        Class[] validatorClasses = annotationEntry.getAnnotation(
-                Validator.class).value();
+        Class[] validatorClasses = metaDataEntry.getValue(Validator.class).value();
 
         javax.faces.validator.Validator validator;
         for (Class validatorClassName : validatorClasses)

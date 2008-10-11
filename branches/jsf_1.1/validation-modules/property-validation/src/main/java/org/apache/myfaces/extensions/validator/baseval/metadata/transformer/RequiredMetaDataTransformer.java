@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class RequiredMetaDataTransformer extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
+    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
@@ -42,9 +42,9 @@ public class RequiredMetaDataTransformer extends AbstractMetaDataTransformer
     }
 
     @Override
-    protected String getSkipExpression(AnnotationEntry annotationEntry)
+    protected String getSkipExpression(MetaDataEntry metaDataEntry)
     {
-        return ((Required)(annotationEntry).getAnnotation()).skipValidation();
+        return metaDataEntry.getValue(Required.class).skipValidation();
     }
 
     //returns the key of the skiped meta-data e.g.

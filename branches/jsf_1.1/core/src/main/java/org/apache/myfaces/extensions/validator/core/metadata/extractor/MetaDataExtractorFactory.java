@@ -16,28 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
+ * The interface for all factories which create annotation extractors
+ * 
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractAnnotationToValidationStrategyNameMapper implements NameMapper<String>
+@UsageInformation(UsageCategory.API)
+public interface MetaDataExtractorFactory
 {
-    protected final Log logger = LogFactory.getLog(getClass());
-
-    public AbstractAnnotationToValidationStrategyNameMapper()
-    {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
-    }
+    MetaDataExtractor create();
 }

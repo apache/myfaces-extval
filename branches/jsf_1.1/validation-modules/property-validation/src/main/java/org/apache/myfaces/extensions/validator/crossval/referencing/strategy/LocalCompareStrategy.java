@@ -25,11 +25,13 @@ import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompare
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import java.lang.annotation.Annotation;
 
 /**
  * "[property_name]" ... local validation -> cross-component, but no cross-entity validation
@@ -75,7 +77,8 @@ public class LocalCompareStrategy implements ReferencingStrategy
                                                         String validationTarget)
     {
         ValueBindingExpression baseExpression =
-            new ValueBindingExpression(crossValidationStorageEntry.getAnnotationEntry().getValueBindingExpression());
+            new ValueBindingExpression(crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class));
         return ValueBindingExpression.replaceOrAddProperty(baseExpression, validationTarget).getExpressionString();
     }
 
@@ -118,7 +121,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
         if (compareStrategy.isViolation(crossValidationStorageEntry
                 .getConvertedObject(), validationTargetEntry
                 .getConvertedValue(), crossValidationStorageEntry
-                .getAnnotationEntry().getAnnotation()))
+                .getMetaDataEntry().getValue(Annotation.class)))
         {
 
             CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
