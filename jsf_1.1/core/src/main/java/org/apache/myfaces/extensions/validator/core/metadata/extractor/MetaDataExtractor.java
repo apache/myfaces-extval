@@ -25,8 +25,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import javax.faces.context.FacesContext;
 
 /**
- * An annotation extractor is responsible to analyze an object
- * and returns all available annotations
+ * An meta-data extractor is responsible to analyze an object
+ * and returns all available meta-data information
  * 
  * @author Gerhard Petracek
  * @since 1.x.1

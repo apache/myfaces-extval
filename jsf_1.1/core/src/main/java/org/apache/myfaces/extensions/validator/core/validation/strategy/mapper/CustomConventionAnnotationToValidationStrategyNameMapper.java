@@ -40,6 +40,6 @@ public class CustomConventionAnnotationToValidationStrategyNameMapper extends
     protected String getCustomNameMapperClassName()
     {
         return ExtValContext.getContext().getInformationProviderBean()
-            .get(CustomInfo.ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER);
+            .get(CustomInfo.META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER);
     }
 }

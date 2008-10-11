@@ -54,7 +54,7 @@ import java.util.MissingResourceException;
 
 
 /**
- * Factory which creates the ValidationStrategy for a given annotation
+ * Factory which creates the ValidationStrategy for a given Meta-Data Key
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -65,7 +65,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private static Map<String, String> annotationStrategyMapping = null;
+    private static Map<String, String> metaDataKeyToValidationStrategyMapping = null;
     private static List<NameMapper<String>> metaDataKeyToValidationStrategyNameMapperList =
         new ArrayList<NameMapper<String>>();
 
@@ -102,14 +102,14 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
 
     public ValidationStrategy create(String metaDataKey)
     {
-        if (annotationStrategyMapping == null)
+        if (metaDataKeyToValidationStrategyMapping == null)
         {
             initStaticMappings();
         }
 
-        if (annotationStrategyMapping.containsKey(metaDataKey))
+        if (metaDataKeyToValidationStrategyMapping.containsKey(metaDataKey))
         {
-            return getValidationStrategyInstance(annotationStrategyMapping.get(metaDataKey));
+            return getValidationStrategyInstance(metaDataKeyToValidationStrategyMapping.get(metaDataKey));
         }
 
         ValidationStrategy validationStrategy;
@@ -135,8 +135,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
         return null;
     }
 
-    private ValidationStrategy getValidationStrategyInstance(
-        String validationStrategyName)
+    private ValidationStrategy getValidationStrategyInstance(String validationStrategyName)
     {
         if (validationStrategyName
             .startsWith(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING))
@@ -146,23 +145,22 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
         }
         else
         {
-            return (ValidationStrategy) ClassUtils
-                .tryToInstantiateClassForName(validationStrategyName);
+            return (ValidationStrategy) ClassUtils.tryToInstantiateClassForName(validationStrategyName);
         }
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    private void addMapping(String annotationName, String validationStrategyName)
+    private void addMapping(String metaDataKey, String validationStrategyName)
     {
         if(logger.isTraceEnabled())
         {
-            logger.trace("adding annotation to validation strategy mapping: "
-                + annotationName + " -> " + validationStrategyName);
+            logger.trace("adding meta-data key to validation strategy mapping: "
+                + metaDataKey + " -> " + validationStrategyName);
         }
 
         synchronized (DefaultValidationStrategyFactory.class)
         {
-            annotationStrategyMapping.put(annotationName, validationStrategyName);
+            metaDataKeyToValidationStrategyMapping.put(metaDataKey, validationStrategyName);
         }
     }
 
@@ -171,12 +169,12 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
     {
         synchronized (DefaultValidationStrategyFactory.class)
         {
-            annotationStrategyMapping = new HashMap<String, String>();
+            metaDataKeyToValidationStrategyMapping = new HashMap<String, String>();
 
             //setup internal static mappings
             for (StaticMappingConfigLoader<String, String> staticMappingConfigLoader :
                 ExtValContext.getContext().getStaticMappingConfigLoaders(
-                    StaticMappingConfigLoaderNames.ANNOTATION_TO_VALIDATION_STRATEGY_CONFIG_LOADER))
+                    StaticMappingConfigLoaderNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG_LOADER))
             {
                 setupStrategyMappings(staticMappingConfigLoader.getMapping());
             }

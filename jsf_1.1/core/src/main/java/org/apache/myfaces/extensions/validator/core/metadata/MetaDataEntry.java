@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Data holder which stores the annotation and some information where the annotation was around.
+ * Data holder which stores the meta-data and some information where the meta-data was around.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
