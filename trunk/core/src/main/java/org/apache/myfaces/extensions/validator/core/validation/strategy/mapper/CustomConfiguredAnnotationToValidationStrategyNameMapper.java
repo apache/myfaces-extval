@@ -36,6 +36,6 @@ public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
 {
     protected String getCustomNameMapperClassName()
     {
-        return WebXmlParameter.CUSTOM_ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER;
+        return WebXmlParameter.CUSTOM_META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER;
     }
 }
