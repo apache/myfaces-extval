@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import java.lang.annotation.Annotation;
 
 /**
  * referencing validation targets - possible formats:
@@ -68,7 +69,7 @@ public class ELCompareStrategy implements ReferencingStrategy
         if (compareStrategy.isViolation(crossValidationStorageEntry
                 .getConvertedObject(), ExtValUtils.getELHelper().getValueOfExpression(
                 facesContext, validationTarget), crossValidationStorageEntry
-                .getAnnotationEntry().getAnnotation()))
+                .getMetaDataEntry().getValue(Annotation.class)))
         {
 
             ProcessedInformationEntry validationTargetEntry;

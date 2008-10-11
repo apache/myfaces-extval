@@ -20,14 +20,13 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -35,12 +34,12 @@ import java.lang.annotation.Annotation;
  */
 public class ValidatorMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
+    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        Annotation annotation = annotationEntry.getAnnotation();
+        Validator annotation = metaDataEntry.getValue(Validator.class);
 
-        Class[] validators = ((Validator)annotation).value();
+        Class[] validators = annotation.value();
 
         List<String> value = new ArrayList<String>();
 

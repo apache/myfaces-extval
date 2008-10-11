@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation({UsageCategory.API})
 public enum FactoryNames
 {
-    COMPONENT_ANNOTATION_EXTRACTOR_FACTORY,
+    COMPONENT_META_DATA_EXTRACTOR_FACTORY,
     VALIDATION_STRATEGY_FACTORY,
     MESSAGE_RESOLVER_FACTORY,
     META_DATA_TRANSFORMER_FACTORY,

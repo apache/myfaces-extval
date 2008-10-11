@@ -26,8 +26,8 @@ import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
@@ -35,7 +35,6 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.Map;
-import java.lang.annotation.Annotation;
 
 
 /**
@@ -44,12 +43,12 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
-    public static ValidationStrategy getValidationStrategyForAnnotation(Annotation annotation)
+    public static ValidationStrategy getValidationStrategyForMetaData(String metaDataKey)
     {
-        return ((ClassMappingFactory<Annotation, ValidationStrategy>) ExtValContext.getContext()
+        return ((ClassMappingFactory<Object, ValidationStrategy>) ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
-                .create(annotation);
+                .create(metaDataKey);
     }
 
     public static MetaDataTransformer getMetaDataTransformerForValidationStrategy(ValidationStrategy validationStrategy)
@@ -60,10 +59,10 @@ public class ExtValUtils
                     .create(validationStrategy);
     }
 
-    public static AnnotationExtractor getAnnotationExtractor()
+    public static MetaDataExtractor getAnnotationExtractor()
     {
             return ExtValContext.getContext().getFactoryFinder()
-                .getFactory(FactoryNames.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY, AnnotationExtractorFactory.class)
+                .getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, MetaDataExtractorFactory.class)
                 .create();
     }
 

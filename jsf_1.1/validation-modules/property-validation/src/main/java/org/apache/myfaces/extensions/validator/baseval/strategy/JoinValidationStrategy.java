@@ -19,9 +19,10 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation;
-import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningAnnotationExtractor;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
+import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningMetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -37,22 +38,22 @@ import javax.faces.validator.ValidatorException;
 public class JoinValidationStrategy extends AbstractValidatorAdapter
 {
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
-        AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
+        MetaDataExtractor extractor = new DefaultPropertyScanningMetaDataExtractor();
 
-        String[] targetExpressions = annotationEntry.getAnnotation(JoinValidation.class).value();
+        String[] targetExpressions = metaDataEntry.getValue(JoinValidation.class).value();
 
         ValidationStrategy validationStrategy;
 
         for (String targetExpression : targetExpressions)
         {
-            targetExpression = createValidBinding(annotationEntry, targetExpression);
+            targetExpression = createValidBinding(metaDataEntry, targetExpression);
 
-            for (AnnotationEntry entry : extractor.extractAnnotations(facesContext, targetExpression))
+            for (MetaDataEntry entry : extractor.extract(facesContext, targetExpression).getMetaDataEntries())
             {
-                validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
+                validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
                 if (validationStrategy != null)
                 {
@@ -62,22 +63,22 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
                 {
                     if(logger.isTraceEnabled())
                     {
-                        logger.trace("no validation strategy found for "
-                            + entry.getAnnotation().annotationType().getName());
+                        logger.trace("no validation strategy found for " + entry.getValue());
                     }
                 }
             }
         }
     }
 
-    private String createValidBinding(AnnotationEntry annotationEntry, String targetExpression)
+    private String createValidBinding(MetaDataEntry metaDataEntry, String targetExpression)
     {
         if(ExtValUtils.getELHelper().isELTerm(targetExpression))
         {
             return targetExpression;
         }
 
-        ValueBindingExpression baseExpression = new ValueBindingExpression(annotationEntry.getValueBindingExpression());
+        ValueBindingExpression baseExpression = new ValueBindingExpression(
+            metaDataEntry.getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class));
         return ValueBindingExpression.replaceOrAddProperty(baseExpression, targetExpression).getExpressionString();
     }
 }

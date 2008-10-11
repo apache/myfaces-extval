@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -32,19 +32,17 @@ import java.util.Collection;
 /**
  * @author Gerhard Petracek
  */
-public class RequiredStrategy extends AbstractValidationStrategy
+public class RequiredStrategy extends AbstractAnnotationValidationStrategy
 {
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
         if (convertedObject == null || convertedObject.equals("") ||
                 (convertedObject instanceof Collection && ((Collection)convertedObject).isEmpty()) ||
                 (convertedObject instanceof Map && ((Map)convertedObject).isEmpty()))
         {
-            throw new ValidatorException(
-                    getValidationErrorFacesMassage(annotationEntry
-                            .getAnnotation()));
+            throw new ValidatorException(getValidationErrorFacesMassage(metaDataEntry.getValue(Annotation.class)));
         }
     }
 
@@ -54,8 +52,8 @@ public class RequiredStrategy extends AbstractValidationStrategy
     }
 
     @Override
-    protected String getSkipExpression(Annotation annotation)
+    protected String getSkipExpression(Object metaData)
     {
-        return ((Required)annotation).skipValidation();
+        return ((Required)metaData).skipValidation();
     }
 }

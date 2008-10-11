@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.BeanMetaDataTransformerAdapter;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -59,10 +59,10 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
 
     public void validate(FacesContext facesContext,
                          UIComponent uiComponent,
-                         AnnotationEntry annotationEntry,
+                         MetaDataEntry metaDataEntry,
                          Object convertedObject)
     {
-        this.validationStrategy.validate(facesContext, uiComponent, annotationEntry, convertedObject);
+        this.validationStrategy.validate(facesContext, uiComponent, metaDataEntry, convertedObject);
     }
 
     public String getValidationStrategyClassName()

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -30,7 +30,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
-import java.lang.annotation.Annotation;
 
 /**
  * Provides the ability to use ValidatorException (as expected by the user) instead of ConverterException.
@@ -58,14 +57,14 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
     }
 
     public void validate(FacesContext facesContext, UIComponent uiComponent,
-                         AnnotationEntry annotationEntry, Object convertedObject)
+                         MetaDataEntry metaDataEntry, Object convertedObject)
     {
         if(logger.isTraceEnabled())
         {
             logger.trace("start initValidation of " + getClass().getName());
         }
 
-        if(skipValidation(facesContext, uiComponent, annotationEntry, convertedObject))
+        if(skipValidation(facesContext, uiComponent, metaDataEntry, convertedObject))
         {
             if(logger.isTraceEnabled())
             {
@@ -74,7 +73,7 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
             return;
         }
 
-        initValidation(facesContext, uiComponent, annotationEntry, convertedObject);
+        initValidation(facesContext, uiComponent, metaDataEntry, convertedObject);
 
         if(logger.isTraceEnabled())
         {
@@ -88,7 +87,7 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                 logger.trace("start processValidation of " + getClass().getName());
             }
 
-            processValidation(facesContext, uiComponent, annotationEntry, convertedObject);
+            processValidation(facesContext, uiComponent, metaDataEntry, convertedObject);
 
             if(logger.isTraceEnabled())
             {
@@ -103,7 +102,7 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
             }
 
             if (processAfterValidatorException(facesContext, uiComponent,
-                annotationEntry, convertedObject, e))
+                metaDataEntry, convertedObject, e))
             {
                 if(logger.isTraceEnabled())
                 {
@@ -123,9 +122,9 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
     }
 
     protected boolean skipValidation(FacesContext facesContext, UIComponent uiComponent,
-                                     AnnotationEntry annotationEntry, Object convertedObject)
+                                     MetaDataEntry metaDataEntry, Object convertedObject)
     {
-        String expression = getSkipExpression(annotationEntry.getAnnotation());
+        String expression = getSkipExpression(metaDataEntry.getValue());
 
         //just for a better performance for "none-skipable" strategies
         if(DO_NOT_SKIP.equals(expression))
@@ -144,14 +143,14 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
         return result;
     }
 
-    protected String getSkipExpression(Annotation annotation)
+    protected String getSkipExpression(Object metaData)
     {
         return DO_NOT_SKIP;
     }
 
     protected void initValidation(FacesContext facesContext,
                                   UIComponent uiComponent,
-                                  AnnotationEntry annotationEntry,
+                                  MetaDataEntry metaDataEntry,
                                   Object convertedObject)
     {
         //override if needed
@@ -159,13 +158,13 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
 
     //override if needed
     protected boolean processAfterValidatorException(FacesContext facesContext,
-                                                     UIComponent uiComponent, AnnotationEntry annotationEntry,
+                                                     UIComponent uiComponent, MetaDataEntry metaDataEntry,
                                                      Object convertedObject, ValidatorException e)
     {
         return true;
     }
 
     protected abstract void processValidation(FacesContext facesContext,
-                                              UIComponent uiComponent, AnnotationEntry annotationEntry,
+                                              UIComponent uiComponent, MetaDataEntry metaDataEntry,
                                               Object convertedObject) throws ValidatorException;
 }
