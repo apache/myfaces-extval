@@ -59,7 +59,7 @@ public class ExtValUtils
                     .create(validationStrategy);
     }
 
-    public static MetaDataExtractor getAnnotationExtractor()
+    public static MetaDataExtractor getMetaDataExtractor()
     {
             return ExtValContext.getContext().getFactoryFinder()
                 .getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, MetaDataExtractorFactory.class)

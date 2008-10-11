@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * The interface for all factories which create annotation extractors
+ * The interface for all factories which create meta-data extractors
  * 
  * @author Gerhard Petracek
  * @since 1.x.1

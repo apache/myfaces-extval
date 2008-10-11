@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation({UsageCategory.API})
 public enum StaticMappingConfigLoaderNames
 {
-    ANNOTATION_TO_VALIDATION_STRATEGY_CONFIG_LOADER,
+    META_DATA_TO_VALIDATION_STRATEGY_CONFIG_LOADER,
     VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG_LOADER,
     VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG_LOADER
 }

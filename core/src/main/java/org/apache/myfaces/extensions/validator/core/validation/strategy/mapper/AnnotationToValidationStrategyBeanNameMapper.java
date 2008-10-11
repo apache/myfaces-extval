@@ -36,8 +36,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class AnnotationToValidationStrategyBeanNameMapper extends
-    AbstractAnnotationToValidationStrategyNameMapper
+public class AnnotationToValidationStrategyBeanNameMapper extends AbstractAnnotationToValidationStrategyNameMapper
 {
     public static final String PREFIX_FOR_BEAN_MAPPING = "bean:";
     private NameMapper<String> wrapped;

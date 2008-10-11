@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
@@ -54,7 +54,7 @@ public abstract class AbstractCrossValidationStrategy extends
     {
         CrossValidationStorageEntry entry = new CrossValidationStorageEntry();
 
-        entry.setAnnotationEntry(metaDataEntry);
+        entry.setMetaDataEntry(metaDataEntry);
         String vbe = metaDataEntry.getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class);
         entry.setBean(ExtValUtils.getELHelper().getBaseObject(new ValueBindingExpression(vbe)));
         entry.setComponent(uiComponent);
