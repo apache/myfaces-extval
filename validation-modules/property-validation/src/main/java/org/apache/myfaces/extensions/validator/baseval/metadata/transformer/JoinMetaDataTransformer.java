@@ -19,9 +19,10 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation;
-import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningAnnotationExtractor;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.annotation.extractor.AnnotationExtractor;
+import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningMetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
@@ -38,11 +39,11 @@ import java.util.Map;
  */
 public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
+    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
-        AnnotationExtractor extractor = new DefaultPropertyScanningAnnotationExtractor();
+        MetaDataExtractor extractor = new DefaultPropertyScanningMetaDataExtractor();
 
-        String[] targetExpressions = ((JoinValidation)(annotationEntry).getAnnotation()).value();
+        String[] targetExpressions = metaDataEntry.getValue(JoinValidation.class).value();
 
         ValidationStrategy validationStrategy;
         MetaDataTransformer metaDataTransformer;
@@ -51,12 +52,12 @@ public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
 
         for (String targetExpression : targetExpressions)
         {
-            targetExpression = createValidBinding(annotationEntry, targetExpression);
+            targetExpression = createValidBinding(metaDataEntry, targetExpression);
 
-            for (AnnotationEntry entry : extractor
-                                            .extractAnnotations(FacesContext.getCurrentInstance(), targetExpression))
+            for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
+                                                                    targetExpression).getMetaDataEntries())
             {
-                validationStrategy = ExtValUtils.getValidationStrategyForAnnotation(entry.getAnnotation());
+                validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
                 metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 
@@ -69,14 +70,15 @@ public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
         return results;
     }
 
-    private String createValidBinding(AnnotationEntry annotationEntry, String targetExpression)
+    private String createValidBinding(MetaDataEntry metaDataEntry, String targetExpression)
     {
         if(ExtValUtils.getELHelper().isELTerm(targetExpression))
         {
             return targetExpression;
         }
         
-        ValueBindingExpression baseExpression = new ValueBindingExpression(annotationEntry.getValueBindingExpression());
+        ValueBindingExpression baseExpression = new ValueBindingExpression(
+            metaDataEntry.getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class));
         return ValueBindingExpression.replaceOrAddProperty(baseExpression, targetExpression).getExpressionString();
     }
 }

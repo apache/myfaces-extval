@@ -76,7 +76,7 @@ public class InformationProviderBean
 
         customizableInfos.put(CustomInfo.BASE_PACKAGE, basePackage);
 
-        customizableInfos.put(CustomInfo.COMPONENT_ANNOTATION_EXTRACTOR, "ComponentAnnotationExtractor");
+        customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR, "ComponentMetaDataExtractor");
 
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_POSTFIX, "ValidationStrategy");
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_POSTFIX, "MetaDataTransformer");
@@ -96,7 +96,7 @@ public class InformationProviderBean
         customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
         customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER_FACTORY, "ComponentInitializerFactory");
-        customizableInfos.put(CustomInfo.COMPONENT_ANNOTATION_EXTRACTOR_FACTORY, "ComponentAnnotationExtractorFactory");
+        customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY, "ComponentAnnotationExtractorFactory");
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
 
         //conventions (the rest of the conventions are built with the help of name mappers,...

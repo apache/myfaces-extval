@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 
 import javax.faces.component.UIComponent;
@@ -33,10 +33,10 @@ import javax.faces.validator.ValidatorException;
 public class LengthStrategy extends AbstractValidatorAdapter
 {
     protected void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
-        Length annotation = annotationEntry.getAnnotation(Length.class);
+        Length annotation = metaDataEntry.getValue(Length.class);
         LengthValidator lengthValidator = (LengthValidator)facesContext.getApplication()
                                             .createValidator("javax.faces.Length");
 

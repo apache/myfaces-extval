@@ -21,11 +21,10 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -33,15 +32,15 @@ import java.lang.annotation.Annotation;
  */
 public class LengthMetaDataTransformer  extends AbstractMetaDataTransformer
 {
-    protected Map<String, Object> convert(AnnotationEntry annotationEntry)
+    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        Annotation annotation = annotationEntry.getAnnotation();
+        Length annotation = metaDataEntry.getValue(Length.class);
 
-        int minimum = ((Length)annotation).minimum();
+        int minimum = annotation.minimum();
 
         results.put(CommonMetaDataKeys.MIN_LENGTH, minimum);
-        results.put(CommonMetaDataKeys.MAX_LENGTH, ((Length)annotation).maximum());
+        results.put(CommonMetaDataKeys.MAX_LENGTH, annotation.maximum());
 
         if(minimum > 0)
         {

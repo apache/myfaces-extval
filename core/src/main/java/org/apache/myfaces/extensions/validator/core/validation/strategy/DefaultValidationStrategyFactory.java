@@ -46,7 +46,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,33 +61,34 @@ import java.util.MissingResourceException;
  */
 @ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationStrategyFactory implements ClassMappingFactory<Annotation, ValidationStrategy>
+public class DefaultValidationStrategyFactory implements ClassMappingFactory<String, ValidationStrategy>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
     private static Map<String, String> annotationStrategyMapping = null;
-    private static List<NameMapper<Annotation>> nameMapperList = new ArrayList<NameMapper<Annotation>>();
+    private static List<NameMapper<String>> metaDataKeyToValidationStrategyNameMapperList =
+        new ArrayList<NameMapper<String>>();
 
     static
     {
-        nameMapperList
+        metaDataKeyToValidationStrategyNameMapperList
             .add(new CustomConfiguredAnnotationToValidationStrategyNameMapper());
-        nameMapperList
+        metaDataKeyToValidationStrategyNameMapperList
             .add(new CustomConventionAnnotationToValidationStrategyNameMapper());
-        nameMapperList
+        metaDataKeyToValidationStrategyNameMapperList
             .add(new DefaultAnnotationToValidationStrategyNameMapper());
-        nameMapperList
+        metaDataKeyToValidationStrategyNameMapperList
             .add(new SimpleAnnotationToValidationStrategyNameMapper());
 
-        nameMapperList
+        metaDataKeyToValidationStrategyNameMapperList
             .add(new AnnotationToValidationStrategyBeanNameMapper(
                 new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
-        nameMapperList
+        metaDataKeyToValidationStrategyNameMapperList
             .add(new AnnotationToValidationStrategyBeanNameMapper(
                 new CustomConventionAnnotationToValidationStrategyNameMapper()));
-        nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
+        metaDataKeyToValidationStrategyNameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
             new DefaultAnnotationToValidationStrategyNameMapper()));
-        nameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
+        metaDataKeyToValidationStrategyNameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
             new SimpleAnnotationToValidationStrategyNameMapper()));
     }
 
@@ -100,26 +100,24 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
         }
     }
 
-    public ValidationStrategy create(Annotation annotation)
+    public ValidationStrategy create(String metaDataKey)
     {
         if (annotationStrategyMapping == null)
         {
             initStaticMappings();
         }
 
-        String annotationName = annotation.annotationType().getName();
-
-        if (annotationStrategyMapping.containsKey(annotationName))
+        if (annotationStrategyMapping.containsKey(metaDataKey))
         {
-            return getValidationStrategyInstance(annotationStrategyMapping.get(annotationName));
+            return getValidationStrategyInstance(annotationStrategyMapping.get(metaDataKey));
         }
 
         ValidationStrategy validationStrategy;
         String strategyName;
         //null -> use name mappers
-        for (NameMapper<Annotation> nameMapper : nameMapperList)
+        for (NameMapper<String> nameMapper : metaDataKeyToValidationStrategyNameMapperList)
         {
-            strategyName = nameMapper.createName(annotation);
+            strategyName = nameMapper.createName(metaDataKey);
 
             if (strategyName == null)
             {
@@ -130,11 +128,10 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Ann
 
             if (validationStrategy != null)
             {
-                addMapping(annotationName, strategyName);
+                addMapping(metaDataKey, strategyName);
                 return validationStrategy;
             }
         }
-
         return null;
     }
 
