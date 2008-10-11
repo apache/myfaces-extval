@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval;
 
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.CrossValidationStrategy;
 
 import javax.faces.component.UIComponent;
@@ -28,21 +28,21 @@ import javax.faces.component.UIComponent;
  */
 public class CrossValidationStorageEntry
 {
-    private AnnotationEntry annotationEntry;
+    private MetaDataEntry metaDataEntry;
     //for complex components (e.g. a table) stores the object of entry (#{entry.property})
     private Object bean;
     private UIComponent component;
     private Object convertedObject;
     private CrossValidationStrategy validationStrategy;
 
-    public AnnotationEntry getAnnotationEntry()
+    public MetaDataEntry getMetaDataEntry()
     {
-        return annotationEntry;
+        return metaDataEntry;
     }
 
-    public void setAnnotationEntry(AnnotationEntry annotationEntry)
+    public void setAnnotationEntry(MetaDataEntry metaDataEntry)
     {
-        this.annotationEntry = annotationEntry;
+        this.metaDataEntry = metaDataEntry;
     }
 
     public Object getBean()

@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.DoubleRange;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 
 import javax.faces.component.UIComponent;
@@ -34,19 +34,17 @@ public class DoubleRangeStrategy extends AbstractValidatorAdapter
 {
 
     protected void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
 
-        DoubleRange annotation = annotationEntry
-                .getAnnotation(DoubleRange.class);
+        DoubleRange annotation = metaDataEntry.getValue(DoubleRange.class);
         DoubleRangeValidator doubleRangeValidator = (DoubleRangeValidator)facesContext.getApplication()
                                                         .createValidator("javax.faces.DoubleRange");
 
         doubleRangeValidator.setMinimum(annotation.minimum());
         doubleRangeValidator.setMaximum(annotation.maximum());
 
-        doubleRangeValidator.validate(facesContext, uiComponent,
-                convertedObject);
+        doubleRangeValidator.validate(facesContext, uiComponent, convertedObject);
     }
 }

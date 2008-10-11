@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.lang.annotation.Annotation;
-
 /**
  * Default implementation which maps ExtVal Annotations to ExtVal ValidationStrategies.
  *
@@ -34,8 +32,8 @@ import java.lang.annotation.Annotation;
 public class DefaultAnnotationToValidationStrategyNameMapper extends
     AbstractAnnotationToValidationStrategyNameMapper
 {
-    public String createName(Annotation annotation)
+    public String createName(String metaDataKey)
     {
-        return InternalConventionProvider.getValidationStrategyClassName(annotation);
+        return InternalConventionProvider.getValidationStrategyClassName(metaDataKey);
     }
 }

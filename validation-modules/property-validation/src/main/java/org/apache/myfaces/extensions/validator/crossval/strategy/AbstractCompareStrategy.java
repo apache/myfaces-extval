@@ -87,7 +87,7 @@ public abstract class AbstractCompareStrategy extends
 
         initValidation(crossValidationStorageEntry);
         String[] validationTargets = getValidationTargets(crossValidationStorageEntry
-                .getAnnotationEntry().getAnnotation());
+                .getMetaDataEntry().getValue(Annotation.class));
 
         for (String validationTarget : validationTargets)
         {
@@ -130,10 +130,8 @@ public abstract class AbstractCompareStrategy extends
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         //get validation error messages for the target component
-        String summary = getErrorMessageSummary(entryOfSource
-                .getAnnotationEntry().getAnnotation(), true);
-        String details = getErrorMessageDetails(entryOfSource
-                .getAnnotationEntry().getAnnotation(), true);
+        String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
+        String details = getErrorMessageDetails(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
 
         //validation target isn't bound to a component withing the current page 
         //(see validateFoundEntry, tryToValidateLocally and tryToValidateBindingOnly)
@@ -143,23 +141,22 @@ public abstract class AbstractCompareStrategy extends
         }
 
         FacesMessage message;
-        if (entryOfTarget.getAnnotationEntry() != null)
+        if (entryOfTarget.getMetaDataEntry() != null)
         {
             message = getTargetComponentErrorMessage(entryOfTarget
-                    .getAnnotationEntry().getAnnotation(), summary, details);
+                    .getMetaDataEntry().getValue(Annotation.class), summary, details);
         }
         else
         {
             //TODO document possible side effects
             //due to a missing target annotation (see: tryToValidateLocally)
             message = getTargetComponentErrorMessage(entryOfSource
-                    .getAnnotationEntry().getAnnotation(), summary, details);
+                    .getMetaDataEntry().getValue(Annotation.class), summary, details);
         }
 
         if (message.getSummary() != null || message.getDetail() != null)
         {
-            facesContext.addMessage(entryOfTarget.getComponent().getClientId(
-                    facesContext), message);
+            facesContext.addMessage(entryOfTarget.getComponent().getClientId(facesContext), message);
         }
     }
 
@@ -173,13 +170,11 @@ public abstract class AbstractCompareStrategy extends
         }
 
         //get validation error messages for the current component
-        String summary = getErrorMessageSummary(entryOfSource
-                .getAnnotationEntry().getAnnotation(), false);
-        String details = getErrorMessageDetails(entryOfSource
-                .getAnnotationEntry().getAnnotation(), false);
+        String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
+        String details = getErrorMessageDetails(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
 
-        FacesMessage message = getSourceComponentErrorMessage(entryOfSource
-                .getAnnotationEntry().getAnnotation(), summary, details);
+        FacesMessage message = getSourceComponentErrorMessage(
+            entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
 
         if (message.getSummary() != null || message.getDetail() != null)
         {
@@ -239,8 +234,7 @@ public abstract class AbstractCompareStrategy extends
             return processedInformationEntry;
         }
 
-        for (ProcessedInformationEntry entry : processedInformationEntry
-                .getFurtherEntries())
+        for (ProcessedInformationEntry entry : processedInformationEntry.getFurtherEntries())
         {
             if (entry.getBean().equals(bean))
             {
@@ -251,21 +245,17 @@ public abstract class AbstractCompareStrategy extends
         return null;
     }
 
-    protected String getErrorMessageSummary(Annotation annotation,
-            boolean isTargetComponent)
+    protected String getErrorMessageSummary(Annotation annotation, boolean isTargetComponent)
     {
-        return resolveMessage(getValidationErrorMsgKey(annotation,
-                isTargetComponent));
+        return resolveMessage(getValidationErrorMsgKey(annotation, isTargetComponent));
     }
 
-    protected String getErrorMessageDetails(Annotation annotation,
-            boolean isTargetComponent)
+    protected String getErrorMessageDetails(Annotation annotation, boolean isTargetComponent)
     {
         try
         {
             String key = getValidationErrorMsgKey(annotation, isTargetComponent);
-            return (key != null) ? resolveMessage(key
-                    + DETAIL_MESSAGE_KEY_POSTFIX) : null;
+            return (key != null) ? resolveMessage(key + DETAIL_MESSAGE_KEY_POSTFIX) : null;
         }
         catch (MissingResourceException e)
         {

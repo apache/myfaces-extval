@@ -24,8 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import java.lang.annotation.Annotation;
-
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -90,9 +88,9 @@ public class InternalConventionProvider
     /**
      * use a custom name mapper to implement custom conventions
      */
-    public static String getValidationStrategyClassName(Annotation annotation)
+    public static String getValidationStrategyClassName(String metaDataKey)
     {
-        return annotation.annotationType().getName().replace(".annotation.", ".strategy.") + "Strategy";
+        return metaDataKey.replace(".annotation.", ".strategy.") + "Strategy";
     }
 
     public static String getMetaDataTransformerClassName(String validationStrategyName)

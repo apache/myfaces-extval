@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
-import org.apache.myfaces.extensions.validator.core.annotation.AnnotationEntry;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -31,15 +31,15 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public class PatternStrategy extends AbstractValidationStrategy
+public class PatternStrategy extends AbstractAnnotationValidationStrategy
 {
 
     protected void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, AnnotationEntry annotationEntry,
+            UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
 
-        Pattern annotation = annotationEntry.getAnnotation(Pattern.class);
+        Pattern annotation = metaDataEntry.getValue(Pattern.class);
 
         for (String expression : annotation.value())
         {

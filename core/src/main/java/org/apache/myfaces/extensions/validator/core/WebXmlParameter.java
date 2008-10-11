@@ -43,8 +43,8 @@ public interface WebXmlParameter
     static final String CUSTOM_INFORMATION_PROVIDER_BEAN = WebXmlUtils
         .getInitParameter("CUSTOM_INFORMATION_PROVIDER_BEAN");
 
-    static final String CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR = WebXmlUtils
-        .getInitParameter("CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR");
+    static final String CUSTOM_COMPONENT_META_DATA_EXTRACTOR = WebXmlUtils
+        .getInitParameter("CUSTOM_COMPONENT_META_DATA_EXTRACTOR");
 
     static final String CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING = WebXmlUtils
         .getInitParameter("CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING");
@@ -73,8 +73,8 @@ public interface WebXmlParameter
     static final String CUSTOM_MESSAGE_RESOLVER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_MESSAGE_RESOLVER_FACTORY");
 
-    static final String CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY = WebXmlUtils
-        .getInitParameter("CUSTOM_COMPONENT_ANNOTATION_EXTRACTOR_FACTORY");
+    static final String CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY");
 
     static final String CUSTOM_META_DATA_TRANSFORMER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_TRANSFORMER_FACTORY");
