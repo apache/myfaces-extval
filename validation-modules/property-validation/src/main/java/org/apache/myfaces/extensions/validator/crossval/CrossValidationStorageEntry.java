@@ -40,7 +40,7 @@ public class CrossValidationStorageEntry
         return metaDataEntry;
     }
 
-    public void setAnnotationEntry(MetaDataEntry metaDataEntry)
+    public void setMetaDataEntry(MetaDataEntry metaDataEntry)
     {
         this.metaDataEntry = metaDataEntry;
     }

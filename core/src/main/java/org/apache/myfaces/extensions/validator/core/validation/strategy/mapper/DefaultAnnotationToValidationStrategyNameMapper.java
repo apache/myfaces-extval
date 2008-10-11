@@ -29,8 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultAnnotationToValidationStrategyNameMapper extends
-    AbstractAnnotationToValidationStrategyNameMapper
+public class DefaultAnnotationToValidationStrategyNameMapper extends AbstractAnnotationToValidationStrategyNameMapper
 {
     public String createName(String metaDataKey)
     {

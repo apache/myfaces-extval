@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 /**
  * Interface for name mappers.
  * A name mapper calculates a name for a given source object.
- * e.g. Annotation -> ValidationStrategy
+ * e.g. Meta-Data Key (e.g.: annotation class name) -> ValidationStrategy
  *
  * @author Gerhard Petracek
  * @since 1.x.1

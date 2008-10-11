@@ -62,23 +62,23 @@ public class StaticResourceBundleLoader implements StaticMappingConfigLoader<Str
 
         Enumeration keys = mapping.getKeys();
 
-        String annotationClassName;
+        String metaDataKey;
         String validationStrategyClassName;
 
         while (keys.hasMoreElements())
         {
-            annotationClassName = (String) keys.nextElement();
-            validationStrategyClassName = mapping.getString(annotationClassName);
+            metaDataKey = (String) keys.nextElement();
+            validationStrategyClassName = mapping.getString(metaDataKey);
 
-            addMapping(annotationClassName, validationStrategyClassName);
+            addMapping(metaDataKey, validationStrategyClassName);
         }
         return mappings;
     }
 
-    private void addMapping(String annotationClassName, String validationStrategyClassName)
+    private void addMapping(String metaDataKey, String validationStrategyClassName)
     {
         StaticMappingConfigEntry<String, String> entry = new StaticMappingConfigEntry<String, String>();
-        entry.setSource(annotationClassName);
+        entry.setSource(metaDataKey);
         entry.setTarget(validationStrategyClassName);
         this.mappings.add(entry);
     }

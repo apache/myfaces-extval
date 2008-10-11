@@ -86,8 +86,8 @@ public class InformationProviderBean
 
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
             "ValidationStrategyToMsgResolverNameMapper");
-        customizableInfos.put(CustomInfo.ANNOTATION_TO_VALIDATION_STRATEGY_NAME_MAPPER,
-            "AnnotationToValidationStrategyNameMapper");
+        customizableInfos.put(CustomInfo.META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER,
+            "MetaDataToValidationStrategyNameMapper");
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
             "ValidationStrategyToMetaDataTransformerNameMapper");
 
@@ -96,7 +96,7 @@ public class InformationProviderBean
         customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
         customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER_FACTORY, "ComponentInitializerFactory");
-        customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY, "ComponentAnnotationExtractorFactory");
+        customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY, "ComponentMetaDataExtractorFactory");
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
 
         //conventions (the rest of the conventions are built with the help of name mappers,...
