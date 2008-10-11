@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -51,30 +54,37 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
         return getClass().getName();
     }
 
+    public Object getReturnValueOnSkipRendererDelegationException(
+        SkipRendererDelegationException skipRendererDelegationException, Object currentReturnValue)
+    {
+        return currentReturnValue;
+    }
+
     /*
     * before
     */
     public void beforeDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
+        throws SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+        throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
     public void beforeEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+        throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
     public void beforeEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+        throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
-        throws ConverterException
+        throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
@@ -82,26 +92,27 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
      * after
      */
     public void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
+        throws SkipAfterInterceptorsException
     {
     }
 
     public void afterEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+        throws IOException, SkipAfterInterceptorsException
     {
     }
 
     public void afterEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+        throws IOException, SkipAfterInterceptorsException
     {
     }
 
     public void afterEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+        throws IOException, SkipAfterInterceptorsException
     {
     }
 
     public void afterGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
-        throws ConverterException
+        throws ConverterException, SkipAfterInterceptorsException
     {
     }
 }
