@@ -22,6 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
@@ -65,35 +68,80 @@ public class ExtValRendererWrapper extends Renderer
     @Override
     public final void decode(FacesContext facesContext, UIComponent uiComponent)
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        boolean delegateToWrappedRenderer = true;
+
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start beforeDecode of " + rendererInterceptor.getClass().getName());
+                }
+
+                try
+                {
+                    rendererInterceptor.beforeDecode(facesContext, uiComponent, this.wrapped);
+                }
+                catch (SkipRendererDelegationException e)
+                {
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.trace("decode delegation canceled", e);
+                    }
+
+                    delegateToWrappedRenderer = false;
+
+                    if(e.isSkipOtherInterceptors())
+                    {
+                        break;
+                    }
+                }
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("beforeDecode of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch(SkipBeforeInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start beforeDecode of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.beforeDecode(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("beforeDecode of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("beforeDecode interceptors canceled", e);
             }
         }
 
-        wrapped.decode(facesContext, uiComponent);
+        /*
+         * delegate
+         */
+        if(delegateToWrappedRenderer)
+        {
+            wrapped.decode(facesContext, uiComponent);
+        }
 
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start afterDecode of " + rendererInterceptor.getClass().getName());
+                }
+
+                rendererInterceptor.afterDecode(facesContext, uiComponent, this.wrapped);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("afterDecode of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipAfterInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start afterDecode of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.afterDecode(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("afterDecode of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("afterDecode interceptors canceled", e);
             }
         }
     }
@@ -102,35 +150,80 @@ public class ExtValRendererWrapper extends Renderer
     public final void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        boolean delegateToWrappedRenderer = true;
+
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start beforeEncodeBegin of " + rendererInterceptor.getClass().getName());
+                }
+
+                try
+                {
+                    rendererInterceptor.beforeEncodeBegin(facesContext, uiComponent, this.wrapped);
+                }
+                catch (SkipRendererDelegationException e)
+                {
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.trace("encodeBegin delegation canceled", e);
+                    }
+
+                    delegateToWrappedRenderer = false;
+
+                    if(e.isSkipOtherInterceptors())
+                    {
+                        break;
+                    }
+                }
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("beforeEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipBeforeInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start beforeEncodeBegin of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.beforeEncodeBegin(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("beforeEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("beforeEncodeBegin interceptors canceled", e);
             }
         }
 
-        wrapped.encodeBegin(facesContext, uiComponent);
+        /*
+         * delegate
+         */
+        if(delegateToWrappedRenderer)
+        {
+            wrapped.encodeBegin(facesContext, uiComponent);
+        }
 
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start afterEncodeBegin of " + rendererInterceptor.getClass().getName());
+                }
+
+                    rendererInterceptor.afterEncodeBegin(facesContext, uiComponent, this.wrapped);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("afterEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipAfterInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start afterEncodeBegin of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.afterEncodeBegin(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("afterEncodeBegin of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("afterEncodeBegin interceptors canceled", e);
             }
         }
     }
@@ -139,35 +232,81 @@ public class ExtValRendererWrapper extends Renderer
     public final void encodeChildren(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        boolean delegateToWrappedRenderer = true;
+
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start beforeEncodeChildren of " + rendererInterceptor.getClass().getName());
+                }
+
+                try
+                {
+                    rendererInterceptor.beforeEncodeChildren(facesContext, uiComponent, this.wrapped);
+                }
+                catch (SkipRendererDelegationException e)
+                {
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.trace("encodeChildren delegation canceled", e);
+                    }
+
+                    delegateToWrappedRenderer = false;
+
+                    if(e.isSkipOtherInterceptors())
+                    {
+                        break;
+                    }
+                }
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("beforeEncodeChildren of " +
+                        rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipBeforeInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start beforeEncodeChildren of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.beforeEncodeChildren(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("beforeEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("beforeEncodeChildren interceptors canceled", e);
             }
         }
 
-        wrapped.encodeChildren(facesContext, uiComponent);
+        /*
+         * delegate
+         */
+        if(delegateToWrappedRenderer)
+        {
+            wrapped.encodeChildren(facesContext, uiComponent);
+        }
 
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start afterEncodeChildren of " + rendererInterceptor.getClass().getName());
+                }
+
+                rendererInterceptor.afterEncodeChildren(facesContext, uiComponent, this.wrapped);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("afterEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipAfterInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start afterEncodeChildren of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.afterEncodeChildren(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("afterEncodeChildren of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("afterEncodeChildren interceptors canceled", e);
             }
         }
     }
@@ -176,35 +315,80 @@ public class ExtValRendererWrapper extends Renderer
     public final void encodeEnd(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        boolean delegateToWrappedRenderer = true;
+
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start beforeEncodeEnd of " + rendererInterceptor.getClass().getName());
+                }
+
+                try
+                {
+                    rendererInterceptor.beforeEncodeEnd(facesContext, uiComponent, this.wrapped);
+                }
+                catch (SkipRendererDelegationException e)
+                {
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.trace("encodeEnd delegation canceled", e);
+                    }
+
+                    delegateToWrappedRenderer = false;
+
+                    if(e.isSkipOtherInterceptors())
+                    {
+                        break;
+                    }
+                }
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("beforeEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipBeforeInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start beforeEncodeEnd of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.beforeEncodeEnd(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("beforeEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("beforeEncodeEnd interceptors canceled", e);
             }
         }
 
-        wrapped.encodeEnd(facesContext, uiComponent);
+        /*
+         * delegate
+         */
+        if(delegateToWrappedRenderer)
+        {
+            wrapped.encodeEnd(facesContext, uiComponent);
+        }
 
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start afterEncodeEnd of " + rendererInterceptor.getClass().getName());
+                }
+
+                rendererInterceptor.afterEncodeEnd(facesContext, uiComponent, this.wrapped);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("afterEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipAfterInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start afterEncodeEnd of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.afterEncodeEnd(facesContext, uiComponent, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("afterEncodeEnd of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("afterEncodeEnd interceptors canceled", e);
             }
         }
     }
@@ -225,35 +409,84 @@ public class ExtValRendererWrapper extends Renderer
     public final Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        boolean delegateToWrappedRenderer = true;
+        Object convertedObject = null;
+
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start beforeGetConvertedValue of " + rendererInterceptor.getClass().getName());
+                }
+
+                try
+                {
+                    rendererInterceptor.beforeGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
+                }
+                catch (SkipRendererDelegationException e)
+                {
+                    convertedObject = e.getReturnValueOnException(convertedObject);
+
+                    if(logger.isTraceEnabled())
+                    {
+                        logger.trace("getConvertedValue delegation canceled", e);
+                    }
+
+                    delegateToWrappedRenderer = false;
+
+                    if(e.isSkipOtherInterceptors())
+                    {
+                        break;
+                    }
+                }
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("beforeGetConvertedValue of " +
+                        rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipBeforeInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start beforeGetConvertedValue of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.beforeGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("beforeGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("beforeGetConvertedValue interceptors canceled", e);
             }
         }
 
-        Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+        /*
+         * delegate
+         */
+        if(delegateToWrappedRenderer)
+        {
+            convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+        }
 
-        for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+        try
+        {
+            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("start afterGetConvertedValue of " + rendererInterceptor.getClass().getName());
+                }
+
+                rendererInterceptor.afterGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("afterGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+        }
+        catch (SkipAfterInterceptorsException e)
         {
             if(logger.isTraceEnabled())
             {
-                logger.trace("start afterGetConvertedValue of " + rendererInterceptor.getClass().getName());
-            }
-
-            rendererInterceptor.afterGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
-
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("afterGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+                logger.trace("afterGetConvertedValue interceptors canceled", e);
             }
         }
 
