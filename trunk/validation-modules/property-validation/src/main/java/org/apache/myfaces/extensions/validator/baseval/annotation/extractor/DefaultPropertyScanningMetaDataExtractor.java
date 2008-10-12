@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.annotation.extractor;
 
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.SourceInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.DefaultSourceInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
@@ -29,8 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Gerhard Petracek
@@ -50,8 +47,6 @@ public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMe
         }
 
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression(((String) object).trim());
-
-        List<MetaDataEntry> metaDataEntries = new ArrayList<MetaDataEntry>();
 
         Class entityClass = ExtValUtils.getELHelper()
             .getTypeOfValueBindingForExpression(facesContext, valueBindingExpression.getBaseExpression());
