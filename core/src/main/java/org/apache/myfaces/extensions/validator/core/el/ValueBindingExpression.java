@@ -102,8 +102,14 @@ public class ValueBindingExpression
 
     public String getProperty()
     {
+        this.value = this.value.trim();
+        
         if("[".equals(this.token))
         {
+            if(this.value.startsWith("'"))
+            {
+                return this.value.substring(1, this.value.length() - 1);
+            }
             return this.base.value + this.token + this.value.substring(0, this.value.length()) + "]";
         }
         return value;
