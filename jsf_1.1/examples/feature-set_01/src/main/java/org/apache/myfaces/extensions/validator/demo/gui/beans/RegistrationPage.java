@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation
 import org.apache.myfaces.extensions.validator.baseval.annotation.LongRange;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation;
 import org.apache.myfaces.custom.emailvalidator.EmailValidator;
 
 public class RegistrationPage
@@ -33,11 +34,12 @@ public class RegistrationPage
 
     //the old password of the person isn't used within the page
     //-> validate with value of the model
+    @SkipValidation("#{person.role eq 'admin'}")
+    @Required
     @Equals("person.password")
     @NotEquals("password")
     private String oldPassword;
 
-    @Required
     @Equals("passwordRepeated")
     @JoinValidation(value = "#{registrationPage.person.password}")
     private String password;
@@ -48,6 +50,7 @@ public class RegistrationPage
     //use #{registrationPage.person.nickName}, #{person.nickName}
     //use registrationPage to display the second error message at old nickname
     //or local property chaining (to avoid the usage of the bean name) - like:
+    @SkipValidation("#{person.role eq 'admin'}")
     @NotEquals("person.nickName")
     @JoinValidation("person.nickName")
     private String newNickName;
