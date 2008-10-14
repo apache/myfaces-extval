@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.loader.StaticResourceBundleLoader;
 import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
 import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
@@ -39,6 +40,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 
         initStaticStrategyMappings();
         initDefaultComponentInitializerName();
+        addSkipValidationSupport();
     }
 
     private void initStaticStrategyMappings()
@@ -60,5 +62,16 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
     private void initDefaultComponentInitializerName()
     {
         ExtValContext.getContext().addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
+    }
+
+    private void addSkipValidationSupport()
+    {
+        if(logger.isInfoEnabled())
+        {
+            logger.info("adding support for @SkipValidation");
+        }
+
+        ExtValContext.getContext().denyRendererInterceptor(ValidationInterceptor.class);
+        ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptorWithSkipValidationSupport());
     }
 }

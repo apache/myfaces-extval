@@ -76,4 +76,9 @@ public class MetaDataEntry
     {
         return (T)getProperty(key);
     }
+
+    public void setProperty(String key, Object value)
+    {
+        this.properties.put(key, value);
+    }
 }

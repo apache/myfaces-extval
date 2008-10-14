@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 
@@ -30,6 +31,7 @@ import javax.faces.validator.ValidatorException;
 /**
  * @author Gerhard Petracek
  */
+@SkipValidationSupport
 public class LengthStrategy extends AbstractValidatorAdapter
 {
     protected void processValidation(FacesContext facesContext,
