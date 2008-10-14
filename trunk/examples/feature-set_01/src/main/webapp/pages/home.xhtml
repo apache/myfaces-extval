@@ -18,7 +18,9 @@
     <ui:define name="content">
         <tr:commandButton text="add user" action="addUser"/><br/>
         <tr:commandButton text="change nick name" action="changeNickName"/><br/>
-        <tr:commandButton text="change password" action="changePassword"/>
+        <tr:commandButton text="change password" action="changePassword"/><br/>
+        <tr:commandLink text="mode: #{registrationPage.person.role}"
+                          action="#{registrationPage.switchMode}" immediate="true"/>
     </ui:define>
 </ui:composition>
 

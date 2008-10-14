@@ -78,6 +78,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
             if (validationStrategy != null)
             {
+                if(skipValidation(facesContext, uiComponent, validationStrategy, entry))
+                {
+                    continue;
+                }
+
                 metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 
                 if(metaDataTransformer != null)
@@ -147,6 +152,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
             if (validationStrategy != null)
             {
+                if(skipValidation(facesContext, uiComponent, validationStrategy, entry))
+                {
+                    continue;
+                }
+
                 if(logger.isTraceEnabled())
                 {
                     logger.trace("validate " + entry.getValue() + " with " +
@@ -169,5 +179,14 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         {
             logger.trace("validation finished");
         }
+    }
+
+    protected boolean skipValidation(FacesContext facesContext,
+                                     UIComponent uiComponent,
+                                     ValidationStrategy validationStrategy,
+                                     MetaDataEntry entry)
+    {
+        //override for custom skip validation support (if needed)
+        return false;
     }
 }

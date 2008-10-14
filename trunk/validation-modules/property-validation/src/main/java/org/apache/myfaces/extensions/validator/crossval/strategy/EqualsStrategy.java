@@ -20,15 +20,16 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 
 import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
+@SkipValidationSupport
 public class EqualsStrategy extends AbstractCompareStrategy
 {
-
     public boolean useTargetComponentToDisplayErrorMsg(
             CrossValidationStorageEntry crossValidationStorageEntry)
     {

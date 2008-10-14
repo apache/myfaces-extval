@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIs;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
@@ -31,6 +32,7 @@ import java.util.MissingResourceException;
 /**
  * @author Gerhard Petracek
  */
+@SkipValidationSupport
 public class DateIsStrategy extends AbstractCompareStrategy
 {
     protected static final String TOO_EARLY = "early";

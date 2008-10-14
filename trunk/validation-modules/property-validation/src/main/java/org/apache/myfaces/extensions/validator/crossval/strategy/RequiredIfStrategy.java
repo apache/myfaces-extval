@@ -21,15 +21,16 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
 import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 
 import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
+@SkipValidationSupport
 public class RequiredIfStrategy extends AbstractCompareStrategy
 {
-
     public boolean useTargetComponentToDisplayErrorMsg(
             CrossValidationStorageEntry crossValidationStorageEntry)
     {
