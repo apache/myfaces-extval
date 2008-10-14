@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 
@@ -32,6 +33,7 @@ import java.util.Collection;
 /**
  * @author Gerhard Petracek
  */
+@SkipValidationSupport
 public class RequiredStrategy extends AbstractAnnotationValidationStrategy
 {
     public void processValidation(FacesContext facesContext,

@@ -16,18 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata;
+package org.apache.myfaces.extensions.validator.baseval.annotation;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public interface PropertySourceInformationKeys
+@Target( { METHOD, FIELD })
+@Retention(RUNTIME)
+public @interface SkipValidation
 {
-    static final String VALUE_BINDING_EXPRESSION = "value_binding_expression";
-    static final String SKIP_VALIDATION = "skip_validation";
+    String[] value();
 }
