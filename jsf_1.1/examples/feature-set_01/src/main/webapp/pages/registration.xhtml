@@ -13,30 +13,13 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:tr="http://myfaces.apache.org/trinidad"
-                xmlns:trh="http://myfaces.apache.org/trinidad/html">
+                xmlns:trh="http://myfaces.apache.org/trinidad/html"
+                xmlns:c="http://myfaces.apache.org/extval/demo/components"
+        >
 
     <ui:define name="content">
 
-        <tr:panelFormLayout>
-
-            <tr:inputText label="nick name" value="#{registrationPage.person[ 'nickName' ]}"/>
-            <tr:inputText label="e-mail" value="#{registrationPage.email}"/>
-
-            <tr:inputText label="first name" value="#{registrationPage.person.firstName}"/>
-            <tr:inputText label="last name" value="#{registrationPage.person.lastName}"/>
-            <tr:inputDate label="birthday" value="#{registrationPage.person.birthday}">
-                <tr:convertDateTime type="date" dateStyle="short"/>
-            </tr:inputDate>
-            <tr:inputDate label="final exam" value="#{registrationPage.person.finalExam}">
-                <tr:convertDateTime type="date" dateStyle="short"/>
-            </tr:inputDate>
-
-            <tr:inputText label="number of siblings" value="#{registrationPage.numberOfSiblings}"/>
-
-            <tr:inputText label="password" value="#{registrationPage.password}" secret="true"/>
-            <tr:inputText label="re-enter password" value="#{registrationPage.passwordRepeated}" secret="true"/>
-
-        </tr:panelFormLayout>
+        <c:userForm bean="#{registrationPage}"/>
         <tr:commandButton text="save" action="#{registrationPage.finish}"/>
 
     </ui:define>
