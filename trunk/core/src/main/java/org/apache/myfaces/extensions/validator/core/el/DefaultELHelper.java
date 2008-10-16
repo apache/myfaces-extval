@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -110,6 +111,11 @@ public class DefaultELHelper implements ELHelper
 
     public ValueBindingExpression getValueBindingExpression(UIComponent uiComponent)
     {
+        return getValueBindingExpression(uiComponent, false);
+    }
+
+    public ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters)
+    {
         String valueBindingExpression = getOriginalValueBindingExpression(uiComponent);
 
         //for input components without value-binding
@@ -120,11 +126,39 @@ public class DefaultELHelper implements ELHelper
             return null;
         }
 
+        if(!allowBlankCharacters)
+        {
+            valueBindingExpression = valueBindingExpression.replace(" ", "");
+        }
+
         if (getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(),
             new ValueBindingExpression(valueBindingExpression).getBaseExpression()) == null)
         {
-            valueBindingExpression = FaceletsTaglibExpressionHelper.
+            ValueBindingExpression result = FaceletsTaglibExpressionHelper.
                 tryToCreateValueBindingForFaceletsBinding(uiComponent);
+
+            if(result == null)
+            {
+                if(logger.isWarnEnabled())
+                {
+                    logger.warn("couldn't resolve expression: " + result.getExpressionString());
+                }
+                return null;
+            }
+
+            Class entityClass = ExtValUtils.getELHelper()
+                .getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), result.getBaseExpression());
+
+            if(entityClass == null)
+            {
+                if(logger.isWarnEnabled())
+                {
+                    logger.warn("couldn't resolve expression: " + result.getExpressionString());
+                }
+
+                return null;
+            }
+            return result;
         }
         return new ValueBindingExpression(valueBindingExpression);
     }
