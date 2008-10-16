@@ -47,6 +47,8 @@ public interface ELHelper
 
     ValueBindingExpression getValueBindingExpression(UIComponent uiComponent);
 
+    ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters);
+
     boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression);
 
     boolean isELTerm(Object o);
