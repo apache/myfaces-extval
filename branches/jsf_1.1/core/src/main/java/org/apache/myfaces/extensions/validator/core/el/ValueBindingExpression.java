@@ -20,12 +20,15 @@ package org.apache.myfaces.extensions.validator.core.el;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@ToDo(value = Priority.MEDIUM, description = "difference between [ and [' - test with more constelations")
 @UsageInformation({UsageCategory.API})
 public class ValueBindingExpression
 {
@@ -50,7 +53,19 @@ public class ValueBindingExpression
     public static ValueBindingExpression replaceProperty(ValueBindingExpression valueBindingExpression,
                                                          String newProperty)
     {
-        return addProperty(valueBindingExpression.getBaseExpression(), newProperty);
+        if(valueBindingExpression.getProperty().endsWith("']"))
+        {
+            valueBindingExpression = valueBindingExpression.getBaseExpression();
+        }
+
+        if(valueBindingExpression.getBaseExpression() != null)
+        {
+            return addProperty(valueBindingExpression.getBaseExpression(), newProperty);
+        }
+        else
+        {
+            return addProperty(valueBindingExpression, newProperty);
+        }
     }
 
     public static ValueBindingExpression addProperty(ValueBindingExpression valueBindingExpression, String newProperty)
@@ -58,7 +73,7 @@ public class ValueBindingExpression
         String sourceExpression = valueBindingExpression.getExpressionString();
         String result = sourceExpression.substring(0, sourceExpression.length() - 1);
 
-        if(newProperty.startsWith("["))
+        if(newProperty.startsWith("['"))
         {
             return new ValueBindingExpression(result + newProperty + "}");
         }
@@ -75,7 +90,7 @@ public class ValueBindingExpression
             throw new IllegalStateException(expression + " is no valid el-expression");
         }
 
-        int index1 = expression.lastIndexOf("]");
+        int index1 = expression.lastIndexOf("']");
         int index2 = expression.lastIndexOf(".");
 
         if(index1 > index2)
@@ -83,9 +98,9 @@ public class ValueBindingExpression
             expression = expression.substring(0, index1);
 
             int index3 = findIndexOfStartingBracket(expression);
-            this.value = expression.substring(index3 + 1, index1);
+            this.value = expression.substring(index3 + 2, index1);
             this.base = new ValueBindingExpression(expression.substring(0, index3) + "}");
-            this.token = "[";
+            this.token = "['";
         }
         else if( index2 > index1)
         {
@@ -110,7 +125,7 @@ public class ValueBindingExpression
             {
                 return this.value.substring(1, this.value.length() - 1);
             }
-            return this.base.value + this.token + this.value.substring(0, this.value.length()) + "]";
+            return this.base.value + this.token + this.value.substring(0, this.value.length()) + "']";
         }
         return value;
     }
@@ -126,9 +141,9 @@ public class ValueBindingExpression
         {
             String baseExpression = this.base.getExpressionString();
 
-            if("[".equals(this.token))
+            if("['".equals(this.token))
             {
-                return baseExpression.substring(0, baseExpression.length() - 1) + this.token + this.value + "]}";
+                return baseExpression.substring(0, baseExpression.length() - 1) + this.token + this.value + "']}";
             }
             return baseExpression.substring(0, baseExpression.length() - 1) + this.token + this.value + "}";
         }

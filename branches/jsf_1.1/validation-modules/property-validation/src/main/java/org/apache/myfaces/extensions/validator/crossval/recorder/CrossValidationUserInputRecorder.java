@@ -62,8 +62,10 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         entry.setComponent(uiComponent);
 
         String key = vbe.getExpressionString();
+
         //for local cross-validation
         if (valueBindingConvertedValueMapping.containsKey(key) &&
+            valueBindingConvertedValueMapping.get(key).getBean() != null &&
             !valueBindingConvertedValueMapping.get(key).getBean().equals(entry.getBean()))
         {
             //for the validation within a complex component e.g. a table

@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -33,16 +34,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 /**
+ * Helper class to get the real/full value binding - tested with facelets 1.1.14
+ * The target is to get rid of this impl. - currently it's a workaround to support custom facelets components.
+ * An alternative would be an EL-Resolver - there are still some open issues with such an approach
+ * + It isn't available with JSF 1.1.x
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 class FaceletsTaglibExpressionHelper
 {
-    public static String tryToCreateValueBindingForFaceletsBinding(
-        UIComponent uiComponent)
+    public static ValueBindingExpression tryToCreateValueBindingForFaceletsBinding(UIComponent uiComponent)
     {
         String faceletsValueBindingExpression = DefaultELHelper.getOriginalValueBindingExpression(uiComponent);
 
@@ -51,26 +57,35 @@ class FaceletsTaglibExpressionHelper
             List<String> foundBindings = extractELTerms(
                 ExtValUtils.getELHelper().getBindingOfComponent(uiComponent, "value"));
 
-            return faceletsValueBindingExpression.substring(0, 1) + "{" + createBinding(foundBindings) + "}";
+            Map<String, String> mappedFaceletsVars = new HashMap<String, String>();
+            ValueBindingExpression vbe= new ValueBindingExpression(faceletsValueBindingExpression
+                    .substring(0, 1) + "{" + createBinding(foundBindings, mappedFaceletsVars) + "}");
+
+            Class entityClass = ExtValUtils.getELHelper()
+                .getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), vbe.getBaseExpression());
+
+            if(entityClass == null)
+            {
+                return tryToReplaceVars(vbe, mappedFaceletsVars);
+            }
+            return vbe;
         }
         catch (Throwable t)
         {
-            return faceletsValueBindingExpression;
+            return new ValueBindingExpression(faceletsValueBindingExpression);
         }
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    private static String createBinding(List<String> expressions)
+    private static String createBinding(List<String> expressions, Map<String, String> virtualVars)
     {
-        String result = "";
-
-        String prevFaceletsAttributeName = null;
         String currentBinding;
-        String partOfBinding;
 
         int indexOfBindingDetails;
         String[] foundBindingDetails;
         String[] bindingDetails;
+
+        Map<String, String> addedVirtualNames = new HashMap<String, String>();
 
         for (String entry : expressions)
         {
@@ -95,20 +110,68 @@ class FaceletsTaglibExpressionHelper
             }
 
             currentBinding = bindingDetails[1];
-            if (prevFaceletsAttributeName != null)
+
+            //to support blanks within a binding with map syntax
+            if(currentBinding.contains("{") && !currentBinding.contains("}"))
             {
-                partOfBinding = currentBinding.substring(currentBinding.indexOf(prevFaceletsAttributeName)
-                    + prevFaceletsAttributeName.length(), currentBinding.indexOf("}"));
-                result = result + partOfBinding;
-            }
-            else
-            {
-                result = currentBinding.substring(currentBinding.indexOf("{") + 1, currentBinding.indexOf("}"));
+                currentBinding = addFurtherBindingParts(currentBinding, foundBindingDetails, indexOfBindingDetails);
             }
 
-            prevFaceletsAttributeName = bindingDetails[0];
+            if (currentBinding.contains("}"))
+            {
+                //entry for "virtual" facelets beans
+                if(!addedVirtualNames.containsKey(bindingDetails[0]))
+                {
+                    addedVirtualNames.put(bindingDetails[0], currentBinding);
+                }
+            }
+            //entry for "virtual" facelets var
+            if(!(currentBinding.contains("{") || currentBinding.contains("}")))
+            {
+                virtualVars.put(bindingDetails[0], bindingDetails[1].substring(1, bindingDetails[1].length()-2));
+            }
         }
-        return result;
+
+        String originalBinding = addedVirtualNames.get("value");
+        originalBinding = originalBinding.substring(originalBinding.indexOf("{") + 1, originalBinding.indexOf("}"));
+        addedVirtualNames.remove("value");
+        return tryToTransformToRealBinding(originalBinding, addedVirtualNames);
+    }
+
+    private static String tryToTransformToRealBinding(String originalBinding, Map<String, String> addedVirtualNames)
+    {
+        originalBinding = "#{" + originalBinding + "}";
+        Iterator nameIterator = addedVirtualNames.keySet().iterator();
+
+        String currentKey;
+        String currentValue;
+        while(nameIterator.hasNext())
+        {
+            currentKey = (String) nameIterator.next();
+            currentValue = addedVirtualNames.get(currentKey);
+
+            currentValue = currentValue.substring(currentValue.indexOf("{") + 1, currentValue.indexOf("}"));
+            originalBinding = originalBinding.replace("{" + currentKey + ".", "{" + currentValue + ".");
+            originalBinding = originalBinding.replace("." + currentKey + ".", "." + currentValue + ".");
+            originalBinding = originalBinding.replace("[" + currentKey + "]", "[" + currentValue + "]");
+        }
+
+        return originalBinding.substring(2, originalBinding.length() - 1);
+    }
+
+    //to support blanks - e.g. with map syntax
+    private static String addFurtherBindingParts(String currentBinding, String[] foundBindingDetails,
+                                                 int indexOfBindingDetails)
+    {
+        for(int i = indexOfBindingDetails + 1; i < foundBindingDetails.length; i++)
+        {
+            currentBinding += foundBindingDetails[i];
+            if(foundBindingDetails[i].contains("}"))
+            {
+                return currentBinding;
+            }
+        }
+        return currentBinding;
     }
 
     private static int findIndexOfBindingDetails(String[] bindingDetails)
@@ -161,6 +224,11 @@ class FaceletsTaglibExpressionHelper
 
             for (Object entry : ((Map) o).values())
             {
+                //found entry for "virtual" facelets var
+                if(entry.toString().contains("ValueExpression["))
+                {
+                    foundELTerms.add(entry.toString());
+                }
                 elCount += resolveELTerms(entry, visited, foundELTerms, count + 1);
             }
             return elCount;
@@ -205,7 +273,7 @@ class FaceletsTaglibExpressionHelper
         }
 
         List<Field> attributes = findAllAttributes(c, new ArrayList<Field>());
-        Field[] fields = (Field[]) attributes.toArray(new Field[attributes.size()]);
+        Field[] fields = attributes.toArray(new Field[attributes.size()]);
 
         AccessibleObject.setAccessible(fields, true);
         for (Field currentField : fields)
@@ -253,4 +321,193 @@ class FaceletsTaglibExpressionHelper
 
         return attributes;
     }
+
+    private static ValueBindingExpression tryToReplaceVars(ValueBindingExpression valueBindingExpression,
+                                                            Map<String, String> mappedFaceletsVars)
+    {
+        String property;
+        String result = "";
+        boolean last = false;
+
+        while(true)
+        {
+            if(valueBindingExpression.getBaseExpression() == null)
+            {
+                last = true;
+            }
+
+
+            property = valueBindingExpression.getProperty();
+
+            valueBindingExpression = ValueBindingExpression
+                .replaceProperty(valueBindingExpression, getNewProperty(property, mappedFaceletsVars));
+
+            if(result.length() == 0)
+            {
+                result = valueBindingExpression.getProperty();
+            }
+            else
+            {
+                result = valueBindingExpression.getProperty() + "." + result;
+            }
+
+            valueBindingExpression = valueBindingExpression.getBaseExpression();
+
+            if(last)
+            {
+                break;
+            }
+        }
+        return new ValueBindingExpression(valueBindingExpression.getPrefix() + "{" + result + "}");
+    }
+
+    private static String getNewProperty(String oldProperty, Map<String, String> mappedFaceletsVars)
+    {
+        List<String> virtualVars = getPotentialVirtualVars(oldProperty);
+
+        for(String virtualVar : virtualVars)
+        {
+            if(mappedFaceletsVars.containsKey(virtualVar))
+            {
+                oldProperty = replacePropertyValue(oldProperty, virtualVar, mappedFaceletsVars.get(virtualVar));
+            }
+        }
+        return oldProperty;
+    }
+
+    private static List<String> getPotentialVirtualVars(String oldProperty)
+    {
+        int start = -1;
+        int end = -1;
+
+        List<String> virtualVarList = new ArrayList<String>();
+
+        for(int i = 0; i < oldProperty.length(); i++)
+        {
+            if(start == - 1 && oldProperty.charAt(i) == '[')
+            {
+                start = i + 1;
+            }
+            else if((start != - 1 && oldProperty.charAt(i) == '[') || oldProperty.charAt(i) == ']')
+            {
+                end = i;
+            }
+
+            if(start != -1 && end != -1)
+            {
+                virtualVarList.add(oldProperty.substring(start, end));
+                if(oldProperty.charAt(i) == '[')
+                {
+                    start = i + 1;
+                }
+                else
+                {
+                    start = -1;
+                }
+                end = -1;
+            }
+        }
+
+        return virtualVarList;
+    }
+
+    private static String replacePropertyValue(String oldProperty, String targetVar, String newValue)
+    {
+        int index = oldProperty.indexOf(targetVar);
+
+        if(index == -1)
+        {
+            return oldProperty;
+        }
+
+        String result = oldProperty.substring(0, index);
+        result += newValue;
+        return result + oldProperty.substring(index + targetVar.length(), oldProperty.length());
+    }
+
+    /*
+     * replace virtual facelets vars (map syntax)
+     * tested styles (simple and nested): test[ix[ix2[ix3]]]
+     */
+    /*
+    private static String _createBinding(List<String> expressions, Map<String, String> virtualVars)
+    {
+        String result = "";
+
+        String prevFaceletsAttributeName = null;
+        String currentBinding;
+        String partOfBinding;
+
+        int indexOfBindingDetails;
+        String[] foundBindingDetails;
+        String[] bindingDetails;
+
+        List<String> addedVirtualNames = new ArrayList<String>();
+
+        for (String entry : expressions)
+        {
+            if (entry.startsWith("ValueExpression["))
+            {
+                continue;
+            }
+
+            foundBindingDetails = entry.split(" ");
+            indexOfBindingDetails = findIndexOfBindingDetails(foundBindingDetails);
+
+            if (indexOfBindingDetails == -1)
+            {
+                return null;
+            }
+
+            bindingDetails = foundBindingDetails[indexOfBindingDetails].split("=");
+
+            if (bindingDetails.length < 2)
+            {
+                return null;
+            }
+
+            currentBinding = bindingDetails[1];
+
+            //to support blanks within a binding with map syntax
+            if(currentBinding.contains("{") && !currentBinding.contains("}"))
+            {
+                currentBinding = addFurtherBindingParts(currentBinding, foundBindingDetails, indexOfBindingDetails);
+            }
+
+            if (prevFaceletsAttributeName != null && currentBinding.contains("}"))
+            {
+                //entry for "virtual" facelets beans
+                if(!addedVirtualNames.contains(bindingDetails[0]))
+                {
+                    partOfBinding = currentBinding.substring(currentBinding.indexOf(prevFaceletsAttributeName)
+                        + prevFaceletsAttributeName.length(), currentBinding.indexOf("}"));
+
+                    addedVirtualNames.add(bindingDetails[0]);
+                    result = result + partOfBinding;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            //entry for "virtual" facelets var
+            else if(!(currentBinding.contains("{") || currentBinding.contains("}")))
+            {
+                virtualVars.put(bindingDetails[0], bindingDetails[1].substring(1, bindingDetails[1].length()-2));
+                continue;
+            }
+            else
+            {
+                if(!addedVirtualNames.contains(bindingDetails[0]))
+                {
+                    addedVirtualNames.add(bindingDetails[0]);
+                    result = currentBinding.substring(currentBinding.indexOf("{") + 1, currentBinding.indexOf("}"));
+                }
+            }
+
+            prevFaceletsAttributeName = bindingDetails[0];
+        }
+        return result;
+    }
+    */
 }
