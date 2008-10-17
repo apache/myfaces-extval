@@ -69,7 +69,7 @@ public class InternalConventionProvider
 
         validationStrategyClassName = validationStrategyClassName.replace(".strategy.", targetPackageName);
 
-        if (targetClassName == null)
+        if (targetClassName == null || validationStrategyClassName.lastIndexOf(".") == -1)
         {
             return null;
         }
