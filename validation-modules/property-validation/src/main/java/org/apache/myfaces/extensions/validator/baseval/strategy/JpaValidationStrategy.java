@@ -31,6 +31,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Id;
 import java.lang.annotation.Annotation;
 
 /**
@@ -57,6 +58,10 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         {
             validateBasicAnnotation((Basic) annotation, convertedObject);
         }
+        else if (annotation instanceof Id)
+        {
+            checkRequiredConvertedObject(convertedObject);
+        }
         else if (annotation instanceof OneToOne)
         {
             validateOneToOneAnnotation((OneToOne) annotation, convertedObject);
@@ -67,8 +72,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         }
     }
 
-    private void validateColumnAnnotation(Column column, Object convertedObject)
-            throws ValidatorException
+    private void validateColumnAnnotation(Column column, Object convertedObject) throws ValidatorException
     {
         if (!column.nullable())
         {
@@ -89,8 +93,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         }
     }
 
-    private void validateBasicAnnotation(Basic basic, Object convertedObject)
-            throws ValidatorException
+    private void validateBasicAnnotation(Basic basic, Object convertedObject) throws ValidatorException
     {
         if (!basic.optional())
         {
@@ -98,8 +101,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         }
     }
 
-    private void validateOneToOneAnnotation(OneToOne oneToOne,
-            Object convertedObject)
+    private void validateOneToOneAnnotation(OneToOne oneToOne, Object convertedObject)
     {
         if (!oneToOne.optional())
         {
@@ -107,8 +109,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         }
     }
 
-    private void validateManyToOneAnnotation(ManyToOne manyToOne,
-            Object convertedObject)
+    private void validateManyToOneAnnotation(ManyToOne manyToOne, Object convertedObject)
     {
         if (!manyToOne.optional())
         {
@@ -117,8 +118,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
     }
 
     @ToDo(Priority.MEDIUM)
-    private void checkRequiredConvertedObject(Object convertedObject)
-            throws ValidatorException
+    private void checkRequiredConvertedObject(Object convertedObject) throws ValidatorException
     {
         if (convertedObject == null || convertedObject.equals(""))
         {
