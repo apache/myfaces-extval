@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.annotation.Annotation;
@@ -58,6 +59,10 @@ public class JpaMetaDataTransformer implements MetaDataTransformer
             {
                 results.put(CommonMetaDataKeys.REQUIRED, true);
             }
+        }
+        else if(annotation instanceof Id)
+        {
+            results.put(CommonMetaDataKeys.REQUIRED, true);
         }
         //TODO impl. the rest!!!
         return results;
