@@ -28,7 +28,7 @@
     <artifactId>examples-project</artifactId>
 
     <name>MyFaces Extensions-Validator examples project</name>
-    <version>${build.version}</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
