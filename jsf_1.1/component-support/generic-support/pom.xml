@@ -27,12 +27,12 @@
     <artifactId>myfaces-extval-generic-support</artifactId>
 
     <name>MyFaces Extensions-Validator Generic Support Module</name>
-    <version>${build.version}</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
         <artifactId>component-support-modules-project</artifactId>
-        <version>${build.version}</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
