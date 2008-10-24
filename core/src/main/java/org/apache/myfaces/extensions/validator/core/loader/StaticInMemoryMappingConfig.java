@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class StaticInMemoryMappingConfig implements StaticMappingConfigLoader<String, String>
 {
     private List<StaticMappingConfigEntry<String, String>> mappings
-        = new ArrayList<StaticMappingConfigEntry<String, String>>();;
+        = new ArrayList<StaticMappingConfigEntry<String, String>>();
 
     public void setSourceOfMapping(String path)
     {
