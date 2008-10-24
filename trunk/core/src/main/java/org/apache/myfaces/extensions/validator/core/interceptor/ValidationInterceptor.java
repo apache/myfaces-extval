@@ -144,7 +144,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         ValidationStrategy validationStrategy;
 
-        MetaDataExtractor metaDataExtractor = ExtValUtils.getMetaDataExtractor();
+        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
 
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
