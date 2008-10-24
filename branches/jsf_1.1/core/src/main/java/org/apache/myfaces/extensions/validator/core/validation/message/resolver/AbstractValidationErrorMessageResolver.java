@@ -40,8 +40,7 @@ import java.util.ResourceBundle;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public abstract class AbstractValidationErrorMessageResolver implements
-    MessageResolver
+public abstract class AbstractValidationErrorMessageResolver implements MessageResolver
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -149,8 +148,15 @@ public abstract class AbstractValidationErrorMessageResolver implements
         }
 
         //use custom name (if possible) otherwise: fallback to default message (if possible)
-        return (customMessage != null) ? customMessage
-            : (getBaseName() != null) ? ResourceBundle.getBundle(getBaseName(), locale).getString(key) : null;
+        try
+        {
+            return (customMessage != null) ? customMessage
+                : (getBaseName() != null) ? ResourceBundle.getBundle(getBaseName(), locale).getString(key) : null;
+        }
+        catch (MissingResourceException e)
+        {
+            return "???" + key + "???";
+        }
     }
 
     private String tryToUseMessageBundleConvention(String key, Locale locale)
