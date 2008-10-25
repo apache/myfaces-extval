@@ -66,7 +66,18 @@ public class ExtValRenderKit extends RenderKit
     public Renderer getRenderer(String family, String rendererType)
     {
         Renderer renderer = wrapped.getRenderer(family, rendererType);
-        return renderer instanceof ExtValRendererWrapper ? renderer : createWrapper(renderer);
+
+        if(renderer != null)
+        {
+            return renderer instanceof ExtValRendererWrapper ? renderer : createWrapper(renderer);
+        }
+
+        if(this.logger.isWarnEnabled())
+        {
+            this.logger.warn("no renderer found for family " + family + " and type " + rendererType);
+        }
+
+        return renderer;
     }
 
     public ResponseStateManager getResponseStateManager()
