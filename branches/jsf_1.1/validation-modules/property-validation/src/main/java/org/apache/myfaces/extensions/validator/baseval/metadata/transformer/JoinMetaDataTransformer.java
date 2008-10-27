@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -37,9 +36,9 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class JoinMetaDataTransformer  extends AbstractMetaDataTransformer
+public class JoinMetaDataTransformer implements MetaDataTransformer
 {
-    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
+    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
         MetaDataExtractor extractor = new DefaultPropertyScanningMetaDataExtractor();
 

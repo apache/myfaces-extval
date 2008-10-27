@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.AbstractMetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
@@ -34,9 +34,9 @@ import java.util.Locale;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class PatternMetaDataTransformer  extends AbstractMetaDataTransformer
+public class PatternMetaDataTransformer implements MetaDataTransformer
 {
-    protected Map<String, Object> convert(MetaDataEntry metaDataEntry)
+    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         Pattern annotation = metaDataEntry.getValue(Pattern.class);
