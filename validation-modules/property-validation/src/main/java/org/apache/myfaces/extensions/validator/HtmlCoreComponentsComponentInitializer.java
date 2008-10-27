@@ -26,7 +26,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import java.util.Map;
-import java.util.List;
 
 /**
  * @author Gerhard Petracek
@@ -44,24 +43,28 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
                                               UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
-        if(metaData.containsKey(CommonMetaDataKeys.REQUIRED) || metaData.containsKey(CommonMetaDataKeys.WEAK_REQUIRED)||
-           metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION))
+        if(!processComponent(uiComponent))
         {
-            if((Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED)) &&
-                Boolean.TRUE.equals(isComponentRequired(uiComponent)))
-                ||
-                (Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)) &&
-                 Boolean.TRUE.equals(isComponentRequired(uiComponent))))
-            {
-                ((EditableValueHolder)uiComponent).setRequired(true);
-            }
-            else if(metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION) &&
-                   ((List)metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)).contains(CommonMetaDataKeys.WEAK_REQUIRED)&&
-                   !Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
-            {
-                ((EditableValueHolder)uiComponent).setRequired(false);
-            }
+            return;
         }
+
+        if((Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED)) ||
+             Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
+            &&
+            Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+        {
+            ((EditableValueHolder)uiComponent).setRequired(true);
+        }
+        else if(Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)) &&
+               !Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
+        {
+            ((EditableValueHolder)uiComponent).setRequired(false);
+        }
+    }
+
+    protected boolean processComponent(UIComponent uiComponent)
+    {
+        return uiComponent instanceof HtmlInputText;
     }
 
     /**
@@ -73,13 +76,8 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
      */
     protected Boolean isComponentRequired(UIComponent uiComponent)
     {
-        if(uiComponent instanceof HtmlInputText)
-        {
-            HtmlInputText htmlInputText = (HtmlInputText)uiComponent;
-            return !(htmlInputText.isReadonly() || htmlInputText.isDisabled());
-        }
-
-        return null;
+        HtmlInputText htmlInputText = (HtmlInputText)uiComponent;
+        return !(htmlInputText.isReadonly() || htmlInputText.isDisabled());
     }
 
     protected void configureMaxLengthAttribute(FacesContext facesContext,

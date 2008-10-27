@@ -52,10 +52,4 @@ public class RequiredStrategy extends AbstractAnnotationValidationStrategy
     {
         return ((Required) annotation).validationErrorMsgKey();
     }
-
-    @Override
-    protected String getSkipExpression(Object metaData)
-    {
-        return ((Required)metaData).skipValidation();
-    }
 }
