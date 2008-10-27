@@ -183,6 +183,19 @@ public class ValueBindingExpression
         return getExpressionString();
     }
 
+    @Override
+    public int hashCode()
+    {
+        return getExpressionString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        return target instanceof ValueBindingExpression && getExpressionString()
+            .equals(((ValueBindingExpression) target).getExpressionString());
+    }
+
     private int findIndexOfStartingBracket(String expression)
     {
         int closeCount = 0;
