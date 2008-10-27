@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
@@ -71,35 +73,44 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         MetaDataExtractor metaDataExtractor = ExtValContext.getContext().getFactoryFinder().getFactory(
             FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, MetaDataExtractorFactory.class).create();
 
-        Map<String, Object> metaData;
+        Map<String, Object> metaData = new HashMap<String, Object>();
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
             validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
             {
-                if(skipValidation(facesContext, uiComponent, validationStrategy, entry))
+                if(!skipValidation(facesContext, uiComponent, validationStrategy, entry))
                 {
-                    continue;
+                    metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
+
+                    if(metaDataTransformer != null)
+                    {
+                        if(this.logger.isDebugEnabled())
+                        {
+                            this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
+                        }
+                        
+                        metaData = metaDataTransformer.convertMetaData(entry);
+                    }
+                    else
+                    {
+                        metaData = null;
+                    }
+
+                    if(metaData == null)
+                    {
+                        metaData = new HashMap<String, Object>();
+                    }
                 }
 
-                metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
-
-                if(metaDataTransformer != null)
+                if(Boolean.TRUE.equals(entry.getProperty(PropertySourceInformationKeys.SKIP_VALIDATION, Boolean.class)))
                 {
-                    metaData = metaDataTransformer.convertMetaData(entry);
-                }
-                else
-                {
-                    metaData = null;
-                }
-
-                if(metaData == null)
-                {
-                    metaData = new HashMap<String, Object>();
+                    metaData.put(CommonMetaDataKeys.SKIP_VALIDATION, true);
                 }
 
                 //get component initializer for the current component and configure it
+                //also in case of skipped validation to reset e.g. the required attribute
                 ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
             }
         }

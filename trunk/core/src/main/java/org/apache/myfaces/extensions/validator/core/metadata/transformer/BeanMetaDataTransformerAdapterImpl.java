@@ -25,7 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
-import java.util.List;
 
 /**
  * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
@@ -40,41 +39,16 @@ import java.util.List;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.REUSE})
-public class BeanMetaDataTransformerAdapterImpl extends AbstractMetaDataTransformer
-    implements BeanMetaDataTransformerAdapter
+public class BeanMetaDataTransformerAdapterImpl implements MetaDataTransformer, BeanMetaDataTransformerAdapter
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
 
-    public Map<String, Object> convert(MetaDataEntry metaDataEntry)
+    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
-        if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
-        {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).convert(metaDataEntry);
-        }
         return this.metaDataTransformer.convertMetaData(metaDataEntry);
-    }
-
-    @Override
-    protected String getSkipExpression(MetaDataEntry metaData)
-    {
-        if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
-        {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).getSkipExpression(metaData);
-        }
-        return super.getSkipExpression(metaData);
-    }
-
-    @Override
-    protected List<String> getMetaDataKeys()
-    {
-        if(this.metaDataTransformer instanceof AbstractMetaDataTransformer)
-        {
-            return ((AbstractMetaDataTransformer)this.metaDataTransformer).getMetaDataKeys();
-        }
-        return super.getMetaDataKeys();
     }
 
     public String getMetaDataTransformerClassName()
