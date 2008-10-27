@@ -39,7 +39,7 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator</groupId>
             <artifactId>myfaces-extval-core</artifactId>
-            <version>${build.version}</version>
+            <version>1.2.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -48,6 +48,51 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>${jsf.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shale</groupId>
+            <artifactId>shale-test</artifactId>
+            <version>1.0.4</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.myfaces</groupId>
+                    <artifactId>myfaces-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.myfaces</groupId>
+                    <artifactId>myfaces-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>myfaces</groupId>
+                    <artifactId>myfaces-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>myfaces</groupId>
+                    <artifactId>myfaces-impl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
     </dependencies>
 
     <build>
@@ -89,6 +134,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/Abstract*.java</exclude>
+                        <exclude>**/TestUtils.java</exclude>
+                        <exclude>**/*Bean.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>            
         </plugins>
     </build>
 
