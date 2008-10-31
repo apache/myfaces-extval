@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.crossval;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
-import javax.faces.el.ValueBinding;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -56,7 +55,7 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     {
         super.setUp();
         CrossValTestBean bean = new CrossValTestBean();
-        ValueBinding vb = application.createValueBinding("#{testBean}");
+        application.createValueBinding("#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean",bean);
         
         rootComponent = new UIViewRoot();
@@ -92,13 +91,10 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
 
-        //update model since it is necessary for crossval
-        inputComponent1.updateModel(facesContext);
-        inputComponent1.updateModel(facesContext);
-        
         processCrossValValidation();
-        
         checkMessageCount(0);
+
+        //no update model needed
     }
     
     public void testEqualsFail() throws Exception
@@ -116,12 +112,10 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
         
-        //update model since it is necessary for crossval
-        inputComponent1.updateModel(facesContext);
-        inputComponent1.updateModel(facesContext);
-        
+
         processCrossValValidation();
-        
         checkMessageCount(2);
+
+        //no update model needed
     }
 }
