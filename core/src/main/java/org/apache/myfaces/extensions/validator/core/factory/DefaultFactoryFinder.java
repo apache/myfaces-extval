@@ -191,7 +191,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         metaDataTransformerFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_TRANSFORMER_FACTORY );
         metaDataTransformerFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.META_DATA_TRANSFORMER_FACTORY));
-        metaDataTransformerFactoryClassNames.add( DefaultMetaDataTransformerFactory.class.getName());
+        metaDataTransformerFactoryClassNames.add(DefaultMetaDataTransformerFactory.class.getName());
 
         for (String className : metaDataTransformerFactoryClassNames)
         {

@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
@@ -27,24 +29,23 @@ import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class CrossValidationUtils
 {
-    public static final String CROSS_VALIDATION_STORAGE_KEY = CrossValidationStorage.class
-            .getName();
+    public static final String CROSS_VALIDATION_STORAGE_KEY = CrossValidationStorage.class.getName();
 
     public static CrossValidationStorage getOrInitCrossValidationStorage()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext()
-                .getRequestMap();
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
 
         if (!requestMap.containsKey(CROSS_VALIDATION_STORAGE_KEY))
         {
             resetCrossValidationStorage();
         }
 
-        return (CrossValidationStorage) requestMap
-                .get(CROSS_VALIDATION_STORAGE_KEY);
+        return (CrossValidationStorage) requestMap.get(CROSS_VALIDATION_STORAGE_KEY);
     }
 
     public static void resetCrossValidationStorage()

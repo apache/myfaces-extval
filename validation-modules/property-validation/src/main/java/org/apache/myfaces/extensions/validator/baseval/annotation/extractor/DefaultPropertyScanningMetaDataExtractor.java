@@ -25,16 +25,19 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultCo
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMetaDataExtractor
 {
-
     @Override
     @ToDo(Priority.MEDIUM)
     public SourceInformation extract(FacesContext facesContext, Object object)

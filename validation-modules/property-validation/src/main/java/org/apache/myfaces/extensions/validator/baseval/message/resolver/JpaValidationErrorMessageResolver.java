@@ -21,14 +21,18 @@ package org.apache.myfaces.extensions.validator.baseval.message.resolver;
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 /*
  * the jpa support is an exception in view of some mechanisms - so there's no convention for the message bundle.
  * instead of the convention there is a global property to have an alternative to web.xml configuration
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class JpaValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
 {
     public static final String JPA_VALIDATION_ERROR_MESSAGES = "JPA_VALIDATION_ERROR_MESSAGES";

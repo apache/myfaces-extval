@@ -26,12 +26,16 @@ import org.apache.myfaces.extensions.validator.trinidad.initializer.component.Tr
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * alternative approach for ExtValRenderKitFactory
  * 
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadModuleStartupListener extends AbstractStartupListener
 {
     @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")

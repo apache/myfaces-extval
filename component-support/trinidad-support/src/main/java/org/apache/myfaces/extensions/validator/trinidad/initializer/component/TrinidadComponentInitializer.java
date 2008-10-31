@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.trinidad.context.RequestContext;
 
 import javax.faces.component.UIComponent;
@@ -33,6 +35,7 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadComponentInitializer implements ComponentInitializer
 {
     private static final String TRINIDAD_CORE_INPUT_TEXT

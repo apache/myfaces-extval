@@ -19,11 +19,14 @@
 package org.apache.myfaces.extensions.validator.core.renderkit.exception;
 
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@UsageInformation(UsageCategory.API)
 public class SkipRendererDelegationException extends Exception
 {
     protected RendererInterceptor exceptionSource;

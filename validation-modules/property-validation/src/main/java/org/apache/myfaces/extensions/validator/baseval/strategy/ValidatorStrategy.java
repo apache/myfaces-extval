@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -30,8 +32,10 @@ import javax.faces.validator.ValidatorException;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @SkipValidationSupport
+@UsageInformation(UsageCategory.INTERNAL)
 public class ValidatorStrategy extends AbstractValidatorAdapter
 {
     protected void processValidation(FacesContext facesContext,
@@ -39,7 +43,8 @@ public class ValidatorStrategy extends AbstractValidatorAdapter
             Object convertedObject) throws ValidatorException
     {
 
-        Class[] validatorClasses = metaDataEntry.getValue(Validator.class).value();
+        Class<? extends javax.faces.validator.Validator>[] validatorClasses =
+            metaDataEntry.getValue(Validator.class).value();
 
         javax.faces.validator.Validator validator;
         for (Class validatorClassName : validatorClasses)

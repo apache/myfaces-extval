@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface WebXmlParameter
 {
     /*

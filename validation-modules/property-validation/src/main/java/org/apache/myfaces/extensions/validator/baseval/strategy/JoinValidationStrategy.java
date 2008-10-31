@@ -27,6 +27,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Abstract
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -34,7 +36,9 @@ import javax.faces.validator.ValidatorException;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class JoinValidationStrategy extends AbstractValidatorAdapter
 {
     public void processValidation(FacesContext facesContext,

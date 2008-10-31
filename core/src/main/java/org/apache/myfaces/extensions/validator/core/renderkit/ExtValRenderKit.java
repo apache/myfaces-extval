@@ -95,7 +95,7 @@ public class ExtValRenderKit extends RenderKit
         return wrapped.createResponseStream(outputStream);
     }
 
-    @UsageInformation({UsageCategory.REUSE, UsageCategory.CUSTOMIZABLE})
+    @UsageInformation(UsageCategory.REUSE)
     protected Renderer createWrapper(Renderer renderer)
     {
         return new ExtValRendererWrapper(renderer);

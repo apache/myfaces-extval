@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ import java.util.Locale;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class PatternMetaDataTransformer implements MetaDataTransformer
 {
     public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)

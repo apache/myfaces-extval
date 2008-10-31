@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
+@UsageInformation({UsageCategory.INTERNAL})
 public class SimpleAnnotationToValidationStrategyNameMapper extends AbstractAnnotationToValidationStrategyNameMapper
 {
     public String createName(String metaDataKey)

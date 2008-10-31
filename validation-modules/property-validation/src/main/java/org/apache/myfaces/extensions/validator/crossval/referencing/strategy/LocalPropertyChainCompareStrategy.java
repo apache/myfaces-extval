@@ -21,12 +21,16 @@ package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * "[local_property.property1.property2]"
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 {
     protected boolean validateELExpression(CrossValidationStorageEntry crossValidationStorageEntry,

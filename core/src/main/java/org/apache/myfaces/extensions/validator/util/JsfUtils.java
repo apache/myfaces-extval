@@ -30,6 +30,7 @@ import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class JsfUtils

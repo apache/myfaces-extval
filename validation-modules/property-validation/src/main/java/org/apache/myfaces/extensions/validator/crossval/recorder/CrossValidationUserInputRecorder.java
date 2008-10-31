@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
@@ -32,7 +34,9 @@ import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class CrossValidationUserInputRecorder implements ProcessedInformationRecorder
 {
     public void recordUserInput(UIComponent uiComponent, Object value)

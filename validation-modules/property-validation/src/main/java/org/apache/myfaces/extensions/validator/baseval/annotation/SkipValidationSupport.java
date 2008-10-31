@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.annotation;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
@@ -29,6 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(TYPE)
 @Retention(RUNTIME)
+@UsageInformation(UsageCategory.API)
 public @interface SkipValidationSupport
 {
 }

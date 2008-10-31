@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 /**
  * helper for frequent meta-data keys
  *
@@ -27,6 +30,7 @@ package org.apache.myfaces.extensions.validator.core.metadata;
 /*
  * placed in core to avoid duplicated information in multiple modules (validation module and component-support module)
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public interface CommonMetaDataKeys
 {
     static final String REQUIRED = "required";
