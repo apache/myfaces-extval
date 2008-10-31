@@ -19,12 +19,16 @@
 package org.apache.myfaces.extensions.validator.crossval;
 
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * centralized in order that these information arn't spread over the complete code base
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public interface WebXmlParameter
 {
     static final String DEACTIVATE_CROSSVALIDATION = WebXmlUtils

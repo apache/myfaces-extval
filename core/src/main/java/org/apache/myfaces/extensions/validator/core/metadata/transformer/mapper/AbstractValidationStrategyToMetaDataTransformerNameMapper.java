@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.ALTERNATIVE})
+@UsageInformation({UsageCategory.INTERNAL})
 public abstract class AbstractValidationStrategyToMetaDataTransformerNameMapper
     implements NameMapper<ValidationStrategy>
 {

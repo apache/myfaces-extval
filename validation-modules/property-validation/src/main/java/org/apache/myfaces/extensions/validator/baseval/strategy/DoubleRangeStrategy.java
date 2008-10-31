@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.DoubleRange;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -30,8 +32,10 @@ import javax.faces.validator.ValidatorException;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @SkipValidationSupport
+@UsageInformation(UsageCategory.INTERNAL)
 public class DoubleRangeStrategy extends AbstractValidatorAdapter
 {
     protected void processValidation(FacesContext facesContext,

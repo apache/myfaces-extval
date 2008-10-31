@@ -27,11 +27,15 @@ import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLo
 import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class PropertyValidationModuleStartupListener extends AbstractStartupListener
 {
     protected void init()

@@ -21,29 +21,30 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @SkipValidationSupport
+@UsageInformation(UsageCategory.INTERNAL)
 public class EqualsStrategy extends AbstractCompareStrategy
 {
-    public boolean useTargetComponentToDisplayErrorMsg(
-            CrossValidationStorageEntry crossValidationStorageEntry)
+    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return true;
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation,
-            boolean isTargetComponent)
+    protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)
     {
         return ((Equals) annotation).validationErrorMsgKey();
     }
 
-    public boolean isViolation(Object object1, Object object2,
-            Annotation annotation)
+    public boolean isViolation(Object object1, Object object2, Annotation annotation)
     {
         return object1 != null && !object1.equals(object2);
     }

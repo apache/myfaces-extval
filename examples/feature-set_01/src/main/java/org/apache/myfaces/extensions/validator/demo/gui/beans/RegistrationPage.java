@@ -41,6 +41,7 @@ public class RegistrationPage
     private String oldPassword;
 
     @Equals("passwordRepeated")
+    //combine gui related annotations with the annoations of the domain model
     @JoinValidation(value = "#{registrationPage.person.password}")
     private String password;
 
@@ -85,8 +86,7 @@ public class RegistrationPage
         return "";
     }
 
-    //combine gui related annotations with the annoations of the domain model
-    @JoinValidation("#{person.email}")
+    @JoinValidation("person.email")
     @Validator(EmailValidator.class)
     public String getEmail()
     {

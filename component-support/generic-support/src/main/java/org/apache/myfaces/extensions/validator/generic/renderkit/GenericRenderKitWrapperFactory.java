@@ -19,12 +19,16 @@
 package org.apache.myfaces.extensions.validator.generic.renderkit;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.render.RenderKit;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
     protected RenderKit createWrapper(RenderKit renderKit)

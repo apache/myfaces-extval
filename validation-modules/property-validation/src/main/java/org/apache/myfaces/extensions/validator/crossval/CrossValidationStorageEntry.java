@@ -20,12 +20,16 @@ package org.apache.myfaces.extensions.validator.crossval;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.crossval.strategy.CrossValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.API)
 public class CrossValidationStorageEntry
 {
     private MetaDataEntry metaDataEntry;

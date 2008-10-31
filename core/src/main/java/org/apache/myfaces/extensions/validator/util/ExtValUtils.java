@@ -39,6 +39,7 @@ import java.util.Map;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
