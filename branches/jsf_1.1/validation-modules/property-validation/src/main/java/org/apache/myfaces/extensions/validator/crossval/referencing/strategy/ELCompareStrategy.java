@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 
 import javax.faces.context.FacesContext;
@@ -37,7 +39,9 @@ import java.lang.annotation.Annotation;
  * "#{[bean_name].[property_name]}" ... cross-entity validation with value binding
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ELCompareStrategy implements ReferencingStrategy
 {
     public boolean evalReferenceAndValidate(

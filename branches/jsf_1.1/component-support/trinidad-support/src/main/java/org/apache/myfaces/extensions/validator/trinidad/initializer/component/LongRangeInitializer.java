@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.trinidad.validator.LongRangeValidator;
 
 import javax.faces.component.EditableValueHolder;
@@ -33,6 +35,7 @@ import java.util.Map;
  * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
+@UsageInformation(UsageCategory.INTERNAL)
 public class LongRangeInitializer extends TrinidadComponentInitializer
 {
     @Override

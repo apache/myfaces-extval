@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ToDo(value = Priority.MEDIUM, description = "difference between [ and [' - test with more constelations")
+@ToDo(value = Priority.MEDIUM, description = "difference between [ and [' - test with more constellations")
 @UsageInformation({UsageCategory.API})
 public class ValueBindingExpression
 {

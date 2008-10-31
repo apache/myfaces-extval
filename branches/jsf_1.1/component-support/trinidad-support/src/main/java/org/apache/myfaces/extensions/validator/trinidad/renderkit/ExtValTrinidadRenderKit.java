@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.trinidad.renderkit;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKit;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.trinidadinternal.renderkit.RenderKitDecorator;
 import org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderKit;
 
@@ -32,7 +34,9 @@ import java.io.OutputStream;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValTrinidadRenderKit extends RenderKitDecorator
 {
     protected ExtValRenderKit extValRenderKit;
