@@ -21,13 +21,17 @@ package org.apache.myfaces.extensions.validator.baseval;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * centralized in order that these information arn't spread over the complete code base
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @ToDo(value = Priority.HIGH, description = "documentation")
+@UsageInformation(UsageCategory.INTERNAL)
 public interface WebXmlParameter
 {
     static final String VALIDATION_MESSAGES_JPA = WebXmlUtils

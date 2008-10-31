@@ -32,13 +32,9 @@ package org.apache.myfaces.extensions.validator.internal;
  * however, we try to keep it as stable as possible and reasonable.
  * <p/>
  * REUSE:<br/>
- * an artifact which you can reuse for a custom artifact.
+ * an artifact which you can reuse for a custom implementation.
  * if it isn't marked as API it might change in future releases.
  * however, we try to keep it as stable as possible and reasonable.
- * <p/>
- * FALLBACK and ALTERNATIVE
- * e.g.: some mechanisms aren't deprecated, because it makes sense to use them.
- * however, it's not the default approach
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -48,7 +44,5 @@ public enum UsageCategory
     API,
     INTERNAL,
     CUSTOMIZABLE,
-    REUSE,
-    FALLBACK,
-    ALTERNATIVE
+    REUSE
 }

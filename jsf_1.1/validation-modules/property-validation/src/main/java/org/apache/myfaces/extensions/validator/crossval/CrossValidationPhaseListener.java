@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.crossval;
 
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -27,11 +29,12 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.validator.ValidatorException;
-import java.util.MissingResourceException;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class CrossValidationPhaseListener implements PhaseListener
 {
     private boolean isInitialized = false;
@@ -40,24 +43,19 @@ public class CrossValidationPhaseListener implements PhaseListener
     {
         try
         {
-            CrossValidationStorage crossValidationStorage = CrossValidationUtils
-                    .getOrInitCrossValidationStorage();
-            for (CrossValidationStorageEntry entry : crossValidationStorage
-                    .getCrossValidationStorageEntries())
+            CrossValidationStorage crossValidationStorage = CrossValidationUtils.getOrInitCrossValidationStorage();
+            for (CrossValidationStorageEntry entry : crossValidationStorage.getCrossValidationStorageEntries())
             {
                 try
                 {
-                    entry.getValidationStrategy().processCrossValidation(entry,
-                            crossValidationStorage);
+                    entry.getValidationStrategy().processCrossValidation(entry, crossValidationStorage);
                 }
                 catch (ValidatorException e)
                 {
 
                     FacesMessage facesMessage = e.getFacesMessage();
 
-                    if (facesMessage != null
-                            && facesMessage.getSummary() != null
-                            && facesMessage.getDetail() != null)
+                    if (facesMessage != null && facesMessage.getSummary() != null && facesMessage.getDetail() != null)
                     {
                         UIComponent component = entry.getComponent();
                         String clientId = null;
@@ -65,25 +63,13 @@ public class CrossValidationPhaseListener implements PhaseListener
                         //TODO
                         if (component != null)
                         {
-                            clientId = component.getClientId(event
-                                    .getFacesContext());
+                            clientId = component.getClientId(event.getFacesContext());
                         }
 
-                        event.getFacesContext().addMessage(clientId,
-                                facesMessage);
+                        event.getFacesContext().addMessage(clientId, facesMessage);
                     }
 
                     event.getFacesContext().renderResponse();
-                }
-                catch (MissingResourceException e)
-                {
-                    event.getFacesContext().addMessage(
-                            null,
-                            new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                    "custom validation message not found", e
-                                            .toString()));
-                    event.getFacesContext().renderResponse();
-                    throw e;
                 }
             }
         }
@@ -98,8 +84,7 @@ public class CrossValidationPhaseListener implements PhaseListener
         if (!isInitialized)
         {
             if (WebXmlParameter.DEACTIVATE_CROSSVALIDATION != null
-                    && WebXmlParameter.DEACTIVATE_CROSSVALIDATION
-                            .equalsIgnoreCase("true"))
+                    && WebXmlParameter.DEACTIVATE_CROSSVALIDATION.equalsIgnoreCase("true"))
             {
                 JsfUtils.deregisterPhaseListener(this);
             }

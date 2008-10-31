@@ -39,12 +39,15 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Loc
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
-public abstract class AbstractCompareStrategy extends
-        AbstractCrossValidationStrategy
+@UsageInformation(UsageCategory.INTERNAL)
+public abstract class AbstractCompareStrategy extends AbstractCrossValidationStrategy
 {
     protected static List<ReferencingStrategy> referencingStrategies;
     protected Map<Object, Object> violationResultStorage = new HashMap<Object, Object>();
@@ -94,8 +97,7 @@ public abstract class AbstractCompareStrategy extends
             validationTarget = validationTarget.trim();
 
             //select validation method
-            tryToValidate(crossValidationStorageEntry, crossValidationStorage,
-                    validationTarget);
+            tryToValidate(crossValidationStorageEntry, crossValidationStorage, validationTarget);
         }
     }
 
@@ -107,8 +109,7 @@ public abstract class AbstractCompareStrategy extends
         for (ReferencingStrategy referencingStrategy : referencingStrategies)
         {
             if (referencingStrategy.evalReferenceAndValidate(
-                    crossValidationStorageEntry, crossValidationStorage,
-                    validationTarget, this))
+                    crossValidationStorageEntry, crossValidationStorage, validationTarget, this))
             {
                 return true;
             }
@@ -280,8 +281,7 @@ public abstract class AbstractCompareStrategy extends
      * the usage of this method requires a new instance
      * -> in case of validation strategy beans application/singleton isn't allowed
      */
-    protected void initValidation(
-            CrossValidationStorageEntry crossValidationStorageEntry)
+    protected void initValidation(CrossValidationStorageEntry crossValidationStorageEntry)
     {
     }
 
@@ -292,14 +292,12 @@ public abstract class AbstractCompareStrategy extends
         return true;
     }
 
-    protected boolean handleSourceViolation(
-            CrossValidationStorageEntry entryOfSource)
+    protected boolean handleSourceViolation(CrossValidationStorageEntry entryOfSource)
     {
         return true;
     }
 
-    public boolean useTargetComponentToDisplayErrorMsg(
-            CrossValidationStorageEntry crossValidationStorageEntry)
+    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return handleTargetViolation(crossValidationStorageEntry, null);
     }
@@ -308,15 +306,13 @@ public abstract class AbstractCompareStrategy extends
      * abstract methods
      */
 
-    protected abstract String getValidationErrorMsgKey(Annotation annotation,
-            boolean isTargetComponent);
+    protected abstract String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent);
 
     /*
      * implements the specific validation logic
      */
 
-    public abstract boolean isViolation(Object object1, Object object2,
-            Annotation annotation);
+    public abstract boolean isViolation(Object object1, Object object2, Annotation annotation);
 
     /*
      * returns the referenced validation targets of the annotation
