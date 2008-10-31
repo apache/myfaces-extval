@@ -31,6 +31,12 @@ import javax.faces.event.PhaseListener;
 import javax.faces.validator.ValidatorException;
 
 /**
+ * This phase listener processes cross validation as soon as it finds a special request scoped storage.<br/>
+ * So it's possible to add information during the process validation phase. At the end of this phase it gets processed.
+ * After that the storage gets reseted.<p/>
+ * If you provide a custom extension and you add the same storage type within a different phase,
+ * it also gets processed at the end of that phase.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
