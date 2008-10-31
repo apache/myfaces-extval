@@ -32,7 +32,9 @@ import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInterceptor
 {
     public static RenderKit newInstance(RenderKit renderKit)
@@ -76,7 +78,7 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
         super(wrapped);
     }
 
-    @UsageInformation({UsageCategory.REUSE, UsageCategory.CUSTOMIZABLE})
+    @Override
     protected Renderer createWrapper(Renderer renderer)
     {
         return ExtValGenericRendererWrapper.newInstance(renderer);

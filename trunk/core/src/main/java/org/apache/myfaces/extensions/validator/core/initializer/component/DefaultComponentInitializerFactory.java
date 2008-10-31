@@ -39,8 +39,7 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultComponentInitializerFactory implements
-    ClassMappingFactory<UIComponent, ComponentInitializer>
+public class DefaultComponentInitializerFactory implements ClassMappingFactory<UIComponent, ComponentInitializer>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 

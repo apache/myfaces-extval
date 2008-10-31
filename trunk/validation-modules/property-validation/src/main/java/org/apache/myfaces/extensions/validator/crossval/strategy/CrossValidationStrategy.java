@@ -31,6 +31,7 @@ import javax.faces.validator.ValidatorException;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface CrossValidationStrategy extends ValidationStrategy

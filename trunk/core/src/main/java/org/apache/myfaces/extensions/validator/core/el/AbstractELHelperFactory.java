@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public abstract class AbstractELHelperFactory
 {
     protected final Log logger = LogFactory.getLog(getClass());

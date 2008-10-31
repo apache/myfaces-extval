@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.trinidad;
 
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRenderKit;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -32,7 +34,9 @@ import javax.faces.render.RenderKitFactory;
  * use this phase-listener instead of a ExtValTrinidadRenderKitWrapperFactory due to a trinidad issue
  *
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 {
     public void afterPhase(PhaseEvent event)

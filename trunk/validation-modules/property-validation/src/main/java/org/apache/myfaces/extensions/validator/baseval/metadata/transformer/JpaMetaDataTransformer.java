@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -35,6 +37,7 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class JpaMetaDataTransformer implements MetaDataTransformer
 {
     @ToDo(value = Priority.HIGH, description = "impl. the rest")

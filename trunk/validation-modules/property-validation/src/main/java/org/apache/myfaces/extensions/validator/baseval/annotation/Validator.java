@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.annotation;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import java.lang.annotation.Retention;
@@ -26,10 +29,12 @@ import java.lang.annotation.Target;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
-@Target( { METHOD, FIELD })
+@Target({METHOD, FIELD})
 @Retention(RUNTIME)
+@UsageInformation(UsageCategory.API)
 public @interface Validator
 {
-    Class[] value();
+    Class<? extends javax.faces.validator.Validator>[] value();
 }

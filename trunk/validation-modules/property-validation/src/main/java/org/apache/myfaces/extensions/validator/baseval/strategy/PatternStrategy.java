@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -31,8 +33,10 @@ import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
 @SkipValidationSupport
+@UsageInformation(UsageCategory.INTERNAL)
 public class PatternStrategy extends AbstractAnnotationValidationStrategy
 {
     protected void processValidation(FacesContext facesContext,

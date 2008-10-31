@@ -18,12 +18,17 @@
  */
 package org.apache.myfaces.extensions.validator.crossval;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
+ * @since 1.x.1
  */
+@UsageInformation(UsageCategory.API)
 public class CrossValidationStorage
 {
     private List<CrossValidationStorageEntry> crossValidationStorageEntries = 
@@ -39,8 +44,7 @@ public class CrossValidationStorage
         return crossValidationStorageEntries;
     }
 
-    public void setCrossValidationStorageEntries(
-            List<CrossValidationStorageEntry> crossValidationStorageEntries)
+    public void setCrossValidationStorageEntries(List<CrossValidationStorageEntry> crossValidationStorageEntries)
     {
         this.crossValidationStorageEntries = crossValidationStorageEntries;
     }

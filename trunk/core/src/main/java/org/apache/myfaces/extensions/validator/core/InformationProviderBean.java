@@ -100,7 +100,7 @@ public class InformationProviderBean
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
 
         //conventions (the rest of the conventions are built with the help of name mappers,...
-        customizableInfos.put(CustomInfo.CONVENTION_FOR_CUSTOM_MESSAGE_BUNDLE, "validation_messages");
+        customizableInfos.put(CustomInfo.MESSAGE_BUNDLE_NAME, "validation_messages");
         //static strategy mappings (name of property files)
         customizableInfos.put(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE, "strategy_mappings");
     }
