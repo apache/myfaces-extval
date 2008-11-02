@@ -22,13 +22,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -70,8 +68,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         ValidationStrategy validationStrategy;
         MetaDataTransformer metaDataTransformer;
 
-        MetaDataExtractor metaDataExtractor = ExtValContext.getContext().getFactoryFinder().getFactory(
-            FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, MetaDataExtractorFactory.class).create();
+        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
 
         Map<String, Object> metaData = new HashMap<String, Object>();
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
