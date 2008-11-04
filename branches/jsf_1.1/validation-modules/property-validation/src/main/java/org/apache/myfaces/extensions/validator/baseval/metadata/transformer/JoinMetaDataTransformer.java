@@ -55,7 +55,7 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
         for (String targetExpression : targetExpressions)
         {
             propertyDetails = ExtValUtils
-                .createTargetInformationEntryForNewTarget(metaDataEntry, targetExpression);
+                .createPropertyDetailsForNewTarget(metaDataEntry, targetExpression);
 
             for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
                 propertyDetails).getMetaDataEntries())

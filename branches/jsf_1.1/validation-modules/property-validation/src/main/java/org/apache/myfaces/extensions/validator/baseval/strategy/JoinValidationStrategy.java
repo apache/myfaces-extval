@@ -54,7 +54,7 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
         for (String targetExpression : targetExpressions)
         {
             propertyDetails = ExtValUtils
-                .createTargetInformationEntryForNewTarget(metaDataEntry, targetExpression);
+                .createPropertyDetailsForNewTarget(metaDataEntry, targetExpression);
 
             for (MetaDataEntry entry : extractor.extract(facesContext, propertyDetails).getMetaDataEntries())
             {
