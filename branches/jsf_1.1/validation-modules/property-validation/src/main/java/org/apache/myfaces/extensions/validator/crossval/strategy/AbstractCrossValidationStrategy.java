@@ -55,6 +55,7 @@ public abstract class AbstractCrossValidationStrategy extends
 
         entry.setMetaDataEntry(metaDataEntry);
         entry.setComponent(uiComponent);
+        entry.setClientId(uiComponent.getClientId(facesContext));
         entry.setConvertedObject(convertedObject);
         entry.setValidationStrategy(this);
 

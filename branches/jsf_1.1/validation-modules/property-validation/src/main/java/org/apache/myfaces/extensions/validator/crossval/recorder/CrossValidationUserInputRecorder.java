@@ -28,6 +28,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
+import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         entry.setBean(targetInformationEntry.getBaseObject());
         entry.setConvertedValue(value);
         entry.setComponent(uiComponent);
+        entry.setClientId(uiComponent.getClientId(FacesContext.getCurrentInstance()));
 
         String key = targetInformationEntry.getKey();
 

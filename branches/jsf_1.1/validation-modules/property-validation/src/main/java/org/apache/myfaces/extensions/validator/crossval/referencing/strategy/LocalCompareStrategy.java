@@ -139,10 +139,12 @@ public class LocalCompareStrategy implements ReferencingStrategy
             if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
             {
                 tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
+                tmpCrossValidationStorageEntry.setClientId(validationTargetEntry.getClientId());
             }
             else
             {
                 tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
+                tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
             }
             tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
             tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);

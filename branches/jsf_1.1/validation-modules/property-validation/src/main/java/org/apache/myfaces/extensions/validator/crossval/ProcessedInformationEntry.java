@@ -40,6 +40,8 @@ public class ProcessedInformationEntry
     //the same key (here the el expression #{entry.property})
     //however, don't override the previous entry - they arn't the same;
     private List<ProcessedInformationEntry> furtherEntries;
+    //just for input components within complex components e.g. dataTable,...
+    private String clientId;
 
     /*
      * generated
@@ -72,6 +74,16 @@ public class ProcessedInformationEntry
     public void setComponent(UIComponent component)
     {
         this.component = component;
+    }
+
+    public String getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(String clientId)
+    {
+        this.clientId = clientId;
     }
 
     public List<ProcessedInformationEntry> getFurtherEntries()
