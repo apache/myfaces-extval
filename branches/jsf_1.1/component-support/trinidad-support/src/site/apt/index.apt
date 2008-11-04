@@ -1,0 +1,13 @@
+ ------
+Apache MyFaces Extensions Validator Trinidad Support Module
+ ------
+
+Apache MyFaces Extensions Validator Trinidad Support Module Overview
+
+    Myfaces Extensions Validator Trinidad Support Module provides trinidad support for use Myfaces Extensions Validator.
+  
+    Myfaces Extensions Validator comes with jar compatible with JSF 1.1(1.1.x version)
+  and JSF 1.2 (1.2.x version), but both packages are JDK 1.5 compatible.
+  
+  
+    
