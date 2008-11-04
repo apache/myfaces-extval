@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.StringTokenizer;
 
 /**
  * @author Gerhard Petracek
@@ -149,5 +150,33 @@ public class ReflectionUtils
         throws InvocationTargetException, IllegalAccessException
     {
         return method.invoke(target, args);
+    }
+
+    public static Object getBaseOfPropertyChain(Object baseObject, String propertyChain)
+    {
+        StringTokenizer tokenizer = new StringTokenizer(propertyChain, ".");
+
+        Object currentBase = baseObject;
+        String currentProperty;
+        Method currentMethod;
+
+        while(tokenizer.hasMoreTokens())
+        {
+            currentProperty = tokenizer.nextToken();
+
+            //ignore the last property
+            if(!tokenizer.hasMoreTokens())
+            {
+                break;
+            }
+
+            //no is - it's only possible at properties not at bean level
+            currentMethod = tryToGetMethod(currentBase.getClass(),
+                "get" + currentProperty.substring(0, 1).toUpperCase() +
+                    currentProperty.substring(1, currentProperty.length()));
+            currentBase = tryToInvokeMethod(currentBase, currentMethod);
+        }
+
+        return currentBase;
     }
 }

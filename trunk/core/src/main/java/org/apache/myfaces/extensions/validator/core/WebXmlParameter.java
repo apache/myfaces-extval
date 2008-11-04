@@ -83,6 +83,12 @@ public interface WebXmlParameter
         .getInitParameter("CUSTOM_COMPONENT_INITIALIZER_FACTORY");
 
     /*
+     * activate
+     */
+    static final String ACTIVATE_EL_RESOLVER = WebXmlUtils
+        .getInitParameter("ACTIVATE_EL_RESOLVER");
+
+    /*
      * deactivate
      */
     static final String DEACTIVATE_RENDERKIT = WebXmlUtils

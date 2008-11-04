@@ -23,10 +23,12 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.el.ValueExpression;
+import javax.el.ELContext;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -49,6 +51,8 @@ import java.io.Externalizable;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultELHelper implements ELHelper
 {
+    private static final String ACTIVATE_EL_RESOLVER = WebXmlParameter.ACTIVATE_EL_RESOLVER;
+
     protected final Log logger = LogFactory.getLog(getClass());
 
     public DefaultELHelper()
@@ -109,12 +113,12 @@ public class DefaultELHelper implements ELHelper
         return true;
     }
 
-    public ValueBindingExpression getValueBindingExpression(UIComponent uiComponent)
+    private ValueBindingExpression getValueBindingExpression(UIComponent uiComponent)
     {
         return getValueBindingExpression(uiComponent, false);
     }
 
-    public ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters)
+    private ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters)
     {
         String valueBindingExpression = getOriginalValueBindingExpression(uiComponent);
 
@@ -161,6 +165,70 @@ public class DefaultELHelper implements ELHelper
             return result;
         }
         return new ValueBindingExpression(valueBindingExpression);
+    }
+
+    public TargetInformationEntry getTargetInformation(UIComponent uiComponent)
+    {
+        if("true".equalsIgnoreCase(ACTIVATE_EL_RESOLVER))
+        {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+
+            ExtValELResolver elResolver = new ExtValELResolver(facesContext.getApplication().getELResolver());
+            ELContext elContext = ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver);
+
+            ValueExpression valueExpression = uiComponent.getValueExpression("value");
+
+            if(valueExpression == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                valueExpression.setValue(elContext, null);
+            }
+            catch (Throwable t)
+            {
+                throw new IllegalStateException("please don't activate the el-resovler of extval. " +
+                    "there's a bug in the el impl. you are using.");
+            }
+
+            if(elResolver.getPath() != null && elResolver.getBaseObject() != null && elResolver.getProperty() != null)
+            {
+                return new TargetInformationEntry(
+                    elResolver.getPath(), elResolver.getBaseObject(), elResolver.getProperty());
+            }
+        }
+
+        ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
+
+        if(valueBindingExpression == null)
+        {
+            return null;
+        }
+
+        ValueBindingExpression currentValueBindingExpression =
+            new ValueBindingExpression(valueBindingExpression.getExpressionString());
+        String path = null;
+
+        while(currentValueBindingExpression.getBaseExpression() != null)
+        {
+            if(path == null)
+            {
+                path = currentValueBindingExpression.getProperty();
+            }
+            else
+            {
+                path = currentValueBindingExpression.getProperty() + "." + path;
+            }
+
+            currentValueBindingExpression = currentValueBindingExpression.getBaseExpression();
+        }
+
+        path = currentValueBindingExpression.getProperty() + "." + path;
+
+        return new TargetInformationEntry(path,
+            getBaseObject(valueBindingExpression), valueBindingExpression.getProperty());
     }
 
     static String getOriginalValueBindingExpression(UIComponent uiComponent)
