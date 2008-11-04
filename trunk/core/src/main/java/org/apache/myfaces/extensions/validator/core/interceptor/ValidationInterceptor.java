@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -101,7 +101,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                     }
                 }
 
-                if(Boolean.TRUE.equals(entry.getProperty(PropertySourceInformationKeys.SKIP_VALIDATION, Boolean.class)))
+                if(Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)))
                 {
                     metaData.put(CommonMetaDataKeys.SKIP_VALIDATION, true);
                 }

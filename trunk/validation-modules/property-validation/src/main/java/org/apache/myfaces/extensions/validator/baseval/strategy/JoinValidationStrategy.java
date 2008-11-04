@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -50,13 +50,13 @@ public class JoinValidationStrategy extends AbstractValidatorAdapter
 
         ValidationStrategy validationStrategy;
 
-        TargetInformationEntry targetInformationEntry;
+        PropertyDetails propertyDetails;
         for (String targetExpression : targetExpressions)
         {
-            targetInformationEntry = ExtValUtils
+            propertyDetails = ExtValUtils
                 .createTargetInformationEntryForNewTarget(metaDataEntry, targetExpression);
 
-            for (MetaDataEntry entry : extractor.extract(facesContext, targetInformationEntry).getMetaDataEntries())
+            for (MetaDataEntry entry : extractor.extract(facesContext, propertyDetails).getMetaDataEntries())
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 

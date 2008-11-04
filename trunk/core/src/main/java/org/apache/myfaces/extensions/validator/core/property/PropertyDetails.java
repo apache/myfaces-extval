@@ -16,20 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.el;
+package org.apache.myfaces.extensions.validator.core.property;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-public class TargetInformationEntry
+public class PropertyDetails
 {
     //forms the id for cross-validation within complex components
     private String key;
     private Object baseObject;
     private String property;
 
-    public TargetInformationEntry(String key, Object baseObject, String property)
+    public PropertyDetails(String key, Object baseObject, String property)
     {
         this.key = key;
         this.baseObject = baseObject;

@@ -25,9 +25,9 @@ import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompare
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -67,8 +67,8 @@ public class LocalCompareStrategy implements ReferencingStrategy
                 .getOrInitKeyToConvertedValueMapping();
         ProcessedInformationEntry validationTargetEntry;
 
-        TargetInformationEntry targetInformationEntry = crossValidationStorageEntry.getMetaDataEntry()
-                .getProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, TargetInformationEntry.class);
+        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
         String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
         if (!keyConvertedValueMapping.containsKey(newKey))
@@ -76,7 +76,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
             return false;
         }
 
-        String sourceKey = targetInformationEntry.getKey();
+        String sourceKey = propertyDetails.getKey();
 
         if(!sourceKey.contains("."))
         {
@@ -92,7 +92,7 @@ public class LocalCompareStrategy implements ReferencingStrategy
         {
             if(logger.isWarnEnabled())
             {
-                logger.warn("couldn't find converted object for " + targetInformationEntry.getKey());
+                logger.warn("couldn't find converted object for " + propertyDetails.getKey());
             }
 
             return false;
@@ -113,8 +113,8 @@ public class LocalCompareStrategy implements ReferencingStrategy
         //here only dot-notation is allowed -> no problem
         ValueBindingExpression baseExpression =
             new ValueBindingExpression("#{" + crossValidationStorageEntry.getMetaDataEntry()
-                .getProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY,
-                    TargetInformationEntry.class).getKey() + "}");
+                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS,
+                    PropertyDetails.class).getKey() + "}");
 
         String result = ValueBindingExpression.replaceOrAddProperty(baseExpression, targetKey)
             .getExpressionString();
