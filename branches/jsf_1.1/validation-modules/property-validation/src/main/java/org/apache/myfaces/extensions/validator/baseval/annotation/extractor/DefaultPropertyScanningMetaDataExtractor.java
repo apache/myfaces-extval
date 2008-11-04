@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.annotation.extractor;
 
-import org.apache.myfaces.extensions.validator.core.metadata.SourceInformation;
-import org.apache.myfaces.extensions.validator.core.metadata.DefaultSourceInformation;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractor;
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -39,29 +39,29 @@ public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMe
 {
     @Override
     @ToDo(Priority.MEDIUM)
-    public SourceInformation extract(FacesContext facesContext, Object object)
+    public PropertyInformation extract(FacesContext facesContext, Object object)
     {
-        SourceInformation sourceInformation = new DefaultSourceInformation();
+        PropertyInformation propertyInformation = new DefaultPropertyInformation();
 
-        if (!(object instanceof TargetInformationEntry))
+        if (!(object instanceof PropertyDetails))
         {
-            throw new IllegalStateException(object.getClass() + " is not a " + TargetInformationEntry.class.getName());
+            throw new IllegalStateException(object.getClass() + " is not a " + PropertyDetails.class.getName());
         }
 
-        TargetInformationEntry targetInformationEntry = (TargetInformationEntry)object;
+        PropertyDetails propertyDetails = (PropertyDetails)object;
 
-        Class entityClass = targetInformationEntry.getBaseObject().getClass();
+        Class entityClass = propertyDetails.getBaseObject().getClass();
 
         //TODO test with complex components
-        sourceInformation.setProperty(
-            PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, targetInformationEntry);
+        propertyInformation.setInformation(
+            PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
         /*
          * find and add annotations
          */
-        addPropertyAccessAnnotations(entityClass, targetInformationEntry.getProperty(), sourceInformation);
-        addFieldAccessAnnotations(entityClass, targetInformationEntry.getProperty(), sourceInformation);
+        addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+        addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
 
-        return sourceInformation;
+        return propertyInformation;
     }
 }

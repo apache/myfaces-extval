@@ -39,8 +39,8 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Loc
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -155,7 +155,8 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
                 entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
         }
 
-        if (message.getSummary() != null || message.getDetail() != null)
+        if ((message.getSummary() != null || message.getDetail() != null) &&
+            entryOfSource.getClientId() != null && !entryOfSource.getClientId().equals(entryOfTarget.getClientId()))
         {
             facesContext.addMessage(entryOfTarget.getClientId(), message);
         }
@@ -225,10 +226,10 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
             return processedInformationEntry;
         }
 
-        TargetInformationEntry targetInformationEntry = crossValidationStorageEntry.getMetaDataEntry()
-                .getProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, TargetInformationEntry.class);
+        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
-        Object targetBean = targetInformationEntry.getBaseObject();
+        Object targetBean = propertyDetails.getBaseObject();
 
         //process complex component entries (e.g. a table)
         //supported: cross-component but no cross-entity validation (= locale validation)

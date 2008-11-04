@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.SourceInformation;
-import org.apache.myfaces.extensions.validator.core.metadata.DefaultSourceInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -61,14 +61,14 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
     }
 
     @ToDo(Priority.MEDIUM)
-    public SourceInformation extract(FacesContext facesContext, Object object)
+    public PropertyInformation extract(FacesContext facesContext, Object object)
     {
-        SourceInformation sourceInformation = new DefaultSourceInformation();
+        PropertyInformation propertyInformation = new DefaultPropertyInformation();
 
         //should never occur
         if (!(object instanceof UIComponent))
         {
-            return sourceInformation;
+            return propertyInformation;
         }
 
         UIComponent uiComponent = (UIComponent) object;
@@ -78,21 +78,21 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             logger.trace("start extracting meta-data of " + uiComponent.getClass().getName());
         }
 
-        TargetInformationEntry targetInformationEntry =
+        PropertyDetails propertyDetails =
             ExtValUtils.getELHelper().getTargetInformation(uiComponent);
 
-        if (targetInformationEntry == null)
+        if (propertyDetails == null)
         {
-            return sourceInformation;
+            return propertyInformation;
         }
 
         /*
          * get bean class and property name
          */
-        Class entityClass = targetInformationEntry.getBaseObject().getClass();
+        Class entityClass = propertyDetails.getBaseObject().getClass();
 
         //create
-        sourceInformation.setProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, targetInformationEntry);
+        propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
         /*
          * find and add annotations
@@ -101,8 +101,8 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         while (!Object.class.getName().equals(currentClass.getName()))
         {
-            addPropertyAccessAnnotations(currentClass, targetInformationEntry.getProperty(), sourceInformation);
-            addFieldAccessAnnotations(currentClass, targetInformationEntry.getProperty(), sourceInformation);
+            addPropertyAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
+            addFieldAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
 
             currentClass = currentClass.getSuperclass();
         }
@@ -113,7 +113,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
             while (currentClass != null)
             {
-                addPropertyAccessAnnotations(currentClass, targetInformationEntry.getProperty(), sourceInformation);
+                addPropertyAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
 
                 currentClass = currentClass.getSuperclass();
             }
@@ -124,11 +124,11 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             logger.trace("extract finished");
         }
 
-        return sourceInformation;
+        return propertyInformation;
     }
 
     protected void addPropertyAccessAnnotations(Class entity, String property,
-                                                SourceInformation sourceInformation)
+                                                PropertyInformation propertyInformation)
     {
         property = property.substring(0, 1).toUpperCase() + property.substring(1);
 
@@ -156,11 +156,11 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             }
         }
 
-        addAnnotationToAnnotationEntries(Arrays.asList(method.getAnnotations()), sourceInformation);
+        addAnnotationToAnnotationEntries(Arrays.asList(method.getAnnotations()), propertyInformation);
     }
 
     protected void addFieldAccessAnnotations(Class entity, String property,
-                                             SourceInformation sourceInformation)
+                                             PropertyInformation propertyInformation)
     {
         Field field;
 
@@ -185,15 +185,15 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             }
         }
 
-        addAnnotationToAnnotationEntries(Arrays.asList(field.getAnnotations()), sourceInformation);
+        addAnnotationToAnnotationEntries(Arrays.asList(field.getAnnotations()), propertyInformation);
     }
 
     protected void addAnnotationToAnnotationEntries(
-        List<Annotation> annotations, SourceInformation sourceInformation)
+        List<Annotation> annotations, PropertyInformation propertyInformation)
     {
         for (Annotation annotation : annotations)
         {
-            sourceInformation.addMetaDataEntry(createMetaDataEntryForAnnotation(annotation));
+            propertyInformation.addMetaDataEntry(createMetaDataEntryForAnnotation(annotation));
 
             if(logger.isTraceEnabled())
             {
