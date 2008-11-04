@@ -26,10 +26,14 @@ import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 
 import javax.faces.component.UIComponent;
@@ -89,5 +93,31 @@ public class ExtValUtils
     {
         return ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class).create();
+    }
+
+    public static TargetInformationEntry createTargetInformationEntryForNewTarget(MetaDataEntry metaDataEntry,
+                                                                                  String targetExpression)
+    {
+        Object baseObject;
+        if(ExtValUtils.getELHelper().isELTerm(targetExpression))
+        {
+            ValueBindingExpression vbe = new ValueBindingExpression(targetExpression);
+
+            String expression = vbe.getExpressionString();
+            baseObject = ExtValUtils.getELHelper().getBaseObject(vbe);
+            return new TargetInformationEntry(
+                expression.substring(2, expression.length() - 1), baseObject, vbe.getProperty());
+        }
+
+        TargetInformationEntry original = metaDataEntry.getProperty(
+            PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, TargetInformationEntry.class);
+
+        String newBaseKey = original.getKey().substring(0, original.getKey().lastIndexOf(".") + 1);
+        String newKey = newBaseKey + targetExpression;
+
+        baseObject = ReflectionUtils.getBaseOfPropertyChain(original.getBaseObject(), targetExpression);
+        return new TargetInformationEntry(
+            newKey, baseObject, targetExpression.substring(targetExpression.lastIndexOf(".") + 1,
+            targetExpression.length()));
     }
 }
