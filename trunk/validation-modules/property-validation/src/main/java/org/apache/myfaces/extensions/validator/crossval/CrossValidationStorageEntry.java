@@ -37,6 +37,8 @@ public class CrossValidationStorageEntry
     private UIComponent component;
     private Object convertedObject;
     private CrossValidationStrategy validationStrategy;
+    //just for input components within complex components e.g. dataTable,...
+    private String clientId;
 
     public MetaDataEntry getMetaDataEntry()
     {
@@ -76,5 +78,15 @@ public class CrossValidationStorageEntry
     public void setValidationStrategy(CrossValidationStrategy validationStrategy)
     {
         this.validationStrategy = validationStrategy;
+    }
+
+    public String getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(String clientId)
+    {
+        this.clientId = clientId;
     }
 }

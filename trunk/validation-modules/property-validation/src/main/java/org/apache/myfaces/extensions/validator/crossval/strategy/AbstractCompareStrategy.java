@@ -144,26 +144,25 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         FacesMessage message;
         if (entryOfTarget.getMetaDataEntry() != null)
         {
-            message = getTargetComponentErrorMessage(entryOfTarget
-                    .getMetaDataEntry().getValue(Annotation.class), summary, details);
+            message = getTargetComponentErrorMessage(
+                entryOfTarget.getMetaDataEntry().getValue(Annotation.class), summary, details);
         }
         else
         {
             //TODO document possible side effects
             //due to a missing target annotation (see: tryToValidateLocally)
-            message = getTargetComponentErrorMessage(entryOfSource
-                    .getMetaDataEntry().getValue(Annotation.class), summary, details);
+            message = getTargetComponentErrorMessage(
+                entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
         }
 
         if (message.getSummary() != null || message.getDetail() != null)
         {
-            facesContext.addMessage(entryOfTarget.getComponent().getClientId(facesContext), message);
+            facesContext.addMessage(entryOfTarget.getClientId(), message);
         }
     }
 
     //has to be public for custom referencing strategies!!!
-    public final void processSourceComponentAfterViolation(
-            CrossValidationStorageEntry entryOfSource)
+    public final void processSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
     {
         if (!handleSourceViolation(entryOfSource))
         {
