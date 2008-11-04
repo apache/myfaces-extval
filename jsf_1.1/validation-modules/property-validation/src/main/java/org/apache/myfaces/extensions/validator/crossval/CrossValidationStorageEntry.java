@@ -34,7 +34,6 @@ public class CrossValidationStorageEntry
 {
     private MetaDataEntry metaDataEntry;
     //for complex components (e.g. a table) stores the object of entry (#{entry.property})
-    private Object bean;
     private UIComponent component;
     private Object convertedObject;
     private CrossValidationStrategy validationStrategy;
@@ -47,16 +46,6 @@ public class CrossValidationStorageEntry
     public void setMetaDataEntry(MetaDataEntry metaDataEntry)
     {
         this.metaDataEntry = metaDataEntry;
-    }
-
-    public Object getBean()
-    {
-        return bean;
-    }
-
-    public void setBean(Object bean)
-    {
-        this.bean = bean;
     }
 
     public UIComponent getComponent()

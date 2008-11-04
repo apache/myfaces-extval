@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.crossval.recorder;
 
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -47,42 +47,42 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         }
 
         //to support local cross-validation (within the same entity)
-        Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
-            .getOrInitValueBindingConvertedValueMapping();
+        Map<String, ProcessedInformationEntry> keyToConvertedValueMapping = CrossValidationUtils
+            .getOrInitKeyToConvertedValueMapping();
 
         ProcessedInformationEntry entry;
 
-        ValueBindingExpression vbe =
-            ExtValUtils.getELHelper().getValueBindingExpression(uiComponent);
+        TargetInformationEntry targetInformationEntry =
+            ExtValUtils.getELHelper().getTargetInformation(uiComponent);
 
-        if (vbe == null)
+        if(targetInformationEntry == null)
         {
             return;
         }
-
+        
         entry = new ProcessedInformationEntry();
-        entry.setBean(ExtValUtils.getELHelper().getBaseObject(vbe, uiComponent));
+        entry.setBean(targetInformationEntry.getBaseObject());
         entry.setConvertedValue(value);
         entry.setComponent(uiComponent);
 
-        String key = vbe.getExpressionString();
+        String key = targetInformationEntry.getKey();
 
         //for local cross-validation
-        if (valueBindingConvertedValueMapping.containsKey(key) &&
-            valueBindingConvertedValueMapping.get(key).getBean() != null &&
-            !valueBindingConvertedValueMapping.get(key).getBean().equals(entry.getBean()))
+        if (keyToConvertedValueMapping.containsKey(key) &&
+            keyToConvertedValueMapping.get(key).getBean() != null &&
+            !keyToConvertedValueMapping.get(key).getBean().equals(entry.getBean()))
         {
             //for the validation within a complex component e.g. a table
             //don't override existing expression (style: #{entry.property}) - make a special mapping
 
             List<ProcessedInformationEntry> furtherEntries =
-                valueBindingConvertedValueMapping.get(key).getFurtherEntries();
+                keyToConvertedValueMapping.get(key).getFurtherEntries();
 
             if (furtherEntries == null)
             {
                 furtherEntries = new ArrayList<ProcessedInformationEntry>();
 
-                valueBindingConvertedValueMapping.get(key).setFurtherEntries(furtherEntries);
+                keyToConvertedValueMapping.get(key).setFurtherEntries(furtherEntries);
             }
 
             furtherEntries.add(entry);
@@ -90,7 +90,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         else
         {
             //for normal validation
-            valueBindingConvertedValueMapping.put(key, entry);
+            keyToConvertedValueMapping.put(key, entry);
         }
     }
 }

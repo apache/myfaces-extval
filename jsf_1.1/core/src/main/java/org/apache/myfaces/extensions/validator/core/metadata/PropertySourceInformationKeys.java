@@ -28,6 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation(UsageCategory.INTERNAL)
 public interface PropertySourceInformationKeys
 {
-    static final String VALUE_BINDING_EXPRESSION = "value_binding_expression";
+    static final String TARGET_INFORMATION_ENTRY = "target_information_entry";
     static final String SKIP_VALIDATION = "skip_validation";
 }
