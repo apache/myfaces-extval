@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.el;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -45,7 +46,7 @@ public interface ELHelper
 
     Object getValueOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
 
-    TargetInformationEntry getTargetInformation(UIComponent uiComponent);
+    PropertyDetails getTargetInformation(UIComponent uiComponent);
 
     boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression);
 

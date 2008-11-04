@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata;
+package org.apache.myfaces.extensions.validator.core.property;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -26,8 +26,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public interface PropertySourceInformationKeys
+public interface PropertyInformationKeys
 {
-    static final String TARGET_INFORMATION_ENTRY = "target_information_entry";
+    static final String PROPERTY_DETAILS = "property_details";
     static final String SKIP_VALIDATION = "skip_validation";
 }

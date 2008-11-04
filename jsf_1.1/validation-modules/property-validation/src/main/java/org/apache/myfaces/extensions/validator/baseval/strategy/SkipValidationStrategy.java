@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.baseval.strategy;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -50,7 +50,7 @@ public class SkipValidationStrategy implements ValidationStrategy
             if((Boolean)ExtValUtils.getELHelper().getValueOfExpression(
                 facesContext, new ValueBindingExpression(valueBindingExpression)))
             {
-                metaDataEntry.setProperty(PropertySourceInformationKeys.SKIP_VALIDATION, true);
+                metaDataEntry.setProperty(PropertyInformationKeys.SKIP_VALIDATION, true);
                 break;
             }
         }

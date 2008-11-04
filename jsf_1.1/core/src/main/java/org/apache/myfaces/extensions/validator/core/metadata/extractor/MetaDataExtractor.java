@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.metadata.SourceInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -34,5 +34,5 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.API)
 public interface MetaDataExtractor
 {
-    SourceInformation extract(FacesContext facesContext, Object object);
+    PropertyInformation extract(FacesContext facesContext, Object object);
 }
