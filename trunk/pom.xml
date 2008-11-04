@@ -27,7 +27,16 @@
     <version>${build.version}</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Module</name>
-    <url>http://myfaces.apache.org/extensions/validator</url>
+    <url>http://myfaces.apache.org/extensions/validator12</url>
+
+    <!-- WARNING: DO NOT GENERATE SITE FROM HERE DIRECTLY
+    Since this project has an async release procedure (not
+    all modules should be released at once), the parent pom.xml 
+    is not this (there is a module for that). Use maven site 
+    plugin here cause problems when the site is generated.
+    The procedure must execute site commmand first on parent 
+    module and then on each module listed below. 
+     -->
 
     <modules>
         <module>parent</module>

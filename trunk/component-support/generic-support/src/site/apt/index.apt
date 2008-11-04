@@ -1,0 +1,13 @@
+ ------
+Apache MyFaces Extensions Validator Generic Support Module
+ ------
+
+Apache MyFaces Extensions Validator Generic Support Module Overview
+
+    Myfaces Extensions Validator Generic Support Module provides default support for jsf frameworks to use Myfaces Extensions Validator.
+  
+    Myfaces Extensions Validator comes with jar compatible with JSF 1.1(1.1.x version)
+  and JSF 1.2 (1.2.x version), but both packages are JDK 1.5 compatible.
+  
+  
+    

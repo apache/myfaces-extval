@@ -1,0 +1,18 @@
+ ------
+Apache MyFaces Extensions Validator
+ ------
+
+Apache MyFaces Extensions Validator Overview
+
+    Myfaces Extensions Validator provide a framework for validation in jsf.
+  
+    It uses annotations on the managed beans to define which fields needs validation and how this should be handled. 
+It has a pluggable architecture, so it is possible to add new validation modules or provide compatibility with jsf
+frameworks like trinidad.
+
+    Myfaces Extensions Validator comes with jar compatible with JSF 1.1(1.1.x version)
+  and JSF 1.2 (1.2.x version), but both packages are JDK 1.5 compatible.
+  
+    A release is not available yet, but you can checkout the code using svn {{{http://svn.apache.org/repos/asf/myfaces/extensions/validator}Here}}.
+  
+    
