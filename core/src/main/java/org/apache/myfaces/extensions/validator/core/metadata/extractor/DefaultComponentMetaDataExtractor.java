@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.SourceInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.DefaultSourceInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
@@ -78,10 +78,10 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             logger.trace("start extracting meta-data of " + uiComponent.getClass().getName());
         }
 
-        ValueBindingExpression vbe =
-            ExtValUtils.getELHelper().getValueBindingExpression(uiComponent);
+        TargetInformationEntry targetInformationEntry =
+            ExtValUtils.getELHelper().getTargetInformation(uiComponent);
 
-        if (vbe == null)
+        if (targetInformationEntry == null)
         {
             return sourceInformation;
         }
@@ -89,13 +89,10 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         /*
          * get bean class and property name
          */
-        Class entityClass = ExtValUtils.getELHelper()
-            .getTypeOfValueBindingForExpression(facesContext, vbe.getBaseExpression());
+        Class entityClass = targetInformationEntry.getBaseObject().getClass();
 
-        //create template entry
-        //TODO test with complex components
-        sourceInformation.setProperty(
-            PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, vbe.getExpressionString());
+        //create
+        sourceInformation.setProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, targetInformationEntry);
 
         /*
          * find and add annotations
@@ -104,9 +101,8 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         while (!Object.class.getName().equals(currentClass.getName()))
         {
-            //TODO map syntax support
-            addPropertyAccessAnnotations(currentClass, vbe.getProperty(), sourceInformation);
-            addFieldAccessAnnotations(currentClass, vbe.getProperty(), sourceInformation);
+            addPropertyAccessAnnotations(currentClass, targetInformationEntry.getProperty(), sourceInformation);
+            addFieldAccessAnnotations(currentClass, targetInformationEntry.getProperty(), sourceInformation);
 
             currentClass = currentClass.getSuperclass();
         }
@@ -117,7 +113,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
             while (currentClass != null)
             {
-                addPropertyAccessAnnotations(currentClass, vbe.getProperty(), sourceInformation);
+                addPropertyAccessAnnotations(currentClass, targetInformationEntry.getProperty(), sourceInformation);
 
                 currentClass = currentClass.getSuperclass();
             }

@@ -100,12 +100,12 @@ public class DefaultELHelper implements ELHelper
         return facesContext.getApplication().createValueBinding(valueBindingExpression) != null;
     }
 
-    public ValueBindingExpression getValueBindingExpression(UIComponent uiComponent)
+    private ValueBindingExpression getValueBindingExpression(UIComponent uiComponent)
     {
         return getValueBindingExpression(uiComponent, false);
     }
 
-    public ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters)
+    private ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters)
     {
         String valueBindingExpression = getOriginalValueBindingExpression(uiComponent);
 
@@ -152,6 +152,34 @@ public class DefaultELHelper implements ELHelper
             return result;
         }
         return new ValueBindingExpression(valueBindingExpression);
+    }
+
+    public TargetInformationEntry getTargetInformation(UIComponent uiComponent)
+    {
+        ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
+        ValueBindingExpression currentValueBindingExpression =
+            new ValueBindingExpression(valueBindingExpression.getExpressionString());
+
+        String path = null;
+
+        while(currentValueBindingExpression.getBaseExpression() != null)
+        {
+            if(path == null)
+            {
+                path = currentValueBindingExpression.getProperty();
+            }
+            else
+            {
+                path = currentValueBindingExpression.getProperty() + "." + path;
+            }
+
+            currentValueBindingExpression = currentValueBindingExpression.getBaseExpression();
+        }
+
+        path = currentValueBindingExpression.getProperty() + "." + path;
+
+        return new TargetInformationEntry(path,
+            getBaseObject(valueBindingExpression), valueBindingExpression.getProperty());
     }
 
     static String getOriginalValueBindingExpression(UIComponent uiComponent)

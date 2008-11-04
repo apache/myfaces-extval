@@ -21,11 +21,10 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation;
 import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningMetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -52,12 +51,14 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
 
         Map<String, Object> results = new HashMap<String, Object>();
 
+        TargetInformationEntry targetInformationEntry;
         for (String targetExpression : targetExpressions)
         {
-            targetExpression = createValidBinding(metaDataEntry, targetExpression);
+            targetInformationEntry = ExtValUtils
+                .createTargetInformationEntryForNewTarget(metaDataEntry, targetExpression);
 
             for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
-                                                                    targetExpression).getMetaDataEntries())
+                                                                    targetInformationEntry).getMetaDataEntries())
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
@@ -70,17 +71,5 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
             }
         }
         return results;
-    }
-
-    private String createValidBinding(MetaDataEntry metaDataEntry, String targetExpression)
-    {
-        if(ExtValUtils.getELHelper().isELTerm(targetExpression))
-        {
-            return targetExpression;
-        }
-        
-        ValueBindingExpression baseExpression = new ValueBindingExpression(
-            metaDataEntry.getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class));
-        return ValueBindingExpression.replaceOrAddProperty(baseExpression, targetExpression).getExpressionString();
     }
 }

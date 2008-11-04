@@ -39,6 +39,8 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Loc
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -84,13 +86,11 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
 
     public void processCrossValidation(
             CrossValidationStorageEntry crossValidationStorageEntry,
-            CrossValidationStorage crossValidationStorage)
-            throws ValidatorException
+            CrossValidationStorage crossValidationStorage) throws ValidatorException
     {
-
         initValidation(crossValidationStorageEntry);
-        String[] validationTargets = getValidationTargets(crossValidationStorageEntry
-                .getMetaDataEntry().getValue(Annotation.class));
+        String[] validationTargets = getValidationTargets(
+            crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class));
 
         for (String validationTarget : validationTargets)
         {
@@ -189,8 +189,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     }
 
     //has to be public for custom referencing strategies!!!
-    public FacesMessage getSourceComponentErrorMessage(Annotation annotation,
-            String summary, String details)
+    public FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String details)
     {
         FacesMessage message = new FacesMessage();
 
@@ -202,8 +201,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     }
 
     //has to be public for custom referencing strategies!!!
-    public FacesMessage getTargetComponentErrorMessage(
-            Annotation foundAnnotation, String summary, String details)
+    public FacesMessage getTargetComponentErrorMessage(Annotation foundAnnotation, String summary, String details)
     {
         FacesMessage message = new FacesMessage();
 
@@ -216,11 +214,11 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
 
     //has to be public for custom referencing strategies!!!
     public ProcessedInformationEntry resolveValidationTargetEntry(
-            Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping,
-            String targetValueBinding, Object bean)
+            Map<String, ProcessedInformationEntry> pathToConvertedValueMapping,
+            String targetKey, CrossValidationStorageEntry crossValidationStorageEntry)
     {
-        ProcessedInformationEntry processedInformationEntry = valueBindingConvertedValueMapping
-                .get(targetValueBinding);
+        ProcessedInformationEntry processedInformationEntry =
+            pathToConvertedValueMapping.get(targetKey);
 
         //simple case
         if (processedInformationEntry.getFurtherEntries() == null)
@@ -228,16 +226,21 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
             return processedInformationEntry;
         }
 
+        TargetInformationEntry targetInformationEntry = crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, TargetInformationEntry.class);
+
+        Object targetBean = targetInformationEntry.getBaseObject();
+
         //process complex component entries (e.g. a table)
         //supported: cross-component but no cross-entity validation (= locale validation)
-        if (processedInformationEntry.getBean().equals(bean))
+        if (processedInformationEntry.getBean().equals(targetBean))
         {
             return processedInformationEntry;
         }
 
         for (ProcessedInformationEntry entry : processedInformationEntry.getFurtherEntries())
         {
-            if (entry.getBean().equals(bean))
+            if (entry.getBean().equals(targetBean))
             {
                 return entry;
             }

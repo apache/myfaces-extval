@@ -78,7 +78,7 @@ public class ELCompareStrategy implements ReferencingStrategy
 
             ProcessedInformationEntry validationTargetEntry;
             Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
-                    .getOrInitValueBindingConvertedValueMapping();
+                    .getOrInitKeyToConvertedValueMapping();
 
             validationTargetEntry = valueBindingConvertedValueMapping
                     .get(validationTarget);

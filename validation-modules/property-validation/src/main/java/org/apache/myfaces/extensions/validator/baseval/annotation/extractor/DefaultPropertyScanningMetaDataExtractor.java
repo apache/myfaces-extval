@@ -22,12 +22,11 @@ import org.apache.myfaces.extensions.validator.core.metadata.SourceInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.DefaultSourceInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractor;
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 
@@ -43,30 +42,25 @@ public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMe
     public SourceInformation extract(FacesContext facesContext, Object object)
     {
         SourceInformation sourceInformation = new DefaultSourceInformation();
-        //should never occur
-        if (!(object instanceof String))
+
+        if (!(object instanceof TargetInformationEntry))
         {
-            return sourceInformation;
+            throw new IllegalStateException(object.getClass() + " is not a " + TargetInformationEntry.class.getName());
         }
 
-        ValueBindingExpression valueBindingExpression = new ValueBindingExpression(((String) object).trim());
+        TargetInformationEntry targetInformationEntry = (TargetInformationEntry)object;
 
-        Class entityClass = ExtValUtils.getELHelper()
-            .getTypeOfValueBindingForExpression(facesContext, valueBindingExpression.getBaseExpression());
+        Class entityClass = targetInformationEntry.getBaseObject().getClass();
 
-        //TODO complex components
+        //TODO test with complex components
         sourceInformation.setProperty(
-            PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, valueBindingExpression.getExpressionString());
+            PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, targetInformationEntry);
 
         /*
          * find and add annotations
          */
-        if (entityClass != null)
-        {
-            //TODO map syntax support
-            addPropertyAccessAnnotations(entityClass, valueBindingExpression.getProperty(), sourceInformation);
-            addFieldAccessAnnotations(entityClass, valueBindingExpression.getProperty(), sourceInformation);
-        }
+        addPropertyAccessAnnotations(entityClass, targetInformationEntry.getProperty(), sourceInformation);
+        addFieldAccessAnnotations(entityClass, targetInformationEntry.getProperty(), sourceInformation);
 
         return sourceInformation;
     }

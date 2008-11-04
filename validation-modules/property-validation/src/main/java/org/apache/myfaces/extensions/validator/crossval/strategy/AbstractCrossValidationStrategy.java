@@ -18,13 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -40,14 +37,12 @@ import javax.faces.validator.ValidatorException;
 public abstract class AbstractCrossValidationStrategy extends
     AbstractAnnotationValidationStrategy implements CrossValidationStrategy
 {
-
     //init cross-validation
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, MetaDataEntry metaDataEntry,
-            Object convertedObject) throws ValidatorException
+            UIComponent uiComponent, MetaDataEntry metaDataEntry, Object convertedObject) throws ValidatorException
     {
-        CrossValidationStorageEntry entry = getCrossValidationStorageEntry(
-                facesContext, uiComponent, metaDataEntry, convertedObject);
+        CrossValidationStorageEntry entry =
+            getCrossValidationStorageEntry(facesContext, uiComponent, metaDataEntry, convertedObject);
 
         CrossValidationUtils.getOrInitCrossValidationStorage().add(entry);
     }
@@ -59,8 +54,6 @@ public abstract class AbstractCrossValidationStrategy extends
         CrossValidationStorageEntry entry = new CrossValidationStorageEntry();
 
         entry.setMetaDataEntry(metaDataEntry);
-        String vbe = metaDataEntry.getProperty(PropertySourceInformationKeys.VALUE_BINDING_EXPRESSION, String.class);
-        entry.setBean(ExtValUtils.getELHelper().getBaseObject(new ValueBindingExpression(vbe)));
         entry.setComponent(uiComponent);
         entry.setConvertedObject(convertedObject);
         entry.setValidationStrategy(this);
