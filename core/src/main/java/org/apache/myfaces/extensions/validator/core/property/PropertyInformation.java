@@ -16,22 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata;
+package org.apache.myfaces.extensions.validator.core.property;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
-public interface SourceInformation
+public interface PropertyInformation
 {
-    boolean containsProperty(String key);
-    Object getProperty(String key);
-    <T> T getProperty(String key, Class<T> targetClass);
-    void setProperty(String key, Object value);
+    boolean containsInformation(String key);
+    Object getInformation(String key);
+    <T> T getInformation(String key, Class<T> targetClass);
+    void setInformation(String key, Object value);
 
     MetaDataEntry[] getMetaDataEntries();
     void addMetaDataEntry(MetaDataEntry metaDataEntry);

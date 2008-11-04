@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.crossval.recorder;
 
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -53,21 +53,21 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
 
         ProcessedInformationEntry entry;
 
-        TargetInformationEntry targetInformationEntry =
+        PropertyDetails propertyDetails =
             ExtValUtils.getELHelper().getTargetInformation(uiComponent);
 
-        if(targetInformationEntry == null)
+        if(propertyDetails == null)
         {
             return;
         }
         
         entry = new ProcessedInformationEntry();
-        entry.setBean(targetInformationEntry.getBaseObject());
+        entry.setBean(propertyDetails.getBaseObject());
         entry.setConvertedValue(value);
         entry.setComponent(uiComponent);
         entry.setClientId(uiComponent.getClientId(FacesContext.getCurrentInstance()));
 
-        String key = targetInformationEntry.getKey();
+        String key = propertyDetails.getKey();
 
         //for local cross-validation
         if (keyToConvertedValueMapping.containsKey(key) &&
