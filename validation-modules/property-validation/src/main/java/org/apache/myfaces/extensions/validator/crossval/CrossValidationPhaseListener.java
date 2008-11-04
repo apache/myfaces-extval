@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -63,16 +62,7 @@ public class CrossValidationPhaseListener implements PhaseListener
 
                     if (facesMessage != null && facesMessage.getSummary() != null && facesMessage.getDetail() != null)
                     {
-                        UIComponent component = entry.getComponent();
-                        String clientId = null;
-
-                        //TODO
-                        if (component != null)
-                        {
-                            clientId = component.getClientId(event.getFacesContext());
-                        }
-
-                        event.getFacesContext().addMessage(clientId, facesMessage);
+                        event.getFacesContext().addMessage(entry.getClientId(), facesMessage);
                     }
 
                     event.getFacesContext().renderResponse();
