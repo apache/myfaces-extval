@@ -1,0 +1,13 @@
+ ------
+Apache MyFaces Extensions Property Validation Module
+ ------
+
+Apache MyFaces Extensions Property Validation Module Overview
+
+    Myfaces Extensions Validator Property Validation provides validation using annotations on managed beans for jsf applications.
+  
+    Myfaces Extensions Validator comes with jar compatible with JSF 1.1(1.1.x version)
+  and JSF 1.2 (1.2.x version), but both packages are JDK 1.5 compatible.
+  
+  
+    
