@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.baseval.strategy.SkipValidationStrategy;
@@ -46,7 +46,7 @@ public class ValidationInterceptorWithSkipValidationSupport extends ValidationIn
         if(validationStrategy.getClass().isAnnotationPresent(SkipValidationSupport.class))
         {
             Boolean skipValidation = metaDataEntry.getProperty(
-                PropertySourceInformationKeys.SKIP_VALIDATION, Boolean.class);
+                PropertyInformationKeys.SKIP_VALIDATION, Boolean.class);
 
             if(Boolean.TRUE.equals(skipValidation))
             {

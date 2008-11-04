@@ -16,10 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata;
+package org.apache.myfaces.extensions.validator.core.property;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,29 +32,29 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultSourceInformation implements SourceInformation
+public class DefaultPropertyInformation implements PropertyInformation
 {
-    private Map<String, Object> properties = new HashMap<String, Object>();
+    private Map<String, Object> informationMap = new HashMap<String, Object>();
     private List<MetaDataEntry> metaDataList = new ArrayList<MetaDataEntry>();
 
-    public boolean containsProperty(String key)
+    public boolean containsInformation(String key)
     {
-        return properties.containsKey(key);
+        return informationMap.containsKey(key);
     }
 
-    public Object getProperty(String key)
+    public Object getInformation(String key)
     {
-        return properties.get(key);
+        return informationMap.get(key);
     }
 
-    public <T> T getProperty(String key, Class<T> targetClass)
+    public <T> T getInformation(String key, Class<T> targetClass)
     {
-        return (T)getProperty(key);
+        return (T) getInformation(key);
     }
 
-    public void setProperty(String key, Object value)
+    public void setInformation(String key, Object value)
     {
-        properties.put(key, value);
+        informationMap.put(key, value);
     }
 
     public MetaDataEntry[] getMetaDataEntries()
@@ -63,7 +64,7 @@ public class DefaultSourceInformation implements SourceInformation
 
     public void addMetaDataEntry(MetaDataEntry metaDataEntry)
     {
-        metaDataEntry.setProperties(this.properties);
+        metaDataEntry.setProperties(this.informationMap);
         this.metaDataList.add(metaDataEntry);
     }
 }

@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -167,7 +168,7 @@ public class DefaultELHelper implements ELHelper
         return new ValueBindingExpression(valueBindingExpression);
     }
 
-    public TargetInformationEntry getTargetInformation(UIComponent uiComponent)
+    public PropertyDetails getTargetInformation(UIComponent uiComponent)
     {
         if("true".equalsIgnoreCase(ACTIVATE_EL_RESOLVER))
         {
@@ -195,7 +196,7 @@ public class DefaultELHelper implements ELHelper
 
             if(elResolver.getPath() != null && elResolver.getBaseObject() != null && elResolver.getProperty() != null)
             {
-                return new TargetInformationEntry(
+                return new PropertyDetails(
                     elResolver.getPath(), elResolver.getBaseObject(), elResolver.getProperty());
             }
         }
@@ -227,7 +228,7 @@ public class DefaultELHelper implements ELHelper
 
         path = currentValueBindingExpression.getProperty() + "." + path;
 
-        return new TargetInformationEntry(path,
+        return new PropertyDetails(path,
             getBaseObject(valueBindingExpression), valueBindingExpression.getProperty());
     }
 

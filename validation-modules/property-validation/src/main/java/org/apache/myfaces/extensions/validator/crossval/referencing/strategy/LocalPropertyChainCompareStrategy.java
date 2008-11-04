@@ -23,8 +23,8 @@ import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEn
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -45,11 +45,11 @@ public class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
                                            String targetKey,
                                            AbstractCompareStrategy compareStrategy)
     {
-        TargetInformationEntry targetInformationEntry = crossValidationStorageEntry.getMetaDataEntry()
-            .getProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, TargetInformationEntry.class);
+        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+            .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
         Object newBase = ReflectionUtils
-            .getBaseOfPropertyChain(targetInformationEntry.getBaseObject(), targetKey);
+            .getBaseOfPropertyChain(propertyDetails.getBaseObject(), targetKey);
 
         if(targetKey.contains("."))
         {
@@ -67,6 +67,7 @@ public class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 
             CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
             tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
+            tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
             tmpCrossValidationStorageEntry.setConvertedObject(targetValue);
             tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
 
