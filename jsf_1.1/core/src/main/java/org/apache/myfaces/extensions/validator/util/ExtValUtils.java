@@ -95,7 +95,7 @@ public class ExtValUtils
             .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class).create();
     }
 
-    public static PropertyDetails createTargetInformationEntryForNewTarget(MetaDataEntry metaDataEntry,
+    public static PropertyDetails createPropertyDetailsForNewTarget(MetaDataEntry metaDataEntry,
                                                                                   String targetExpression)
     {
         Object baseObject;
