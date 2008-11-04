@@ -23,6 +23,12 @@ import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEn
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.el.TargetInformationEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.PropertySourceInformationKeys;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * "[local_property.property1.property2]"
@@ -33,15 +39,66 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 {
-    protected boolean validateELExpression(CrossValidationStorageEntry crossValidationStorageEntry,
+    @Override
+    protected boolean tryToValidateLocally(CrossValidationStorageEntry crossValidationStorageEntry,
                                            CrossValidationStorage crossValidationStorage,
-                                           String validationTarget,
+                                           String targetKey,
                                            AbstractCompareStrategy compareStrategy)
     {
-        return new ELCompareStrategy().evalReferenceAndValidate(
-            crossValidationStorageEntry,
-            crossValidationStorage,
-            validationTarget,
-            compareStrategy);
+        TargetInformationEntry targetInformationEntry = crossValidationStorageEntry.getMetaDataEntry()
+            .getProperty(PropertySourceInformationKeys.TARGET_INFORMATION_ENTRY, TargetInformationEntry.class);
+
+        Object newBase = ReflectionUtils
+            .getBaseOfPropertyChain(targetInformationEntry.getBaseObject(), targetKey);
+
+        if(targetKey.contains("."))
+        {
+            //find the last property
+            targetKey = targetKey.substring(targetKey.lastIndexOf(".") + 1, targetKey.length());
+        }
+
+        Object targetValue = getValueOfProperty(newBase, targetKey);
+
+        boolean violationFound = false;
+
+        if (compareStrategy.isViolation(crossValidationStorageEntry.getConvertedObject(),
+                                targetValue, crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
+        {
+
+            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
+            tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
+            tmpCrossValidationStorageEntry.setConvertedObject(targetValue);
+            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
+
+            compareStrategy
+                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
+
+            violationFound = true;
+        }
+
+        if (violationFound)
+        {
+            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
+        }
+
+        return true;
+    }
+
+    private Object getValueOfProperty(Object base, String property)
+    {
+        property = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
+        Method targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "get" + property);
+
+        if(targetMethod == null)
+        {
+            targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "is" + property);
+        }
+
+        if(targetMethod == null)
+        {
+            throw new IllegalStateException(
+                "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
+        }
+        return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
     }
 }

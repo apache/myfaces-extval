@@ -45,9 +45,7 @@ public interface ELHelper
 
     Object getValueOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
 
-    ValueBindingExpression getValueBindingExpression(UIComponent uiComponent);
-
-    ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters);
+    TargetInformationEntry getTargetInformation(UIComponent uiComponent);
 
     boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression);
 

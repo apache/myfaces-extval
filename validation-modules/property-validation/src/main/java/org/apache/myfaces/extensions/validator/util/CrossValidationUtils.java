@@ -57,23 +57,23 @@ public class CrossValidationUtils
                 .put(CROSS_VALIDATION_STORAGE_KEY, new CrossValidationStorage());
     }
 
-    public static final String VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY = JsfUtils.class.getName();
+    public static final String KEY_TO_CONVERTED_VALUE_MAPPING_KEY = JsfUtils.class.getName();
 
-    public static Map<String, ProcessedInformationEntry> getOrInitValueBindingConvertedValueMapping()
+    public static Map<String, ProcessedInformationEntry> getOrInitKeyToConvertedValueMapping()
     {
         Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
 
-        if (!requestMap.containsKey(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY))
+        if (!requestMap.containsKey(KEY_TO_CONVERTED_VALUE_MAPPING_KEY))
         {
-            resetValueBindingConvertedValueMapping();
+            resetKeyToConvertedValueMapping();
         }
 
-        return (Map<String, ProcessedInformationEntry>) requestMap.get(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY);
+        return (Map<String, ProcessedInformationEntry>) requestMap.get(KEY_TO_CONVERTED_VALUE_MAPPING_KEY);
     }
 
-    public static void resetValueBindingConvertedValueMapping()
+    public static void resetKeyToConvertedValueMapping()
     {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-            .put(VALUE_BINDING_CONVERTED_VALUE_MAPPING_KEY, new HashMap<String, ProcessedInformationEntry>());
+            .put(KEY_TO_CONVERTED_VALUE_MAPPING_KEY, new HashMap<String, ProcessedInformationEntry>());
     }
 }
