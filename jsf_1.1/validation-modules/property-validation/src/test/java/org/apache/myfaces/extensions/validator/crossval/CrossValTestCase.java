@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.crossval;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
-import javax.faces.el.ValueBinding;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -56,7 +55,7 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     {
         super.setUp();
         CrossValTestBean bean = new CrossValTestBean();
-        ValueBinding vb = application.createValueBinding("#{testBean}");
+        createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean",bean);
         
         rootComponent = new UIViewRoot();
@@ -79,11 +78,9 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     
     public void testEqualsCorrect() throws Exception
     {
-        inputComponent1.setValueBinding("value", 
-                application.createValueBinding("#{testBean.property1}"));
-        inputComponent2.setValueBinding("value", 
-                application.createValueBinding("#{testBean.property2}"));
-        
+        createValueBinding(inputComponent1, "value", "#{testBean.property1}");
+        createValueBinding(inputComponent2, "value", "#{testBean.property2}");
+
         //decode
         inputComponent1.setSubmittedValue("1d3");
         inputComponent2.setSubmittedValue("1d3");
@@ -92,22 +89,17 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
 
-        //update model since it is necessary for crossval
-        inputComponent1.updateModel(facesContext);
-        inputComponent1.updateModel(facesContext);
-        
         processCrossValValidation();
-        
         checkMessageCount(0);
+
+        //no update model needed
     }
     
     public void testEqualsFail() throws Exception
     {
-        inputComponent1.setValueBinding("value", 
-                application.createValueBinding("#{testBean.property1}"));
-        inputComponent2.setValueBinding("value", 
-                application.createValueBinding("#{testBean.property2}"));
-        
+        createValueBinding(inputComponent1, "value", "#{testBean.property1}");
+        createValueBinding(inputComponent2, "value", "#{testBean.property2}");
+
         //decode
         inputComponent1.setSubmittedValue("1d3");
         inputComponent2.setSubmittedValue("1d4");
@@ -116,12 +108,10 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
         
-        //update model since it is necessary for crossval
-        inputComponent1.updateModel(facesContext);
-        inputComponent1.updateModel(facesContext);
-        
+
         processCrossValValidation();
-        
         checkMessageCount(2);
+
+        //no update model needed
     }
 }
