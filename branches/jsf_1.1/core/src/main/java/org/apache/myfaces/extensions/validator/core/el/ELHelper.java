@@ -46,7 +46,7 @@ public interface ELHelper
 
     Object getValueOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
 
-    PropertyDetails getTargetInformation(UIComponent uiComponent);
+    PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent);
 
     boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression);
 
