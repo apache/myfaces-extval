@@ -56,6 +56,7 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
         super.setUp();
         CrossValTestBean bean = new CrossValTestBean();
         application.createValueBinding("#{testBean}");
+        expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean}", Object.class);
         facesContext.getExternalContext().getRequestMap().put("testBean",bean);
         
         rootComponent = new UIViewRoot();
@@ -80,9 +81,13 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent1.setValueBinding("value", 
                 application.createValueBinding("#{testBean.property1}"));
-        inputComponent2.setValueBinding("value", 
+        inputComponent1.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property1}", Object.class));
+        inputComponent2.setValueBinding("value",
                 application.createValueBinding("#{testBean.property2}"));
-        
+        inputComponent2.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property2}", Object.class));
+
         //decode
         inputComponent1.setSubmittedValue("1d3");
         inputComponent2.setSubmittedValue("1d3");
@@ -101,9 +106,13 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent1.setValueBinding("value", 
                 application.createValueBinding("#{testBean.property1}"));
-        inputComponent2.setValueBinding("value", 
+        inputComponent1.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property1}", Object.class));
+        inputComponent2.setValueBinding("value",
                 application.createValueBinding("#{testBean.property2}"));
-        
+        inputComponent2.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property2}", Object.class));
+
         //decode
         inputComponent1.setSubmittedValue("1d3");
         inputComponent2.setSubmittedValue("1d4");

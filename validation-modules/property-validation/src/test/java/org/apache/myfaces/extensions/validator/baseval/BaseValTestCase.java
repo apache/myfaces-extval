@@ -83,6 +83,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.name}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.name}", Object.class));
 
         inputComponent.setSubmittedValue("");
 
@@ -96,6 +98,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.name1}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.name1}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("12345");
@@ -111,6 +115,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.name1}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.name1}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("1d3");
@@ -126,6 +132,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.name1}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.name1}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("x");
@@ -141,6 +149,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.patternName}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.patternName}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("Peter1");
@@ -156,6 +166,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.patternName}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.patternName}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("Peter");
@@ -170,7 +182,9 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     public void testDoubleValueFail() throws Exception
     {
         inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.doubleValue1}"));
+                .createValueBinding("#{}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.doubleValue1}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("-301");
@@ -186,6 +200,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     {
         inputComponent.setValueBinding("value", application
                 .createValueBinding("#{testBean.doubleValue1}"));
+        inputComponent.setValueExpression("value",
+            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.doubleValue1}", Object.class));
 
         //decode
         inputComponent.setSubmittedValue("200");
