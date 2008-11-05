@@ -55,8 +55,7 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     {
         super.setUp();
         CrossValTestBean bean = new CrossValTestBean();
-        application.createValueBinding("#{testBean}");
-        expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean}", Object.class);
+        createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean",bean);
         
         rootComponent = new UIViewRoot();
@@ -79,14 +78,8 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     
     public void testEqualsCorrect() throws Exception
     {
-        inputComponent1.setValueBinding("value", 
-                application.createValueBinding("#{testBean.property1}"));
-        inputComponent1.setValueExpression("value",
-            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property1}", Object.class));
-        inputComponent2.setValueBinding("value",
-                application.createValueBinding("#{testBean.property2}"));
-        inputComponent2.setValueExpression("value",
-            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property2}", Object.class));
+        createValueBinding(inputComponent1, "value", "#{testBean.property1}");
+        createValueBinding(inputComponent2, "value", "#{testBean.property2}");
 
         //decode
         inputComponent1.setSubmittedValue("1d3");
@@ -104,14 +97,8 @@ public class CrossValTestCase extends AbstractExValViewControllerTestCase
     
     public void testEqualsFail() throws Exception
     {
-        inputComponent1.setValueBinding("value", 
-                application.createValueBinding("#{testBean.property1}"));
-        inputComponent1.setValueExpression("value",
-            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property1}", Object.class));
-        inputComponent2.setValueBinding("value",
-                application.createValueBinding("#{testBean.property2}"));
-        inputComponent2.setValueExpression("value",
-            expressionFactory.createValueExpression(facesContext.getELContext(), "#{testBean.property2}", Object.class));
+        createValueBinding(inputComponent1, "value", "#{testBean.property1}");
+        createValueBinding(inputComponent2, "value", "#{testBean.property2}");
 
         //decode
         inputComponent1.setSubmittedValue("1d3");
