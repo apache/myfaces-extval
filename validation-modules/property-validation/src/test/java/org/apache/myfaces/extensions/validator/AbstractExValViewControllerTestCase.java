@@ -24,8 +24,10 @@ import java.net.URLClassLoader;
 import java.util.Iterator;
 
 import javax.faces.FactoryFinder;
+import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -112,6 +114,8 @@ public class AbstractExValViewControllerTestCase extends TestCase
         threadContextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[0], getClass().getClassLoader()));
         servletContext = new MockServletContext();
+        //for testing the fallback
+        //servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER", "true");
         config = new MockServletConfig(servletContext);
         session = new MockHttpSession();
         session.setServletContext(servletContext);
@@ -219,9 +223,17 @@ public class AbstractExValViewControllerTestCase extends TestCase
         assertNotNull("ID is not null", id);
         assertTrue("Response Complete", facesContext.getResponseComplete());
         String output = writer.getWriter().toString();
-//        System.out.println("Output = '" + output + "'");
         assertNotNull("Has output", output);
         assertTrue("Contains id '" + id + "'", output.indexOf(id) != -1);
     }
 
+    protected void createValueBinding(UIInput uiInput, String name, String expression)
+    {
+        ValueBinding valueBinding = application.createValueBinding(expression);
+
+        if(uiInput != null)
+        {
+            uiInput.setValueBinding(name, valueBinding);
+        }
+    }
 }
