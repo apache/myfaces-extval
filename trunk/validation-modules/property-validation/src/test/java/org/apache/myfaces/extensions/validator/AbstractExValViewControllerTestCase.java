@@ -37,6 +37,7 @@ import junit.framework.TestCase;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.util.TestUtils;
+import org.apache.myfaces.extensions.validator.mock.ExtValMockApplicationFactory;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
 import org.apache.shale.test.mock.MockApplication;
 import org.apache.shale.test.mock.MockExternalContext;
@@ -51,6 +52,7 @@ import org.apache.shale.test.mock.MockRenderKit;
 import org.apache.shale.test.mock.MockResponseWriter;
 import org.apache.shale.test.mock.MockServletConfig;
 import org.apache.shale.test.mock.MockServletContext;
+import org.apache.shale.test.el.MockExpressionFactory;
 
 /**
  * Abstract Shale Test base class, which sets up the JSF environment.  If the test
@@ -71,6 +73,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
     protected MockHttpServletResponse response;
     protected MockServletContext servletContext;
     protected MockHttpSession session;
+    protected MockExpressionFactory expressionFactory;
     private ClassLoader threadContextClassLoader;
         
     /** Response Writer */
@@ -96,6 +99,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
         response = null;
         servletContext = null;
         session = null;
+        expressionFactory = null;
         threadContextClassLoader = null;
     }
 
@@ -112,8 +116,8 @@ public class AbstractExValViewControllerTestCase extends TestCase
         threadContextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[0], getClass().getClassLoader()));
         servletContext = new MockServletContext();
-        //workaround for testing
-        servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER", "true");
+        //for testing the fallback
+        //servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER", "true");
         config = new MockServletConfig(servletContext);
         session = new MockHttpSession();
         session.setServletContext(servletContext);
@@ -121,7 +125,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
         request.setServletContext(servletContext);
         response = new MockHttpServletResponse();
         FactoryFinder.releaseFactories();
-        FactoryFinder.setFactory("javax.faces.application.ApplicationFactory", "org.apache.shale.test.mock.MockApplicationFactory");
+        FactoryFinder.setFactory("javax.faces.application.ApplicationFactory", ExtValMockApplicationFactory.class.getName());
         FactoryFinder.setFactory("javax.faces.context.FacesContextFactory", "org.apache.shale.test.mock.MockFacesContextFactory");
         FactoryFinder.setFactory("javax.faces.lifecycle.LifecycleFactory", "org.apache.shale.test.mock.MockLifecycleFactory");
         FactoryFinder.setFactory("javax.faces.render.RenderKitFactory", "org.apache.shale.test.mock.MockRenderKitFactory");
@@ -152,6 +156,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
         TestUtils.addDefaultRenderers(facesContext);
         TestUtils.addDefaultValidators(facesContext);
                 
+        expressionFactory = (MockExpressionFactory)application.getExpressionFactory();
         new PropertyValidationModuleStartupListener().init();
     }
 
@@ -174,6 +179,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
         session = null;
         FactoryFinder.releaseFactories();
         Thread.currentThread().setContextClassLoader(threadContextClassLoader);
+        expressionFactory = null;
         threadContextClassLoader = null;
     }
     
@@ -221,7 +227,6 @@ public class AbstractExValViewControllerTestCase extends TestCase
         assertNotNull("ID is not null", id);
         assertTrue("Response Complete", facesContext.getResponseComplete());
         String output = writer.getWriter().toString();
-//        System.out.println("Output = '" + output + "'");
         assertNotNull("Has output", output);
         assertTrue("Contains id '" + id + "'", output.indexOf(id) != -1);
     }
