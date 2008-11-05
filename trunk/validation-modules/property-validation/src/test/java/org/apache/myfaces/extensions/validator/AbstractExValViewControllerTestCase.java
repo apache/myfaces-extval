@@ -24,13 +24,16 @@ import java.net.URLClassLoader;
 import java.util.Iterator;
 
 import javax.faces.FactoryFinder;
+import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.el.ValueExpression;
 
 import junit.framework.TestCase;
 
@@ -231,4 +234,16 @@ public class AbstractExValViewControllerTestCase extends TestCase
         assertTrue("Contains id '" + id + "'", output.indexOf(id) != -1);
     }
 
+    protected void createValueBinding(UIInput uiInput, String name, String expression)
+    {
+        ValueBinding valueBinding = application.createValueBinding(expression);
+        ValueExpression valueExpression = expressionFactory.createValueExpression(
+            facesContext.getELContext(), expression, Object.class);
+
+        if(uiInput != null)
+        {
+            uiInput.setValueBinding(name, valueBinding);
+            uiInput.setValueExpression(name, valueExpression);
+        }
+    }
 }
