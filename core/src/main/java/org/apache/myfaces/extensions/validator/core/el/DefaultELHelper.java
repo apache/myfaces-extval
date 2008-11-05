@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -52,7 +53,7 @@ import java.io.Externalizable;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultELHelper implements ELHelper
 {
-    private static final String ACTIVATE_EL_RESOLVER = WebXmlParameter.ACTIVATE_EL_RESOLVER;
+    private static final String DEACTIVATE_EL_RESOLVER = WebXmlParameter.DEACTIVATE_EL_RESOLVER;
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -168,39 +169,48 @@ public class DefaultELHelper implements ELHelper
         return new ValueBindingExpression(valueBindingExpression);
     }
 
-    public PropertyDetails getTargetInformation(UIComponent uiComponent)
+    public PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent)
     {
-        if("true".equalsIgnoreCase(ACTIVATE_EL_RESOLVER))
+        if("true".equalsIgnoreCase(DEACTIVATE_EL_RESOLVER))
         {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-
-            ExtValELResolver elResolver = new ExtValELResolver(facesContext.getApplication().getELResolver());
-            ELContext elContext = ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver);
-
-            ValueExpression valueExpression = uiComponent.getValueExpression("value");
-
-            if(valueExpression == null)
-            {
-                return null;
-            }
-
-            try
-            {
-                valueExpression.setValue(elContext, null);
-            }
-            catch (Throwable t)
-            {
-                throw new IllegalStateException("please don't activate the el-resovler of extval. " +
-                    "there's a bug in the el impl. you are using.");
-            }
-
-            if(elResolver.getPath() != null && elResolver.getBaseObject() != null && elResolver.getProperty() != null)
-            {
-                return new PropertyDetails(
-                    elResolver.getPath(), elResolver.getBaseObject(), elResolver.getProperty());
-            }
+            return getPropertyDetailsViaReflectionFallback(uiComponent);
         }
 
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        ExtValELResolver elResolver = new ExtValELResolver(facesContext.getApplication().getELResolver());
+        ELContext elContext = ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver);
+
+        ValueExpression valueExpression = uiComponent.getValueExpression("value");
+
+        if(valueExpression == null)
+        {
+            return null;
+        }
+
+        try
+        {
+            valueExpression.setValue(elContext, null);
+        }
+        catch (Throwable t)
+        {
+            throw new IllegalStateException(
+                "an el-resolver error occurred! " +
+                "please report the issue, deactivate the el-resovler of extval via web.xml context-param: " +
+                ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER" +
+                " and test again.");
+        }
+
+        if(elResolver.getPath() == null || elResolver.getBaseObject() == null || elResolver.getProperty() == null)
+        {
+            return null;
+        }
+
+        return new PropertyDetails(elResolver.getPath(), elResolver.getBaseObject(), elResolver.getProperty());
+    }
+
+    private PropertyDetails getPropertyDetailsViaReflectionFallback(UIComponent uiComponent)
+    {
         ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
 
         if(valueBindingExpression == null)

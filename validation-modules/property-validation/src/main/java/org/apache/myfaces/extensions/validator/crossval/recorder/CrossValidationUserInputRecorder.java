@@ -54,7 +54,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         ProcessedInformationEntry entry;
 
         PropertyDetails propertyDetails =
-            ExtValUtils.getELHelper().getTargetInformation(uiComponent);
+            ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
 
         if(propertyDetails == null)
         {

@@ -88,6 +88,7 @@ public class ExtValELResolver extends ELResolver
         expression += "." + o1;
         property = (String)o1;
         baseObject = o;
+        elContext.setPropertyResolved(true);
     }
 
     public boolean isReadOnly(ELContext elContext, Object o, Object o1)
