@@ -155,7 +155,7 @@ public class DefaultELHelper implements ELHelper
         return new ValueBindingExpression(valueBindingExpression);
     }
 
-    public PropertyDetails getTargetInformation(UIComponent uiComponent)
+    public PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent)
     {
         ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
         ValueBindingExpression currentValueBindingExpression =
