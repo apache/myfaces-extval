@@ -81,8 +81,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
     public void testNameRequiredFail() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.name}"));
+        createValueBinding(inputComponent, "value", "#{testBean.name}");
 
         inputComponent.setSubmittedValue("");
 
@@ -94,8 +93,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
     public void testName1LenghtMaxFail() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.name1}"));
+        createValueBinding(inputComponent, "value", "#{testBean.name1}");
 
         //decode
         inputComponent.setSubmittedValue("12345");
@@ -109,8 +107,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
     public void testName1LenghtCorrect() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.name1}"));
+        createValueBinding(inputComponent, "value", "#{testBean.name1}");
 
         //decode
         inputComponent.setSubmittedValue("1d3");
@@ -124,8 +121,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
     public void testName1LenghtMinFail() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.name1}"));
+        createValueBinding(inputComponent, "value", "#{testBean.name1}");
 
         //decode
         inputComponent.setSubmittedValue("x");
@@ -139,8 +135,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     
     public void testPatternNameFail() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.patternName}"));
+        createValueBinding(inputComponent, "value", "#{testBean.patternName}");
 
         //decode
         inputComponent.setSubmittedValue("Peter1");
@@ -154,8 +149,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     
     public void testPatternNameCorrect() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.patternName}"));
+        createValueBinding(inputComponent, "value", "#{testBean.patternName}");
 
         //decode
         inputComponent.setSubmittedValue("Peter");
@@ -169,8 +163,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
     public void testDoubleValueFail() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.doubleValue1}"));
+        createValueBinding(inputComponent, "value", "#{testBean.doubleValue1}");
 
         //decode
         inputComponent.setSubmittedValue("-301");
@@ -184,8 +177,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
     public void testDoubleValueCorrect() throws Exception
     {
-        inputComponent.setValueBinding("value", application
-                .createValueBinding("#{testBean.doubleValue1}"));
+        createValueBinding(inputComponent, "value", "#{testBean.doubleValue1}");
 
         //decode
         inputComponent.setSubmittedValue("200");
