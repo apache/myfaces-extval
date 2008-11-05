@@ -79,7 +79,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         }
 
         PropertyDetails propertyDetails =
-            ExtValUtils.getELHelper().getTargetInformation(uiComponent);
+            ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
 
         if (propertyDetails == null)
         {
