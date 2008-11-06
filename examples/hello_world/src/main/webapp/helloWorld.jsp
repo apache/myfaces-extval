@@ -8,9 +8,13 @@
         <f:view>
             <h:form id="mainForm">
               <h:panelGrid columns="3">
-                <h:outputLabel for="name" value="Please enter your name" />
-                <h:inputText id="name" value="#{helloWorld.name}"/>
-                <h:message for="name" showSummary="true" showDetail="false"/>
+                <h:outputLabel for="first_name" value="First name:"/>
+                <h:inputText id="first_name" value="#{helloWorld.person.firstName}"/>
+                <h:message for="first_name" showSummary="true" showDetail="false"/>
+
+                <h:outputLabel for="last_name" value="Last name:"/>
+                <h:inputText id="last_name" value="#{helloWorld.person.lastName}"/>
+                <h:message for="last_name" showSummary="true" showDetail="false"/>
 
                 <h:commandButton value="Press me" action="#{helloWorld.send}"/>
                 <h:panelGroup/>
