@@ -16,45 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.blank;
+package org.apache.myfaces.blank.domain;
 
-import org.apache.myfaces.blank.domain.Person;
+import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 
-/**
- * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
- * 
- */
-public class HelloWorldController
+import javax.persistence.Column;
+
+public class Person
 {
+    //hello world demo
+    @Required
+    private String firstName;
 
-    //properties
-    private Person person;
+    //demo for jpa based validation support
+    @Column(nullable = false, length = 10 /*...*/)
+    private String lastName;
 
-    /**
-     * default empty constructor
-     */
-    public HelloWorldController()
+    public String getFirstName()
     {
+        return firstName;
     }
 
-    //-------------------getter & setter
-
-    public Person getPerson()
+    public void setFirstName(String firstName)
     {
-        return person;
+        this.firstName = firstName;
     }
 
-    public void setPerson(Person person)
+    public String getLastName()
     {
-        this.person = person;
+        return lastName;
     }
 
-    /**
-     * Method that is backed to a submit button of a form.
-     */
-    public String send()
+    public void setLastName(String lastName)
     {
-        //do real logic, return a string which will be used for the navigation system of JSF
-        return "success";
+        this.lastName = lastName;
     }
 }
