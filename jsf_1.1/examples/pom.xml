@@ -52,7 +52,6 @@
 
     <modules>
         <module>hello_world</module>
-        <module>hello_jpa</module>
         <module>feature-set_01</module>
     </modules>
 
