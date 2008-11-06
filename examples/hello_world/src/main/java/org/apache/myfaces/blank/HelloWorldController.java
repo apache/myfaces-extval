@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.blank;
 
-import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
+import org.apache.myfaces.blank.domain.Person;
 
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
@@ -26,27 +26,13 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
  */
 public class HelloWorldController
 {
-
-    //properties
-    @Required
-    private String name;
+    private Person person = new Person();
 
     /**
      * default empty constructor
      */
     public HelloWorldController()
     {
-    }
-
-    //-------------------getter & setter
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     /**
@@ -56,5 +42,15 @@ public class HelloWorldController
     {
         //do real logic, return a string which will be used for the navigation system of JSF
         return "success";
+    }
+
+    public Person getPerson()
+    {
+        return person;
+    }
+
+    public void setPerson(Person person)
+    {
+        this.person = person;
     }
 }
