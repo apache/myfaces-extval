@@ -104,7 +104,7 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/coresrc.xml</descriptor>
                             </descriptors>
-                            <finalName>myfaces-extval12-${version}-src</finalName>
+                            <finalName>myfaces-extval11-${version}-src</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>target/assembly/out</outputDirectory>
                             <workDirectory>target/assembly/work</workDirectory>
@@ -120,7 +120,7 @@
                             <descriptors>
                                 <descriptor>${basedir}/src/main/assembly/corebin.xml</descriptor>
                             </descriptors>
-                            <finalName>myfaces-extval12-${version}-bin</finalName>
+                            <finalName>myfaces-extval11-${version}-bin</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>target/assembly/out</outputDirectory>
                             <workDirectory>target/assembly/work</workDirectory>
