@@ -233,26 +233,15 @@
 
     <profiles>
         <profile>
-            <id>release</id>
-            <!--
-                NOTE: Execute this profile like
-                mvn clean source:jar install deploy -DaltDeploymentRepository=matzew::default::file://FOLDER -Prelease
-            -->
+            <id>generate-assembly</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.0-alpha-4</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>2.3</version>
@@ -261,19 +250,6 @@
                                 <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-scm-plugin</artifactId>
-                        <version>1.0</version>
-                        <executions>
-                            <execution>
-                                <phase>validate</phase>
-                                <id>getting-scm.revision</id>
-                                <goals>
-                                    <goal>update</goal>
                                 </goals>
                             </execution>
                         </executions>
