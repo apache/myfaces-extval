@@ -25,10 +25,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * Internal interface to allow multiple referencing strategies for cross component validation.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface ReferencingStrategy
 {
     boolean evalReferenceAndValidate(

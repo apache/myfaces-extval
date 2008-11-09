@@ -25,6 +25,9 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import java.util.Map;
 
 /**
+ * Allows to transform concrete meta-data to a more abstract form.<br/>
+ * e.g.: @Required, @Column(nullable = false,...), @Length(minimum = 1), ... -> required = true
+ * 
  * @author Gerhard Petracek
  * @since 1.x.1
  */
