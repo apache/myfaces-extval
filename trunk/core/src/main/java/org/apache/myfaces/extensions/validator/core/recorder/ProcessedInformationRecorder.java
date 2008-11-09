@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 
 /**
+ * Allows to capture converted values.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
