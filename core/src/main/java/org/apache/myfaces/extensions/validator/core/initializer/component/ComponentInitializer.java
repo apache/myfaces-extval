@@ -26,6 +26,9 @@ import javax.faces.context.FacesContext;
 import java.util.Map;
 
 /**
+ * Allows to initialize components beforeEncodeBegin.<br/>
+ * e.g.: you can add information for client-side validation mechanisms,...
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
