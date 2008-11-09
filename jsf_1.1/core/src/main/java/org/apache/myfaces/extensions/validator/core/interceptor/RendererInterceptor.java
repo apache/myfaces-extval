@@ -31,6 +31,9 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 
 /**
+ * Allows to intercept renderer methods.<br/>
+ * Base mechanism of extval. It allows to add custom infrastructures.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
