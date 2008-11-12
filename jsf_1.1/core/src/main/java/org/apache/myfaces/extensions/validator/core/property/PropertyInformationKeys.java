@@ -30,4 +30,5 @@ public interface PropertyInformationKeys
 {
     static final String PROPERTY_DETAILS = "property_details";
     static final String SKIP_VALIDATION = "skip_validation";
+    static final String LABEL = "label";
 }

@@ -42,6 +42,8 @@ import java.util.ResourceBundle;
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public abstract class AbstractValidationErrorMessageResolver implements MessageResolver
 {
+    public static final String MISSING_RESOURCE_MARKER = "???";
+
     protected final Log logger = LogFactory.getLog(getClass());
 
     private static String deactivateDefaultConvention = WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION;
@@ -155,7 +157,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         }
         catch (MissingResourceException e)
         {
-            return "???" + key + "???";
+            return MISSING_RESOURCE_MARKER + key + MISSING_RESOURCE_MARKER;
         }
     }
 
