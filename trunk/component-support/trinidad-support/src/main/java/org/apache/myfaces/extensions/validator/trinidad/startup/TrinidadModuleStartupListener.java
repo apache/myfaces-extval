@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitW
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -48,14 +49,22 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
     {
         //deactivate default approach
         ExtValContext.getContext().getFactoryFinder()
-            .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class)
-            .deactivate();
+            .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class).deactivate();
         
         String deactivateClientSideValidation = WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION;
 
         if(deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true"))
         {
             ExtValContext.getContext().addComponentInitializer(new TrinidadComponentInitializer());
+        }
+
+        String deactivateTrinidadValidationExceptionInterceptor =
+                WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR;
+
+        if(deactivateTrinidadValidationExceptionInterceptor == null ||
+                !deactivateTrinidadValidationExceptionInterceptor.equalsIgnoreCase("true"))
+        {
+            ExtValContext.getContext().addValidationExceptionInterceptor(new TrinidadValidationExceptionInterceptor());
         }
     }
 }

@@ -115,11 +115,6 @@ public class DefaultELHelper implements ELHelper
         return true;
     }
 
-    private ValueBindingExpression getValueBindingExpression(UIComponent uiComponent)
-    {
-        return getValueBindingExpression(uiComponent, false);
-    }
-
     private ValueBindingExpression getValueBindingExpression(UIComponent uiComponent, boolean allowBlankCharacters)
     {
         String valueBindingExpression = getOriginalValueBindingExpression(uiComponent);

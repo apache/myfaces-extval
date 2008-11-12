@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.crossval;
 
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -57,15 +58,19 @@ public class CrossValidationPhaseListener implements PhaseListener
                 }
                 catch (ValidatorException e)
                 {
-
-                    FacesMessage facesMessage = e.getFacesMessage();
-
-                    if (facesMessage != null && facesMessage.getSummary() != null && facesMessage.getDetail() != null)
+                    if(ExtValUtils.executeAfterThrowingInterceptors(
+                            entry.getComponent(), entry.getMetaDataEntry(), entry.getConvertedObject(), e))
                     {
-                        event.getFacesContext().addMessage(entry.getClientId(), facesMessage);
-                    }
+                        FacesMessage facesMessage = e.getFacesMessage();
 
-                    event.getFacesContext().renderResponse();
+                        if (facesMessage != null &&
+                                facesMessage.getSummary() != null && facesMessage.getDetail() != null)
+                        {
+                            event.getFacesContext().addMessage(entry.getClientId(), facesMessage);
+                        }
+
+                        event.getFacesContext().renderResponse();
+                    }
                 }
             }
         }
