@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
@@ -38,6 +39,7 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import java.util.Map;
 
 
@@ -79,6 +81,18 @@ public class ExtValUtils
                     .getFactory(FactoryNames.COMPONENT_INITIALIZER_FACTORY, ClassMappingFactory.class))
                     .create(uiComponent)
                     .configureComponent(facesContext, uiComponent, metaData);
+    }
+
+    public static boolean executeAfterThrowingInterceptors(UIComponent uiComponent,
+                                                        MetaDataEntry metaDataEntry,
+                                                        Object convertedObject,
+                                                        ValidatorException validatorException)
+    {
+        return ((ClassMappingFactory<UIComponent, ValidationExceptionInterceptor>)
+                ExtValContext.getContext().getFactoryFinder()
+                    .getFactory(FactoryNames.VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY, ClassMappingFactory.class))
+                    .create(uiComponent)
+                    .afterThrowing(uiComponent, metaDataEntry, convertedObject, validatorException);
     }
 
     public static MessageResolver getMessageResolverForValidationStrategy(ValidationStrategy validationStrategy)

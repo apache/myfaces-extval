@@ -61,4 +61,29 @@ public abstract class AbstractCrossValidationStrategy extends
 
         return entry;
     }
+
+    @Override
+    protected final boolean processAfterValidatorException(FacesContext facesContext,
+                                                           UIComponent uiComponent,
+                                                           MetaDataEntry metaDataEntry,
+                                                           Object convertedObject,
+                                                           ValidatorException validatorException)
+    {
+        throw new IllegalStateException("not available for cross validation");
+    }
+
+    @Override
+    protected final String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
+    {
+        throw new IllegalStateException("not available for cross validation");
+    }
+
+    @Override
+    protected final void initValidation(FacesContext facesContext,
+                                        UIComponent uiComponent,
+                                        MetaDataEntry metaDataEntry,
+                                        Object convertedObject)
+    {
+        //not available for cross validation
+    }
 }

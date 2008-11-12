@@ -36,4 +36,7 @@ public interface WebXmlParameter
      */
     static final String DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION = WebXmlUtils
         .getInitParameter("DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION");
+
+    static final String DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR = WebXmlUtils
+        .getInitParameter("DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR");
 }
