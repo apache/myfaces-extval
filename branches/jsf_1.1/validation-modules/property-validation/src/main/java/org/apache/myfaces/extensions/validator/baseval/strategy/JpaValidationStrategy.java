@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.baseval.strategy;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -29,12 +30,14 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.application.FacesMessage;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Id;
 import java.lang.annotation.Annotation;
+import java.util.MissingResourceException;
 
 /**
  * @author Gerhard Petracek
@@ -43,6 +46,9 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
 {
+    private boolean useFacesBundle = false;
+    private static final String JAVAX_FACES_REQUIRED = "javax.faces.component.UIInput.REQUIRED";
+    private static final String JAVAX_FACES_REQUIRED_DETAIL = "javax.faces.component.UIInput.REQUIRED_detail";
 
     private static final String VALIDATE_LENGTH = "length";
 
@@ -50,8 +56,9 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
     private int maxLength;
 
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, MetaDataEntry metaDataEntry,
-            Object convertedObject) throws ValidatorException
+                                  UIComponent uiComponent,
+                                  MetaDataEntry metaDataEntry,
+                                  Object convertedObject) throws ValidatorException
     {
         Annotation annotation = metaDataEntry.getValue(Annotation.class);
         if (annotation instanceof Column)
@@ -155,5 +162,53 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         {
             return message;
         }
+    }
+
+    @Override
+    protected String resolveMessage(String key)
+    {
+        String result = super.resolveMessage(key);
+        String marker = AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER;
+
+        if((marker + key + marker).equals(result))
+        {
+            this.useFacesBundle = true;
+        }
+
+        return result;
+    }
+
+    @Override
+    protected boolean processAfterValidatorException(FacesContext facesContext,
+                                                     UIComponent uiComponent,
+                                                     MetaDataEntry metaDataEntry,
+                                                     Object convertedObject,
+                                                     ValidatorException e)
+    {
+        FacesMessage facesMessage = e.getFacesMessage();
+
+        if(this.useFacesBundle && !VALIDATE_LENGTH.equals(this.violation))
+        {
+            String facesRequiredMessage = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED);
+            String facesRequiredMessageDetail = facesRequiredMessage;
+
+            //use try/catch for easier sync between trunk/branch
+            try
+            {
+                if(getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL) != null)
+                {
+                    facesRequiredMessageDetail = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL);
+                }
+            }
+            catch (MissingResourceException missingResourceException)
+            {
+                //jsf 1.2 doesn't have a detail message
+            }
+
+            facesMessage.setSummary(facesRequiredMessage);
+            facesMessage.setDetail(facesRequiredMessageDetail);
+        }
+
+        return super.processAfterValidatorException(facesContext, uiComponent, metaDataEntry, convertedObject, e);
     }
 }

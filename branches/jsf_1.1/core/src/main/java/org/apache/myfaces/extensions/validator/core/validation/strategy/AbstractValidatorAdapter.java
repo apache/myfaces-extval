@@ -19,8 +19,10 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -87,8 +89,7 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                 logger.trace("start processAfterValidatorException of " + getClass().getName());
             }
 
-            if (processAfterValidatorException(facesContext, uiComponent,
-                metaDataEntry, convertedObject, e))
+            if (processAfterValidatorException(facesContext, uiComponent, metaDataEntry, convertedObject, e))
             {
                 if(logger.isTraceEnabled())
                 {
@@ -117,10 +118,21 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
 
     //override if needed
     protected boolean processAfterValidatorException(FacesContext facesContext,
-                                                     UIComponent uiComponent, MetaDataEntry metaDataEntry,
-                                                     Object convertedObject, ValidatorException e)
+                                                     UIComponent uiComponent,
+                                                     MetaDataEntry metaDataEntry,
+                                                     Object convertedObject,
+                                                     ValidatorException validatorException)
     {
-        return true;
+        metaDataEntry.setProperty(PropertyInformationKeys.LABEL, getLabel(facesContext, uiComponent, metaDataEntry));
+
+        return ExtValUtils.executeAfterThrowingInterceptors(
+                uiComponent, metaDataEntry, convertedObject, validatorException);
+    }
+
+    //override if needed
+    protected String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
+    {
+        return null;
     }
 
     protected abstract void processValidation(FacesContext facesContext,

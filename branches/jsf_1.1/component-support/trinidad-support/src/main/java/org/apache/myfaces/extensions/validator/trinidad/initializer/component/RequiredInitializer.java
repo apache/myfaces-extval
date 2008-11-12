@@ -64,10 +64,10 @@ public class RequiredInitializer extends TrinidadComponentInitializer
     protected Boolean isComponentRequired(UIComponent uiComponent)
     {
         //compare with false so true = true or null
-        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils
-            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isReadOnly"));
-        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils
-            .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "isDisabled"));
+        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
+                uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isReadOnly")));
+        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
+                uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isDisabled")));
 
         return !(isReadOnly || isDisabled);
     }

@@ -16,33 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.annotation;
+package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
 
 /**
+ * Allows to intercept validatior exceptions.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@Target({METHOD, FIELD})
-@Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
-public @interface Required
+public interface ValidationExceptionInterceptor
 {
-    String label() default "none";
-
     /**
-     * to customize the error message or
-     * to override the default jsf required message with the usage of the message resolver mechanism
      *
-     * @return an optional error message key
+     * @param uiComponent the current component
+     * @param metaDataEntry the meta data entry which contains the meta data of the property
+     * @param convertedObject the converted user input
+     * @param validatorException the current exception
+     * @return false to stop throwing the exception
      */
-    String validationErrorMsgKey() default "field_required";
+    boolean afterThrowing(UIComponent uiComponent,
+                          MetaDataEntry metaDataEntry,
+                          Object convertedObject,
+                          ValidatorException validatorException);
 }

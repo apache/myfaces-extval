@@ -43,7 +43,8 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         ExtValContext.getContext().addProcessedInformationRecorder(new CrossValidationUserInputRecorder());
 
         initStaticStrategyMappings();
-        initDefaultComponentInitializerName();
+        initDefaultComponentInitializer();
+        initDefaultValidationExceptionInterceptor();
         addSkipValidationSupport();
     }
 
@@ -63,9 +64,16 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
     }
 
     @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
-    private void initDefaultComponentInitializerName()
+    private void initDefaultComponentInitializer()
     {
         ExtValContext.getContext().addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
+    private void initDefaultValidationExceptionInterceptor()
+    {
+        ExtValContext.getContext().addValidationExceptionInterceptor(
+                new HtmlCoreComponentsValidationExceptionInterceptor());
     }
 
     private void addSkipValidationSupport()

@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.DefaultValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
@@ -126,6 +128,11 @@ public class ExtValContext
     public void addComponentInitializer(ComponentInitializer componentInitializer)
     {
         DefaultComponentInitializer.addComponentInitializer(componentInitializer);
+    }
+
+    public void addValidationExceptionInterceptor(ValidationExceptionInterceptor validationExceptionInterceptor)
+    {
+        DefaultValidationExceptionInterceptor.addComponentInitializer(validationExceptionInterceptor);
     }
 
     public List<ProcessedInformationRecorder> getProcessedInformationRecorders()
