@@ -28,6 +28,7 @@ import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Provides the ability of message resolving to ValidationStrategies
@@ -38,7 +39,7 @@ import java.util.MissingResourceException;
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
 public abstract class AbstractAnnotationValidationStrategy extends AbstractValidatorAdapter
 {
-    protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_details";
+    protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_detail";
     private MessageResolver messageResolver;
 
     protected String resolveMessage(String key)
@@ -83,5 +84,18 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
     public void setMessageResolver(MessageResolver messageResolver)
     {
         this.messageResolver = messageResolver;
+    }
+
+    protected ResourceBundle getDefaultFacesMessageBundle()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String bundleName = facesContext.getApplication().getMessageBundle();
+
+        if(bundleName == null)
+        {
+            bundleName = FacesMessage.FACES_MESSAGES;
+        }
+
+        return ResourceBundle.getBundle(bundleName, facesContext.getViewRoot().getLocale());
     }
 }

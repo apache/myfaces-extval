@@ -52,6 +52,9 @@ public interface WebXmlParameter
     static final String CUSTOM_COMPONENT_INITIALIZER = WebXmlUtils
         .getInitParameter("CUSTOM_COMPONENT_INITIALIZER");
 
+    static final String CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR = WebXmlUtils
+        .getInitParameter("CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR");
+
     /*
      * name mapper
      */
@@ -81,6 +84,9 @@ public interface WebXmlParameter
 
     static final String CUSTOM_COMPONENT_INITIALIZER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_COMPONENT_INITIALIZER_FACTORY");
+
+    static final String CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY = WebXmlUtils
+            .getInitParameter("CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY");
 
     /*
      * deactivate

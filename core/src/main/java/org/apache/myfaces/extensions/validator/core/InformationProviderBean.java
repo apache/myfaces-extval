@@ -83,6 +83,7 @@ public class InformationProviderBean
         customizableInfos.put(CustomInfo.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX, "ValidationErrorMessageResolver");
 
         customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER, "ComponentInitializer");
+        customizableInfos.put(CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR, "ValidationExceptionInterceptor");
 
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
             "ValidationStrategyToMsgResolverNameMapper");
@@ -96,6 +97,8 @@ public class InformationProviderBean
         customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
         customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER_FACTORY, "ComponentInitializerFactory");
+        customizableInfos.put(CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY,
+                "ValidationExceptionInterceptorFactory");
         customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY, "ComponentMetaDataExtractorFactory");
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
 
