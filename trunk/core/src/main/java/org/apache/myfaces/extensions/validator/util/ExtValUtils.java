@@ -40,6 +40,7 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.application.FacesMessage;
 import java.util.Map;
 
 
@@ -133,5 +134,19 @@ public class ExtValUtils
         return new PropertyDetails(
             newKey, baseObject, targetExpression.substring(targetExpression.lastIndexOf(".") + 1,
             targetExpression.length()));
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static void tryToPlaceLabel(FacesMessage facesMessage, String label, int index)
+    {
+        if(facesMessage.getSummary() != null && facesMessage.getSummary().contains("{" + index + "}"))
+        {
+            facesMessage.setSummary(facesMessage.getSummary().replace("{" + index + "}", label));
+        }
+
+        if(facesMessage.getDetail() != null && facesMessage.getDetail().contains("{" + index + "}"))
+        {
+            facesMessage.setDetail(facesMessage.getDetail().replace("{" + index + "}", label));
+        }
     }
 }
