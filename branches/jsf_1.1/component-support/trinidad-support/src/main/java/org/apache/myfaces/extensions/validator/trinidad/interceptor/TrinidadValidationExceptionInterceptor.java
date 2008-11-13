@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExcept
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -65,16 +66,9 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
                 label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
             }
 
-            if(facesMessage.getSummary() != null && facesMessage.getSummary().contains("{0}"))
+            for(int i = 0; i < 3; i++)
             {
-                String newSummary = facesMessage.getSummary().replace("{0}", label);
-                facesMessage.setSummary(newSummary);
-            }
-
-            if(facesMessage.getDetail() != null && facesMessage.getDetail().contains("{0}"))
-            {
-                String newDetail = facesMessage.getDetail().replace("{0}", label);
-                facesMessage.setDetail(newDetail);
+                ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
             }
         }
         return true;
