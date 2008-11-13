@@ -34,6 +34,7 @@ import javax.faces.component.html.HtmlSelectOneRadio;
 import javax.faces.component.html.HtmlSelectManyCheckbox;
 import javax.faces.component.html.HtmlSelectManyListbox;
 import javax.faces.component.html.HtmlSelectManyMenu;
+import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 
@@ -83,7 +84,8 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
                 uiComponent instanceof HtmlSelectOneRadio ||
                 uiComponent instanceof HtmlSelectManyCheckbox ||
                 uiComponent instanceof HtmlSelectManyListbox ||
-                uiComponent instanceof HtmlSelectManyMenu;
+                uiComponent instanceof HtmlSelectManyMenu ||
+                uiComponent instanceof HtmlInputTextarea;
     }
 
     /**
