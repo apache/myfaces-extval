@@ -26,6 +26,14 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlInputSecret;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
+import javax.faces.component.html.HtmlSelectOneListbox;
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.component.html.HtmlSelectOneRadio;
+import javax.faces.component.html.HtmlSelectManyCheckbox;
+import javax.faces.component.html.HtmlSelectManyListbox;
+import javax.faces.component.html.HtmlSelectManyMenu;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 
@@ -67,7 +75,15 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
 
     protected boolean processComponent(UIComponent uiComponent)
     {
-        return uiComponent instanceof HtmlInputText;
+        return uiComponent instanceof HtmlInputText ||
+                uiComponent instanceof HtmlInputSecret ||
+                uiComponent instanceof HtmlSelectBooleanCheckbox ||
+                uiComponent instanceof HtmlSelectOneListbox ||
+                uiComponent instanceof HtmlSelectOneMenu ||
+                uiComponent instanceof HtmlSelectOneRadio ||
+                uiComponent instanceof HtmlSelectManyCheckbox ||
+                uiComponent instanceof HtmlSelectManyListbox ||
+                uiComponent instanceof HtmlSelectManyMenu;
     }
 
     /**
