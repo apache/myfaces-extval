@@ -28,6 +28,14 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlInputSecret;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
+import javax.faces.component.html.HtmlSelectOneListbox;
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.component.html.HtmlSelectOneRadio;
+import javax.faces.component.html.HtmlSelectManyCheckbox;
+import javax.faces.component.html.HtmlSelectManyListbox;
+import javax.faces.component.html.HtmlSelectManyMenu;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
@@ -45,11 +53,10 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
                                  ValidatorException validatorException)
     {
 
-        if(uiComponent instanceof HtmlInputText)
+        if(processComponent(uiComponent))
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();
 
-            //use reflection for easier sync between trunk/branch
             String label = (String) ReflectionUtils.tryToInvokeMethod(uiComponent,
                 ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getLabel"));
 
@@ -70,5 +77,18 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
             }
         }
         return true;
+    }
+
+    private boolean processComponent(UIComponent uiComponent)
+    {
+        return uiComponent instanceof HtmlInputText ||
+                uiComponent instanceof HtmlInputSecret ||
+                uiComponent instanceof HtmlSelectBooleanCheckbox ||
+                uiComponent instanceof HtmlSelectOneListbox ||
+                uiComponent instanceof HtmlSelectOneMenu ||
+                uiComponent instanceof HtmlSelectOneRadio ||
+                uiComponent instanceof HtmlSelectManyCheckbox ||
+                uiComponent instanceof HtmlSelectManyListbox ||
+                uiComponent instanceof HtmlSelectManyMenu;
     }
 }
