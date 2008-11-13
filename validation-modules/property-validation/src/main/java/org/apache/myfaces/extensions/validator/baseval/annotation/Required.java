@@ -36,8 +36,6 @@ import java.lang.annotation.Target;
 @UsageInformation(UsageCategory.API)
 public @interface Required
 {
-    String label() default "none";
-
     /**
      * to customize the error message or
      * to override the default jsf required message with the usage of the message resolver mechanism

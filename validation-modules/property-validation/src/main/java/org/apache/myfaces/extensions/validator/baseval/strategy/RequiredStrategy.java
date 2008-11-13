@@ -23,10 +23,8 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -112,24 +110,5 @@ public class RequiredStrategy extends AbstractAnnotationValidationStrategy
         }
 
         return super.processAfterValidatorException(facesContext, uiComponent, metaDataEntry, convertedObject, e);
-    }
-
-    @Override
-    protected String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
-    {
-        Required requiredAnnotation = metaDataEntry.getValue(Required.class);
-        String label = requiredAnnotation.label();
-
-        if("none".equals(label))
-        {
-            return null;
-        }
-
-        if(ExtValUtils.getELHelper().isELTerm(label))
-        {
-            return (String)ExtValUtils.getELHelper()
-                    .getValueOfExpression(facesContext, new ValueBindingExpression(label));
-        }
-        return label;
     }
 }
