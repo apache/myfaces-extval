@@ -19,12 +19,16 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -97,5 +101,24 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
         }
 
         return ResourceBundle.getBundle(bundleName, facesContext.getViewRoot().getLocale());
+    }
+
+    @Override
+    protected boolean processAfterValidatorException(FacesContext facesContext,
+                                                     UIComponent uiComponent,
+                                                     MetaDataEntry metaDataEntry,
+                                                     Object convertedObject,
+                                                     ValidatorException validatorException)
+    {
+        metaDataEntry.setProperty(PropertyInformationKeys.LABEL, getLabel(facesContext, uiComponent, metaDataEntry));
+
+        return super.processAfterValidatorException(
+                facesContext, uiComponent, metaDataEntry, convertedObject, validatorException);
+    }
+
+    //for custom annotations - override if needed
+    protected String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
+    {
+        return null;
     }
 }

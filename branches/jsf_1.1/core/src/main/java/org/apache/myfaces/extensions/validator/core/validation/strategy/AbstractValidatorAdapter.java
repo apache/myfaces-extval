@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -123,16 +122,8 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                                                      Object convertedObject,
                                                      ValidatorException validatorException)
     {
-        metaDataEntry.setProperty(PropertyInformationKeys.LABEL, getLabel(facesContext, uiComponent, metaDataEntry));
-
         return ExtValUtils.executeAfterThrowingInterceptors(
                 uiComponent, metaDataEntry, convertedObject, validatorException);
-    }
-
-    //override if needed
-    protected String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
-    {
-        return null;
     }
 
     protected abstract void processValidation(FacesContext facesContext,
