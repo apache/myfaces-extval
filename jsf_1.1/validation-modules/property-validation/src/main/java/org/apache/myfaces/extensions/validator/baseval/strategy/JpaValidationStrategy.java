@@ -49,6 +49,8 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
     private boolean useFacesBundle = false;
     private static final String JAVAX_FACES_REQUIRED = "javax.faces.component.UIInput.REQUIRED";
     private static final String JAVAX_FACES_REQUIRED_DETAIL = "javax.faces.component.UIInput.REQUIRED_detail";
+    private static final String JAVAX_FACES_MAXIMUM = "javax.faces.validator.LengthValidator.MAXIMUM";
+    private static final String JAVAX_FACES_MAXIMUM_DETAIL = "javax.faces.validator.LengthValidator.MAXIMUM_detail";
 
     private static final String VALIDATE_LENGTH = "length";
 
@@ -187,22 +189,51 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
     {
         FacesMessage facesMessage = e.getFacesMessage();
 
-        if(this.useFacesBundle && !VALIDATE_LENGTH.equals(this.violation))
+        if(this.useFacesBundle)
         {
-            String facesRequiredMessage = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED);
-            String facesRequiredMessageDetail = facesRequiredMessage;
+            String facesRequiredMessage;
+            String facesRequiredMessageDetail;
 
-            //use try/catch for easier sync between trunk/branch
-            try
+            if(VALIDATE_LENGTH.equals(this.violation))
             {
-                if(getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL) != null)
+                facesRequiredMessage = getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM);
+                facesRequiredMessageDetail = facesRequiredMessage;
+
+                //use try/catch for easier sync between trunk/branch
+                try
                 {
-                    facesRequiredMessageDetail = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL);
+                    if(getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM_DETAIL) != null)
+                    {
+                        facesRequiredMessageDetail = getDefaultFacesMessageBundle()
+                                .getString(JAVAX_FACES_MAXIMUM_DETAIL);
+                    }
                 }
+                catch (MissingResourceException missingResourceException)
+                {
+                    //jsf 1.2 doesn't have a detail message
+                }
+
+                facesRequiredMessage = facesRequiredMessage.replace("{0}", "" + this.maxLength);
+                facesRequiredMessageDetail = facesRequiredMessageDetail.replace("{0}", "" + this.maxLength);
             }
-            catch (MissingResourceException missingResourceException)
+            else
             {
-                //jsf 1.2 doesn't have a detail message
+                facesRequiredMessage = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED);
+                facesRequiredMessageDetail = facesRequiredMessage;
+
+                //use try/catch for easier sync between trunk/branch
+                try
+                {
+                    if(getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL) != null)
+                    {
+                        facesRequiredMessageDetail = getDefaultFacesMessageBundle()
+                                .getString(JAVAX_FACES_REQUIRED_DETAIL);
+                    }
+                }
+                catch (MissingResourceException missingResourceException)
+                {
+                    //jsf 1.2 doesn't have a detail message
+                }
             }
 
             facesMessage.setSummary(facesRequiredMessage);

@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
@@ -63,16 +64,9 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
                 label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
             }
 
-            if(facesMessage.getSummary() != null && facesMessage.getSummary().contains("{0}"))
+            for(int i = 0; i < 3; i++)
             {
-                String newSummary = facesMessage.getSummary().replace("{0}", label);
-                facesMessage.setSummary(newSummary);
-            }
-
-            if(facesMessage.getDetail() != null && facesMessage.getDetail().contains("{0}"))
-            {
-                String newDetail = facesMessage.getDetail().replace("{0}", label);
-                facesMessage.setDetail(newDetail);
+                ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
             }
         }
         return true;
