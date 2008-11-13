@@ -80,7 +80,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
         return true;
     }
 
-    private boolean processComponent(UIComponent uiComponent)
+    protected boolean processComponent(UIComponent uiComponent)
     {
         return uiComponent instanceof HtmlInputText ||
                 uiComponent instanceof HtmlInputSecret ||
