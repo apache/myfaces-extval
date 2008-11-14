@@ -95,7 +95,7 @@
     </profiles>
 
     <properties>
-        <trinidad.version>1.2.8</trinidad.version>
+        <trinidad.version>1.2.9</trinidad.version>
     </properties>
 
 </project>
