@@ -16,10 +16,10 @@
         <tr:inputText label="first name" value="#{bean.person.firstName}"/>
         <tr:inputText label="last name" value="#{bean.person.lastName}"/>
         <tr:inputDate label="birthday" value="#{bean.person.birthday}">
-            <tr:convertDateTime type="date" dateStyle="short"/>
+            <tr:convertDateTime type="date" pattern="dd.MM.yyyy"/>
         </tr:inputDate>
         <tr:inputDate label="final exam" value="#{bean.person.finalExam}">
-            <tr:convertDateTime type="date" dateStyle="short"/>
+            <tr:convertDateTime type="date" pattern="dd.MM.yyyy"/>
         </tr:inputDate>
 
         <tr:inputText label="number of siblings" value="#{bean.numberOfSiblings}"/>
