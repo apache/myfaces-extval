@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Compon
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -97,8 +98,12 @@ public class HtmlCoreComponentsComponentInitializer implements ComponentInitiali
      */
     protected Boolean isComponentRequired(UIComponent uiComponent)
     {
-        HtmlInputText htmlInputText = (HtmlInputText)uiComponent;
-        return !(htmlInputText.isReadonly() || htmlInputText.isDisabled());
+        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
+                uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isReadonly")));
+        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
+                uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isDisabled")));
+
+        return !(isReadOnly || isDisabled);
     }
 
     protected void configureMaxLengthAttribute(FacesContext facesContext,
