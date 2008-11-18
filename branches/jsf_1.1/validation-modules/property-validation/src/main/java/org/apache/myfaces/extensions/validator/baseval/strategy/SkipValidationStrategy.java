@@ -47,8 +47,8 @@ public class SkipValidationStrategy implements ValidationStrategy
 
         for(String valueBindingExpression : valueBindingExpressions)
         {
-            if((Boolean)ExtValUtils.getELHelper().getValueOfExpression(
-                facesContext, new ValueBindingExpression(valueBindingExpression)))
+            if(Boolean.TRUE.equals(ExtValUtils.getELHelper().getValueOfExpression(
+                facesContext, new ValueBindingExpression(valueBindingExpression))))
             {
                 metaDataEntry.setProperty(PropertyInformationKeys.SKIP_VALIDATION, true);
                 break;
