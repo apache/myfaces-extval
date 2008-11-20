@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
@@ -33,6 +34,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 /**
  * Default approach to avoid proxies for converters and the adapter fallback.
@@ -57,7 +59,47 @@ public class ExtValRendererWrapper extends Renderer
 
     public ExtValRendererWrapper(Renderer renderer)
     {
-        this.wrapped = new ExtValRendererProxy(renderer);
+        String proxyClassName = (String)ExtValContext.getContext().getGlobalProperty(ExtValRendererProxy.KEY);
+
+        if(proxyClassName == null)
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("no extval renderer proxy configured");
+            }
+
+            this.wrapped = new ExtValLazyRendererProxy(renderer);
+            return;
+        }
+
+        Class targetClass = ClassUtils.tryToLoadClassForName(proxyClassName);
+
+        if(targetClass == null)
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("no extval renderer proxy configured");
+            }
+
+            this.wrapped = new ExtValLazyRendererProxy(renderer);
+            return;
+        }
+
+        Class[] argClasses = new Class[1];
+        argClasses[0] = Renderer.class;
+
+        try
+        {
+            Constructor constructor = targetClass.getConstructor(argClasses);
+            this.wrapped = (Renderer)constructor.newInstance(renderer);
+        }
+        catch (Throwable e)
+        {
+            if(logger.isWarnEnabled())
+            {
+                logger.warn("no extval renderer proxy created for " + renderer.getClass().getName());
+            }
+        }
 
         if(logger.isTraceEnabled())
         {
