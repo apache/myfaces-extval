@@ -61,6 +61,12 @@ public class ExtValRenderKitFactory extends RenderKitFactory
     {
         RenderKit renderKit = this.wrapped.getRenderKit(facesContext, s);
 
+        //jsf ri + trinidad
+        if(renderKit == null)
+        {
+            return null;
+        }
+
         AbstractRenderKitWrapperFactory wrapperFactory = ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class);
 
