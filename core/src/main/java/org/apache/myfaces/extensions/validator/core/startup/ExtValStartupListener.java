@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 
@@ -51,6 +52,9 @@ public class ExtValStartupListener extends AbstractStartupListener
             .get(CustomInfo.STARTUP_LISTENER);
         AbstractStartupListener customStartupListener =
             (AbstractStartupListener)ClassUtils.tryToInstantiateClassForName(customStartupListenerName);
+
+        ExtValContext.getContext()
+                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
 
         if(customStartupListener != null)
         {

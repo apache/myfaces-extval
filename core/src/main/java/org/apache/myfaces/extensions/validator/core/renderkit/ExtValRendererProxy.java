@@ -40,9 +40,10 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRendererProxy extends Renderer
 {
+    public static final String KEY = ExtValRendererProxy.class.getName() + ":KEY";
     protected final Log logger = LogFactory.getLog(getClass());
     
-    private Renderer wrapped;
+    protected Renderer wrapped;
 
     public ExtValRendererProxy(Renderer renderer)
     {
@@ -64,6 +65,13 @@ public class ExtValRendererProxy extends Renderer
             entry.setDecodeCalled(true);
             wrapped.decode(facesContext, uiComponent);
         }
+        else
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("double call of method 'decode' filtered");
+            }
+        }
     }
 
     @Override
@@ -76,6 +84,13 @@ public class ExtValRendererProxy extends Renderer
         {
             entry.setEncodeBeginCalled(true);
             wrapped.encodeBegin(facesContext, uiComponent);
+        }
+        else
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("double call of method 'encodeBegin' filtered");
+            }
         }
     }
 
@@ -90,6 +105,13 @@ public class ExtValRendererProxy extends Renderer
             entry.setEncodeChildrenCalled(true);
             wrapped.encodeChildren(facesContext, uiComponent);
         }
+        else
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("double call of method 'encodeChildren' filtered");
+            }
+        }
     }
 
     @Override
@@ -102,6 +124,13 @@ public class ExtValRendererProxy extends Renderer
         {
             entry.setEncodeEndCalled(true);
             wrapped.encodeEnd(facesContext, uiComponent);
+        }
+        else
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("double call of method 'encodeEnd' filtered");
+            }
         }
     }
 
@@ -127,18 +156,32 @@ public class ExtValRendererProxy extends Renderer
         {
             entry.setConvertedValue(wrapped.getConvertedValue(facesContext, uiComponent, o));
         }
+        else
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("double call of method 'getConvertedValue' filtered");
+            }
+        }
         return entry.getConvertedValue();
     }
 
     private RendererProxyEntry getOrInitEntry(FacesContext facesContext, UIComponent uiComponent)
     {
-        String clientId = uiComponent.getClientId(facesContext);
+        String key = uiComponent.getClientId(facesContext);
 
-        if (!getOrInitComponentProxyMapping().containsKey(clientId))
+        key += getOptionalKey(facesContext, uiComponent);
+
+        if (!getOrInitComponentProxyMapping().containsKey(key))
         {
-            getOrInitComponentProxyMapping().put(clientId, new RendererProxyEntry());
+            getOrInitComponentProxyMapping().put(key, new RendererProxyEntry());
         }
-        return getOrInitComponentProxyMapping().get(clientId);
+        return getOrInitComponentProxyMapping().get(key);
+    }
+
+    protected String getOptionalKey(FacesContext facesContext, UIComponent uiComponent)
+    {
+        return "";
     }
 
     private static final String PROXY_STORAGE_NAME = ExtValRendererProxy.class.getName() + ":STORAGE";
