@@ -21,9 +21,11 @@ package org.apache.myfaces.extensions.validator.trinidad.startup;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRendererProxy;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -66,5 +68,16 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
         {
             ExtValContext.getContext().addValidationExceptionInterceptor(new TrinidadValidationExceptionInterceptor());
         }
+
+        //deactivate extval renderer proxy - due to an incompatibility with the table renderer
+        ExtValContext.getContext()
+                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValTrinidadRendererProxy.class.getName());
+
+        /*
+         * if there are further incompatible renderers use the following quick-fix:
+         *         ExtValContext.getContext()
+                .addGlobalProperty(ExtValRendererProxy.KEY, null);
+           attention: it causes direct delegation without a check of double invocations
+         */
     }
 }
