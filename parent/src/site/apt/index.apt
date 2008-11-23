@@ -2,7 +2,6 @@
 Overview
  ------
 
-Apache Myfaces Extensions Validator for JSF 1.1
+Apache MyFaces Extensions Validator for JSF 1.1
 
-  This project contains the artifacts compatible with jsf 1.1 for Myfaces Extensions Validator.
-
+  Apache MyFaces Extensions Validator provides versions for JSF 1.1 and 1.2
