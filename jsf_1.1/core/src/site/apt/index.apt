@@ -4,10 +4,7 @@ Apache MyFaces Extensions Validator Core Module
 
 Apache MyFaces Extensions Validator Core Module Overview
 
-    Myfaces Extensions Validator Core Module provides an stable api for add validation features to jsf applications.
-  
-    Myfaces Extensions Validator comes with jar compatible with JSF 1.1(1.1.x version)
-  and JSF 1.2 (1.2.x version), but both packages are JDK 1.5 compatible.
-  
-  
-    
+    MyFaces Extensions Validator Core Module provides an extensible validation platform to implement validation based on meta-data.
+    Based on this module it is possible to implement validation modules.
+
+    MyFaces Extensions Validator is compatible with JSF 1.1.x and JSF 1.2.x. Both versions require Java 1.5+
