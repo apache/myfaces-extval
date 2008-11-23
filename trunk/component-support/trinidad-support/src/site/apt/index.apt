@@ -4,10 +4,7 @@ Apache MyFaces Extensions Validator Trinidad Support Module
 
 Apache MyFaces Extensions Validator Trinidad Support Module Overview
 
-    Myfaces Extensions Validator Trinidad Support Module provides trinidad support for use Myfaces Extensions Validator.
+    MyFaces Extensions Validator Trinidad Support Module provides special Trinidad Support for MyFaces Extensions Validator.
+    Furthermore, it allows to join the client-side validation mechanism of Trinidad. Sample use-case: annotate your model with JPA 1.0 annotations, bind properties to JSF Input components and get automatic client-side validation just by adding 3 JAR files (MyFaces Extensions Validator Core, Property Validation and Trinidad Support).
   
-    Myfaces Extensions Validator comes with jar compatible with JSF 1.1(1.1.x version)
-  and JSF 1.2 (1.2.x version), but both packages are JDK 1.5 compatible.
-  
-  
-    
+    MyFaces Extensions Validator is compatible with JSF 1.1.x and JSF 1.2.x. Both versions require Java 1.5+  
