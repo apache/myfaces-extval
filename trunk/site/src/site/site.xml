@@ -49,17 +49,17 @@
     </menu>
 
     <menu name="Contents" inherit="top">
-        <item name="Myfaces Extensions Validator Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
-        <item name="Myfaces Extensions Validator for JSF 1.1"       href="http://myfaces.apache.org/extensions/validator11/index.html" collapse="true">
+        <item name="Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
+        <item name="ExtVal for JSF 1.1"       href="http://myfaces.apache.org/extensions/validator11/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
-        <item name="Myfaces Extensions Validator for JSF 1.2"       href="http://myfaces.apache.org/extensions/validator12/index.html" collapse="true">
+        <item name="ExtVal for JSF 1.2"       href="http://myfaces.apache.org/extensions/validator12/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
     </menu>
 
     <menu name="Documentation">
-      <item name="About"         href="index.html"/>
+      <item name="Wiki"         href="http://wiki.apache.org/myfaces/Extensions/Validator/"/>
     </menu>
 
     <menu ref="reports"/>

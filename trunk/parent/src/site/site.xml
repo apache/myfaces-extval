@@ -16,7 +16,7 @@
  * limitations under the License.
 -->
 
-<project name="Apache MyFaces Extensions Validator for JSF 1.2">
+<project name="Apache MyFaces Extensions Validator">
   <bannerLeft>
     <name>Apache MyFaces</name>
     <src>img/banners/MyFaces_logo.jpg</src>
@@ -49,20 +49,20 @@
     </menu>
 
     <menu name="Contents" inherit="top">
-        <item name="Myfaces Extensions Validator Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
-        <item name="Myfaces Extensions Validator for JSF 1.1"       href="http://myfaces.apache.org/extensions/validator11/index.html" collapse="true">
+        <item name="Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
+        <item name="ExtVal for JSF 1.1"       href="http://myfaces.apache.org/extensions/validator11/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
-        <item name="Myfaces Extensions Validator for JSF 1.2"   href="http://myfaces.apache.org/extensions/validator12/index.html">
-              <item name="Myfaces ExtVal Core API"              href="http://myfaces.apache.org/extensions/validator12/myfaces-extval-core/index.html"/>
-              <item name="Myfaces ExtVal Generic Support"       href="http://myfaces.apache.org/extensions/validator12/component-support-modules-project/myfaces-extval-generic-support/index.html"/>
-              <item name="Myfaces ExtVal Trinidad Support"      href="http://myfaces.apache.org/extensions/validator12/component-support-modules-project/myfaces-extval-trinidad-support/index.html"/>
-              <item name="Myfaces ExtVal Property Validation"   href="http://myfaces.apache.org/extensions/validator12/validation-modules-project/myfaces-extval-property-validation/index.html"/>
+        <item name="ExtVal for JSF 1.2"   href="http://myfaces.apache.org/extensions/validator12/index.html">
+              <item name="Core Module"           href="http://myfaces.apache.org/extensions/validator12/myfaces-extval-core/index.html"/>
+              <item name="Property Validation"   href="http://myfaces.apache.org/extensions/validator12/validation-modules-project/myfaces-extval-property-validation/index.html"/>
+              <item name="Trinidad Support"      href="http://myfaces.apache.org/extensions/validator12/component-support-modules-project/myfaces-extval-trinidad-support/index.html"/>
+              <item name="Generic Support"       href="http://myfaces.apache.org/extensions/validator12/component-support-modules-project/myfaces-extval-generic-support/index.html"/>
         </item>
     </menu>
 	
     <menu name="Documentation">
-      <item name="About"         href="index.html"/>
+      <item name="Wiki"         href="http://wiki.apache.org/myfaces/Extensions/Validator/"/>
     </menu>
 
     <menu ref="reports"/>
