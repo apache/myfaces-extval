@@ -67,9 +67,13 @@ public class LengthInitializer extends TrinidadComponentInitializer
             {
                 if(processComponent(uiComponent))
                 {
-                    ReflectionUtils
-                        .tryToInvokeMethodOfClassAndMethodName(uiComponent.getClass().getName(), "setMaximumLength",
-                            new Object[] {maxLength}, new Class[] {int.class});
+                    ReflectionUtils.tryToInvokeMethod(
+                            uiComponent,
+                            ReflectionUtils.tryToGetMethod(
+                                    uiComponent.getClass(),
+                                    "setMaximumLength",
+                                    int.class),
+                            maxLength);
                 }
                 lengthValidator.setMaximum((Integer)maxLength);
                 informationAdded = true;

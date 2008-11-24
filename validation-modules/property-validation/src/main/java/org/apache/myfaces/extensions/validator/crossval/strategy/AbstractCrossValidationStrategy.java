@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -75,7 +76,7 @@ public abstract class AbstractCrossValidationStrategy extends
     @Override
     protected final String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
     {
-        throw new IllegalStateException("not available for cross validation");
+        throw new IllegalStateException("not available for cross validation - use processAfterCrossValidatorException");
     }
 
     @Override
@@ -84,6 +85,20 @@ public abstract class AbstractCrossValidationStrategy extends
                                         MetaDataEntry metaDataEntry,
                                         Object convertedObject)
     {
-        //not available for cross validation
+        //not available for cross validation - use initCrossValidation
+    }
+
+    protected void initCrossValidation(CrossValidationStorageEntry crossValidationStorageEntry)
+    {
+        //override if needed
+    }
+
+    //override if needed
+    protected boolean processAfterCrossValidatorException(CrossValidationStorageEntry crossValidationStorageEntry,
+                                                          ValidatorException validatorException)
+    {
+        return ExtValUtils.executeAfterThrowingInterceptors(
+                crossValidationStorageEntry.getComponent(), crossValidationStorageEntry.getMetaDataEntry(),
+                crossValidationStorageEntry.getConvertedObject(), validatorException);
     }
 }
