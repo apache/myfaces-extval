@@ -25,15 +25,14 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Abstract
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import javax.faces.application.FacesMessage;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Collection;
-import java.util.MissingResourceException;
 
 /**
  * @author Gerhard Petracek
@@ -44,8 +43,6 @@ import java.util.MissingResourceException;
 public class RequiredStrategy extends AbstractAnnotationValidationStrategy
 {
     private boolean useFacesBundle = false;
-    private static final String JAVAX_FACES_REQUIRED = "javax.faces.component.UIInput.REQUIRED";
-    private static final String JAVAX_FACES_REQUIRED_DETAIL = "javax.faces.component.UIInput.REQUIRED_detail";
 
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, MetaDataEntry metaDataEntry,
@@ -85,28 +82,9 @@ public class RequiredStrategy extends AbstractAnnotationValidationStrategy
                                                      Object convertedObject,
                                                      ValidatorException e)
     {
-        FacesMessage facesMessage = e.getFacesMessage();
-
         if(this.useFacesBundle)
         {
-            String facesRequiredMessage = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED);
-            String facesRequiredMessageDetail = facesRequiredMessage;
-
-            //use try/catch for easier sync between trunk/branch
-            try
-            {
-                if(getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL) != null)
-                {
-                    facesRequiredMessageDetail = getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL);
-                }
-            }
-            catch (MissingResourceException missingResourceException)
-            {
-                //jsf 1.2 doesn't have a detail message
-            }
-
-            facesMessage.setSummary(facesRequiredMessage);
-            facesMessage.setDetail(facesRequiredMessageDetail);
+            ExtValUtils.replaceWithDefaultRequiredMessage(e.getFacesMessage());
         }
 
         return super.processAfterValidatorException(facesContext, uiComponent, metaDataEntry, convertedObject, e);

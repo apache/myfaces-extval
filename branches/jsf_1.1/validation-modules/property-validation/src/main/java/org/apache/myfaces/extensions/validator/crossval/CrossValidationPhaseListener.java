@@ -20,15 +20,17 @@ package org.apache.myfaces.extensions.validator.crossval;
 
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCrossValidationStrategy;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.validator.ValidatorException;
+import javax.faces.FacesException;
 
 /**
  * This phase listener processes cross validation as soon as it finds a special request scoped storage.<br/>
@@ -54,14 +56,46 @@ public class CrossValidationPhaseListener implements PhaseListener
             {
                 try
                 {
+                    if(entry.getValidationStrategy() instanceof AbstractCrossValidationStrategy)
+                    {
+                        ReflectionUtils.tryToInvokeMethod(
+                                entry.getValidationStrategy(),
+                                ReflectionUtils.tryToGetMethod(
+                                        entry.getValidationStrategy().getClass(),
+                                        "initCrossValidation",
+                                        CrossValidationStorageEntry.class),
+                                entry);
+                    }
+
                     entry.getValidationStrategy().processCrossValidation(entry, crossValidationStorage);
                 }
-                catch (ValidatorException e)
+                catch (ValidatorException validatorException)
                 {
-                    if(ExtValUtils.executeAfterThrowingInterceptors(
-                            entry.getComponent(), entry.getMetaDataEntry(), entry.getConvertedObject(), e))
+                    boolean addMessage = true;
+
+                    if(entry.getValidationStrategy() instanceof AbstractCrossValidationStrategy)
                     {
-                        FacesMessage facesMessage = e.getFacesMessage();
+                        try
+                        {
+                            addMessage = (Boolean)ReflectionUtils.tryToInvokeMethod(
+                                    entry.getValidationStrategy(),
+                                    ReflectionUtils.tryToGetMethod(
+                                            entry.getValidationStrategy().getClass(),
+                                            "processAfterCrossValidatorException",
+                                            CrossValidationStorageEntry.class,
+                                            validatorException.getClass()),
+                                    entry,
+                                    validatorException);
+                        }
+                        catch (Throwable e)
+                        {
+                            throw new FacesException(e);
+                        }
+                    }
+
+                    if(addMessage)
+                    {
+                        FacesMessage facesMessage = validatorException.getFacesMessage();
 
                         if (facesMessage != null &&
                                 facesMessage.getSummary() != null && facesMessage.getDetail() != null)
