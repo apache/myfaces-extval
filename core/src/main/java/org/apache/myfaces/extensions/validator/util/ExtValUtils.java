@@ -42,6 +42,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 
 /**
@@ -51,6 +52,12 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
+    private static final String JAVAX_FACES_REQUIRED = "javax.faces.component.UIInput.REQUIRED";
+    private static final String JAVAX_FACES_REQUIRED_DETAIL = "javax.faces.component.UIInput.REQUIRED_detail";
+
+    private static final String JAVAX_FACES_MAXIMUM = "javax.faces.validator.LengthValidator.MAXIMUM";
+    private static final String JAVAX_FACES_MAXIMUM_DETAIL = "javax.faces.validator.LengthValidator.MAXIMUM_detail";
+
     public static ValidationStrategy getValidationStrategyForMetaData(String metaDataKey)
     {
         return ((ClassMappingFactory<Object, ValidationStrategy>) ExtValContext.getContext()
@@ -148,5 +155,56 @@ public class ExtValUtils
         {
             facesMessage.setDetail(facesMessage.getDetail().replace("{" + index + "}", label));
         }
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static void replaceWithDefaultMaximumMessage(FacesMessage facesMessage, int maxLength)
+    {
+        String facesRequiredMessage = JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM);
+        String facesRequiredMessageDetail = facesRequiredMessage;
+
+        //use try/catch for easier sync between trunk/branch
+        try
+        {
+            if(JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM_DETAIL) != null)
+            {
+                facesRequiredMessageDetail = JsfUtils
+                        .getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM_DETAIL);
+            }
+        }
+        catch (MissingResourceException missingResourceException)
+        {
+            //jsf 1.2 doesn't have a detail message
+        }
+
+        facesRequiredMessage = facesRequiredMessage.replace("{0}", "" + maxLength);
+        facesRequiredMessageDetail = facesRequiredMessageDetail.replace("{0}", "" + maxLength);
+
+        facesMessage.setSummary(facesRequiredMessage);
+        facesMessage.setDetail(facesRequiredMessageDetail);
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static void replaceWithDefaultRequiredMessage(FacesMessage facesMessage)
+    {
+        String facesRequiredMessage = JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED);
+        String facesRequiredMessageDetail = facesRequiredMessage;
+
+        //use try/catch for easier sync between trunk/branch
+        try
+        {
+            if(JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL) != null)
+            {
+                facesRequiredMessageDetail = JsfUtils
+                        .getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL);
+            }
+        }
+        catch (MissingResourceException missingResourceException)
+        {
+            //jsf 1.2 doesn't have a detail message
+        }
+
+        facesMessage.setSummary(facesRequiredMessage);
+        facesMessage.setDetail(facesRequiredMessageDetail);
     }
 }
