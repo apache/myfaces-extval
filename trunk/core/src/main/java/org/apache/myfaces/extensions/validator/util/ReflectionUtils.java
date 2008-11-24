@@ -37,7 +37,7 @@ public class ReflectionUtils
         return tryToGetMethod(targetClass, targetMethodName, null);
     }
 
-    public static Method tryToGetMethod(Class targetClass, String targetMethodName, Class[] parameterTypes)
+    public static Method tryToGetMethod(Class targetClass, String targetMethodName, Class... parameterTypes)
     {
         try
         {
@@ -56,10 +56,53 @@ public class ReflectionUtils
         return getMethod(targetClass, targetMethodName, null);
     }
 
-    public static Method getMethod(Class targetClass, String targetMethodName, Class[] parameterTypes)
+    public static Method getMethod(Class targetClass, String targetMethodName, Class... parameterTypes)
         throws NoSuchMethodException
     {
-        return targetClass.getMethod(targetMethodName, parameterTypes);
+        Class currentClass = targetClass;
+        Method targetMethod = null;
+        
+        while (!Object.class.getName().equals(currentClass.getName()))
+        {
+            try
+            {
+                targetMethod = currentClass.getDeclaredMethod(targetMethodName, parameterTypes);
+                break;
+            }
+            catch (NoSuchMethodException e)
+            {
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+
+        if(targetMethod == null)
+        {
+            for (Class currentInterface : targetClass.getInterfaces())
+            {
+                currentClass = currentInterface;
+
+                while (currentClass != null)
+                {
+                    try
+                    {
+                        targetMethod = currentClass.getDeclaredMethod(targetMethodName, parameterTypes);
+                        break;
+                    }
+                    catch (NoSuchMethodException e)
+                    {
+                        currentClass = currentClass.getSuperclass();
+                    }
+                }
+            }
+        }
+
+        if(targetMethod != null)
+        {
+            return targetMethod;
+        }
+
+        throw new NoSuchMethodException("there is no method with the name '" + targetMethodName + "'" +
+                " class: " + targetClass.getName());
     }
 
     public static Object tryToInvokeMethod(Object target, Method method)
@@ -70,36 +113,6 @@ public class ReflectionUtils
     public static Object tryToInvokeMethodOfClass(Class target, Method method)
     {
         return tryToInvokeMethodOfClass(target, method, null);
-    }
-
-    public static Object tryToInvokeMethodOfClassAndMethodName(String className, String methodName)
-    {
-        return tryToInvokeMethodOfClassAndMethodName(className, methodName, null);
-    }
-
-    public static Object tryToInvokeMethodOfClassAndMethodName(String className, String methodName, Object[] args)
-    {
-        Class[] targetArgs = new Class[0];
-
-        if(args != null)
-        {
-            targetArgs = new Class[args.length];
-
-            for(int i = 0; i < args.length; i++)
-            {
-                targetArgs[i] = args[i].getClass();
-            }
-        }
-
-        return tryToInvokeMethodOfClassAndMethodName(className, methodName, args, targetArgs);
-    }
-
-    public static Object tryToInvokeMethodOfClassAndMethodName(String className, String methodName,
-                                                               Object[] args, Class[] argTypes)
-    {
-        Class targetClass = ClassUtils.tryToLoadClassForName(className);
-        Method targetMethod = tryToGetMethod(targetClass, methodName, argTypes);
-        return tryToInvokeMethodOfClass(targetClass, targetMethod, args);
     }
 
     public static Object tryToInvokeMethodOfClass(Class target, Method method, Object[] args)
@@ -121,17 +134,17 @@ public class ReflectionUtils
         return invokeMethod(target.newInstance(), method, null);
     }
 
-    public static Object invokeMethodOfClass(Class target, Method method, Object[] args)
+    public static Object invokeMethodOfClass(Class target, Method method, Object... args)
         throws IllegalAccessException, InstantiationException, InvocationTargetException
     {
         return invokeMethod(target.newInstance(), method, args);
     }
 
-    public static Object tryToInvokeMethod(Object target, Method method, Object[] args)
+    public static Object tryToInvokeMethod(Object target, Method method, Object... args)
     {
         try
         {
-            return method.invoke(target, args);
+            return invokeMethod(target, method, args);
         }
         catch (Throwable t)
         {
@@ -146,9 +159,10 @@ public class ReflectionUtils
         return invokeMethod(target, method, null);
     }
 
-    public static Object invokeMethod(Object target, Method method, Object[] args)
+    public static Object invokeMethod(Object target, Method method, Object... args)
         throws InvocationTargetException, IllegalAccessException
     {
+        method.setAccessible(true);
         return method.invoke(target, args);
     }
 

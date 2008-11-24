@@ -22,10 +22,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.FactoryFinder;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
 
 /**
@@ -48,5 +51,18 @@ public class JsfUtils
             currentLifecycle = lifecycleFactory.getLifecycle(currentId);
             currentLifecycle.removePhaseListener(phaseListener);
         }
+    }
+
+    public static ResourceBundle getDefaultFacesMessageBundle()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String bundleName = facesContext.getApplication().getMessageBundle();
+
+        if(bundleName == null)
+        {
+            bundleName = FacesMessage.FACES_MESSAGES;
+        }
+
+        return ResourceBundle.getBundle(bundleName, facesContext.getViewRoot().getLocale());
     }
 }
