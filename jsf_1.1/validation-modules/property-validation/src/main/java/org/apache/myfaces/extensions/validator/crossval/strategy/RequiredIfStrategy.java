@@ -24,7 +24,10 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfTyp
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
+import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
 
 /**
@@ -35,9 +38,25 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class RequiredIfStrategy extends AbstractCompareStrategy
 {
+    private boolean useFacesBundle = false;
+
     public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return false;
+    }
+
+    @Override
+    protected String resolveMessage(String key)
+    {
+        String result = super.resolveMessage(key);
+        String marker = AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER;
+
+        if((marker + key + marker).equals(result))
+        {
+            this.useFacesBundle = true;
+        }
+
+        return result;
     }
 
     protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)
@@ -64,5 +83,17 @@ public class RequiredIfStrategy extends AbstractCompareStrategy
     public String[] getValidationTargets(Annotation annotation)
     {
         return ((RequiredIf) annotation).valueOf();
+    }
+
+    @Override
+    protected boolean processAfterCrossValidatorException(
+            CrossValidationStorageEntry crossValidationStorageEntry, ValidatorException validatorException)
+    {
+        if(this.useFacesBundle)
+        {
+            ExtValUtils.replaceWithDefaultRequiredMessage(validatorException.getFacesMessage());
+        }
+
+        return super.processAfterCrossValidatorException(crossValidationStorageEntry, validatorException);
     }
 }
