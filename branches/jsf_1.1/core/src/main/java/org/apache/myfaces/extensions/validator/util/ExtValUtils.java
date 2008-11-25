@@ -126,7 +126,8 @@ public class ExtValUtils
             ValueBindingExpression vbe = new ValueBindingExpression(targetExpression);
 
             String expression = vbe.getExpressionString();
-            baseObject = ExtValUtils.getELHelper().getBaseObject(vbe);
+            baseObject = ExtValUtils.getELHelper()
+                    .getValueOfExpression(FacesContext.getCurrentInstance(), vbe.getBaseExpression());
             return new PropertyDetails(
                 expression.substring(2, expression.length() - 1), baseObject, vbe.getProperty());
         }

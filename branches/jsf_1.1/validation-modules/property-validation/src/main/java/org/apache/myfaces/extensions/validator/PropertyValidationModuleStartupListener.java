@@ -22,9 +22,9 @@ import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.core.loader.StaticResourceBundleLoader;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticResourceBundleConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigNames;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -54,12 +54,12 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         if (jpaBasedValidation == null
                 || !jpaBasedValidation.equalsIgnoreCase("true"))
         {
-            StaticMappingConfigLoader<String, String> staticMappingConfigLoader = new StaticResourceBundleLoader();
-            staticMappingConfigLoader.setSourceOfMapping(
+            StaticConfig<String, String> staticConfig = new StaticResourceBundleConfig();
+            staticConfig.setSourceOfMapping(
                 ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME +".jpa_strategy_mappings");
 
-            ExtValContext.getContext().addStaticMappingConfigLoader(
-             StaticMappingConfigLoaderNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG_LOADER, staticMappingConfigLoader);
+            ExtValContext.getContext().addStaticConfig(
+             StaticConfigNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG, staticConfig);
         }
     }
 
