@@ -28,14 +28,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultELHelperFactory extends AbstractELHelperFactory
 {
-    private ELHelper elHelper;
+    private ELHelper elHelper = new DefaultELHelper();
     
     protected ELHelper createELHelper()
     {
-        if(this.elHelper == null)
-        {
-            this.elHelper = new DefaultELHelper();
-        }
         return this.elHelper;
     }
 }

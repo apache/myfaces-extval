@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.loader;
+package org.apache.myfaces.extensions.validator.core.initializer.config;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -29,23 +29,23 @@ import java.util.ArrayList;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public class StaticInMemoryMappingConfig implements StaticMappingConfigLoader<String, String>
+public class StaticInMemoryConfig implements StaticConfig<String, String>
 {
-    private List<StaticMappingConfigEntry<String, String>> mappings
-        = new ArrayList<StaticMappingConfigEntry<String, String>>();
+    private List<StaticConfigEntry<String, String>> mappings
+        = new ArrayList<StaticConfigEntry<String, String>>();
 
     public void setSourceOfMapping(String path)
     {
     }
 
-    public List<StaticMappingConfigEntry<String, String>> getMapping()
+    public List<StaticConfigEntry<String, String>> getMapping()
     {
         return mappings;
     }
 
     public void addMapping(String source, String target)
     {
-        StaticMappingConfigEntry<String, String> entry = new StaticMappingConfigEntry<String, String>();
+        StaticConfigEntry<String, String> entry = new StaticConfigEntry<String, String>();
         entry.setSource(source);
         entry.setTarget(target);
         this.mappings.add(entry);

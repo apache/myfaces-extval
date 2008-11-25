@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.loader;
+package org.apache.myfaces.extensions.validator.core.initializer.config;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -26,9 +26,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API})
-public enum StaticMappingConfigLoaderNames
+public enum StaticConfigNames
 {
-    META_DATA_TO_VALIDATION_STRATEGY_CONFIG_LOADER,
-    VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG_LOADER,
-    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG_LOADER
+    META_DATA_TO_VALIDATION_STRATEGY_CONFIG,
+    VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG,
+    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG
 }

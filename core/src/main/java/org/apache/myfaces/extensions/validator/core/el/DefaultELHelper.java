@@ -65,8 +65,7 @@ public class DefaultELHelper implements ELHelper
         }
     }
 
-    public Class getTypeOfValueBindingForExpression(FacesContext facesContext,
-                                                    ValueBindingExpression valueBindingExpression)
+    public Class getTypeOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression)
     {
         //due to a restriction with the ri
         Object bean = getValueOfExpression(facesContext, valueBindingExpression);
@@ -77,22 +76,6 @@ public class DefaultELHelper implements ELHelper
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         return facesContext.getApplication().getELResolver().getValue(facesContext.getELContext(), null, beanName);
-    }
-
-    @ToDo(value = Priority.MEDIUM, description = "refactor - problem - static values - jsf 1.2 e.g.: ${value}")
-    public Object getBaseObject(ValueBindingExpression valueBindingExpression, UIComponent uiComponent)
-    {
-        if(valueBindingExpression.getBaseExpression() == null)
-        {
-            return uiComponent.getValueExpression("value").getValue(FacesContext.getCurrentInstance().getELContext());
-        }
-        return getBaseObject(valueBindingExpression);
-    }
-
-    public Object getBaseObject(ValueBindingExpression valueBindingExpression)
-    {
-        return getValueOfExpression(FacesContext.getCurrentInstance(),
-            valueBindingExpression.getBaseExpression());
     }
 
     public Object getValueOfExpression(FacesContext facesContext,
@@ -132,7 +115,7 @@ public class DefaultELHelper implements ELHelper
             valueBindingExpression = valueBindingExpression.replace(" ", "");
         }
 
-        if (getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(),
+        if (getTypeOfExpression(FacesContext.getCurrentInstance(),
             new ValueBindingExpression(valueBindingExpression).getBaseExpression()) == null)
         {
             ValueBindingExpression result = FaceletsTaglibExpressionHelper.
@@ -148,7 +131,7 @@ public class DefaultELHelper implements ELHelper
             }
 
             Class entityClass = ExtValUtils.getELHelper()
-                .getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), result.getBaseExpression());
+                .getTypeOfExpression(FacesContext.getCurrentInstance(), result.getBaseExpression());
 
             if(entityClass == null)
             {
@@ -233,8 +216,9 @@ public class DefaultELHelper implements ELHelper
 
         path = currentValueBindingExpression.getProperty() + "." + path;
 
-        return new PropertyDetails(path,
-            getBaseObject(valueBindingExpression), valueBindingExpression.getProperty());
+        Object baseObject = getValueOfExpression(
+                FacesContext.getCurrentInstance(), valueBindingExpression.getBaseExpression());
+        return new PropertyDetails(path, baseObject, valueBindingExpression.getProperty());
     }
 
     static String getOriginalValueBindingExpression(UIComponent uiComponent)
@@ -242,13 +226,6 @@ public class DefaultELHelper implements ELHelper
         ValueExpression valueExpression = uiComponent.getValueExpression("value");
 
         return (valueExpression != null) ? valueExpression.getExpressionString() : null;
-    }
-
-    public Class getTypeOfValueBindingForComponent(FacesContext facesContext, UIComponent uiComponent)
-    {
-        ValueExpression valueExpression = uiComponent.getValueExpression("value");
-
-        return (valueExpression != null) ? valueExpression.getType(facesContext.getELContext()) : null;
     }
 
     public boolean isELTerm(Object o)
