@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.el;
 
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -49,7 +47,6 @@ import java.io.Externalizable;
  * it's pluggable in order to support special mechanisms of different technologies (than jsp and facelets)
  * so you can plug in your own impl. which implements a custom workaround (like the facelets workaround of this impl.)
  */
-@ToDo(Priority.MEDIUM)
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultELHelper implements ELHelper
 {
@@ -106,7 +103,11 @@ public class DefaultELHelper implements ELHelper
         //(e.g. for special component libs -> issue with ExtValRendererWrapper#encodeBegin)
         if(valueBindingExpression == null)
         {
-            //TODO logging
+            if(this.logger.isTraceEnabled())
+            {
+                this.logger.trace(
+                        uiComponent.getClass() + " has no value binding - component id: " + uiComponent.getId());
+            }
             return null;
         }
 
@@ -125,7 +126,7 @@ public class DefaultELHelper implements ELHelper
             {
                 if(logger.isWarnEnabled())
                 {
-                    logger.warn("couldn't resolve expression: " + result.getExpressionString());
+                    logger.warn("couldn't resolve expression: " + valueBindingExpression);
                 }
                 return null;
             }
