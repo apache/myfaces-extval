@@ -62,7 +62,7 @@ class FaceletsTaglibExpressionHelper
                     .substring(0, 1) + "{" + createBinding(foundBindings, mappedFaceletsVars) + "}");
 
             Class entityClass = ExtValUtils.getELHelper()
-                .getTypeOfValueBindingForExpression(FacesContext.getCurrentInstance(), vbe.getBaseExpression());
+                .getTypeOfExpression(FacesContext.getCurrentInstance(), vbe.getBaseExpression());
 
             if(entityClass == null)
             {

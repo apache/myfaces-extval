@@ -22,11 +22,11 @@ import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigEntry;
-import org.apache.myfaces.extensions.validator.core.loader.StaticResourceBundleLoader;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigEntry;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticResourceBundleConfig;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
@@ -172,22 +172,22 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
             metaDataKeyToValidationStrategyMapping = new HashMap<String, String>();
 
             //setup internal static mappings
-            for (StaticMappingConfigLoader<String, String> staticMappingConfigLoader :
-                ExtValContext.getContext().getStaticMappingConfigLoaders(
-                    StaticMappingConfigLoaderNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG_LOADER))
+            for (StaticConfig<String, String> staticConfig :
+                ExtValContext.getContext().getStaticConfig(
+                    StaticConfigNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG))
             {
-                setupStrategyMappings(staticMappingConfigLoader.getMapping());
+                setupStrategyMappings(staticConfig.getMapping());
             }
 
-            StaticMappingConfigLoader<String, String> staticMappingConfigLoader = new StaticResourceBundleLoader();
+            StaticConfig<String, String> staticConfig = new StaticResourceBundleConfig();
             //try to setup mapping with base name by convention - overrides default mapping
             try
             {
                 //build convention (strategy mapping)
-                staticMappingConfigLoader.setSourceOfMapping(ExtValContext.getContext().getInformationProviderBean()
+                staticConfig.setSourceOfMapping(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE));
 
-                setupStrategyMappings(staticMappingConfigLoader.getMapping());
+                setupStrategyMappings(staticConfig.getMapping());
             }
             catch (Throwable t)
             {
@@ -200,9 +200,9 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
             {
                 try
                 {
-                    staticMappingConfigLoader = new StaticResourceBundleLoader();
-                    staticMappingConfigLoader.setSourceOfMapping(customMappingBaseName);
-                    setupStrategyMappings(staticMappingConfigLoader.getMapping());
+                    staticConfig = new StaticResourceBundleConfig();
+                    staticConfig.setSourceOfMapping(customMappingBaseName);
+                    setupStrategyMappings(staticConfig.getMapping());
                 }
                 catch (MissingResourceException e)
                 {
@@ -212,9 +212,9 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
         }
     }
 
-    private void setupStrategyMappings(List<StaticMappingConfigEntry<String,String>> mappings)
+    private void setupStrategyMappings(List<StaticConfigEntry<String,String>> mappings)
     {
-        for(StaticMappingConfigEntry<String, String> mapping : mappings)
+        for(StaticConfigEntry<String, String> mapping : mappings)
         {
             addMapping(mapping.getSource(), mapping.getTarget());
         }

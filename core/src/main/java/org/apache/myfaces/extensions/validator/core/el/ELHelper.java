@@ -34,17 +34,11 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.API)
 public interface ELHelper
 {
-    Class getTypeOfValueBindingForExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
-
-    Class getTypeOfValueBindingForComponent(FacesContext facesContext, UIComponent uiComponent);
-
     Object getBean(String beanName);
 
-    Object getBaseObject(ValueBindingExpression valueBindingExpression);
-
-    Object getBaseObject(ValueBindingExpression valueBindingExpression, UIComponent uiComponent);
-
     Object getValueOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
+
+    Class getTypeOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
 
     PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent);
 
