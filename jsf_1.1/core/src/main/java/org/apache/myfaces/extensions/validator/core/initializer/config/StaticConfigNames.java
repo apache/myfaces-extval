@@ -16,38 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.loader;
+package org.apache.myfaces.extensions.validator.core.initializer.config;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
-public class StaticMappingConfigEntry<T, R>
+@UsageInformation({UsageCategory.API})
+public enum StaticConfigNames
 {
-    private T source;
-    private R target;
-
-    public T getSource()
-    {
-        return source;
-    }
-
-    public void setSource(T source)
-    {
-        this.source = source;
-    }
-
-    public R getTarget()
-    {
-        return target;
-    }
-
-    public void setTarget(R target)
-    {
-        this.target = target;
-    }
+    META_DATA_TO_VALIDATION_STRATEGY_CONFIG,
+    VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG,
+    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG
 }

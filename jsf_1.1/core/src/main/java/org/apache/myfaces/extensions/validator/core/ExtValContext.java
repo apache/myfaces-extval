@@ -20,14 +20,14 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfig;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.DefaultValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoader;
-import org.apache.myfaces.extensions.validator.core.loader.StaticMappingConfigLoaderNames;
+import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigNames;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -60,9 +60,8 @@ public class ExtValContext
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
-    private Map<StaticMappingConfigLoaderNames, List<StaticMappingConfigLoader<String, String>>>
-        staticMappingConfigLoaderMap
-        = new HashMap<StaticMappingConfigLoaderNames, List<StaticMappingConfigLoader<String, String>>>();
+    private Map<StaticConfigNames, List<StaticConfig<String, String>>> staticConfigMap
+        = new HashMap<StaticConfigNames, List<StaticConfig<String, String>>>();
 
     public static ExtValContext getContext()
     {
@@ -196,30 +195,27 @@ public class ExtValContext
         }
     }
 
-    public List<StaticMappingConfigLoader<String, String>> getStaticMappingConfigLoaders(
-        StaticMappingConfigLoaderNames name)
+    public List<StaticConfig<String, String>> getStaticConfig(StaticConfigNames name)
     {
-        if(!this.staticMappingConfigLoaderMap.containsKey(name))
+        if(!this.staticConfigMap.containsKey(name))
         {
-            List<StaticMappingConfigLoader<String, String>> staticMappingConfigLoaderList
-                = new ArrayList<StaticMappingConfigLoader<String, String>>();
-            this.staticMappingConfigLoaderMap.put(name, staticMappingConfigLoaderList);
+            List<StaticConfig<String, String>> staticConfigList = new ArrayList<StaticConfig<String, String>>();
+            this.staticConfigMap.put(name, staticConfigList);
         }
-        return this.staticMappingConfigLoaderMap.get(name);
+        return this.staticConfigMap.get(name);
     }
 
-    public void addStaticMappingConfigLoader(StaticMappingConfigLoaderNames name, StaticMappingConfigLoader<String,
-                                             String> staticMappingConfigLoader)
+    public void addStaticConfig(StaticConfigNames name, StaticConfig<String, String> staticConfig)
     {
         synchronized (this)
         {
-            List<StaticMappingConfigLoader<String, String>> staticMappingConfigLoaderList;
-            if(!this.staticMappingConfigLoaderMap.containsKey(name))
+            List<StaticConfig<String, String>> staticConfigList;
+            if(!this.staticConfigMap.containsKey(name))
             {
-                staticMappingConfigLoaderList = new ArrayList<StaticMappingConfigLoader<String, String>>();
-                this.staticMappingConfigLoaderMap.put(name, staticMappingConfigLoaderList);
+                staticConfigList = new ArrayList<StaticConfig<String, String>>();
+                this.staticConfigMap.put(name, staticConfigList);
             }
-            this.staticMappingConfigLoaderMap.get(name).add(staticMappingConfigLoader);
+            this.staticConfigMap.get(name).add(staticConfig);
         }
     }
 
@@ -238,7 +234,10 @@ public class ExtValContext
             }
             else
             {
-                logger.warn("override global property '" + name + "'");
+                if(this.logger.isInfoEnabled())
+                {
+                    logger.info("override global property '" + name + "'");
+                }
             }
         }
 

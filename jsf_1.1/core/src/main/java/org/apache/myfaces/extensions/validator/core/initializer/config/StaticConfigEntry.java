@@ -16,38 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.loader;
+package org.apache.myfaces.extensions.validator.core.initializer.config;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.util.List;
-import java.util.ArrayList;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public class StaticInMemoryMappingConfig implements StaticMappingConfigLoader<String, String>
+@UsageInformation(UsageCategory.API)
+public class StaticConfigEntry<T, R>
 {
-    private List<StaticMappingConfigEntry<String, String>> mappings
-        = new ArrayList<StaticMappingConfigEntry<String, String>>();
+    private T source;
+    private R target;
 
-    public void setSourceOfMapping(String path)
+    public T getSource()
     {
+        return source;
     }
 
-    public List<StaticMappingConfigEntry<String, String>> getMapping()
+    public void setSource(T source)
     {
-        return mappings;
+        this.source = source;
     }
 
-    public void addMapping(String source, String target)
+    public R getTarget()
     {
-        StaticMappingConfigEntry<String, String> entry = new StaticMappingConfigEntry<String, String>();
-        entry.setSource(source);
-        entry.setTarget(target);
-        this.mappings.add(entry);
+        return target;
+    }
+
+    public void setTarget(R target)
+    {
+        this.target = target;
     }
 }
