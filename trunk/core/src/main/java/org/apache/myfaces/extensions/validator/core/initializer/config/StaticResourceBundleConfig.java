@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.loader;
+package org.apache.myfaces.extensions.validator.core.initializer.config;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -31,10 +31,10 @@ import java.util.ArrayList;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public class StaticResourceBundleLoader implements StaticMappingConfigLoader<String, String>
+public class StaticResourceBundleConfig implements StaticConfig<String, String>
 {
     private String path;
-    private List<StaticMappingConfigEntry<String, String>> mappings;
+    private List<StaticConfigEntry<String, String>> mappings;
 
     public void setSourceOfMapping(String path)
     {
@@ -43,21 +43,21 @@ public class StaticResourceBundleLoader implements StaticMappingConfigLoader<Str
         mappings = null;
     }
 
-    public List<StaticMappingConfigEntry<String, String>> getMapping()
+    public List<StaticConfigEntry<String, String>> getMapping()
     {
         if(mappings != null)
         {
             return mappings;
         }
 
-        mappings = new ArrayList<StaticMappingConfigEntry<String, String>>();
+        mappings = new ArrayList<StaticConfigEntry<String, String>>();
 
         ResourceBundle mapping = ResourceBundle.getBundle(path);
 
         if (mapping == null)
         {
             //logging
-            return new ArrayList<StaticMappingConfigEntry<String, String>>();
+            return new ArrayList<StaticConfigEntry<String, String>>();
         }
 
         Enumeration keys = mapping.getKeys();
@@ -77,7 +77,7 @@ public class StaticResourceBundleLoader implements StaticMappingConfigLoader<Str
 
     private void addMapping(String metaDataKey, String validationStrategyClassName)
     {
-        StaticMappingConfigEntry<String, String> entry = new StaticMappingConfigEntry<String, String>();
+        StaticConfigEntry<String, String> entry = new StaticConfigEntry<String, String>();
         entry.setSource(metaDataKey);
         entry.setTarget(validationStrategyClassName);
         this.mappings.add(entry);

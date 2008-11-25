@@ -16,20 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.loader;
+package org.apache.myfaces.extensions.validator.core.initializer.config;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-
-import java.util.List;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
-public interface StaticMappingConfigLoader<T, R>
+public class StaticConfigEntry<T, R>
 {
-    void setSourceOfMapping(String path);
-    List<StaticMappingConfigEntry<T, R>> getMapping();
+    private T source;
+    private R target;
+
+    public T getSource()
+    {
+        return source;
+    }
+
+    public void setSource(T source)
+    {
+        this.source = source;
+    }
+
+    public R getTarget()
+    {
+        return target;
+    }
+
+    public void setTarget(R target)
+    {
+        this.target = target;
+    }
 }
