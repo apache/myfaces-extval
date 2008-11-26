@@ -32,9 +32,9 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
         .BeanValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfig;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigNames;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigEntry;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigEntry;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -59,8 +59,7 @@ import java.util.Map;
  * to avoid a second static mapping e.g. for jpa annotations
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultMetaDataTransformerFactory implements
-    ClassMappingFactory<ValidationStrategy, MetaDataTransformer>
+public class DefaultMetaDataTransformerFactory implements ClassMappingFactory<ValidationStrategy, MetaDataTransformer>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
