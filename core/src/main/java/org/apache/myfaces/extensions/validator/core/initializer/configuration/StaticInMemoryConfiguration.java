@@ -21,14 +21,33 @@ package org.apache.myfaces.extensions.validator.core.initializer.configuration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation({UsageCategory.API})
-public enum StaticConfigNames
+@UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
+public class StaticInMemoryConfiguration implements StaticConfiguration<String, String>
 {
-    META_DATA_TO_VALIDATION_STRATEGY_CONFIG,
-    VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG,
-    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG
+    private List<StaticConfigurationEntry<String, String>> mappings
+        = new ArrayList<StaticConfigurationEntry<String, String>>();
+
+    public void setSourceOfMapping(String path)
+    {
+    }
+
+    public List<StaticConfigurationEntry<String, String>> getMapping()
+    {
+        return mappings;
+    }
+
+    public void addMapping(String source, String target)
+    {
+        StaticConfigurationEntry<String, String> entry = new StaticConfigurationEntry<String, String>();
+        entry.setSource(source);
+        entry.setTarget(target);
+        this.mappings.add(entry);
+    }
 }
