@@ -23,10 +23,10 @@ import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfig;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigEntry;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigNames;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticResourceBundleConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigEntry;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfig;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
