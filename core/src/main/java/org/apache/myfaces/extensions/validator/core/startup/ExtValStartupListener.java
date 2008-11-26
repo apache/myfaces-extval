@@ -48,13 +48,13 @@ public class ExtValStartupListener extends AbstractStartupListener
 
     private void executeCustomStartupListener()
     {
+        ExtValContext.getContext()
+                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
+
         String customStartupListenerName = ExtValContext.getContext().getInformationProviderBean()
             .get(CustomInfo.STARTUP_LISTENER);
         AbstractStartupListener customStartupListener =
             (AbstractStartupListener)ClassUtils.tryToInstantiateClassForName(customStartupListenerName);
-
-        ExtValContext.getContext()
-                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
 
         if(customStartupListener != null)
         {
