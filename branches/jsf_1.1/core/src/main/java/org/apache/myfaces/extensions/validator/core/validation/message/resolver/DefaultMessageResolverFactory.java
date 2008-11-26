@@ -31,9 +31,9 @@ import org.apache.myfaces.extensions.validator.core.validation.message.
 import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfig;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigEntry;
-import org.apache.myfaces.extensions.validator.core.initializer.config.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigEntry;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;

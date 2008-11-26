@@ -68,6 +68,10 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         //should never occur
         if (!(object instanceof UIComponent))
         {
+            if(this.logger.isWarnEnabled() && object != null)
+            {
+                this.logger.warn(object.getClass() + " is no valid component");
+            }
             return propertyInformation;
         }
 
@@ -78,8 +82,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             logger.trace("start extracting meta-data of " + uiComponent.getClass().getName());
         }
 
-        PropertyDetails propertyDetails =
-            ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
+        PropertyDetails propertyDetails = ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
 
         if (propertyDetails == null)
         {
