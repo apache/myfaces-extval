@@ -29,23 +29,23 @@ import java.util.ArrayList;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public class StaticInMemoryConfig implements StaticConfig<String, String>
+public class StaticInMemoryConfiguration implements StaticConfiguration<String, String>
 {
-    private List<StaticConfigEntry<String, String>> mappings
-        = new ArrayList<StaticConfigEntry<String, String>>();
+    private List<StaticConfigurationEntry<String, String>> mappings
+        = new ArrayList<StaticConfigurationEntry<String, String>>();
 
     public void setSourceOfMapping(String path)
     {
     }
 
-    public List<StaticConfigEntry<String, String>> getMapping()
+    public List<StaticConfigurationEntry<String, String>> getMapping()
     {
         return mappings;
     }
 
     public void addMapping(String source, String target)
     {
-        StaticConfigEntry<String, String> entry = new StaticConfigEntry<String, String>();
+        StaticConfigurationEntry<String, String> entry = new StaticConfigurationEntry<String, String>();
         entry.setSource(source);
         entry.setTarget(target);
         this.mappings.add(entry);

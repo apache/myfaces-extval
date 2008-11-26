@@ -22,9 +22,9 @@ import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfig;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfig;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfiguration;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -54,12 +54,12 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         if (jpaBasedValidation == null
                 || !jpaBasedValidation.equalsIgnoreCase("true"))
         {
-            StaticConfig<String, String> staticConfig = new StaticResourceBundleConfig();
+            StaticConfiguration<String, String> staticConfig = new StaticResourceBundleConfiguration();
             staticConfig.setSourceOfMapping(
                 ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME +".jpa_strategy_mappings");
 
-            ExtValContext.getContext().addStaticConfig(
-             StaticConfigNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG, staticConfig);
+            ExtValContext.getContext().addStaticConfiguration(
+             StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG, staticConfig);
         }
     }
 

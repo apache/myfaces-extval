@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API})
-public enum StaticConfigNames
+public enum StaticConfigurationNames
 {
     META_DATA_TO_VALIDATION_STRATEGY_CONFIG,
     VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG,

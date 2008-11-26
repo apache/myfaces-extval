@@ -31,10 +31,10 @@ import java.util.ArrayList;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public class StaticResourceBundleConfig implements StaticConfig<String, String>
+public class StaticResourceBundleConfiguration implements StaticConfiguration<String, String>
 {
     private String path;
-    private List<StaticConfigEntry<String, String>> mappings;
+    private List<StaticConfigurationEntry<String, String>> mappings;
 
     public void setSourceOfMapping(String path)
     {
@@ -43,21 +43,21 @@ public class StaticResourceBundleConfig implements StaticConfig<String, String>
         mappings = null;
     }
 
-    public List<StaticConfigEntry<String, String>> getMapping()
+    public List<StaticConfigurationEntry<String, String>> getMapping()
     {
         if(mappings != null)
         {
             return mappings;
         }
 
-        mappings = new ArrayList<StaticConfigEntry<String, String>>();
+        mappings = new ArrayList<StaticConfigurationEntry<String, String>>();
 
         ResourceBundle mapping = ResourceBundle.getBundle(path);
 
         if (mapping == null)
         {
             //logging
-            return new ArrayList<StaticConfigEntry<String, String>>();
+            return new ArrayList<StaticConfigurationEntry<String, String>>();
         }
 
         Enumeration keys = mapping.getKeys();
@@ -77,7 +77,7 @@ public class StaticResourceBundleConfig implements StaticConfig<String, String>
 
     private void addMapping(String metaDataKey, String validationStrategyClassName)
     {
-        StaticConfigEntry<String, String> entry = new StaticConfigEntry<String, String>();
+        StaticConfigurationEntry<String, String> entry = new StaticConfigurationEntry<String, String>();
         entry.setSource(metaDataKey);
         entry.setTarget(validationStrategyClassName);
         this.mappings.add(entry);
