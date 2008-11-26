@@ -31,9 +31,9 @@ import org.apache.myfaces.extensions.validator.core.validation.message.
 import org.apache.myfaces.extensions.validator.core.validation.message.
         resolver.mapper.SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfig;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigEntry;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -141,18 +141,18 @@ public class DefaultMessageResolverFactory implements
             strategyMessageResolverMapping = new HashMap<String, String>();
 
             //setup internal static mappings
-            for (StaticConfig<String, String> staticConfig :
-                ExtValContext.getContext().getStaticConfig(
-                    StaticConfigNames.VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG))
+            for (StaticConfiguration<String, String> staticConfig :
+                ExtValContext.getContext().getStaticConfiguration(
+                    StaticConfigurationNames.VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG))
             {
                 setupStrategyMappings(staticConfig.getMapping());
             }
         }
     }
 
-    private void setupStrategyMappings(List<StaticConfigEntry<String,String>> mappings)
+    private void setupStrategyMappings(List<StaticConfigurationEntry<String,String>> mappings)
     {
-        for(StaticConfigEntry<String, String> mapping : mappings)
+        for(StaticConfigurationEntry<String, String> mapping : mappings)
         {
             addMapping(mapping.getSource(), mapping.getTarget());
         }
