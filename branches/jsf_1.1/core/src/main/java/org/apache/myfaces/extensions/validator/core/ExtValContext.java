@@ -20,14 +20,14 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfig;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.DefaultValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
-import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -60,8 +60,8 @@ public class ExtValContext
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
-    private Map<StaticConfigNames, List<StaticConfig<String, String>>> staticConfigMap
-        = new HashMap<StaticConfigNames, List<StaticConfig<String, String>>>();
+    private Map<StaticConfigurationNames, List<StaticConfiguration<String, String>>> staticConfigMap
+        = new HashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
 
     public static ExtValContext getContext()
     {
@@ -195,24 +195,25 @@ public class ExtValContext
         }
     }
 
-    public List<StaticConfig<String, String>> getStaticConfig(StaticConfigNames name)
+    public List<StaticConfiguration<String, String>> getStaticConfiguration(StaticConfigurationNames name)
     {
         if(!this.staticConfigMap.containsKey(name))
         {
-            List<StaticConfig<String, String>> staticConfigList = new ArrayList<StaticConfig<String, String>>();
+            List<StaticConfiguration<String, String>> staticConfigList =
+                    new ArrayList<StaticConfiguration<String, String>>();
             this.staticConfigMap.put(name, staticConfigList);
         }
         return this.staticConfigMap.get(name);
     }
 
-    public void addStaticConfig(StaticConfigNames name, StaticConfig<String, String> staticConfig)
+    public void addStaticConfiguration(StaticConfigurationNames name, StaticConfiguration<String, String> staticConfig)
     {
         synchronized (this)
         {
-            List<StaticConfig<String, String>> staticConfigList;
+            List<StaticConfiguration<String, String>> staticConfigList;
             if(!this.staticConfigMap.containsKey(name))
             {
-                staticConfigList = new ArrayList<StaticConfig<String, String>>();
+                staticConfigList = new ArrayList<StaticConfiguration<String, String>>();
                 this.staticConfigMap.put(name, staticConfigList);
             }
             this.staticConfigMap.get(name).add(staticConfig);

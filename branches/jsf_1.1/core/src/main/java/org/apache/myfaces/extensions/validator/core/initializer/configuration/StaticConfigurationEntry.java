@@ -21,15 +21,33 @@ package org.apache.myfaces.extensions.validator.core.initializer.configuration;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import java.util.List;
-
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
-public interface StaticConfig<T, R>
+public class StaticConfigurationEntry<T, R>
 {
-    void setSourceOfMapping(String path);
-    List<StaticConfigEntry<T, R>> getMapping();
+    private T source;
+    private R target;
+
+    public T getSource()
+    {
+        return source;
+    }
+
+    public void setSource(T source)
+    {
+        this.source = source;
+    }
+
+    public R getTarget()
+    {
+        return target;
+    }
+
+    public void setTarget(R target)
+    {
+        this.target = target;
+    }
 }
