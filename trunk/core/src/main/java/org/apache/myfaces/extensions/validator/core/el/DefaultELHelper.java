@@ -174,7 +174,8 @@ public class DefaultELHelper implements ELHelper
         catch (Throwable t)
         {
             throw new IllegalStateException(
-                "an el-resolver error occurred! " +
+                "error at binding: " + valueExpression.getExpressionString() +
+                " -- an el-resolver error occurred! maybe you used an invalid binding. otherwise: " +
                 "please report the issue, deactivate the el-resovler of extval via web.xml context-param: " +
                 ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER" +
                 " and test again.");
