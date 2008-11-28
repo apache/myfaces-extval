@@ -20,12 +20,20 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.util.HashMap;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -75,5 +83,85 @@ public class CrossValidationUtils
     {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
             .put(KEY_TO_CONVERTED_VALUE_MAPPING_KEY, new HashMap<String, ProcessedInformationEntry>());
+    }
+
+    public static ProcessedInformationEntry resolveValidationTargetEntry(
+            Map<String, ProcessedInformationEntry> keyToConvertedValueMapping,
+            String targetKey, CrossValidationStorageEntry crossValidationStorageEntry)
+    {
+        ProcessedInformationEntry processedInformationEntry =
+            keyToConvertedValueMapping.get(targetKey);
+
+        //simple case
+        if (processedInformationEntry.getFurtherEntries() == null)
+        {
+            return processedInformationEntry;
+        }
+
+        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+
+        Object targetBean = propertyDetails.getBaseObject();
+
+        //process complex component entries (e.g. a table)
+        //supported: cross-component but no cross-entity validation (= locale validation)
+        if (processedInformationEntry.getBean().equals(targetBean))
+        {
+            return processedInformationEntry;
+        }
+
+        for (ProcessedInformationEntry entry : processedInformationEntry.getFurtherEntries())
+        {
+            if (entry.getBean().equals(targetBean))
+            {
+                return entry;
+            }
+        }
+
+        return null;
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "support for map syntax")
+    public static String convertValueBindingExpressionToProcessedInformationKey(ValueBindingExpression vbe)
+    {
+        return vbe.getExpressionString().replace("#{", "").replace("}", "");
+    }
+
+    public static void crossValidateCompareStrategy(AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            ProcessedInformationEntry validationTargetEntry)
+    {
+        boolean violationFound = false;
+
+        if (compareStrategy.isViolation(
+                crossValidationStorageEntry.getConvertedObject(),
+                validationTargetEntry.getConvertedValue(),
+                crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
+        {
+
+            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
+            if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
+            {
+                tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
+                tmpCrossValidationStorageEntry.setClientId(validationTargetEntry.getClientId());
+            }
+            else
+            {
+                tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
+                tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
+            }
+            tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
+            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
+
+            compareStrategy
+                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
+
+            violationFound = true;
+        }
+
+        if (violationFound)
+        {
+            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
+        }
     }
 }

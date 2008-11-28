@@ -70,13 +70,13 @@ public abstract class AbstractCrossValidationStrategy extends
                                                            Object convertedObject,
                                                            ValidatorException validatorException)
     {
-        throw new IllegalStateException("not available for cross validation");
+        throw new IllegalStateException("not available for cross validation - use processAfterCrossValidatorException");
     }
 
     @Override
     protected final String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
     {
-        throw new IllegalStateException("not available for cross validation - use processAfterCrossValidatorException");
+        throw new IllegalStateException("not available for cross validation");
     }
 
     @Override
