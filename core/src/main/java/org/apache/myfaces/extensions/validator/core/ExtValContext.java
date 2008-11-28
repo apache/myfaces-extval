@@ -131,7 +131,7 @@ public class ExtValContext
 
     public void addValidationExceptionInterceptor(ValidationExceptionInterceptor validationExceptionInterceptor)
     {
-        DefaultValidationExceptionInterceptor.addComponentInitializer(validationExceptionInterceptor);
+        DefaultValidationExceptionInterceptor.addValidationExceptionInterceptor(validationExceptionInterceptor);
     }
 
     public List<ProcessedInformationRecorder> getProcessedInformationRecorders()

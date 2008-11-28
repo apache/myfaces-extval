@@ -32,7 +32,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
-import java.lang.annotation.Annotation;
 
 /**
  * "[property_name]" ... local validation -> cross-component, but no cross-entity validation
@@ -65,16 +64,15 @@ public class LocalCompareStrategy implements ReferencingStrategy
     {
         Map<String, ProcessedInformationEntry> keyConvertedValueMapping = CrossValidationUtils
                 .getOrInitKeyToConvertedValueMapping();
-        ProcessedInformationEntry validationTargetEntry;
-
-        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
-                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
         String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
         if (!keyConvertedValueMapping.containsKey(newKey))
         {
             return false;
         }
+
+        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
         String sourceKey = propertyDetails.getKey();
 
@@ -85,25 +83,23 @@ public class LocalCompareStrategy implements ReferencingStrategy
 
         targetKey = sourceKey.substring(0, sourceKey.lastIndexOf(".") + 1) + targetKey;
 
-        validationTargetEntry = compareStrategy.resolveValidationTargetEntry(
+        ProcessedInformationEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
                 keyConvertedValueMapping, targetKey, crossValidationStorageEntry);
 
-        if (validationTargetEntry == null)
+        if (validationTargetEntry != null)
+        {
+            CrossValidationUtils
+                    .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
+        }
+        else
         {
             if(logger.isWarnEnabled())
             {
                 logger.warn("couldn't find converted object for " + propertyDetails.getKey());
             }
-
-            return false;
         }
 
-        return tryToValidateLocally(
-            crossValidationStorageEntry,
-            crossValidationStorage,
-            targetKey,
-            compareStrategy,
-            validationTargetEntry);
+        return true;
     }
 
     protected String createTargetKey(CrossValidationStorageEntry crossValidationStorageEntry, String targetKey)
@@ -119,47 +115,5 @@ public class LocalCompareStrategy implements ReferencingStrategy
         String result = ValueBindingExpression.replaceOrAddProperty(baseExpression, targetKey)
             .getExpressionString();
         return result.substring(2, result.length() -1);
-    }
-
-    protected boolean tryToValidateLocally(CrossValidationStorageEntry crossValidationStorageEntry,
-            CrossValidationStorage crossValidationStorage,
-            String targetKey,
-            AbstractCompareStrategy compareStrategy,
-            ProcessedInformationEntry validationTargetEntry)
-    {
-        boolean violationFound = false;
-
-        if (compareStrategy.isViolation(crossValidationStorageEntry
-                .getConvertedObject(), validationTargetEntry
-                .getConvertedValue(), crossValidationStorageEntry
-                .getMetaDataEntry().getValue(Annotation.class)))
-        {
-
-            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-            if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
-            {
-                tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
-                tmpCrossValidationStorageEntry.setClientId(validationTargetEntry.getClientId());
-            }
-            else
-            {
-                tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
-                tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
-            }
-            tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
-            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
-
-            compareStrategy
-                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
-
-            violationFound = true;
-        }
-
-        if (violationFound)
-        {
-            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
-        }
-
-        return true;
     }
 }

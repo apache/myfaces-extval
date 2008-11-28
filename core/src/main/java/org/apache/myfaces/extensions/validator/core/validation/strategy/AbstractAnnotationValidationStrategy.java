@@ -43,6 +43,7 @@ import java.util.MissingResourceException;
 public abstract class AbstractAnnotationValidationStrategy extends AbstractValidatorAdapter
 {
     protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_detail";
+    //e.g. for injecting a message resolver via spring
     private MessageResolver messageResolver;
 
     protected String resolveMessage(String key)
@@ -58,7 +59,7 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
         return resolveMessage(getValidationErrorMsgKey(annotation));
     }
 
-    protected String getErrorMessageDetails(Annotation annotation)
+    protected String getErrorMessageDetail(Annotation annotation)
     {
         try
         {
@@ -79,7 +80,7 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
     protected FacesMessage getValidationErrorFacesMassage(Annotation annotation)
     {
         return new FacesMessage(FacesMessage.SEVERITY_ERROR,
-            getErrorMessageSummary(annotation), getErrorMessageDetails(annotation));
+            getErrorMessageSummary(annotation), getErrorMessageDetail(annotation));
     }
 
     protected abstract String getValidationErrorMsgKey(Annotation annotation);

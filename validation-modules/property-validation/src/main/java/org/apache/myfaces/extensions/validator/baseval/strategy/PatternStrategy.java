@@ -55,7 +55,7 @@ public class PatternStrategy extends AbstractAnnotationValidationStrategy
                 throw new ValidatorException(new FacesMessage(
                         FacesMessage.SEVERITY_ERROR,
                         getErrorMessageSummary(annotation),
-                        getErrorMessageDetails(annotation).replace("{0}",
+                        getErrorMessageDetail(annotation).replace("{0}",
                                 expression)));
             }
         }
