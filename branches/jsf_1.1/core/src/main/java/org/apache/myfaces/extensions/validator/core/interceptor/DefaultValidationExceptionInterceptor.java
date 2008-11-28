@@ -66,7 +66,7 @@ public class DefaultValidationExceptionInterceptor implements ValidationExceptio
             if(logger.isTraceEnabled())
             {
                 logger.trace(
-                        "configureComponent of " + validationExceptionInterceptor.getClass().getName() + " called");
+                        "afterThrowing of " + validationExceptionInterceptor.getClass().getName() + " called");
             }
         }
 
@@ -74,7 +74,7 @@ public class DefaultValidationExceptionInterceptor implements ValidationExceptio
     }
 
     @UsageInformation(UsageCategory.INTERNAL)
-    public static void addComponentInitializer(ValidationExceptionInterceptor validationExceptionInterceptor)
+    public static void addValidationExceptionInterceptor(ValidationExceptionInterceptor validationExceptionInterceptor)
     {
         synchronized (DefaultValidationExceptionInterceptor.class)
         {
