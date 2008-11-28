@@ -29,7 +29,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
-import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ELCompareStrategy;
@@ -39,8 +38,6 @@ import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.Loc
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
-import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -132,7 +129,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
 
         //get validation error messages for the target component
         String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
-        String details = getErrorMessageDetails(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
+        String details = getErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
 
         //validation target isn't bound to a component withing the current page 
         //(see validateFoundEntry, tryToValidateLocally and tryToValidateBindingOnly)
@@ -172,7 +169,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
 
         //get validation error messages for the current component
         String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
-        String details = getErrorMessageDetails(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
+        String details = getErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
 
         FacesMessage message = getSourceComponentErrorMessage(
             entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
@@ -188,65 +185,26 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         }
     }
 
-    //has to be public for custom referencing strategies!!!
-    public FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String details)
+    protected FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String detail)
     {
         FacesMessage message = new FacesMessage();
 
         message.setSeverity(FacesMessage.SEVERITY_ERROR);
         message.setSummary(summary);
-        message.setDetail(details);
+        message.setDetail(detail);
 
         return message;
     }
 
-    //has to be public for custom referencing strategies!!!
-    public FacesMessage getTargetComponentErrorMessage(Annotation foundAnnotation, String summary, String details)
+    protected FacesMessage getTargetComponentErrorMessage(Annotation foundAnnotation, String summary, String detail)
     {
         FacesMessage message = new FacesMessage();
 
         message.setSeverity(FacesMessage.SEVERITY_ERROR);
         message.setSummary(summary);
-        message.setDetail(details);
+        message.setDetail(detail);
 
         return message;
-    }
-
-    //has to be public for custom referencing strategies!!!
-    public ProcessedInformationEntry resolveValidationTargetEntry(
-            Map<String, ProcessedInformationEntry> pathToConvertedValueMapping,
-            String targetKey, CrossValidationStorageEntry crossValidationStorageEntry)
-    {
-        ProcessedInformationEntry processedInformationEntry =
-            pathToConvertedValueMapping.get(targetKey);
-
-        //simple case
-        if (processedInformationEntry.getFurtherEntries() == null)
-        {
-            return processedInformationEntry;
-        }
-
-        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
-                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
-
-        Object targetBean = propertyDetails.getBaseObject();
-
-        //process complex component entries (e.g. a table)
-        //supported: cross-component but no cross-entity validation (= locale validation)
-        if (processedInformationEntry.getBean().equals(targetBean))
-        {
-            return processedInformationEntry;
-        }
-
-        for (ProcessedInformationEntry entry : processedInformationEntry.getFurtherEntries())
-        {
-            if (entry.getBean().equals(targetBean))
-            {
-                return entry;
-            }
-        }
-
-        return null;
     }
 
     protected String getErrorMessageSummary(Annotation annotation, boolean isTargetComponent)
@@ -254,7 +212,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return resolveMessage(getValidationErrorMsgKey(annotation, isTargetComponent));
     }
 
-    protected String getErrorMessageDetails(Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessageDetail(Annotation annotation, boolean isTargetComponent)
     {
         try
         {
@@ -277,9 +235,6 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return getValidationErrorMsgKey(annotation, false);
     }
 
-    /*
-     * optional methods - recommended to override - have to be public for custom referencing strategies!!!
-     */
     /**
      * the usage of this method requires a new instance
      * -> in case of validation strategy beans application/singleton isn't allowed

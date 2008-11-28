@@ -147,9 +147,9 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         }
     }
 
-    protected String getErrorMessageDetails(Annotation annotation)
+    protected String getErrorMessageDetail(Annotation annotation)
     {
-        String message = super.getErrorMessageDetails(annotation);
+        String message = super.getErrorMessageDetail(annotation);
 
         if (VALIDATE_LENGTH.equals(this.violation))
         {
