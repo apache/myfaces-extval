@@ -29,10 +29,13 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
-import java.lang.annotation.Annotation;
 
 /**
  * referencing validation targets - possible formats:
@@ -44,6 +47,8 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ELCompareStrategy implements ReferencingStrategy
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     public boolean evalReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,
@@ -66,60 +71,27 @@ public class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             AbstractCompareStrategy compareStrategy)
     {
-        boolean violationFound = false;
+        Map<String, ProcessedInformationEntry> keyConvertedValueMapping = CrossValidationUtils
+                .getOrInitKeyToConvertedValueMapping();
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ProcessedInformationEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
+                keyConvertedValueMapping,
+                CrossValidationUtils.convertValueBindingExpressionToProcessedInformationKey(validationTarget),
+                crossValidationStorageEntry);
 
-        if (compareStrategy.isViolation(crossValidationStorageEntry
-                .getConvertedObject(), ExtValUtils.getELHelper().getValueOfExpression(
-                facesContext, validationTarget), crossValidationStorageEntry
-                .getMetaDataEntry().getValue(Annotation.class)))
+        if(validationTargetEntry != null)
         {
-
-            ProcessedInformationEntry validationTargetEntry;
-            Map<String, ProcessedInformationEntry> valueBindingConvertedValueMapping = CrossValidationUtils
-                    .getOrInitKeyToConvertedValueMapping();
-
-            validationTargetEntry = valueBindingConvertedValueMapping
-                    .get(validationTarget);
-
-            CrossValidationStorageEntry tmpCrossValidationStorageEntry = null;
-
-            if (validationTargetEntry != null)
-            {
-                tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-                //TODO test
-                if (compareStrategy
-                        .useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
-                {
-                    tmpCrossValidationStorageEntry
-                            .setComponent(validationTargetEntry.getComponent());
-                }
-                else
-                {
-                    tmpCrossValidationStorageEntry
-                            .setComponent(crossValidationStorageEntry
-                                    .getComponent());
-                }
-                tmpCrossValidationStorageEntry
-                        .setConvertedObject(validationTargetEntry
-                                .getConvertedValue());
-                tmpCrossValidationStorageEntry
-                        .setValidationStrategy(compareStrategy);
-            }
-
-            compareStrategy
-                    .processTargetComponentAfterViolation(
-                            crossValidationStorageEntry,
-                            tmpCrossValidationStorageEntry);
-
-            violationFound = true;
+            CrossValidationUtils
+                    .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
-
-        if (violationFound)
+        else
         {
-            compareStrategy
-                    .processSourceComponentAfterViolation(crossValidationStorageEntry);
+            if(logger.isWarnEnabled())
+            {
+                PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                        .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+                logger.warn("couldn't find converted object for " + propertyDetails.getKey());
+            }
         }
 
         return true;

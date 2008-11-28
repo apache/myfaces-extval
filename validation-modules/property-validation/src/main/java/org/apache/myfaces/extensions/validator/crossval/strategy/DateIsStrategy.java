@@ -135,11 +135,11 @@ public class DateIsStrategy extends AbstractCompareStrategy
     }
 
     @Override
-    protected String getErrorMessageDetails(Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessageDetail(Annotation annotation, boolean isTargetComponent)
     {
         if (!isTargetComponent)
         {
-            return super.getErrorMessageDetails(annotation, isTargetComponent);
+            return super.getErrorMessageDetail(annotation, isTargetComponent);
         }
 
         try
