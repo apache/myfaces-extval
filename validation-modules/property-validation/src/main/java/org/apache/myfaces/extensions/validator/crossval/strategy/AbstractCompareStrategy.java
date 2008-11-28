@@ -31,10 +31,6 @@ import javax.faces.validator.ValidatorException;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ELCompareStrategy;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalCompareStrategy;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.ReferencingStrategy;
-import org.apache.myfaces.extensions.validator.crossval.referencing.strategy.LocalPropertyChainCompareStrategy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
@@ -105,7 +101,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     {
         for (ReferencingStrategy referencingStrategy : referencingStrategies)
         {
-            if (referencingStrategy.evalReferenceAndValidate(
+            if (referencingStrategy.evaluateReferenceAndValidate(
                     crossValidationStorageEntry, crossValidationStorage, validationTarget, this))
             {
                 return true;
@@ -115,8 +111,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return false;
     }
 
-    //has to be public for custom referencing strategies!!!
-    public final void processTargetComponentAfterViolation(
+    protected final void processTargetComponentAfterViolation(
             CrossValidationStorageEntry entryOfSource,
             CrossValidationStorageEntry entryOfTarget)
     {
@@ -159,8 +154,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         }
     }
 
-    //has to be public for custom referencing strategies!!!
-    public final void processSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
+    protected final void processSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
     {
         if (!handleSourceViolation(entryOfSource))
         {
@@ -255,7 +249,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return true;
     }
 
-    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
+    protected boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return handleTargetViolation(crossValidationStorageEntry, null);
     }
