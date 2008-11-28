@@ -16,14 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
+package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
-import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -45,11 +44,11 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ELCompareStrategy implements ReferencingStrategy
+class ELCompareStrategy implements ReferencingStrategy
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public boolean evalReferenceAndValidate(
+    public boolean evaluateReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,
             String validationTarget, AbstractCompareStrategy compareStrategy)
@@ -81,7 +80,7 @@ public class ELCompareStrategy implements ReferencingStrategy
 
         if(validationTargetEntry != null)
         {
-            CrossValidationUtils
+            CrossValidationHelper
                     .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
         else

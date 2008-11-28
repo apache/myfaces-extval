@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.util;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -33,7 +32,6 @@ import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import javax.faces.context.FacesContext;
 import java.util.Map;
 import java.util.HashMap;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -125,43 +123,5 @@ public class CrossValidationUtils
     public static String convertValueBindingExpressionToProcessedInformationKey(ValueBindingExpression vbe)
     {
         return vbe.getExpressionString().replace("#{", "").replace("}", "");
-    }
-
-    public static void crossValidateCompareStrategy(AbstractCompareStrategy compareStrategy,
-            CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry)
-    {
-        boolean violationFound = false;
-
-        if (compareStrategy.isViolation(
-                crossValidationStorageEntry.getConvertedObject(),
-                validationTargetEntry.getConvertedValue(),
-                crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
-        {
-
-            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-            if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
-            {
-                tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
-                tmpCrossValidationStorageEntry.setClientId(validationTargetEntry.getClientId());
-            }
-            else
-            {
-                tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
-                tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
-            }
-            tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
-            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
-
-            compareStrategy
-                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
-
-            violationFound = true;
-        }
-
-        if (violationFound)
-        {
-            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
-        }
     }
 }
