@@ -16,11 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
+package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -37,7 +36,7 @@ import java.lang.reflect.Method;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
+class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 {
     @Override
     protected boolean tryToValidateLocally(CrossValidationStorageEntry crossValidationStorageEntry,
