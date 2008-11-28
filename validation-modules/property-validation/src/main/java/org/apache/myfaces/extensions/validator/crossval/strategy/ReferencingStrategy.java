@@ -16,11 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.crossval.referencing.strategy;
+package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCompareStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -31,9 +30,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public interface ReferencingStrategy
+interface ReferencingStrategy
 {
-    boolean evalReferenceAndValidate(
+    boolean evaluateReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,
             String validationTarget,
