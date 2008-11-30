@@ -36,7 +36,7 @@ import java.text.DateFormat;
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
-@ToDo(value = Priority.MEDIUM, description = "DateIsEntry (value, type)")
+@ToDo(value = Priority.MEDIUM, description = "DateIsEntry (valueOf, type)")
 @UsageInformation(UsageCategory.API)
 public @interface DateIs
 {

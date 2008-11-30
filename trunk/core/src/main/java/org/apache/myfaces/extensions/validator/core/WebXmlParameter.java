@@ -88,6 +88,7 @@ public interface WebXmlParameter
     static final String DEACTIVATE_RENDERKIT = WebXmlUtils
         .getInitParameter("DEACTIVATE_RENDERKIT");
 
+    //currently just used by AbstractValidationErrorMessageResolver
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");
 

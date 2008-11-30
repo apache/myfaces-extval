@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.el.DefaultELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
@@ -115,7 +115,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY);
         metaDataExtractorFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
-                .get(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY));
+                .get(CustomInformation.COMPONENT_META_DATA_EXTRACTOR_FACTORY));
         metaDataExtractorFactoryClassNames.add(DefaultComponentMetaDataExtractorFactory.class.getName());
 
         for (String className : metaDataExtractorFactoryClassNames)
@@ -138,7 +138,8 @@ public class DefaultFactoryFinder implements FactoryFinder
 
         validationStrategyFactoryClassNames.add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
         validationStrategyFactoryClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.VALIDATION_STRATEGY_FACTORY));
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                    .get(CustomInformation.VALIDATION_STRATEGY_FACTORY));
         validationStrategyFactoryClassNames.add(DefaultValidationStrategyFactory.class.getName());
 
         for (String className : validationStrategyFactoryClassNames)
@@ -161,7 +162,8 @@ public class DefaultFactoryFinder implements FactoryFinder
 
         messageResolverFactoryClassNames.add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
         messageResolverFactoryClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.MESSAGE_RESOLVER_FACTORY));
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                    .get(CustomInformation.MESSAGE_RESOLVER_FACTORY));
         messageResolverFactoryClassNames
             .add(DefaultMessageResolverFactory.class.getName());
 
@@ -185,7 +187,8 @@ public class DefaultFactoryFinder implements FactoryFinder
 
         metaDataTransformerFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_TRANSFORMER_FACTORY );
         metaDataTransformerFactoryClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.META_DATA_TRANSFORMER_FACTORY));
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                    .get(CustomInformation.META_DATA_TRANSFORMER_FACTORY));
         metaDataTransformerFactoryClassNames.add(DefaultMetaDataTransformerFactory.class.getName());
 
         for (String className : metaDataTransformerFactoryClassNames)

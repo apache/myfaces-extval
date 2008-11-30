@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
@@ -185,7 +185,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
             {
                 //build convention (strategy mapping)
                 staticConfig.setSourceOfMapping(ExtValContext.getContext().getInformationProviderBean()
-                    .get(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE));
+                    .get(CustomInformation.STATIC_STRATEGY_MAPPING_SOURCE));
 
                 setupStrategyMappings(staticConfig.getMapping());
             }

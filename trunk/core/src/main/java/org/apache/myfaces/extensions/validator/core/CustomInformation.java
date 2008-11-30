@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API})
-public enum CustomInfo
+public enum CustomInformation
 {
     BASE_PACKAGE,
     COMPONENT_META_DATA_EXTRACTOR,

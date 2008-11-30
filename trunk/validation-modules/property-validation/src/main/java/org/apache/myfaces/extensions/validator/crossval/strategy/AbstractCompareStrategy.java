@@ -33,7 +33,7 @@ import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -60,7 +60,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
 
             String customReferencingStrategyClassName =
                 ExtValContext.getContext().getInformationProviderBean()
-                    .get(CustomInfo.BASE_PACKAGE) + "ReferencingStrategy";
+                    .get(CustomInformation.BASE_PACKAGE) + "ReferencingStrategy";
 
             ReferencingStrategy customReferencingStrategy = (ReferencingStrategy) ClassUtils
                     .tryToInstantiateClassForName(customReferencingStrategyClassName);
