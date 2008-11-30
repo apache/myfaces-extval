@@ -41,6 +41,7 @@ public interface ValidationExceptionInterceptor
      * @param metaDataEntry the meta data entry which contains the meta data of the property
      * @param convertedObject the converted user input
      * @param validatorException the current exception
+     * @param validatorExceptionSource validation strategy which threw the exception
      * @return false to stop throwing the exception
      */
     boolean afterThrowing(UIComponent uiComponent,
