@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -46,9 +47,9 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
     public boolean afterThrowing(UIComponent uiComponent,
                                  MetaDataEntry metaDataEntry,
                                  Object convertedObject,
-                                 ValidatorException validatorException)
+                                 ValidatorException validatorException,
+                                 ValidationStrategy validatorExceptionSource)
     {
-
         if(processComponent(uiComponent))
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();

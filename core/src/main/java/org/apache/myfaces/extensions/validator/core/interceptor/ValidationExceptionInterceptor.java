@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
@@ -45,5 +46,6 @@ public interface ValidationExceptionInterceptor
     boolean afterThrowing(UIComponent uiComponent,
                           MetaDataEntry metaDataEntry,
                           Object convertedObject,
-                          ValidatorException validatorException);
+                          ValidatorException validatorException,
+                          ValidationStrategy validatorExceptionSource);
 }
