@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
@@ -52,7 +52,7 @@ public class ExtValStartupListener extends AbstractStartupListener
                 .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
 
         String customStartupListenerName = ExtValContext.getContext().getInformationProviderBean()
-            .get(CustomInfo.STARTUP_LISTENER);
+            .get(CustomInformation.STARTUP_LISTENER);
         AbstractStartupListener customStartupListener =
             (AbstractStartupListener)ClassUtils.tryToInstantiateClassForName(customStartupListenerName);
 

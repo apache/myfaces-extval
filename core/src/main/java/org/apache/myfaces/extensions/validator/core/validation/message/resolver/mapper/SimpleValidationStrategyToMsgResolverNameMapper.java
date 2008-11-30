@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper;
 
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -37,7 +37,7 @@ public class SimpleValidationStrategyToMsgResolverNameMapper extends
     protected String getClassName(String strategyClassName)
     {
         String customPostfix = ExtValContext.getContext().getInformationProviderBean()
-            .get(CustomInfo.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX);
+            .get(CustomInformation.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX);
         return InternalConventionProvider.getValidationStrategyBasedName(strategyClassName, customPostfix);
     }
 }

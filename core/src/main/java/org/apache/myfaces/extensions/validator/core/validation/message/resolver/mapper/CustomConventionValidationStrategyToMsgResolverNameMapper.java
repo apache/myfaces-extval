@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -42,6 +42,6 @@ public class CustomConventionValidationStrategyToMsgResolverNameMapper extends
     protected String getCustomNameMapperClassName()
     {
         return ExtValContext.getContext().getInformationProviderBean()
-            .get(CustomInfo.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER);
+            .get(CustomInformation.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER);
     }
 }

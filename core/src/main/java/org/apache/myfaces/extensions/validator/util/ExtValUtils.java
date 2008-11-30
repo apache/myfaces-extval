@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.ComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
@@ -77,7 +77,7 @@ public class ExtValUtils
     public static MetaDataExtractor getComponentMetaDataExtractor()
     {
             return ExtValContext.getContext().getFactoryFinder()
-                .getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, MetaDataExtractorFactory.class)
+                .getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, ComponentMetaDataExtractorFactory.class)
                 .create();
     }
 

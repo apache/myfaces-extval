@@ -40,7 +40,7 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class JpaMetaDataTransformer implements MetaDataTransformer
 {
-    @ToDo(value = Priority.HIGH, description = "impl. the rest")
+    @ToDo(value = Priority.MEDIUM, description = "impl. the rest")
     public Map<String, Object> convertMetaData(MetaDataEntry metaData)
     {
         Map<String, Object> results = new HashMap<String, Object>();

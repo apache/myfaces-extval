@@ -31,8 +31,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationErrorMessageResolver extends
-    AbstractValidationErrorMessageResolver
+public class DefaultValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
 {
     private static final String CUSTOM_BUNDLE = WebXmlParameter.CUSTOM_MESSAGE_BUNDLE;
 
