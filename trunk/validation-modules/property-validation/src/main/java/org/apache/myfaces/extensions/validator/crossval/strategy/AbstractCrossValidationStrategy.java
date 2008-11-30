@@ -99,6 +99,6 @@ public abstract class AbstractCrossValidationStrategy extends
     {
         return ExtValUtils.executeAfterThrowingInterceptors(
                 crossValidationStorageEntry.getComponent(), crossValidationStorageEntry.getMetaDataEntry(),
-                crossValidationStorageEntry.getConvertedObject(), validatorException);
+                crossValidationStorageEntry.getConvertedObject(), validatorException, this);
     }
 }

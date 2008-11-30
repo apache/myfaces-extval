@@ -123,7 +123,7 @@ public abstract class AbstractValidatorAdapter implements ValidationStrategy
                                                      ValidatorException validatorException)
     {
         return ExtValUtils.executeAfterThrowingInterceptors(
-                uiComponent, metaDataEntry, convertedObject, validatorException);
+                uiComponent, metaDataEntry, convertedObject, validatorException, this);
     }
 
     protected abstract void processValidation(FacesContext facesContext,

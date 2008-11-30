@@ -85,22 +85,31 @@ public class ExtValUtils
                                                       UIComponent uiComponent,
                                                       Map<String, Object> metaData)
     {
-        ((ClassMappingFactory<UIComponent, ComponentInitializer>)ExtValContext.getContext().getFactoryFinder()
-                    .getFactory(FactoryNames.COMPONENT_INITIALIZER_FACTORY, ClassMappingFactory.class))
-                    .create(uiComponent)
-                    .configureComponent(facesContext, uiComponent, metaData);
+        for(ComponentInitializer componentInitializer : ExtValContext.getContext().getComponentInitializers())
+        {
+            componentInitializer.configureComponent(facesContext, uiComponent, metaData);
+        }
     }
 
     public static boolean executeAfterThrowingInterceptors(UIComponent uiComponent,
                                                         MetaDataEntry metaDataEntry,
                                                         Object convertedObject,
-                                                        ValidatorException validatorException)
+                                                        ValidatorException validatorException,
+                                                        ValidationStrategy validatorExceptionSource)
     {
-        return ((ClassMappingFactory<UIComponent, ValidationExceptionInterceptor>)
-                ExtValContext.getContext().getFactoryFinder()
-                    .getFactory(FactoryNames.VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY, ClassMappingFactory.class))
-                    .create(uiComponent)
-                    .afterThrowing(uiComponent, metaDataEntry, convertedObject, validatorException);
+        boolean result = true;
+
+        for(ValidationExceptionInterceptor validationExceptionInterceptor : ExtValContext.getContext()
+                .getValidationExceptionInterceptors())
+        {
+            if(!validationExceptionInterceptor.afterThrowing(
+                            uiComponent, metaDataEntry, convertedObject, validatorException, validatorExceptionSource))
+            {
+                result = false;
+            }
+        }
+
+        return result;
     }
 
     public static MessageResolver getMessageResolverForValidationStrategy(ValidationStrategy validationStrategy)

@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
@@ -51,9 +52,9 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
     public boolean afterThrowing(UIComponent uiComponent,
                                  MetaDataEntry metaDataEntry,
                                  Object convertedObject,
-                                 ValidatorException validatorException)
+                                 ValidatorException validatorException,
+                                 ValidationStrategy validatorExceptionSource)
     {
-
         if(processComponent(uiComponent))
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();

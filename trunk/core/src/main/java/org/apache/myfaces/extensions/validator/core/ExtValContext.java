@@ -19,11 +19,9 @@
 package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
-import org.apache.myfaces.extensions.validator.core.interceptor.DefaultValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
@@ -58,10 +56,81 @@ public class ExtValContext
     private List<ProcessedInformationRecorder> processedInformationRecorders =
         new ArrayList<ProcessedInformationRecorder>();
 
+    private List<ComponentInitializer> componentInitializers;
+    private List<ValidationExceptionInterceptor> validationExceptionInterceptors;
+
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
     private Map<StaticConfigurationNames, List<StaticConfiguration<String, String>>> staticConfigMap
         = new HashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
+
+
+    private void initComponentInitializers()
+    {
+        if(this.componentInitializers != null)
+        {
+            return;
+        }
+
+        this.componentInitializers = new ArrayList<ComponentInitializer>();
+        List<String> componentInitializerClassNames = new ArrayList<String>();
+        componentInitializerClassNames
+            .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER);
+        componentInitializerClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.COMPONENT_INITIALIZER));
+
+        ComponentInitializer componentInitializer;
+        for (String componentInitializerName : componentInitializerClassNames)
+        {
+            componentInitializer =
+                (ComponentInitializer) ClassUtils.tryToInstantiateClassForName(componentInitializerName);
+
+            if (componentInitializer != null)
+            {
+                componentInitializers.add(componentInitializer);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(componentInitializer.getClass().getName() + " added");
+                }
+            }
+        }
+    }
+
+    private void initValidationExceptionInterceptors()
+    {
+        if(this.validationExceptionInterceptors != null)
+        {
+            return;
+        }
+
+        this.validationExceptionInterceptors = new ArrayList<ValidationExceptionInterceptor>();
+        List<String> validationExceptionInterceptorClassNames = new ArrayList<String>();
+
+        validationExceptionInterceptorClassNames
+            .add(WebXmlParameter.CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR);
+        validationExceptionInterceptorClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().get(
+                    CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR));
+
+        ValidationExceptionInterceptor validationExceptionInterceptor;
+        for (String validationExceptionInterceptorName : validationExceptionInterceptorClassNames)
+        {
+            validationExceptionInterceptor =
+                (ValidationExceptionInterceptor)
+                        ClassUtils.tryToInstantiateClassForName(validationExceptionInterceptorName);
+
+            if (validationExceptionInterceptor != null)
+            {
+                validationExceptionInterceptors.add(validationExceptionInterceptor);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(validationExceptionInterceptor.getClass().getName() + " added");
+                }
+            }
+        }
+    }
 
     public static ExtValContext getContext()
     {
@@ -126,12 +195,26 @@ public class ExtValContext
 
     public void addComponentInitializer(ComponentInitializer componentInitializer)
     {
-        DefaultComponentInitializer.addComponentInitializer(componentInitializer);
+        initComponentInitializers();
+        this.componentInitializers.add(componentInitializer);
+    }
+
+    public List<ComponentInitializer> getComponentInitializers()
+    {
+        initComponentInitializers();
+        return componentInitializers;
     }
 
     public void addValidationExceptionInterceptor(ValidationExceptionInterceptor validationExceptionInterceptor)
     {
-        DefaultValidationExceptionInterceptor.addValidationExceptionInterceptor(validationExceptionInterceptor);
+        initValidationExceptionInterceptors();
+        this.validationExceptionInterceptors.add(validationExceptionInterceptor);
+    }
+
+    public List<ValidationExceptionInterceptor> getValidationExceptionInterceptors()
+    {
+        initValidationExceptionInterceptors();
+        return validationExceptionInterceptors;
     }
 
     public List<ProcessedInformationRecorder> getProcessedInformationRecorders()
