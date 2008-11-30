@@ -130,7 +130,7 @@ public class ExtValUtils
                                                                                   String targetExpression)
     {
         Object baseObject;
-        if(ExtValUtils.getELHelper().isELTerm(targetExpression))
+        if(ExtValUtils.getELHelper().isELTermWellFormed(targetExpression))
         {
             ValueBindingExpression vbe = new ValueBindingExpression(targetExpression);
 

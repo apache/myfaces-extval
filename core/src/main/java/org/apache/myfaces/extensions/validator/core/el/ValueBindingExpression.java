@@ -85,7 +85,7 @@ public class ValueBindingExpression
 
     public ValueBindingExpression(String expression)
     {
-        if(!ExtValUtils.getELHelper().isELTerm(expression))
+        if(!ExtValUtils.getELHelper().isELTermWellFormed(expression))
         {
             throw new IllegalStateException(expression + " is no valid el-expression");
         }
