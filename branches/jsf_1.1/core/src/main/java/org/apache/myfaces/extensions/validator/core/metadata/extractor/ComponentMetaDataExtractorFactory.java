@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
-public interface MetaDataExtractorFactory
+public interface ComponentMetaDataExtractorFactory
 {
     MetaDataExtractor create();
 }

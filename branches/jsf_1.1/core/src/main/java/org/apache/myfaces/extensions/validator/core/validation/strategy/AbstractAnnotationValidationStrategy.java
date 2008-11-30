@@ -40,7 +40,7 @@ import java.util.MissingResourceException;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public abstract class AbstractAnnotationValidationStrategy extends AbstractValidatorAdapter
+public abstract class AbstractAnnotationValidationStrategy extends AbstractValidationStrategy
 {
     protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_detail";
     //e.g. for injecting a message resolver via spring

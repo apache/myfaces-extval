@@ -40,11 +40,11 @@ import javax.faces.validator.ValidatorException;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public abstract class AbstractValidatorAdapter implements ValidationStrategy
+public abstract class AbstractValidationStrategy implements ValidationStrategy
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    protected AbstractValidatorAdapter()
+    protected AbstractValidationStrategy()
     {
         if(logger.isDebugEnabled())
         {

@@ -30,7 +30,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ToDo(value = Priority.HIGH, description = "documentation")
+@ToDo(value = Priority.MEDIUM, description = "documentation")
 @UsageInformation(UsageCategory.INTERNAL)
 public interface WebXmlParameter
 {
