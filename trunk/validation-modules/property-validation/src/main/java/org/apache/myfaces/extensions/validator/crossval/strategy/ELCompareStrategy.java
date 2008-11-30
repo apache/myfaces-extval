@@ -53,8 +53,8 @@ class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             String validationTarget, AbstractCompareStrategy compareStrategy)
     {
-        if (ExtValUtils.getELHelper().isELTerm(validationTarget) &&
-            ExtValUtils.getELHelper().isExpressionValid(FacesContext.getCurrentInstance(), validationTarget))
+        if (ExtValUtils.getELHelper().isELTermWellFormed(validationTarget) &&
+            ExtValUtils.getELHelper().isELTermValid(FacesContext.getCurrentInstance(), validationTarget))
         {
             tryToValidateValueBinding(crossValidationStorageEntry,
                 new ValueBindingExpression(validationTarget), crossValidationStorage, compareStrategy);
