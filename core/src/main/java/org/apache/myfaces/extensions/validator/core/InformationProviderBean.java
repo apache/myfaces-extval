@@ -59,7 +59,7 @@ public class InformationProviderBean
         applyCustomValues(this.customizableInfos);
     }
 
-    private Map<CustomInfo, String> customizableInfos = new HashMap<CustomInfo, String>();
+    private Map<CustomInformation, String> customizableInfos = new HashMap<CustomInformation, String>();
 
     private void setupCustomizableInformation()
     {
@@ -74,47 +74,60 @@ public class InformationProviderBean
             basePackage = basePackage + ".";
         }
 
-        customizableInfos.put(CustomInfo.BASE_PACKAGE, basePackage);
+        customizableInfos.put(CustomInformation.BASE_PACKAGE, basePackage);
 
-        customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR, "ComponentMetaDataExtractor");
+        customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR,
+                "ComponentMetaDataExtractor");
 
-        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_POSTFIX, "ValidationStrategy");
-        customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_POSTFIX, "MetaDataTransformer");
-        customizableInfos.put(CustomInfo.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX, "ValidationErrorMessageResolver");
+        customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_POSTFIX,
+                "ValidationStrategy");
+        customizableInfos.put(CustomInformation.META_DATA_TRANSFORMER_POSTFIX,
+                "MetaDataTransformer");
+        customizableInfos.put(CustomInformation.VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX,
+                "ValidationErrorMessageResolver");
 
-        customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER, "ComponentInitializer");
-        customizableInfos.put(CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR, "ValidationExceptionInterceptor");
+        customizableInfos.put(CustomInformation.COMPONENT_INITIALIZER,
+                "ComponentInitializer");
+        customizableInfos.put(CustomInformation.VALIDATION_EXCEPTION_INTERCEPTOR,
+                "ValidationExceptionInterceptor");
 
-        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
+        customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
             "ValidationStrategyToMsgResolverNameMapper");
-        customizableInfos.put(CustomInfo.META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER,
+        customizableInfos.put(CustomInformation.META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER,
             "MetaDataToValidationStrategyNameMapper");
-        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
+        customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
             "ValidationStrategyToMetaDataTransformerNameMapper");
 
-        customizableInfos.put(CustomInfo.STARTUP_LISTENER, "StartupListener");
+        customizableInfos.put(CustomInformation.STARTUP_LISTENER,
+                "StartupListener");
 
-        customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
-        customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
-        customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY, "ComponentMetaDataExtractorFactory");
-        customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
+        customizableInfos.put(CustomInformation.MESSAGE_RESOLVER_FACTORY,
+                "MessageResolverFactory");
+        customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_FACTORY,
+                "ValidationStrategyFactory");
+        customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR_FACTORY,
+                "ComponentMetaDataExtractorFactory");
+        customizableInfos.put(CustomInformation.META_DATA_TRANSFORMER_FACTORY,
+                "MetaDataTransformerFactory");
 
         //conventions (the rest of the conventions are built with the help of name mappers,...
-        customizableInfos.put(CustomInfo.MESSAGE_BUNDLE_NAME, "validation_messages");
+        customizableInfos.put(CustomInformation.MESSAGE_BUNDLE_NAME,
+                "validation_messages");
         //static strategy mappings (name of property files)
-        customizableInfos.put(CustomInfo.STATIC_STRATEGY_MAPPING_SOURCE, "strategy_mappings");
+        customizableInfos.put(CustomInformation.STATIC_STRATEGY_MAPPING_SOURCE,
+                "strategy_mappings");
     }
 
-    protected void applyCustomValues(Map<CustomInfo, String> map)
+    protected void applyCustomValues(Map<CustomInformation, String> map)
     {
         //override to customize information
     }
 
-    public final String get(CustomInfo customInfo)
+    public final String get(CustomInformation customInformation)
     {
-        String value = customizableInfos.get(customInfo);
+        String value = customizableInfos.get(customInformation);
 
-        switch (customInfo)
+        switch (customInformation)
         {
             case BASE_PACKAGE:
                 return value;
@@ -135,7 +148,7 @@ public class InformationProviderBean
                 return value;
 
             default:
-                return customizableInfos.get(CustomInfo.BASE_PACKAGE) + value;
+                return customizableInfos.get(CustomInformation.BASE_PACKAGE) + value;
         }
     }
 }

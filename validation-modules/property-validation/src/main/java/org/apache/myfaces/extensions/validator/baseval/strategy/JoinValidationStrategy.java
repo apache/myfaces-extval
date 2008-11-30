@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.JoinValidation
 import org.apache.myfaces.extensions.validator.baseval.annotation.extractor.DefaultPropertyScanningMetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidatorAdapter;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -38,7 +38,7 @@ import javax.faces.validator.ValidatorException;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class JoinValidationStrategy extends AbstractValidatorAdapter
+public class JoinValidationStrategy extends AbstractValidationStrategy
 {
     public void processValidation(FacesContext facesContext,
             UIComponent uiComponent, MetaDataEntry metaDataEntry,
