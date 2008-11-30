@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -47,7 +47,7 @@ import java.util.List;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultComponentMetaDataExtractorFactory implements MetaDataExtractorFactory
+public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDataExtractorFactory
 {
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -71,7 +71,7 @@ public class DefaultComponentMetaDataExtractorFactory implements MetaDataExtract
             metaDataExtractorClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_META_DATA_EXTRACTOR);
             metaDataExtractorClassNames
                 .add(ExtValContext.getContext().getInformationProviderBean()
-                    .get(CustomInfo.COMPONENT_META_DATA_EXTRACTOR));
+                    .get(CustomInformation.COMPONENT_META_DATA_EXTRACTOR));
             metaDataExtractorClassNames.add(DefaultComponentMetaDataExtractor.class.getName());
 
             for (String className : metaDataExtractorClassNames)

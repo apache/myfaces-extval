@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -35,6 +35,6 @@ public class SimpleAnnotationToValidationStrategyNameMapper extends AbstractAnno
     public String createName(String metaDataKey)
     {
         return metaDataKey +
-            ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.VALIDATION_STRATEGY_POSTFIX);
+            ExtValContext.getContext().getInformationProviderBean().get(CustomInformation.VALIDATION_STRATEGY_POSTFIX);
     }
 }

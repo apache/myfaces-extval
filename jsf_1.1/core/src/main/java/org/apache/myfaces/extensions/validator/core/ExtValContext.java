@@ -65,7 +65,7 @@ public class ExtValContext
         = new HashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
 
 
-    private void initComponentInitializers()
+    private void lazyInitComponentInitializers()
     {
         if(this.componentInitializers != null)
         {
@@ -77,7 +77,7 @@ public class ExtValContext
         componentInitializerClassNames
             .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER);
         componentInitializerClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.COMPONENT_INITIALIZER));
+            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInformation.COMPONENT_INITIALIZER));
 
         ComponentInitializer componentInitializer;
         for (String componentInitializerName : componentInitializerClassNames)
@@ -97,7 +97,7 @@ public class ExtValContext
         }
     }
 
-    private void initValidationExceptionInterceptors()
+    private void lazyInitValidationExceptionInterceptors()
     {
         if(this.validationExceptionInterceptors != null)
         {
@@ -111,7 +111,7 @@ public class ExtValContext
             .add(WebXmlParameter.CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR);
         validationExceptionInterceptorClassNames
             .add(ExtValContext.getContext().getInformationProviderBean().get(
-                    CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR));
+                    CustomInformation.VALIDATION_EXCEPTION_INTERCEPTOR));
 
         ValidationExceptionInterceptor validationExceptionInterceptor;
         for (String validationExceptionInterceptorName : validationExceptionInterceptorClassNames)
@@ -195,25 +195,25 @@ public class ExtValContext
 
     public void addComponentInitializer(ComponentInitializer componentInitializer)
     {
-        initComponentInitializers();
+        lazyInitComponentInitializers();
         this.componentInitializers.add(componentInitializer);
     }
 
     public List<ComponentInitializer> getComponentInitializers()
     {
-        initComponentInitializers();
+        lazyInitComponentInitializers();
         return componentInitializers;
     }
 
     public void addValidationExceptionInterceptor(ValidationExceptionInterceptor validationExceptionInterceptor)
     {
-        initValidationExceptionInterceptors();
+        lazyInitValidationExceptionInterceptors();
         this.validationExceptionInterceptors.add(validationExceptionInterceptor);
     }
 
     public List<ValidationExceptionInterceptor> getValidationExceptionInterceptors()
     {
-        initValidationExceptionInterceptors();
+        lazyInitValidationExceptionInterceptors();
         return validationExceptionInterceptors;
     }
 

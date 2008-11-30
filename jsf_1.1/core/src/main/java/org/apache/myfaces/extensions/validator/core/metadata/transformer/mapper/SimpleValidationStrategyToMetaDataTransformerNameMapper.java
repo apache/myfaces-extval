@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInfo;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -48,14 +48,14 @@ public class SimpleValidationStrategyToMetaDataTransformerNameMapper extends
                                                  String validationStrategyClassName)
     {
         String postfix = ExtValContext.getContext().getInformationProviderBean()
-            .get(CustomInfo.META_DATA_TRANSFORMER_POSTFIX);
+            .get(CustomInformation.META_DATA_TRANSFORMER_POSTFIX);
 
         if(validationStrategyClassName.endsWith("ValidationStrategy") ||
            validationStrategyClassName.endsWith("Strategy"))
         {
             return validationStrategyPackageName + validationStrategyClassName
                     .replace(ExtValContext.getContext().getInformationProviderBean()
-                        .get(CustomInfo.VALIDATION_STRATEGY_POSTFIX) ,postfix)
+                        .get(CustomInformation.VALIDATION_STRATEGY_POSTFIX) ,postfix)
                     .replace("ValidationStrategy", postfix)
                     .replace("Strategy", postfix);
         }
