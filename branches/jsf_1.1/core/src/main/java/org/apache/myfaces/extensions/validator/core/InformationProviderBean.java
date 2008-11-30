@@ -96,9 +96,6 @@ public class InformationProviderBean
 
         customizableInfos.put(CustomInfo.MESSAGE_RESOLVER_FACTORY, "MessageResolverFactory");
         customizableInfos.put(CustomInfo.VALIDATION_STRATEGY_FACTORY, "ValidationStrategyFactory");
-        customizableInfos.put(CustomInfo.COMPONENT_INITIALIZER_FACTORY, "ComponentInitializerFactory");
-        customizableInfos.put(CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY,
-                "ValidationExceptionInterceptorFactory");
         customizableInfos.put(CustomInfo.COMPONENT_META_DATA_EXTRACTOR_FACTORY, "ComponentMetaDataExtractorFactory");
         customizableInfos.put(CustomInfo.META_DATA_TRANSFORMER_FACTORY, "MetaDataTransformerFactory");
 

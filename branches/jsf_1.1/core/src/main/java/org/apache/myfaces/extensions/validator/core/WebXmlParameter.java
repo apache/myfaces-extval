@@ -82,12 +82,6 @@ public interface WebXmlParameter
     static final String CUSTOM_META_DATA_TRANSFORMER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_TRANSFORMER_FACTORY");
 
-    static final String CUSTOM_COMPONENT_INITIALIZER_FACTORY = WebXmlUtils
-        .getInitParameter("CUSTOM_COMPONENT_INITIALIZER_FACTORY");
-
-    static final String CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY = WebXmlUtils
-            .getInitParameter("CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY");
-
     /*
      * deactivate
      */

@@ -24,10 +24,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultCo
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInfo;
-import org.apache.myfaces.extensions.validator.core.interceptor.DefaultValidationExceptionInterceptorFactory;
 import org.apache.myfaces.extensions.validator.core.el.DefaultELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.core.initializer.component.DefaultComponentInitializerFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
@@ -88,14 +86,6 @@ public class DefaultFactoryFinder implements FactoryFinder
 
             case META_DATA_TRANSFORMER_FACTORY:
                 factory = createMetaDataTransformerFactory();
-                break;
-
-            case COMPONENT_INITIALIZER_FACTORY:
-                factory = createComponentInitializerFactory();
-                break;
-
-            case VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY:
-                factory = createValidationExceptionInterceptorFactory();
                 break;
 
             case RENDERKIT_WRAPPER_FACTORY:
@@ -199,55 +189,6 @@ public class DefaultFactoryFinder implements FactoryFinder
         metaDataTransformerFactoryClassNames.add(DefaultMetaDataTransformerFactory.class.getName());
 
         for (String className : metaDataTransformerFactoryClassNames)
-        {
-            factory = ClassUtils.tryToInstantiateClassForName(className);
-
-            if (factory != null)
-            {
-                break;
-            }
-        }
-
-        return factory;
-    }
-
-    protected Object createComponentInitializerFactory()
-    {
-        Object factory = null;
-        List<String> componentInitializerFactoryClassNames = new ArrayList<String>();
-
-        componentInitializerFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER_FACTORY);
-        componentInitializerFactoryClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().get(CustomInfo.COMPONENT_INITIALIZER_FACTORY));
-        componentInitializerFactoryClassNames.add(DefaultComponentInitializerFactory.class.getName());
-
-        for (String className : componentInitializerFactoryClassNames)
-        {
-            factory = ClassUtils.tryToInstantiateClassForName(className);
-
-            if (factory != null)
-            {
-                break;
-            }
-        }
-
-        return factory;
-    }
-
-    private Object createValidationExceptionInterceptorFactory()
-    {
-        Object factory = null;
-        List<String> validationExceptionInterceptorFactoryClassNames = new ArrayList<String>();
-
-        validationExceptionInterceptorFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY);
-        validationExceptionInterceptorFactoryClassNames
-            .add(ExtValContext.getContext().getInformationProviderBean().get(
-                    CustomInfo.VALIDATION_EXCEPTION_INTERCEPTOR_FACTORY));
-        validationExceptionInterceptorFactoryClassNames
-                .add(DefaultValidationExceptionInterceptorFactory.class.getName());
-
-        for (String className : validationExceptionInterceptorFactoryClassNames)
         {
             factory = ClassUtils.tryToInstantiateClassForName(className);
 
