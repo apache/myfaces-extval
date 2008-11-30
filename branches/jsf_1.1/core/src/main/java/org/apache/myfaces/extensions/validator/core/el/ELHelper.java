@@ -42,9 +42,9 @@ public interface ELHelper
 
     PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent);
 
-    boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression);
+    boolean isELTermValid(FacesContext facesContext, String valueBindingExpression);
 
-    boolean isELTerm(Object o);
+    boolean isELTermWellFormed(Object o);
 
     Object getBindingOfComponent(UIComponent uiComponent, String name);
 }

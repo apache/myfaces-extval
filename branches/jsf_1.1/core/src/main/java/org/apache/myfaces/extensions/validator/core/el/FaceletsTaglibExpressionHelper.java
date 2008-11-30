@@ -234,7 +234,7 @@ class FaceletsTaglibExpressionHelper
             return elCount;
         }
 
-        if (ExtValUtils.getELHelper().isELTerm(o))
+        if (ExtValUtils.getELHelper().isELTermWellFormed(o))
         {
             if (foundELTerms != null)
             {
@@ -254,7 +254,7 @@ class FaceletsTaglibExpressionHelper
                 {
                     if (o.toString().startsWith("[Ljava.lang.String"))
                     {
-                        if (ExtValUtils.getELHelper().isELTerm(Array.get(o, i)))
+                        if (ExtValUtils.getELHelper().isELTermWellFormed(Array.get(o, i)))
                         {
                             if (foundELTerms != null)
                             {
@@ -285,7 +285,7 @@ class FaceletsTaglibExpressionHelper
 
             if (currentField.getType().equals(String.class))
             {
-                if (currentField.get(o) != null && ExtValUtils.getELHelper().isELTerm(currentField.get(o)))
+                if (currentField.get(o) != null && ExtValUtils.getELHelper().isELTermWellFormed(currentField.get(o)))
                 {
                     if (foundELTerms != null)
                     {

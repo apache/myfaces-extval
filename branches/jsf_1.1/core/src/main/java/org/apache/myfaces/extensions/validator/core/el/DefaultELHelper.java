@@ -75,7 +75,7 @@ public class DefaultELHelper implements ELHelper
             .createValueBinding(valueBindingExpression.getExpressionString()).getValue(facesContext) : null;
     }
 
-    public boolean isExpressionValid(FacesContext facesContext, String valueBindingExpression)
+    public boolean isELTermValid(FacesContext facesContext, String valueBindingExpression)
     {
         return facesContext.getApplication().createValueBinding(valueBindingExpression) != null;
     }
@@ -169,7 +169,7 @@ public class DefaultELHelper implements ELHelper
         return (valueExpression != null) ? valueExpression.getExpressionString() : null;
     }
 
-    public boolean isELTerm(Object o)
+    public boolean isELTermWellFormed(Object o)
     {
         if (o instanceof ValueBinding || o instanceof Externalizable)
         {
