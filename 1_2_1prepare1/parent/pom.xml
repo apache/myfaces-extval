@@ -9,7 +9,7 @@
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-parent</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Project Parent</name>
     <url>http://myfaces.apache.org/extensions/validator12</url>
@@ -188,9 +188,9 @@
     </reporting>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/12_1_2_1parent</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/12_1_2_1parent</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/12_1_2_1parent</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/parent/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/parent/</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/trunk/parent/</url>
     </scm>
 
     <distributionManagement>
