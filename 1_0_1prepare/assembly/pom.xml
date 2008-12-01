@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>myfaces-extval-assembly11</artifactId>
     <packaging>pom</packaging>
@@ -8,15 +7,15 @@
     .zip and .tar.gz distributions </description>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/jsf_1.1/assembly/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/jsf_1.1/assembly/</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/jsf_1.1/assembly/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_0_1assembly</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_0_1assembly</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/1_0_1assembly</url>
     </scm>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
         <artifactId>myfaces-extval-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <build>
@@ -173,9 +172,9 @@
     <!-- Since extval could be async released, an generated assembly could contain different
          artifact versions -->
     <properties>
-        <core.version>1.0.1-SNAPSHOT</core.version>
-        <trinidad-support.version>1.0.1-SNAPSHOT</trinidad-support.version>
-        <generic-support.version>1.0.1-SNAPSHOT</generic-support.version>
-        <property-validation.version>1.0.1-SNAPSHOT</property-validation.version>
+        <core.version>1.0.1</core.version>
+        <trinidad-support.version>1.0.1</trinidad-support.version>
+        <generic-support.version>1.0.1</generic-support.version>
+        <property-validation.version>1.0.1</property-validation.version>
     </properties>
 </project>
