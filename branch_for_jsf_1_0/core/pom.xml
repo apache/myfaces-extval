@@ -34,6 +34,12 @@
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_0/core/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_0/core/</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_1_0/core/</url>
+    </scm>
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>

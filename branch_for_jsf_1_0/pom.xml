@@ -28,6 +28,12 @@
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Module</name>
     <url>http://myfaces.apache.org/extensions/validator11</url>
+    
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_0/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_0/</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_1_0/</url>
+    </scm>    
 
     <!-- WARNING: DO NOT GENERATE SITE FROM HERE DIRECTLY
     Since this project has an async release procedure (not
