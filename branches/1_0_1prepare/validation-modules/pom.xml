@@ -37,9 +37,9 @@
     </parent>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/jsf_1.1/validation-modules/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/jsf_1.1/validation-modules/</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/jsf_1.1/validation-modules/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/jsf_1.1/validation-modules/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/jsf_1.1/validation-modules/</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/jsf_1.1/validation-modules/</url>
     </scm>
 
     <modules>
