@@ -6,6 +6,7 @@
     <artifactId>examples-hello_world</artifactId>
 
     <name>MyFaces Extensions-Validator examples hello world</name>
+    <version>1.2.1</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
