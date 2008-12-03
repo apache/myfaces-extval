@@ -85,19 +85,6 @@
                 </plugins>
             </build>
         </profile>
-
-        <profile>
-            <id>perform-release</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <modules>
-                <module>assembly</module>
-            </modules>
-        </profile>
     </profiles>
 
     <properties>
