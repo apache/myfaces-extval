@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions Validator Examples Assembly</name>
-    <groupId>org.apache.myfaces.tomahawk</groupId>
+    <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
     <artifactId>myfaces-extval-examples-assembly12</artifactId>
 
     <parent>
