@@ -56,15 +56,6 @@
             <version>${trinidad.version}</version>
             <scope>provided</scope>
         </dependency>
-
-<!--
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.validator</groupId>
-            <artifactId>myfaces-extval-core</artifactId>
-            <version>${build.version}</version>
-            <scope>compile</scope>
-        </dependency>
--->
     </dependencies>
 
     <build>
