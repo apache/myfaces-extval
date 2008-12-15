@@ -57,7 +57,7 @@
               <item name="Trinidad Support"      href="http://myfaces.apache.org/extensions/validator11/component-support-modules-project/myfaces-extval-trinidad-support/index.html"/>
               <item name="Generic Support"       href="http://myfaces.apache.org/extensions/validator11/component-support-modules-project/myfaces-extval-generic-support/index.html"/>
         </item>
-        <item name="Myfaces Extensions Validator for JSF 1.2"   href="http://myfaces.apache.org/extensions/validator12/index.html" collapse="true">
+        <item name="ExtVal for JSF 1.2"   href="http://myfaces.apache.org/extensions/validator12/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
     </menu>
