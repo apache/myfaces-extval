@@ -24,18 +24,11 @@ import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Target;
 
 /**
- * it's an internal annotation to provide some information
- * <p/>
- * e.g.: some mechanisms aren't deprecated
- * they are e.g. fallbacks, alternatives,...
- * in order to avoid the deprecated annotation it's possible to use this one.
- * you can tell other developers:
- * this artifact isn't used for the desired approach, however, it's still essential to have it as ...
- * <p/>
- * idea: unify small parts of information which are frequently used
+ * it's an internal annotation to provide some information concerning usage-categories
  *
  * @author Gerhard Petracek
  * @since 1.x.1
+ * @see org.apache.myfaces.extensions.validator.internal.UsageCategory
  */
 @Target({TYPE, METHOD, FIELD})
 public @interface UsageInformation
