@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.trinidad.context.RequestContext;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -50,7 +51,9 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
                                  ValidatorException validatorException,
                                  ValidationStrategy validatorExceptionSource)
     {
-        if(processComponent(uiComponent))
+        refreshComponent(uiComponent);
+
+        if(processComponent(uiComponent) && metaDataEntry != null)
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();
 
@@ -73,6 +76,14 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
             }
         }
         return true;
+    }
+
+    private void refreshComponent(UIComponent uiComponent)
+    {
+        if(RequestContext.getCurrentInstance().isPartialRequest(FacesContext.getCurrentInstance()))
+        {
+            RequestContext.getCurrentInstance().addPartialTarget(uiComponent);
+        }
     }
 
     protected boolean processComponent(UIComponent uiComponent)

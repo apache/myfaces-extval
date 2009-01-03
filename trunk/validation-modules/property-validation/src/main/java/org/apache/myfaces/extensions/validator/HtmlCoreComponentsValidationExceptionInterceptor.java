@@ -55,7 +55,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
                                  ValidatorException validatorException,
                                  ValidationStrategy validatorExceptionSource)
     {
-        if(processComponent(uiComponent))
+        if(processComponent(uiComponent) && metaDataEntry != null)
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();
 
