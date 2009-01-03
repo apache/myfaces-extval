@@ -32,6 +32,7 @@ import javax.faces.validator.ValidatorException;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -111,6 +112,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return false;
     }
 
+    @SuppressWarnings({"ThrowableInstanceNeverThrown"})
     protected final void processTargetComponentAfterViolation(
             CrossValidationStorageEntry entryOfSource,
             CrossValidationStorageEntry entryOfTarget)
@@ -150,7 +152,14 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         if ((message.getSummary() != null || message.getDetail() != null) &&
             entryOfSource.getClientId() != null && !entryOfSource.getClientId().equals(entryOfTarget.getClientId()))
         {
-            facesContext.addMessage(entryOfTarget.getClientId(), message);
+            ValidatorException validatorException = new ValidatorException(message);
+
+            if(ExtValUtils.executeAfterThrowingInterceptors(
+                    entryOfTarget.getComponent(), entryOfTarget.getMetaDataEntry(),
+                    entryOfTarget.getConvertedObject(), validatorException, this))
+            {
+                facesContext.addMessage(entryOfTarget.getClientId(), validatorException.getFacesMessage());
+            }
         }
     }
 
