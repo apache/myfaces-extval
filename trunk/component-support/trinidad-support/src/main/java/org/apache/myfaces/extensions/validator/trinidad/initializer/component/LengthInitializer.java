@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadClientValidatorWrapper;
+import org.apache.myfaces.trinidad.validator.ClientValidator;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -82,9 +84,11 @@ public class LengthInitializer extends TrinidadComponentInitializer
 
         //reInitValidators((EditableValueHolder)uiComponent, metaData); //search wrappers and call .deactivate
 
-        if(informationAdded)
+        if(informationAdded && lengthValidator instanceof ClientValidator)
         {
-            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            ((EditableValueHolder)uiComponent).addValidator(
+                    new ExtValTrinidadClientValidatorWrapper((ClientValidator)lengthValidator));
+
             return true;
         }
         return false;

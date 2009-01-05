@@ -23,7 +23,9 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadClientValidatorWrapper;
 import org.apache.myfaces.trinidad.validator.LongRangeValidator;
+import org.apache.myfaces.trinidad.validator.ClientValidator;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -43,7 +45,7 @@ public class LongRangeInitializer extends TrinidadComponentInitializer
                                               Map<String, Object> metaData)
     {
         boolean informationAdded = false;
-        LongRangeValidator lengthValidator = (LongRangeValidator)facesContext.getApplication()
+        LongRangeValidator longRangeValidator = (LongRangeValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.LongRange");
 
         if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN))
@@ -52,7 +54,7 @@ public class LongRangeInitializer extends TrinidadComponentInitializer
 
             if(min instanceof Long)
             {
-                lengthValidator.setMinimum((Long)min);
+                longRangeValidator.setMinimum((Long)min);
                 informationAdded = true;
             }
         }
@@ -63,13 +65,16 @@ public class LongRangeInitializer extends TrinidadComponentInitializer
 
             if(maxLength instanceof Long)
             {
-                lengthValidator.setMaximum((Long)maxLength);
+                longRangeValidator.setMaximum((Long)maxLength);
                 informationAdded = true;
             }
         }
-        if(informationAdded)
+
+        if(informationAdded && longRangeValidator instanceof ClientValidator)
         {
-            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            ((EditableValueHolder)uiComponent).addValidator(
+                    new ExtValTrinidadClientValidatorWrapper((ClientValidator)longRangeValidator));
+
             return true;
         }
         return false;
