@@ -23,7 +23,9 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadClientValidatorWrapper;
 import org.apache.myfaces.trinidad.validator.DoubleRangeValidator;
+import org.apache.myfaces.trinidad.validator.ClientValidator;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -43,7 +45,7 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
                                               Map<String, Object> metaData)
     {
         boolean informationAdded = false;
-        DoubleRangeValidator lengthValidator = (DoubleRangeValidator)facesContext.getApplication()
+        DoubleRangeValidator doubleRangeValidator = (DoubleRangeValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.DoubleRange");
 
         if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN))
@@ -52,7 +54,7 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
 
             if(min instanceof Double)
             {
-                lengthValidator.setMinimum((Double)min);
+                doubleRangeValidator.setMinimum((Double)min);
                 informationAdded = true;
             }
         }
@@ -63,13 +65,15 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
 
             if(maxLength instanceof Double)
             {
-                lengthValidator.setMaximum((Double)maxLength);
+                doubleRangeValidator.setMaximum((Double)maxLength);
                 informationAdded = true;
             }
         }
-        if(informationAdded)
+        
+        if(informationAdded && doubleRangeValidator instanceof ClientValidator)
         {
-            ((EditableValueHolder)uiComponent).addValidator(lengthValidator);
+            ((EditableValueHolder)uiComponent).addValidator(
+                    new ExtValTrinidadClientValidatorWrapper((ClientValidator)doubleRangeValidator));
             return true;
         }
         return false;
