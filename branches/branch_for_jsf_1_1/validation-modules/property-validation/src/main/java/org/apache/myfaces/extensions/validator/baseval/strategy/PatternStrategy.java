@@ -43,7 +43,6 @@ public class PatternStrategy extends AbstractAnnotationValidationStrategy
             UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
-
         Pattern annotation = metaDataEntry.getValue(Pattern.class);
 
         for (String expression : annotation.value())
@@ -55,8 +54,7 @@ public class PatternStrategy extends AbstractAnnotationValidationStrategy
                 throw new ValidatorException(new FacesMessage(
                         FacesMessage.SEVERITY_ERROR,
                         getErrorMessageSummary(annotation),
-                        getErrorMessageDetail(annotation).replace("{0}",
-                                expression)));
+                        getErrorMessageDetail(annotation).replace("{0}", expression)));
             }
         }
     }

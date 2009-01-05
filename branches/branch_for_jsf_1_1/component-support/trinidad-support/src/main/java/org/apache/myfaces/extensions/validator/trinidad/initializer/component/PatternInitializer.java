@@ -23,7 +23,9 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadClientValidatorWrapper;
 import org.apache.myfaces.trinidad.validator.RegExpValidator;
+import org.apache.myfaces.trinidad.validator.ClientValidator;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -60,7 +62,11 @@ public class PatternInitializer extends TrinidadComponentInitializer
             regExpValidator.setMessageDetailNoMatch((String)metaData.get(
                 CommonMetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE));
 
-            ((EditableValueHolder)uiComponent).addValidator(regExpValidator);
+            if(regExpValidator instanceof ClientValidator)
+            {
+                ((EditableValueHolder)uiComponent).addValidator(
+                        new ExtValTrinidadClientValidatorWrapper((ClientValidator)regExpValidator));
+            }
         }
         return true;
     }
