@@ -41,7 +41,7 @@ import java.util.Collection;
 @UsageInformation(UsageCategory.REUSE)
 public class ExtValTrinidadClientValidatorWrapper implements Validator, ClientValidator, Serializable
 {
-    private ClientValidator wrapped;
+    private transient ClientValidator wrapped;
     private static final long serialVersionUID = 1414547841700621410L;
 
     public ExtValTrinidadClientValidatorWrapper(ClientValidator clientValidator)
