@@ -38,7 +38,14 @@ public class ExtValStartupListener extends AbstractStartupListener
     {
         if(logger.isInfoEnabled())
         {
-            logger.info("starting up MyFaces Extensions Validator v" + ExtValInformation.VERSION);
+            if(ExtValInformation.VERSION != null)
+            {
+                logger.info("starting up MyFaces Extensions Validator v" + ExtValInformation.VERSION);
+            }
+            else
+            {
+                logger.info("starting up MyFaces Extensions Validator");
+            }
         }
 
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
