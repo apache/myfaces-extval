@@ -20,6 +20,12 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.jar.Manifest;
+import java.util.jar.Attributes;
+import java.net.URL;
 
 /**
  * @author Gerhard Petracek
@@ -28,6 +34,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ClassUtils
 {
+    private static final Log LOG = LogFactory.getLog(ClassUtils.class);
+
     public static Class tryToLoadClassForName(String name)
     {
         try
@@ -87,5 +95,29 @@ public class ClassUtils
         throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         return loadClassForName(className).newInstance();
+    }
+
+    public static String getJarVersion(Class targetClass)
+    {
+        String classFilePath = targetClass.getCanonicalName().replace('.', '/') + ".class";
+        String manifestFilePath = "/META-INF/MANIFEST.MF";
+
+        String classLocation = targetClass.getResource(targetClass.getSimpleName() + ".class").toString();
+        String manifestFileLocation = classLocation
+                .substring(0, classLocation.indexOf(classFilePath) - 1) + manifestFilePath;
+
+        try
+        {
+            return new Manifest(new URL(manifestFileLocation).openStream())
+                    .getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
+        }
+        catch (Throwable t)
+        {
+            if (LOG.isTraceEnabled())
+            {
+                LOG.trace("couldn't load version of jar file which contains " + targetClass.getName(), t);
+            }
+            return null;
+        }
     }
 }
