@@ -23,8 +23,40 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .BeanValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .SimpleValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .DefaultValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .CustomConventionValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+        .CustomConventionAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+        .DefaultAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+        .CustomConfiguredAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+        .SimpleAnnotationToValidationStrategyNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
+        .AnnotationToValidationStrategyBeanNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
+        .CustomConfiguredValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
+        .CustomConventionValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
+        .DefaultValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
+        .DefaultModuleValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
+        .SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 /**
@@ -50,14 +82,71 @@ public class ExtValStartupListener extends AbstractStartupListener
 
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
 
+        ExtValContext.getContext()
+                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
+
+        initNameMappers();
         executeCustomStartupListener();
+    }
+
+    private void initNameMappers()
+    {
+        String deactivateDefaultNameMappers = WebXmlParameter.DEACTIVATE_DEFAULT_NAME_MAPPERS;
+        if ((deactivateDefaultNameMappers != null && deactivateDefaultNameMappers.equalsIgnoreCase("true")))
+        {
+            return;
+        }
+
+        //register metadata to validation strategy name mapper
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new CustomConfiguredAnnotationToValidationStrategyNameMapper());
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new CustomConventionAnnotationToValidationStrategyNameMapper());
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new DefaultAnnotationToValidationStrategyNameMapper());
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new SimpleAnnotationToValidationStrategyNameMapper());
+
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new AnnotationToValidationStrategyBeanNameMapper(
+                        new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new AnnotationToValidationStrategyBeanNameMapper(
+                        new CustomConventionAnnotationToValidationStrategyNameMapper()));
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new AnnotationToValidationStrategyBeanNameMapper(
+                        new DefaultAnnotationToValidationStrategyNameMapper()));
+        ExtValUtils.registerMetaDataToValidationStrategyNameMapper(
+                new AnnotationToValidationStrategyBeanNameMapper(
+                        new SimpleAnnotationToValidationStrategyNameMapper()));
+
+        //register validation strategy to message resolver name mapper
+        ExtValUtils.registerValidationStrategyToMessageResolverNameMapper(
+                new CustomConfiguredValidationStrategyToMsgResolverNameMapper());
+        ExtValUtils.registerValidationStrategyToMessageResolverNameMapper(
+                new CustomConventionValidationStrategyToMsgResolverNameMapper());
+        ExtValUtils.registerValidationStrategyToMessageResolverNameMapper(
+                new DefaultValidationStrategyToMsgResolverNameMapper());
+        ExtValUtils.registerValidationStrategyToMessageResolverNameMapper(
+                new DefaultModuleValidationStrategyToMsgResolverNameMapper());
+        ExtValUtils.registerValidationStrategyToMessageResolverNameMapper(
+                new SimpleValidationStrategyToMsgResolverNameMapper());
+
+        //register validation strategy to metadata transformer name mapper
+        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
+                new CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper());
+        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
+                new CustomConventionValidationStrategyToMetaDataTransformerNameMapper());
+        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
+                new DefaultValidationStrategyToMetaDataTransformerNameMapper());
+        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
+                new SimpleValidationStrategyToMetaDataTransformerNameMapper());
+        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
+                new BeanValidationStrategyToMetaDataTransformerNameMapper());
     }
 
     private void executeCustomStartupListener()
     {
-        ExtValContext.getContext()
-                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
-
         String customStartupListenerName = ExtValContext.getContext().getInformationProviderBean()
             .get(CustomInformation.STARTUP_LISTENER);
         AbstractStartupListener customStartupListener =
