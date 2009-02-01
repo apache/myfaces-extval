@@ -18,19 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .CustomConventionValidationStrategyToMetaDataTransformerNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .DefaultValidationStrategyToMetaDataTransformerNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .SimpleValidationStrategyToMetaDataTransformerNameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .BeanValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
@@ -59,27 +50,13 @@ import java.util.Map;
  * to avoid a second static mapping e.g. for jpa annotations
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultMetaDataTransformerFactory implements ClassMappingFactory<ValidationStrategy, MetaDataTransformer>
+public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFactory<ValidationStrategy>
+        implements ClassMappingFactory<ValidationStrategy, MetaDataTransformer>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private static Map<String, String> validationStrategyToMetaDataTransformerMapping;
-    private static List<NameMapper<ValidationStrategy>> nameMapperList
-        = new ArrayList<NameMapper<ValidationStrategy>>();
-
-    static
-    {
-        nameMapperList
-            .add(new CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper());
-        nameMapperList
-            .add(new CustomConventionValidationStrategyToMetaDataTransformerNameMapper());
-        nameMapperList
-            .add(new DefaultValidationStrategyToMetaDataTransformerNameMapper());
-        nameMapperList
-            .add(new SimpleValidationStrategyToMetaDataTransformerNameMapper());
-        nameMapperList
-            .add(new BeanValidationStrategyToMetaDataTransformerNameMapper());
-    }
+    private Map<String, String> validationStrategyToMetaDataTransformerMapping;
+    private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
 
     public DefaultMetaDataTransformerFactory()
     {
@@ -143,19 +120,16 @@ public class DefaultMetaDataTransformerFactory implements ClassMappingFactory<Va
         return null;
     }
 
-    private void initStaticMappings()
+    private synchronized void initStaticMappings()
     {
-        synchronized (DefaultMetaDataTransformerFactory.class)
-        {
-            validationStrategyToMetaDataTransformerMapping = new HashMap<String, String>();
+        validationStrategyToMetaDataTransformerMapping = new HashMap<String, String>();
 
-            //setup internal static mappings
-            for (StaticConfiguration<String, String> staticConfig :
-                ExtValContext.getContext().getStaticConfiguration(
-                    StaticConfigurationNames.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG))
-            {
-                setupStrategyMappings(staticConfig.getMapping());
-            }
+        //setup internal static mappings
+        for (StaticConfiguration<String, String> staticConfig :
+            ExtValContext.getContext().getStaticConfiguration(
+                StaticConfigurationNames.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG))
+        {
+            setupStrategyMappings(staticConfig.getMapping());
         }
     }
 
@@ -167,7 +141,7 @@ public class DefaultMetaDataTransformerFactory implements ClassMappingFactory<Va
         }
     }
 
-    private void addMapping(String validationStrategyName, String transformerName)
+    private synchronized void addMapping(String validationStrategyName, String transformerName)
     {
         if(logger.isTraceEnabled())
         {
@@ -175,9 +149,11 @@ public class DefaultMetaDataTransformerFactory implements ClassMappingFactory<Va
                 + validationStrategyName + " -> " + transformerName);
         }
 
-        synchronized (DefaultMetaDataTransformerFactory.class)
-        {
-            validationStrategyToMetaDataTransformerMapping.put(validationStrategyName, transformerName);
-        }
+        validationStrategyToMetaDataTransformerMapping.put(validationStrategyName, transformerName);
+    }
+
+    protected List<NameMapper<ValidationStrategy>> getNameMapperList()
+    {
+        return nameMapperList;
     }
 }
