@@ -16,17 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.mapper;
+package org.apache.myfaces.extensions.validator.core.factory;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)
-public interface ClassMappingFactory<P, R>
+public interface NameMapperAwareFactory<T extends NameMapper>
 {
-    R create(P source);
+    void register(T classToAdd);
+    void deregister(Class<? extends NameMapper> classToDeregister);
+    void deny(Class<? extends NameMapper> classToDeny);
 }

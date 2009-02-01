@@ -22,8 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
-import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -36,6 +37,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Compon
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -66,12 +68,66 @@ public class ExtValUtils
                 .create(metaDataKey);
     }
 
+    public static void registerMetaDataToValidationStrategyNameMapper(
+            NameMapper<String> metaDataToValidationStrategyNameMapper)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, NameMapperAwareFactory.class))
+                .register(metaDataToValidationStrategyNameMapper);
+    }
+
+    public static void deregisterMetaDataToValidationStrategyNameMapper(
+            Class<? extends NameMapper> metaDataToValidationStrategyNameMapperClass)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, NameMapperAwareFactory.class))
+                .deregister(metaDataToValidationStrategyNameMapperClass);
+    }
+
+    public static void denyMetaDataToValidationStrategyNameMapper(
+            Class<? extends NameMapper> metaDataToValidationStrategyNameMapperClass)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, NameMapperAwareFactory.class))
+                .deny(metaDataToValidationStrategyNameMapperClass);
+    }
+
     public static MetaDataTransformer getMetaDataTransformerForValidationStrategy(ValidationStrategy validationStrategy)
     {
         return ((ClassMappingFactory<ValidationStrategy, MetaDataTransformer>) ExtValContext
                     .getContext().getFactoryFinder()
                     .getFactory(FactoryNames.META_DATA_TRANSFORMER_FACTORY, ClassMappingFactory.class))
                     .create(validationStrategy);
+    }
+
+    public static void registerValidationStrategyToMetaDataTransformerNameMapper(
+            NameMapper<ValidationStrategy> validationStrategyToMetaDataTransformerNameMapper)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.META_DATA_TRANSFORMER_FACTORY, NameMapperAwareFactory.class))
+                .register(validationStrategyToMetaDataTransformerNameMapper);
+    }
+
+    public static void deregisterValidationStrategyToMetaDataTransformerNameMapper(
+            Class<? extends NameMapper> validationStrategyToMetaDataTransformerNameMapperClass)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.META_DATA_TRANSFORMER_FACTORY, NameMapperAwareFactory.class))
+                .deregister(validationStrategyToMetaDataTransformerNameMapperClass);
+    }
+
+    public static void denyValidationStrategyToMetaDataTransformerNameMapper(
+            Class<? extends NameMapper> validationStrategyToMetaDataTransformerNameMapperClass)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.META_DATA_TRANSFORMER_FACTORY, NameMapperAwareFactory.class))
+                .deny(validationStrategyToMetaDataTransformerNameMapperClass);
     }
 
     public static MetaDataExtractor getComponentMetaDataExtractor()
@@ -118,6 +174,33 @@ public class ExtValUtils
             .getFactoryFinder()
             .getFactory(FactoryNames.MESSAGE_RESOLVER_FACTORY, ClassMappingFactory.class))
             .create(validationStrategy);
+    }
+
+    public static void registerValidationStrategyToMessageResolverNameMapper(
+            NameMapper<ValidationStrategy> validationStrategyToMsgResolverNameMapper)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.MESSAGE_RESOLVER_FACTORY, NameMapperAwareFactory.class))
+                .register(validationStrategyToMsgResolverNameMapper);
+    }
+
+    public static void deregisterValidationStrategyToMessageResolverNameMapper(
+            Class<? extends NameMapper> validationStrategyToMessageResolverNameMapperClass)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.MESSAGE_RESOLVER_FACTORY, NameMapperAwareFactory.class))
+                .deregister(validationStrategyToMessageResolverNameMapperClass);
+    }
+
+    public static void denyValidationStrategyToMessageResolverNameMapper(
+            Class<? extends NameMapper> validationStrategyToMessageResolverNameMapperClass)
+    {
+        (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.MESSAGE_RESOLVER_FACTORY, NameMapperAwareFactory.class))
+                .deny(validationStrategyToMessageResolverNameMapperClass);
     }
 
     public static ELHelper getELHelper()

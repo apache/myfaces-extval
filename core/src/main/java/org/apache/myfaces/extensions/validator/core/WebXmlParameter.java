@@ -85,6 +85,7 @@ public interface WebXmlParameter
     /*
      * deactivate
      */
+    @Deprecated
     static final String DEACTIVATE_RENDERKIT = WebXmlUtils
         .getInitParameter("DEACTIVATE_RENDERKIT");
 
@@ -92,6 +93,9 @@ public interface WebXmlParameter
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");
 
+    static final String DEACTIVATE_DEFAULT_NAME_MAPPERS = WebXmlUtils
+        .getInitParameter("DEACTIVATE_DEFAULT_NAME_MAPPERS");
+    
     static final String DEACTIVATE_EL_RESOLVER = WebXmlUtils
         .getInitParameter("DEACTIVATE_EL_RESOLVER");
 
