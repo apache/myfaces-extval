@@ -16,17 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.mapper;
+package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.API)
-public interface ClassMappingFactory<P, R>
+@UsageInformation(UsageCategory.INTERNAL)
+public abstract class AbstractMetaDataToValidationStrategyNameMapper implements NameMapper<String>
 {
-    R create(P source);
+    protected final Log logger = LogFactory.getLog(getClass());
+
+    public AbstractMetaDataToValidationStrategyNameMapper()
+    {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug(getClass().getName() + " instantiated");
+        }
+    }
 }

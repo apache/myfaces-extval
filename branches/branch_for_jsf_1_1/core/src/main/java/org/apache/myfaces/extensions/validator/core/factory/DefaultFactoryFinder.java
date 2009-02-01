@@ -49,12 +49,19 @@ public class DefaultFactoryFinder implements FactoryFinder
     protected final Log logger = LogFactory.getLog(getClass());
     protected Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
 
-    public DefaultFactoryFinder()
+    private static FactoryFinder factoryFinder = new DefaultFactoryFinder();
+
+    private DefaultFactoryFinder()
     {
         if(logger.isDebugEnabled())
         {
             logger.debug(getClass().getName() + " instantiated");
         }
+    }
+
+    public static FactoryFinder getInstance()
+    {
+        return factoryFinder;
     }
 
     public final <T> T getFactory(FactoryNames factoryName, Class<T> targetClass)

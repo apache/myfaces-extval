@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
@@ -29,14 +30,6 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
-    .CustomConfiguredAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
-    .CustomConventionAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
-    .DefaultAnnotationToValidationStrategyNameMapper;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
-    .SimpleAnnotationToValidationStrategyNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -59,38 +52,14 @@ import java.util.MissingResourceException;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationStrategyFactory implements ClassMappingFactory<String, ValidationStrategy>
+public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFactory
+        implements ClassMappingFactory<String, ValidationStrategy>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private static Map<String, String> metaDataKeyToValidationStrategyMapping = null;
-    private static List<NameMapper<String>> metaDataKeyToValidationStrategyNameMapperList =
-        new ArrayList<NameMapper<String>>();
-
-    static
-    {
-        metaDataKeyToValidationStrategyNameMapperList
-            .add(new CustomConfiguredAnnotationToValidationStrategyNameMapper());
-        metaDataKeyToValidationStrategyNameMapperList
-            .add(new CustomConventionAnnotationToValidationStrategyNameMapper());
-        metaDataKeyToValidationStrategyNameMapperList
-            .add(new DefaultAnnotationToValidationStrategyNameMapper());
-        metaDataKeyToValidationStrategyNameMapperList
-            .add(new SimpleAnnotationToValidationStrategyNameMapper());
-
-        metaDataKeyToValidationStrategyNameMapperList
-            .add(new AnnotationToValidationStrategyBeanNameMapper(
-                new CustomConfiguredAnnotationToValidationStrategyNameMapper()));
-        metaDataKeyToValidationStrategyNameMapperList
-            .add(new AnnotationToValidationStrategyBeanNameMapper(
-                new CustomConventionAnnotationToValidationStrategyNameMapper()));
-        metaDataKeyToValidationStrategyNameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
-            new DefaultAnnotationToValidationStrategyNameMapper()));
-        metaDataKeyToValidationStrategyNameMapperList.add(new AnnotationToValidationStrategyBeanNameMapper(
-            new SimpleAnnotationToValidationStrategyNameMapper()));
-    }
+    private Map<String, String> metaDataKeyToValidationStrategyMapping = null;
+    private List<NameMapper<String>> nameMapperList = new ArrayList<NameMapper<String>>();
 
     public DefaultValidationStrategyFactory()
     {
@@ -115,7 +84,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
         ValidationStrategy validationStrategy;
         String strategyName;
         //null -> use name mappers
-        for (NameMapper<String> nameMapper : metaDataKeyToValidationStrategyNameMapperList)
+        for (NameMapper<String> nameMapper : nameMapperList)
         {
             strategyName = nameMapper.createName(metaDataKey);
 
@@ -150,7 +119,7 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    private void addMapping(String metaDataKey, String validationStrategyName)
+    private synchronized void addMapping(String metaDataKey, String validationStrategyName)
     {
         if(logger.isTraceEnabled())
         {
@@ -158,56 +127,50 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
                 + metaDataKey + " -> " + validationStrategyName);
         }
 
-        synchronized (DefaultValidationStrategyFactory.class)
-        {
-            metaDataKeyToValidationStrategyMapping.put(metaDataKey, validationStrategyName);
-        }
+        metaDataKeyToValidationStrategyMapping.put(metaDataKey, validationStrategyName);
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
-    private void initStaticMappings()
+    private synchronized void initStaticMappings()
     {
-        synchronized (DefaultValidationStrategyFactory.class)
+        metaDataKeyToValidationStrategyMapping = new HashMap<String, String>();
+
+        //setup internal static mappings
+        for (StaticConfiguration<String, String> staticConfig :
+            ExtValContext.getContext().getStaticConfiguration(
+                StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG))
         {
-            metaDataKeyToValidationStrategyMapping = new HashMap<String, String>();
+            setupStrategyMappings(staticConfig.getMapping());
+        }
 
-            //setup internal static mappings
-            for (StaticConfiguration<String, String> staticConfig :
-                ExtValContext.getContext().getStaticConfiguration(
-                    StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG))
-            {
-                setupStrategyMappings(staticConfig.getMapping());
-            }
+        StaticConfiguration<String, String> staticConfig = new StaticResourceBundleConfiguration();
+        //try to setup mapping with base name by convention - overrides default mapping
+        try
+        {
+            //build convention (strategy mapping)
+            staticConfig.setSourceOfMapping(ExtValContext.getContext().getInformationProviderBean()
+                .get(CustomInformation.STATIC_STRATEGY_MAPPING_SOURCE));
 
-            StaticConfiguration<String, String> staticConfig = new StaticResourceBundleConfiguration();
-            //try to setup mapping with base name by convention - overrides default mapping
+            setupStrategyMappings(staticConfig.getMapping());
+        }
+        catch (Throwable t)
+        {
+            //do nothing - it was just a try
+        }
+
+        //setup custom mapping - overrides all other mappings
+        String customMappingBaseName = WebXmlParameter.CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING;
+        if (customMappingBaseName != null)
+        {
             try
             {
-                //build convention (strategy mapping)
-                staticConfig.setSourceOfMapping(ExtValContext.getContext().getInformationProviderBean()
-                    .get(CustomInformation.STATIC_STRATEGY_MAPPING_SOURCE));
-
+                staticConfig = new StaticResourceBundleConfiguration();
+                staticConfig.setSourceOfMapping(customMappingBaseName);
                 setupStrategyMappings(staticConfig.getMapping());
             }
-            catch (Throwable t)
+            catch (MissingResourceException e)
             {
-                //do nothing - it was just a try
-            }
-
-            //setup custom mapping - overrides all other mappings
-            String customMappingBaseName = WebXmlParameter.CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING;
-            if (customMappingBaseName != null)
-            {
-                try
-                {
-                    staticConfig = new StaticResourceBundleConfiguration();
-                    staticConfig.setSourceOfMapping(customMappingBaseName);
-                    setupStrategyMappings(staticConfig.getMapping());
-                }
-                catch (MissingResourceException e)
-                {
-                    e.printStackTrace();
-                }
+                e.printStackTrace();
             }
         }
     }
@@ -218,5 +181,10 @@ public class DefaultValidationStrategyFactory implements ClassMappingFactory<Str
         {
             addMapping(mapping.getSource(), mapping.getTarget());
         }
+    }
+
+    protected List<NameMapper<String>> getNameMapperList()
+    {
+        return this.nameMapperList;
     }
 }
