@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.mapper.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

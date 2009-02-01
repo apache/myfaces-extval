@@ -38,6 +38,7 @@ import javax.el.ValueExpression;
 import junit.framework.TestCase;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.util.TestUtils;
 import org.apache.myfaces.extensions.validator.mock.ExtValMockApplicationFactory;
@@ -151,8 +152,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
         renderKitFactory.addRenderKit("HTML_BASIC", renderKit);        
         
         // additional setup not provided automatically by the shale mock stuff
-        facesContext.getExternalContext().getApplicationMap().put(
-                MyfacesConfig.class.getName(), new MyfacesConfig());
+        facesContext.getExternalContext().getApplicationMap().put(MyfacesConfig.class.getName(), new MyfacesConfig());
         writer = new MockResponseWriter(new StringWriter(), null, null);
         facesContext.setResponseWriter(writer);
 
@@ -160,6 +160,16 @@ public class AbstractExValViewControllerTestCase extends TestCase
         TestUtils.addDefaultValidators(facesContext);
                 
         expressionFactory = (MockExpressionFactory)application.getExpressionFactory();
+
+        //execute startup listener
+        new ExtValStartupListener() {
+            @Override
+            protected void init()
+            {
+                super.init();
+            }
+        }.init();
+
         new PropertyValidationModuleStartupListener().init();
     }
 

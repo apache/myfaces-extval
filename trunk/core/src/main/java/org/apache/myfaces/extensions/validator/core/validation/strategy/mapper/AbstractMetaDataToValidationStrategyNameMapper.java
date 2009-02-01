@@ -29,11 +29,11 @@ import org.apache.commons.logging.LogFactory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractAnnotationToValidationStrategyNameMapper implements NameMapper<String>
+public abstract class AbstractMetaDataToValidationStrategyNameMapper implements NameMapper<String>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public AbstractAnnotationToValidationStrategyNameMapper()
+    public AbstractMetaDataToValidationStrategyNameMapper()
     {
         if(logger.isDebugEnabled())
         {

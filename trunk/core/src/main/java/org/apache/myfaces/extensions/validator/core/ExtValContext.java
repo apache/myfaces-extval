@@ -50,7 +50,7 @@ public class ExtValContext
 
     private static ExtValContext extValContext = new ExtValContext();
 
-    private FactoryFinder factoryFinder = new DefaultFactoryFinder();
+    private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
     private List<String> deniedInterceptors = new ArrayList<String>();
     private List<ProcessedInformationRecorder> processedInformationRecorders =

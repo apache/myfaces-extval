@@ -16,23 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core.factory;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default implementation which maps ExtVal Annotations to ExtVal ValidationStrategies.
- *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultAnnotationToValidationStrategyNameMapper extends AbstractMetaDataToValidationStrategyNameMapper
+@UsageInformation(UsageCategory.API)
+public interface ClassMappingFactory<P, R>
 {
-    public String createName(String metaDataKey)
-    {
-        return InternalConventionProvider.getValidationStrategyClassName(metaDataKey);
-    }
+    R create(P source);
 }
