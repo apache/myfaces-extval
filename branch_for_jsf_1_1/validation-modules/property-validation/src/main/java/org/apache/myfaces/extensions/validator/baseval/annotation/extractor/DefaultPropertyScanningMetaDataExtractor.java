@@ -23,10 +23,12 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 
@@ -37,6 +39,15 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMetaDataExtractor
 {
+    private DefaultPropertyScanningMetaDataExtractor()
+    {
+    }
+
+    public static MetaDataExtractor getInstance()
+    {
+        return ExtValUtils.createInterceptedMetaDataExtractor(new DefaultPropertyScanningMetaDataExtractor());
+    }
+
     @Override
     @ToDo(Priority.MEDIUM)
     public PropertyInformation extract(FacesContext facesContext, Object object)

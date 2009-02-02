@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAw
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
@@ -54,12 +55,12 @@ import java.util.MissingResourceException;
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFactory
-        implements ClassMappingFactory<String, ValidationStrategy>
+        implements ClassMappingFactory<MetaDataEntry, ValidationStrategy>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
     private Map<String, String> metaDataKeyToValidationStrategyMapping = null;
-    private List<NameMapper<String>> nameMapperList = new ArrayList<NameMapper<String>>();
+    private List<NameMapper<MetaDataEntry>> nameMapperList = new ArrayList<NameMapper<MetaDataEntry>>();
 
     public DefaultValidationStrategyFactory()
     {
@@ -69,24 +70,24 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
         }
     }
 
-    public ValidationStrategy create(String metaDataKey)
+    public ValidationStrategy create(MetaDataEntry metaDataEntry)
     {
         if (metaDataKeyToValidationStrategyMapping == null)
         {
             initStaticMappings();
         }
 
-        if (metaDataKeyToValidationStrategyMapping.containsKey(metaDataKey))
+        if (metaDataKeyToValidationStrategyMapping.containsKey(metaDataEntry.getKey()))
         {
-            return getValidationStrategyInstance(metaDataKeyToValidationStrategyMapping.get(metaDataKey));
+            return getValidationStrategyInstance(metaDataKeyToValidationStrategyMapping.get(metaDataEntry.getKey()));
         }
 
         ValidationStrategy validationStrategy;
         String strategyName;
         //null -> use name mappers
-        for (NameMapper<String> nameMapper : nameMapperList)
+        for (NameMapper<MetaDataEntry> nameMapper : this.nameMapperList)
         {
-            strategyName = nameMapper.createName(metaDataKey);
+            strategyName = nameMapper.createName(metaDataEntry);
 
             if (strategyName == null)
             {
@@ -97,7 +98,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
 
             if (validationStrategy != null)
             {
-                addMapping(metaDataKey, strategyName);
+                addMapping(metaDataEntry.getKey(), strategyName);
                 return validationStrategy;
             }
         }
@@ -183,7 +184,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
         }
     }
 
-    protected List<NameMapper<String>> getNameMapperList()
+    protected List<NameMapper<MetaDataEntry>> getNameMapperList()
     {
         return this.nameMapperList;
     }

@@ -49,8 +49,14 @@ public class PatternMetaDataTransformer implements MetaDataTransformer
         String validationErrorMsgKey = (annotation).validationErrorMsgKey();
         Locale currentLocale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
+        MetaDataEntry tmpMetaDataEntry = new MetaDataEntry();
+        tmpMetaDataEntry.setKey(annotation.annotationType().getName());
+        tmpMetaDataEntry.setValue(annotation);
+        //needed for jsr303 integration
+        tmpMetaDataEntry.setProperties(metaDataEntry.getProperties());
+
         ValidationStrategy validationStrategy =
-            ExtValUtils.getValidationStrategyForMetaData(annotation.annotationType().getName());
+            ExtValUtils.getValidationStrategyForMetaDataEntry(tmpMetaDataEntry);
 
         String validationErrorMsg = ExtValUtils.getMessageResolverForValidationStrategy(validationStrategy)
             .getMessage(validationErrorMsgKey, currentLocale);
