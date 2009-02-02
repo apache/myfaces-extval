@@ -16,24 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core.interceptor;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 
 /**
- * Default implementation which maps ExtVal Annotations to ExtVal ValidationStrategies.
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since 1.x.2
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultAnnotationToValidationStrategyNameMapper extends AbstractMetaDataToValidationStrategyNameMapper
+@UsageInformation(UsageCategory.API)
+public interface MetaDataExtractionInterceptor
 {
-    public String createName(MetaDataEntry metaDataEntry)
-    {
-        return InternalConventionProvider.getValidationStrategyClassName(metaDataEntry.getKey());
-    }
+    /**
+     *
+     * @param propertyInformation the information entry which contains information about the property
+     */
+    void afterExtracting(PropertyInformation propertyInformation);
 }

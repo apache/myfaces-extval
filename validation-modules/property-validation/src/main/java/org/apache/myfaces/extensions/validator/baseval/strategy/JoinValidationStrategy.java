@@ -44,7 +44,7 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
             UIComponent uiComponent, MetaDataEntry metaDataEntry,
             Object convertedObject) throws ValidatorException
     {
-        MetaDataExtractor extractor = new DefaultPropertyScanningMetaDataExtractor();
+        MetaDataExtractor extractor = DefaultPropertyScanningMetaDataExtractor.getInstance();
 
         String[] targetExpressions = metaDataEntry.getValue(JoinValidation.class).value();
 
@@ -58,7 +58,7 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
 
             for (MetaDataEntry entry : extractor.extract(facesContext, propertyDetails).getMetaDataEntries())
             {
-                validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+                validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
 
                 if (validationStrategy != null)
                 {
