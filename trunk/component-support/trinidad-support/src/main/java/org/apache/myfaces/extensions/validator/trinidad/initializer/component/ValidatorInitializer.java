@@ -36,7 +36,7 @@ import java.util.Map;
  */
 @UsageInformation(value = UsageCategory.INTERNAL)
 @ToDo(value = Priority.LOW, description = "impl. trinidad e-mail validator")
-public class ValidatorInitializer implements ComponentInitializer
+class ValidatorInitializer implements ComponentInitializer
 {
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
