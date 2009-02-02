@@ -26,8 +26,10 @@ import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -60,16 +62,16 @@ public class ExtValUtils
     private static final String JAVAX_FACES_MAXIMUM = "javax.faces.validator.LengthValidator.MAXIMUM";
     private static final String JAVAX_FACES_MAXIMUM_DETAIL = "javax.faces.validator.LengthValidator.MAXIMUM_detail";
 
-    public static ValidationStrategy getValidationStrategyForMetaData(String metaDataKey)
+    public static ValidationStrategy getValidationStrategyForMetaDataEntry(MetaDataEntry metaDataEntry)
     {
         return ((ClassMappingFactory<Object, ValidationStrategy>) ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
-                .create(metaDataKey);
+                .create(metaDataEntry);
     }
 
     public static void registerMetaDataToValidationStrategyNameMapper(
-            NameMapper<String> metaDataToValidationStrategyNameMapper)
+            NameMapper<MetaDataEntry> metaDataToValidationStrategyNameMapper)
     {
         (ExtValContext.getContext()
                 .getFactoryFinder()
@@ -166,6 +168,23 @@ public class ExtValUtils
         }
 
         return result;
+    }
+
+    public static MetaDataExtractor createInterceptedMetaDataExtractor(final MetaDataExtractor metaDataExtractor)
+    {
+        return new MetaDataExtractor()
+        {
+            public PropertyInformation extract(FacesContext facesContext, Object object)
+            {
+                PropertyInformation result = metaDataExtractor.extract(facesContext, object);
+                for(MetaDataExtractionInterceptor metaDataExtractionInterceptor :
+                        ExtValContext.getContext().getMetaDataExtractionInterceptors())
+                {
+                    metaDataExtractionInterceptor.afterExtracting(result);
+                }
+                return result;
+            }
+        };
     }
 
     public static MessageResolver getMessageResolverForValidationStrategy(ValidationStrategy validationStrategy)

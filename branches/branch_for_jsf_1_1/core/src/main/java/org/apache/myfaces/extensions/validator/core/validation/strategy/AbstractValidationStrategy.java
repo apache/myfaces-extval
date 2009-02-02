@@ -27,7 +27,6 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
 
 /**
@@ -96,7 +95,7 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
                         ": throw original exception after processAfterValidatorException");
                 }
 
-                throw new ConverterException(e.getFacesMessage(), e);
+                throw e;
             }
 
             if(logger.isTraceEnabled())
