@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.trinidad.initializer.component.Tr
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRendererProxy;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadRendererInterceptor;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -58,6 +59,13 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
         if(deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true"))
         {
             ExtValContext.getContext().addComponentInitializer(new TrinidadComponentInitializer());
+        }
+
+        String deactivateInitCoreOutputLabel = WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION;
+
+        if(deactivateInitCoreOutputLabel == null || !deactivateInitCoreOutputLabel.equalsIgnoreCase("true"))
+        {
+            ExtValContext.getContext().registerRendererInterceptor(new TrinidadRendererInterceptor());
         }
 
         String deactivateTrinidadValidationExceptionInterceptor =

@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
 @UsageInformation(UsageCategory.INTERNAL)
-public class DoubleRangeInitializer extends TrinidadComponentInitializer
+class DoubleRangeInitializer extends TrinidadComponentInitializer
 {
     @Override
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
@@ -70,7 +70,8 @@ public class DoubleRangeInitializer extends TrinidadComponentInitializer
             }
         }
         
-        if(informationAdded && doubleRangeValidator instanceof ClientValidator)
+        if(informationAdded &&
+                doubleRangeValidator instanceof ClientValidator && uiComponent instanceof EditableValueHolder)
         {
             ((EditableValueHolder)uiComponent).addValidator(
                     new ExtValTrinidadClientValidatorWrapper((ClientValidator)doubleRangeValidator));
