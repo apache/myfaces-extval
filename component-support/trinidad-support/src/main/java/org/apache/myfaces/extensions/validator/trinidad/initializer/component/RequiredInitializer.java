@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.trinidad.util.TrinidadUtils;
+import org.apache.myfaces.trinidad.component.core.output.CoreOutputLabel;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -33,7 +35,7 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class RequiredInitializer extends TrinidadComponentInitializer
+class RequiredInitializer extends TrinidadComponentInitializer
 {
     @Override
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
@@ -43,18 +45,35 @@ public class RequiredInitializer extends TrinidadComponentInitializer
            metaData.containsKey(CommonMetaDataKeys.WEAK_REQUIRED)||
            metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION))
         {
-            if((Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED)) ||
+            if((
+                    (!Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)) &&
+                    Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED))) ||
                  Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
                 &&
                 Boolean.TRUE.equals(isComponentRequired(uiComponent)))
             {
-                ((EditableValueHolder)uiComponent).setRequired(true);
+                if(uiComponent instanceof EditableValueHolder)
+                {
+                    ((EditableValueHolder)uiComponent).setRequired(true);
+                }
+                else if (uiComponent instanceof CoreOutputLabel)
+                {
+                    ((CoreOutputLabel)uiComponent).setShowRequired(true);
+                }
+
                 return true;
             }
             else if(Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)) &&
                    !Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
             {
-                ((EditableValueHolder)uiComponent).setRequired(false);
+                if(uiComponent instanceof EditableValueHolder)
+                {
+                    ((EditableValueHolder)uiComponent).setRequired(false);
+                }
+                else if (uiComponent instanceof CoreOutputLabel)
+                {
+                    ((CoreOutputLabel)uiComponent).setShowRequired(false);
+                }
                 return true;
             }
         }
@@ -63,6 +82,16 @@ public class RequiredInitializer extends TrinidadComponentInitializer
 
     protected Boolean isComponentRequired(UIComponent uiComponent)
     {
+        if(uiComponent instanceof CoreOutputLabel)
+        {
+            uiComponent = TrinidadUtils.findLabeledEditableComponent((CoreOutputLabel) uiComponent);
+
+            if(uiComponent == null)
+            {
+                return false;
+            }
+        }
+        
         //compare with false so true = true or null
         boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
                 uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isReadOnly")));
