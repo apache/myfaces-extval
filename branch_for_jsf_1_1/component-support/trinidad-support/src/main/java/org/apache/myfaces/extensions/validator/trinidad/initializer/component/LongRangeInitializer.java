@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
 @UsageInformation(UsageCategory.INTERNAL)
-public class LongRangeInitializer extends TrinidadComponentInitializer
+class LongRangeInitializer extends TrinidadComponentInitializer
 {
     @Override
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
@@ -70,12 +70,13 @@ public class LongRangeInitializer extends TrinidadComponentInitializer
             }
         }
 
-        if(informationAdded && longRangeValidator instanceof ClientValidator)
+        if(informationAdded &&
+                longRangeValidator instanceof ClientValidator && uiComponent instanceof EditableValueHolder)
         {
-            ((EditableValueHolder)uiComponent).addValidator(
-                    new ExtValTrinidadClientValidatorWrapper((ClientValidator)longRangeValidator));
+                ((EditableValueHolder)uiComponent).addValidator(
+                        new ExtValTrinidadClientValidatorWrapper((ClientValidator)longRangeValidator));
 
-            return true;
+                return true;
         }
         return false;
     }
