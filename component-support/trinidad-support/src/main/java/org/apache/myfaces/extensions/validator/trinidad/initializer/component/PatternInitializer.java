@@ -38,7 +38,7 @@ import java.util.Map;
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
 @UsageInformation(UsageCategory.INTERNAL)
-public class PatternInitializer extends TrinidadComponentInitializer
+class PatternInitializer extends TrinidadComponentInitializer
 {
     @Override
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
@@ -62,7 +62,7 @@ public class PatternInitializer extends TrinidadComponentInitializer
             regExpValidator.setMessageDetailNoMatch((String)metaData.get(
                 CommonMetaDataKeys.PATTERN_VALIDATION_ERROR_MESSAGE));
 
-            if(regExpValidator instanceof ClientValidator)
+            if(regExpValidator instanceof ClientValidator && uiComponent instanceof EditableValueHolder)
             {
                 ((EditableValueHolder)uiComponent).addValidator(
                         new ExtValTrinidadClientValidatorWrapper((ClientValidator)regExpValidator));

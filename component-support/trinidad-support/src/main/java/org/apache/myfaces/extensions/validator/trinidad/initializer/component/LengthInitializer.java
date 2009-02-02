@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadClientValidatorWrapper;
 import org.apache.myfaces.trinidad.validator.ClientValidator;
+import org.apache.myfaces.trinidad.component.core.output.CoreOutputLabel;
 
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -39,7 +40,7 @@ import java.util.Map;
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")
 @UsageInformation(UsageCategory.INTERNAL)
-public class LengthInitializer extends TrinidadComponentInitializer
+class LengthInitializer extends TrinidadComponentInitializer
 {
     @Override
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
@@ -86,8 +87,23 @@ public class LengthInitializer extends TrinidadComponentInitializer
 
         if(informationAdded && lengthValidator instanceof ClientValidator)
         {
-            ((EditableValueHolder)uiComponent).addValidator(
-                    new ExtValTrinidadClientValidatorWrapper((ClientValidator)lengthValidator));
+            if(uiComponent instanceof EditableValueHolder)
+            {
+                ((EditableValueHolder)uiComponent).addValidator(
+                        new ExtValTrinidadClientValidatorWrapper((ClientValidator)lengthValidator));
+            }
+            else if (uiComponent instanceof CoreOutputLabel)
+            {
+                if(lengthValidator.getMinimum() > 0)
+                {
+                    ((CoreOutputLabel)uiComponent).setShowRequired(true);
+                }
+
+                if(Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)))
+                {
+                    ((CoreOutputLabel)uiComponent).setShowRequired(false);
+                }
+            }
 
             return true;
         }
