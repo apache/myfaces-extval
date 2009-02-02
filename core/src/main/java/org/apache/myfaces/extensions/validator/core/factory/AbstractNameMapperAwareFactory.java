@@ -43,7 +43,7 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
         }
     }
 
-    public synchronized void deregister(Class classToDeregister)
+    public synchronized void deregister(Class<? extends NameMapper> classToDeregister)
     {
         Iterator<NameMapper<T>> nameMapperIterator = getNameMapperList().iterator();
         while(nameMapperIterator.hasNext())
@@ -57,7 +57,7 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
         }
     }
 
-    public void deny(Class classToDeny)
+    public void deny(Class<? extends NameMapper> classToDeny)
     {
         deregister(classToDeny);
 

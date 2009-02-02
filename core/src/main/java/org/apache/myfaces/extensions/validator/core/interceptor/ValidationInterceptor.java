@@ -27,6 +27,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -35,6 +37,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
+import javax.faces.validator.ValidatorException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
@@ -48,7 +51,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 {
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-        throws IOException
+            throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
         initComponent(facesContext, uiComponent);
     }
@@ -73,7 +76,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         Map<String, Object> metaData = new HashMap<String, Object>();
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+            validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
 
             if (validationStrategy != null)
             {
@@ -101,15 +104,19 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                     }
                 }
 
-                if(Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)))
+                if(!metaData.isEmpty() &&
+                        Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)))
                 {
                     metaData.put(CommonMetaDataKeys.SKIP_VALIDATION, true);
                 }
 
                 //get component initializer for the current component and configure it
                 //also in case of skipped validation to reset e.g. the required attribute
-                ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
-            }
+                if(!metaData.isEmpty())
+                {
+                    ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
+                }
+           }
         }
 
         if(logger.isTraceEnabled())
@@ -120,7 +127,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
     @Override
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
-        throws ConverterException
+            throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
 
@@ -135,7 +142,14 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
             }
         }
 
-        processValidation(facesContext, uiComponent, convertedObject);
+        try
+        {
+            processValidation(facesContext, uiComponent, convertedObject);
+        }
+        catch (ValidatorException e)
+        {
+            throw new ConverterException(e.getFacesMessage(), e);
+        }
     }
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
@@ -156,7 +170,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+            validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
 
             if (validationStrategy != null)
             {
