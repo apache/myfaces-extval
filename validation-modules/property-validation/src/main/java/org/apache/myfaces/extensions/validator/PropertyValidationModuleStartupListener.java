@@ -19,8 +19,11 @@
 package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
@@ -30,6 +33,9 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -85,5 +91,17 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 
         ExtValContext.getContext().denyRendererInterceptor(ValidationInterceptor.class);
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptorWithSkipValidationSupport());
+
+        String key = ExtValContext.getContext().getInformationProviderBean()
+                    .get(CustomInformation.BASE_PACKAGE) + CommonMetaDataKeys.SKIP_VALIDATION.toUpperCase();
+        List<Class> markerList = (List<Class>)ExtValContext.getContext().getGlobalProperty(key);
+
+        if(markerList == null)
+        {
+            markerList = new ArrayList<Class>();
+            ExtValContext.getContext().addGlobalProperty(key, markerList);
+        }
+        
+        markerList.add(SkipValidationSupport.class);
     }
 }
