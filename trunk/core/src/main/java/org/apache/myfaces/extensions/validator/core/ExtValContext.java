@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Compon
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
@@ -58,6 +59,7 @@ public class ExtValContext
 
     private List<ComponentInitializer> componentInitializers;
     private List<ValidationExceptionInterceptor> validationExceptionInterceptors;
+    private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors;
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
@@ -127,6 +129,42 @@ public class ExtValContext
                 if(logger.isTraceEnabled())
                 {
                     logger.trace(validationExceptionInterceptor.getClass().getName() + " added");
+                }
+            }
+        }
+    }
+
+    private void lazyInitMetaDataExtractionInterceptors()
+    {
+        if(this.metaDataExtractionInterceptors != null)
+        {
+            return;
+        }
+
+        this.metaDataExtractionInterceptors = new ArrayList<MetaDataExtractionInterceptor>();
+
+        List<String> metaDataExtractionInterceptorClassNames = new ArrayList<String>();
+
+        metaDataExtractionInterceptorClassNames
+            .add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTION_INTERCEPTOR);
+        metaDataExtractionInterceptorClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().get(
+                    CustomInformation.META_DATA_EXTRACTION_INTERCEPTOR));
+
+        MetaDataExtractionInterceptor metaDataExtractionInterceptor;
+        for (String validationExceptionInterceptorName : metaDataExtractionInterceptorClassNames)
+        {
+            metaDataExtractionInterceptor =
+                (MetaDataExtractionInterceptor)
+                        ClassUtils.tryToInstantiateClassForName(validationExceptionInterceptorName);
+
+            if (metaDataExtractionInterceptor != null)
+            {
+                this.metaDataExtractionInterceptors.add(metaDataExtractionInterceptor);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(metaDataExtractionInterceptor.getClass().getName() + " added");
                 }
             }
         }
@@ -215,6 +253,18 @@ public class ExtValContext
     {
         lazyInitValidationExceptionInterceptors();
         return validationExceptionInterceptors;
+    }
+
+    public void addMetaDataExtractionInterceptor(MetaDataExtractionInterceptor metaDataExtractionInterceptor)
+    {
+        lazyInitMetaDataExtractionInterceptors();
+        metaDataExtractionInterceptors.add(metaDataExtractionInterceptor);
+    }
+
+    public List<MetaDataExtractionInterceptor> getMetaDataExtractionInterceptors()
+    {
+        lazyInitMetaDataExtractionInterceptors();
+        return metaDataExtractionInterceptors;
     }
 
     public List<ProcessedInformationRecorder> getProcessedInformationRecorders()

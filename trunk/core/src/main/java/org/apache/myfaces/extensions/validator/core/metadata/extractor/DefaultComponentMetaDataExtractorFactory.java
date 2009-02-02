@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -90,6 +91,6 @@ public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDa
             logger.trace(metaDataExtractor.getClass().getName() + " created");
         }
 
-        return metaDataExtractor;
+        return ExtValUtils.createInterceptedMetaDataExtractor(metaDataExtractor);
     }
 }

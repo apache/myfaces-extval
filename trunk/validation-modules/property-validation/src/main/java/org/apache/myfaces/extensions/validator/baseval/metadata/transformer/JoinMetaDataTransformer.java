@@ -42,7 +42,7 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
 {
     public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
-        MetaDataExtractor extractor = new DefaultPropertyScanningMetaDataExtractor();
+        MetaDataExtractor extractor = DefaultPropertyScanningMetaDataExtractor.getInstance();
 
         String[] targetExpressions = metaDataEntry.getValue(JoinValidation.class).value();
 
@@ -60,7 +60,7 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
             for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
                 propertyDetails).getMetaDataEntries())
             {
-                validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+                validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
 
                 metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 

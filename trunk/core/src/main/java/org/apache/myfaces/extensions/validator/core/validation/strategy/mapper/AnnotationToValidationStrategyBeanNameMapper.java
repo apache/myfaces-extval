@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -39,14 +40,14 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public class AnnotationToValidationStrategyBeanNameMapper extends AbstractMetaDataToValidationStrategyNameMapper
 {
     public static final String PREFIX_FOR_BEAN_MAPPING = "bean:";
-    private NameMapper<String> wrapped;
+    private NameMapper<MetaDataEntry> wrapped;
 
-    public AnnotationToValidationStrategyBeanNameMapper(NameMapper<String> nameMapper)
+    public AnnotationToValidationStrategyBeanNameMapper(NameMapper<MetaDataEntry> nameMapper)
     {
         this.wrapped = nameMapper;
     }
 
-    public String createName(String source)
+    public String createName(MetaDataEntry source)
     {
         String name = wrapped.createName(source);
 
