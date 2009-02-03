@@ -93,23 +93,6 @@ public class CrossValidationUtils
         //value not submitted at this request - use model value (validation against the model)
         if(processedInformationEntry == null)
         {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ProcessedInformationEntry newProcessedInformationEntry = new ProcessedInformationEntry();
-            ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{" + targetKey + "}");
-
-            Object baseObject = ExtValUtils.getELHelper()
-                    .getValueOfExpression(facesContext, valueBindingExpression.getBaseExpression());
-
-            if(baseObject != null)
-            {
-                newProcessedInformationEntry.setBean(baseObject);
-                newProcessedInformationEntry.setConvertedValue(
-                        ExtValUtils.getELHelper().getValueOfExpression(facesContext, valueBindingExpression));
-
-                return  newProcessedInformationEntry;
-            }
-
-            //TODO logging
             return null;
         }
 

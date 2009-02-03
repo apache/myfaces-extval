@@ -88,10 +88,9 @@ class LocalCompareStrategy implements ReferencingStrategy
             processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
         //no target - because there is no target component - value was validated against the model
-        else if(validationTargetEntry != null && isModelAwareValidation)
+        else if(isModelAwareValidation)
         {
-            processModelAwareCrossValidation(
-                    compareStrategy, crossValidationStorageEntry, validationTargetEntry, targetProperty);
+            processModelAwareCrossValidation(compareStrategy, crossValidationStorageEntry, targetProperty);
         }
         else
         {
@@ -182,14 +181,17 @@ class LocalCompareStrategy implements ReferencingStrategy
     private void processModelAwareCrossValidation(
             AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry,
             String targetProperty)
     {
-        validationTargetEntry
-                .setConvertedValue(getValueOfProperty(validationTargetEntry.getBean(), targetProperty));
+        ProcessedInformationEntry targetEntry = new ProcessedInformationEntry();
+
+        targetEntry.setBean(
+                crossValidationStorageEntry.getMetaDataEntry()
+                        .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class).getBaseObject());
+        targetEntry
+                .setConvertedValue(getValueOfProperty(targetEntry.getBean(), targetProperty));
 
         CrossValidationHelper
-                .crossValidateCompareStrategy(
-                        compareStrategy, crossValidationStorageEntry, validationTargetEntry, true);
+                .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, targetEntry, true);
     }
 }

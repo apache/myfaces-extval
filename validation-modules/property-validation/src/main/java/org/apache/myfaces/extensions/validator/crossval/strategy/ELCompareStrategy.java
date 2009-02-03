@@ -28,8 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
-import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -115,11 +113,15 @@ class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorageEntry crossValidationStorageEntry,
             ValueBindingExpression validationTarget)
     {
-        if(logger.isWarnEnabled())
-        {
-            PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
-                    .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
-            logger.warn("couldn't find converted object for " + propertyDetails.getKey());
-        }
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Object targetValue = ExtValUtils.getELHelper().getValueOfExpression(facesContext, validationTarget);
+
+        ProcessedInformationEntry targetEntry = new ProcessedInformationEntry();
+        targetEntry.setBean(
+                ExtValUtils.getELHelper().getValueOfExpression(facesContext, validationTarget.getBaseExpression()));
+        targetEntry.setConvertedValue(targetValue);
+
+        CrossValidationHelper
+                .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, targetEntry, true);
     }
 }
