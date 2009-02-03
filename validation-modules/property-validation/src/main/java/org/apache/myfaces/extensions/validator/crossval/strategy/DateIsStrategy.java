@@ -44,11 +44,19 @@ public class DateIsStrategy extends AbstractCompareStrategy
     protected static final String NOT_EQUAL_DATE_TIME = "not equal";
     protected static final String RESULT_KEY = "result";
     protected static final String COMPARED_VALUE_KEY = "target value";
+    protected static final String REVERSE_COMPARED_VALUE_KEY = "reverse target value";
 
     public boolean useTargetComponentToDisplayErrorMsg(
             CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return true;
+    }
+
+    //TODO test & remove
+    @Override
+    protected boolean handleSourceViolation(CrossValidationStorageEntry entryOfSource)
+    {
+        return false;
     }
 
     public boolean isViolation(Object object1, Object object2, Annotation annotation)
@@ -88,6 +96,7 @@ public class DateIsStrategy extends AbstractCompareStrategy
         if (violationFound)
         {
             this.violationResultStorage.put(COMPARED_VALUE_KEY, object1);
+            this.violationResultStorage.put(REVERSE_COMPARED_VALUE_KEY, object2);
         }
 
         return violationFound;
@@ -103,12 +112,13 @@ public class DateIsStrategy extends AbstractCompareStrategy
      */
     protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)
     {
+        String result = (String) this.violationResultStorage.get(RESULT_KEY);
+
         if (!isTargetComponent)
         {
-            return null;
+            result = reverseResult(result);
         }
 
-        String result = (String) this.violationResultStorage.get(RESULT_KEY);
         if (TOO_EARLY.equals(result))
         {
             return getNotAfterErrorMsgKey((DateIs) annotation);
@@ -120,6 +130,18 @@ public class DateIsStrategy extends AbstractCompareStrategy
         else
         {
             return getNotEqualErrorMsgKey((DateIs) annotation);
+        }
+    }
+
+    private String reverseResult(String result)
+    {
+        if (TOO_EARLY.equals(result))
+        {
+            return TOO_LATE;
+        }
+        else
+        {
+            return TOO_EARLY;
         }
     }
 
@@ -158,6 +180,31 @@ public class DateIsStrategy extends AbstractCompareStrategy
         return null;
     }
 
+    @Override
+    protected String getReverseErrorMessageSummary(Annotation annotation)
+    {
+        return getErrorMessage(getValidationErrorMsgKey(annotation, false), annotation, false);
+    }
+
+    @Override
+    protected String getReverseErrorMessageDetail(Annotation annotation)
+    {
+        try
+        {
+            return getErrorMessage(getValidationErrorMsgKey(annotation, false)
+                    + DETAIL_MESSAGE_KEY_POSTFIX, annotation, false);
+        }
+        catch (MissingResourceException e)
+        {
+            if(logger.isWarnEnabled())
+            {
+                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation)
+                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
+            }
+        }
+        return null;
+    }
+
     protected String getErrorMessage(String key, Annotation annotation, boolean isTargetComponent)
     {
         String message = resolveMessage(key);
@@ -165,8 +212,21 @@ public class DateIsStrategy extends AbstractCompareStrategy
         DateFormat dateFormat = DateFormat.getDateInstance(((DateIs) annotation).errorMessageDateStyle(),
             FacesContext.getCurrentInstance().getViewRoot().getLocale());
 
+        String result;
+
+        if(isTargetComponent)
+        {
+            result = message.replace("{0}",
+                        dateFormat.format((Date) this.violationResultStorage.get(COMPARED_VALUE_KEY)));
+        }
+        else
+        {
+            result = message.replace("{0}",
+                        dateFormat.format((Date) this.violationResultStorage.get(REVERSE_COMPARED_VALUE_KEY)));
+        }
+
         //replace placeholder with the value of the other component
-        return message.replace("{0}", dateFormat.format((Date) this.violationResultStorage.get(COMPARED_VALUE_KEY)));
+        return result;
     }
 
     /*
