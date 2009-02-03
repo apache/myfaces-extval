@@ -82,7 +82,8 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage) throws ValidatorException
     {
-        initValidation(crossValidationStorageEntry);
+        //initCrossValidation is done in the CrossValidationPhaseListener
+
         String[] validationTargets = getValidationTargets(
             crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class));
 
@@ -119,6 +120,13 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     {
         if (!handleTargetViolation(entryOfSource, entryOfTarget))
         {
+            //no target - because there is no target component - value was validated against the model
+            if(entryOfTarget == null)
+            {
+                processTargetComponentAsSourceComponentAfterViolation(entryOfSource);
+                return;
+            }
+
             return;
         }
 
@@ -163,16 +171,11 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         }
     }
 
-    protected final void processSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
+    private void processTargetComponentAsSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
     {
-        if (!handleSourceViolation(entryOfSource))
-        {
-            return;
-        }
-
         //get validation error messages for the current component
-        String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
-        String details = getErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
+        String summary = getReverseErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class));
+        String details = getReverseErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class));
 
         FacesMessage message = getSourceComponentErrorMessage(
             entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
@@ -184,8 +187,30 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         }
         else
         {
-            throw new ValidatorException(new FacesMessage());
+            //TODO logging
         }
+    }
+
+    protected final void processSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
+    {
+        if (handleSourceViolation(entryOfSource))
+        {
+            //get validation error messages for the current component
+            String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
+            String details = getErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
+
+            FacesMessage message = getSourceComponentErrorMessage(
+                entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
+
+            if (message.getSummary() != null || message.getDetail() != null)
+            {
+                //TODO
+                throw new ValidatorException(message);
+            }
+        }
+
+        //just throw a new message - the error message is at the target
+        throw new ValidatorException(new FacesMessage());
     }
 
     protected FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String detail)
@@ -238,19 +263,11 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return getValidationErrorMsgKey(annotation, false);
     }
 
-    /**
-     * the usage of this method requires a new instance
-     * -> in case of validation strategy beans application/singleton isn't allowed
-     */
-    protected void initValidation(CrossValidationStorageEntry crossValidationStorageEntry)
-    {
-    }
-
     protected boolean handleTargetViolation(
             CrossValidationStorageEntry entryOfSource,
             CrossValidationStorageEntry entryOfTarget)
     {
-        return true;
+        return entryOfTarget != null && entryOfTarget.getComponent() != null;
     }
 
     protected boolean handleSourceViolation(CrossValidationStorageEntry entryOfSource)
@@ -261,6 +278,24 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     protected boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return handleTargetViolation(crossValidationStorageEntry, null);
+    }
+
+    /*
+     * no target component (validation against the model) -> get reverse message for source component
+     */
+    protected String getReverseErrorMessageSummary(Annotation annotation)
+    {
+        //if the message is neutral
+        return getErrorMessageSummary(annotation, true);
+    }
+
+    /*
+     * no target component (validation against the model) -> get reverse message for source component
+     */
+    protected String getReverseErrorMessageDetail(Annotation annotation)
+    {
+        //if the message is neutral
+        return getErrorMessageDetail(annotation, true);
     }
 
     /*

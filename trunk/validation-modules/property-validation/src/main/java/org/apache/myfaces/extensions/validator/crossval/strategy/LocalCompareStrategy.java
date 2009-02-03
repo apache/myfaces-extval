@@ -27,10 +27,12 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
+import java.lang.reflect.Method;
 
 /**
  * "[property_name]" ... local validation -> cross-component, but no cross-entity validation
@@ -48,6 +50,12 @@ class LocalCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             String validationTarget, AbstractCompareStrategy compareStrategy)
     {
+        if(validationTarget.contains("."))
+        {
+            //LocalPropertyChainCompareStrategy will continue
+            return false;
+        }
+
         return tryToValidateLocally(
             crossValidationStorageEntry,
             crossValidationStorage,
@@ -61,41 +69,33 @@ class LocalCompareStrategy implements ReferencingStrategy
             String targetKey,
             AbstractCompareStrategy compareStrategy)
     {
-        Map<String, ProcessedInformationEntry> keyConvertedValueMapping = CrossValidationUtils
-                .getOrInitKeyToConvertedValueMapping();
+        Map<String, ProcessedInformationEntry> keyConvertedValueMapping =
+                CrossValidationUtils.getOrInitKeyToConvertedValueMapping();
 
-        String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
-        if (!keyConvertedValueMapping.containsKey(newKey))
-        {
-            return false;
-        }
+        boolean isModelAwareValidation =
+                isModelAwareCrossValidation(crossValidationStorageEntry, keyConvertedValueMapping, targetKey);
 
-        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
-                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+        String targetProperty = targetKey;
 
-        String sourceKey = propertyDetails.getKey();
-
-        if(!sourceKey.contains("."))
-        {
-            throw new IllegalStateException("source path: " + sourceKey + " invalid");
-        }
-
+        String sourceKey = resolveSourceKey(crossValidationStorageEntry);
         targetKey = sourceKey.substring(0, sourceKey.lastIndexOf(".") + 1) + targetKey;
 
         ProcessedInformationEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
                 keyConvertedValueMapping, targetKey, crossValidationStorageEntry);
 
-        if (validationTargetEntry != null)
+        if (validationTargetEntry != null && validationTargetEntry.getComponent() != null && !isModelAwareValidation)
         {
-            CrossValidationHelper
-                    .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
+            processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
+        }
+        //no target - because there is no target component - value was validated against the model
+        else if(validationTargetEntry != null && isModelAwareValidation)
+        {
+            processModelAwareCrossValidation(
+                    compareStrategy, crossValidationStorageEntry, validationTargetEntry, targetProperty);
         }
         else
         {
-            if(logger.isWarnEnabled())
-            {
-                logger.warn("couldn't find converted object for " + propertyDetails.getKey());
-            }
+            unsupportedCase(crossValidationStorageEntry);
         }
 
         return true;
@@ -114,5 +114,82 @@ class LocalCompareStrategy implements ReferencingStrategy
         String result = ValueBindingExpression.replaceOrAddProperty(baseExpression, targetKey)
             .getExpressionString();
         return result.substring(2, result.length() -1);
+    }
+
+    protected Object getValueOfProperty(Object base, String property)
+    {
+        property = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
+        Method targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "get" + property);
+
+        if(targetMethod == null)
+        {
+            targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "is" + property);
+        }
+
+        if(targetMethod == null)
+        {
+            throw new IllegalStateException(
+                "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
+        }
+        return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
+    }
+
+    private boolean isModelAwareCrossValidation(
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            Map<String, ProcessedInformationEntry> keyConvertedValueMapping,
+            String targetKey)
+    {
+        String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
+
+        return !keyConvertedValueMapping.containsKey(newKey);
+
+    }
+
+    private String resolveSourceKey(CrossValidationStorageEntry crossValidationStorageEntry)
+    {
+        PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+
+        String sourceKey = propertyDetails.getKey();
+
+        if(!sourceKey.contains("."))
+        {
+            throw new IllegalStateException("source path: " + sourceKey + " invalid");
+        }
+
+        return sourceKey;
+    }
+
+    private void unsupportedCase(CrossValidationStorageEntry crossValidationStorageEntry)
+    {
+        if(logger.isWarnEnabled())
+        {
+            logger.warn("couldn't find converted object for " +  crossValidationStorageEntry.getMetaDataEntry()
+            .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class).getKey());
+        }
+    }
+
+    private void processCrossComponentValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            ProcessedInformationEntry validationTargetEntry)
+    {
+        CrossValidationHelper
+                .crossValidateCompareStrategy(
+                        compareStrategy, crossValidationStorageEntry, validationTargetEntry, false);
+    }
+
+    private void processModelAwareCrossValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            ProcessedInformationEntry validationTargetEntry,
+            String targetProperty)
+    {
+        validationTargetEntry
+                .setConvertedValue(getValueOfProperty(validationTargetEntry.getBean(), targetProperty));
+
+        CrossValidationHelper
+                .crossValidateCompareStrategy(
+                        compareStrategy, crossValidationStorageEntry, validationTargetEntry, true);
     }
 }
