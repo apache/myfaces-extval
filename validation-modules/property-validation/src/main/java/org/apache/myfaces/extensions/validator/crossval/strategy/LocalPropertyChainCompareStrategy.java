@@ -20,14 +20,16 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * "[local_property.property1.property2]"
@@ -39,10 +41,86 @@ import java.lang.reflect.Method;
 class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 {
     @Override
+    public boolean evaluateReferenceAndValidate(
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            CrossValidationStorage crossValidationStorage,
+            String validationTarget, AbstractCompareStrategy compareStrategy)
+    {
+        if(!validationTarget.contains("."))
+        {
+            //not supported - TODO add logging
+            return false;
+        }
+
+        return tryToValidateLocally(
+            crossValidationStorageEntry,
+            crossValidationStorage,
+            validationTarget,
+            compareStrategy);
+    }
+
+    @Override
     protected boolean tryToValidateLocally(CrossValidationStorageEntry crossValidationStorageEntry,
                                            CrossValidationStorage crossValidationStorage,
                                            String targetKey,
                                            AbstractCompareStrategy compareStrategy)
+    {
+        Map<String, ProcessedInformationEntry> keyConvertedValueMapping =
+                CrossValidationUtils.getOrInitKeyToConvertedValueMapping();
+
+        String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
+
+        if (keyConvertedValueMapping.containsKey(newKey))
+        {
+            ProcessedInformationEntry validationTargetEntry = keyConvertedValueMapping.get(newKey);
+            Object targetValue = validationTargetEntry.getConvertedValue();
+
+            processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, targetValue);
+        }
+        //no target - because there is no target component - value was validated against the model
+        else
+        {
+            processModelAwareCrossValidation(compareStrategy, crossValidationStorageEntry, targetKey);
+        }
+
+        return true;
+    }
+
+    private void processCrossComponentValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            Object targetValue)
+    {
+        //no target - because there is no target component - value was validated against the model
+        if (compareStrategy.isViolation(crossValidationStorageEntry.getConvertedObject(),
+                                targetValue, crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
+        {
+            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
+            tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
+            tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
+            tmpCrossValidationStorageEntry.setConvertedObject(targetValue);
+            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
+
+            //process after violation
+            //just add messages
+            if(crossValidationStorageEntry.getComponent() != null)
+            {
+                compareStrategy.processTargetComponentAfterViolation(
+                        crossValidationStorageEntry, tmpCrossValidationStorageEntry);
+            }
+            else
+            {
+                compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, null);
+            }
+
+            //thow exception
+            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
+        }
+    }
+
+    private void processModelAwareCrossValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry, String targetKey)
     {
         PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
             .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
@@ -58,47 +136,12 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 
         Object targetValue = getValueOfProperty(newBase, targetKey);
 
-        boolean violationFound = false;
+        ProcessedInformationEntry targetEntry = new ProcessedInformationEntry();
+        targetEntry.setBean(newBase);
+        targetEntry.setConvertedValue(targetValue);
 
-        if (compareStrategy.isViolation(crossValidationStorageEntry.getConvertedObject(),
-                                targetValue, crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
-        {
-
-            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-            tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
-            tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
-            tmpCrossValidationStorageEntry.setConvertedObject(targetValue);
-            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
-
-            compareStrategy
-                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
-
-            violationFound = true;
-        }
-
-        if (violationFound)
-        {
-            compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
-        }
-
-        return true;
-    }
-
-    private Object getValueOfProperty(Object base, String property)
-    {
-        property = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
-        Method targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "get" + property);
-
-        if(targetMethod == null)
-        {
-            targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "is" + property);
-        }
-
-        if(targetMethod == null)
-        {
-            throw new IllegalStateException(
-                "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
-        }
-        return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
+        CrossValidationHelper
+                .crossValidateCompareStrategy(
+                        compareStrategy, crossValidationStorageEntry, targetEntry, true);
     }
 }

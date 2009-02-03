@@ -34,39 +34,63 @@ class CrossValidationHelper
 {
     public static void crossValidateCompareStrategy(AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry)
+            ProcessedInformationEntry validationTargetEntry,
+            boolean isModelAwareValidation)
     {
-        boolean violationFound = false;
-
         if (compareStrategy.isViolation(
                 crossValidationStorageEntry.getConvertedObject(),
                 validationTargetEntry.getConvertedValue(),
                 crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
         {
-
-            CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
-            if (compareStrategy.useTargetComponentToDisplayErrorMsg(crossValidationStorageEntry))
+            //process after violation
+            //just add messages
+            if(!isModelAwareValidation)
             {
-                tmpCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
-                tmpCrossValidationStorageEntry.setClientId(validationTargetEntry.getClientId());
+                processTargetAfterCrossComponentValidation(
+                        compareStrategy, crossValidationStorageEntry, validationTargetEntry);
             }
             else
             {
-                tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
-                tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
+                processTargetAfterModelAwareCrossValidation(
+                        compareStrategy, crossValidationStorageEntry);
             }
-            tmpCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
-            tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
 
-            compareStrategy
-                    .processTargetComponentAfterViolation(crossValidationStorageEntry, tmpCrossValidationStorageEntry);
-
-            violationFound = true;
-        }
-
-        if (violationFound)
-        {
+            //thow exception
             compareStrategy.processSourceComponentAfterViolation(crossValidationStorageEntry);
         }
+    }
+
+    private static void processTargetAfterCrossComponentValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry sourceCrossValidationStorageEntry,
+            ProcessedInformationEntry validationTargetEntry)
+    {
+        CrossValidationStorageEntry targetCrossValidationStorageEntry = new CrossValidationStorageEntry();
+
+        if (compareStrategy.useTargetComponentToDisplayErrorMsg(sourceCrossValidationStorageEntry))
+        {
+            targetCrossValidationStorageEntry.setComponent(validationTargetEntry.getComponent());
+            targetCrossValidationStorageEntry.setClientId(validationTargetEntry.getClientId());
+        }
+        else
+        {
+            targetCrossValidationStorageEntry.setComponent(sourceCrossValidationStorageEntry.getComponent());
+            targetCrossValidationStorageEntry.setClientId(sourceCrossValidationStorageEntry.getClientId());
+        }
+
+        targetCrossValidationStorageEntry.setConvertedObject(validationTargetEntry.getConvertedValue());
+        targetCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
+
+        //add message
+        compareStrategy.processTargetComponentAfterViolation(
+                sourceCrossValidationStorageEntry, targetCrossValidationStorageEntry);
+    }
+
+    private static void processTargetAfterModelAwareCrossValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry)
+    {
+        //no target - because there is no target component - value was validated against the model
+        compareStrategy.processTargetComponentAfterViolation(crossValidationStorageEntry, null);
     }
 }

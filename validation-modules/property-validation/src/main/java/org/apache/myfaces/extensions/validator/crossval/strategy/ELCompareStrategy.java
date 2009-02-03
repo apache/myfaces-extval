@@ -56,8 +56,10 @@ class ELCompareStrategy implements ReferencingStrategy
         if (ExtValUtils.getELHelper().isELTermWellFormed(validationTarget) &&
             ExtValUtils.getELHelper().isELTermValid(FacesContext.getCurrentInstance(), validationTarget))
         {
-            tryToValidateValueBinding(crossValidationStorageEntry,
-                new ValueBindingExpression(validationTarget), crossValidationStorage, compareStrategy);
+            tryToValidateValueBinding(
+                    crossValidationStorageEntry,
+                    new ValueBindingExpression(validationTarget), crossValidationStorage, compareStrategy);
+
             return true;
         }
         return false;
@@ -70,29 +72,54 @@ class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             AbstractCompareStrategy compareStrategy)
     {
-        Map<String, ProcessedInformationEntry> keyConvertedValueMapping = CrossValidationUtils
-                .getOrInitKeyToConvertedValueMapping();
-
-        ProcessedInformationEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
-                keyConvertedValueMapping,
-                CrossValidationUtils.convertValueBindingExpressionToProcessedInformationKey(validationTarget),
-                crossValidationStorageEntry);
+        ProcessedInformationEntry validationTargetEntry =
+                resolveTargetForCrossComponentValidation(crossValidationStorageEntry, validationTarget);
 
         if(validationTargetEntry != null)
         {
-            CrossValidationHelper
-                    .crossValidateCompareStrategy(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
+            processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
         else
         {
-            if(logger.isWarnEnabled())
-            {
-                PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
-                        .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
-                logger.warn("couldn't find converted object for " + propertyDetails.getKey());
-            }
+            processModelAwareCrossValidation(compareStrategy, crossValidationStorageEntry, validationTarget);
         }
 
         return true;
+    }
+
+    private ProcessedInformationEntry resolveTargetForCrossComponentValidation(
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            ValueBindingExpression validationTarget)
+    {
+        Map<String, ProcessedInformationEntry> keyConvertedValueMapping =
+                CrossValidationUtils.getOrInitKeyToConvertedValueMapping();
+
+        return CrossValidationUtils.resolveValidationTargetEntry(
+                keyConvertedValueMapping,
+                CrossValidationUtils.convertValueBindingExpressionToProcessedInformationKey(validationTarget),
+                crossValidationStorageEntry);
+    }
+
+    private void processCrossComponentValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            ProcessedInformationEntry validationTargetEntry)
+    {
+        CrossValidationHelper
+                .crossValidateCompareStrategy(
+                        compareStrategy, crossValidationStorageEntry, validationTargetEntry, false);
+    }
+
+    private void processModelAwareCrossValidation(
+            AbstractCompareStrategy compareStrategy,
+            CrossValidationStorageEntry crossValidationStorageEntry,
+            ValueBindingExpression validationTarget)
+    {
+        if(logger.isWarnEnabled())
+        {
+            PropertyDetails propertyDetails = crossValidationStorageEntry.getMetaDataEntry()
+                    .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+            logger.warn("couldn't find converted object for " + propertyDetails.getKey());
+        }
     }
 }
