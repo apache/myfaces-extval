@@ -33,14 +33,14 @@ import java.util.Date;
 /**
  * @author Gerhard Petracek
  */
-public class ELCrossComponentValidationTest extends AbstractExValViewControllerTestCase
+public class ELCrossValTestCase extends AbstractExValViewControllerTestCase
 {
     HtmlInputText inputComponent1 = null;
     HtmlInputText inputComponent2 = null;
 
     UIViewRoot rootComponent = null;
 
-    public ELCrossComponentValidationTest(String name)
+    public ELCrossValTestCase(String name)
     {
         super(name);
         inputComponent1 = null;
@@ -50,15 +50,15 @@ public class ELCrossComponentValidationTest extends AbstractExValViewControllerT
 
     public static Test suite()
     {
-        return new TestSuite(ELCrossComponentValidationTest.class);
+        return new TestSuite(ELCrossValTestCase.class);
     }
 
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
-        createRequestScopedBean("bean1", new ELCrossValTestDateBean());
-        createRequestScopedBean("bean2", new ELCrossValTestDateBean());
+        createRequestScopedBean("bean1", getEntityInstance());
+        createRequestScopedBean("bean2", getEntityInstance());
 
 
         rootComponent = new UIViewRoot();
@@ -107,8 +107,8 @@ public class ELCrossComponentValidationTest extends AbstractExValViewControllerT
         createValueBinding(inputComponent2, "value", "#{bean2.date2}");
 
         //set model values
-        resolveBean("bean1", ELCrossValTestDateBean.class).setDate2((Date)inputComponent1.getConverter().getAsObject(facesContext, inputComponent1, valueBean1Property2));
-        resolveBean("bean2", ELCrossValTestDateBean.class).setDate1((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
+        resolveBean("bean1", getEntityInstance().getClass()).setDate2((Date)inputComponent1.getConverter().getAsObject(facesContext, inputComponent1, valueBean1Property2));
+        resolveBean("bean2", getEntityInstance().getClass()).setDate1((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
 
 
         //decode
@@ -144,9 +144,9 @@ public class ELCrossComponentValidationTest extends AbstractExValViewControllerT
         createValueBinding(inputComponent2, "value", "#{bean2.date2}");
 
         //set model values
-        resolveBean("bean1", ELCrossValTestDateBean.class).setDate2((Date)inputComponent1.getConverter().getAsObject(facesContext, inputComponent1, valueBean1Property2));
-        resolveBean("bean2", ELCrossValTestDateBean.class).setDate1((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
-        resolveBean("bean2", ELCrossValTestDateBean.class).setDate2((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property2));
+        resolveBean("bean1", getEntityInstance().getClass()).setDate2((Date)inputComponent1.getConverter().getAsObject(facesContext, inputComponent1, valueBean1Property2));
+        resolveBean("bean2", getEntityInstance().getClass()).setDate1((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
+        resolveBean("bean2", getEntityInstance().getClass()).setDate2((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property2));
 
 
         //decode
@@ -158,5 +158,10 @@ public class ELCrossComponentValidationTest extends AbstractExValViewControllerT
         processCrossValValidation();
 
         //no update model needed
+    }
+
+    protected ELCrossValTestDateBean getEntityInstance()
+    {
+        return new ELCrossValTestDateBean();
     }
 }
