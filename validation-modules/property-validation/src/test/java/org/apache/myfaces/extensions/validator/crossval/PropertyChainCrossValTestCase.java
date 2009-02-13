@@ -18,29 +18,32 @@
  */
 package org.apache.myfaces.extensions.validator.crossval;
 
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.html.HtmlForm;
-import javax.faces.component.html.HtmlInputText;
-import javax.faces.convert.DateTimeConverter;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
 import org.apache.myfaces.extensions.validator.AbstractExValViewControllerTestCase;
 
+import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlForm;
+import javax.faces.component.UIViewRoot;
+import javax.faces.convert.DateTimeConverter;
 import java.util.Date;
 
 /**
  * @author Gerhard Petracek
  */
-public class ELCrossValTestCase extends AbstractExValViewControllerTestCase
+public class PropertyChainCrossValTestCase extends AbstractExValViewControllerTestCase
 {
     HtmlInputText inputComponent1 = null;
     HtmlInputText inputComponent2 = null;
 
     UIViewRoot rootComponent = null;
 
-    public ELCrossValTestCase(String name)
+    public static Test suite()
+    {
+        return new TestSuite(PropertyChainCrossValTestCase.class);
+    }
+
+    public PropertyChainCrossValTestCase(String name)
     {
         super(name);
         inputComponent1 = null;
@@ -48,18 +51,11 @@ public class ELCrossValTestCase extends AbstractExValViewControllerTestCase
         rootComponent = null;
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(ELCrossValTestCase.class);
-    }
-
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
         createRequestScopedBean("bean1", getEntityInstance());
-        createRequestScopedBean("bean2", getEntityInstance());
-
 
         rootComponent = new UIViewRoot();
         HtmlForm form = new HtmlForm();
@@ -89,27 +85,22 @@ public class ELCrossValTestCase extends AbstractExValViewControllerTestCase
 
     public void testCrossComponentEqualsValidationCorrect() throws Exception
     {
-        validateELCrossComponentValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "14.05.1983");
+        validatePropertyChainCrossComponentValidationUseCase("14.05.1983", "14.05.1983");
 
         checkMessageCount(0);
     }
 
     public void testCrossComponentEqualsValidationFailedValidation() throws Exception
     {
-        validateELCrossComponentValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "12.12.2008");
+        validatePropertyChainCrossComponentValidationUseCase("14.05.1983", "12.12.2008");
 
         checkMessageCount(2);
     }
 
-    private void validateELCrossComponentValidationUseCase(String valueBean1Property1, String valueBean1Property2, String valueBean2Property1, String valueBean2Property2)
+    private void validatePropertyChainCrossComponentValidationUseCase(String valueBean1Property1, String valueBean2Property2)
     {
         createValueBinding(inputComponent1, "value", "#{bean1.date1}");
-        createValueBinding(inputComponent2, "value", "#{bean2.date2}");
-
-        //set model values
-        resolveBean("bean1", getEntityInstance().getClass()).setDate2((Date)inputComponent1.getConverter().getAsObject(facesContext, inputComponent1, valueBean1Property2));
-        resolveBean("bean2", getEntityInstance().getClass()).setDate1((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
-
+        createValueBinding(inputComponent2, "value", "#{bean1.subBean.date2}");
 
         //decode
         inputComponent1.setSubmittedValue(valueBean1Property1);
@@ -126,26 +117,24 @@ public class ELCrossValTestCase extends AbstractExValViewControllerTestCase
 
     public void testModelAwareCrossEqualsValidationCorrect() throws Exception
     {
-        validateELModelAwareCrossValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "14.05.1983");
+        validateELModelAwareCrossValidationUseCase("14.05.1983", "14.05.1983");
 
         checkMessageCount(0);
     }
 
     public void testModelAwareCrossEqualsValidationFailedValidation() throws Exception
     {
-        validateELModelAwareCrossValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "12.12.2008");
+        validateELModelAwareCrossValidationUseCase("14.05.1983", "12.12.2008");
 
         checkMessageCount(1);
     }
 
-    private void validateELModelAwareCrossValidationUseCase(String valueBean1Property1, String valueBean1Property2, String valueBean2Property1, String valueBean2Property2)
+    private void validateELModelAwareCrossValidationUseCase(String valueBean1Property1, String valueBean2Property1)
     {
         createValueBinding(inputComponent1, "value", "#{bean1.date1}");
 
         //set model values
-        resolveBean("bean1", getEntityInstance().getClass()).setDate2((Date)inputComponent1.getConverter().getAsObject(facesContext, inputComponent1, valueBean1Property2));
-        resolveBean("bean2", getEntityInstance().getClass()).setDate1((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
-        resolveBean("bean2", getEntityInstance().getClass()).setDate2((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property2));
+        resolveBean("bean1", getEntityInstance().getClass()).getSubBean().setDate2((Date)inputComponent2.getConverter().getAsObject(facesContext, inputComponent2, valueBean2Property1));
 
 
         //decode
@@ -159,8 +148,8 @@ public class ELCrossValTestCase extends AbstractExValViewControllerTestCase
         //no update model needed
     }
 
-    protected ELCrossValTestDateBean getEntityInstance()
+    protected PropertyChainCrossValTestDateBean getEntityInstance()
     {
-        return new ELCrossValTestDateBean();
+        return new PropertyChainCrossValTestDateBean();
     }
 }
