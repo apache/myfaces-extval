@@ -61,7 +61,7 @@ import org.apache.shale.test.mock.MockServletContext;
  * overrides <code>setUp()</code> and/or <code>tearDown()</code>, then those
  * methods but call the overwitten method to insure a valid test environment.
  */
-public class AbstractExValViewControllerTestCase extends TestCase
+public abstract class AbstractExValViewControllerTestCase extends TestCase
 {
     protected MockApplication application;
     protected MockServletConfig config;
