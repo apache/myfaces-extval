@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator;
+package org.apache.myfaces.extensions.validator.test;
 
 import java.io.StringWriter;
 import java.net.URL;
@@ -40,10 +40,12 @@ import junit.framework.TestCase;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
-import org.apache.myfaces.extensions.validator.crossval.MockValidationStrategyFactory;
-import org.apache.myfaces.extensions.validator.util.TestUtils;
+import org.apache.myfaces.extensions.validator.test.crossval.MockValidationStrategyFactory;
+import org.apache.myfaces.extensions.validator.test.util.TestUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.mock.ExtValMockApplicationFactory;
+import org.apache.myfaces.extensions.validator.test.mock.ExtValMockApplicationFactory;
+import org.apache.myfaces.extensions.validator.ExtValInformation;
+import org.apache.myfaces.extensions.validator.PropertyValidationModuleStartupListener;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
 import org.apache.shale.test.mock.MockApplication;
 import org.apache.shale.test.mock.MockExternalContext;
@@ -173,7 +175,13 @@ public abstract class AbstractExValViewControllerTestCase extends TestCase
             }
         }.init();
 
-        new PropertyValidationModuleStartupListener().init();
+        new PropertyValidationModuleStartupListener(){
+            @Override
+            protected void init()
+            {
+                super.init();
+            }
+        }.init();
     }
 
     /**

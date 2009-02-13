@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.mock;
+package org.apache.myfaces.extensions.validator.test.mock;
 
 import org.apache.myfaces.extensions.validator.core.el.ExtValELResolver;
 import org.apache.shale.test.el.MockValueExpression;

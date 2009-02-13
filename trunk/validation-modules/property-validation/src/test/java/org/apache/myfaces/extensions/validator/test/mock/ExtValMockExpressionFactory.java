@@ -16,20 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.mock;
+package org.apache.myfaces.extensions.validator.test.mock;
 
-import org.apache.shale.test.mock.MockApplicationFactory;
+import org.apache.shale.test.el.MockExpressionFactory;
 
-import javax.faces.application.Application;
+import javax.el.ELContext;
+import javax.el.ValueExpression;
 
 /**
  * @author Gerhard Petracek
  */
-public class ExtValMockApplicationFactory extends MockApplicationFactory
+public class ExtValMockExpressionFactory extends MockExpressionFactory
 {
     @Override
-    public Application getApplication()
+    public ValueExpression createValueExpression(ELContext context, String expression, Class expectedType)
     {
-        return new ExtValMockApplication(super.getApplication());
+        return new ExtValMockValueExpression(expression, expectedType);
     }
 }

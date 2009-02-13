@@ -16,21 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.mock;
+package org.apache.myfaces.extensions.validator.test.crossval;
 
-import org.apache.shale.test.el.MockExpressionFactory;
-
-import javax.el.ELContext;
-import javax.el.ValueExpression;
+import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
 
 /**
- * @author Gerhard Petracek
+ * @author Leonardo Uribe
  */
-public class ExtValMockExpressionFactory extends MockExpressionFactory
+public class CrossValTestBean
 {
-    @Override
-    public ValueExpression createValueExpression(ELContext context, String expression, Class expectedType)
+
+    private String property1;
+    
+    @Equals("property1")    
+    private String property2;
+    
+    public String getProperty1()
     {
-        return new ExtValMockValueExpression(expression, expectedType);
+        return property1;
+    }
+    public void setProperty1(String property1)
+    {
+        this.property1 = property1;
+    }
+    public String getProperty2()
+    {
+        return property2;
+    }
+    public void setProperty2(String property2)
+    {
+        this.property2 = property2;
     }
 }
