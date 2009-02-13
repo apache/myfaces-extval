@@ -40,6 +40,7 @@ import junit.framework.TestCase;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
+import org.apache.myfaces.extensions.validator.crossval.MockValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.util.TestUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.mock.ExtValMockApplicationFactory;
@@ -123,6 +124,7 @@ public abstract class AbstractExValViewControllerTestCase extends TestCase
         servletContext = new MockServletContext();
         //for testing the fallback
         //servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER", "true");
+        servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_VALIDATION_STRATEGY_FACTORY", MockValidationStrategyFactory.class.getName());
         config = new MockServletConfig(servletContext);
         session = new MockHttpSession();
         session.setServletContext(servletContext);
