@@ -73,9 +73,8 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
         if (keyConvertedValueMapping.containsKey(newKey))
         {
             ProcessedInformationEntry validationTargetEntry = keyConvertedValueMapping.get(newKey);
-            Object targetValue = validationTargetEntry.getConvertedValue();
 
-            processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, targetValue);
+            processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
         //no target - because there is no target component - value was validated against the model
         else
@@ -89,16 +88,17 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
     private void processCrossComponentValidation(
             AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            Object targetValue)
+            ProcessedInformationEntry targetInformationEntry)
     {
-        //no target - because there is no target component - value was validated against the model
-        if (compareStrategy.isViolation(crossValidationStorageEntry.getConvertedObject(),
-                                targetValue, crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
+        if (compareStrategy.isViolation(
+                crossValidationStorageEntry.getConvertedObject(),
+                targetInformationEntry.getConvertedValue(),
+                crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class)))
         {
             CrossValidationStorageEntry tmpCrossValidationStorageEntry = new CrossValidationStorageEntry();
             tmpCrossValidationStorageEntry.setComponent(crossValidationStorageEntry.getComponent());
-            tmpCrossValidationStorageEntry.setClientId(crossValidationStorageEntry.getClientId());
-            tmpCrossValidationStorageEntry.setConvertedObject(targetValue);
+            tmpCrossValidationStorageEntry.setClientId(targetInformationEntry.getClientId());
+            tmpCrossValidationStorageEntry.setConvertedObject(targetInformationEntry.getConvertedValue());
             tmpCrossValidationStorageEntry.setValidationStrategy(compareStrategy);
 
             //process after violation
