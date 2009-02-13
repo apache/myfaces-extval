@@ -23,7 +23,9 @@ import org.apache.shale.test.mock.MockApplication;
 import javax.el.ELContextListener;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
+import javax.el.ELException;
 import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
@@ -59,5 +61,11 @@ public class ExtValMockApplication extends MockApplication
     public ExpressionFactory getExpressionFactory()
     {
         return new ExtValMockExpressionFactory();
+    }
+
+    @Override
+    public Object evaluateExpressionGet(FacesContext facesContext, String expression, Class aClass) throws ELException
+    {
+        return wrapped.evaluateExpressionGet(facesContext, expression, aClass);
     }
 }

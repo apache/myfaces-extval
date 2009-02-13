@@ -41,6 +41,7 @@ import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWr
 import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.util.TestUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.mock.ExtValMockApplicationFactory;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
 import org.apache.shale.test.mock.MockApplication;
@@ -79,7 +80,7 @@ public class AbstractExValViewControllerTestCase extends TestCase
     protected MockHttpSession session;
     protected MockExpressionFactory expressionFactory;
     private ClassLoader threadContextClassLoader;
-        
+
     /** Response Writer */
     private MockResponseWriter writer;
 
@@ -255,5 +256,16 @@ public class AbstractExValViewControllerTestCase extends TestCase
             uiInput.setValueBinding(name, valueBinding);
             uiInput.setValueExpression(name, valueExpression);
         }
+    }
+
+    protected void createRequestScopedBean(String name, Object instance)
+    {
+        createValueBinding(null, "value", "#{" + name + "}");
+        facesContext.getExternalContext().getRequestMap().put(name, instance);
+    }
+
+    protected <T> T resolveBean(String name, Class<T> targetClass)
+    {
+        return (T)ExtValUtils.getELHelper().getBean(name);
     }
 }
