@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.trinidad.util.TrinidadUtils;
 import org.apache.myfaces.trinidad.component.core.output.CoreOutputLabel;
 
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -70,7 +72,7 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
 
         UIComponent targetComponent = TrinidadUtils.findLabeledEditableComponent(coreOutputLabel);
 
-        if(targetComponent == null)
+        if(targetComponent == null || !isComponentEditable(targetComponent))
         {
             return;
         }
@@ -121,18 +123,31 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
         }
     }
 
+    private boolean isComponentEditable(UIComponent uiComponent)
+    {
+        //compare with false so true = true or null
+        boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
+                uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isReadOnly")));
+        boolean isDisabled = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
+                uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isDisabled")));
+
+        return !(isReadOnly || isDisabled);
+    }
+    
+    @SuppressWarnings({"unchecked"})
     private boolean isSkipableValidationStrategy(Class<? extends ValidationStrategy> validationStrategyClass)
     {
         String key = ExtValContext.getContext().getInformationProviderBean()
                 .get(CustomInformation.BASE_PACKAGE) + CommonMetaDataKeys.SKIP_VALIDATION.toUpperCase();
-        List<Class> markerList = (List<Class>)ExtValContext.getContext().getGlobalProperty(key);
+        List<Class<? extends Annotation>> markerList =
+                (List<Class<? extends Annotation>>)ExtValContext.getContext().getGlobalProperty(key);
 
         if(markerList == null)
         {
             return false;
         }
 
-        for(Class currentClass : markerList)
+        for(Class<? extends Annotation> currentClass : markerList)
         {
             if(currentClass.isAnnotation())
             {
