@@ -82,7 +82,7 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
         Map<String, Object> metaData;
         for (MetaDataEntry entry : annotationExtractor.extract(facesContext, targetComponent).getMetaDataEntries())
         {
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
+            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
             {

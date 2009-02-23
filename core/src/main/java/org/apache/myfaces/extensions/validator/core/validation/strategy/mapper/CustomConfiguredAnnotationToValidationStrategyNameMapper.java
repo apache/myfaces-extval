@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -33,7 +32,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
-    AbstractCustomNameMapper<MetaDataEntry>
+    AbstractCustomNameMapper<String>
 {
     protected String getCustomNameMapperClassName()
     {

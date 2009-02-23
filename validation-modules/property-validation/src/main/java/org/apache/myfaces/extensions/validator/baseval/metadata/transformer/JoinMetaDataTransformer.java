@@ -60,7 +60,7 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
             for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
                 propertyDetails).getMetaDataEntries())
             {
-                validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
+                validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
                 metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 
