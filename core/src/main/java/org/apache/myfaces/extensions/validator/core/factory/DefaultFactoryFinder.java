@@ -64,6 +64,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factoryFinder;
     }
 
+    @SuppressWarnings({"unchecked"})
     public final <T> T getFactory(FactoryNames factoryName, Class<T> targetClass)
     {
         if(!(factoryMap.containsKey(factoryName)))

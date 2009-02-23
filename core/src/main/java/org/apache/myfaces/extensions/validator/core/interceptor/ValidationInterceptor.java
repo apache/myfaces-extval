@@ -76,7 +76,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         Map<String, Object> metaData = new HashMap<String, Object>();
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
+            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
             {
@@ -170,7 +170,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
+            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
             {

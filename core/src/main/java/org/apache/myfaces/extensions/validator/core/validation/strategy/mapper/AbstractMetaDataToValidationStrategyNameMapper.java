@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
@@ -30,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractMetaDataToValidationStrategyNameMapper implements NameMapper<MetaDataEntry>
+public abstract class AbstractMetaDataToValidationStrategyNameMapper implements NameMapper<String>
 {
     protected final Log logger = LogFactory.getLog(getClass());
 

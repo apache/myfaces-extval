@@ -62,16 +62,16 @@ public class ExtValUtils
     private static final String JAVAX_FACES_MAXIMUM = "javax.faces.validator.LengthValidator.MAXIMUM";
     private static final String JAVAX_FACES_MAXIMUM_DETAIL = "javax.faces.validator.LengthValidator.MAXIMUM_detail";
 
-    public static ValidationStrategy getValidationStrategyForMetaDataEntry(MetaDataEntry metaDataEntry)
+    public static ValidationStrategy getValidationStrategyForMetaData(String metaDataKey)
     {
-        return ((ClassMappingFactory<Object, ValidationStrategy>) ExtValContext.getContext()
+        return ((ClassMappingFactory<String, ValidationStrategy>) ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, ClassMappingFactory.class))
-                .create(metaDataEntry);
+                .create(metaDataKey);
     }
 
     public static void registerMetaDataToValidationStrategyNameMapper(
-            NameMapper<MetaDataEntry> metaDataToValidationStrategyNameMapper)
+            NameMapper<String> metaDataToValidationStrategyNameMapper)
     {
         (ExtValContext.getContext()
                 .getFactoryFinder()
