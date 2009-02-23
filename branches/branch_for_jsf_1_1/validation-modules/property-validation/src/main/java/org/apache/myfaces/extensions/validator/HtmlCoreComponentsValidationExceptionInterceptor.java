@@ -55,7 +55,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
                                  ValidatorException validatorException,
                                  ValidationStrategy validatorExceptionSource)
     {
-        if(processComponent(uiComponent) && metaDataEntry != null)
+        if(processComponent(uiComponent))
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();
 
@@ -68,7 +68,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
             }
 
             //override the label if the annotation provides a label
-            if(metaDataEntry.getProperty(PropertyInformationKeys.LABEL) != null)
+            if(metaDataEntry != null && metaDataEntry.getProperty(PropertyInformationKeys.LABEL) != null)
             {
                 label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
             }

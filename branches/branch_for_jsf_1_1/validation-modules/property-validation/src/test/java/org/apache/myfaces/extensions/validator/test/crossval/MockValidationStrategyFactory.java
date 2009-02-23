@@ -29,10 +29,10 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 public class MockValidationStrategyFactory extends DefaultValidationStrategyFactory
 {
     @Override
-    public ValidationStrategy create(MetaDataEntry metaDataEntry)
+    public ValidationStrategy create(String metaDataKey)
     {
         //force init so that every test-case setup method can add a mock validation strategy via extval java-api
         ReflectionUtils.tryToInvokeMethod(this,ReflectionUtils.tryToGetMethod(getClass(), "initStaticMappings"));
-        return super.create(metaDataEntry);
+        return super.create(metaDataKey);
     }
 }
