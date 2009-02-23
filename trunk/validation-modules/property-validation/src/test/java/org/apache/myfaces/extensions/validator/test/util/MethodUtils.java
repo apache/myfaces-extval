@@ -27,6 +27,10 @@ import java.util.Map;
 //TODO
 public class MethodUtils
 {
+    private MethodUtils()
+    {
+    }
+
     public static boolean checkMethodCalled(Class usedClass, String methodName, int callCount)
     {
         checkRequiredClass(usedClass);

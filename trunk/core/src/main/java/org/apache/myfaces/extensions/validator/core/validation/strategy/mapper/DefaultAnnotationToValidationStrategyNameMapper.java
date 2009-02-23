@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -32,8 +31,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultAnnotationToValidationStrategyNameMapper extends AbstractMetaDataToValidationStrategyNameMapper
 {
-    public String createName(MetaDataEntry metaDataEntry)
+    public String createName(String metaDataKey)
     {
-        return InternalConventionProvider.getValidationStrategyClassName(metaDataEntry.getKey());
+        return InternalConventionProvider.getValidationStrategyClassName(metaDataKey);
     }
 }
