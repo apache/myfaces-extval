@@ -58,7 +58,7 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
 
             for (MetaDataEntry entry : extractor.extract(facesContext, propertyDetails).getMetaDataEntries())
             {
-                validationStrategy = ExtValUtils.getValidationStrategyForMetaDataEntry(entry);
+                validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
                 if (validationStrategy != null)
                 {
