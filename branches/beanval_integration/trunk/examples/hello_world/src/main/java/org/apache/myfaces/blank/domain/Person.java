@@ -19,8 +19,9 @@
 package org.apache.myfaces.blank.domain;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
+import org.hibernate.validation.constraints.Length;
 
-import javax.persistence.Column;
+import javax.validation.constraints.NotNull;
 
 public class Person
 {
@@ -29,7 +30,8 @@ public class Person
     private String firstName;
 
     //demo for jpa based validation support
-    @Column(nullable = false, length = 10 /*...*/)
+    @NotNull
+    @Length(max = 6)
     private String lastName;
 
     public String getFirstName()
