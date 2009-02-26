@@ -19,11 +19,16 @@
 package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.DefaultMessageInterpolator;
+import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.ExtValMessageInterpolatorAdapter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 
 import javax.faces.context.FacesContext;
 import javax.validation.groups.Default;
+import javax.validation.MessageInterpolator;
+import javax.validation.Validation;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -36,6 +41,11 @@ import java.util.HashMap;
 public class ExtValBeanValidationContext
 {
     private static final String KEY = ExtValBeanValidationContext.class.getName() + ":KEY";
+
+    private static MessageInterpolator defaultMessageInterpolator = new DefaultMessageInterpolator(
+            Validation.buildDefaultValidatorFactory().getMessageInterpolator());
+
+    private static MessageResolver messageResolver;
 
     @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
     private Map<String, List<Class>> currentGroups = new HashMap<String, List<Class>>();
@@ -155,5 +165,20 @@ public class ExtValBeanValidationContext
     public List<PropertyValidationInterceptor> getPropertyValidationInterceptors()
     {
         return this.propertyValidationInterceptors;
+    }
+
+    public MessageInterpolator getMessageInterpolator()
+    {
+        if(messageResolver != null)
+        {
+            return new ExtValMessageInterpolatorAdapter(defaultMessageInterpolator, messageResolver);
+        }
+
+        return defaultMessageInterpolator;
+    }
+
+    public static void setMessageResolver(MessageResolver customMessageResolver)
+    {
+        messageResolver = customMessageResolver;
     }
 }

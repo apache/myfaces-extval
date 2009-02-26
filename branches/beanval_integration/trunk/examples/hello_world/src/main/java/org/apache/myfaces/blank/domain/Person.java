@@ -29,7 +29,7 @@ public class Person
     @Required
     private String firstName;
 
-    //demo for jpa based validation support
+    //demo for bean validation based validation support
     @NotNull
     @Length(max = 6)
     private String lastName;
