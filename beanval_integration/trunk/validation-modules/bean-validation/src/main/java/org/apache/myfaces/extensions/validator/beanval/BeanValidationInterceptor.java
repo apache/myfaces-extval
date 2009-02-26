@@ -122,7 +122,9 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
             interceptor.beforeValidation(uiComponent, propertyInformation, convertedObject);
         }
 
-        Set<ConstraintViolation> violations = this.validationFactory.getValidator()
+        Set<ConstraintViolation> violations = this.validationFactory.usingContext()
+                .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
+                .getValidator()
                 .validateValue(
                         baseBeanClass,
                         propertyName,
@@ -137,13 +139,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
             {
                 ConstraintViolation violation = (ConstraintViolation) violations.toArray()[0];
 
-                this.validationFactory.getMessageInterpolator().interpolate(
-                        violation.getRawMessage(),
-                        violation.getConstraintDescriptor(),
-                        convertedObject,
-                        facesContext.getViewRoot().getLocale());
-
                 String violationMessage = violation.getInterpolatedMessage();
+
                 String labeledMessage = "{0}: " + violationMessage;
                 ValidatorException validatorException = new ValidatorException(
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, labeledMessage, labeledMessage));
