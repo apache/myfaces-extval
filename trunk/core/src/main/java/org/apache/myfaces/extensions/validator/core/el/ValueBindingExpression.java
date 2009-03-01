@@ -53,6 +53,7 @@ public class ValueBindingExpression
     public static ValueBindingExpression replaceProperty(ValueBindingExpression valueBindingExpression,
                                                          String newProperty)
     {
+        //TODO adjustments for isDynamicBaseAndProperty
         if(valueBindingExpression.getProperty().endsWith("']"))
         {
             valueBindingExpression = valueBindingExpression.getBaseExpression();
@@ -73,6 +74,7 @@ public class ValueBindingExpression
         String sourceExpression = valueBindingExpression.getExpressionString();
         String result = sourceExpression.substring(0, sourceExpression.length() - 1);
 
+        //TODO adjustments for isDynamicBaseAndProperty
         if(newProperty.startsWith("['"))
         {
             return new ValueBindingExpression(result + newProperty + "}");
@@ -90,7 +92,8 @@ public class ValueBindingExpression
             throw new IllegalStateException(expression + " is no valid el-expression");
         }
 
-        int index1 = expression.lastIndexOf("']");
+        boolean isDynamicBaseAndProperty = expression.lastIndexOf("']") == -1;
+        int index1 = isDynamicBaseAndProperty ? expression.lastIndexOf("]") : expression.lastIndexOf("']");
         int index2 = expression.lastIndexOf(".");
 
         if(index1 > index2)
@@ -98,9 +101,18 @@ public class ValueBindingExpression
             expression = expression.substring(0, index1);
 
             int index3 = findIndexOfStartingBracket(expression);
-            this.value = expression.substring(index3 + 2, index1);
+            if(isDynamicBaseAndProperty)
+            {
+                this.value = expression.substring(index3 + 1, index1);
+
+            }
+            else
+            {
+                this.value = expression.substring(index3 + 2, index1);
+            }
+
             this.base = new ValueBindingExpression(expression.substring(0, index3) + "}");
-            this.token = "['";
+            this.token = isDynamicBaseAndProperty ? "[" : "['";
         }
         else if( index2 > index1)
         {
@@ -125,7 +137,7 @@ public class ValueBindingExpression
             {
                 return this.value.substring(1, this.value.length() - 1);
             }
-            return this.base.value + this.token + this.value.substring(0, this.value.length()) + "']";
+            //return this.base.value + this.token + this.value.substring(0, this.value.length()) + "']";
         }
         return value;
     }
@@ -144,6 +156,10 @@ public class ValueBindingExpression
             if("['".equals(this.token))
             {
                 return baseExpression.substring(0, baseExpression.length() - 1) + this.token + this.value + "']}";
+            }
+            else if("[".equals(this.token))
+            {
+                return baseExpression.substring(0, baseExpression.length() - 1) + this.token + this.value + "]}";
             }
             return baseExpression.substring(0, baseExpression.length() - 1) + this.token + this.value + "}";
         }

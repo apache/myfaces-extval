@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.el;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.el.ELResolver;
 import javax.el.ELContext;
 import javax.el.VariableMapper;
@@ -32,11 +35,14 @@ import java.beans.FeatureDescriptor;
  */
 public class ExtValELResolver extends ELResolver
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private ELResolver wrapped;
     private Object baseObject;
     private String property;
     //forms the id for cross-validation within complex components
     private String expression;
+    private boolean isPathRecordingStopped = false;
 
     public ExtValELResolver(ELResolver elResolver)
     {
@@ -55,7 +61,11 @@ public class ExtValELResolver extends ELResolver
 
     public String getPath()
     {
-        return expression;
+        if(this.logger.isTraceEnabled())
+        {
+            this.logger.trace("extracted path: " + this.expression);
+        }
+        return this.expression;
     }
 
     public void reset()
@@ -65,17 +75,87 @@ public class ExtValELResolver extends ELResolver
         this.expression = null;
     }
 
+    /**
+     * path recording is performed to get a key for cross-validation<br/>
+     * every base after the first call which is null stops recording<br/>
+     * with a dynamic map syntax the last property in the middle of an expression has to be a string.
+     * such a string result continues the path recording at the next call for the current expression.
+     * <p/>
+     * example: #{bean[bean.propertyNameProvider['nameOfProperty1']]['dynBean'].property}
+     * <p/>
+     * limitation for cross-validation: nameOfProperty1 has to be of type string.
+     * other key types aren't supported yet
+     *
+     * @param elContext wrapped el-context
+     * @param base current base
+     * @param property property to resolve
+     * @return result of the delegated method call
+     */
     public Object getValue(ELContext elContext, Object base, Object property)
     {
+        Object result = this.wrapped.getValue(elContext, base, property);
+
+        //very first call for an expression
         if(this.expression == null)
         {
             this.expression = (String)property;
         }
+        //#{bean[dynBase.propertyName]} -> base of dynBase is null -> stop path recording
+        else if(base == null)
+        {
+            this.isPathRecordingStopped = true;
+        }
         else
+        {
+            boolean propertyExists = false;
+            String propertyName = (String)property;
+            propertyName = propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
+
+            try
+            {
+                if(base.getClass().getMethod("get" + propertyName) != null)
+                {
+                    propertyExists = true;
+                }
+            }
+            catch (NoSuchMethodException e)
+            {
+                try
+                {
+                    if(base.getClass().getMethod("is" + propertyName) != null)
+                    {
+                        propertyExists = true;
+                    }
+                }
+                catch (NoSuchMethodException e1)
+                {
+                    if(this.logger.isTraceEnabled())
+                    {
+                        this.logger.trace("property: " + property +
+                                " isn't used for path - it isn't a property of " + base.getClass());
+                    }
+                }
+            }
+
+            //e.g.: #{bean.subBase.property} -> here we are at subBase
+            if(propertyExists && !this.isPathRecordingStopped)
+            {
+                this.expression += "." + property;
+            }
+            else if(propertyExists && result instanceof String)
+            {
+                this.isPathRecordingStopped = false;
+            }
+        }
+
+        /*
+        if(this.isPathRecordingStopped && result instanceof String)
         {
             this.expression += "." + property;
         }
-        return wrapped.getValue(elContext, base, property);
+        */
+
+        return result;
     }
 
     public Class<?> getType(ELContext elContext, Object o, Object o1)
