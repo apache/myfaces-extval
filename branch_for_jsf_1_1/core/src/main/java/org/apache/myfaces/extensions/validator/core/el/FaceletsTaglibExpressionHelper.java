@@ -135,10 +135,11 @@ class FaceletsTaglibExpressionHelper
         String originalBinding = addedVirtualNames.get("value");
         originalBinding = originalBinding.substring(originalBinding.indexOf("{") + 1, originalBinding.indexOf("}"));
         addedVirtualNames.remove("value");
-        return tryToTransformToRealBinding(originalBinding, addedVirtualNames);
+        return tryToTransformToRealBinding(originalBinding, addedVirtualNames, virtualVars);
     }
 
-    private static String tryToTransformToRealBinding(String originalBinding, Map<String, String> addedVirtualNames)
+    private static String tryToTransformToRealBinding(
+            String originalBinding, Map<String, String> addedVirtualNames, Map<String, String> virtualVars)
     {
         originalBinding = "#{" + originalBinding + "}";
         Iterator nameIterator = addedVirtualNames.keySet().iterator();
@@ -148,12 +149,44 @@ class FaceletsTaglibExpressionHelper
         while(nameIterator.hasNext())
         {
             currentKey = (String) nameIterator.next();
-            currentValue = addedVirtualNames.get(currentKey);
 
+            currentValue = addedVirtualNames.get(currentKey);
             currentValue = currentValue.substring(currentValue.indexOf("{") + 1, currentValue.indexOf("}"));
+
             originalBinding = originalBinding.replace("{" + currentKey + ".", "{" + currentValue + ".");
+            //dynamic base and property
+            originalBinding = originalBinding.replace("{" + currentKey + "[", "{" + currentValue + "[");
+
             originalBinding = originalBinding.replace("." + currentKey + ".", "." + currentValue + ".");
-            originalBinding = originalBinding.replace("[" + currentKey + "]", "[" + currentValue + "]");
+            //dynamic base and property
+            originalBinding = originalBinding.replace("." + currentKey + "[", "." + currentValue + "[");
+
+            originalBinding = originalBinding.replace("[" + currentKey + "]", "['" + currentValue + "']");
+            //dynamic base and property
+            originalBinding = originalBinding.replace("[" + currentKey + "[", "[" + currentValue + "[");
+            originalBinding = originalBinding.replace("[" + currentKey + ".", "[" + currentValue + ".");
+        }
+
+        nameIterator = virtualVars.keySet().iterator();
+
+        while(nameIterator.hasNext())
+        {
+            currentKey = (String) nameIterator.next();
+
+            currentValue = virtualVars.get(currentKey);
+
+            originalBinding = originalBinding.replace("{" + currentKey + ".", "{" + currentValue + ".");
+            //dynamic base and property
+            originalBinding = originalBinding.replace("{" + currentKey + "[", "{" + currentValue + "[");
+
+            originalBinding = originalBinding.replace("." + currentKey + ".", "." + currentValue + ".");
+            //dynamic base and property
+            originalBinding = originalBinding.replace("." + currentKey + "[", "." + currentValue + "[");
+
+            originalBinding = originalBinding.replace("[" + currentKey + "]", "['" + currentValue + "']");
+            //dynamic base and property
+            originalBinding = originalBinding.replace("[" + currentKey + "[", "[" + currentValue + "[");
+            originalBinding = originalBinding.replace("[" + currentKey + ".", "[" + currentValue + ".");
         }
 
         return originalBinding.substring(2, originalBinding.length() - 1);
