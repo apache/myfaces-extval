@@ -49,6 +49,7 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
 import javax.validation.GroupSequence;
+import javax.validation.GroupSequences;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
@@ -202,13 +203,23 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         List<GroupSequence> foundGroupSequencesForCurrentView = new ArrayList<GroupSequence>();
 
-        processClass(firstBean.getClass(), foundGroupSequencesForCurrentView);
-        processFieldsAndProperties(key[0] + "." + key[1], firstBean, key[1], foundGroupSequencesForCurrentView);
-        processFieldsAndProperties(
-                propertyDetails.getKey(),
-                propertyDetails.getBaseObject(),
-                propertyDetails.getProperty(),
-                foundGroupSequencesForCurrentView);
+        if(!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
+                .DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS))
+        {
+            processClass(firstBean.getClass(), foundGroupSequencesForCurrentView, false);
+            processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView, false);
+            processFieldsAndProperties(key[0] + "." + key[1], firstBean, key[1], foundGroupSequencesForCurrentView);
+            processFieldsAndProperties(
+                    propertyDetails.getKey(),
+                    propertyDetails.getBaseObject(),
+                    propertyDetails.getProperty(),
+                    foundGroupSequencesForCurrentView);
+        }
+        else
+        {
+            processClass(firstBean.getClass(), foundGroupSequencesForCurrentView, true);
+            processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView, true);
+        }
 
         for(GroupSequence currentGroupSequence : foundGroupSequencesForCurrentView)
         {
@@ -220,14 +231,32 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         }
     }
 
-    private void processClass(Class classToInspect, List<GroupSequence> foundGroupSequencesForCurrentView)
+    //TODO process super classes and interfaces as well
+    private void processClass(
+            Class classToInspect, List<GroupSequence> foundGroupSequencesForCurrentView, boolean useStandardAnnotations)
     {
-        //TODO process super classes and interfaces as well
-        if(classToInspect.isAnnotationPresent(BeanValidationController.class))
+        if(useStandardAnnotations)
         {
-            addGroupSequencesForCurrentView(
-                    (BeanValidationController) classToInspect.getAnnotation(BeanValidationController.class),
-                    foundGroupSequencesForCurrentView);
+            if(classToInspect.isAnnotationPresent(GroupSequence.class))
+            {
+                foundGroupSequencesForCurrentView
+                        .add((GroupSequence) classToInspect.getAnnotation(GroupSequence.class));
+            }
+
+            if(classToInspect.isAnnotationPresent(GroupSequences.class))
+            {
+                GroupSequences groupSequences = (GroupSequences) classToInspect.getAnnotation(GroupSequences.class);
+                foundGroupSequencesForCurrentView.addAll(Arrays.asList(groupSequences.value()));
+            }
+        }
+        else
+        {
+            if(classToInspect.isAnnotationPresent(BeanValidationController.class))
+            {
+                addGroupSequencesForCurrentView(
+                        (BeanValidationController) classToInspect.getAnnotation(BeanValidationController.class),
+                        foundGroupSequencesForCurrentView);
+            }
         }
     }
 
