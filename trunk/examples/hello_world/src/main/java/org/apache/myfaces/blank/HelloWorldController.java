@@ -19,13 +19,16 @@
 package org.apache.myfaces.blank;
 
 import org.apache.myfaces.blank.domain.Person;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidationController;
 
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
  * 
  */
+@BeanValidationController
 public class HelloWorldController
 {
+    //@BeanValidationController(@ValidateGroup(viewId = "/page2.jsp"))
     private Person person = new Person();
 
     /**

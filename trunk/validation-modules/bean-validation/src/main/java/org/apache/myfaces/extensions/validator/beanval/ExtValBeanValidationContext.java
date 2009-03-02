@@ -129,12 +129,53 @@ public class ExtValBeanValidationContext
     {
         if(this.currentGroups.size() < 1)
         {
-            return new Class[] {Default.class};
+            if(!"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION))
+            {
+                return new Class[] {Default.class};
+            }
+            return new Class[0];
         }
 
-        String key = getGroupKey(viewId, componentId);
+        String key = getGroupKey(viewId, null);
+        Class[] resultsForPage = buildResultFor(key);
 
-        return (Class[]) this.currentGroups.get(key).toArray();
+        key = getGroupKey(viewId, componentId);
+        Class[] resultsForComponent = buildResultFor(key);
+
+        if(resultsForPage.length == 0)
+        {
+            return resultsForComponent;
+        }
+        else if(resultsForComponent.length == 0)
+        {
+            return resultsForPage;
+        }
+
+        return mergeResult(resultsForPage, resultsForComponent);
+    }
+
+    private Class[] buildResultFor(String key)
+    {
+        List<Class> list = this.currentGroups.get(key);
+        int listSize = list != null ? list.size() : 0;
+        Class[] results = new Class[listSize];
+
+        for(int i = 0; i < listSize; i++)
+        {
+            results[i] = this.currentGroups.get(key).get(i);
+        }
+
+        return results;
+    }
+
+    private Class[] mergeResult(Class[] resultsForPage, Class[] resultsForComponent)
+    {
+        Class[] mergedResult = new Class[resultsForPage.length + resultsForComponent.length];
+
+        System.arraycopy(resultsForPage, 0, mergedResult, 0, resultsForPage.length);
+        System.arraycopy(resultsForComponent, 0, mergedResult, resultsForPage.length, resultsForComponent.length);
+
+        return mergedResult;
     }
 
     public void removeGroup(Class groupClass)
