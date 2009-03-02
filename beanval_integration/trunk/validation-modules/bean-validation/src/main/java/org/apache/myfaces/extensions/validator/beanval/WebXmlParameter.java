@@ -31,4 +31,7 @@ public interface WebXmlParameter
 {
     static final String DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION = WebXmlUtils
         .getInitParameter("DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION");
+
+    static final String DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS = WebXmlUtils
+        .getInitParameter("DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS");
 }
