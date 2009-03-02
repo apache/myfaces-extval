@@ -27,10 +27,14 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRendererInterceptor;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidationController;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.ValidateGroup;
+import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
@@ -44,7 +48,11 @@ import javax.faces.application.FacesMessage;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
+import javax.validation.GroupSequence;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.IOException;
 
 /**
@@ -110,6 +118,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
 
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
+
+        addGroupsToContext(propertyInformation, uiComponent.getClientId(facesContext));
         Class baseBeanClass = (propertyInformation.getInformation(
                 PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class)).getBaseObject().getClass();
 
@@ -178,6 +188,78 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         if(logger.isTraceEnabled())
         {
             logger.trace("jsr303 validation finished");
+        }
+    }
+
+    private void addGroupsToContext(PropertyInformation propertyInformation, String clientId)
+    {
+        PropertyDetails propertyDetails = propertyInformation
+                .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+
+        String[] key = propertyDetails.getKey().split("\\.");
+
+        Object firstBean = ExtValUtils.getELHelper().getBean(key[0]);
+
+        List<GroupSequence> foundGroupSequencesForCurrentView = new ArrayList<GroupSequence>();
+
+        processClass(firstBean.getClass(), foundGroupSequencesForCurrentView);
+        processFieldsAndProperties(key[0] + "." + key[1], firstBean, key[1], foundGroupSequencesForCurrentView);
+        processFieldsAndProperties(
+                propertyDetails.getKey(),
+                propertyDetails.getBaseObject(),
+                propertyDetails.getProperty(),
+                foundGroupSequencesForCurrentView);
+
+        for(GroupSequence currentGroupSequence : foundGroupSequencesForCurrentView)
+        {
+            for(Class currentGroup : currentGroupSequence.sequence())
+            {
+                ExtValBeanValidationContext.getCurrentInstance()
+                        .addGroup(currentGroup, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
+            }
+        }
+    }
+
+    private void processClass(Class classToInspect, List<GroupSequence> foundGroupSequencesForCurrentView)
+    {
+        //TODO process super classes and interfaces as well
+        if(classToInspect.isAnnotationPresent(BeanValidationController.class))
+        {
+            addGroupSequencesForCurrentView(
+                    (BeanValidationController) classToInspect.getAnnotation(BeanValidationController.class),
+                    foundGroupSequencesForCurrentView);
+        }
+    }
+
+    private void processFieldsAndProperties(
+            String key, Object base, String property, List<GroupSequence> foundGroupSequencesForCurrentView)
+    {
+        PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
+                .extract(FacesContext.getCurrentInstance(), new PropertyDetails(key, base, property));
+
+        for(MetaDataEntry metaDataEntry : propertyInformation.getMetaDataEntries())
+        {
+            if(metaDataEntry.getValue() instanceof BeanValidationController)
+            {
+                addGroupSequencesForCurrentView(
+                        (BeanValidationController)metaDataEntry.getValue(), foundGroupSequencesForCurrentView);
+            }
+        }
+    }
+
+    private void addGroupSequencesForCurrentView(
+            BeanValidationController beanValidationController, List<GroupSequence> foundGroupSequencesForCurrentView)
+    {
+        for(ValidateGroup validateGroup : beanValidationController.value())
+        {
+            for(String currentViewIdEntry : validateGroup.viewId())
+            {
+                if(currentViewIdEntry.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
+                        currentViewIdEntry.equals("*"))
+                {
+                    foundGroupSequencesForCurrentView.addAll(Arrays.asList(validateGroup.groupSequence()));
+                }
+            }
         }
     }
 }
