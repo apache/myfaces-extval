@@ -166,7 +166,8 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
                     entryOfTarget.getComponent(), entryOfTarget.getMetaDataEntry(),
                     entryOfTarget.getConvertedObject(), validatorException, this))
             {
-                facesContext.addMessage(entryOfTarget.getClientId(), validatorException.getFacesMessage());
+                facesContext.addMessage(entryOfTarget.getClientId(),
+                        ExtValUtils.convertFacesMessage(validatorException.getFacesMessage()));
             }
         }
     }
@@ -215,24 +216,12 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
 
     protected FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String detail)
     {
-        FacesMessage message = new FacesMessage();
-
-        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-        message.setSummary(summary);
-        message.setDetail(detail);
-
-        return message;
+        return ExtValUtils.createFacesMessage(summary, detail);
     }
 
     protected FacesMessage getTargetComponentErrorMessage(Annotation foundAnnotation, String summary, String detail)
     {
-        FacesMessage message = new FacesMessage();
-
-        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-        message.setSummary(summary);
-        message.setDetail(detail);
-
-        return message;
+        return ExtValUtils.createFacesMessage(summary, detail);
     }
 
     protected String getErrorMessageSummary(Annotation annotation, boolean isTargetComponent)
