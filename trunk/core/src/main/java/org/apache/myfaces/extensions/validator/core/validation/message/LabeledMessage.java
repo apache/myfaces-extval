@@ -16,40 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.core.validation.message;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * don't remove *Text - it would lead to an overlap with trinidad
+ * 
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since 1.x.2
  */
-@UsageInformation({UsageCategory.API})
-public enum CustomInformation
+@UsageInformation(UsageCategory.API)
+public interface LabeledMessage
 {
-    BASE_PACKAGE,
-    COMPONENT_META_DATA_EXTRACTOR,
-
-    VALIDATION_STRATEGY_POSTFIX,
-    VALIDATION_ERROR_MESSAGE_RESOLVER_POSTFIX,
-    META_DATA_TRANSFORMER_POSTFIX,
-
-    VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
-    META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER,
-    VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
-
-    STARTUP_LISTENER,
-    COMPONENT_INITIALIZER,
-    VALIDATION_EXCEPTION_INTERCEPTOR,
-    META_DATA_EXTRACTION_INTERCEPTOR,
-
-    MESSAGE_RESOLVER_FACTORY,
-    VALIDATION_STRATEGY_FACTORY,
-    COMPONENT_META_DATA_EXTRACTOR_FACTORY,
-    META_DATA_TRANSFORMER_FACTORY,
-    FACES_MESSAGE_FACTORY,
-
-    MESSAGE_BUNDLE_NAME,
-    STATIC_STRATEGY_MAPPING_SOURCE
+    String getLabelText();
+    void setLabelText(String label);
 }
