@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProx
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.trinidad.validation.message.TrinidadFacesMessageFactory;
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRendererProxy;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadRendererInterceptor;
@@ -81,6 +82,10 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
         ExtValContext.getContext()
                 .addGlobalProperty(ExtValRendererProxy.KEY, ExtValTrinidadRendererProxy.class.getName());
 
+        ExtValContext.getContext()
+                .addGlobalProperty(
+                        FactoryNames.FACES_MESSAGE_FACTORY.name(),
+                        TrinidadFacesMessageFactory.class.getName());
         /*
          * if there are further incompatible renderers use the following quick-fix:
          *         ExtValContext.getContext()

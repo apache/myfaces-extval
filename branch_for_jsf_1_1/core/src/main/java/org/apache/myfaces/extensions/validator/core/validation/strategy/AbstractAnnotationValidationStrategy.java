@@ -79,8 +79,7 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
 
     protected FacesMessage getValidationErrorFacesMassage(Annotation annotation)
     {
-        return new FacesMessage(FacesMessage.SEVERITY_ERROR,
-            getErrorMessageSummary(annotation), getErrorMessageDetail(annotation));
+        return ExtValUtils.createFacesMessage(getErrorMessageSummary(annotation), getErrorMessageDetail(annotation));
     }
 
     protected abstract String getValidationErrorMsgKey(Annotation annotation);
