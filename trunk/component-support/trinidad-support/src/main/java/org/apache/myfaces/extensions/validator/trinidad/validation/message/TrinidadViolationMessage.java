@@ -30,7 +30,7 @@ import javax.faces.context.FacesContext;
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMessage
+class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMessage
 {
     private static final long serialVersionUID = 6356800689961505154L;
 

@@ -28,7 +28,7 @@ import javax.faces.application.FacesMessage;
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ViolationMessage extends FacesMessage implements LabeledMessage
+class ViolationMessage extends FacesMessage implements LabeledMessage
 {
     private static final long serialVersionUID = 6903958942987711231L;
     private String label;
