@@ -40,6 +40,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
+import org.apache.myfaces.extensions.validator.core.factory.FacesMessageFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -226,6 +227,25 @@ public class ExtValUtils
     {
         return ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class).create();
+    }
+
+    public static FacesMessage createFacesMessage(String summary, String detail)
+    {
+        return createFacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
+    }
+
+    public static FacesMessage createFacesMessage(FacesMessage.Severity severity, String summary, String detail)
+    {
+        return ExtValContext.getContext().getFactoryFinder()
+            .getFactory(FactoryNames.FACES_MESSAGE_FACTORY, FacesMessageFactory.class)
+                .create(severity, summary, detail);
+    }
+
+    public static FacesMessage convertFacesMessage(FacesMessage facesMessage)
+    {
+        return ExtValContext.getContext().getFactoryFinder()
+            .getFactory(FactoryNames.FACES_MESSAGE_FACTORY, FacesMessageFactory.class)
+                .convert(facesMessage);
     }
 
     public static PropertyDetails createPropertyDetailsForNewTarget(MetaDataEntry metaDataEntry,

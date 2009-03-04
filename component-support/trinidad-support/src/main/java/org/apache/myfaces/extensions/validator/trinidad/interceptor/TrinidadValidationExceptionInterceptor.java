@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExcept
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.trinidad.context.RequestContext;
@@ -70,9 +71,17 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
                 label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
             }
 
-            for(int i = 0; i < 3; i++)
+            if(facesMessage instanceof LabeledMessage)
             {
-                ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
+                ((LabeledMessage)facesMessage).setLabelText(label);
+            }
+            //if someone uses a normal faces message
+            else
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
+                }
             }
         }
         return true;

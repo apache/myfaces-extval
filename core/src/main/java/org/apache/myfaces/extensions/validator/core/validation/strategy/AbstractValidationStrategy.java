@@ -87,7 +87,10 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
                 logger.trace("start processAfterValidatorException of " + getClass().getName());
             }
 
-            if (processAfterValidatorException(facesContext, uiComponent, metaDataEntry, convertedObject, e))
+            ValidatorException validatorException = new ValidatorException(
+                    ExtValUtils.convertFacesMessage(e.getFacesMessage()), e.getCause());
+            if (processAfterValidatorException(
+                    facesContext, uiComponent, metaDataEntry, convertedObject, validatorException))
             {
                 if(logger.isTraceEnabled())
                 {
@@ -95,7 +98,7 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
                         ": throw original exception after processAfterValidatorException");
                 }
 
-                throw e;
+                throw validatorException;
             }
 
             if(logger.isTraceEnabled())
