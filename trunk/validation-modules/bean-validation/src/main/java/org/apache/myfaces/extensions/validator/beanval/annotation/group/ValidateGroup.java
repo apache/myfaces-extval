@@ -42,5 +42,5 @@ public @interface ValidateGroup
 {
     public abstract String[] viewId() default "*";
 
-    public abstract GroupSequence[] groupSequence() default @GroupSequence(sequence = Default.class);
+    public abstract GroupSequence[] groupSequence() default @GroupSequence(Default.class);
 }
