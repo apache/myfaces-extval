@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.factory;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -120,6 +122,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         factoryMap.put(factoryName, factory);
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createComponentMetaDataExtractorFactory()
     {
         Object factory = null;
@@ -144,6 +147,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createValidationStrategyFactory()
     {
         Object factory = null;
@@ -169,6 +173,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createMessageResolverFactory()
     {
         Object factory = null;
@@ -194,6 +199,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createMetaDataTransformerFactory()
     {
         Object factory = null;

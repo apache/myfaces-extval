@@ -176,6 +176,9 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
             {
                 if(skipValidation(facesContext, uiComponent, validationStrategy, entry))
                 {
+                    //required is a special case - reset it
+                    ((EditableValueHolder)uiComponent).setRequired(false);
+
                     continue;
                 }
 
