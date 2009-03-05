@@ -49,7 +49,6 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
 import javax.validation.GroupSequence;
-import javax.validation.GroupSequences;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
@@ -150,7 +149,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
             {
                 ConstraintViolation violation = (ConstraintViolation) violations.toArray()[0];
 
-                String violationMessage = violation.getInterpolatedMessage();
+                String violationMessage = violation.getMessage();
 
                 String labeledMessage = "{0}: " + violationMessage;
                 ValidatorException validatorException = new ValidatorException(
@@ -223,7 +222,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         for(GroupSequence currentGroupSequence : foundGroupSequencesForCurrentView)
         {
-            for(Class currentGroup : currentGroupSequence.sequence())
+            for(Class currentGroup : currentGroupSequence.value())
             {
                 ExtValBeanValidationContext.getCurrentInstance()
                         .addGroup(currentGroup, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
@@ -241,12 +240,6 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
             {
                 foundGroupSequencesForCurrentView
                         .add((GroupSequence) classToInspect.getAnnotation(GroupSequence.class));
-            }
-
-            if(classToInspect.isAnnotationPresent(GroupSequences.class))
-            {
-                GroupSequences groupSequences = (GroupSequences) classToInspect.getAnnotation(GroupSequences.class);
-                foundGroupSequencesForCurrentView.addAll(Arrays.asList(groupSequences.value()));
             }
         }
         else
