@@ -23,11 +23,13 @@ import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRend
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRendererInterceptor;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
@@ -35,6 +37,7 @@ import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPr
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidationController;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.ValidateGroup;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
@@ -46,10 +49,14 @@ import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import javax.validation.Validation;
+import javax.validation.BeanDescriptor;
+import javax.validation.ElementDescriptor;
+import javax.validation.ConstraintDescriptor;
 import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
 import javax.validation.GroupSequence;
 import java.util.Set;
+import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,10 +71,106 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     private ValidatorFactory validationFactory = Validation.buildDefaultValidatorFactory();
 
     @Override
-    @ToDo(Priority.HIGH)
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
+        initComponent(facesContext, uiComponent);
+    }
+
+    @ToDo(value = Priority.HIGH, description = "check groups")
+    protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
+    {
+        if (!(uiComponent instanceof EditableValueHolder))
+        {
+            return;
+        }
+
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("start to init component " + uiComponent.getClass().getName());
+        }
+
+        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
+
+        PropertyDetails propertyDetails = metaDataExtractor.extract(facesContext, uiComponent)
+                .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+
+        if(propertyDetails.getBaseObject() == null)
+        {
+            if(this.logger.isWarnEnabled())
+            {
+                this.logger.warn("no base object at " + propertyDetails.getKey() +
+                        " component-id: " + uiComponent.getClientId(facesContext));
+            }
+            return;
+        }
+
+        BeanDescriptor beanDescriptor = this.validationFactory.getValidator().getConstraintsForClass(
+                propertyDetails.getBaseObject().getClass());
+
+        ElementDescriptor elementDescriptor = beanDescriptor.getConstraintsForProperty(propertyDetails.getProperty());
+
+        if(elementDescriptor == null)
+        {
+            return;
+        }
+        
+        ValidationStrategy validationStrategy;
+        MetaDataTransformer metaDataTransformer;
+        MetaDataEntry entry;
+        Map<String, Object> metaData;
+
+        for (ConstraintDescriptor<?> constraintDescriptor : elementDescriptor.getConstraintDescriptors())
+        {
+            //TODO check groups
+            
+            validationStrategy = new BeanValidationStrategyAdapter(constraintDescriptor);
+
+            /*
+             * per default
+             * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.BeanValidationMetaDataTransformer
+             * is bound to BeanValidationStrategyAdapter
+             * don't use it directly - it's possible to deactivate
+             * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
+             *    .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper
+             */
+            metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
+
+            if (metaDataTransformer != null)
+            {
+                if (this.logger.isDebugEnabled())
+                {
+                    this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
+                }
+
+                entry = new MetaDataEntry();
+                entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());
+                entry.setValue(constraintDescriptor);
+
+                metaData = metaDataTransformer.convertMetaData(entry);
+            }
+            else
+            {
+                metaData = null;
+            }
+
+            if (metaData == null)
+            {
+                continue;
+            }
+
+            //get component initializer for the current component and configure it
+            //also in case of skipped validation to reset e.g. the required attribute
+            if (!metaData.isEmpty())
+            {
+                ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
+            }
+        }
+
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
+        }
     }
 
     @Override
@@ -77,11 +180,11 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
 
         //recorde user input e.g. for cross-component validation
-        for(ProcessedInformationRecorder recorder : ExtValContext.getContext().getProcessedInformationRecorders())
+        for (ProcessedInformationRecorder recorder : ExtValContext.getContext().getProcessedInformationRecorders())
         {
             recorder.recordUserInput(uiComponent, convertedObject);
 
-            if(logger.isTraceEnabled())
+            if (logger.isTraceEnabled())
             {
                 logger.trace(recorder.getClass().getName() + " called");
             }
@@ -104,12 +207,12 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
             return;
         }
 
-        if(logger.isTraceEnabled())
+        if (logger.isTraceEnabled())
         {
             logger.trace("jsr303 start validation");
         }
 
-        if(!"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_EMPTY_STRING_INTERPRETATION)
+        if (!"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_EMPTY_STRING_INTERPRETATION)
                 && "".equals(convertedObject))
         {
             convertedObject = null;
@@ -127,7 +230,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
                 PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class)).getProperty();
 
         ExtValBeanValidationContext beanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
-        for(PropertyValidationInterceptor interceptor : beanValidationContext.getPropertyValidationInterceptors())
+        for (PropertyValidationInterceptor interceptor : beanValidationContext.getPropertyValidationInterceptors())
         {
             interceptor.beforeValidation(uiComponent, propertyInformation, convertedObject);
         }
@@ -145,7 +248,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         try
         {
-            if(violations != null && violations.size() > 0)
+            if (violations != null && violations.size() > 0)
             {
                 ConstraintViolation violation = (ConstraintViolation) violations.toArray()[0];
 
@@ -165,7 +268,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
                 propertyInformation.setInformation(
                         BeanValidationPropertyInformationKeys.CONSTRAINT_VIOLATIONS, violations);
 
-                if(labeledMessage.equals(validatorException.getFacesMessage().getSummary()) ||
+                if (labeledMessage.equals(validatorException.getFacesMessage().getSummary()) ||
                         labeledMessage.equals(validatorException.getFacesMessage().getDetail()))
                 {
                     throw new ValidatorException(
@@ -179,13 +282,13 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         }
         finally
         {
-            for(PropertyValidationInterceptor interceptor : beanValidationContext.getPropertyValidationInterceptors())
+            for (PropertyValidationInterceptor interceptor : beanValidationContext.getPropertyValidationInterceptors())
             {
                 interceptor.afterValidation(uiComponent, propertyInformation, convertedObject);
             }
         }
 
-        if(logger.isTraceEnabled())
+        if (logger.isTraceEnabled())
         {
             logger.trace("jsr303 validation finished");
         }
@@ -202,7 +305,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         List<GroupSequence> foundGroupSequencesForCurrentView = new ArrayList<GroupSequence>();
 
-        if(!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
+        if (!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
                 .DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS))
         {
             processClass(firstBean.getClass(), foundGroupSequencesForCurrentView, false);
@@ -220,9 +323,9 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
             processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView, true);
         }
 
-        for(GroupSequence currentGroupSequence : foundGroupSequencesForCurrentView)
+        for (GroupSequence currentGroupSequence : foundGroupSequencesForCurrentView)
         {
-            for(Class currentGroup : currentGroupSequence.value())
+            for (Class currentGroup : currentGroupSequence.value())
             {
                 ExtValBeanValidationContext.getCurrentInstance()
                         .addGroup(currentGroup, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
@@ -234,9 +337,9 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     private void processClass(
             Class classToInspect, List<GroupSequence> foundGroupSequencesForCurrentView, boolean useStandardAnnotations)
     {
-        if(useStandardAnnotations)
+        if (useStandardAnnotations)
         {
-            if(classToInspect.isAnnotationPresent(GroupSequence.class))
+            if (classToInspect.isAnnotationPresent(GroupSequence.class))
             {
                 foundGroupSequencesForCurrentView
                         .add((GroupSequence) classToInspect.getAnnotation(GroupSequence.class));
@@ -244,7 +347,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         }
         else
         {
-            if(classToInspect.isAnnotationPresent(BeanValidationController.class))
+            if (classToInspect.isAnnotationPresent(BeanValidationController.class))
             {
                 addGroupSequencesForCurrentView(
                         (BeanValidationController) classToInspect.getAnnotation(BeanValidationController.class),
@@ -259,12 +362,12 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
                 .extract(FacesContext.getCurrentInstance(), new PropertyDetails(key, base, property));
 
-        for(MetaDataEntry metaDataEntry : propertyInformation.getMetaDataEntries())
+        for (MetaDataEntry metaDataEntry : propertyInformation.getMetaDataEntries())
         {
-            if(metaDataEntry.getValue() instanceof BeanValidationController)
+            if (metaDataEntry.getValue() instanceof BeanValidationController)
             {
                 addGroupSequencesForCurrentView(
-                        (BeanValidationController)metaDataEntry.getValue(), foundGroupSequencesForCurrentView);
+                        (BeanValidationController) metaDataEntry.getValue(), foundGroupSequencesForCurrentView);
             }
         }
     }
@@ -272,11 +375,11 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     private void addGroupSequencesForCurrentView(
             BeanValidationController beanValidationController, List<GroupSequence> foundGroupSequencesForCurrentView)
     {
-        for(ValidateGroup validateGroup : beanValidationController.value())
+        for (ValidateGroup validateGroup : beanValidationController.value())
         {
-            for(String currentViewIdEntry : validateGroup.viewId())
+            for (String currentViewIdEntry : validateGroup.viewId())
             {
-                if(currentViewIdEntry.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
+                if (currentViewIdEntry.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
                         currentViewIdEntry.equals("*"))
                 {
                     foundGroupSequencesForCurrentView.addAll(Arrays.asList(validateGroup.groupSequence()));
