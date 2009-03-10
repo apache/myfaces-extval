@@ -117,6 +117,21 @@
                             </tasks>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>javadoc.site.copy</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <!-- Copy javadoc to another directory, to keep javadoc of previous versions on site -->
+                                <copy todir="${project.build.directory}/site/apidocs-${project.version}" failonerror="false">
+                                  <fileset dir="${project.build.directory}/site/apidocs"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <!--
@@ -156,7 +171,7 @@
                     <target>1.5</target>
                     <optimize>false</optimize>
                 </configuration>
-            </plugin>
+            </plugin>            
         </plugins>
     </build>
 
