@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.metadata;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -33,6 +35,8 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.API)
 public class MetaDataEntry
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private String key;
     private Object value;
     private Map<String, Object> properties = new HashMap<String, Object>();
@@ -44,6 +48,11 @@ public class MetaDataEntry
 
     public void setKey(String key)
     {
+        if(this.logger.isTraceEnabled())
+        {
+            this.logger.trace("setting meta-data key: " + key);
+        }
+
         this.key = key;
     }
 
@@ -59,6 +68,11 @@ public class MetaDataEntry
 
     public void setValue(Object value)
     {
+        if(this.logger.isTraceEnabled())
+        {
+            this.logger.trace("setting meta-data value: " + value);
+        }
+
         this.value = value;
     }
 
@@ -84,6 +98,11 @@ public class MetaDataEntry
 
     public void setProperty(String key, Object value)
     {
+        if(this.logger.isTraceEnabled())
+        {
+            this.logger.trace("new property added key: " + key + " value: " + value + " for metadata-key: " + this.key);
+        }
+
         this.properties.put(key, value);
     }
 }

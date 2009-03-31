@@ -36,4 +36,5 @@ public interface PropertyInformation
 
     MetaDataEntry[] getMetaDataEntries();
     void addMetaDataEntry(MetaDataEntry metaDataEntry);
+    void resetMetaDataEntries();
 }
