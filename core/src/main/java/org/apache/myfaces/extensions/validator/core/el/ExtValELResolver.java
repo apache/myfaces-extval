@@ -27,6 +27,7 @@ import javax.el.VariableMapper;
 import javax.el.FunctionMapper;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.beans.FeatureDescriptor;
 
 /**
@@ -113,7 +114,14 @@ public class ExtValELResolver extends ELResolver
 
             try
             {
-                if(base.getClass().getMethod("get" + propertyName) != null)
+                if(base instanceof Map)
+                {
+                    if(((Map)base).containsKey(property))
+                    {
+                        propertyExists = true;
+                    }
+                }
+                else if(base.getClass().getMethod("get" + propertyName) != null)
                 {
                     propertyExists = true;
                 }
