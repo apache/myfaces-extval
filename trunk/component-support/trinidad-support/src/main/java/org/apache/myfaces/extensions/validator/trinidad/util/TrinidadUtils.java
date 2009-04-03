@@ -43,6 +43,11 @@ public class TrinidadUtils
     public static UIComponent findLabeledEditableComponent(CoreOutputLabel coreOutputLabel)
     {
         //TODO
+        if(coreOutputLabel.getFor() == null)
+        {
+            return null;
+        }
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UIComponent result = facesContext.getViewRoot().findComponent(coreOutputLabel.getFor());
 
