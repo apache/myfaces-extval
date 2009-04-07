@@ -36,11 +36,16 @@ import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.ComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FacesMessageFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -48,7 +53,8 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import java.util.Map;
 import java.util.MissingResourceException;
-
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -57,6 +63,8 @@ import java.util.MissingResourceException;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
+    private static final Log LOGGER = LogFactory.getLog(ExtValUtils.class);
+
     private static final String JAVAX_FACES_REQUIRED = "javax.faces.component.UIInput.REQUIRED";
     private static final String JAVAX_FACES_REQUIRED_DETAIL = "javax.faces.component.UIInput.REQUIRED_detail";
 
@@ -338,5 +346,70 @@ public class ExtValUtils
 
         facesMessage.setSummary(facesRequiredMessage);
         facesMessage.setDetail(facesRequiredMessageDetail);
+    }
+
+    public static boolean isSkipableValidationStrategy(Class<? extends ValidationStrategy> targetClass)
+    {
+        for(Class currentClass : ExtValUtils.getSkipValidationSupportClassList())
+        {
+            if(ExtValUtils.isSkipValidationSupported(currentClass, targetClass))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static List<Class> getSkipValidationSupportClassList()
+    {
+        List<StaticConfiguration<String, String>> staticConfigurationList = ExtValContext.getContext()
+                .getStaticConfiguration(StaticConfigurationNames.SKIP_VALIDATION_SUPPORT_CONFIG);
+
+        List<Class> markerList = new ArrayList<Class>();
+
+        Class currentClass;
+        for(StaticConfiguration<String, String> currentEntry : staticConfigurationList)
+        {
+            for(StaticConfigurationEntry<String, String> currentConfigurationEntry : currentEntry.getMapping())
+            {
+                currentClass = ClassUtils.tryToLoadClassForName(currentConfigurationEntry.getTarget());
+
+                if(currentClass != null)
+                {
+                    markerList.add(currentClass);
+                }
+                else
+                {
+                    if(LOGGER.isWarnEnabled())
+                    {
+                        LOGGER.warn("configuration entry provides an invalid entry: "
+                                + currentConfigurationEntry.getTarget());
+                    }
+                }
+            }
+        }
+
+        return markerList;
+    }
+
+    public static boolean isSkipValidationSupported(Class currentClass, Class targetClass)
+    {
+        if(currentClass.isAnnotation())
+        {
+            if(targetClass.isAnnotationPresent(currentClass))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            if(currentClass.isAssignableFrom(targetClass))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
