@@ -24,8 +24,8 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.baseval.strategy.SkipValidationStrategy;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -43,7 +43,7 @@ public class ValidationInterceptorWithSkipValidationSupport extends ValidationIn
                                      ValidationStrategy validationStrategy,
                                      MetaDataEntry metaDataEntry)
     {
-        if(validationStrategy.getClass().isAnnotationPresent(SkipValidationSupport.class))
+        if(ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass()))
         {
             Boolean skipValidation = metaDataEntry.getProperty(
                 PropertyInformationKeys.SKIP_VALIDATION, Boolean.class);

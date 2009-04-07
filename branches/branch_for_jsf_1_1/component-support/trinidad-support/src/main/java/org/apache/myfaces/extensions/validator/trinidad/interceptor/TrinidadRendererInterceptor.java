@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.Component
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
@@ -39,8 +38,6 @@ import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -110,7 +107,7 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
                 }
 
                 if(Boolean.TRUE.equals(skipInitialization) && !metaData.isEmpty() &&
-                        isSkipableValidationStrategy(validationStrategy.getClass()))
+                        ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass()))
                 {
                     metaData.put(CommonMetaDataKeys.SKIP_VALIDATION, true);
                 }
@@ -132,39 +129,5 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
                 uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isDisabled")));
 
         return !(isReadOnly || isDisabled);
-    }
-    
-    @SuppressWarnings({"unchecked"})
-    private boolean isSkipableValidationStrategy(Class<? extends ValidationStrategy> validationStrategyClass)
-    {
-        String key = ExtValContext.getContext().getInformationProviderBean()
-                .get(CustomInformation.BASE_PACKAGE) + CommonMetaDataKeys.SKIP_VALIDATION.toUpperCase();
-        List<Class<? extends Annotation>> markerList =
-                (List<Class<? extends Annotation>>)ExtValContext.getContext().getGlobalProperty(key);
-
-        if(markerList == null)
-        {
-            return false;
-        }
-
-        for(Class<? extends Annotation> currentClass : markerList)
-        {
-            if(currentClass.isAnnotation())
-            {
-                if(validationStrategyClass.isAnnotationPresent(currentClass))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if(currentClass.isAssignableFrom(validationStrategyClass))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }
