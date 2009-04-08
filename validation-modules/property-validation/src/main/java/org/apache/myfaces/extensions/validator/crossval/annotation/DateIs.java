@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.annotation;
 
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -36,7 +34,6 @@ import java.text.DateFormat;
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
-@ToDo(value = Priority.MEDIUM, description = "DateIsEntry (valueOf, type)")
 @UsageInformation(UsageCategory.API)
 public @interface DateIs
 {
