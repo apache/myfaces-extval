@@ -107,19 +107,9 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             addPropertyAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
             addFieldAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
 
+            processInterfaces(currentClass, propertyDetails, propertyInformation);
+
             currentClass = currentClass.getSuperclass();
-        }
-
-        for (Class currentInterface : entityClass.getInterfaces())
-        {
-            currentClass = currentInterface;
-
-            while (currentClass != null)
-            {
-                addPropertyAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
-
-                currentClass = currentClass.getSuperclass();
-            }
         }
 
         if(logger.isTraceEnabled())
@@ -128,6 +118,17 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         }
 
         return propertyInformation;
+    }
+
+    private void processInterfaces(
+            Class currentClass, PropertyDetails propertyDetails, PropertyInformation propertyInformation)
+    {
+        for (Class currentInterface : currentClass.getInterfaces())
+        {
+            addPropertyAccessAnnotations(currentInterface, propertyDetails.getProperty(), propertyInformation);
+
+            processInterfaces(currentInterface, propertyDetails, propertyInformation);
+        }
     }
 
     protected void addPropertyAccessAnnotations(Class entity, String property,
