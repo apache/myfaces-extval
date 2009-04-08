@@ -21,16 +21,21 @@ package org.apache.myfaces.extensions.validator.beanval.annotation.group;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import javax.validation.GroupSequence;
-import javax.validation.groups.Default;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
+ * Replacement for GroupSequence<br/>
+ * reasons:
+ * <ul>
+ * <li>jsr-303 api call doesn't guarantee the validation order</li>
+ * <li>avoid multiple api calls</li>
+ * <li>@GroupSequence is used a bit different</li>
+ * </ul>
  * @author Gerhard Petracek
  * @since 1.x.3
  */
@@ -38,9 +43,7 @@ import static java.lang.annotation.ElementType.FIELD;
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
-public @interface ValidateGroup
+public @interface Group
 {
-    public abstract String[] viewId() default "*";
-
-    public abstract GroupSequence[] groupSequence() default @GroupSequence(Default.class);
+    Class<?>[] value();
 }

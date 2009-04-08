@@ -35,7 +35,8 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidationController;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.ValidateGroup;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.GroupValidation;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.Group;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -54,7 +55,6 @@ import javax.validation.ElementDescriptor;
 import javax.validation.ConstraintDescriptor;
 import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
-import javax.validation.GroupSequence;
 import java.util.Set;
 import java.util.Map;
 import java.util.List;
@@ -303,14 +303,24 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         Object firstBean = ExtValUtils.getELHelper().getBean(key[0]);
 
-        List<GroupSequence> foundGroupSequencesForCurrentView = new ArrayList<GroupSequence>();
+        List<Group> foundGroupSequencesForCurrentView = new ArrayList<Group>();
 
         if (!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
                 .DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS))
         {
-            processClass(firstBean.getClass(), foundGroupSequencesForCurrentView, false);
-            processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView, false);
+            //extract bv-controller-annotation of
+
+            //first bean
+            processClass(firstBean.getClass(), foundGroupSequencesForCurrentView,
+                    false);
+
+            //base object (of target property)
+            processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView,
+                    false);
+
+            //first property
             processFieldsAndProperties(key[0] + "." + key[1], firstBean, key[1], foundGroupSequencesForCurrentView);
+            //last property
             processFieldsAndProperties(
                     propertyDetails.getKey(),
                     propertyDetails.getBaseObject(),
@@ -319,11 +329,16 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         }
         else
         {
-            processClass(firstBean.getClass(), foundGroupSequencesForCurrentView, true);
-            processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView, true);
+            processClass(firstBean.getClass(), foundGroupSequencesForCurrentView,
+                    true);
+            processClass(propertyDetails.getBaseObject().getClass(), foundGroupSequencesForCurrentView,
+                    true);
         }
 
-        for (GroupSequence currentGroupSequence : foundGroupSequencesForCurrentView)
+        /*
+         * add found groups to context
+         */
+        for (Group currentGroupSequence : foundGroupSequencesForCurrentView)
         {
             for (Class currentGroup : currentGroupSequence.value())
             {
@@ -335,14 +350,14 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
     //TODO process super classes and interfaces as well
     private void processClass(
-            Class classToInspect, List<GroupSequence> foundGroupSequencesForCurrentView, boolean useStandardAnnotations)
+            Class classToInspect, List<Group> foundGroupSequencesForCurrentView, boolean useStandardAnnotations)
     {
         if (useStandardAnnotations)
         {
-            if (classToInspect.isAnnotationPresent(GroupSequence.class))
+            if (classToInspect.isAnnotationPresent(Group.class))
             {
                 foundGroupSequencesForCurrentView
-                        .add((GroupSequence) classToInspect.getAnnotation(GroupSequence.class));
+                        .add((Group) classToInspect.getAnnotation(Group.class));
             }
         }
         else
@@ -357,7 +372,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     }
 
     private void processFieldsAndProperties(
-            String key, Object base, String property, List<GroupSequence> foundGroupSequencesForCurrentView)
+            String key, Object base, String property, List<Group> foundGroupSequencesForCurrentView)
     {
         PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
                 .extract(FacesContext.getCurrentInstance(), new PropertyDetails(key, base, property));
@@ -373,16 +388,16 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     }
 
     private void addGroupSequencesForCurrentView(
-            BeanValidationController beanValidationController, List<GroupSequence> foundGroupSequencesForCurrentView)
+            BeanValidationController beanValidationController, List<Group> foundGroupSequencesForCurrentView)
     {
-        for (ValidateGroup validateGroup : beanValidationController.value())
+        for (GroupValidation groupValidation : beanValidationController.value())
         {
-            for (String currentViewIdEntry : validateGroup.viewId())
+            for (String currentViewIdEntry : groupValidation.viewId())
             {
                 if (currentViewIdEntry.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
                         currentViewIdEntry.equals("*"))
                 {
-                    foundGroupSequencesForCurrentView.addAll(Arrays.asList(validateGroup.groupSequence()));
+                    foundGroupSequencesForCurrentView.addAll(Arrays.asList(groupValidation.use()));
                 }
             }
         }
