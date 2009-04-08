@@ -34,7 +34,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRenderer
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPropertyInformationKeys;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidationController;
+import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidationController;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.GroupValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.Group;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
