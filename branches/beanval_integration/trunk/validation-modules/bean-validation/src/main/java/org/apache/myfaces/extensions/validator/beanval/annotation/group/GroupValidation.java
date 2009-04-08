@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.annotation.group;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
+import javax.validation.groups.Default;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -36,7 +37,9 @@ import static java.lang.annotation.ElementType.FIELD;
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
-public @interface BeanValidationController
+public @interface GroupValidation
 {
-    GroupValidation[] value() default @GroupValidation();
+    String[] viewId() default "*";
+
+    Group[] use() default @Group(Default.class);
 }

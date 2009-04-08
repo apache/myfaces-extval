@@ -95,12 +95,27 @@ public class ExtValBeanValidationContext
     public void addGroup(Class groupClass, String viewId, String componentId)
     {
         List<Class> groupList = this.currentGroups.get(getGroupKey(viewId, componentId));
+
         if(groupList == null)
         {
             groupList = new ArrayList<Class>();
             this.currentGroups.put(getGroupKey(viewId, componentId), groupList);
         }
-        groupList.add(groupClass);
+
+        if(!groupList.contains(groupClass))
+        {
+            groupList.add(groupClass);
+        }
+    }
+
+    public void resetGroup(String viewId)
+    {
+        resetGroups(viewId, null);
+    }
+
+    public void resetGroups(String viewId, String componentId)
+    {
+        this.currentGroups.put(getGroupKey(viewId, componentId), new ArrayList<Class>());
     }
 
     public Class[] getGroups()
