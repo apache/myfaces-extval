@@ -29,8 +29,6 @@ import org.apache.myfaces.extensions.validator.trinidad.validation.message.Trini
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRendererProxy;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadRendererInterceptor;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -43,7 +41,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadModuleStartupListener extends AbstractStartupListener
 {
-    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     protected void init()
     {
         initTrinidadSupport();
