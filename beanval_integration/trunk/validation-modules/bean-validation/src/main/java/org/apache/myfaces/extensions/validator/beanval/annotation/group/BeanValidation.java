@@ -16,12 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.annotation;
+package org.apache.myfaces.extensions.validator.beanval.annotation.group;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.GroupValidation;
 
+import javax.validation.groups.Default;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -37,7 +37,17 @@ import static java.lang.annotation.ElementType.FIELD;
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
-public @interface BeanValidationController
+public @interface BeanValidation
 {
-    GroupValidation[] value() default @GroupValidation();
+    String[] viewId() default "*";
+
+    boolean useModelValidation() default false;
+
+    Group[] use() default @Group(Default.class);
+
+    @Retention(RUNTIME) static @interface List
+    {
+        BeanValidation[] value();
+    }
+
 }

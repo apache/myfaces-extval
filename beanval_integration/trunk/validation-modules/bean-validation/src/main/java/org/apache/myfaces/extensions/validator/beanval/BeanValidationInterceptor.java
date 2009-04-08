@@ -34,8 +34,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRenderer
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPropertyInformationKeys;
-import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidationController;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.GroupValidation;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.Group;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
@@ -222,7 +221,9 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
 
+        //extract group validation annotations
         addGroupsToContext(propertyInformation, uiComponent.getClientId(facesContext));
+
         Class baseBeanClass = (propertyInformation.getInformation(
                 PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class)).getBaseObject().getClass();
 
@@ -340,7 +341,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     {
         while (!Object.class.getName().equals(classToInspect.getName()))
         {
-            transferBeanValidationControllerInformationToFoundGroups(classToInspect, foundGroupsForCurrentView);
+            transferGroupValidationInformationToFoundGroups(classToInspect, foundGroupsForCurrentView);
 
             processInterfaces(classToInspect, foundGroupsForCurrentView);
 
@@ -352,20 +353,28 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     {
         for (Class currentInterface : currentClass.getInterfaces())
         {
-            transferBeanValidationControllerInformationToFoundGroups(currentClass, foundGroupsForCurrentView);
+            transferGroupValidationInformationToFoundGroups(currentClass, foundGroupsForCurrentView);
 
             processInterfaces(currentInterface, foundGroupsForCurrentView);
         }
     }
 
-    private void transferBeanValidationControllerInformationToFoundGroups(
+    private void transferGroupValidationInformationToFoundGroups(
             Class classToInspect, List<Group> foundGroupsForCurrentView)
     {
-        if (classToInspect.isAnnotationPresent(BeanValidationController.class))
+        if (classToInspect.isAnnotationPresent(BeanValidation.class))
         {
             addGroupsForCurrentView(
-                    (BeanValidationController) classToInspect.getAnnotation(BeanValidationController.class),
+                    (BeanValidation) classToInspect.getAnnotation(BeanValidation.class),
                     foundGroupsForCurrentView);
+        }
+        else if (classToInspect.isAnnotationPresent(BeanValidation.List.class))
+        {
+            for(BeanValidation currentBeanValidation :
+                    ((BeanValidation.List)classToInspect.getAnnotation(BeanValidation.List.class)).value())
+            {
+                addGroupsForCurrentView(currentBeanValidation, foundGroupsForCurrentView);
+            }
         }
     }
 
@@ -377,26 +386,28 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         for (MetaDataEntry metaDataEntry : propertyInformation.getMetaDataEntries())
         {
-            if (metaDataEntry.getValue() instanceof BeanValidationController)
+            if (metaDataEntry.getValue() instanceof BeanValidation)
             {
-                addGroupsForCurrentView(
-                        (BeanValidationController) metaDataEntry.getValue(), foundGroupsForCurrentView);
+                addGroupsForCurrentView((BeanValidation) metaDataEntry.getValue(), foundGroupsForCurrentView);
+            }
+            else if(metaDataEntry.getValue() instanceof BeanValidation.List)
+            {
+                for(BeanValidation currentBeanValidation : ((BeanValidation.List)metaDataEntry.getValue()).value())
+                {
+                    addGroupsForCurrentView(currentBeanValidation, foundGroupsForCurrentView);
+                }
             }
         }
     }
 
-    private void addGroupsForCurrentView(
-            BeanValidationController beanValidationController, List<Group> foundGroupsForCurrentView)
+    private void addGroupsForCurrentView(BeanValidation beanValidation, List<Group> foundGroupsForCurrentView)
     {
-        for (GroupValidation groupValidation : beanValidationController.value())
+        for (String currentViewId : beanValidation.viewId())
         {
-            for (String currentViewIdEntry : groupValidation.viewId())
+            if (currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
+                    currentViewId.equals("*"))
             {
-                if (currentViewIdEntry.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
-                        currentViewIdEntry.equals("*"))
-                {
-                    foundGroupsForCurrentView.addAll(Arrays.asList(groupValidation.use()));
-                }
+                foundGroupsForCurrentView.addAll(Arrays.asList(beanValidation.use()));
             }
         }
     }
