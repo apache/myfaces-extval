@@ -21,20 +21,18 @@ package org.apache.myfaces.blank;
 import org.apache.myfaces.blank.domain.Person;
 import org.apache.myfaces.blank.validation.group.Admin;
 import org.apache.myfaces.blank.validation.group.User;
-import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidationController;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.Group;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.GroupValidation;
+import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidation;
 
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
  */
 
-//@Group({User.class, Admin.class})
 //in case of deactivated default validation
-@BeanValidationController
+@BeanValidation
 public class HelloWorldController
 {
-    //@BeanValidationController(@GroupValidation(viewId = "/form1.jsp"))
+    //@BeanValidation(viewId = "/form1.jsp")
     private Person person = new Person();
 
     /**
@@ -53,10 +51,10 @@ public class HelloWorldController
         return "success";
     }
 
-    @BeanValidationController({
-            @GroupValidation(viewId = "/helloWorld.jsp"),
-            @GroupValidation(viewId = "/form1.jsp", use = @Group(User.class)),
-            @GroupValidation(viewId = "/form2.jsp", use = {@Group(Admin.class)})
+    @BeanValidation.List({
+            @BeanValidation(viewId = "/helloWorld.jsp"),
+            @BeanValidation(viewId = "/form1.jsp", use = @Group(User.class)),
+            @BeanValidation(viewId = "/form2.jsp", use = {@Group(Admin.class)})
     })
     public Person getPerson()
     {
