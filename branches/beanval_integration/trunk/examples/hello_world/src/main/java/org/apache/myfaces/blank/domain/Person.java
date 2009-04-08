@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.blank.domain;
 
+import org.apache.myfaces.blank.validation.group.Admin;
+import org.apache.myfaces.blank.validation.group.User;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
-import org.hibernate.validation.constraints.Length;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Person
 {
@@ -31,7 +33,10 @@ public class Person
 
     //demo for bean validation based validation support
     @NotNull
-    @Length(max = 6)
+    @Size.List({
+            @Size(min = 3, max = 6, groups = User.class),
+            @Size(min = 3, max = 12, groups = Admin.class)
+    })
     private String lastName;
 
     public String getFirstName()
