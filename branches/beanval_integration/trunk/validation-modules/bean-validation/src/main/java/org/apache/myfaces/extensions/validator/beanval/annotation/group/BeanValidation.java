@@ -39,13 +39,13 @@ import static java.lang.annotation.ElementType.FIELD;
 @UsageInformation(UsageCategory.API)
 public @interface BeanValidation
 {
-    String[] viewId() default "*";
+    String[] viewIds() default "*";
 
     boolean useModelValidation() default false;
 
-    Group[] use() default @Group(Default.class);
+    Class[] useGroups() default Default.class;
 
-    Group[] restrict() default @Group(None.class);
+    Class[] restrictGroups() default None.class;
 
     @Retention(RUNTIME) static @interface List
     {
