@@ -76,11 +76,6 @@ public class MetaDataEntry
         this.value = value;
     }
 
-    public Map<String, Object> getProperties()
-    {
-        return properties;
-    }
-
     public void setProperties(Map<String, Object> properties)
     {
         this.properties = properties;
