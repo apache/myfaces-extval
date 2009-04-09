@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.beanval.validation.message.interp
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.validation.groups.Default;
@@ -40,6 +42,8 @@ import java.util.HashMap;
  */
 public class ExtValBeanValidationContext
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private static final String KEY = ExtValBeanValidationContext.class.getName() + ":KEY";
 
     private static MessageInterpolator defaultMessageInterpolator = new DefaultMessageInterpolator(
@@ -48,7 +52,10 @@ public class ExtValBeanValidationContext
     private static MessageResolver messageResolver;
 
     @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
-    private Map<String, List<Class>> currentGroups = new HashMap<String, List<Class>>();
+    private Map<String, List<Class>> addedGroups = new HashMap<String, List<Class>>();
+
+    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
+    private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
 
     @ToDo(value = Priority.HIGH,
             description = "idea: use it for impl. group support in a more extensible way - target: move it to the core")
@@ -94,12 +101,33 @@ public class ExtValBeanValidationContext
 
     public void addGroup(Class groupClass, String viewId, String componentId)
     {
-        List<Class> groupList = this.currentGroups.get(getGroupKey(viewId, componentId));
+        addGroupToGroupStorage(groupClass, viewId, componentId, this.addedGroups);
+    }
+
+    public void restrictGroup(Class groupClass)
+    {
+        restrictGroup(groupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId());
+    }
+
+    public void restrictGroup(Class groupClass, String viewId)
+    {
+        restrictGroup(groupClass, viewId, null);
+    }
+
+    public void restrictGroup(Class groupClass, String viewId, String componentId)
+    {
+        addGroupToGroupStorage(groupClass, viewId, componentId, this.restrictedGroups);
+    }
+
+    private void addGroupToGroupStorage(Class groupClass, String viewId, String componentId,
+                                        Map<String, List<Class>> groupStorage)
+    {
+        List<Class> groupList = groupStorage.get(getGroupKey(viewId, componentId));
 
         if(groupList == null)
         {
             groupList = new ArrayList<Class>();
-            this.currentGroups.put(getGroupKey(viewId, componentId), groupList);
+            groupStorage.put(getGroupKey(viewId, componentId), groupList);
         }
 
         if(!groupList.contains(groupClass))
@@ -115,19 +143,19 @@ public class ExtValBeanValidationContext
 
     public void resetGroups(String viewId, String componentId)
     {
-        this.currentGroups.put(getGroupKey(viewId, componentId), new ArrayList<Class>());
+        this.addedGroups.put(getGroupKey(viewId, componentId), new ArrayList<Class>());
     }
 
     public Class[] getGroups()
     {
-        if(this.currentGroups.size() < 1)
+        if(this.addedGroups.size() < 1)
         {
             return new Class[] {Default.class};
         }
 
         List<Class> fullGroupList = new ArrayList<Class>();
 
-        for(Map.Entry<String, List<Class>> currentGroupEntry : this.currentGroups.entrySet())
+        for(Map.Entry<String, List<Class>> currentGroupEntry : this.addedGroups.entrySet())
         {
             fullGroupList.addAll(currentGroupEntry.getValue());
 
@@ -142,7 +170,7 @@ public class ExtValBeanValidationContext
 
     public Class[] getGroups(String viewId, String componentId)
     {
-        if(this.currentGroups.size() < 1)
+        if(this.addedGroups.size() < 1)
         {
             if(!"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION))
             {
@@ -152,13 +180,26 @@ public class ExtValBeanValidationContext
         }
 
         String key = getGroupKey(viewId, null);
-        Class[] resultsForPage = buildResultFor(key);
+        List<Class> resultListForPage = buildResultFor(key, this.addedGroups);
 
         key = getGroupKey(viewId, componentId);
-        Class[] resultsForComponent = buildResultFor(key);
+        List<Class> resultListForComponent = buildResultFor(key, this.addedGroups);
+
+        //remove restricted groups
+        Class[] resultsForPage = filterResult(getGroupKey(viewId, null), resultListForPage);
+        Class[] resultsForComponent = filterResult(getGroupKey(viewId, componentId), resultListForComponent);
 
         if(resultsForPage.length == 0)
         {
+            if(resultsForComponent.length == 0)
+            {
+                if(this.logger.isDebugEnabled())
+                {
+                    this.logger.debug("no groups for group-validation available." +
+                            "maybe you restricted all groups or you aren't using groups." +
+                            "bean validation will use the default group for validation");
+                }
+            }
             return resultsForComponent;
         }
         else if(resultsForComponent.length == 0)
@@ -166,24 +207,32 @@ public class ExtValBeanValidationContext
             return resultsForPage;
         }
 
-        return mergeResult(resultsForPage, resultsForComponent);
+        return mergeResults(resultsForPage, resultsForComponent);
     }
 
-    private Class[] buildResultFor(String key)
+    private List<Class> buildResultFor(String key, Map<String, List<Class>> groupStorage)
     {
-        List<Class> list = this.currentGroups.get(key);
-        int listSize = list != null ? list.size() : 0;
-        Class[] results = new Class[listSize];
+        List<Class> list = groupStorage.get(key);
+        return (list != null) ? list : new ArrayList<Class>();
+    }
 
-        for(int i = 0; i < listSize; i++)
+    private Class[] filterResult(String key, List<Class> addedGroups)
+    {
+        List<Class> restrictedGroups = buildResultFor(key, this.restrictedGroups);
+        List<Class> results = new ArrayList<Class>();
+
+        for(Class currentGroup : addedGroups)
         {
-            results[i] = this.currentGroups.get(key).get(i);
+            if(!restrictedGroups.contains(currentGroup))
+            {
+                results.add(currentGroup);
+            }
         }
 
-        return results;
+        return results.toArray(new Class[results.size()]);
     }
 
-    private Class[] mergeResult(Class[] resultsForPage, Class[] resultsForComponent)
+    private Class[] mergeResults(Class[] resultsForPage, Class[] resultsForComponent)
     {
         Class[] mergedResult = new Class[resultsForPage.length + resultsForComponent.length];
 
@@ -203,9 +252,10 @@ public class ExtValBeanValidationContext
         removeGroup(groupClass, viewId, null);
     }
 
+    @ToDo(Priority.HIGH)
     public void removeGroup(Class groupClass, String viewId, String componentId)
     {
-        this.currentGroups.remove(getGroupKey(viewId, componentId));
+        this.addedGroups.remove(getGroupKey(viewId, componentId));
     }
 
     @ToDo(Priority.HIGH)
