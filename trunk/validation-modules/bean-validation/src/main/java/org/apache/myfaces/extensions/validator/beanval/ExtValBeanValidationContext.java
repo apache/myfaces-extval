@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval;
 
-import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.DefaultMessageInterpolator;
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.ExtValMessageInterpolatorAdapter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -56,11 +55,6 @@ public class ExtValBeanValidationContext
 
     @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
     private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
-
-    @ToDo(value = Priority.HIGH,
-            description = "idea: use it for impl. group support in a more extensible way - target: move it to the core")
-    private List<PropertyValidationInterceptor> propertyValidationInterceptors
-            = new ArrayList<PropertyValidationInterceptor>();
 
     private ExtValBeanValidationContext()
     {
@@ -176,9 +170,10 @@ public class ExtValBeanValidationContext
             {
                 return new Class[] {Default.class};
             }
-            return new Class[0];
+            return null;
         }
 
+        //add found groups
         String key = getGroupKey(viewId, null);
         List<Class> resultListForPage = buildResultFor(key, this.addedGroups);
 
@@ -256,21 +251,6 @@ public class ExtValBeanValidationContext
     public void removeGroup(Class groupClass, String viewId, String componentId)
     {
         this.addedGroups.remove(getGroupKey(viewId, componentId));
-    }
-
-    @ToDo(Priority.HIGH)
-    public void registerPropertyValidationInterceptor(PropertyValidationInterceptor propertyValidationInterceptor)
-    {
-    }
-
-    @ToDo(Priority.HIGH)
-    public void denyPropertyValidationInterceptor(Class<? extends PropertyValidationInterceptor> groupInterceptorClass)
-    {
-    }
-
-    public List<PropertyValidationInterceptor> getPropertyValidationInterceptors()
-    {
-        return this.propertyValidationInterceptors;
     }
 
     public MessageInterpolator getMessageInterpolator()

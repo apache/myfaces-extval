@@ -32,7 +32,6 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRendererInterceptor;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.None;
@@ -231,61 +230,49 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
                 PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class)).getProperty();
 
         ExtValBeanValidationContext beanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
-        for (PropertyValidationInterceptor interceptor : beanValidationContext.getPropertyValidationInterceptors())
+
+        Class[] groups = beanValidationContext.getGroups(
+                facesContext.getViewRoot().getViewId(), uiComponent.getClientId(facesContext));
+
+        if(groups == null)
         {
-            interceptor.beforeValidation(uiComponent, propertyInformation, convertedObject);
+            return;
         }
 
         Set<ConstraintViolation> violations = this.validationFactory.usingContext()
                 .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
                 .getValidator()
-                .validateValue(
-                        baseBeanClass,
-                        propertyName,
-                        convertedObject,
-                        beanValidationContext.getGroups(
-                                facesContext.getViewRoot().getViewId(),
-                                uiComponent.getClientId(facesContext)));
+                .validateValue(baseBeanClass, propertyName, convertedObject, groups);
 
-        try
+        if (violations != null && violations.size() > 0)
         {
-            if (violations != null && violations.size() > 0)
+            ConstraintViolation violation = (ConstraintViolation) violations.toArray()[0];
+
+            String violationMessage = violation.getMessage();
+
+            String labeledMessage = "{0}: " + violationMessage;
+            ValidatorException validatorException = new ValidatorException(
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, labeledMessage, labeledMessage));
+
+            ExtValUtils.executeAfterThrowingInterceptors(
+                    uiComponent,
+                    null,
+                    convertedObject,
+                    validatorException,
+                    null);
+
+            propertyInformation.setInformation(
+                    BeanValidationPropertyInformationKeys.CONSTRAINT_VIOLATIONS, violations);
+
+            if (labeledMessage.equals(validatorException.getFacesMessage().getSummary()) ||
+                    labeledMessage.equals(validatorException.getFacesMessage().getDetail()))
             {
-                ConstraintViolation violation = (ConstraintViolation) violations.toArray()[0];
-
-                String violationMessage = violation.getMessage();
-
-                String labeledMessage = "{0}: " + violationMessage;
-                ValidatorException validatorException = new ValidatorException(
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, labeledMessage, labeledMessage));
-
-                ExtValUtils.executeAfterThrowingInterceptors(
-                        uiComponent,
-                        null,
-                        convertedObject,
-                        validatorException,
-                        null);
-
-                propertyInformation.setInformation(
-                        BeanValidationPropertyInformationKeys.CONSTRAINT_VIOLATIONS, violations);
-
-                if (labeledMessage.equals(validatorException.getFacesMessage().getSummary()) ||
-                        labeledMessage.equals(validatorException.getFacesMessage().getDetail()))
-                {
-                    throw new ValidatorException(
-                            new FacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
-                }
-                else
-                {
-                    throw validatorException;
-                }
+                throw new ValidatorException(
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
             }
-        }
-        finally
-        {
-            for (PropertyValidationInterceptor interceptor : beanValidationContext.getPropertyValidationInterceptors())
+            else
             {
-                interceptor.afterValidation(uiComponent, propertyInformation, convertedObject);
+                throw validatorException;
             }
         }
 
