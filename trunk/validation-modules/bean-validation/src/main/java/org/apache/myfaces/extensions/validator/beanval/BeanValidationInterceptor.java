@@ -35,7 +35,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.property.BeanValidationPropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidation;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.Group;
 import org.apache.myfaces.extensions.validator.beanval.annotation.group.None;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
@@ -305,8 +304,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         Object firstBean = ExtValUtils.getELHelper().getBean(key[0]);
 
-        List<Group> foundGroupsForCurrentView = new ArrayList<Group>();
-        List<Group> restrictedGroupsForCurrentView = new ArrayList<Group>();
+        List<Class> foundGroupsForCurrentView = new ArrayList<Class>();
+        List<Class> restrictedGroupsForCurrentView = new ArrayList<Class>();
 
         //extract bv-controller-annotation of
 
@@ -332,31 +331,25 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         /*
          * add found groups to context
          */
-        for (Group currentGroup : foundGroupsForCurrentView)
+        for (Class currentGroupClass : foundGroupsForCurrentView)
         {
-            for (Class currentGroupClass : currentGroup.value())
-            {
-                ExtValBeanValidationContext.getCurrentInstance().addGroup(
-                        currentGroupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
-            }
+            ExtValBeanValidationContext.getCurrentInstance().addGroup(
+                    currentGroupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
         }
 
         /*
          * add restricted groups
          */
-        for (Group currentGroup : restrictedGroupsForCurrentView)
+        for (Class currentGroupClass : restrictedGroupsForCurrentView)
         {
-            for (Class currentGroupClass : currentGroup.value())
-            {
-                ExtValBeanValidationContext.getCurrentInstance().restrictGroup(
-                        currentGroupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
-            }
+            ExtValBeanValidationContext.getCurrentInstance().restrictGroup(
+                    currentGroupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId(), clientId);
         }
     }
 
     private void processClass(Class classToInspect,
-                              List<Group> foundGroupsForCurrentView,
-                              List<Group> restrictedGroupsForCurrentView)
+                              List<Class> foundGroupsForCurrentView,
+                              List<Class> restrictedGroupsForCurrentView)
     {
         while (!Object.class.getName().equals(classToInspect.getName()))
         {
@@ -371,8 +364,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     }
 
     private void processInterfaces(Class currentClass,
-                                   List<Group> foundGroupsForCurrentView,
-                                   List<Group> restrictedGroupsForCurrentView)
+                                   List<Class> foundGroupsForCurrentView,
+                                   List<Class> restrictedGroupsForCurrentView)
     {
         for (Class currentInterface : currentClass.getInterfaces())
         {
@@ -385,8 +378,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     }
 
     private void transferGroupValidationInformationToFoundGroups(Class classToInspect,
-                                                                 List<Group> foundGroupsForCurrentView,
-                                                                 List<Group> restrictedGroupsForCurrentView)
+                                                                 List<Class> foundGroupsForCurrentView,
+                                                                 List<Class> restrictedGroupsForCurrentView)
     {
         if (classToInspect.isAnnotationPresent(BeanValidation.class))
         {
@@ -409,8 +402,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
     private void processFieldsAndProperties(String key,
                                             Object base,
-                                            String property, List<Group> foundGroupsForCurrentView,
-                                            List<Group> restrictedGroupsForCurrentView)
+                                            String property, List<Class> foundGroupsForCurrentView,
+                                            List<Class> restrictedGroupsForCurrentView)
     {
         PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
                 .extract(FacesContext.getCurrentInstance(), new PropertyDetails(key, base, property));
@@ -435,21 +428,20 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     }
 
     private void addGroupsForCurrentView(BeanValidation beanValidation,
-                                         List<Group> foundGroupsForCurrentView,
-                                         List<Group> restrictedGroupsForCurrentView)
+                                         List<Class> foundGroupsForCurrentView,
+                                         List<Class> restrictedGroupsForCurrentView)
     {
-        for (String currentViewId : beanValidation.viewId())
+        for (String currentViewId : beanValidation.viewIds())
         {
             if (currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
                     currentViewId.equals("*"))
             {
-                foundGroupsForCurrentView.addAll(Arrays.asList(beanValidation.use()));
+                foundGroupsForCurrentView.addAll(Arrays.asList(beanValidation.useGroups()));
 
-                if(!(beanValidation.restrict().length == 1 &&
-                        beanValidation.restrict()[0].value().length == 1 &&
-                        beanValidation.restrict()[0].value()[0].equals(None.class)))
+                if(!(beanValidation.restrictGroups().length == 1 &&
+                        beanValidation.restrictGroups()[0].equals(None.class)))
                 {
-                    restrictedGroupsForCurrentView.addAll(Arrays.asList(beanValidation.restrict()));
+                    restrictedGroupsForCurrentView.addAll(Arrays.asList(beanValidation.restrictGroups()));
                 }
             }
         }

@@ -21,13 +21,6 @@ package org.apache.myfaces.extensions.validator.beanval.annotation.group;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.lang.annotation.Target;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.TYPE;
-
 /**
  * default group for restricted groups
  *
@@ -35,10 +28,7 @@ import static java.lang.annotation.ElementType.TYPE;
  * @since 1.x.3
  */
 
-@Target({METHOD, FIELD, TYPE})
-@Retention(RUNTIME)
 @UsageInformation(UsageCategory.INTERNAL)
-public @interface None
+public interface None
 {
-    public abstract Class<?>[] value();
 }
