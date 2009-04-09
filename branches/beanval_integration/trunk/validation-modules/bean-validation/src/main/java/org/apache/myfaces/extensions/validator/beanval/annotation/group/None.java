@@ -21,35 +21,24 @@ package org.apache.myfaces.extensions.validator.beanval.annotation.group;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import javax.validation.groups.Default;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 
 /**
+ * default group for restricted groups
+ *
  * @author Gerhard Petracek
  * @since 1.x.3
  */
 
 @Target({METHOD, FIELD, TYPE})
 @Retention(RUNTIME)
-@UsageInformation(UsageCategory.API)
-public @interface BeanValidation
+@UsageInformation(UsageCategory.INTERNAL)
+public @interface None
 {
-    String[] viewId() default "*";
-
-    boolean useModelValidation() default false;
-
-    Group[] use() default @Group(Default.class);
-
-    Group[] restrict() default @Group(None.class);
-
-    @Retention(RUNTIME) static @interface List
-    {
-        BeanValidation[] value();
-    }
-
+    public abstract Class<?>[] value();
 }
