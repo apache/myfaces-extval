@@ -25,13 +25,13 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
         <artifactId>myfaces-extval-parent</artifactId>
-        <version>1.2.2-SNAPSHOT</version>
+        <version>1.2bv-PROTOTYPE</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-core</artifactId>
     <name>MyFaces Extensions-Validator Core</name>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2bv-PROTOTYPE</version>
     <packaging>jar</packaging>
 
     <scm>

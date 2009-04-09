@@ -34,7 +34,7 @@
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-parent</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2bv-PROTOTYPE</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Project Parent</name>
     <url>http://myfaces.apache.org/extensions/validator12</url>
