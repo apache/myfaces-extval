@@ -376,8 +376,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
                 modelValidationEntry.removeGroup(restrictedGroup);
             }
 
-            if(modelValidationEntry.getGroups().length > 0 &&
-                    isModelValidationAllowed(modelValidationEntry.getMetaData()))
+            if(modelValidationEntry.getGroups().length > 0)
             {
                 addTargetsForModelValidation(modelValidationEntry, propertyDetails.getBaseObject());
                 extValBeanValidationContext.addModelValidationEntry(modelValidationEntry, currentViewId, component);
@@ -508,8 +507,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     {
         for (String currentViewId : beanValidation.viewIds())
         {
-            if (currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
-                    currentViewId.equals("*"))
+            if ((currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
+                    currentViewId.equals("*")) && isValidationPermitted(beanValidation))
             {
                 if(isModelValidation(beanValidation))
                 {
@@ -647,11 +646,11 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
     }
 
-    private boolean isModelValidationAllowed(ModelValidation modelValidation)
+    private boolean isValidationPermitted(BeanValidation beanValidation)
     {
         ELHelper elHelper = ExtValUtils.getELHelper();
 
-        for(String condition : modelValidation.conditions())
+        for(String condition : beanValidation.conditions())
         {
             if(elHelper.isELTermWellFormed(condition) &&
                     elHelper.isELTermValid(FacesContext.getCurrentInstance(), condition))
