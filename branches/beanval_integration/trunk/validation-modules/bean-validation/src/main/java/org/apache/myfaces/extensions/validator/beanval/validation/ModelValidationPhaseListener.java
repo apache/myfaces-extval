@@ -68,8 +68,6 @@ public class ModelValidationPhaseListener implements PhaseListener
             processModelValidation(modelValidationEntry, processedValidationTargets);
         }
 
-        FacesContext.getCurrentInstance().renderResponse();
-        
         if (logger.isTraceEnabled())
         {
             logger.trace("jsr303 validation finished");
@@ -98,6 +96,8 @@ public class ModelValidationPhaseListener implements PhaseListener
 
             if (violations != null && violations.size() > 0)
             {
+                FacesContext.getCurrentInstance().renderResponse();
+
                 //jsf 2.0 is able to display multiple messages per component - so process all violations
                 //jsf < 2.0 will just use the first one (it's only a little overhead)
                 Iterator violationsIterator = violations.iterator();

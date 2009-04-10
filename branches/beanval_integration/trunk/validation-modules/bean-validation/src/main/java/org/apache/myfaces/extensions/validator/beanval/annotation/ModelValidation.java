@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.beanval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
@@ -45,9 +43,6 @@ public @interface ModelValidation
     boolean isActive() default false;
 
     boolean displayInline() default false;
-
-    @ToDo(value = Priority.HIGH, description = "support property chain syntax")
-    String[] conditions() default "#{true}";
 
     String[] validationTargets() default DEFAULT_TARGET;
 }
