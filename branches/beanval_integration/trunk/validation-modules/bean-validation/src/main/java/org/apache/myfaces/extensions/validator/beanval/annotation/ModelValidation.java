@@ -16,17 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.annotation.group;
+package org.apache.myfaces.extensions.validator.beanval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.3
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public interface GroupValidationKeys
+
+@Target({METHOD, FIELD, TYPE})
+@Retention(RUNTIME)
+@UsageInformation(UsageCategory.API)
+public @interface ModelValidation
 {
-    static final String GROUPS_TO_VALIDATE = "groups_to_validate";
+    public static final String DEFAULT_TARGET = "base";
+
+    boolean isActive() default false;
+
+    boolean displayInline() default false;
+
+    @ToDo(value = Priority.HIGH, description = "support property chain syntax")
+    String[] conditions() default "#{true}";
+
+    String[] validationTargets() default DEFAULT_TARGET;
 }

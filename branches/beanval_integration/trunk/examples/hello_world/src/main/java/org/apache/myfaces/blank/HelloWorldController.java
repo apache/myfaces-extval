@@ -21,7 +21,9 @@ package org.apache.myfaces.blank;
 import org.apache.myfaces.blank.domain.Person;
 import org.apache.myfaces.blank.validation.group.Admin;
 import org.apache.myfaces.blank.validation.group.User;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.BeanValidation;
+import org.apache.myfaces.blank.validation.group.Address;
+import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
+import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
@@ -53,7 +55,10 @@ public class HelloWorldController
     @BeanValidation.List({
             @BeanValidation(viewIds = "/helloWorld.jsp"),
             @BeanValidation(viewIds = "/form1.jsp", useGroups = User.class),
-            @BeanValidation(viewIds = "/form2.jsp", useGroups = {Admin.class})
+            @BeanValidation(viewIds = "/form2.jsp", useGroups = Admin.class),
+            @BeanValidation(viewIds = "/violation.jsp", useGroups = Admin.class),
+            @BeanValidation(viewIds = "/violation.jsp", useGroups = Address.class,
+                    modelValidation = @ModelValidation(isActive = true))
     })
     public Person getPerson()
     {
