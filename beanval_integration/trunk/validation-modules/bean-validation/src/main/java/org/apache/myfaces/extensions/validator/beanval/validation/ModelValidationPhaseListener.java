@@ -18,27 +18,28 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.validation;
 
-import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
+import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
-import javax.faces.event.PhaseListener;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
-import javax.validation.ValidatorFactory;
 import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -63,7 +64,7 @@ public class ModelValidationPhaseListener implements PhaseListener
 
         List processedValidationTargets = new ArrayList();
 
-        for(ModelValidationEntry modelValidationEntry : modelValidationEntries)
+        for (ModelValidationEntry modelValidationEntry : modelValidationEntries)
         {
             processModelValidation(modelValidationEntry, processedValidationTargets);
         }
@@ -76,15 +77,15 @@ public class ModelValidationPhaseListener implements PhaseListener
 
     private void processModelValidation(ModelValidationEntry modelValidationEntry, List processedValidationTargets)
     {
-        for(Object validationTarget : modelValidationEntry.getValidationTargets())
+        for (Object validationTarget : modelValidationEntry.getValidationTargets())
         {
-            if(processedValidationTargets.contains(validationTarget) &&
+            if (processedValidationTargets.contains(validationTarget) &&
                     !modelValidationEntry.getMetaData().displayInline())
             {
                 continue;
             }
 
-            if(!processedValidationTargets.contains(validationTarget))
+            if (!processedValidationTargets.contains(validationTarget))
             {
                 processedValidationTargets.add(validationTarget);
             }
@@ -102,10 +103,10 @@ public class ModelValidationPhaseListener implements PhaseListener
                 //jsf < 2.0 will just use the first one (it's only a little overhead)
                 Iterator violationsIterator = violations.iterator();
                 ConstraintViolation constraintViolation;
-                while(violationsIterator.hasNext())
+                while (violationsIterator.hasNext())
                 {
-                    constraintViolation = (ConstraintViolation)violationsIterator.next();
-                    if(modelValidationEntry.getMetaData().displayInline())
+                    constraintViolation = (ConstraintViolation) violationsIterator.next();
+                    if (modelValidationEntry.getMetaData().displayInline())
                     {
                         processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, true);
                     }
@@ -122,9 +123,9 @@ public class ModelValidationPhaseListener implements PhaseListener
     @ToDo(value = Priority.HIGH, description = "use ExtValUtils#createFacesMessage" +
             "check ExtValUtils#executeAfterThrowingInterceptors")
     private void processConstraintViolation(ConstraintViolation violation,
-                                                  ModelValidationEntry modelValidationEntry,
-                                                  Object validationTarget,
-                                                  boolean displayAtComponent)
+                                            ModelValidationEntry modelValidationEntry,
+                                            Object validationTarget,
+                                            boolean displayAtComponent)
     {
         String violationMessage = violation.getMessage();
 
@@ -135,10 +136,21 @@ public class ModelValidationPhaseListener implements PhaseListener
         UIComponent uiComponent = null;
         String clientId = null;
 
-        if(displayAtComponent)
+        if (displayAtComponent)
         {
             uiComponent = modelValidationEntry.getComponent();
             clientId = modelValidationEntry.getComponent().getClientId(facesContext);
+        }
+
+        if (!ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getMetaData().message()))
+        {
+            String validationErrorMessage =  ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator()
+                    .interpolate(modelValidationEntry.getMetaData().message(),
+                            violation.getConstraintDescriptor(),
+                            validationTarget);
+
+            validatorException.getFacesMessage().setSummary(validationErrorMessage);
+            validatorException.getFacesMessage().setDetail(validationErrorMessage);
         }
 
         ExtValUtils.executeAfterThrowingInterceptors(
