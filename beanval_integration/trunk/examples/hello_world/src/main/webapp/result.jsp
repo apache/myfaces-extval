@@ -29,6 +29,7 @@
                     <h:outputText value="Home"/>
                 </h:commandLink>
             </h:form>
+            <h:messages globalOnly="true" showDetail="true" showSummary="false"/>
         </f:view>
     </body>
 </html>

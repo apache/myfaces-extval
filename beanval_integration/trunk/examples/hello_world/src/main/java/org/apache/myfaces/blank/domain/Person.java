@@ -20,6 +20,7 @@ package org.apache.myfaces.blank.domain;
 
 import org.apache.myfaces.blank.validation.group.Admin;
 import org.apache.myfaces.blank.validation.group.User;
+import org.apache.myfaces.blank.validation.group.Address;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 
 import javax.validation.constraints.NotNull;
@@ -39,6 +40,13 @@ public class Person
     })
     private String lastName;
 
+    @NotNull(groups = Address.class, message = "street is required")
+    private String street;
+    @NotNull(groups = Address.class, message = "zip is required")
+    private String zip;
+    @NotNull(groups = Address.class, message = "city is required")
+    private String city;
+
     public String getFirstName()
     {
         return firstName;
@@ -57,5 +65,35 @@ public class Person
     public void setLastName(String lastName)
     {
         this.lastName = lastName;
+    }
+
+    public String getStreet()
+    {
+        return street;
+    }
+
+    public void setStreet(String street)
+    {
+        this.street = street;
+    }
+
+    public String getZip()
+    {
+        return zip;
+    }
+
+    public void setZip(String zip)
+    {
+        this.zip = zip;
+    }
+
+    public String getCity()
+    {
+        return city;
+    }
+
+    public void setCity(String city)
+    {
+        this.city = city;
     }
 }

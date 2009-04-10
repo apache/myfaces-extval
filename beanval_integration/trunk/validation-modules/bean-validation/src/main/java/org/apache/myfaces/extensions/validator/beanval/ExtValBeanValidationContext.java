@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.DefaultMessageInterpolator;
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.ExtValMessageInterpolatorAdapter;
+import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
@@ -27,6 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIComponent;
 import javax.validation.groups.Default;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
@@ -56,6 +58,10 @@ public class ExtValBeanValidationContext
     @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
     private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
 
+    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
+    private Map<String, List<ModelValidationEntry>> modelValidationEntries =
+            new HashMap<String, List<ModelValidationEntry>>();
+
     private ExtValBeanValidationContext()
     {
     }
@@ -80,7 +86,7 @@ public class ExtValBeanValidationContext
 
     private String getGroupKey(String viewId, String componentId)
     {
-        return componentId == null ? viewId : viewId + ":" + componentId;
+        return componentId == null ? viewId : viewId + "@" + componentId;
     }
 
     public void addGroup(Class groupClass)
@@ -96,6 +102,37 @@ public class ExtValBeanValidationContext
     public void addGroup(Class groupClass, String viewId, String componentId)
     {
         addGroupToGroupStorage(groupClass, viewId, componentId, this.addedGroups);
+    }
+
+    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry)
+    {
+        addModelValidationEntry(modelValidationEntry, FacesContext.getCurrentInstance().getViewRoot().getViewId());
+    }
+
+    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry, String viewId)
+    {
+        addModelValidationEntry(modelValidationEntry, viewId, null);
+    }
+
+    public void addModelValidationEntry(
+            ModelValidationEntry modelValidationEntry, String viewId, UIComponent component)
+    {
+        modelValidationEntry.setComponent(component);
+
+        String componentId = component.getClientId(FacesContext.getCurrentInstance());
+        List<ModelValidationEntry> modelValidationEntryList =
+                this.modelValidationEntries.get(getGroupKey(viewId, componentId));
+
+        if(modelValidationEntryList == null)
+        {
+            modelValidationEntryList = new ArrayList<ModelValidationEntry>();
+            this.modelValidationEntries.put(getGroupKey(viewId, componentId), modelValidationEntryList);
+        }
+
+        if(!modelValidationEntryList.contains(modelValidationEntry))
+        {
+            modelValidationEntryList.add(modelValidationEntry);
+        }
     }
 
     public void restrictGroup(Class groupClass)
@@ -140,6 +177,7 @@ public class ExtValBeanValidationContext
         this.addedGroups.put(getGroupKey(viewId, componentId), new ArrayList<Class>());
     }
 
+    /*
     public Class[] getGroups()
     {
         if(this.addedGroups.size() < 1)
@@ -156,12 +194,19 @@ public class ExtValBeanValidationContext
         }
         return (Class[]) fullGroupList.toArray();
     }
+    */
 
     public Class[] getGroups(String viewId)
     {
         return getGroups(viewId, null);
     }
 
+    public Class[] getAllGroups(String viewId)
+    {
+        return getGroups(viewId, "*");
+    }
+
+    @ToDo(value = Priority.HIGH, description = "change impl. for #getAllGroups - see getModelValidationEntries")
     public Class[] getGroups(String viewId, String componentId)
     {
         if(this.addedGroups.size() < 1)
@@ -175,14 +220,14 @@ public class ExtValBeanValidationContext
 
         //add found groups
         String key = getGroupKey(viewId, null);
-        List<Class> resultListForPage = buildResultFor(key, this.addedGroups);
+        List<Class> resultListForPage = buildGroupList(key, this.addedGroups);
 
         key = getGroupKey(viewId, componentId);
-        List<Class> resultListForComponent = buildResultFor(key, this.addedGroups);
+        List<Class> resultListForComponent = buildGroupList(key, this.addedGroups);
 
         //remove restricted groups
-        Class[] resultsForPage = filterResult(getGroupKey(viewId, null), resultListForPage);
-        Class[] resultsForComponent = filterResult(getGroupKey(viewId, componentId), resultListForComponent);
+        Class[] resultsForPage = filterGroupList(getGroupKey(viewId, null), resultListForPage);
+        Class[] resultsForComponent = filterGroupList(getGroupKey(viewId, componentId), resultListForComponent);
 
         if(resultsForPage.length == 0)
         {
@@ -205,15 +250,86 @@ public class ExtValBeanValidationContext
         return mergeResults(resultsForPage, resultsForComponent);
     }
 
-    private List<Class> buildResultFor(String key, Map<String, List<Class>> groupStorage)
+    public List<ModelValidationEntry> getModelValidationEntries(String viewId)
+    {
+        return getModelValidationEntries(viewId, null);
+    }
+
+    public List<ModelValidationEntry> getAllModelValidationEntries(String viewId)
+    {
+        return getModelValidationEntries(viewId, "*");
+    }
+
+    public List<ModelValidationEntry> getModelValidationEntries(String viewId, String componentId)
+    {
+        if(this.modelValidationEntries.size() < 1)
+        {
+            return new ArrayList<ModelValidationEntry>();
+        }
+
+        //add found groups
+        String key;
+        List<ModelValidationEntry> resultListForPage = null;
+
+        if(!"*".equals(componentId))
+        {
+            key = getGroupKey(viewId, null);
+            resultListForPage =
+                    buildModelValidationEntryList(key, this.modelValidationEntries);
+        }
+
+        key = getGroupKey(viewId, componentId);
+        List<ModelValidationEntry> resultListForComponent =
+                buildModelValidationEntryList(key, this.modelValidationEntries);
+
+        if(resultListForPage == null || resultListForPage.isEmpty())
+        {
+            return resultListForComponent;
+        }
+        else if(resultListForComponent.isEmpty())
+        {
+            return resultListForPage;
+        }
+
+        //merge results
+        List<ModelValidationEntry> mergedResult = new ArrayList<ModelValidationEntry>();
+        mergedResult.addAll(resultListForPage);
+        mergedResult.addAll(resultListForComponent);
+        return mergedResult;
+    }
+
+    private List<Class> buildGroupList(String key, Map<String, List<Class>> groupStorage)
     {
         List<Class> list = groupStorage.get(key);
         return (list != null) ? list : new ArrayList<Class>();
     }
 
-    private Class[] filterResult(String key, List<Class> addedGroups)
+    private List<ModelValidationEntry> buildModelValidationEntryList(
+            String key, Map<String, List<ModelValidationEntry>> groupStorage)
     {
-        List<Class> restrictedGroups = buildResultFor(key, this.restrictedGroups);
+        List<ModelValidationEntry> list;
+
+        if(key != null && key.endsWith("*"))
+        {
+            list = new ArrayList<ModelValidationEntry>();
+            for(Map.Entry<String,List<ModelValidationEntry>> entry : groupStorage.entrySet())
+            {
+                if(entry.getKey().substring(0, entry.getKey().indexOf("@"))
+                        .equals(key.substring(0, key.indexOf("@"))))
+                {
+                    list.addAll(entry.getValue());
+                }
+            }
+            return list;
+        }
+
+        list = groupStorage.get(key);
+        return (list != null) ? list : new ArrayList<ModelValidationEntry>();
+    }
+
+    private Class[] filterGroupList(String key, List<Class> addedGroups)
+    {
+        List<Class> restrictedGroups = buildGroupList(key, this.restrictedGroups);
         List<Class> results = new ArrayList<Class>();
 
         for(Class currentGroup : addedGroups)
