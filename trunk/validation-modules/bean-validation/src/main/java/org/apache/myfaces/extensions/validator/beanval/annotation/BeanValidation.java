@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.annotation.group;
+package org.apache.myfaces.extensions.validator.beanval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -41,12 +41,12 @@ public @interface BeanValidation
 {
     String[] viewIds() default "*";
 
-    boolean useModelValidation() default false;
-
     Class[] useGroups() default Default.class;
 
-    Class[] restrictGroups() default None.class;
+    Class[] restrictGroups() default NoRestrictionGroup.class;
 
+    ModelValidation modelValidation() default @ModelValidation;
+    
     @Retention(RUNTIME) static @interface List
     {
         BeanValidation[] value();

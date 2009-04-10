@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultCo
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.beanval.annotation.group.GroupValidationKeys;
+import org.apache.myfaces.extensions.validator.beanval.annotation.GroupValidationKeys;
 
 import javax.faces.context.FacesContext;
 

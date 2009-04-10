@@ -38,6 +38,7 @@
                 <h:panelGroup/>
               </h:panelGrid>
             </h:form>
+            <h:messages globalOnly="true" showDetail="true" showSummary="false"/>
         </f:view>
     </body>
 </html>
