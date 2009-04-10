@@ -39,10 +39,13 @@ import static java.lang.annotation.ElementType.FIELD;
 public @interface ModelValidation
 {
     public static final String DEFAULT_TARGET = "base";
+    public static final String DEFAULT_MESSAGE = "org.apache.myfaces.extensions.validator.bv_message";
 
     boolean isActive() default false;
 
     boolean displayInline() default false;
 
     String[] validationTargets() default DEFAULT_TARGET;
+
+    String message() default DEFAULT_MESSAGE;
 }

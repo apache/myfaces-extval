@@ -379,6 +379,7 @@ public class ExtValBeanValidationContext
         return defaultMessageInterpolator;
     }
 
+    @ToDo(Priority.HIGH)
     public static void setMessageResolver(MessageResolver customMessageResolver)
     {
         messageResolver = customMessageResolver;

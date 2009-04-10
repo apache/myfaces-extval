@@ -254,6 +254,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         if (violations != null && violations.size() > 0)
         {
+            //TODO jsf 2.0 supports multiple messages -> use all messages
             ConstraintViolation violation = (ConstraintViolation) violations.toArray()[0];
 
             String violationMessage = violation.getMessage();
