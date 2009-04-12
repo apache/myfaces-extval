@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.property;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,8 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultPropertyInformation implements PropertyInformation
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private Map<String, Object> informationMap = new HashMap<String, Object>();
     private List<MetaDataEntry> metaDataList = new ArrayList<MetaDataEntry>();
 
@@ -54,6 +58,11 @@ public class DefaultPropertyInformation implements PropertyInformation
 
     public void setInformation(String key, Object value)
     {
+        if(this.logger.isTraceEnabled())
+        {
+            this.logger.trace("new information added key: " + key + " value: " + value);
+        }
+
         informationMap.put(key, value);
     }
 
@@ -66,5 +75,15 @@ public class DefaultPropertyInformation implements PropertyInformation
     {
         metaDataEntry.setProperties(this.informationMap);
         this.metaDataList.add(metaDataEntry);
+    }
+
+    public void resetMetaDataEntries()
+    {
+        if(this.logger.isTraceEnabled())
+        {
+            this.logger.trace("resetting meta-data entries");
+        }
+
+        this.metaDataList.clear();
     }
 }
