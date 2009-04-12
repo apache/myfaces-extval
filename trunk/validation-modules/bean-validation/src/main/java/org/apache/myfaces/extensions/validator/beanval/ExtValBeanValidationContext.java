@@ -52,15 +52,18 @@ public class ExtValBeanValidationContext
 
     private static MessageResolver messageResolver;
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
+    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private Map<String, List<Class>> addedGroups = new HashMap<String, List<Class>>();
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
+    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable GroupStorage")
+    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private Map<String, List<ModelValidationEntry>> modelValidationEntries =
             new HashMap<String, List<ModelValidationEntry>>();
+
+    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
+    private List<String> componentsOfRequest = new ArrayList<String>();
 
     private ExtValBeanValidationContext()
     {
@@ -119,7 +122,14 @@ public class ExtValBeanValidationContext
     {
         modelValidationEntry.setComponent(component);
 
-        String componentId = component.getClientId(FacesContext.getCurrentInstance());
+        String componentId = null;
+
+        if(component != null)
+        {
+            componentId = component.getClientId(FacesContext.getCurrentInstance());
+            this.componentsOfRequest.add(componentId);
+        }
+
         List<ModelValidationEntry> modelValidationEntryList =
                 this.modelValidationEntries.get(getGroupKey(viewId, componentId));
 
@@ -258,6 +268,20 @@ public class ExtValBeanValidationContext
     public List<ModelValidationEntry> getAllModelValidationEntries(String viewId)
     {
         return getModelValidationEntries(viewId, "*");
+    }
+
+    public List<ModelValidationEntry> getModelValidationEntriesOfCurrentRequest(String viewId)
+    {
+        List<ModelValidationEntry> result = new ArrayList<ModelValidationEntry>();
+
+        for(String currentClientId : this.componentsOfRequest)
+        {
+            result.addAll(getModelValidationEntries(viewId, currentClientId));
+        }
+
+        result.addAll(getModelValidationEntries(viewId));
+
+        return result;
     }
 
     public List<ModelValidationEntry> getModelValidationEntries(String viewId, String componentId)
