@@ -197,7 +197,10 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         try
         {
-            processValidation(facesContext, uiComponent, convertedObject);
+            if(processComponent(uiComponent))
+            {
+                processValidation(facesContext, uiComponent, convertedObject);
+            }
         }
         catch (ValidatorException e)
         {
@@ -205,14 +208,14 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         }
     }
 
+    private boolean processComponent(UIComponent uiComponent)
+    {
+        return uiComponent instanceof EditableValueHolder;
+    }
+
     @ToDo(value = Priority.HIGH, description = "use ExtValUtils#createFacesMessage")
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
     {
-        if (!(uiComponent instanceof EditableValueHolder))
-        {
-            return;
-        }
-
         if (logger.isTraceEnabled())
         {
             logger.trace("jsr303 start validation");
@@ -231,6 +234,142 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         //extract group validation annotations
         addMetaDataToContext(propertyInformation, uiComponent);
 
+        processFieldValidation(facesContext, uiComponent, convertedObject, propertyInformation);
+
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("jsr303 validation finished");
+        }
+    }
+
+    protected void addMetaDataToContext(PropertyInformation propertyInformation, UIComponent component)
+    {
+        PropertyDetails propertyDetails = propertyInformation
+                .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+
+        String[] key = propertyDetails.getKey().split("\\.");
+
+        Object firstBean = ExtValUtils.getELHelper().getBean(key[0]);
+
+        List<Class> foundGroupsForPropertyValidation = new ArrayList<Class>();
+        List<Class> restrictedGroupsForPropertyValidation = new ArrayList<Class>();
+        List<ModelValidationEntry> modelValidationEntryList = new ArrayList<ModelValidationEntry>();
+        List<Class> restrictedGroupsForModelValidation = new ArrayList<Class>();
+
+        //extract bv-controller-annotation of
+
+        //first bean
+        processClass(firstBean,
+                foundGroupsForPropertyValidation,
+                restrictedGroupsForPropertyValidation,
+                modelValidationEntryList,
+                restrictedGroupsForModelValidation);
+
+        //first property
+        processFieldsAndProperties(key[0] + "." + key[1],
+                firstBean,
+                key[1],
+                foundGroupsForPropertyValidation,
+                restrictedGroupsForPropertyValidation,
+                modelValidationEntryList,
+                restrictedGroupsForModelValidation);
+
+        //base object (of target property)
+        processClass(propertyDetails.getBaseObject(),
+                foundGroupsForPropertyValidation,
+                restrictedGroupsForPropertyValidation,
+                modelValidationEntryList,
+                restrictedGroupsForModelValidation);
+
+        //last property
+        processFieldsAndProperties(
+                propertyDetails.getKey(),
+                propertyDetails.getBaseObject(),
+                propertyDetails.getProperty(),
+                foundGroupsForPropertyValidation,
+                restrictedGroupsForPropertyValidation,
+                modelValidationEntryList,
+                restrictedGroupsForModelValidation);
+
+        ExtValBeanValidationContext extValBeanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
+        String currentViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+
+        String clientId = component.getClientId(FacesContext.getCurrentInstance());
+
+        processFoundGroups(extValBeanValidationContext, currentViewId, clientId,
+                foundGroupsForPropertyValidation);
+
+        processRestrictedGroups(extValBeanValidationContext, currentViewId, clientId,
+                restrictedGroupsForPropertyValidation);
+
+        initModelValidation(extValBeanValidationContext, currentViewId, component, propertyDetails,
+                modelValidationEntryList, restrictedGroupsForModelValidation);
+    }
+
+    protected void processFoundGroups(ExtValBeanValidationContext extValBeanValidationContext,
+                                      String currentViewId,
+                                      String clientId,
+                                      List<Class> foundGroupsForPropertyValidation)
+    {
+        /*
+         * add found groups to context
+         */
+        for (Class currentGroupClass : foundGroupsForPropertyValidation)
+        {
+            extValBeanValidationContext.addGroup(currentGroupClass, currentViewId, clientId);
+        }
+    }
+
+    protected void processRestrictedGroups(ExtValBeanValidationContext extValBeanValidationContext,
+                                         String currentViewId,
+                                         String clientId,
+                                         List<Class> restrictedGroupsForPropertyValidation)
+    {
+        /*
+         * add restricted groups
+         */
+        for (Class currentGroupClass : restrictedGroupsForPropertyValidation)
+        {
+            extValBeanValidationContext.restrictGroup(currentGroupClass, currentViewId, clientId);
+        }
+    }
+
+    protected void initModelValidation(ExtValBeanValidationContext extValBeanValidationContext,
+                                     String currentViewId,
+                                     UIComponent component,
+                                     PropertyDetails propertyDetails,
+                                     List<ModelValidationEntry> modelValidationEntryList,
+                                     List<Class> restrictedGroupsForModelValidation)
+    {
+        /*
+         * add model validation entry list
+         */
+        for(ModelValidationEntry modelValidationEntry : modelValidationEntryList)
+        {
+            if(!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
+                    .DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION))
+            {
+                modelValidationEntry.addGroup(Default.class);
+            }
+
+            for(Class restrictedGroup : restrictedGroupsForModelValidation)
+            {
+                modelValidationEntry.removeGroup(restrictedGroup);
+            }
+
+            if(modelValidationEntry.getGroups().length > 0)
+            {
+                addTargetsForModelValidation(modelValidationEntry, propertyDetails.getBaseObject());
+                extValBeanValidationContext.addModelValidationEntry(modelValidationEntry, currentViewId, component);
+            }
+        }
+    }
+
+    protected void processFieldValidation(FacesContext facesContext,
+                                        UIComponent uiComponent,
+                                        Object convertedObject,
+                                        PropertyInformation propertyInformation)
+    {
         Class baseBeanClass = (propertyInformation.getInformation(
                 PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class)).getBaseObject().getClass();
 
@@ -285,106 +424,8 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
                 throw validatorException;
             }
         }
-
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("jsr303 validation finished");
-        }
     }
-
-    private void addMetaDataToContext(PropertyInformation propertyInformation, UIComponent component)
-    {
-        PropertyDetails propertyDetails = propertyInformation
-                .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
-
-        String[] key = propertyDetails.getKey().split("\\.");
-
-        Object firstBean = ExtValUtils.getELHelper().getBean(key[0]);
-
-        List<Class> foundGroupsForPropertyValidation = new ArrayList<Class>();
-        List<Class> restrictedGroupsForPropertyValidation = new ArrayList<Class>();
-        List<ModelValidationEntry> modelValidationEntryList = new ArrayList<ModelValidationEntry>();
-        List<Class> restrictedGroupsForModelValidation = new ArrayList<Class>();
-
-        //extract bv-controller-annotation of
-
-        //first bean
-        processClass(firstBean,
-                foundGroupsForPropertyValidation,
-                restrictedGroupsForPropertyValidation,
-                modelValidationEntryList,
-                restrictedGroupsForModelValidation);
-
-        //first property
-        processFieldsAndProperties(key[0] + "." + key[1],
-                firstBean,
-                key[1],
-                foundGroupsForPropertyValidation,
-                restrictedGroupsForPropertyValidation,
-                modelValidationEntryList,
-                restrictedGroupsForModelValidation);
-
-        //base object (of target property)
-        processClass(propertyDetails.getBaseObject(),
-                foundGroupsForPropertyValidation,
-                restrictedGroupsForPropertyValidation,
-                modelValidationEntryList,
-                restrictedGroupsForModelValidation);
-
-        //last property
-        processFieldsAndProperties(
-                propertyDetails.getKey(),
-                propertyDetails.getBaseObject(),
-                propertyDetails.getProperty(),
-                foundGroupsForPropertyValidation,
-                restrictedGroupsForPropertyValidation,
-                modelValidationEntryList,
-                restrictedGroupsForModelValidation);
-
-        ExtValBeanValidationContext extValBeanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
-        String currentViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-
-        String clientId = component.getClientId(FacesContext.getCurrentInstance());
-        /*
-         * add found groups to context
-         */
-        for (Class currentGroupClass : foundGroupsForPropertyValidation)
-        {
-            extValBeanValidationContext.addGroup(currentGroupClass, currentViewId, clientId);
-        }
-
-        /*
-         * add restricted groups
-         */
-        for (Class currentGroupClass : restrictedGroupsForPropertyValidation)
-        {
-            extValBeanValidationContext.restrictGroup(currentGroupClass, currentViewId, clientId);
-        }
-
-        /*
-         * add model validation entry list
-         */
-        for(ModelValidationEntry modelValidationEntry : modelValidationEntryList)
-        {
-            if(!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
-                    .DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION))
-            {
-                modelValidationEntry.addGroup(Default.class);
-            }
-
-            for(Class restrictedGroup : restrictedGroupsForModelValidation)
-            {
-                modelValidationEntry.removeGroup(restrictedGroup);
-            }
-
-            if(modelValidationEntry.getGroups().length > 0)
-            {
-                addTargetsForModelValidation(modelValidationEntry, propertyDetails.getBaseObject());
-                extValBeanValidationContext.addModelValidationEntry(modelValidationEntry, currentViewId, component);
-            }
-        }
-    }
-
+    
     private void processClass(Object objectToInspect,
                               List<Class> foundGroupsForPropertyValidation,
                               List<Class> restrictedGroupsForPropertyValidation,
