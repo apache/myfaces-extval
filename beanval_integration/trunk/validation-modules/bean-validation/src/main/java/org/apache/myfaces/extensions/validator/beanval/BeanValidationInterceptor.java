@@ -540,7 +540,7 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         }
     }
 
-    private void processMetaData(BeanValidation beanValidation,
+    protected void processMetaData(BeanValidation beanValidation,
                                  Object metaDataSourceObject,
                                  List<Class> foundGroupsForPropertyValidation,
                                  List<Class> restrictedGroupsForPropertyValidation,
