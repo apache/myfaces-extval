@@ -60,7 +60,7 @@ public class ModelValidationPhaseListener implements PhaseListener
         }
 
         List<ModelValidationEntry> modelValidationEntries = ExtValBeanValidationContext.getCurrentInstance()
-                .getAllModelValidationEntries(FacesContext.getCurrentInstance().getViewRoot().getViewId());
+                .getModelValidationEntriesOfCurrentRequest(FacesContext.getCurrentInstance().getViewRoot().getViewId());
 
         List processedValidationTargets = new ArrayList();
 
