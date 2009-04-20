@@ -38,21 +38,21 @@ Download Apache MyFaces Extensions Validator
 *-------------------------+---------+----------+-----------+
 |                         | Mirrors | Checksum | Signature |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.1 1.1.1 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval11-1.1.1-bin.tar.gz} myfaces-extval11-1.1.1-bin.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.1-bin.tar.gz.md5} myfaces-extval11-1.1.1-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.1-bin.tar.gz.asc} myfaces-extval11-1.1.1-bin.tar.gz.asc}} |
+| MyFaces Extensions Validator for JSF 1.1 1.1.2 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval11-1.1.2-bin.tar.gz} myfaces-extval11-1.1.2-bin.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.2-bin.tar.gz.md5} myfaces-extval11-1.1.2-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.2-bin.tar.gz.asc} myfaces-extval11-1.1.2-bin.tar.gz.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.1 1.1.1 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval11-1.1.1-bin.zip} myfaces-extval11-1.1.1-bin.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.1-bin.zip.md5} myfaces-extval11-1.1.1-bin.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.1-bin.zip.asc} myfaces-extval11-1.1.1-bin.zip.asc}} |
+| MyFaces Extensions Validator for JSF 1.1 1.1.2 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval11-1.1.2-bin.zip} myfaces-extval11-1.1.2-bin.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.2-bin.zip.md5} myfaces-extval11-1.1.2-bin.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval11-1.1.2-bin.zip.asc} myfaces-extval11-1.1.2-bin.zip.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.1 1.1.1 Source (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval11-1.1.1-src.tar.gz} myfaces-extval11-1.1.1-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.1-src.tar.gz.md5} myfaces-extval11-1.1.1-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.1-src.tar.gz.asc} myfaces-extval11-1.1.1-src.tar.gz.asc}} |
+| MyFaces Extensions Validator for JSF 1.1 1.1.2 Source (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval11-1.1.2-src.tar.gz} myfaces-extval11-1.1.2-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.2-src.tar.gz.md5} myfaces-extval11-1.1.2-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.2-src.tar.gz.asc} myfaces-extval11-1.1.2-src.tar.gz.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.1 1.1.1 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval11-1.1.1-src.zip} myfaces-extval11-1.1.1-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.1-src.zip.md5} myfaces-extval11-1.1.1-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.1-src.zip.asc} myfaces-extval11-1.1.1-src.zip.asc}} |
+| MyFaces Extensions Validator for JSF 1.1 1.1.2 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval11-1.1.2-src.zip} myfaces-extval11-1.1.2-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.2-src.zip.md5} myfaces-extval11-1.1.2-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval11-1.1.2-src.zip.asc} myfaces-extval11-1.1.2-src.zip.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.2 1.2.1 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval12-1.2.1-bin.tar.gz} myfaces-extval12-1.2.1-bin.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.1-bin.tar.gz.md5} myfaces-extval12-1.2.1-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.1-bin.tar.gz.asc} myfaces-extval12-1.2.1-bin.tar.gz.asc}} |
+| MyFaces Extensions Validator for JSF 1.2 1.2.2 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval12-1.2.2-bin.tar.gz} myfaces-extval12-1.2.2-bin.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.2-bin.tar.gz.md5} myfaces-extval12-1.2.2-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.2-bin.tar.gz.asc} myfaces-extval12-1.2.2-bin.tar.gz.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.2 1.2.1 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval12-1.2.1-bin.zip} myfaces-extval12-1.2.1-bin.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.1-bin.zip.md5} myfaces-extval12-1.2.1-bin.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.1-bin.zip.asc} myfaces-extval12-1.2.1-bin.zip.asc}} |
+| MyFaces Extensions Validator for JSF 1.2 1.2.2 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extval12-1.2.2-bin.zip} myfaces-extval12-1.2.2-bin.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.2-bin.zip.md5} myfaces-extval12-1.2.2-bin.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extval12-1.2.2-bin.zip.asc} myfaces-extval12-1.2.2-bin.zip.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.2 1.2.1 Source (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval12-1.2.1-src.tar.gz} myfaces-extval12-1.2.1-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.1-src.tar.gz.md5} myfaces-extval12-1.2.1-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.1-src.tar.gz.asc} myfaces-extval12-1.2.1-src.tar.gz.asc}} |
+| MyFaces Extensions Validator for JSF 1.2 1.2.2 Source (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval12-1.2.2-src.tar.gz} myfaces-extval12-1.2.2-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.2-src.tar.gz.md5} myfaces-extval12-1.2.2-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.2-src.tar.gz.asc} myfaces-extval12-1.2.2-src.tar.gz.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions Validator for JSF 1.2 1.2.1 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval12-1.2.1-src.zip} myfaces-extval12-1.2.1-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.1-src.zip.md5} myfaces-extval12-1.2.1-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.1-src.zip.asc} myfaces-extval12-1.2.1-src.zip.asc}} |
+| MyFaces Extensions Validator for JSF 1.2 1.2.2 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extval12-1.2.2-src.zip} myfaces-extval12-1.2.2-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.2-src.zip.md5} myfaces-extval12-1.2.2-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extval12-1.2.2-src.zip.asc} myfaces-extval12-1.2.2-src.zip.asc}} |
 *-------------------------+---------+----------+-----------+
 
 Latest source code from SVN repository
@@ -90,19 +90,19 @@ Verifying signatures
 
 	  <<<
 	  % pgpk -a KEYS
-	  % pgpv myfaces-extval11-1.1.1-bin.tar.gz.asc myfaces-extval11-1.1.1-bin.tar.gz
+	  % pgpv myfaces-extval11-1.1.2-bin.tar.gz.asc myfaces-extval11-1.1.2-bin.tar.gz
 	  >>>
 
 	  <or>
 
 	  <<<
 	  % pgp -ka KEYS
-	  % pgp myfaces-extval11-1.1.1-bin.tar.gz.asc myfaces-extval11-1.1.1-bin.tar.gz
+	  % pgp myfaces-extval11-1.1.2-bin.tar.gz.asc myfaces-extval11-1.1.2-bin.tar.gz
 	  >>>
 
 	  <or>
 
 	  <<<
   	% gpg --import KEYS
-	  % gpg --verify myfaces-extval11-1.1.1-bin.tar.gz.asc myfaces-extval11-1.1.1-bin.tar.gz
+	  % gpg --verify myfaces-extval11-1.1.2-bin.tar.gz.asc myfaces-extval11-1.1.2-bin.tar.gz
 	  >>>
