@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -58,9 +59,16 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
                 .createPropertyDetailsForNewTarget(metaDataEntry, targetExpression);
 
             for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
-                propertyDetails).getMetaDataEntries())
+                                                            propertyDetails).getMetaDataEntries())
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+
+                if(validationStrategy == null ||
+                        PropertyValidationUtils.isValidationSkipped(FacesContext.getCurrentInstance(),
+                                validationStrategy, entry))
+                {
+                    continue;
+                }
 
                 metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
 
