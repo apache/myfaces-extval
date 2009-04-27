@@ -361,6 +361,13 @@ public class ExtValUtils
         return false;
     }
 
+    public static boolean processMetaDataEntryAfterSkipValidation(
+            Class<? extends ValidationStrategy> targetClass, MetaDataEntry entry)
+    {
+        return ExtValUtils.isSkipableValidationStrategy(targetClass) &&
+                Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class));
+    }
+
     public static List<Class> getSkipValidationSupportClassList()
     {
         List<StaticConfiguration<String, String>> staticConfigurationList = ExtValContext.getContext()

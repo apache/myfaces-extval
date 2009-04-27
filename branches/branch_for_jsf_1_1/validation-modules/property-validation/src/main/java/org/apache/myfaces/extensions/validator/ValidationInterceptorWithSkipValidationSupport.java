@@ -22,10 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.baseval.strategy.SkipValidationStrategy;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -43,26 +41,6 @@ public class ValidationInterceptorWithSkipValidationSupport extends ValidationIn
                                      ValidationStrategy validationStrategy,
                                      MetaDataEntry metaDataEntry)
     {
-        if(ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass()))
-        {
-            Boolean skipValidation = metaDataEntry.getProperty(
-                PropertyInformationKeys.SKIP_VALIDATION, Boolean.class);
-
-            if(Boolean.TRUE.equals(skipValidation))
-            {
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace("validation of " + validationStrategy.getClass().getName() + " canceled");
-                }
-
-                return true;
-            }
-        }
-        else if(validationStrategy instanceof SkipValidationStrategy)
-        {
-            validationStrategy.validate(facesContext, uiComponent, metaDataEntry, null);
-            return true;
-        }
-        return false;
+        return PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
     }
 }
