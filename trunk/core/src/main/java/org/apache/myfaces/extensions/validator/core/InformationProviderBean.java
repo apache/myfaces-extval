@@ -111,6 +111,8 @@ public class InformationProviderBean
                 "ComponentMetaDataExtractorFactory");
         customizableInfos.put(CustomInformation.META_DATA_TRANSFORMER_FACTORY,
                 "MetaDataTransformerFactory");
+        customizableInfos.put(CustomInformation.FACES_MESSAGE_FACTORY,
+                "FacesMessageFactory");
 
         //conventions (the rest of the conventions are built with the help of name mappers,...
         customizableInfos.put(CustomInformation.MESSAGE_BUNDLE_NAME,

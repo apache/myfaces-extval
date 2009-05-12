@@ -20,7 +20,10 @@ package org.apache.myfaces.extensions.validator.core.el;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
@@ -33,6 +36,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import java.io.Externalizable;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * in order to centralize the jsf version dependency within the core
@@ -178,7 +183,7 @@ public class DefaultELHelper implements ELHelper
                 " -- an el-resolver error occurred! maybe you used an invalid binding. otherwise: " +
                 "please report the issue, deactivate the el-resovler of extval via web.xml context-param: " +
                 ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER" +
-                " and test again.");
+                " and test again.", t);
         }
 
         if(elResolver.getPath() == null || elResolver.getBaseObject() == null || elResolver.getProperty() == null)
@@ -189,28 +194,25 @@ public class DefaultELHelper implements ELHelper
         return new PropertyDetails(elResolver.getPath(), elResolver.getBaseObject(), elResolver.getProperty());
     }
 
+    //keep in sync with DefaultELHelper#getPropertyDetailsOfValueBinding of branch!!!
     private PropertyDetails getPropertyDetailsViaReflectionFallback(UIComponent uiComponent)
     {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
-
-        if(valueBindingExpression == null)
-        {
-            return null;
-        }
-
         ValueBindingExpression currentValueBindingExpression =
             new ValueBindingExpression(valueBindingExpression.getExpressionString());
+
         String path = null;
 
         while(currentValueBindingExpression.getBaseExpression() != null)
         {
             if(path == null)
             {
-                path = currentValueBindingExpression.getProperty();
+                path = getPropertyName(currentValueBindingExpression);
             }
             else
             {
-                path = currentValueBindingExpression.getProperty() + "." + path;
+                path = getPropertyName(currentValueBindingExpression) + "." + path;
             }
 
             currentValueBindingExpression = currentValueBindingExpression.getBaseExpression();
@@ -218,9 +220,67 @@ public class DefaultELHelper implements ELHelper
 
         path = currentValueBindingExpression.getProperty() + "." + path;
 
-        Object baseObject = getValueOfExpression(
-                FacesContext.getCurrentInstance(), valueBindingExpression.getBaseExpression());
-        return new PropertyDetails(path, baseObject, valueBindingExpression.getProperty());
+        Object baseObject = getValueOfExpression(facesContext, valueBindingExpression.getBaseExpression());
+
+        //in case of e.g.: #{bean[bean.passwordRepeatedPropertyName]}
+        //-> bean.passwordRepeatedPropertyName is not the final property name
+        return new PropertyDetails(path, baseObject, getPropertyName(valueBindingExpression));
+    }
+
+    private String getPropertyName(ValueBindingExpression valueBindingExpression)
+    {
+        String propertyName = valueBindingExpression.getProperty();
+
+        if(propertyName.contains("."))
+        {
+            propertyName = extractPropertyNameOfPropertyPath(propertyName);
+        }
+
+        return propertyName;
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "support for more dynamic bindings - details see inline")
+    private String extractPropertyNameOfPropertyPath(String propertyChain)
+    {
+        String[] properties = propertyChain.split("\\.");
+
+        Object currentPropertyValue = ExtValUtils.getELHelper().getBean(properties[0]);
+
+        Method currentMethod;
+        String currentPropertyName;
+        for(int i = 1; i < properties.length; i++)
+        {
+            currentPropertyName = properties[i];
+            currentMethod = ReflectionUtils.tryToGetMethod(currentPropertyValue.getClass(),
+                "get" + currentPropertyName.substring(0, 1).toUpperCase() + currentPropertyName.substring(1));
+
+            if(currentMethod == null && currentPropertyValue instanceof Map)
+            {
+                //it's ok for the simple map case - but not for e.g.:
+                //#{bean1[bean2.propertyNameProvider[ bean3.index]]}
+                //or every other complex replacement for bean3.index
+                //it might also require an adjustment at FaceletsTaglibExpressionHelper#tryToTransformToRealBinding
+                ((Map)currentPropertyValue).get(currentPropertyName);
+            }
+            else
+            {
+                currentPropertyValue = ReflectionUtils.tryToInvokeMethod(currentPropertyValue, currentMethod);
+            }
+        }
+
+        if(currentPropertyValue instanceof String)
+        {
+            return (String)currentPropertyValue;
+        }
+        else
+        {
+            if(this.logger.isErrorEnabled())
+            {
+                this.logger.error("unexpected value within map syntax: " + propertyChain +
+                        " last property name: " + currentPropertyValue);
+            }
+            return null;
+        }
     }
 
     static String getOriginalValueBindingExpression(UIComponent uiComponent)

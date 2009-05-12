@@ -62,6 +62,11 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
 
                 if (validationStrategy != null)
                 {
+                    if(ExtValUtils.processMetaDataEntryAfterSkipValidation(validationStrategy.getClass(), entry))
+                    {
+                        continue;
+                    }
+
                     validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
                 }
                 else
