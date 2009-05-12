@@ -28,8 +28,10 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.render.ClientBehaviorRenderer;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
@@ -95,9 +97,30 @@ public class ExtValRenderKit extends RenderKit
         return wrapped.createResponseStream(outputStream);
     }
 
+    public Iterator<String> getComponentFamilies() {
+        return wrapped.getComponentFamilies();
+    }
+
+    public Iterator<String> getRendererTypes(String s) {
+        return wrapped.getRendererTypes(s);
+    }
+
+    public void addClientBehaviorRenderer(String s, ClientBehaviorRenderer clientBehaviorRenderer) {
+        wrapped.addClientBehaviorRenderer(s, clientBehaviorRenderer);
+    }
+
+    public ClientBehaviorRenderer getClientBehaviorRenderer(String s) {
+        return wrapped.getClientBehaviorRenderer(s);
+    }
+
+    public Iterator<String> getClientBehaviorRendererTypes() {
+        return wrapped.getClientBehaviorRendererTypes();
+    }
+
     @UsageInformation(UsageCategory.REUSE)
     protected Renderer createWrapper(Renderer renderer)
     {
         return new ExtValRendererWrapper(renderer);
     }
+
 }
