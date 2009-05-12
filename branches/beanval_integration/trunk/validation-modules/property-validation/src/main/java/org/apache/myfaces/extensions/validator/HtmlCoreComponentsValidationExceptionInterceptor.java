@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
@@ -57,7 +58,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
     {
         if(processComponent(uiComponent))
         {
-            FacesMessage facesMessage = validatorException.getFacesMessage();
+            FacesMessage facesMessage = ExtValUtils.convertFacesMessage(validatorException.getFacesMessage());
 
             String label = (String) ReflectionUtils.tryToInvokeMethod(uiComponent,
                 ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getLabel"));
@@ -73,9 +74,17 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
                 label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
             }
 
-            for(int i = 0; i < 3; i++)
+            if(facesMessage instanceof LabeledMessage)
             {
-                ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
+                ((LabeledMessage)facesMessage).setLabelText(label);
+            }
+            //if someone uses a normal faces message
+            else
+            {
+                for(int i = 0; i < 3; i++)
+                {
+                    ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
+                }
             }
         }
         return true;

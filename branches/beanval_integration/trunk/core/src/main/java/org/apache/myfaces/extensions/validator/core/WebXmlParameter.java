@@ -85,6 +85,9 @@ public interface WebXmlParameter
     static final String CUSTOM_META_DATA_TRANSFORMER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_TRANSFORMER_FACTORY");
 
+    static final String CUSTOM_FACES_MESSAGE_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_FACES_MESSAGE_FACTORY");
+
     /*
      * deactivate
      */

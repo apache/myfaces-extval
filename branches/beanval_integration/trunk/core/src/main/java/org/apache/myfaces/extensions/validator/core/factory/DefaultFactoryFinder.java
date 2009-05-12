@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.factory;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -29,6 +31,7 @@ import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWr
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
+import org.apache.myfaces.extensions.validator.core.validation.message.DefaultFacesMessageFactory;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -103,6 +106,11 @@ public class DefaultFactoryFinder implements FactoryFinder
             case EL_HELPER_FACTORY:
                 factory = createELHelperFactory();
                 break;
+
+            case FACES_MESSAGE_FACTORY:
+                factory = createFacesMessageFactory();
+                break;
+
             default: //required by checkstyle
         }
 
@@ -114,6 +122,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         factoryMap.put(factoryName, factory);
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createComponentMetaDataExtractorFactory()
     {
         Object factory = null;
@@ -138,6 +147,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createValidationStrategyFactory()
     {
         Object factory = null;
@@ -163,6 +173,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createMessageResolverFactory()
     {
         Object factory = null;
@@ -188,6 +199,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
     protected Object createMetaDataTransformerFactory()
     {
         Object factory = null;
@@ -215,6 +227,37 @@ public class DefaultFactoryFinder implements FactoryFinder
     protected Object createRenderKitWrapperFactory()
     {
         return new DefaultRenderKitWrapperFactory();
+    }
+
+    private Object createFacesMessageFactory()
+    {
+        Object factory = null;
+
+        List<String> facesMessageFactoryClassNames = new ArrayList<String>();
+
+        facesMessageFactoryClassNames.add(WebXmlParameter.CUSTOM_FACES_MESSAGE_FACTORY);
+        facesMessageFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                    .get(CustomInformation.FACES_MESSAGE_FACTORY));
+
+        Object target = ExtValContext.getContext().getGlobalProperty(CustomInformation.FACES_MESSAGE_FACTORY.name());
+        if(target != null && target instanceof String)
+        {
+            facesMessageFactoryClassNames.add((String)target);
+        }
+        facesMessageFactoryClassNames.add(DefaultFacesMessageFactory.class.getName());
+
+        for (String className : facesMessageFactoryClassNames)
+        {
+            factory = ClassUtils.tryToInstantiateClassForName(className);
+
+            if (factory != null)
+            {
+                break;
+            }
+        }
+
+        return factory;
     }
 
     private Object createELHelperFactory()

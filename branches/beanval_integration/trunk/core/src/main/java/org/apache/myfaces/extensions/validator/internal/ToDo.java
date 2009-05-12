@@ -32,4 +32,10 @@ public @interface ToDo
 {
     Priority value();
     String description() default "";
+
+    @Target({TYPE, METHOD, FIELD})
+    @interface List
+    {
+        ToDo[] value();
+    }
 }
