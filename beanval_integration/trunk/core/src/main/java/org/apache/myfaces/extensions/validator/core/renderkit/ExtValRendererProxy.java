@@ -63,7 +63,16 @@ public class ExtValRendererProxy extends Renderer
         if (!entry.isDecodeCalled())
         {
             entry.setDecodeCalled(true);
-            wrapped.decode(facesContext, uiComponent);
+
+            try
+            {
+                this.wrapped.decode(facesContext, uiComponent);
+            }
+            catch (RuntimeException r)
+            {
+                resetComponentProxyMapping();
+                throw r;
+            }
         }
         else
         {
@@ -83,7 +92,20 @@ public class ExtValRendererProxy extends Renderer
         if (!entry.isEncodeBeginCalled())
         {
             entry.setEncodeBeginCalled(true);
-            wrapped.encodeBegin(facesContext, uiComponent);
+            try
+            {
+                this.wrapped.encodeBegin(facesContext, uiComponent);
+            }
+            catch (IOException e)
+            {
+                resetComponentProxyMapping();
+                throw e;
+            }
+            catch (RuntimeException r)
+            {
+                resetComponentProxyMapping();
+                throw r;
+            }
         }
         else
         {
@@ -103,7 +125,21 @@ public class ExtValRendererProxy extends Renderer
         if (!entry.isEncodeChildrenCalled())
         {
             entry.setEncodeChildrenCalled(true);
-            wrapped.encodeChildren(facesContext, uiComponent);
+
+            try
+            {
+                this.wrapped.encodeChildren(facesContext, uiComponent);
+            }
+            catch (IOException e)
+            {
+                resetComponentProxyMapping();
+                throw e;
+            }
+            catch (RuntimeException r)
+            {
+                resetComponentProxyMapping();
+                throw r;
+            }
         }
         else
         {
@@ -123,7 +159,21 @@ public class ExtValRendererProxy extends Renderer
         if (!entry.isEncodeEndCalled())
         {
             entry.setEncodeEndCalled(true);
-            wrapped.encodeEnd(facesContext, uiComponent);
+
+            try
+            {
+                this.wrapped.encodeEnd(facesContext, uiComponent);
+            }
+            catch (IOException e)
+            {
+                resetComponentProxyMapping();
+                throw e;
+            }
+            catch (RuntimeException r)
+            {
+                resetComponentProxyMapping();
+                throw r;
+            }
         }
         else
         {
@@ -137,13 +187,29 @@ public class ExtValRendererProxy extends Renderer
     @Override
     public String convertClientId(FacesContext facesContext, String s)
     {
-        return wrapped.convertClientId(facesContext, s);
+        try
+        {
+            return wrapped.convertClientId(facesContext, s);
+        }
+        catch (RuntimeException r)
+        {
+            resetComponentProxyMapping();
+            throw r;
+        }
     }
 
     @Override
     public boolean getRendersChildren()
     {
-        return wrapped.getRendersChildren();
+        try
+        {
+            return wrapped.getRendersChildren();
+        }
+        catch (RuntimeException t)
+        {
+            resetComponentProxyMapping();
+            throw t;
+        }
     }
 
     @Override
@@ -154,7 +220,15 @@ public class ExtValRendererProxy extends Renderer
 
         if (entry.getConvertedValue() == null)
         {
-            entry.setConvertedValue(wrapped.getConvertedValue(facesContext, uiComponent, o));
+            try
+            {
+                entry.setConvertedValue(wrapped.getConvertedValue(facesContext, uiComponent, o));
+            }
+            catch (RuntimeException r)
+            {
+                resetComponentProxyMapping();
+                throw r;
+            }
         }
         else
         {
@@ -206,5 +280,11 @@ public class ExtValRendererProxy extends Renderer
         }
 
         return proxyStorage.get(key);
+    }
+
+    private void resetComponentProxyMapping()
+    {
+        //reset component proxy mapping
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().remove(PROXY_STORAGE_NAME);
     }
 }
