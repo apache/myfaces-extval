@@ -97,23 +97,28 @@ public class ExtValRenderKit extends RenderKit
         return wrapped.createResponseStream(outputStream);
     }
 
-    public Iterator<String> getComponentFamilies() {
+    public Iterator<String> getComponentFamilies()
+    {
         return wrapped.getComponentFamilies();
     }
 
-    public Iterator<String> getRendererTypes(String s) {
+    public Iterator<String> getRendererTypes(String s)
+    {
         return wrapped.getRendererTypes(s);
     }
 
-    public void addClientBehaviorRenderer(String s, ClientBehaviorRenderer clientBehaviorRenderer) {
+    public void addClientBehaviorRenderer(String s, ClientBehaviorRenderer clientBehaviorRenderer)
+    {
         wrapped.addClientBehaviorRenderer(s, clientBehaviorRenderer);
     }
 
-    public ClientBehaviorRenderer getClientBehaviorRenderer(String s) {
+    public ClientBehaviorRenderer getClientBehaviorRenderer(String s)
+    {
         return wrapped.getClientBehaviorRenderer(s);
     }
 
-    public Iterator<String> getClientBehaviorRendererTypes() {
+    public Iterator<String> getClientBehaviorRendererTypes()
+    {
         return wrapped.getClientBehaviorRendererTypes();
     }
 
