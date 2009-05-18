@@ -1,0 +1,5 @@
+jsf 2.0 specific changes in (not finished):
+ - ExtValApplicationFactory
+ - ExtValRenderKit
+ - BeanValidationInterceptor (isValidationDisabled, mergeFoundGroupsWithValidatorGroups)
+ - DefaultELHelper
