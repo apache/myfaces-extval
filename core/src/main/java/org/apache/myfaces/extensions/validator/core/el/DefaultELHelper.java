@@ -153,6 +153,8 @@ public class DefaultELHelper implements ELHelper
         return new ValueBindingExpression(valueBindingExpression);
     }
 
+    @ToDo(value = Priority.BLOCKING, description = "doesn't work with new interface for composite components" +
+            "solution see: BeanValidator.class and ValueExpressionAnalyzer")
     public PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent)
     {
         if("true".equalsIgnoreCase(DEACTIVATE_EL_RESOLVER))
