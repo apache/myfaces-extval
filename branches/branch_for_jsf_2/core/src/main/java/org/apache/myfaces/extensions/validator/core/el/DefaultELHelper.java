@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -153,8 +152,7 @@ public class DefaultELHelper implements ELHelper
         return new ValueBindingExpression(valueBindingExpression);
     }
 
-    @ToDo(value = Priority.BLOCKING, description = "doesn't work with new interface for composite components" +
-            "solution see: BeanValidator.class and ValueExpressionAnalyzer")
+    @ToDo(value = Priority.HIGH, description = "check if it works with nested composite components")
     public PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent)
     {
         if("true".equalsIgnoreCase(DEACTIVATE_EL_RESOLVER))
@@ -164,9 +162,6 @@ public class DefaultELHelper implements ELHelper
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        ExtValELResolver elResolver = new ExtValELResolver(facesContext.getApplication().getELResolver());
-        ELContext elContext = ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver);
-
         ValueExpression valueExpression = uiComponent.getValueExpression("value");
 
         if(valueExpression == null)
@@ -174,18 +169,21 @@ public class DefaultELHelper implements ELHelper
             return null;
         }
 
-        try
+        ExtValELResolver elResolver = createWrappedELContext(facesContext);
+        inspectTarget(valueExpression,
+                ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver), false);
+
+        ExtValELResolver compositeComponentELResolver = null;
+
+        //re-check to get full key for cross-validation
+        if (elResolver.getCompositeComponentExpression() != null)
         {
-            valueExpression.setValue(elContext, null);
-        }
-        catch (Throwable t)
-        {
-            throw new IllegalStateException(
-                "error at binding: " + valueExpression.getExpressionString() +
-                " -- an el-resolver error occurred! maybe you used an invalid binding. otherwise: " +
-                "please report the issue, deactivate the el-resovler of extval via web.xml context-param: " +
-                ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER" +
-                " and test again.", t);
+            ValueExpression compositeExpression = elResolver.getCompositeComponentExpression();
+            
+            compositeComponentELResolver = createWrappedELContext(facesContext);
+            inspectTarget(compositeExpression,
+                    ExtValELResolver.createContextWrapper(
+                            facesContext.getELContext(), compositeComponentELResolver), true);
         }
 
         if(elResolver.getPath() == null || elResolver.getBaseObject() == null || elResolver.getProperty() == null)
@@ -193,7 +191,40 @@ public class DefaultELHelper implements ELHelper
             return null;
         }
 
-        return new PropertyDetails(elResolver.getPath(), elResolver.getBaseObject(), elResolver.getProperty());
+        String key;
+        if(compositeComponentELResolver != null)
+        {
+            key = compositeComponentELResolver.getPath() +
+                    elResolver.getPath().substring(elResolver.getPath().indexOf("."));
+        }
+        else
+        {
+            key = elResolver.getPath();
+        }
+
+        return new PropertyDetails(key, elResolver.getBaseObject(), elResolver.getProperty());
+    }
+
+    private void inspectTarget(ValueExpression valueExpression, ELContext elContext, boolean inspectCompositeComponent)
+    {
+        try
+        {
+            valueExpression.setValue(elContext, null);
+        }
+        catch (Throwable t)
+        {
+            if(inspectCompositeComponent)
+            {
+                throw new IllegalStateException(
+                        "error at binding: " + valueExpression.getExpressionString() +
+                                " -- an el-resolver error occurred! maybe you used an invalid binding.", t);
+            }
+        }
+    }
+
+    private ExtValELResolver createWrappedELContext(FacesContext facesContext)
+    {
+        return new ExtValELResolver(facesContext.getApplication().getELResolver());
     }
 
     //keep in sync with DefaultELHelper#getPropertyDetailsOfValueBinding of branch!!!

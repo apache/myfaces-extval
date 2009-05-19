@@ -24,7 +24,9 @@ import org.apache.commons.logging.LogFactory;
 import javax.el.ELResolver;
 import javax.el.ELContext;
 import javax.el.VariableMapper;
+import javax.el.ValueExpression;
 import javax.el.FunctionMapper;
+import javax.faces.el.CompositeComponentExpressionHolder;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -44,6 +46,8 @@ public class ExtValELResolver extends ELResolver
     //forms the id for cross-validation within complex components
     private String expression;
     private boolean isPathRecordingStopped = false;
+    private CompositeComponentExpressionHolder compositeComponentExpressionHolder;
+    private String compositeComponentExpressionBase;
 
     public ExtValELResolver(ELResolver elResolver)
     {
@@ -96,6 +100,16 @@ public class ExtValELResolver extends ELResolver
     {
         Object result = this.wrapped.getValue(elContext, base, property);
 
+        if(this.compositeComponentExpressionHolder != null && this.compositeComponentExpressionBase == null)
+        {
+            this.compositeComponentExpressionBase = (String)property;
+        }
+
+        if(this.compositeComponentExpressionHolder == null && result instanceof CompositeComponentExpressionHolder)
+        {
+            this.compositeComponentExpressionHolder = ((CompositeComponentExpressionHolder)result);
+        }
+
         //very first call for an expression
         if(this.expression == null)
         {
@@ -137,12 +151,16 @@ public class ExtValELResolver extends ELResolver
                 }
                 catch (NoSuchMethodException e1)
                 {
-                    if(this.logger.isTraceEnabled())
+                    if(this.logger.isTraceEnabled() && !"attrs".equals(property))
                     {
                         this.logger.trace("property: " + property +
                                 " isn't used for path - it isn't a property of " + base.getClass());
                     }
                 }
+            }
+            catch (Throwable t)
+            {
+                return result;
             }
 
             //e.g.: #{bean.subBase.property} -> here we are at subBase
@@ -250,5 +268,14 @@ public class ExtValELResolver extends ELResolver
             }
 
         };
+    }
+
+    public ValueExpression getCompositeComponentExpression()
+    {
+        if(this.compositeComponentExpressionHolder != null)
+        {
+            return this.compositeComponentExpressionHolder.getExpression(this.compositeComponentExpressionBase);
+        }
+        return null;
     }
 }
