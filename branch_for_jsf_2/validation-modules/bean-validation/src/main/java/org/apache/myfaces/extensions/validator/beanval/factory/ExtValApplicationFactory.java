@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.beanval.factory;
 
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
@@ -29,6 +31,7 @@ import javax.faces.application.ApplicationWrapper;
  * @author Gerhard Petracek
  * @since 2.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValApplicationFactory extends ApplicationFactory
 {
     private ApplicationFactory wrapped;
@@ -56,7 +59,7 @@ public class ExtValApplicationFactory extends ApplicationFactory
             @Override
             public void addDefaultValidatorId(String s)
             {
-                if(!"javax.faces.Bean".endsWith(s))
+                if(!"javax.faces.Bean".equals(s))
                 {
                     super.addDefaultValidatorId(s);
                 }
