@@ -55,6 +55,9 @@ public interface WebXmlParameter
     static final String CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR = WebXmlUtils
         .getInitParameter("CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR");
 
+    static final String CUSTOM_VALIDATION_INTERCEPTOR = WebXmlUtils
+        .getInitParameter("CUSTOM_VALIDATION_INTERCEPTOR");
+
     static final String CUSTOM_META_DATA_EXTRACTION_INTERCEPTOR = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_EXTRACTION_INTERCEPTOR");
 
