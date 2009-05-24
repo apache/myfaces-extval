@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.startup;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationRendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
@@ -80,7 +80,7 @@ public class ExtValStartupListener extends AbstractStartupListener
             }
         }
 
-        ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
+        ExtValContext.getContext().registerRendererInterceptor(new ValidationRendererInterceptor());
 
         ExtValContext.getContext()
                 .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);

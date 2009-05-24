@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationRendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
@@ -86,7 +86,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
             logger.info("adding support for @SkipValidation");
         }
 
-        ExtValContext.getContext().denyRendererInterceptor(ValidationInterceptor.class);
+        ExtValContext.getContext().denyRendererInterceptor(ValidationRendererInterceptor.class);
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptorWithSkipValidationSupport());
 
         StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
