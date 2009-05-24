@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCrossValidationStrategy;
@@ -31,6 +32,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.validator.ValidatorException;
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
 /**
  * This phase listener processes cross validation as soon as it finds a special request scoped storage.<br/>
@@ -65,6 +67,16 @@ public class CrossValidationPhaseListener implements PhaseListener
                                         "initCrossValidation",
                                         CrossValidationStorageEntry.class),
                                 entry);
+                    }
+
+                    if(!ExtValUtils.executeBeforeValidationInterceptors(
+                            FacesContext.getCurrentInstance(),
+                            entry.getComponent(),
+                            entry.getConvertedObject(),
+                            CrossValidationStorageEntry.class.getName(),
+                            entry))
+                    {
+                        continue;
                     }
 
                     entry.getValidationStrategy().processCrossValidation(entry, crossValidationStorage);
@@ -105,6 +117,15 @@ public class CrossValidationPhaseListener implements PhaseListener
 
                         event.getFacesContext().renderResponse();
                     }
+                }
+                finally
+                {
+                    ExtValUtils.executeAfterValidationInterceptors(
+                            FacesContext.getCurrentInstance(),
+                            entry.getComponent(),
+                            entry.getConvertedObject(),
+                            CrossValidationStorageEntry.class.getName(),
+                            entry);
                 }
             }
         }

@@ -21,18 +21,22 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
+import org.apache.myfaces.extensions.validator.beanval.interceptor.ValidationGroupProvider;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
         .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @ToDo(value = Priority.HIGH, description = "add optional web.xml param to deactivate" +
         "DefaultBeanValidationStrategyToMetaDataTransformerNameMapper")
+@UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationStartupListener extends AbstractStartupListener
 {
     private static final long serialVersionUID = -5025748399876833394L;
@@ -40,6 +44,8 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void init()
     {
         ExtValContext.getContext().registerRendererInterceptor(new BeanValidationInterceptor());
+
+        ExtValContext.getContext().addValidationInterceptor(new ValidationGroupProvider());
 
         ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
                 new DefaultBeanValidationStrategyToMetaDataTransformerNameMapper());
