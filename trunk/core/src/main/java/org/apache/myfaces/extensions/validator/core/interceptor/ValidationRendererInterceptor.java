@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataE
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
@@ -159,16 +160,44 @@ public class ValidationRendererInterceptor extends AbstractRendererInterceptor
             return;
         }
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("start validation");
-        }
-
-        ValidationStrategy validationStrategy;
-
         MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
 
-        for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
+        PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
+
+        if(!ExtValUtils.executeBeforeValidationInterceptors(facesContext, uiComponent, convertedObject,
+                PropertyInformation.class.getName() ,propertyInformation))
+        {
+            return;
+        }
+
+        try
+        {
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("start validation");
+            }
+
+            processFieldValidation(facesContext, uiComponent, convertedObject, propertyInformation);
+
+            if(logger.isTraceEnabled())
+            {
+                logger.trace("validation finished");
+            }
+        }
+        finally
+        {
+            ExtValUtils.executeAfterValidationInterceptors(facesContext, uiComponent, convertedObject,
+                    PropertyInformation.class.getName(), propertyInformation);
+        }
+    }
+
+    protected void processFieldValidation(FacesContext facesContext,
+                                          UIComponent uiComponent,
+                                          Object convertedObject,
+                                          PropertyInformation propertyInformation)
+    {
+        ValidationStrategy validationStrategy;
+        for (MetaDataEntry entry : propertyInformation.getMetaDataEntries())
         {
             validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
@@ -184,8 +213,7 @@ public class ValidationRendererInterceptor extends AbstractRendererInterceptor
 
                 if(logger.isTraceEnabled())
                 {
-                    logger.trace("validate " + entry.getValue() + " with " +
-                            validationStrategy.getClass().getName());
+                    logger.trace("validate " + entry.getValue() + " with " + validationStrategy.getClass().getName());
                 }
 
                 validationStrategy.validate(facesContext, uiComponent, entry, convertedObject);
@@ -194,15 +222,9 @@ public class ValidationRendererInterceptor extends AbstractRendererInterceptor
             {
                 if(logger.isTraceEnabled())
                 {
-                    logger.trace("no validation strategy found for "
-                            + entry.getValue());
+                    logger.trace("no validation strategy found for " + entry.getValue());
                 }
             }
-        }
-
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("validation finished");
         }
     }
 
