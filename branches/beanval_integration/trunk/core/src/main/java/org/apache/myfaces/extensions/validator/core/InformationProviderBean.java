@@ -90,6 +90,8 @@ public class InformationProviderBean
                 "ComponentInitializer");
         customizableInfos.put(CustomInformation.VALIDATION_EXCEPTION_INTERCEPTOR,
                 "ValidationExceptionInterceptor");
+        customizableInfos.put(CustomInformation.VALIDATION_INTERCEPTOR,
+                "ValidationInterceptor");
         customizableInfos.put(CustomInformation.META_DATA_EXTRACTION_INTERCEPTOR,
                 "MetaDataExtractionInterceptor");
 
