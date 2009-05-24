@@ -47,7 +47,7 @@ import java.util.HashMap;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ValidationInterceptor extends AbstractRendererInterceptor
+public class ValidationRendererInterceptor extends AbstractRendererInterceptor
 {
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)

@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationRendererInterceptor;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
 
 import javax.faces.context.FacesContext;
@@ -33,7 +33,7 @@ import javax.faces.component.UIComponent;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ValidationInterceptorWithSkipValidationSupport extends ValidationInterceptor
+public class ValidationInterceptorWithSkipValidationSupport extends ValidationRendererInterceptor
 {
     @Override
     protected boolean skipValidation(FacesContext facesContext,
