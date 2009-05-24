@@ -24,6 +24,7 @@
         <application-factory>org.apache.myfaces.extensions.validator.beanval.factory.ExtValApplicationFactory</application-factory>
     </factory>
     <lifecycle>
+        <phase-listener>org.apache.myfaces.extensions.validator.beanval.startup.JSF2AwareBeanValidationStartupListener</phase-listener>
         <phase-listener>org.apache.myfaces.extensions.validator.beanval.startup.BeanValidationStartupListener</phase-listener>
         <phase-listener>org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener</phase-listener>
     </lifecycle>

@@ -20,11 +20,8 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
-import org.apache.myfaces.extensions.validator.beanval.interceptor.ValidationGroupProvider;
-import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
-        .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.beanval.interceptor.ResetBeanValidationRendererInterceptor;
+import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationTagAwareValidationInterceptor;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -32,22 +29,17 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * @author Gerhard Petracek
- * @since x.x.3
+ * @since 2.x.3
  */
-@ToDo(value = Priority.HIGH, description = "add optional web.xml param to deactivate" +
-        "DefaultBeanValidationStrategyToMetaDataTransformerNameMapper")
+@ToDo(value = Priority.HIGH, description = "add optional web.xml param to deactivate")
 @UsageInformation(UsageCategory.INTERNAL)
-public class BeanValidationStartupListener extends AbstractStartupListener
+public class JSF2AwareBeanValidationStartupListener extends AbstractStartupListener
 {
-    private static final long serialVersionUID = -5025748399876833394L;
+    private static final long serialVersionUID = -5025748399876833393L;
 
     protected void init()
     {
-        ExtValContext.getContext().registerRendererInterceptor(new BeanValidationInterceptor());
-
-        ExtValContext.getContext().addValidationInterceptor(new ValidationGroupProvider());
-
-        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
-                new DefaultBeanValidationStrategyToMetaDataTransformerNameMapper());
+        ExtValContext.getContext().registerRendererInterceptor(new ResetBeanValidationRendererInterceptor());
+        ExtValContext.getContext().addValidationInterceptor(new BeanValidationTagAwareValidationInterceptor());
     }
 }

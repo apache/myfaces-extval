@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
@@ -52,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.List;
 import java.util.ArrayList;
@@ -418,5 +420,54 @@ public class ExtValUtils
         }
 
         return false;
+    }
+
+    public static boolean executeBeforeValidationInterceptors(FacesContext facesContext,
+                                                              UIComponent uiComponent,
+                                                              Object convertedObject,
+                                                              String propertyKey,
+                                                              Object properties)
+    {
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
+
+        if(properties != null)
+        {
+            propertyMap.put(propertyKey, properties);
+        }
+        
+        List<ValidationInterceptor> validationInterceptors =
+                ExtValContext.getContext().getValidationValidationInterceptors();
+
+        for(ValidationInterceptor validationInterceptor : validationInterceptors)
+        {
+            if(!validationInterceptor.beforeValidation(facesContext, uiComponent, convertedObject, propertyMap))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void executeAfterValidationInterceptors(FacesContext facesContext,
+                                                          UIComponent uiComponent,
+                                                          Object convertedObject,
+                                                          String propertyKey,
+                                                          Object properties)
+    {
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
+
+        if(properties != null)
+        {
+            propertyMap.put(propertyKey, properties);
+        }
+
+        List<ValidationInterceptor> validationInterceptors =
+                ExtValContext.getContext().getValidationValidationInterceptors();
+
+        for(ValidationInterceptor validationInterceptor : validationInterceptors)
+        {
+            validationInterceptor.afterValidation(facesContext, uiComponent, convertedObject, propertyMap);
+        }
     }
 }
