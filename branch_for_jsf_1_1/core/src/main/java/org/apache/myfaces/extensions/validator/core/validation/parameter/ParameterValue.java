@@ -25,12 +25,13 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.3
  */
-@Target({FIELD})
+@Target({FIELD, METHOD})
 @Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
 public @interface ParameterValue
