@@ -23,12 +23,20 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExcept
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterKey;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterValue;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
@@ -42,6 +50,13 @@ import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.WildcardType;
 
 /**
  * @author Gerhard Petracek
@@ -50,6 +65,8 @@ import javax.faces.application.FacesMessage;
 @UsageInformation(UsageCategory.INTERNAL)
 public class HtmlCoreComponentsValidationExceptionInterceptor implements ValidationExceptionInterceptor
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     public boolean afterThrowing(UIComponent uiComponent,
                                  MetaDataEntry metaDataEntry,
                                  Object convertedObject,
@@ -58,6 +75,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
     {
         if(processComponent(uiComponent))
         {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
             FacesMessage facesMessage = ExtValUtils.convertFacesMessage(validatorException.getFacesMessage());
 
             String label = (String) ReflectionUtils.tryToInvokeMethod(uiComponent,
@@ -65,7 +83,7 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
 
             if(label == null)
             {
-                label = uiComponent.getClientId(FacesContext.getCurrentInstance());
+                label = uiComponent.getClientId(facesContext);
             }
 
             //override the label if the annotation provides a label
@@ -86,8 +104,138 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
                     ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
                 }
             }
+
+            if(metaDataEntry != null && metaDataEntry.getValue() instanceof Annotation)
+            {
+                if(!displayAsException(facesMessage, metaDataEntry.getValue(Annotation.class)))
+                {
+                    facesContext.addMessage(uiComponent.getClientId(facesContext), facesMessage);
+                    //it's a special case - since validation will continue it's essential to reset it
+                    ((EditableValueHolder)uiComponent).setRequired(false);
+                    return false;
+                }
+            }
         }
         return true;
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "refactor to a generic parameter extractor")
+    private boolean displayAsException(FacesMessage facesMessage, Annotation annotation)
+    {
+        boolean isError = true;
+
+        for(Method currentAnnotationAttribute : annotation.annotationType().getDeclaredMethods())
+        {
+            try
+            {
+                if(!isValidationParameter(currentAnnotationAttribute.getGenericReturnType()))
+                {
+                    continue;
+                }
+
+                Object parameterValue = currentAnnotationAttribute.invoke(annotation);
+
+                if(parameterValue instanceof Class[])
+                {
+                    for(Class currentParameterValue : (Class[])parameterValue)
+                    {
+                        //keep check so that following is true:
+                        //if at least one parameter is found which tells that it isn't a blocking error, let it pass
+                        if(!processParameterValue(annotation, currentParameterValue, facesMessage))
+                        {
+                            isError = false;
+                        }
+                    }
+                }
+                else if(parameterValue instanceof Class)
+                {
+                    //keep check so that following is true:
+                    //if at least one parameter is found which tells that it isn't a blocking error, let it pass
+                    if(!processParameterValue(annotation, (Class)parameterValue, facesMessage))
+                    {
+                        isError = false;
+                    }
+                }
+            }
+            catch (Throwable e)
+            {
+                if(this.logger.isWarnEnabled())
+                {
+                    this.logger.warn(e);
+                }
+            }
+        }
+
+        return isError;
+    }
+
+    private boolean processParameterValue(Annotation annotation, Class parameterClass, FacesMessage facesMessage)
+            throws Exception
+    {
+        boolean showAsError = true;
+
+        for(Field currentField : parameterClass.getDeclaredFields())
+        {
+            if(currentField.isAnnotationPresent(ParameterKey.class))
+            {
+                Object key = parameterClass.getDeclaredField(currentField.getName()).get(annotation);
+                //invoke ParameterProcessors(key, annotation)
+            }
+            //no "else if" to allow both at one field
+            if(currentField.isAnnotationPresent(ParameterValue.class))
+            {
+                Object value = parameterClass.getDeclaredField(currentField.getName()).get(annotation);
+                if(value instanceof FacesMessage.Severity)
+                {
+                    facesMessage.setSeverity((FacesMessage.Severity)value);
+                    if(((FacesMessage.Severity)value).compareTo(FacesMessage.SEVERITY_ERROR) < 0)
+                    {
+                        showAsError = false;
+                    }
+                }
+            }
+        }
+
+        return showAsError;
+    }
+
+    private boolean isValidationParameter(Type genericReturnType)
+    {
+        if(genericReturnType instanceof GenericArrayType)
+        {
+            if(((GenericArrayType)genericReturnType).getGenericComponentType() instanceof ParameterizedType)
+            {
+                return analyzeParameterizedType(
+                        (ParameterizedType)((GenericArrayType)genericReturnType).getGenericComponentType());
+            }
+        }
+        else if(genericReturnType instanceof ParameterizedType)
+        {
+            return analyzeParameterizedType(
+                    (ParameterizedType)genericReturnType);
+        }
+
+        return false;
+    }
+
+    private boolean analyzeParameterizedType(ParameterizedType parameterizedType)
+    {
+        for(Type type : parameterizedType.getActualTypeArguments())
+        {
+            if(type instanceof WildcardType)
+            {
+                for(Type upperBounds : ((WildcardType)type).getUpperBounds())
+                {
+                    if(upperBounds instanceof Class &&
+                            ((Class)upperBounds).isAssignableFrom(ValidationParameter.class))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     protected boolean processComponent(UIComponent uiComponent)
