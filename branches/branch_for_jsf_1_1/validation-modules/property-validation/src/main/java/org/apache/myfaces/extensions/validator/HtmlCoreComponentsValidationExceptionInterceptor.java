@@ -169,34 +169,79 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
         return isError;
     }
 
-    private boolean processParameterValue(Annotation annotation, Class parameterClass, FacesMessage facesMessage)
+    private boolean processParameterValue(Annotation annotation, Class paramClass, FacesMessage facesMessage)
             throws Exception
     {
         boolean showAsError = true;
 
-        for(Field currentField : parameterClass.getDeclaredFields())
+        if(ValidationParameter.class.isAssignableFrom(paramClass))
         {
-            if(currentField.isAnnotationPresent(ParameterKey.class))
+            //support pure interface approach e.g. ViolationSeverity.Warn.class
+            for(Field currentField : paramClass.getDeclaredFields())
             {
-                Object key = parameterClass.getDeclaredField(currentField.getName()).get(annotation);
-                //invoke ParameterProcessors(key, annotation)
-            }
-            //no "else if" to allow both at one field
-            if(currentField.isAnnotationPresent(ParameterValue.class))
-            {
-                Object value = parameterClass.getDeclaredField(currentField.getName()).get(annotation);
-                if(value instanceof FacesMessage.Severity)
+                if(currentField.isAnnotationPresent(ParameterKey.class))
                 {
-                    facesMessage.setSeverity((FacesMessage.Severity)value);
-                    if(((FacesMessage.Severity)value).compareTo(FacesMessage.SEVERITY_ERROR) < 0)
+                    Object key = currentField.get(annotation);
+                    //invoke ParameterProcessors(key, annotation)
+                }
+                //no "else if" to allow both at one field
+                if(currentField.isAnnotationPresent(ParameterValue.class))
+                {
+                    currentField.setAccessible(true);
+                    //targetField = paramClass.getDeclaredField(currentField.getName());
+                    if(!processFoundParameterValue(currentField.get(annotation), facesMessage))
                     {
                         showAsError = false;
+                    }
+                }
+            }
+
+            for(Class currentInterface : paramClass.getInterfaces())
+            {
+                if(!ValidationParameter.class.isAssignableFrom(currentInterface))
+                {
+                    continue;
+                }
+
+                //support interface + impl. approach e.g. MyParamImpl.class
+                //(MyParamImpl implements MyParam
+                //MyParam extends ValidationParameter
+                //methods in the interface have to be marked with @ParameterValue and @ParameterKey
+                for(Method currentMethod : currentInterface.getDeclaredMethods())
+                {
+                    if(currentMethod.isAnnotationPresent(ParameterKey.class))
+                    {
+                        Object key = currentMethod.invoke(paramClass.newInstance());
+                        //invoke ParameterProcessors(key, annotation)
+                    }
+                    //no "else if" to allow both at one field
+                    if(currentMethod.isAnnotationPresent(ParameterValue.class))
+                    {
+                        currentMethod.setAccessible(true);
+                        if(!processFoundParameterValue(currentMethod.invoke(paramClass.newInstance()), facesMessage))
+                        {
+                            showAsError = false;
+                        }
                     }
                 }
             }
         }
 
         return showAsError;
+    }
+
+    private boolean processFoundParameterValue(Object value, FacesMessage facesMessage)
+    {
+        if(value instanceof FacesMessage.Severity)
+        {
+            facesMessage.setSeverity((FacesMessage.Severity)value);
+            if(((FacesMessage.Severity)value).compareTo(FacesMessage.SEVERITY_ERROR) < 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private boolean isValidationParameter(Type genericReturnType)
