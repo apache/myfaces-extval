@@ -16,31 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.baseval.annotation;
+package org.apache.myfaces.extensions.validator.core.validation.parameter;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
+import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since 1.x.3
  */
-@Target({METHOD, FIELD})
+@Target({FIELD})
 @Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
-public @interface LongRange
+public @interface ParameterKey
 {
-    long minimum() default 0;
-
-    long maximum() default Long.MAX_VALUE;
-
-    Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }

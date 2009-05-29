@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.crossval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -45,4 +47,6 @@ public @interface RequiredIf
     RequiredIfType is() default RequiredIfType.not_empty;
 
     String validationErrorMsgKey() default "empty_field";
+
+    Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }
