@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.baseval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -39,4 +41,6 @@ public @interface DoubleRange
     double minimum() default 0;
 
     double maximum() default Double.MAX_VALUE;
+
+    Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }

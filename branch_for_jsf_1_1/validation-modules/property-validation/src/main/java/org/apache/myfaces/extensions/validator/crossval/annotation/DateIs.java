@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.crossval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -54,4 +56,6 @@ public @interface DateIs
     String notEqualErrorMsgKey() default "wrong_date_not_equal";
 
     int errorMessageDateStyle() default DateFormat.MEDIUM;
+
+    Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }
