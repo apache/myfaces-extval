@@ -154,6 +154,20 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
 
         if(key == null)
         {
+            //check for super-interface (exclude ValidationParameter itself)
+            for(Class interfaceClass : paramClass.getInterfaces())
+            {
+                if(ValidationParameter.class.isAssignableFrom(interfaceClass) &&
+                        (!interfaceClass.getName().equals(ValidationParameter.class.getName())))
+                {
+                    key = interfaceClass;
+                    break;
+                }
+            }
+        }
+
+        if(key == null)
+        {
             key = paramClass;
         }
 
