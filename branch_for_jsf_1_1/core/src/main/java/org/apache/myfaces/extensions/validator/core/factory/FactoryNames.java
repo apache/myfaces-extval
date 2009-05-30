@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public enum FactoryNames
 {
     COMPONENT_META_DATA_EXTRACTOR_FACTORY,
+    VALIDATION_PARAMETER_EXTRACTOR_FACTORY,
     VALIDATION_STRATEGY_FACTORY,
     MESSAGE_RESOLVER_FACTORY,
     META_DATA_TRANSFORMER_FACTORY,

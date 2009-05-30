@@ -78,6 +78,8 @@ public class InformationProviderBean
 
         customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR,
                 "ComponentMetaDataExtractor");
+        customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR,
+                "VALIDATION_PARAMETER_EXTRACTOR");
 
         customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_POSTFIX,
                 "ValidationStrategy");
@@ -109,6 +111,8 @@ public class InformationProviderBean
                 "ValidationStrategyFactory");
         customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR_FACTORY,
                 "ComponentMetaDataExtractorFactory");
+        customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR_FACTORY,
+                "VALIDATION_PARAMETER_EXTRACTOR_FACTORY");
         customizableInfos.put(CustomInformation.META_DATA_TRANSFORMER_FACTORY,
                 "MetaDataTransformerFactory");
         customizableInfos.put(CustomInformation.FACES_MESSAGE_FACTORY,
