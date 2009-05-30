@@ -23,9 +23,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExcept
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterKey;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterValue;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -51,12 +49,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.WildcardType;
 
 /**
  * @author Gerhard Petracek
@@ -124,163 +116,17 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
     {
         boolean isError = true;
 
-        for(Method currentAnnotationAttribute : annotation.annotationType().getDeclaredMethods())
+        for(FacesMessage.Severity severity : ExtValUtils.getValidationParameterExtractor()
+                .extract(annotation, ViolationSeverity.class, FacesMessage.Severity.class))
         {
-            try
+            if(severity.compareTo(facesMessage.getSeverity()) < 0)
             {
-                if(!isValidationParameter(currentAnnotationAttribute.getGenericReturnType()))
-                {
-                    continue;
-                }
-
-                Object parameterValue = currentAnnotationAttribute.invoke(annotation);
-
-                if(parameterValue instanceof Class[])
-                {
-                    for(Class currentParameterValue : (Class[])parameterValue)
-                    {
-                        //keep check so that following is true:
-                        //if at least one parameter is found which tells that it isn't a blocking error, let it pass
-                        if(!processParameterValue(annotation, currentParameterValue, facesMessage))
-                        {
-                            isError = false;
-                        }
-                    }
-                }
-                else if(parameterValue instanceof Class)
-                {
-                    //keep check so that following is true:
-                    //if at least one parameter is found which tells that it isn't a blocking error, let it pass
-                    if(!processParameterValue(annotation, (Class)parameterValue, facesMessage))
-                    {
-                        isError = false;
-                    }
-                }
-            }
-            catch (Throwable e)
-            {
-                if(this.logger.isWarnEnabled())
-                {
-                    this.logger.warn(e);
-                }
+                facesMessage.setSeverity(severity);
+                isError = false;
             }
         }
 
         return isError;
-    }
-
-    private boolean processParameterValue(Annotation annotation, Class paramClass, FacesMessage facesMessage)
-            throws Exception
-    {
-        boolean showAsError = true;
-
-        if(ValidationParameter.class.isAssignableFrom(paramClass))
-        {
-            //support pure interface approach e.g. ViolationSeverity.Warn.class
-            for(Field currentField : paramClass.getDeclaredFields())
-            {
-                if(currentField.isAnnotationPresent(ParameterKey.class))
-                {
-                    Object key = currentField.get(annotation);
-                    //invoke ParameterProcessors(key, annotation)
-                }
-                //no "else if" to allow both at one field
-                if(currentField.isAnnotationPresent(ParameterValue.class))
-                {
-                    currentField.setAccessible(true);
-                    //targetField = paramClass.getDeclaredField(currentField.getName());
-                    if(!processFoundParameterValue(currentField.get(annotation), facesMessage))
-                    {
-                        showAsError = false;
-                    }
-                }
-            }
-
-            for(Class currentInterface : paramClass.getInterfaces())
-            {
-                if(!ValidationParameter.class.isAssignableFrom(currentInterface))
-                {
-                    continue;
-                }
-
-                //support interface + impl. approach e.g. MyParamImpl.class
-                //(MyParamImpl implements MyParam
-                //MyParam extends ValidationParameter
-                //methods in the interface have to be marked with @ParameterValue and @ParameterKey
-                for(Method currentMethod : currentInterface.getDeclaredMethods())
-                {
-                    if(currentMethod.isAnnotationPresent(ParameterKey.class))
-                    {
-                        Object key = currentMethod.invoke(paramClass.newInstance());
-                        //invoke ParameterProcessors(key, annotation)
-                    }
-                    //no "else if" to allow both at one field
-                    if(currentMethod.isAnnotationPresent(ParameterValue.class))
-                    {
-                        currentMethod.setAccessible(true);
-                        if(!processFoundParameterValue(currentMethod.invoke(paramClass.newInstance()), facesMessage))
-                        {
-                            showAsError = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        return showAsError;
-    }
-
-    private boolean processFoundParameterValue(Object value, FacesMessage facesMessage)
-    {
-        if(value instanceof FacesMessage.Severity)
-        {
-            facesMessage.setSeverity((FacesMessage.Severity)value);
-            if(((FacesMessage.Severity)value).compareTo(FacesMessage.SEVERITY_ERROR) < 0)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean isValidationParameter(Type genericReturnType)
-    {
-        if(genericReturnType instanceof GenericArrayType)
-        {
-            if(((GenericArrayType)genericReturnType).getGenericComponentType() instanceof ParameterizedType)
-            {
-                return analyzeParameterizedType(
-                        (ParameterizedType)((GenericArrayType)genericReturnType).getGenericComponentType());
-            }
-        }
-        else if(genericReturnType instanceof ParameterizedType)
-        {
-            return analyzeParameterizedType(
-                    (ParameterizedType)genericReturnType);
-        }
-
-        return false;
-    }
-
-    private boolean analyzeParameterizedType(ParameterizedType parameterizedType)
-    {
-        for(Type type : parameterizedType.getActualTypeArguments())
-        {
-            if(type instanceof WildcardType)
-            {
-                for(Type upperBounds : ((WildcardType)type).getUpperBounds())
-                {
-                    if(upperBounds instanceof Class &&
-                            ((Class)upperBounds).isAssignableFrom(ValidationParameter.class))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     protected boolean processComponent(UIComponent uiComponent)
