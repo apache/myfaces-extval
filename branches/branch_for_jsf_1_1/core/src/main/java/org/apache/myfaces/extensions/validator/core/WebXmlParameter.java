@@ -46,6 +46,9 @@ public interface WebXmlParameter
     static final String CUSTOM_COMPONENT_META_DATA_EXTRACTOR = WebXmlUtils
         .getInitParameter("CUSTOM_COMPONENT_META_DATA_EXTRACTOR");
 
+    static final String CUSTOM_VALIDATION_PARAMETER_EXTRACTOR = WebXmlUtils
+        .getInitParameter("CUSTOM_VALIDATION_PARAMETER_EXTRACTOR");
+
     static final String CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING = WebXmlUtils
         .getInitParameter("CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING");
 
@@ -81,6 +84,9 @@ public interface WebXmlParameter
 
     static final String CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY");
+
+    static final String CUSTOM_VALIDATION_PARAMETER_EXTRACTOR_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_VALIDATION_PARAMETER_EXTRACTOR_FACTORY");
 
     static final String CUSTOM_META_DATA_TRANSFORMER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_TRANSFORMER_FACTORY");
