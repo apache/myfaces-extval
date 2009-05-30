@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.Default
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.DefaultFacesMessageFactory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -111,6 +112,10 @@ public class DefaultFactoryFinder implements FactoryFinder
                 factory = createFacesMessageFactory();
                 break;
 
+            case VALIDATION_PARAMETER_EXTRACTOR_FACTORY:
+                factory = createValidationParameterExtractorFactory();
+                break;
+             
             default: //required by checkstyle
         }
 
@@ -229,7 +234,8 @@ public class DefaultFactoryFinder implements FactoryFinder
         return new DefaultRenderKitWrapperFactory();
     }
 
-    private Object createFacesMessageFactory()
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
+    protected Object createFacesMessageFactory()
     {
         Object factory = null;
 
@@ -260,8 +266,34 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
-    private Object createELHelperFactory()
+    protected Object createELHelperFactory()
     {
         return new DefaultELHelperFactory();
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "add global property extension point")
+    protected Object createValidationParameterExtractorFactory()
+    {
+        Object factory = null;
+
+        List<String> validationParameterExtractorFactoryClassNames = new ArrayList<String>();
+
+        validationParameterExtractorFactoryClassNames
+                .add(WebXmlParameter.CUSTOM_VALIDATION_PARAMETER_EXTRACTOR_FACTORY);
+        validationParameterExtractorFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                .get(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR_FACTORY));
+        validationParameterExtractorFactoryClassNames.add(DefaultValidationParameterExtractorFactory.class.getName());
+
+        for (String className : validationParameterExtractorFactoryClassNames)
+        {
+            factory = ClassUtils.tryToInstantiateClassForName(className);
+
+            if (factory != null)
+            {
+                break;
+            }
+        }
+        return factory;
     }
 }

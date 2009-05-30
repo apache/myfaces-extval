@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
@@ -418,5 +420,12 @@ public class ExtValUtils
         }
 
         return false;
+    }
+
+    public static ValidationParameterExtractor getValidationParameterExtractor()
+    {
+        return ExtValContext.getContext().getFactoryFinder()
+            .getFactory(FactoryNames.VALIDATION_PARAMETER_EXTRACTOR_FACTORY, ValidationParameterExtractorFactory.class)
+            .create();
     }
 }
