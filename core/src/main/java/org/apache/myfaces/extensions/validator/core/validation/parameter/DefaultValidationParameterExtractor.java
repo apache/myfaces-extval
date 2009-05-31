@@ -46,6 +46,61 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
 
     public Map<Object, List<Object>> extract(Annotation annotation)
     {
+        return extractById(annotation, null);
+    }
+
+    public List<Object> extract(Annotation annotation, Object key)
+    {
+        return extractById(annotation, key, null);
+    }
+
+    public <T> List<T> extract(Annotation annotation, Object key, Class<T> valueType)
+    {
+        return extractById(annotation, key, valueType, null);
+    }
+
+    public <T> T extract(Annotation annotation, Object key, Class<T> valueType, Class valueId)
+    {
+        List<T> results = extractById(annotation, key, valueType, valueId);
+
+        if(results.iterator().hasNext())
+        {
+            return results.iterator().next();
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public <T> List<T> extractById(Annotation annotation, Object key, Class<T> valueType, Class valueId)
+    {
+        List<Object> result = new ArrayList<Object>();
+
+        for(Object entry : extractById(annotation, key, valueId))
+        {
+            if(valueType.isAssignableFrom(entry.getClass()))
+            {
+                result.add(entry);
+            }
+        }
+
+        return (List<T>)result;
+    }
+
+    public List<Object> extractById(Annotation annotation, Object key, Class valueId)
+    {
+        Map<Object, List<Object>> fullResult = extractById(annotation, valueId);
+
+        if(fullResult.containsKey(key))
+        {
+            return fullResult.get(key);
+        }
+
+        return new ArrayList<Object>();
+    }
+
+    public Map<Object, List<Object>> extractById(Annotation annotation, Class valueId)
+    {
         Map<Object, List<Object>> result = new HashMap<Object, List<Object>>();
 
         for(Method currentAnnotationAttribute : annotation.annotationType().getDeclaredMethods())
@@ -65,14 +120,14 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                     {
                         //keep check so that following is true:
                         //if at least one parameter is found which tells that it isn't a blocking error, let it pass
-                        processParameterValue(annotation, currentParameterValue, result);
+                        processParameterValue(annotation, currentParameterValue, result, valueId);
                     }
                 }
                 else if(parameterValue instanceof Class)
                 {
                     //keep check so that following is true:
                     //if at least one parameter is found which tells that it isn't a blocking error, let it pass
-                    processParameterValue(annotation, (Class)parameterValue, result);
+                    processParameterValue(annotation, (Class)parameterValue, result, valueId);
                 }
             }
             catch (Throwable e)
@@ -87,36 +142,8 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         return result;
     }
 
-    public List<Object> extract(Annotation annotation, Object key)
-    {
-        Map<Object, List<Object>> fullResult = extract(annotation);
-
-        if(fullResult.containsKey(key))
-        {
-            return fullResult.get(key);
-        }
-
-        return new ArrayList<Object>();
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public <T> List<T> extract(Annotation annotation, Object key, Class<T> valueType)
-    {
-        List<Object> result = new ArrayList<Object>();
-
-        for(Object entry : extract(annotation, key))
-        {
-            if(valueType.isAssignableFrom(entry.getClass()))
-            {
-                result.add(entry);
-            }
-        }
-
-        return (List<T>)result;
-    }
-
-    private void processParameterValue(Annotation annotation, Class paramClass, Map<Object, List<Object>> result)
-            throws Exception
+    private void processParameterValue(
+            Annotation annotation, Class paramClass, Map<Object, List<Object>> result, Class valueId) throws Exception
     {
         Object key = null;
         List<Object> parameterValues = new ArrayList<Object>();
@@ -126,7 +153,7 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
             //support pure interface approach e.g. ViolationSeverity.Warn.class
             for(Field currentField : paramClass.getDeclaredFields())
             {
-                key = processFoundField(annotation, currentField, parameterValues, key);
+                key = processFoundField(annotation, currentField, parameterValues, key, valueId);
             }
 
             for(Class currentInterface : paramClass.getInterfaces())
@@ -142,12 +169,12 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                 //methods in the interface have to be marked with @ParameterValue and @ParameterKey
                 for(Method currentMethod : currentInterface.getDeclaredMethods())
                 {
-                    key = processFoundMethod(paramClass, currentMethod, parameterValues, key);
+                    key = processFoundMethod(paramClass, currentMethod, parameterValues, key, valueId);
                 }
 
                 for(Field currentField : currentInterface.getDeclaredFields())
                 {
-                    key = processFoundField(annotation, currentField, parameterValues, key);
+                    key = processFoundField(annotation, currentField, parameterValues, key, valueId);
                 }
             }
         }
@@ -181,7 +208,8 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         }
     }
 
-    private Object processFoundField(Annotation annotation, Field currentField, List<Object> paramValues, Object key)
+    private Object processFoundField(
+            Annotation annotation, Field currentField, List<Object> paramValues, Object key, Class valueId)
     {
         Object newKey = null;
         if(key == null && currentField.isAnnotationPresent(ParameterKey.class))
@@ -201,16 +229,19 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         //no "else if" to allow both at one field
         if(currentField.isAnnotationPresent(ParameterValue.class))
         {
-            currentField.setAccessible(true);
-            try
+            if(valueId == null || valueId.equals(currentField.getAnnotation(ParameterValue.class).id()))
             {
-                paramValues.add(currentField.get(annotation));
-            }
-            catch (Throwable e)
-            {
-                if(this.logger.isWarnEnabled())
+                currentField.setAccessible(true);
+                try
                 {
-                    this.logger.warn(e);
+                    paramValues.add(currentField.get(annotation));
+                }
+                catch (Throwable e)
+                {
+                    if(this.logger.isWarnEnabled())
+                    {
+                        this.logger.warn(e);
+                    }
                 }
             }
         }
@@ -218,7 +249,8 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         return newKey != null ? newKey : key;
     }
 
-    private Object processFoundMethod(Class paramClass, Method currentMethod, List<Object> parameterValues, Object key)
+    private Object processFoundMethod(
+            Class paramClass, Method currentMethod, List<Object> parameterValues, Object key, Class valueId)
     {
         Object newKey = null;
         if(key == null && currentMethod.isAnnotationPresent(ParameterKey.class))
@@ -238,16 +270,19 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         //no "else if" to allow both at one field
         if(currentMethod.isAnnotationPresent(ParameterValue.class))
         {
-            currentMethod.setAccessible(true);
-            try
+            if(valueId == null || valueId.equals(currentMethod.getAnnotation(ParameterValue.class).id()))
             {
-                parameterValues.add(currentMethod.invoke(paramClass.newInstance()));
-            }
-            catch (Throwable e)
-            {
-                if(this.logger.isWarnEnabled())
+                currentMethod.setAccessible(true);
+                try
                 {
-                    this.logger.warn(e);
+                    parameterValues.add(currentMethod.invoke(paramClass.newInstance()));
+                }
+                catch (Throwable e)
+                {
+                    if(this.logger.isWarnEnabled())
+                    {
+                        this.logger.warn(e);
+                    }
                 }
             }
         }

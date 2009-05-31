@@ -36,4 +36,5 @@ import static java.lang.annotation.ElementType.METHOD;
 @UsageInformation(UsageCategory.API)
 public @interface ParameterValue
 {
+    Class id() default ParameterValue.class;
 }
