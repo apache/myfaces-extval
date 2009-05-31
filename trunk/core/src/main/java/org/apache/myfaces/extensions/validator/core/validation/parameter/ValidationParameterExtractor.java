@@ -35,4 +35,5 @@ public interface ValidationParameterExtractor
     Map<Object, List<Object>> extract(Annotation annotation);
     List<Object> extract(Annotation annotation, Object key);
     <T> List<T> extract(Annotation annotation, Object key, Class<T> valueType);
+    <T> T extract(Annotation annotation, Object key, Class<T> valueType, Class valueId);
 }
