@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
@@ -54,9 +55,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -402,6 +405,7 @@ public class ExtValUtils
         return markerList;
     }
 
+    @SuppressWarnings({"unchecked"})
     public static boolean isSkipValidationSupported(Class currentClass, Class targetClass)
     {
         if(currentClass.isAnnotation())
@@ -427,5 +431,105 @@ public class ExtValUtils
         return ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.VALIDATION_PARAMETER_EXTRACTOR_FACTORY, ValidationParameterExtractorFactory.class)
             .create();
+    }
+
+    public static boolean executeLocalBeforeValidationInterceptors(FacesContext facesContext,
+                                                                   UIComponent uiComponent,
+                                                                   Object convertedObject,
+                                                                   String propertyKey,
+                                                                   Object properties,
+                                                                   Annotation annotation)
+    {
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
+        List<PropertyValidationInterceptor> propertyValidationInterceptors = getValidationParameterExtractor().extract(
+                annotation, PropertyValidationInterceptor.class, PropertyValidationInterceptor.class);
+        boolean result = true;
+
+        if(properties != null)
+        {
+            propertyMap.put(propertyKey, properties);
+        }
+
+        for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
+        {
+            if(!propertyValidationInterceptor.beforeValidation(facesContext, uiComponent, convertedObject, propertyMap))
+            {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    public static void executeLocalAfterValidationInterceptors(FacesContext facesContext,
+                                                               UIComponent uiComponent,
+                                                               Object convertedObject,
+                                                               String propertyKey,
+                                                               Object properties,
+                                                               Annotation annotation)
+    {
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
+        List<PropertyValidationInterceptor> propertyValidationInterceptors = getValidationParameterExtractor().extract(
+                annotation, PropertyValidationInterceptor.class, PropertyValidationInterceptor.class);
+
+        if(properties != null)
+        {
+            propertyMap.put(propertyKey, properties);
+        }
+
+        for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
+        {
+            propertyValidationInterceptor.afterValidation(facesContext, uiComponent, convertedObject, propertyMap);
+        }
+    }
+
+    public static boolean executeGlobalBeforeValidationInterceptors(FacesContext facesContext,
+                                                                    UIComponent uiComponent,
+                                                                    Object convertedObject,
+                                                                    String propertyKey,
+                                                                    Object properties)
+    {
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
+        boolean result = true;
+
+        if(properties != null)
+        {
+            propertyMap.put(propertyKey, properties);
+        }
+
+        List<PropertyValidationInterceptor> propertyValidationInterceptors =
+                ExtValContext.getContext().getPropertyValidationInterceptors();
+
+        for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
+        {
+            if(!propertyValidationInterceptor.beforeValidation(facesContext, uiComponent, convertedObject, propertyMap))
+            {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    public static void executeGlobalAfterValidationInterceptors(FacesContext facesContext,
+                                                                UIComponent uiComponent,
+                                                                Object convertedObject,
+                                                                String propertyKey,
+                                                                Object properties)
+    {
+        Map<String, Object> propertyMap = new HashMap<String, Object>();
+
+        if(properties != null)
+        {
+            propertyMap.put(propertyKey, properties);
+        }
+
+        List<PropertyValidationInterceptor> propertyValidationInterceptors =
+                ExtValContext.getContext().getPropertyValidationInterceptors();
+
+        for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
+        {
+            propertyValidationInterceptor.afterValidation(facesContext, uiComponent, convertedObject, propertyMap);
+        }
     }
 }
