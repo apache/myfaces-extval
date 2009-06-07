@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
@@ -59,6 +60,7 @@ public class ExtValContext
 
     private List<ComponentInitializer> componentInitializers;
     private List<ValidationExceptionInterceptor> validationExceptionInterceptors;
+    private List<PropertyValidationInterceptor> propertyValidationInterceptors;
     private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors;
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
@@ -129,6 +131,41 @@ public class ExtValContext
                 if(logger.isTraceEnabled())
                 {
                     logger.trace(validationExceptionInterceptor.getClass().getName() + " added");
+                }
+            }
+        }
+    }
+
+    private void lazyInitPropertyValidationInterceptors()
+    {
+        if(this.propertyValidationInterceptors != null)
+        {
+            return;
+        }
+
+        this.propertyValidationInterceptors = new ArrayList<PropertyValidationInterceptor>();
+        List<String> validationInterceptorClassNames = new ArrayList<String>();
+
+        validationInterceptorClassNames
+            .add(WebXmlParameter.CUSTOM_PROPERTY_VALIDATION_INTERCEPTOR);
+        validationInterceptorClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().get(
+                    CustomInformation.PROPERTY_VALIDATION_INTERCEPTOR));
+
+        PropertyValidationInterceptor propertyValidationInterceptor;
+        for (String validationInterceptorName : validationInterceptorClassNames)
+        {
+            propertyValidationInterceptor =
+                (PropertyValidationInterceptor)
+                        ClassUtils.tryToInstantiateClassForName(validationInterceptorName);
+
+            if (propertyValidationInterceptor != null)
+            {
+                propertyValidationInterceptors.add(propertyValidationInterceptor);
+
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace(propertyValidationInterceptor.getClass().getName() + " added");
                 }
             }
         }
@@ -252,7 +289,19 @@ public class ExtValContext
     public List<ValidationExceptionInterceptor> getValidationExceptionInterceptors()
     {
         lazyInitValidationExceptionInterceptors();
-        return validationExceptionInterceptors;
+        return this.validationExceptionInterceptors;
+    }
+
+    public void addPropertyValidationInterceptor(PropertyValidationInterceptor propertyValidationInterceptor)
+    {
+        lazyInitPropertyValidationInterceptors();
+        this.propertyValidationInterceptors.add(propertyValidationInterceptor);
+    }
+
+    public List<PropertyValidationInterceptor> getPropertyValidationInterceptors()
+    {
+        lazyInitPropertyValidationInterceptors();
+        return this.propertyValidationInterceptors;
     }
 
     public void addMetaDataExtractionInterceptor(MetaDataExtractionInterceptor metaDataExtractionInterceptor)
@@ -289,6 +338,7 @@ public class ExtValContext
         return bean;
     }
 
+    @SuppressWarnings({"unchecked"})
     private InformationProviderBean initInformationProviderBean(Map applicationMap)
     {
         List<String> informationProviderBeanClassNames = new ArrayList<String>();
@@ -317,6 +367,7 @@ public class ExtValContext
         return new InformationProviderBean();
     }
 
+    @SuppressWarnings({"unchecked"})
     private void tryToInitCustomConfiguredInformationProviderBeanClassName(Map applicationMap)
     {
         InformationProviderBean bean = (InformationProviderBean) ExtValUtils.getELHelper()
@@ -366,12 +417,10 @@ public class ExtValContext
             {
                 return false;
             }
-            else
+
+            if(this.logger.isInfoEnabled())
             {
-                if(this.logger.isInfoEnabled())
-                {
-                    logger.info("override global property '" + name + "'");
-                }
+                logger.info("override global property '" + name + "'");
             }
         }
 

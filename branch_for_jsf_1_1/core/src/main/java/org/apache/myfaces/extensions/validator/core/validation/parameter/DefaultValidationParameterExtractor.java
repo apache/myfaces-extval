@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.validation.parameter;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -99,6 +101,7 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         return new ArrayList<Object>();
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "add web.xml parameter for performance tuning to deactivate the scan")
     public Map<Object, List<Object>> extractById(Annotation annotation, Class valueId)
     {
         Map<Object, List<Object>> result = new HashMap<Object, List<Object>>();
@@ -177,12 +180,32 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                     key = processFoundField(annotation, currentField, parameterValues, key, valueId);
                 }
             }
+
+            //inspect the other methods of the implementing class
+            for(Method currentMethod : paramClass.getDeclaredMethods())
+            {
+                processFoundMethod(paramClass, currentMethod, parameterValues, key, valueId);
+            }
         }
 
+        key = createDefaultKey(key, paramClass);
+
+        if(result.containsKey(key))
+        {
+            result.get(key).addAll(parameterValues);
+        }
+        else
+        {
+            result.put(key, parameterValues);
+        }
+    }
+
+    private Object createDefaultKey(Object key, Class currentClass)
+    {
         if(key == null)
         {
             //check for super-interface (exclude ValidationParameter itself)
-            for(Class interfaceClass : paramClass.getInterfaces())
+            for(Class interfaceClass : currentClass.getInterfaces())
             {
                 if(ValidationParameter.class.isAssignableFrom(interfaceClass) &&
                         (!interfaceClass.getName().equals(ValidationParameter.class.getName())))
@@ -195,28 +218,21 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
 
         if(key == null)
         {
-            key = paramClass;
+            key = currentClass;
         }
 
-        if(result.containsKey(key))
-        {
-            result.get(key).addAll(parameterValues);
-        }
-        else
-        {
-            result.put(key, parameterValues);
-        }
+        return key;
     }
 
     private Object processFoundField(
-            Annotation annotation, Field currentField, List<Object> paramValues, Object key, Class valueId)
+            Object instance, Field currentField, List<Object> paramValues, Object key, Class valueId)
     {
         Object newKey = null;
         if(key == null && currentField.isAnnotationPresent(ParameterKey.class))
         {
             try
             {
-                newKey = currentField.get(annotation);
+                newKey = currentField.get(instance);
             }
             catch (Throwable e)
             {
@@ -234,7 +250,7 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                 currentField.setAccessible(true);
                 try
                 {
-                    paramValues.add(currentField.get(annotation));
+                    paramValues.add(currentField.get(instance));
                 }
                 catch (Throwable e)
                 {
