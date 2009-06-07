@@ -92,6 +92,8 @@ public class InformationProviderBean
                 "ComponentInitializer");
         customizableInfos.put(CustomInformation.VALIDATION_EXCEPTION_INTERCEPTOR,
                 "ValidationExceptionInterceptor");
+        customizableInfos.put(CustomInformation.PROPERTY_VALIDATION_INTERCEPTOR,
+                "PropertyValidationInterceptor");
         customizableInfos.put(CustomInformation.META_DATA_EXTRACTION_INTERCEPTOR,
                 "MetaDataExtractionInterceptor");
 
@@ -126,6 +128,7 @@ public class InformationProviderBean
                 "strategy_mappings");
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     protected void applyCustomValues(Map<CustomInformation, String> map)
     {
         //override to customize information
