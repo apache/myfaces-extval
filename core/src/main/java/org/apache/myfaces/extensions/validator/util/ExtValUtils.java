@@ -449,6 +449,7 @@ public class ExtValUtils
         {
             propertyMap.put(propertyKey, properties);
         }
+        propertyMap.put(Annotation.class.getName(), annotation);
 
         for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
         {
@@ -475,6 +476,7 @@ public class ExtValUtils
         if(properties != null)
         {
             propertyMap.put(propertyKey, properties);
+            propertyMap.put(Annotation.class.getName(), annotation);
         }
 
         for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
