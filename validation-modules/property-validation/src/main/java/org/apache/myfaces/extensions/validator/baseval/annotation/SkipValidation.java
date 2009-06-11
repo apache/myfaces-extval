@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.baseval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -37,4 +38,6 @@ import java.lang.annotation.Target;
 public @interface SkipValidation
 {
     String[] value();
+
+    Class<? extends ValidationParameter>[] parameters() default {};
 }
