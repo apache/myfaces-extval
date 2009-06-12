@@ -91,4 +91,18 @@ class ViolationMessage extends FacesMessage implements LabeledMessage
 
         return message;
     }
+
+    @Override
+    public void setSummary(String s)
+    {
+        super.setSummary(s);
+        this.summaryLabelReplaced = false;
+    }
+
+    @Override
+    public void setDetail(String s)
+    {
+        super.setDetail(s);
+        this.detailLabelReplaced = false;
+    }
 }
