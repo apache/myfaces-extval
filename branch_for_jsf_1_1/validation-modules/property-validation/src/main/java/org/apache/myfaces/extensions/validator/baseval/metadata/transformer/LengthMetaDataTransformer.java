@@ -43,7 +43,11 @@ public class LengthMetaDataTransformer implements MetaDataTransformer
         int minimum = annotation.minimum();
 
         results.put(CommonMetaDataKeys.MIN_LENGTH, minimum);
-        results.put(CommonMetaDataKeys.MAX_LENGTH, annotation.maximum());
+
+        if(annotation.maximum() != Integer.MAX_VALUE)
+        {
+            results.put(CommonMetaDataKeys.MAX_LENGTH, annotation.maximum());
+        }
 
         if(minimum > 0)
         {
