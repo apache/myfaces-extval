@@ -67,6 +67,11 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             return null;
         }
 
+        if(key.contains(" "))
+        {
+            return key;
+        }
+
         ResourceBundle resourceBundle = null;
         String customMessage = null;
 
