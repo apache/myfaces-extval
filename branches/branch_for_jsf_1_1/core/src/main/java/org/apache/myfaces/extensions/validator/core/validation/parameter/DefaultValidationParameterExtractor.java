@@ -334,7 +334,8 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                 for(Type upperBounds : ((WildcardType)type).getUpperBounds())
                 {
                     if(upperBounds instanceof Class &&
-                            ((Class)upperBounds).isAssignableFrom(ValidationParameter.class))
+                            //for attributes like: Class<? extends InheritedFromValidationParameter> value();
+                            ValidationParameter.class.isAssignableFrom((Class)upperBounds))
                     {
                         return true;
                     }
