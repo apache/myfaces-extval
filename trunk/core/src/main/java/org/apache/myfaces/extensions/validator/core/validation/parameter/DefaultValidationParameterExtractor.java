@@ -190,6 +190,12 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
 
         key = createDefaultKey(key, paramClass);
 
+        if(parameterValues.isEmpty())
+        {
+            //@ParameterValue is optional as well
+            parameterValues.add(key);
+        }
+
         if(result.containsKey(key))
         {
             result.get(key).addAll(parameterValues);
