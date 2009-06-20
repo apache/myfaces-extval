@@ -69,6 +69,10 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
         if(key.contains(" "))
         {
+            if(key.endsWith("_detail"))
+            {
+                key = key.substring(0, key.length() - 7);
+            }
             return key;
         }
 
