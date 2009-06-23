@@ -143,6 +143,12 @@ public class DefaultELHelper implements ELHelper
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
+
+        if(valueBindingExpression == null)
+        {
+            return null;
+        }
+
         ValueBindingExpression currentValueBindingExpression =
             new ValueBindingExpression(valueBindingExpression.getExpressionString());
 
