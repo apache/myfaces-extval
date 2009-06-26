@@ -23,7 +23,9 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterExtractor;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 
 import javax.faces.application.FacesMessage;
@@ -73,4 +75,62 @@ public class ParameterTestCase extends TestCase
         assertEquals(extractor.extract(required, TestPriority.class, String.class, TestPriority.ShortDescription.class), "do it asap");
         assertEquals(extractor.extract(required, TestPriority.class, String.class, TestPriority.LongDescription.class), "do it immediately");
     }
+
+    public void testParameterStyleFour() throws Exception
+    {
+        ValidationParameterExtractor extractor = new DefaultValidationParameterExtractor();
+
+        TestPerson person = new TestPerson();
+        Required required = person.getClass().getDeclaredField("lastName").getAnnotation(Required.class);
+
+        assertNotNull(extractor.extract(required).containsKey(PropertyValidationInterceptor.class));
+        assertNotNull(extractor.extract(required, PropertyValidationInterceptor.class).iterator().next());
+        assertEquals(extractor.extract(required, PropertyValidationInterceptor.class).size(), 1);
+        assertEquals(extractor.extract(required, PropertyValidationInterceptor.class, PropertyValidationInterceptor.class).iterator().next().getClass().getName(), TestValidationInterceptor.class.getName());
+    }
+
+    public void testParameterStyleFive() throws Exception
+    {
+        ValidationParameterExtractor extractor = new DefaultValidationParameterExtractor();
+
+        TestPerson person = new TestPerson();
+        Required required = person.getClass().getDeclaredField("lastName").getAnnotation(Required.class);
+
+        assertNotNull(extractor.extract(required).containsKey(DisableClientValidation.class));
+        assertNotNull(extractor.extract(required, DisableClientValidation.class).iterator().next());
+        assertEquals(extractor.extract(required, DisableClientValidation.class).size(), 1);
+        assertEquals(extractor.extract(required, DisableClientValidation.class, Class.class).size(), 1);
+        assertEquals(extractor.extract(required, DisableClientValidation.class, Class.class).iterator().next().getName(), DisableClientValidation.class.getName());
+    }
+
+    /*
+     * TODO these tests work in an ide but not via commandline - check it
+     */
+    /*
+    public void testParameterStyleSix() throws Exception
+    {
+        ValidationParameterExtractor extractor = new DefaultValidationParameterExtractor();
+
+        TestPerson person = new TestPerson();
+        Required required = person.getClass().getDeclaredField("lastName").getAnnotation(Required.class);
+
+        assertNotNull(extractor.extract(required).containsKey(TestValidatorProvider.class));
+        assertNotNull(extractor.extract(required, TestValidatorProvider.class).iterator().next());
+        assertEquals(extractor.extract(required, TestValidatorProvider.class, Class.class).size(), 2);
+    }
+
+    public void testParameterStyleSeven() throws Exception
+    {
+        ValidationParameterExtractor extractor = new DefaultValidationParameterExtractor();
+
+        TestPerson person = new TestPerson();
+        Required required = person.getClass().getDeclaredField("lastName").getAnnotation(Required.class);
+
+        assertNotNull(extractor.extract(required).containsKey(TestValidatorProvider.class));
+        for (Class currentClass : extractor.extract(required, TestValidatorProvider.class, Class.class))
+        {
+            assertTrue(TestValidatorProvider.class.isAssignableFrom(currentClass));
+        }
+    }
+    */
 }
