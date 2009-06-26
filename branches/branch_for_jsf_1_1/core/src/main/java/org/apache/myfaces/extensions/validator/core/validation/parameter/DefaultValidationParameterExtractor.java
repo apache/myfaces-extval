@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.WildcardType;
+import java.lang.reflect.Modifier;
 
 /**
  * @author Gerhard Petracek
@@ -145,6 +146,12 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         return result;
     }
 
+    /*
+     * don't use the Introspector in this case
+     * if you have a better solution which supports all supported parameter styles (see extval wiki),
+     * you can impl. it and use it (exchange the impls. via the ExtValContext).
+     * furthermore, you can provide the fix for the community
+     */
     private void processParameterValue(
             Annotation annotation, Class paramClass, Map<Object, List<Object>> result, Class valueId) throws Exception
     {
@@ -153,38 +160,69 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
 
         if(ValidationParameter.class.isAssignableFrom(paramClass))
         {
-            //support pure interface approach e.g. ViolationSeverity.Warn.class
-            for(Field currentField : paramClass.getDeclaredFields())
-            {
-                key = processFoundField(annotation, currentField, parameterValues, key, valueId);
-            }
+            List<Field> processedFields = new ArrayList<Field>();
+            List<Method> processedMethods = new ArrayList<Method>();
 
-            for(Class currentInterface : paramClass.getInterfaces())
+            Class currentParamClass = paramClass;
+            while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
             {
-                if(!ValidationParameter.class.isAssignableFrom(currentInterface))
+                /*
+                 * process class
+                 */
+                //support pure interface approach e.g. ViolationSeverity.Warn.class
+                for(Field currentField : currentParamClass.getDeclaredFields())
                 {
-                    continue;
+                    if(!processedFields.contains(currentField))
+                    {
+                        key = processFoundField(annotation, currentField, parameterValues, key, valueId);
+                        processedFields.add(currentField);
+                    }
                 }
 
-                //support interface + impl. approach e.g. MyParamImpl.class
-                //(MyParamImpl implements MyParam
-                //MyParam extends ValidationParameter
-                //methods in the interface have to be marked with @ParameterValue and @ParameterKey
-                for(Method currentMethod : currentInterface.getDeclaredMethods())
+                //inspect the other methods of the implementing class
+                for(Method currentMethod : currentParamClass.getDeclaredMethods())
                 {
-                    key = processFoundMethod(paramClass, currentMethod, parameterValues, key, valueId);
+                    if(!processedMethods.contains(currentMethod))
+                    {
+                        key = processFoundMethod(currentParamClass, currentMethod, parameterValues, key, valueId);
+                        processedMethods.add(currentMethod);
+                    }
                 }
 
-                for(Field currentField : currentInterface.getDeclaredFields())
+                /*
+                 * process interfaces
+                 */
+                for(Class currentInterface : currentParamClass.getInterfaces())
                 {
-                    key = processFoundField(annotation, currentField, parameterValues, key, valueId);
-                }
-            }
+                    if(!ValidationParameter.class.isAssignableFrom(currentInterface))
+                    {
+                        continue;
+                    }
 
-            //inspect the other methods of the implementing class
-            for(Method currentMethod : paramClass.getDeclaredMethods())
-            {
-                processFoundMethod(paramClass, currentMethod, parameterValues, key, valueId);
+                    //support interface + impl. approach e.g. MyParamImpl.class
+                    //(MyParamImpl implements MyParam
+                    //MyParam extends ValidationParameter
+                    //methods in the interface have to be marked with @ParameterValue and @ParameterKey
+                    for(Method currentMethod : currentInterface.getDeclaredMethods())
+                    {
+                        if(!processedMethods.contains(currentMethod))
+                        {
+                            key = processFoundMethod(currentParamClass, currentMethod, parameterValues, key, valueId);
+                            processedMethods.add(currentMethod);
+                        }
+                    }
+
+                    for(Field currentField : currentInterface.getDeclaredFields())
+                    {
+                        if(!processedFields.contains(currentField))
+                        {
+                            key = processFoundField(annotation, currentField, parameterValues, key, valueId);
+                            processedFields.add(currentField);
+                        }
+                    }
+                }
+
+                currentParamClass = currentParamClass.getSuperclass();
             }
         }
 
@@ -279,7 +317,10 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
         {
             try
             {
-                newKey = currentMethod.invoke(paramClass.newInstance());
+                if(!(Modifier.isAbstract(paramClass.getModifiers()) || Modifier.isInterface(paramClass.getModifiers())))
+                {
+                    newKey = currentMethod.invoke(paramClass.newInstance());
+                }
             }
             catch (Throwable e)
             {
@@ -301,7 +342,12 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                 }
                 catch (Throwable e)
                 {
-                    if(this.logger.isWarnEnabled())
+                    //check if it's a none-static inner class -> return this class
+                    if(paramClass.getEnclosingClass() != null)
+                    {
+                        parameterValues.add(paramClass);
+                    }
+                    else if(this.logger.isWarnEnabled())
                     {
                         this.logger.warn(e);
                     }

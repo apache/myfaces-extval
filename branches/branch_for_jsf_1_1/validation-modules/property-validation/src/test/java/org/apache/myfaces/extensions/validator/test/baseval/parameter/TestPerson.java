@@ -19,7 +19,14 @@
 package org.apache.myfaces.extensions.validator.test.baseval.parameter;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterValue;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+
+import javax.faces.context.FacesContext;
+import javax.faces.component.UIComponent;
 
 public class TestPerson
 {
@@ -29,8 +36,69 @@ public class TestPerson
     @Required(parameters = {
             ViolationSeverity.Info.class,
             TestDenyClientSideValidation.class,
-            TestPriorityHigh.class})
+            TestPriorityHigh.class,
+            TestValidationInterceptor.class,
+            DisableClientValidation.class,
+            //LoginValidator.class,
+            AdditionalValidator.class})
     private String lastName;
+
+    private int failedLogins = 0;
+    private boolean userLocked;
+
+    /*
+     * TODO these tests work in an ide but not via commandline - check it
+     */
+    /*
+    public class LoginValidator extends TestValidatorProvider
+    {
+        @ParameterValue
+        public TestValidationStrategyProvider getValue()
+        {
+            return this;
+        }
+
+        @Override
+        public ValidationStrategy getValidationStrategy()
+        {
+            return new ValidationStrategy() {
+
+                int failedLogins;
+
+                public void validate(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry, Object convertedObject)
+                {
+                    if((this.failedLogins = isLoginSuccessful()) > 0)
+                    {
+                        if(this.failedLogins > 3)
+                        {
+                            lock();
+                        }
+                    }
+                }
+            };
+        }
+    }
+    */
+
+    private int isLoginSuccessful()
+    {
+        //force an exception
+        return ++this.failedLogins;
+    }
+
+    public boolean isLocked()
+    {
+        return userLocked;
+    }
+
+    private void lock()
+    {
+        this.userLocked = true;
+    }
+
+    /*
+     * generated
+     */
 
     public String getFirstName()
     {
