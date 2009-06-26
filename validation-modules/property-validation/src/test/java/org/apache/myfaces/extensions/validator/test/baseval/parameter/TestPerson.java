@@ -47,7 +47,7 @@ public class TestPerson
     private boolean userLocked;
 
     /*
-     * TODO these tests work in an ide but not via commandline - check it
+     * TODO these tests work in an ide but not via commandline - it's a Surefire issue
      */
     /*
     public class LoginValidator extends TestValidatorProvider
