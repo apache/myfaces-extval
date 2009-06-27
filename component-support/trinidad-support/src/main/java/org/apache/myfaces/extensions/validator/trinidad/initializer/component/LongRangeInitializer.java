@@ -48,26 +48,36 @@ class LongRangeInitializer extends TrinidadComponentInitializer
         LongRangeValidator longRangeValidator = (LongRangeValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.LongRange");
 
+        Object min = null;
         if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN))
         {
-            Object min = metaData.get(CommonMetaDataKeys.RANGE_MIN);
-
-            if(min instanceof Long)
-            {
-                longRangeValidator.setMinimum((Long)min);
-                informationAdded = true;
-            }
+            min = metaData.get(CommonMetaDataKeys.RANGE_MIN);
+        }
+        else if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN_DEFAULT))
+        {
+            min = metaData.get(CommonMetaDataKeys.RANGE_MIN_DEFAULT);
         }
 
+        if(min instanceof Long)
+        {
+            longRangeValidator.setMinimum((Long)min);
+            informationAdded = true;
+        }
+
+        Object max = null;
         if(metaData.containsKey(CommonMetaDataKeys.RANGE_MAX))
         {
-            Object maxLength = metaData.get(CommonMetaDataKeys.RANGE_MAX);
+            max = metaData.get(CommonMetaDataKeys.RANGE_MAX);
+        }
+        else if(metaData.containsKey(CommonMetaDataKeys.RANGE_MAX_DEFAULT))
+        {
+            max = metaData.get(CommonMetaDataKeys.RANGE_MAX_DEFAULT);
+        }
 
-            if(maxLength instanceof Long)
-            {
-                longRangeValidator.setMaximum((Long)maxLength);
-                informationAdded = true;
-            }
+        if(max instanceof Long)
+        {
+            longRangeValidator.setMaximum((Long)max);
+            informationAdded = true;
         }
 
         if(informationAdded &&

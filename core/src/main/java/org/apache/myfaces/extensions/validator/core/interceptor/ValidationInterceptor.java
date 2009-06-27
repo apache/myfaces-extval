@@ -21,10 +21,10 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -75,9 +75,12 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
 
-        Map<String, Object> metaData = new HashMap<String, Object>();
+        Map<String, Object> metaData;
+        Map<String, Object> metaDataResult = new HashMap<String, Object>();
+
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
+            metaData = new HashMap<String, Object>();
             validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
@@ -92,8 +95,14 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                         {
                             this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
                         }
-                        
-                        metaData = metaDataTransformer.convertMetaData(entry);
+
+                        if(!(entry.getValue() instanceof Annotation &&
+                                ExtValUtils.getValidationParameterExtractor()
+                                        .extract(entry.getValue(Annotation.class), DisableClientValidation.class)
+                                        .iterator().hasNext()))
+                        {
+                            metaData = metaDataTransformer.convertMetaData(entry);
+                        }
                     }
                     else
                     {
@@ -109,16 +118,18 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                 if(!metaData.isEmpty() &&
                         Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)))
                 {
-                    metaData.put(CommonMetaDataKeys.SKIP_VALIDATION, true);
+                    break;
                 }
 
-                //get component initializer for the current component and configure it
-                //also in case of skipped validation to reset e.g. the required attribute
-                if(!metaData.isEmpty())
-                {
-                    ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
-                }
+                metaDataResult.putAll(metaData);
            }
+        }
+
+        //get component initializer for the current component and configure it
+        //also in case of skipped validation to reset e.g. the required attribute
+        if(!metaDataResult.isEmpty())
+        {
+            ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaDataResult);
         }
 
         if(logger.isTraceEnabled())

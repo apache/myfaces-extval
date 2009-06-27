@@ -37,10 +37,16 @@ public interface CommonMetaDataKeys
     static final String WEAK_REQUIRED = "weak_required";
 
     static final String MIN_LENGTH = "min_length";
+    static final String MIN_LENGTH_DEFAULT = "min_length_default";
+
     static final String MAX_LENGTH = "max_length";
+    static final String MAX_LENGTH_DEFAULT = "max_length_default";
 
     static final String RANGE_MIN = "range_min";
+    static final String RANGE_MIN_DEFAULT = "range_min_default";
+
     static final String RANGE_MAX = "range_max";
+    static final String RANGE_MAX_DEFAULT = "range_max_default";
 
     static final String PATTERN = "pattern";
     static final String PATTERN_VALIDATION_ERROR_MESSAGE = "pattern_validation_error_message";
