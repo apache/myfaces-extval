@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataE
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.trinidad.util.TrinidadUtils;
@@ -38,6 +39,7 @@ import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -74,11 +76,12 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
             return;
         }
 
-        Boolean skipInitialization = false;
-
         Map<String, Object> metaData;
+        Map<String, Object> metaDataResult = new HashMap<String, Object>();
+
         for (MetaDataEntry entry : annotationExtractor.extract(facesContext, targetComponent).getMetaDataEntries())
         {
+            metaData = new HashMap<String, Object>();
             validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
@@ -87,7 +90,13 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
 
                 if(metaDataTransformer != null)
                 {
-                    metaData = metaDataTransformer.convertMetaData(entry);
+                    if(!(entry.getValue() instanceof Annotation &&
+                            ExtValUtils.getValidationParameterExtractor()
+                                    .extract(entry.getValue(Annotation.class), DisableClientValidation.class)
+                                    .iterator().hasNext()))
+                    {
+                        metaData = metaDataTransformer.convertMetaData(entry);
+                    }
                 }
                 else
                 {
@@ -102,21 +111,24 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
                 {
                     //execute skip validation strategy -> skip validation y/n in entry
                     validationStrategy.validate(facesContext, targetComponent, entry, null);
-                    skipInitialization = entry.getProperty(CommonMetaDataKeys.SKIP_VALIDATION, Boolean.class);
-                    continue;
+                    if(Boolean.TRUE.equals(entry.getProperty(CommonMetaDataKeys.SKIP_VALIDATION, Boolean.class)))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        //reset it - because the transformer set it in every case and the validator the final value
+                        metaData.remove(CommonMetaDataKeys.SKIP_VALIDATION);
+                    }
                 }
 
-                if(Boolean.TRUE.equals(skipInitialization) && !metaData.isEmpty() &&
-                        ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass()))
-                {
-                    metaData.put(CommonMetaDataKeys.SKIP_VALIDATION, true);
-                }
-
-                if(!metaData.isEmpty())
-                {
-                    ExtValUtils.configureComponentWithMetaData(facesContext, coreOutputLabel, metaData);
-                }
+                metaDataResult.putAll(metaData);
             }
+        }
+
+        if(!metaDataResult.isEmpty())
+        {
+            ExtValUtils.configureComponentWithMetaData(facesContext, coreOutputLabel, metaDataResult);
         }
     }
 

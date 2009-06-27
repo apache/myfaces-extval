@@ -51,36 +51,47 @@ class LengthInitializer extends TrinidadComponentInitializer
         LengthValidator lengthValidator = (LengthValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.Length");
 
+        Object minLength = null;
         if(metaData.containsKey(CommonMetaDataKeys.MIN_LENGTH))
         {
-            Object min = metaData.get(CommonMetaDataKeys.MIN_LENGTH);
-
-            if(min instanceof Integer)
-            {
-                lengthValidator.setMinimum((Integer)min);
-                informationAdded = true;
-            }
+            minLength = metaData.get(CommonMetaDataKeys.MIN_LENGTH);
+        }
+        else if(metaData.containsKey(CommonMetaDataKeys.MIN_LENGTH_DEFAULT))
+        {
+            minLength = metaData.get(CommonMetaDataKeys.MIN_LENGTH_DEFAULT);
         }
 
+        if(minLength instanceof Integer)
+        {
+            lengthValidator.setMinimum((Integer)minLength);
+            informationAdded = true;
+        }
+
+        Object maxLength = null;
         if(metaData.containsKey(CommonMetaDataKeys.MAX_LENGTH))
         {
-            Object maxLength = metaData.get(CommonMetaDataKeys.MAX_LENGTH);
+            maxLength = metaData.get(CommonMetaDataKeys.MAX_LENGTH);
+        }
+        else if(metaData.containsKey(CommonMetaDataKeys.MAX_LENGTH_DEFAULT))
+        {
+            maxLength = metaData.get(CommonMetaDataKeys.MAX_LENGTH_DEFAULT);
+        }
 
-            if(maxLength instanceof Integer)
+        if(maxLength instanceof Integer)
+        {
+            if(processComponent(uiComponent))
             {
-                if(processComponent(uiComponent))
-                {
-                    ReflectionUtils.tryToInvokeMethod(
-                            uiComponent,
-                            ReflectionUtils.tryToGetMethod(
-                                    uiComponent.getClass(),
-                                    "setMaximumLength",
-                                    int.class),
-                            maxLength);
-                }
-                lengthValidator.setMaximum((Integer)maxLength);
-                informationAdded = true;
+                ReflectionUtils.tryToInvokeMethod(
+                        uiComponent,
+                        ReflectionUtils.tryToGetMethod(
+                                uiComponent.getClass(),
+                                "setMaximumLength",
+                                int.class),
+                        maxLength);
             }
+            
+            lengthValidator.setMaximum((Integer)maxLength);
+            informationAdded = true;
         }
 
         //reInitValidators((EditableValueHolder)uiComponent, metaData); //search wrappers and call .deactivate
