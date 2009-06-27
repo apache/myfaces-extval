@@ -38,7 +38,7 @@ import java.lang.annotation.Target;
 @UsageInformation(UsageCategory.API)
 public @interface LongRange
 {
-    long minimum() default 0;
+    long minimum() default Long.MIN_VALUE;
 
     long maximum() default Long.MAX_VALUE;
 

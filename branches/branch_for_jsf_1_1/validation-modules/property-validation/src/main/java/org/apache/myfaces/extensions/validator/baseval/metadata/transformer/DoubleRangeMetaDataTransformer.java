@@ -42,12 +42,24 @@ public class DoubleRangeMetaDataTransformer implements MetaDataTransformer
 
         double minimum = annotation.minimum();
 
-        results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
-        results.put(CommonMetaDataKeys.RANGE_MAX, annotation.maximum());
-
-        if(minimum > 0)
+        if(minimum != Double.MIN_VALUE)
         {
-            results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
+            results.put(CommonMetaDataKeys.RANGE_MIN, minimum);
+        }
+        else
+        {
+            results.put(CommonMetaDataKeys.RANGE_MIN_DEFAULT, minimum);
+        }
+
+        double maximum = annotation.maximum();
+
+        if(maximum != Double.MAX_VALUE)
+        {
+            results.put(CommonMetaDataKeys.RANGE_MAX, maximum);
+        }
+        else
+        {
+            results.put(CommonMetaDataKeys.RANGE_MAX_DEFAULT, maximum);
         }
 
         return results;

@@ -48,28 +48,38 @@ class DoubleRangeInitializer extends TrinidadComponentInitializer
         DoubleRangeValidator doubleRangeValidator = (DoubleRangeValidator)facesContext.getApplication()
                                             .createValidator("org.apache.myfaces.trinidad.DoubleRange");
 
+        Object min = null;
         if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN))
         {
-            Object min = metaData.get(CommonMetaDataKeys.RANGE_MIN);
-
-            if(min instanceof Double)
-            {
-                doubleRangeValidator.setMinimum((Double)min);
-                informationAdded = true;
-            }
+            min = metaData.get(CommonMetaDataKeys.RANGE_MIN);
+        }
+        else if(metaData.containsKey(CommonMetaDataKeys.RANGE_MIN_DEFAULT))
+        {
+            min = metaData.get(CommonMetaDataKeys.RANGE_MIN_DEFAULT);
         }
 
+        if(min instanceof Double)
+        {
+            doubleRangeValidator.setMinimum((Double)min);
+            informationAdded = true;
+        }
+
+        Object max = null;
         if(metaData.containsKey(CommonMetaDataKeys.RANGE_MAX))
         {
-            Object maxLength = metaData.get(CommonMetaDataKeys.RANGE_MAX);
-
-            if(maxLength instanceof Double)
-            {
-                doubleRangeValidator.setMaximum((Double)maxLength);
-                informationAdded = true;
-            }
+            max = metaData.get(CommonMetaDataKeys.RANGE_MAX);
         }
-        
+        else if(metaData.containsKey(CommonMetaDataKeys.RANGE_MAX_DEFAULT))
+        {
+            max = metaData.get(CommonMetaDataKeys.RANGE_MAX_DEFAULT);
+        }
+
+        if(max instanceof Double)
+        {
+            doubleRangeValidator.setMaximum((Double)max);
+            informationAdded = true;
+        }
+
         if(informationAdded &&
                 doubleRangeValidator instanceof ClientValidator && uiComponent instanceof EditableValueHolder)
         {
