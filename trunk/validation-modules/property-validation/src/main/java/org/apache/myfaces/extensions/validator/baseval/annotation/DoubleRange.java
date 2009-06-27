@@ -38,7 +38,7 @@ import java.lang.annotation.Target;
 @UsageInformation(UsageCategory.API)
 public @interface DoubleRange
 {
-    double minimum() default 0;
+    double minimum() default Double.MIN_VALUE;
 
     double maximum() default Double.MAX_VALUE;
 
