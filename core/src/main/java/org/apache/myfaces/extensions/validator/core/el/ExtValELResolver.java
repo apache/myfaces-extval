@@ -109,7 +109,7 @@ public class ExtValELResolver extends ELResolver
         else
         {
             boolean propertyExists = false;
-            String propertyName = (String)property;
+            String propertyName = property.toString();
             propertyName = propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
 
             try
