@@ -23,7 +23,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterExtractor;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
@@ -96,11 +96,11 @@ public class ParameterTestCase extends TestCase
         TestPerson person = new TestPerson();
         Required required = person.getClass().getDeclaredField("lastName").getAnnotation(Required.class);
 
-        assertNotNull(extractor.extract(required).containsKey(DisableClientValidation.class));
-        assertNotNull(extractor.extract(required, DisableClientValidation.class).iterator().next());
-        assertEquals(extractor.extract(required, DisableClientValidation.class).size(), 1);
-        assertEquals(extractor.extract(required, DisableClientValidation.class, Class.class).size(), 1);
-        assertEquals(extractor.extract(required, DisableClientValidation.class, Class.class).iterator().next().getName(), DisableClientValidation.class.getName());
+        assertNotNull(extractor.extract(required).containsKey(DisableClientSideValidation.class));
+        assertNotNull(extractor.extract(required, DisableClientSideValidation.class).iterator().next());
+        assertEquals(extractor.extract(required, DisableClientSideValidation.class).size(), 1);
+        assertEquals(extractor.extract(required, DisableClientSideValidation.class, Class.class).size(), 1);
+        assertEquals(extractor.extract(required, DisableClientSideValidation.class, Class.class).iterator().next().getName(), DisableClientSideValidation.class.getName());
     }
 
     /*

@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataE
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.trinidad.util.TrinidadUtils;
@@ -92,7 +92,7 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
                 {
                     if(!(entry.getValue() instanceof Annotation &&
                             ExtValUtils.getValidationParameterExtractor()
-                                    .extract(entry.getValue(Annotation.class), DisableClientValidation.class)
+                                    .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
                                     .iterator().hasNext()))
                     {
                         metaData = metaDataTransformer.convertMetaData(entry);
