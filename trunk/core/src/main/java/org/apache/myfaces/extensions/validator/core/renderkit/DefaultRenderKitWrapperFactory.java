@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.render.RenderKit;
 
@@ -31,12 +32,29 @@ import javax.faces.render.RenderKit;
 public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
     private RenderKit renderKit;
+    private static final String GENERIC_RENDER_KIT_WRAPPER_FACTORY =
+            "org.apache.myfaces.extensions.validator.generic.renderkit.GenericRenderKitWrapperFactory";
+    private static Boolean useGenericRenderKitWrapperFactory = null;
 
     protected RenderKit createWrapper(RenderKit renderKit)
     {
         if(logger.isTraceEnabled())
         {
             logger.trace("extval renderkit wrapper created for " + renderKit.getClass().getName());
+        }
+
+        //workaround for mojarra (EXTVAL-38)
+        if(useGenericRenderKitWrapperFactory == null)
+        {
+            Class genericFactory = ClassUtils.tryToLoadClassForName(GENERIC_RENDER_KIT_WRAPPER_FACTORY);
+            useGenericRenderKitWrapperFactory = genericFactory != null;
+        }
+
+        if(useGenericRenderKitWrapperFactory)
+        {
+            AbstractRenderKitWrapperFactory renderKitWrapperFactory = (AbstractRenderKitWrapperFactory)ClassUtils
+                    .tryToInstantiateClassForName(GENERIC_RENDER_KIT_WRAPPER_FACTORY);
+            return renderKitWrapperFactory.createWrapper(renderKit);
         }
 
         if(this.renderKit == null)
