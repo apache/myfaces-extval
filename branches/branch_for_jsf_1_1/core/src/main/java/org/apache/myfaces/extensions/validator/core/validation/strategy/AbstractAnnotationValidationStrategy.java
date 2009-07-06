@@ -40,7 +40,7 @@ import java.util.MissingResourceException;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
-public abstract class AbstractAnnotationValidationStrategy extends AbstractValidationStrategy
+public abstract class AbstractAnnotationValidationStrategy<A extends Annotation> extends AbstractValidationStrategy
 {
     protected static final String DETAIL_MESSAGE_KEY_POSTFIX = "_detail";
     //e.g. for injecting a message resolver via spring
@@ -54,12 +54,12 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
             ExtValUtils.getMessageResolverForValidationStrategy(this).getMessage(key, locale);
     }
 
-    protected String getErrorMessageSummary(Annotation annotation)
+    protected String getErrorMessageSummary(A annotation)
     {
         return resolveMessage(getValidationErrorMsgKey(annotation));
     }
 
-    protected String getErrorMessageDetail(Annotation annotation)
+    protected String getErrorMessageDetail(A annotation)
     {
         try
         {
@@ -77,12 +77,12 @@ public abstract class AbstractAnnotationValidationStrategy extends AbstractValid
         return null;
     }
 
-    protected FacesMessage getValidationErrorFacesMassage(Annotation annotation)
+    protected FacesMessage getValidationErrorFacesMassage(A annotation)
     {
         return ExtValUtils.createFacesMessage(getErrorMessageSummary(annotation), getErrorMessageDetail(annotation));
     }
 
-    protected abstract String getValidationErrorMsgKey(Annotation annotation);
+    protected abstract String getValidationErrorMsgKey(A annotation);
 
     public void setMessageResolver(MessageResolver messageResolver)
     {
