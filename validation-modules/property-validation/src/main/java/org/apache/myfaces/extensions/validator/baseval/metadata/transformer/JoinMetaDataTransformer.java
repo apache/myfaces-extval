@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
@@ -78,7 +78,7 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
                 {
                     if(!(entry.getValue() instanceof Annotation &&
                             ExtValUtils.getValidationParameterExtractor()
-                                    .extract(entry.getValue(Annotation.class), DisableClientValidation.class)
+                                    .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
                                     .iterator().hasNext()))
                     {
                         results.putAll(metaDataTransformer.convertMetaData(entry));
