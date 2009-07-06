@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
@@ -98,7 +98,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
                         if(!(entry.getValue() instanceof Annotation &&
                                 ExtValUtils.getValidationParameterExtractor()
-                                        .extract(entry.getValue(Annotation.class), DisableClientValidation.class)
+                                        .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
                                         .iterator().hasNext()))
                         {
                             metaData = metaDataTransformer.convertMetaData(entry);

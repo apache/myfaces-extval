@@ -26,6 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.3
  */
 @UsageInformation(UsageCategory.API)
-public interface DisableClientValidation extends ValidationParameter
+public interface DisableClientSideValidation extends ValidationParameter
 {
 }

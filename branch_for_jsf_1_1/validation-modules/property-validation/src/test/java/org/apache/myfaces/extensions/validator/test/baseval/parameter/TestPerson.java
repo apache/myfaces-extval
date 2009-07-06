@@ -19,14 +19,8 @@
 package org.apache.myfaces.extensions.validator.test.baseval.parameter;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientValidation;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterValue;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 
 public class TestPerson
 {
@@ -38,7 +32,7 @@ public class TestPerson
             TestDenyClientSideValidation.class,
             TestPriorityHigh.class,
             TestValidationInterceptor.class,
-            DisableClientValidation.class,
+            DisableClientSideValidation.class,
             //LoginValidator.class,
             AdditionalValidator.class})
     private String lastName;
