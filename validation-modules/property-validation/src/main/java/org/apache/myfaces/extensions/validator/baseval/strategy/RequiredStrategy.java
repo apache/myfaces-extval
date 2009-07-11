@@ -30,7 +30,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Collection;
 
@@ -40,7 +39,7 @@ import java.util.Collection;
  */
 @SkipValidationSupport
 @UsageInformation(UsageCategory.INTERNAL)
-public class RequiredStrategy extends AbstractAnnotationValidationStrategy
+public class RequiredStrategy extends AbstractAnnotationValidationStrategy<Required>
 {
     private boolean useFacesBundle = false;
 
@@ -52,13 +51,13 @@ public class RequiredStrategy extends AbstractAnnotationValidationStrategy
                 (convertedObject instanceof Collection && ((Collection)convertedObject).isEmpty()) ||
                 (convertedObject instanceof Map && ((Map)convertedObject).isEmpty()))
         {
-            throw new ValidatorException(getValidationErrorFacesMassage(metaDataEntry.getValue(Annotation.class)));
+            throw new ValidatorException(getValidationErrorFacesMassage(metaDataEntry.getValue(Required.class)));
         }
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation)
+    protected String getValidationErrorMsgKey(Required annotation)
     {
-        return ((Required) annotation).validationErrorMsgKey();
+        return annotation.validationErrorMsgKey();
     }
 
     @Override

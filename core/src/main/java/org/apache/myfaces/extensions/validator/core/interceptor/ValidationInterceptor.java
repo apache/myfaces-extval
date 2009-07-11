@@ -39,6 +39,7 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import javax.faces.validator.ValidatorException;
+import javax.el.PropertyNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
@@ -55,16 +56,14 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
-        initComponent(facesContext, uiComponent);
+        if(processComponent(uiComponent))
+        {
+            initComponent(facesContext, uiComponent);
+        }
     }
 
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
-        if(!(uiComponent instanceof EditableValueHolder))
-        {
-            return;
-        }
-
         if(logger.isTraceEnabled())
         {
             logger.trace("start to init component " + uiComponent.getClass().getName());
@@ -142,7 +141,22 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
             throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
-        Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+        Object convertedObject;
+
+        try
+        {
+            convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+        }
+        catch (PropertyNotFoundException r)
+        {
+            if(this.logger.isFatalEnabled())
+            {
+                this.logger.fatal("it seems you are using an invalid binding. " + wrapped.getClass().getName()
+                        + ": conversion failed. normally this is >not< a myfaces extval issue!", r);
+            }
+
+            throw r;
+        }
 
         //recorde user input e.g. for cross-component validation
         for(ProcessedInformationRecorder recorder : ExtValContext.getContext().getProcessedInformationRecorders())
@@ -157,7 +171,10 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
         try
         {
-            processValidation(facesContext, uiComponent, convertedObject);
+            if(processComponent(uiComponent))
+            {
+                processValidation(facesContext, uiComponent, convertedObject);
+            }
         }
         catch (ValidatorException e)
         {
@@ -167,11 +184,6 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
     {
-        if (!(uiComponent instanceof EditableValueHolder))
-        {
-            return;
-        }
-
         MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
 
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
@@ -265,6 +277,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                 }
             }
         }
+    }
+
+    protected boolean processComponent(UIComponent uiComponent)
+    {
+        return uiComponent instanceof EditableValueHolder;
     }
 
     protected boolean skipValidation(FacesContext facesContext,
