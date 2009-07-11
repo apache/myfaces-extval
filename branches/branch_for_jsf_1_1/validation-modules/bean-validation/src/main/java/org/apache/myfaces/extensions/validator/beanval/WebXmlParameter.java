@@ -16,29 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.util;
+package org.apache.myfaces.extensions.validator.beanval;
 
-import org.apache.myfaces.extensions.validator.ExtValInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import javax.faces.context.FacesContext;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since 1.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class WebXmlUtils
+public interface WebXmlParameter
 {
-    public static String getInitParameter(String key)
-    {
-        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key);
-    }
+    static final String DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION = WebXmlUtils
+        .getInitParameter("DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION");
 
-    public static String getInitParameter(String prefix, String name)
-    {
-        String value = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(prefix + "." + name);
-        return (value != null) ? value.replace(" ", "").trim() : null;
-    }
+    static final String DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS = WebXmlUtils
+        .getInitParameter("DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS");
 }

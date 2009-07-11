@@ -16,29 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.util;
+package org.apache.myfaces.extensions.validator.beanval.annotation;
 
-import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import javax.faces.context.FacesContext;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since 1.x.3
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class WebXmlUtils
-{
-    public static String getInitParameter(String key)
-    {
-        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key);
-    }
 
-    public static String getInitParameter(String prefix, String name)
-    {
-        String value = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(prefix + "." + name);
-        return (value != null) ? value.replace(" ", "").trim() : null;
-    }
+@Target({METHOD, FIELD, TYPE})
+@Retention(RUNTIME)
+@UsageInformation(UsageCategory.API)
+public @interface ModelValidation
+{
+    public static final String DEFAULT_TARGET = "base";
+    public static final String DEFAULT_MESSAGE = "org.apache.myfaces.extensions.validator.bv_message";
+
+    boolean isActive() default false;
+
+    boolean displayInline() default false;
+
+    String[] validationTargets() default DEFAULT_TARGET;
+
+    String message() default DEFAULT_MESSAGE;
 }
