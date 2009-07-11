@@ -29,7 +29,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -37,7 +36,7 @@ import java.lang.annotation.Annotation;
  */
 @SkipValidationSupport
 @UsageInformation(UsageCategory.INTERNAL)
-public class PatternStrategy extends AbstractAnnotationValidationStrategy
+public class PatternStrategy extends AbstractAnnotationValidationStrategy<Pattern>
 {
     protected void processValidation(FacesContext facesContext,
             UIComponent uiComponent, MetaDataEntry metaDataEntry,
@@ -59,8 +58,8 @@ public class PatternStrategy extends AbstractAnnotationValidationStrategy
         }
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation)
+    protected String getValidationErrorMsgKey(Pattern annotation)
     {
-        return ((Pattern) annotation).validationErrorMsgKey();
+        return annotation.validationErrorMsgKey();
     }
 }
