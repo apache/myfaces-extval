@@ -113,4 +113,14 @@ public interface WebXmlParameter
     
     //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
     //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
+
+    //to display all violations via the messages-tag or to use the new jsf 2.0 support
+    static final String ACTIVATE_MULTIPLE_VIOLATIONS_PER_FIELD = WebXmlUtils
+        .getInitParameter("ACTIVATE_MULTIPLE_VIOLATIONS_PER_FIELD");
+                        
+    static final String INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL = WebXmlUtils
+        .getInitParameter("javax.faces", "INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL");
+
+    static final String VALIDATE_EMPTY_FIELDS = WebXmlUtils
+        .getInitParameter("javax.faces", "VALIDATE_EMPTY_FIELDS");
 }
