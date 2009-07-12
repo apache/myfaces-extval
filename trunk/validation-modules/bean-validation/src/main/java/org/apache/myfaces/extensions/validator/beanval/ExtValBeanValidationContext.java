@@ -21,9 +21,9 @@ package org.apache.myfaces.extensions.validator.beanval;
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.DefaultMessageInterpolator;
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.ExtValMessageInterpolatorAdapter;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationEntry;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -47,26 +47,35 @@ public class ExtValBeanValidationContext
 
     private static final String KEY = ExtValBeanValidationContext.class.getName() + ":KEY";
 
-    private static MessageInterpolator defaultMessageInterpolator = new DefaultMessageInterpolator(
-            Validation.buildDefaultValidatorFactory().getMessageInterpolator());
+    private MessageInterpolator defaultMessageInterpolator;
 
-    private static MessageResolver messageResolver;
+    private MessageResolver messageResolver;
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private Map<String, List<Class>> addedGroups = new HashMap<String, List<Class>>();
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private Map<String, List<ModelValidationEntry>> modelValidationEntries =
             new HashMap<String, List<ModelValidationEntry>>();
 
-    @ToDo(value = Priority.HIGH, description = "refactor to a pluggable Storage")
     private List<String> componentsOfRequest = new ArrayList<String>();
 
     private ExtValBeanValidationContext()
     {
+        this.messageResolver = ExtValUtils
+                .getMessageResolverForValidationStrategy(new BeanValidationStrategyAdapter(null));
+
+        Object foundBean = ExtValUtils.getELHelper().getBean(MessageInterpolator.class.getName().replace(".", "_"));
+
+        if(foundBean instanceof MessageInterpolator)
+        {
+            this.defaultMessageInterpolator = (MessageInterpolator)foundBean;
+        }
+        else
+        {
+            this.defaultMessageInterpolator = new DefaultMessageInterpolator(
+                Validation.buildDefaultValidatorFactory().getMessageInterpolator());
+        }
     }
 
     @SuppressWarnings({"unchecked"})
@@ -87,34 +96,9 @@ public class ExtValBeanValidationContext
         return currentContext;
     }
 
-    private String getGroupKey(String viewId, String componentId)
-    {
-        return componentId == null ? viewId : viewId + "@" + componentId;
-    }
-
-    public void addGroup(Class groupClass)
-    {
-        addGroup(groupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId());
-    }
-
-    public void addGroup(Class groupClass, String viewId)
-    {
-        addGroup(groupClass, viewId, null);
-    }
-
     public void addGroup(Class groupClass, String viewId, String componentId)
     {
         addGroupToGroupStorage(groupClass, viewId, componentId, this.addedGroups);
-    }
-
-    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry)
-    {
-        addModelValidationEntry(modelValidationEntry, FacesContext.getCurrentInstance().getViewRoot().getViewId());
-    }
-
-    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry, String viewId)
-    {
-        addModelValidationEntry(modelValidationEntry, viewId, null);
     }
 
     public void addModelValidationEntry(
@@ -145,78 +129,11 @@ public class ExtValBeanValidationContext
         }
     }
 
-    public void restrictGroup(Class groupClass)
-    {
-        restrictGroup(groupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId());
-    }
-
-    public void restrictGroup(Class groupClass, String viewId)
-    {
-        restrictGroup(groupClass, viewId, null);
-    }
-
     public void restrictGroup(Class groupClass, String viewId, String componentId)
     {
         addGroupToGroupStorage(groupClass, viewId, componentId, this.restrictedGroups);
     }
 
-    private void addGroupToGroupStorage(Class groupClass, String viewId, String componentId,
-                                        Map<String, List<Class>> groupStorage)
-    {
-        List<Class> groupList = groupStorage.get(getGroupKey(viewId, componentId));
-
-        if(groupList == null)
-        {
-            groupList = new ArrayList<Class>();
-            groupStorage.put(getGroupKey(viewId, componentId), groupList);
-        }
-
-        if(!groupList.contains(groupClass))
-        {
-            groupList.add(groupClass);
-        }
-    }
-
-    public void resetGroup(String viewId)
-    {
-        resetGroups(viewId, null);
-    }
-
-    public void resetGroups(String viewId, String componentId)
-    {
-        this.addedGroups.put(getGroupKey(viewId, componentId), new ArrayList<Class>());
-    }
-
-    /*
-    public Class[] getGroups()
-    {
-        if(this.addedGroups.size() < 1)
-        {
-            return new Class[] {Default.class};
-        }
-
-        List<Class> fullGroupList = new ArrayList<Class>();
-
-        for(Map.Entry<String, List<Class>> currentGroupEntry : this.addedGroups.entrySet())
-        {
-            fullGroupList.addAll(currentGroupEntry.getValue());
-
-        }
-        return (Class[]) fullGroupList.toArray();
-    }
-    */
-
-    public Class[] getGroups(String viewId)
-    {
-        return getGroups(viewId, null);
-    }
-
-    public Class[] getAllGroups(String viewId)
-    {
-        return getGroups(viewId, "*");
-    }
-
-    @ToDo(value = Priority.HIGH, description = "change impl. for #getAllGroups - see getModelValidationEntries")
     public Class[] getGroups(String viewId, String componentId)
     {
         if(this.addedGroups.size() < 1)
@@ -260,66 +177,56 @@ public class ExtValBeanValidationContext
         return mergeResults(resultsForPage, resultsForComponent);
     }
 
-    public List<ModelValidationEntry> getModelValidationEntries(String viewId)
+    public List<ModelValidationEntry> getModelValidationEntriesToValidate()
     {
-        return getModelValidationEntries(viewId, null);
-    }
-
-    public List<ModelValidationEntry> getAllModelValidationEntries(String viewId)
-    {
-        return getModelValidationEntries(viewId, "*");
-    }
-
-    public List<ModelValidationEntry> getModelValidationEntriesOfCurrentRequest(String viewId)
-    {
+        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
         List<ModelValidationEntry> result = new ArrayList<ModelValidationEntry>();
 
+        //add entries for specific components
         for(String currentClientId : this.componentsOfRequest)
         {
             result.addAll(getModelValidationEntries(viewId, currentClientId));
         }
 
+        //add entries for the whole page
         result.addAll(getModelValidationEntries(viewId));
 
         return result;
     }
 
-    public List<ModelValidationEntry> getModelValidationEntries(String viewId, String componentId)
+    public MessageInterpolator getMessageInterpolator()
     {
-        if(this.modelValidationEntries.size() < 1)
+        if(this.messageResolver != null)
         {
-            return new ArrayList<ModelValidationEntry>();
+            return new ExtValMessageInterpolatorAdapter(this.defaultMessageInterpolator, this.messageResolver);
         }
 
-        //add found groups
-        String key;
-        List<ModelValidationEntry> resultListForPage = null;
+        return this.defaultMessageInterpolator;
+    }
 
-        if(!"*".equals(componentId))
+    /*
+     * private methods
+     */
+    private String getGroupKey(String viewId, String componentId)
+    {
+        return componentId == null ? viewId : viewId + "@" + componentId;
+    }
+
+    private void addGroupToGroupStorage(Class groupClass, String viewId, String componentId,
+                                        Map<String, List<Class>> groupStorage)
+    {
+        List<Class> groupList = groupStorage.get(getGroupKey(viewId, componentId));
+
+        if(groupList == null)
         {
-            key = getGroupKey(viewId, null);
-            resultListForPage =
-                    buildModelValidationEntryList(key, this.modelValidationEntries);
+            groupList = new ArrayList<Class>();
+            groupStorage.put(getGroupKey(viewId, componentId), groupList);
         }
 
-        key = getGroupKey(viewId, componentId);
-        List<ModelValidationEntry> resultListForComponent =
-                buildModelValidationEntryList(key, this.modelValidationEntries);
-
-        if(resultListForPage == null || resultListForPage.isEmpty())
+        if(!groupList.contains(groupClass))
         {
-            return resultListForComponent;
+            groupList.add(groupClass);
         }
-        else if(resultListForComponent.isEmpty())
-        {
-            return resultListForPage;
-        }
-
-        //merge results
-        List<ModelValidationEntry> mergedResult = new ArrayList<ModelValidationEntry>();
-        mergedResult.addAll(resultListForPage);
-        mergedResult.addAll(resultListForComponent);
-        return mergedResult;
     }
 
     private List<Class> buildGroupList(String key, Map<String, List<Class>> groupStorage)
@@ -377,35 +284,46 @@ public class ExtValBeanValidationContext
         return mergedResult;
     }
 
-    public void removeGroup(Class groupClass)
+    private List<ModelValidationEntry> getModelValidationEntries(String viewId)
     {
-        removeGroup(groupClass, FacesContext.getCurrentInstance().getViewRoot().getViewId());
+        return getModelValidationEntries(viewId, null);
     }
 
-    public void removeGroup(Class groupClass, String viewId)
+    private List<ModelValidationEntry> getModelValidationEntries(String viewId, String componentId)
     {
-        removeGroup(groupClass, viewId, null);
-    }
-
-    @ToDo(Priority.HIGH)
-    public void removeGroup(Class groupClass, String viewId, String componentId)
-    {
-        this.addedGroups.remove(getGroupKey(viewId, componentId));
-    }
-
-    public MessageInterpolator getMessageInterpolator()
-    {
-        if(messageResolver != null)
+        if(this.modelValidationEntries.size() < 1)
         {
-            return new ExtValMessageInterpolatorAdapter(defaultMessageInterpolator, messageResolver);
+            return new ArrayList<ModelValidationEntry>();
         }
 
-        return defaultMessageInterpolator;
-    }
+        //add found groups
+        String key;
+        List<ModelValidationEntry> resultListForPage = null;
 
-    @ToDo(Priority.HIGH)
-    public static void setMessageResolver(MessageResolver customMessageResolver)
-    {
-        messageResolver = customMessageResolver;
+        if(!"*".equals(componentId))
+        {
+            key = getGroupKey(viewId, null);
+            resultListForPage =
+                    buildModelValidationEntryList(key, this.modelValidationEntries);
+        }
+
+        key = getGroupKey(viewId, componentId);
+        List<ModelValidationEntry> resultListForComponent =
+                buildModelValidationEntryList(key, this.modelValidationEntries);
+
+        if(resultListForPage == null || resultListForPage.isEmpty())
+        {
+            return resultListForComponent;
+        }
+        else if(resultListForComponent.isEmpty())
+        {
+            return resultListForPage;
+        }
+
+        //merge results
+        List<ModelValidationEntry> mergedResult = new ArrayList<ModelValidationEntry>();
+        mergedResult.addAll(resultListForPage);
+        mergedResult.addAll(resultListForComponent);
+        return mergedResult;
     }
 }

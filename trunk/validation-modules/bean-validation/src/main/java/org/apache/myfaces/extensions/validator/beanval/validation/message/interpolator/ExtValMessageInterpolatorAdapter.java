@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator;
 
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 
 import javax.validation.MessageInterpolator;
 import java.util.Locale;
@@ -50,8 +51,14 @@ public class ExtValMessageInterpolatorAdapter extends DefaultMessageInterpolator
         {
             if(messageOrKey.startsWith("{") && messageOrKey.endsWith("}"))
             {
-                messageOrKey = this.messageResolver
+                String newMessageOrKey = this.messageResolver
                         .getMessage(messageOrKey.substring(1, messageOrKey.length() - 1), getCurrentLocale());
+
+                if(!(newMessageOrKey.startsWith(AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER) &&
+                        newMessageOrKey.endsWith(AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER)))
+                {
+                    messageOrKey = newMessageOrKey;
+                }
             }
             else
             {
