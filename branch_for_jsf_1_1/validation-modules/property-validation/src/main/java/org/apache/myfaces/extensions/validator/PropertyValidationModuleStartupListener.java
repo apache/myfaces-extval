@@ -38,6 +38,9 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
+import org.apache.myfaces.extensions.validator.crossval.storage.DefaultCrossValidationStorageManager;
+import org.apache.myfaces.extensions.validator.crossval.storage.mapper.CrossValidationStorageNameMapper;
 
 /**
  * @author Gerhard Petracek
@@ -56,7 +59,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         initDefaultComponentInitializer();
         initDefaultValidationExceptionInterceptor();
         addSkipValidationSupport();
-        initNameMappers();
+        initStorageManagerAndNameMappers();
     }
 
     private void initStaticStrategyMappings()
@@ -108,13 +111,19 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
     }
 
     @SuppressWarnings({"unchecked"})
-    private void initNameMappers()
+    private void initStorageManagerAndNameMappers()
     {
         StorageManagerHolder storageManagerHolder =
                 (ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
 
+        //cross-validation
+        DefaultCrossValidationStorageManager crossValidationStorageManager = new DefaultCrossValidationStorageManager();
+        crossValidationStorageManager.register(new CrossValidationStorageNameMapper());
+        storageManagerHolder.setStorageManager(CrossValidationStorage.class, crossValidationStorageManager, false);
+
+        //group-validation light
         StorageManager storageManager = storageManagerHolder.getStorageManager(GroupStorage.class);
 
         if(storageManager instanceof AbstractNameMapperAwareFactory)

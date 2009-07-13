@@ -16,23 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.crossval;
+package org.apache.myfaces.extensions.validator.crossval.storage.mapper;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.util.List;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
+import org.apache.myfaces.extensions.validator.crossval.storage.DefaultCrossValidationStorage;
 
 /**
- * normally it should be in the storage package - due to backward compatibility it isn't the case
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface CrossValidationStorage
+@UsageInformation(INTERNAL)
+public class CrossValidationStorageNameMapper implements NameMapper<String>
 {
-    void add(CrossValidationStorageEntry entry);
-
-    List<CrossValidationStorageEntry> getCrossValidationStorageEntries();
+    public String createName(String key)
+    {
+        return (CrossValidationStorage.class.getName().equals(key)) ?
+                DefaultCrossValidationStorage.class.getName() : null;
+    }
 }

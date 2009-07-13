@@ -16,23 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.crossval;
+package org.apache.myfaces.extensions.validator.crossval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.util.List;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import org.apache.myfaces.extensions.validator.core.storage.AbstractRequestScopeAwareStorageManager;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 
 /**
- * normally it should be in the storage package - due to backward compatibility it isn't the case
+ * default storage-manager for cross-validation entries
  *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface CrossValidationStorage
+@UsageInformation(INTERNAL)
+public class DefaultCrossValidationStorageManager
+    extends AbstractRequestScopeAwareStorageManager<CrossValidationStorage>
 {
-    void add(CrossValidationStorageEntry entry);
-
-    List<CrossValidationStorageEntry> getCrossValidationStorageEntries();
+    public String getStorageManagerKey()
+    {
+        //for better backward compatibility
+        return CrossValidationStorage.class.getName();
+    }
 }

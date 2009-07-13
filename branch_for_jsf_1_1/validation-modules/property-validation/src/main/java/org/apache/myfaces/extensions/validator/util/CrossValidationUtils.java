@@ -40,27 +40,14 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.INTERNAL)
 public class CrossValidationUtils
 {
-    public static final String CROSS_VALIDATION_STORAGE_KEY = CrossValidationStorage.class.getName();
-
     public static CrossValidationStorage getOrInitCrossValidationStorage()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-
-        if (!requestMap.containsKey(CROSS_VALIDATION_STORAGE_KEY))
-        {
-            resetCrossValidationStorage();
-        }
-
-        return (CrossValidationStorage) requestMap.get(CROSS_VALIDATION_STORAGE_KEY);
+        return ExtValUtils.getOrInitStorage(CrossValidationStorage.class, CrossValidationStorage.class.getName());
     }
 
     public static void resetCrossValidationStorage()
     {
-        FacesContext
-                .getCurrentInstance()
-                .getExternalContext()
-                .getRequestMap()
-                .put(CROSS_VALIDATION_STORAGE_KEY, new CrossValidationStorage());
+        ExtValUtils.resetStorage(CrossValidationStorage.class, CrossValidationStorage.class.getName());
     }
 
     public static final String KEY_TO_CONVERTED_VALUE_MAPPING_KEY = CrossValidationUtils.class.getName();
