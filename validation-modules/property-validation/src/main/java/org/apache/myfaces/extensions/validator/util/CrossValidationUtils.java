@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.util;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -28,10 +29,6 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
-
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -50,32 +47,23 @@ public class CrossValidationUtils
         ExtValUtils.resetStorage(CrossValidationStorage.class, CrossValidationStorage.class.getName());
     }
 
-    public static final String KEY_TO_CONVERTED_VALUE_MAPPING_KEY = CrossValidationUtils.class.getName();
-
-    public static Map<String, ProcessedInformationEntry> getOrInitKeyToConvertedValueMapping()
+    public static ProcessedInformationStorage getOrInitProcessedInformationStorage()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-
-        if (!requestMap.containsKey(KEY_TO_CONVERTED_VALUE_MAPPING_KEY))
-        {
-            resetKeyToConvertedValueMapping();
-        }
-
-        return (Map<String, ProcessedInformationEntry>) requestMap.get(KEY_TO_CONVERTED_VALUE_MAPPING_KEY);
+        return ExtValUtils.getOrInitStorage(
+                ProcessedInformationStorage.class, ProcessedInformationStorage.class.getName());
     }
 
     public static void resetKeyToConvertedValueMapping()
     {
-        FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
-            .put(KEY_TO_CONVERTED_VALUE_MAPPING_KEY, new HashMap<String, ProcessedInformationEntry>());
+        ExtValUtils.resetStorage(ProcessedInformationStorage.class, ProcessedInformationStorage.class.getName());
     }
 
     public static ProcessedInformationEntry resolveValidationTargetEntry(
-            Map<String, ProcessedInformationEntry> keyToConvertedValueMapping,
+            ProcessedInformationStorage processedInformationStorage,
             String targetKey, CrossValidationStorageEntry crossValidationStorageEntry)
     {
         ProcessedInformationEntry processedInformationEntry =
-            keyToConvertedValueMapping.get(targetKey);
+            processedInformationStorage.getEntry(targetKey);
 
         //value not submitted at this request - use model value (validation against the model)
         if(processedInformationEntry == null)

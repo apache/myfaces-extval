@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.recorder;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -29,7 +30,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
-import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -48,8 +48,8 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         }
 
         //to support local cross-validation (within the same entity)
-        Map<String, ProcessedInformationEntry> keyToConvertedValueMapping = CrossValidationUtils
-            .getOrInitKeyToConvertedValueMapping();
+        ProcessedInformationStorage processedInformationStorage = CrossValidationUtils
+            .getOrInitProcessedInformationStorage();
 
         ProcessedInformationEntry entry;
 
@@ -70,21 +70,21 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         String key = propertyDetails.getKey();
 
         //for local cross-validation
-        if (keyToConvertedValueMapping.containsKey(key) &&
-            keyToConvertedValueMapping.get(key).getBean() != null &&
-            !keyToConvertedValueMapping.get(key).getBean().equals(entry.getBean()))
+        if (processedInformationStorage.containsEntry(key) &&
+            processedInformationStorage.getEntry(key).getBean() != null &&
+            !processedInformationStorage.getEntry(key).getBean().equals(entry.getBean()))
         {
             //for the validation within a complex component e.g. a table
             //don't override existing expression (style: #{entry.property}) - make a special mapping
 
             List<ProcessedInformationEntry> furtherEntries =
-                keyToConvertedValueMapping.get(key).getFurtherEntries();
+                processedInformationStorage.getEntry(key).getFurtherEntries();
 
             if (furtherEntries == null)
             {
                 furtherEntries = new ArrayList<ProcessedInformationEntry>();
 
-                keyToConvertedValueMapping.get(key).setFurtherEntries(furtherEntries);
+                processedInformationStorage.getEntry(key).setFurtherEntries(furtherEntries);
             }
 
             furtherEntries.add(entry);
@@ -92,7 +92,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         else
         {
             //for normal validation
-            keyToConvertedValueMapping.put(key, entry);
+            processedInformationStorage.setEntry(key, entry);
         }
     }
 }

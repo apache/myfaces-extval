@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
@@ -29,7 +30,6 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 
 import java.lang.annotation.Annotation;
-import java.util.Map;
 
 /**
  * "[local_property.property1.property2]"
@@ -65,14 +65,14 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
                                            String targetKey,
                                            AbstractCompareStrategy compareStrategy)
     {
-        Map<String, ProcessedInformationEntry> keyConvertedValueMapping =
-                CrossValidationUtils.getOrInitKeyToConvertedValueMapping();
+        ProcessedInformationStorage processedInformationStorage =
+                CrossValidationUtils.getOrInitProcessedInformationStorage();
 
         String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
 
-        if (keyConvertedValueMapping.containsKey(newKey))
+        if (processedInformationStorage.containsEntry(newKey))
         {
-            ProcessedInformationEntry validationTargetEntry = keyConvertedValueMapping.get(newKey);
+            ProcessedInformationEntry validationTargetEntry = processedInformationStorage.getEntry(newKey);
 
             processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
