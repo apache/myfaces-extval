@@ -28,9 +28,9 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API
 @UsageInformation(API)
 public interface ProcessedInformationStorage
 {
-    void setEntry(String key, ProcessedInformationEntry entry);
+    void setEntry(String key, ProcessedInformationStorageEntry entry);
 
     boolean containsEntry(String key);
 
-    ProcessedInformationEntry getEntry(String key);
+    ProcessedInformationStorageEntry getEntry(String key);
 }

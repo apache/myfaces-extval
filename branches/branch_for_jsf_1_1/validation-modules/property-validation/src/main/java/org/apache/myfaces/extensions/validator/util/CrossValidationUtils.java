@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -58,11 +58,11 @@ public class CrossValidationUtils
         ExtValUtils.resetStorage(ProcessedInformationStorage.class, ProcessedInformationStorage.class.getName());
     }
 
-    public static ProcessedInformationEntry resolveValidationTargetEntry(
+    public static ProcessedInformationStorageEntry resolveValidationTargetEntry(
             ProcessedInformationStorage processedInformationStorage,
             String targetKey, CrossValidationStorageEntry crossValidationStorageEntry)
     {
-        ProcessedInformationEntry processedInformationEntry =
+        ProcessedInformationStorageEntry processedInformationEntry =
             processedInformationStorage.getEntry(targetKey);
 
         //value not submitted at this request - use model value (validation against the model)
@@ -89,7 +89,7 @@ public class CrossValidationUtils
             return processedInformationEntry;
         }
 
-        for (ProcessedInformationEntry entry : processedInformationEntry.getFurtherEntries())
+        for (ProcessedInformationStorageEntry entry : processedInformationEntry.getFurtherEntries())
         {
             if (entry.getBean().equals(targetBean))
             {

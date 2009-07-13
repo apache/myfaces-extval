@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
@@ -70,7 +70,7 @@ class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorage crossValidationStorage,
             AbstractCompareStrategy compareStrategy)
     {
-        ProcessedInformationEntry validationTargetEntry =
+        ProcessedInformationStorageEntry validationTargetEntry =
                 resolveTargetForCrossComponentValidation(crossValidationStorageEntry, validationTarget);
 
         if(validationTargetEntry != null)
@@ -85,7 +85,7 @@ class ELCompareStrategy implements ReferencingStrategy
         return true;
     }
 
-    private ProcessedInformationEntry resolveTargetForCrossComponentValidation(
+    private ProcessedInformationStorageEntry resolveTargetForCrossComponentValidation(
             CrossValidationStorageEntry crossValidationStorageEntry,
             ValueBindingExpression validationTarget)
     {
@@ -101,7 +101,7 @@ class ELCompareStrategy implements ReferencingStrategy
     private void processCrossComponentValidation(
             AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry)
+            ProcessedInformationStorageEntry validationTargetEntry)
     {
         CrossValidationHelper
                 .crossValidateCompareStrategy(
@@ -116,7 +116,7 @@ class ELCompareStrategy implements ReferencingStrategy
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Object targetValue = ExtValUtils.getELHelper().getValueOfExpression(facesContext, validationTarget);
 
-        ProcessedInformationEntry targetEntry = new ProcessedInformationEntry();
+        ProcessedInformationStorageEntry targetEntry = new ProcessedInformationStorageEntry();
         targetEntry.setBean(
                 ExtValUtils.getELHelper().getValueOfExpression(facesContext, validationTarget.getBaseExpression()));
         targetEntry.setConvertedValue(targetValue);
