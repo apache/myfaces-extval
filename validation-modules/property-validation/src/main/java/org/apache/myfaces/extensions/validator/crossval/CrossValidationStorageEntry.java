@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 
 /**
+ * normally it should be in the storage package - due to backward compatibility it isn't the case
+ * 
  * @author Gerhard Petracek
  * @since 1.x.1
  */
