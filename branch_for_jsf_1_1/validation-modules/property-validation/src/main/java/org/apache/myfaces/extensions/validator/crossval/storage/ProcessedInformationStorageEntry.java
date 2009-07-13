@@ -25,16 +25,13 @@ import javax.faces.component.UIComponent;
 import java.util.List;
 
 /**
- * normally it should be in the storage package and the name should be ProcessedInformationStorageEntry
- * due to backward compatibility it isn't the case
- * <p/>
  * In order to build up a mapping which is used for cross-validation.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ProcessedInformationEntry
+public class ProcessedInformationStorageEntry
 {
     private Object bean;
     private Object convertedValue;
@@ -42,7 +39,7 @@ public class ProcessedInformationEntry
     //for complex components (e.g. a table there are multiple entries with
     //the same key (here the el expression #{entry.property})
     //however, don't override the previous entry - they arn't the same;
-    private List<ProcessedInformationEntry> furtherEntries;
+    private List<ProcessedInformationStorageEntry> furtherEntries;
     //just for input components within complex components e.g. dataTable,...
     private String clientId;
 
@@ -89,12 +86,12 @@ public class ProcessedInformationEntry
         this.clientId = clientId;
     }
 
-    public List<ProcessedInformationEntry> getFurtherEntries()
+    public List<ProcessedInformationStorageEntry> getFurtherEntries()
     {
         return furtherEntries;
     }
 
-    public void setFurtherEntries(List<ProcessedInformationEntry> furtherEntries)
+    public void setFurtherEntries(List<ProcessedInformationStorageEntry> furtherEntries)
     {
         this.furtherEntries = furtherEntries;
     }

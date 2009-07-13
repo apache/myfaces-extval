@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -72,7 +72,7 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 
         if (processedInformationStorage.containsEntry(newKey))
         {
-            ProcessedInformationEntry validationTargetEntry = processedInformationStorage.getEntry(newKey);
+            ProcessedInformationStorageEntry validationTargetEntry = processedInformationStorage.getEntry(newKey);
 
             processCrossComponentValidation(compareStrategy, crossValidationStorageEntry, validationTargetEntry);
         }
@@ -88,7 +88,7 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
     private void processCrossComponentValidation(
             AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry targetInformationEntry)
+            ProcessedInformationStorageEntry targetInformationEntry)
     {
         if (compareStrategy.isViolation(
                 crossValidationStorageEntry.getConvertedObject(),
@@ -136,7 +136,7 @@ class LocalPropertyChainCompareStrategy extends LocalCompareStrategy
 
         Object targetValue = getValueOfProperty(newBase, targetKey);
 
-        ProcessedInformationEntry targetEntry = new ProcessedInformationEntry();
+        ProcessedInformationStorageEntry targetEntry = new ProcessedInformationStorageEntry();
         targetEntry.setBean(newBase);
         targetEntry.setConvertedValue(targetValue);
 
