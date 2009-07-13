@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.crossval.recorder;
 
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;

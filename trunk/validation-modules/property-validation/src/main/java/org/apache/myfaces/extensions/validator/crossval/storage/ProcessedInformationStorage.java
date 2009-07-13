@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.crossval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API;
-import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 
 /**
  * @author Gerhard Petracek
