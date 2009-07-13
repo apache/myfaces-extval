@@ -21,13 +21,14 @@ package org.apache.myfaces.extensions.validator.internal;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import java.lang.annotation.Target;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@Target({TYPE, METHOD, FIELD})
+@Target({TYPE, METHOD, FIELD, CONSTRUCTOR})
 public @interface ToDo
 {
     Priority value();
