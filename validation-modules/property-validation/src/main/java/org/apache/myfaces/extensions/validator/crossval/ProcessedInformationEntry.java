@@ -25,6 +25,9 @@ import javax.faces.component.UIComponent;
 import java.util.List;
 
 /**
+ * normally it should be in the storage package and the name should be ProcessedInformationStorageEntry
+ * due to backward compatibility it isn't the case
+ * <p/>
  * In order to build up a mapping which is used for cross-validation.
  *
  * @author Gerhard Petracek

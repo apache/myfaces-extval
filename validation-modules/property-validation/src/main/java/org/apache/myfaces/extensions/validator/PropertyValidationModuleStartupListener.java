@@ -40,7 +40,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultCrossValidationStorageManager;
+import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessedInformationStorageManager;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.CrossValidationStorageNameMapper;
+import org.apache.myfaces.extensions.validator.crossval.storage.mapper.ProcessedInformationStorageNameMapper;
 
 /**
  * @author Gerhard Petracek
@@ -118,8 +121,15 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
                 .getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
 
+        //processed-information
+        DefaultProcessedInformationStorageManager processedInfoStorageManager =
+                new DefaultProcessedInformationStorageManager();
+        processedInfoStorageManager.register(new ProcessedInformationStorageNameMapper());
+        storageManagerHolder.setStorageManager(ProcessedInformationStorage.class, processedInfoStorageManager, false);
+
         //cross-validation
-        DefaultCrossValidationStorageManager crossValidationStorageManager = new DefaultCrossValidationStorageManager();
+        DefaultCrossValidationStorageManager crossValidationStorageManager =
+                new DefaultCrossValidationStorageManager();
         crossValidationStorageManager.register(new CrossValidationStorageNameMapper());
         storageManagerHolder.setStorageManager(CrossValidationStorage.class, crossValidationStorageManager, false);
 
