@@ -53,7 +53,7 @@ import java.util.MissingResourceException;
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFactory
+public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFactory<String>
         implements ClassMappingFactory<String, ValidationStrategy>
 {
     protected final Log logger = LogFactory.getLog(getClass());
@@ -118,7 +118,6 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
         }
     }
 
-    @ToDo(value = Priority.MEDIUM, description = "logging")
     private synchronized void addMapping(String metaDataKey, String validationStrategyName)
     {
         if(logger.isTraceEnabled())
