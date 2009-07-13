@@ -48,7 +48,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 public class PropertyValidationGroupProvider implements PropertyValidationInterceptor
 {
