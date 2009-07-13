@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -34,7 +34,7 @@ class CrossValidationHelper
 {
     public static void crossValidateCompareStrategy(AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry,
+            ProcessedInformationStorageEntry validationTargetEntry,
             boolean isModelAwareValidation)
     {
         if (compareStrategy.isViolation(
@@ -63,7 +63,7 @@ class CrossValidationHelper
     private static void processTargetAfterCrossComponentValidation(
             AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry sourceCrossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry)
+            ProcessedInformationStorageEntry validationTargetEntry)
     {
         CrossValidationStorageEntry targetCrossValidationStorageEntry = new CrossValidationStorageEntry();
 

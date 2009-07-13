@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.crossval.recorder;
 
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -51,7 +51,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
         ProcessedInformationStorage processedInformationStorage = CrossValidationUtils
             .getOrInitProcessedInformationStorage();
 
-        ProcessedInformationEntry entry;
+        ProcessedInformationStorageEntry entry;
 
         PropertyDetails propertyDetails =
             ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
@@ -61,7 +61,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
             return;
         }
         
-        entry = new ProcessedInformationEntry();
+        entry = new ProcessedInformationStorageEntry();
         entry.setBean(propertyDetails.getBaseObject());
         entry.setConvertedValue(value);
         entry.setComponent(uiComponent);
@@ -77,12 +77,12 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
             //for the validation within a complex component e.g. a table
             //don't override existing expression (style: #{entry.property}) - make a special mapping
 
-            List<ProcessedInformationEntry> furtherEntries =
+            List<ProcessedInformationStorageEntry> furtherEntries =
                 processedInformationStorage.getEntry(key).getFurtherEntries();
 
             if (furtherEntries == null)
             {
-                furtherEntries = new ArrayList<ProcessedInformationEntry>();
+                furtherEntries = new ArrayList<ProcessedInformationStorageEntry>();
 
                 processedInformationStorage.getEntry(key).setFurtherEntries(furtherEntries);
             }
