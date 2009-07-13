@@ -16,23 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.crossval;
+package org.apache.myfaces.extensions.validator.crossval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * normally it should be in the storage package - due to backward compatibility it isn't the case
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface CrossValidationStorage
+@UsageInformation(UsageCategory.INTERNAL)
+public class DefaultCrossValidationStorage implements CrossValidationStorage
 {
-    void add(CrossValidationStorageEntry entry);
+    private List<CrossValidationStorageEntry> crossValidationStorageEntries =
+        new ArrayList<CrossValidationStorageEntry>();
 
-    List<CrossValidationStorageEntry> getCrossValidationStorageEntries();
+    public void add(CrossValidationStorageEntry entry)
+    {
+        this.crossValidationStorageEntries.add(entry);
+    }
+
+    public List<CrossValidationStorageEntry> getCrossValidationStorageEntries()
+    {
+        return crossValidationStorageEntries;
+    }
+
+    public void setCrossValidationStorageEntries(List<CrossValidationStorageEntry> crossValidationStorageEntries)
+    {
+        this.crossValidationStorageEntries = crossValidationStorageEntries;
+    }
 }
