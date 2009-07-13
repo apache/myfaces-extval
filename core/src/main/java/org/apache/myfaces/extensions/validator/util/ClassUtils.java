@@ -65,7 +65,7 @@ public class ClassUtils
         }
     }
 
-    public static Object tryToInstantiateClass(Class targetClass)
+    public static <T> T tryToInstantiateClass(Class<T> targetClass)
     {
         try
         {
