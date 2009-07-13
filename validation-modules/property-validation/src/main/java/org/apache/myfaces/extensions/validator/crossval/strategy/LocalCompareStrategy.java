@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
@@ -80,7 +80,7 @@ class LocalCompareStrategy implements ReferencingStrategy
         String sourceKey = resolveSourceKey(crossValidationStorageEntry);
         targetKey = sourceKey.substring(0, sourceKey.lastIndexOf(".") + 1) + targetKey;
 
-        ProcessedInformationEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
+        ProcessedInformationStorageEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
                 processedInformationStorage, targetKey, crossValidationStorageEntry);
 
         if (validationTargetEntry != null && validationTargetEntry.getComponent() != null && !isModelAwareValidation)
@@ -171,7 +171,7 @@ class LocalCompareStrategy implements ReferencingStrategy
     private void processCrossComponentValidation(
             AbstractCompareStrategy compareStrategy,
             CrossValidationStorageEntry crossValidationStorageEntry,
-            ProcessedInformationEntry validationTargetEntry)
+            ProcessedInformationStorageEntry validationTargetEntry)
     {
         CrossValidationHelper
                 .crossValidateCompareStrategy(
@@ -183,7 +183,7 @@ class LocalCompareStrategy implements ReferencingStrategy
             CrossValidationStorageEntry crossValidationStorageEntry,
             String targetProperty)
     {
-        ProcessedInformationEntry targetEntry = new ProcessedInformationEntry();
+        ProcessedInformationStorageEntry targetEntry = new ProcessedInformationStorageEntry();
 
         targetEntry.setBean(
                 crossValidationStorageEntry.getMetaDataEntry()

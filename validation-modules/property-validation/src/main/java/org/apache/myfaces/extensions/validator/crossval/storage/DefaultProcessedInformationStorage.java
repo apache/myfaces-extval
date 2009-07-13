@@ -31,10 +31,10 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultProcessedInformationStorage implements ProcessedInformationStorage
 {
-    private Map<String, ProcessedInformationEntry> processedInformationMap =
-        new HashMap<String, ProcessedInformationEntry>();
+    private Map<String, ProcessedInformationStorageEntry> processedInformationMap =
+        new HashMap<String, ProcessedInformationStorageEntry>();
 
-    public void setEntry(String key, ProcessedInformationEntry entry)
+    public void setEntry(String key, ProcessedInformationStorageEntry entry)
     {
         this.processedInformationMap.put(key, entry);
     }
@@ -44,7 +44,7 @@ public class DefaultProcessedInformationStorage implements ProcessedInformationS
         return processedInformationMap.containsKey(key);
     }
 
-    public ProcessedInformationEntry getEntry(String key)
+    public ProcessedInformationStorageEntry getEntry(String key)
     {
         return processedInformationMap.get(key);
     }
