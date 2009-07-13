@@ -46,7 +46,7 @@ import java.util.Set;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 public class ModelValidationPhaseListener implements PhaseListener
 {

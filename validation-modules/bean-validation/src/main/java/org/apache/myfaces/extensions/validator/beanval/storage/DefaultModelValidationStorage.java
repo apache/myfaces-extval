@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.beanval.storage;
 
 import org.apache.myfaces.extensions.validator.util.GroupUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -28,9 +30,12 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 /**
+ * storage implementation for model-validation entries
+ *
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
+@UsageInformation(INTERNAL)
 public class DefaultModelValidationStorage implements ModelValidationStorage
 {
     private Map<String, List<ModelValidationEntry>> modelValidationEntries =
