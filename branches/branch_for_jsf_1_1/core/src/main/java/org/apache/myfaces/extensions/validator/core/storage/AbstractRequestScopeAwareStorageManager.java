@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.storage;
 import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.REUSE;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,9 +33,12 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
+ * generic storage manager implementation which stores the storage implementations in the request scope
+ *
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
+@UsageInformation(REUSE)
 public abstract class AbstractRequestScopeAwareStorageManager<T> extends AbstractNameMapperAwareFactory<String>
         implements StorageManager<T>
 {

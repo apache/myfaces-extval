@@ -33,7 +33,7 @@ import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 
 @Target({METHOD, FIELD, TYPE})

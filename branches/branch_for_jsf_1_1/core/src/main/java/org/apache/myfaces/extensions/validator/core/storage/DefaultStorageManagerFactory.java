@@ -37,8 +37,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
+ * default implementation for storage-manager creation and caching
+ *
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @UsageInformation(INTERNAL)
 public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory<Class>

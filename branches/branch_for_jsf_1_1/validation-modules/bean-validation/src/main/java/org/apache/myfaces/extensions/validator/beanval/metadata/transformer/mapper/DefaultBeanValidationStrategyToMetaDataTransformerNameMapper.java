@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.Bean
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @UsageInformation({UsageCategory.INTERNAL})
 public class DefaultBeanValidationStrategyToMetaDataTransformerNameMapper

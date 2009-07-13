@@ -18,10 +18,19 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 /**
+ * suggested interface for a group storage
+ * used by the bvi module and add-ons
+ * <p/>
+ * it allows to manage groups for the current request
+ * 
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
+@UsageInformation(UsageCategory.API)
 public interface GroupStorage
 {
     void addGroup(Class groupClass, String viewId, String componentId);

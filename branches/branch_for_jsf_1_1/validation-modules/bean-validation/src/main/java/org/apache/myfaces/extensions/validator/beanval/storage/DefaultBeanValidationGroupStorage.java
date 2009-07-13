@@ -20,13 +20,18 @@ package org.apache.myfaces.extensions.validator.beanval.storage;
 
 import org.apache.myfaces.extensions.validator.core.storage.DefaultGroupStorage;
 import org.apache.myfaces.extensions.validator.beanval.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 import javax.validation.groups.Default;
 
 /**
+ * default storage implementation for bean-validation groups
+ *
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
+@UsageInformation(INTERNAL)
 public class DefaultBeanValidationGroupStorage extends DefaultGroupStorage
 {
     @Override

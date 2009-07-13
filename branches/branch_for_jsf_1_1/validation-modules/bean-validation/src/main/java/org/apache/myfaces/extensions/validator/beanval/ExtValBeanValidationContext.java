@@ -42,7 +42,7 @@ import java.util.List;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 public class ExtValBeanValidationContext implements GroupStorage, ModelValidationStorage
 {
