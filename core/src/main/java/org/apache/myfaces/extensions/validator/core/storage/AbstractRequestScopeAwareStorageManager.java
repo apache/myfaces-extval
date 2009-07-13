@@ -109,7 +109,8 @@ public abstract class AbstractRequestScopeAwareStorageManager<T> extends Abstrac
 
         if(storageMap != null && storageMap.containsKey(storageKey))
         {
-            storageMap.put(storageKey, null);
+            Class storageClass = storageMap.get(storageKey).getClass();
+            storageMap.put(storageKey, (T)ClassUtils.tryToInstantiateClass(storageClass));
         }
     }
 
