@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.validation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
+import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;

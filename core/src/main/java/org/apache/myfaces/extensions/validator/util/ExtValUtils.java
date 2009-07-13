@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Validat
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
@@ -65,6 +66,7 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@SuppressWarnings({"unchecked"})
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
@@ -533,5 +535,22 @@ public class ExtValUtils
         {
             propertyValidationInterceptor.afterValidation(facesContext, uiComponent, convertedObject, propertyMap);
         }
+    }
+
+    public static <T> T getOrInitStorage(Class<T> storageType, String storageName)
+    {
+        return (T)getStorageManagerFactory().create(storageType).create(storageName);
+    }
+
+    public static void resetStorage(Class storageType, String storageName)
+    {
+        getStorageManagerFactory().create(storageType).reset(storageName);
+    }
+
+    private static ClassMappingFactory<Class, StorageManager> getStorageManagerFactory()
+    {
+        return (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, ClassMappingFactory.class));
     }
 }

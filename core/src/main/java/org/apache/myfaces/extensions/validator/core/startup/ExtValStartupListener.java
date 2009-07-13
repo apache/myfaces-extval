@@ -66,6 +66,8 @@ import org.apache.myfaces.extensions.validator.ExtValInformation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValStartupListener extends AbstractStartupListener
 {
+    private static final long serialVersionUID = -2504826421086572012L;
+
     protected void init()
     {
         if(logger.isInfoEnabled())
