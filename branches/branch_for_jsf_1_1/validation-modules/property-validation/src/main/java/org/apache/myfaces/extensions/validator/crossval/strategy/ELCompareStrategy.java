@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -32,7 +33,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
-import java.util.Map;
 
 /**
  * referencing validation targets - possible formats:
@@ -89,11 +89,11 @@ class ELCompareStrategy implements ReferencingStrategy
             CrossValidationStorageEntry crossValidationStorageEntry,
             ValueBindingExpression validationTarget)
     {
-        Map<String, ProcessedInformationEntry> keyConvertedValueMapping =
-                CrossValidationUtils.getOrInitKeyToConvertedValueMapping();
+        ProcessedInformationStorage processedInformationStorage =
+                CrossValidationUtils.getOrInitProcessedInformationStorage();
 
         return CrossValidationUtils.resolveValidationTargetEntry(
-                keyConvertedValueMapping,
+                processedInformationStorage,
                 CrossValidationUtils.convertValueBindingExpressionToProcessedInformationKey(validationTarget),
                 crossValidationStorageEntry);
     }

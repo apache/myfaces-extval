@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -31,7 +32,6 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Map;
 import java.lang.reflect.Method;
 
 /**
@@ -69,11 +69,11 @@ class LocalCompareStrategy implements ReferencingStrategy
             String targetKey,
             AbstractCompareStrategy compareStrategy)
     {
-        Map<String, ProcessedInformationEntry> keyConvertedValueMapping =
-                CrossValidationUtils.getOrInitKeyToConvertedValueMapping();
+        ProcessedInformationStorage processedInformationStorage =
+                CrossValidationUtils.getOrInitProcessedInformationStorage();
 
         boolean isModelAwareValidation =
-                isModelAwareCrossValidation(crossValidationStorageEntry, keyConvertedValueMapping, targetKey);
+                isModelAwareCrossValidation(crossValidationStorageEntry, processedInformationStorage, targetKey);
 
         String targetProperty = targetKey;
 
@@ -81,7 +81,7 @@ class LocalCompareStrategy implements ReferencingStrategy
         targetKey = sourceKey.substring(0, sourceKey.lastIndexOf(".") + 1) + targetKey;
 
         ProcessedInformationEntry validationTargetEntry = CrossValidationUtils.resolveValidationTargetEntry(
-                keyConvertedValueMapping, targetKey, crossValidationStorageEntry);
+                processedInformationStorage, targetKey, crossValidationStorageEntry);
 
         if (validationTargetEntry != null && validationTargetEntry.getComponent() != null && !isModelAwareValidation)
         {
@@ -135,12 +135,12 @@ class LocalCompareStrategy implements ReferencingStrategy
 
     private boolean isModelAwareCrossValidation(
             CrossValidationStorageEntry crossValidationStorageEntry,
-            Map<String, ProcessedInformationEntry> keyConvertedValueMapping,
+            ProcessedInformationStorage keyConvertedValueMapping,
             String targetKey)
     {
         String newKey = createTargetKey(crossValidationStorageEntry, targetKey);
 
-        return !keyConvertedValueMapping.containsKey(newKey);
+        return !keyConvertedValueMapping.containsEntry(newKey);
 
     }
 
