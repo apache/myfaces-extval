@@ -20,7 +20,16 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
+import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
+import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
+import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
+import org.apache.myfaces.extensions.validator.beanval.storage.mapper.BeanValidationGroupStorageNameMapper;
+import org.apache.myfaces.extensions.validator.beanval.storage.mapper.ModelValidationStorageNameMapper;
+import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationStorage;
+import org.apache.myfaces.extensions.validator.beanval.storage.DefaultModelValidationStorageManager;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationGroupProvider;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
         .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper;
@@ -49,5 +58,31 @@ public class BeanValidationStartupListener extends AbstractStartupListener
 
         ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
                 new DefaultBeanValidationStrategyToMetaDataTransformerNameMapper());
+
+        StorageManagerHolder storageManagerHolder =
+                (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
+
+        StorageManager storageManager = storageManagerHolder.getStorageManager(GroupStorage.class);
+
+        if(storageManager instanceof AbstractNameMapperAwareFactory)
+        {
+            ((AbstractNameMapperAwareFactory<String>)storageManager)
+                    .register(new BeanValidationGroupStorageNameMapper());
+        }
+        else
+        {
+            if(this.logger.isWarnEnabled())
+            {
+                this.logger.warn(storageManager.getClass().getName() +
+                        " has to implement AbstractNameMapperAwareFactory " + getClass().getName() +
+                        " couldn't register " + BeanValidationGroupStorageNameMapper.class.getName());
+            }
+        }
+
+        DefaultModelValidationStorageManager modelValidationStorageManager = new DefaultModelValidationStorageManager();
+        modelValidationStorageManager.register(new ModelValidationStorageNameMapper());
+        storageManagerHolder.setStorageManager(ModelValidationStorage.class, modelValidationStorageManager, false);
     }
 }

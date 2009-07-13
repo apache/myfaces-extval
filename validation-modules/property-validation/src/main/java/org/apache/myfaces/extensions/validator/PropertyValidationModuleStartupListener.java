@@ -22,6 +22,11 @@ import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
+import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
+import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
+import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfiguration;
@@ -41,6 +46,8 @@ import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidation
 @UsageInformation(UsageCategory.INTERNAL)
 public class PropertyValidationModuleStartupListener extends AbstractStartupListener
 {
+    private static final long serialVersionUID = -2474361612857222283L;
+
     protected void init()
     {
         ExtValContext.getContext().addProcessedInformationRecorder(new CrossValidationUserInputRecorder());
@@ -49,6 +56,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         initDefaultComponentInitializer();
         initDefaultValidationExceptionInterceptor();
         addSkipValidationSupport();
+        initNameMappers();
     }
 
     private void initStaticStrategyMappings()
@@ -97,5 +105,22 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
                 .addStaticConfiguration(StaticConfigurationNames.SKIP_VALIDATION_SUPPORT_CONFIG, config);
 
         //config.addMapping(CommonMetaDataKeys.SKIP_VALIDATION, RequiredStrategy.class.getName());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private void initNameMappers()
+    {
+        StorageManagerHolder storageManagerHolder =
+                (ExtValContext.getContext()
+                .getFactoryFinder()
+                .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
+
+        StorageManager storageManager = storageManagerHolder.getStorageManager(GroupStorage.class);
+
+        if(storageManager instanceof AbstractNameMapperAwareFactory)
+        {
+            ((AbstractNameMapperAwareFactory<String>)storageManager)
+                    .register(new PropertyValidationGroupStorageNameMapper());
+        }
     }
 }

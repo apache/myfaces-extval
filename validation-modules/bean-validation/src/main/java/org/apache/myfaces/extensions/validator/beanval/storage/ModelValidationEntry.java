@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.validation;
+package org.apache.myfaces.extensions.validator.beanval.storage;
 
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
