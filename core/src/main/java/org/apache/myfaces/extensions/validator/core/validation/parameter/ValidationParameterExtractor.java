@@ -27,7 +27,7 @@ import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
 public interface ValidationParameterExtractor

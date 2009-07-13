@@ -18,13 +18,21 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.storage;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import javax.faces.component.UIComponent;
 import java.util.List;
 
 /**
+ * suggested interface for a model-validation storage
+ * <p/>
+ * it allows to manage model-validation-entries for the current request
+ * 
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
+@UsageInformation(UsageCategory.API)
 public interface ModelValidationStorage
 {
     void addModelValidationEntry(

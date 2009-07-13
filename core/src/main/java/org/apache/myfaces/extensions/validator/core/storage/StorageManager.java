@@ -18,10 +18,16 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API;
+
 /**
+ * manager to create and reset specific storage implementations
+ *
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
+@UsageInformation(API)
 public interface StorageManager<T>
 {
     T create(String key);

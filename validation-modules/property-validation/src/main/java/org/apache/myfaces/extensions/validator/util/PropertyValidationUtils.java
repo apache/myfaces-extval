@@ -31,7 +31,7 @@ import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
 public class PropertyValidationUtils
