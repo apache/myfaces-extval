@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.crossval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
 
 import java.util.Map;
 import java.util.HashMap;

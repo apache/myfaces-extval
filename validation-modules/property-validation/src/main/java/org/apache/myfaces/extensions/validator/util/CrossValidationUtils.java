@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
-import org.apache.myfaces.extensions.validator.crossval.ProcessedInformationEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationEntry;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
