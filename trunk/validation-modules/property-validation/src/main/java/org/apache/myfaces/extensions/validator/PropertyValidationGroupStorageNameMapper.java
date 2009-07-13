@@ -21,11 +21,16 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultGroupStorage;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 /**
+ * name mapper for group implementations via validation parameters
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(INTERNAL)
 public class PropertyValidationGroupStorageNameMapper implements NameMapper<String>
 {
     public String createName(String source)

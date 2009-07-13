@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @ToDo(value = Priority.HIGH, description = "select final transformer")
 public class BeanValidationMetaDataTransformer implements MetaDataTransformer

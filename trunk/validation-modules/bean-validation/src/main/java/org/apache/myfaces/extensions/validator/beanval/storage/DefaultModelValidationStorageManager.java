@@ -24,8 +24,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 /**
+ * default storage-manager for model-validation entries
+ *
  * @author Gerhard Petracek
- * @since 1.x.3
+ * @since x.x.3
  */
 @UsageInformation(INTERNAL)
 public class DefaultModelValidationStorageManager
