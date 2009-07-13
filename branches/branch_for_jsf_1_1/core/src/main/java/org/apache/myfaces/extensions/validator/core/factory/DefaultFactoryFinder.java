@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultCo
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.storage.DefaultStorageManagerFactory;
 import org.apache.myfaces.extensions.validator.core.el.DefaultELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
@@ -116,6 +117,10 @@ public class DefaultFactoryFinder implements FactoryFinder
                 factory = createValidationParameterExtractorFactory();
                 break;
 
+            case STORAGE_MANAGER_FACTORY:
+                factory = createStorageManagerFactory();
+                break;
+             
             default: //required by checkstyle
         }
 
@@ -295,5 +300,10 @@ public class DefaultFactoryFinder implements FactoryFinder
             }
         }
         return factory;
+    }
+
+    private Object createStorageManagerFactory()
+    {
+        return new DefaultStorageManagerFactory();
     }
 }

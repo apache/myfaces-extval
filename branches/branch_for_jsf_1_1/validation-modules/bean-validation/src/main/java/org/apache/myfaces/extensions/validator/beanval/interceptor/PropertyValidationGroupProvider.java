@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
-import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationEntry;
+import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
