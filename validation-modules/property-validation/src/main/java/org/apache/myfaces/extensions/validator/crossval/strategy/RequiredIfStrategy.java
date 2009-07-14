@@ -40,6 +40,7 @@ public class RequiredIfStrategy extends AbstractCompareStrategy
 {
     private boolean useFacesBundle = false;
 
+    @Override
     public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return false;
