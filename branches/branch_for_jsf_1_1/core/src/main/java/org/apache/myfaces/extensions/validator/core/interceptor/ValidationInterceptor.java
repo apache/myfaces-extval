@@ -114,10 +114,12 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                     }
                 }
 
-                if(!metaData.isEmpty() &&
-                        Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)))
+                if(metaData.isEmpty() ||
+                      (Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)) &&
+                        ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass())))
                 {
-                    break;
+                    //don't break maybe there are constraints which don't support the skip-mechanism
+                    continue;
                 }
 
                 metaDataResult.putAll(metaData);
