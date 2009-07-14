@@ -16,28 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.storage;
+package org.apache.myfaces.extensions.validator.core.storage.mapper;
 
-import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
-import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultRendererProxyStorageNameMapper;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.storage.DefaultRendererProxyStorage;
+import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage;
 
 /**
- * default storage-manager for renderer proxy entries
+ * use a public class to allow optional deregistration
  *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-class DefaultRendererProxyStorageManager
-    extends AbstractRequestScopeAwareStorageManager<RendererProxyStorage>
+public class DefaultRendererProxyStorageNameMapper implements NameMapper<String>
 {
-    DefaultRendererProxyStorageManager()
-    {
-        register(new DefaultRendererProxyStorageNameMapper());
-    }
 
-    public String getStorageManagerKey()
+    public String createName(String source)
     {
-        //for better backward compatibility
-        return ExtValRendererProxy.class.getName() + ":STORAGE";
+        return (RendererProxyStorage.class.getName().equals(source)) ?
+                DefaultRendererProxyStorage.class.getName() : null;
     }
 }
