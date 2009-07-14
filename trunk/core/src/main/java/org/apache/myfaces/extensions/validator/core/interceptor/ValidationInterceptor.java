@@ -232,6 +232,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
                     //required is a special case - reset it
                     ((EditableValueHolder)uiComponent).setRequired(false);
 
+                    //don't break maybe there are constraints which don't support the skip-mechanism
                     continue;
                 }
 
