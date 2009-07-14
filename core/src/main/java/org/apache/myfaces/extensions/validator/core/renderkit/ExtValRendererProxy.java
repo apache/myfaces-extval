@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorageEntry;
+import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,8 +31,6 @@ import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.ConverterException;
 import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * to avoid multiple calls of renderer methods within renderer interceptors (e.g. for encode, decode,...)
@@ -58,7 +59,7 @@ public class ExtValRendererProxy extends Renderer
     @Override
     public void decode(FacesContext facesContext, UIComponent uiComponent)
     {
-        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+        RendererProxyStorageEntry entry = getRendererEntry(facesContext, uiComponent);
 
         if (!entry.isDecodeCalled())
         {
@@ -87,7 +88,7 @@ public class ExtValRendererProxy extends Renderer
     public void encodeBegin(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+        RendererProxyStorageEntry entry = getRendererEntry(facesContext, uiComponent);
 
         if (!entry.isEncodeBeginCalled())
         {
@@ -120,7 +121,7 @@ public class ExtValRendererProxy extends Renderer
     public void encodeChildren(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+        RendererProxyStorageEntry entry = getRendererEntry(facesContext, uiComponent);
 
         if (!entry.isEncodeChildrenCalled())
         {
@@ -154,7 +155,7 @@ public class ExtValRendererProxy extends Renderer
     public void encodeEnd(FacesContext facesContext, UIComponent uiComponent)
         throws IOException
     {
-        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+        RendererProxyStorageEntry entry = getRendererEntry(facesContext, uiComponent);
 
         if (!entry.isEncodeEndCalled())
         {
@@ -216,7 +217,7 @@ public class ExtValRendererProxy extends Renderer
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
-        RendererProxyEntry entry = getOrInitEntry(facesContext, uiComponent);
+        RendererProxyStorageEntry entry = getRendererEntry(facesContext, uiComponent);
 
         if (entry.getConvertedValue() == null)
         {
@@ -240,17 +241,17 @@ public class ExtValRendererProxy extends Renderer
         return entry.getConvertedValue();
     }
 
-    private RendererProxyEntry getOrInitEntry(FacesContext facesContext, UIComponent uiComponent)
+    protected RendererProxyStorageEntry getRendererEntry(FacesContext facesContext, UIComponent uiComponent)
     {
         String key = uiComponent.getClientId(facesContext);
 
         key += getOptionalKey(facesContext, uiComponent);
 
-        if (!getOrInitComponentProxyMapping().containsKey(key))
+        if (!getRendererStorage().containsEntry(getRendererKey(), key))
         {
-            getOrInitComponentProxyMapping().put(key, new RendererProxyEntry());
+            getRendererStorage().setEntry(getRendererKey(), key, new RendererProxyStorageEntry());
         }
-        return getOrInitComponentProxyMapping().get(key);
+        return getRendererStorage().getEntry(getRendererKey(), key);
     }
 
     protected String getOptionalKey(FacesContext facesContext, UIComponent uiComponent)
@@ -258,33 +259,19 @@ public class ExtValRendererProxy extends Renderer
         return "";
     }
 
-    private static final String PROXY_STORAGE_NAME = ExtValRendererProxy.class.getName() + ":STORAGE";
-
-    private Map<String, RendererProxyEntry> getOrInitComponentProxyMapping()
+    protected String getRendererKey()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        return this.wrapped.getClass().getName();
+    }
 
-        if(!requestMap.containsKey(PROXY_STORAGE_NAME))
-        {
-            requestMap.put(PROXY_STORAGE_NAME, new HashMap<String, Map<String, RendererProxyEntry>>());
-        }
-
-        Map<String, Map<String, RendererProxyEntry>> proxyStorage =
-            ((Map<String, Map<String, RendererProxyEntry>>)requestMap.get(PROXY_STORAGE_NAME));
-
-        String key = this.wrapped.getClass().getName();
-
-        if(!proxyStorage.containsKey(key))
-        {
-            proxyStorage.put(key, new HashMap<String, RendererProxyEntry>());
-        }
-
-        return proxyStorage.get(key);
+    private RendererProxyStorage getRendererStorage()
+    {
+        return ExtValUtils.getOrInitStorage(RendererProxyStorage.class, RendererProxyStorage.class.getName());
     }
 
     private void resetComponentProxyMapping()
     {
         //reset component proxy mapping
-        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().remove(PROXY_STORAGE_NAME);
+        ExtValUtils.resetStorage(RendererProxyStorage.class, RendererProxyStorage.class.getName());
     }
 }
