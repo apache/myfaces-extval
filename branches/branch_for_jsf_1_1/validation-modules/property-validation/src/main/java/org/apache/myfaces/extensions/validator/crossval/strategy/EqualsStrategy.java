@@ -34,6 +34,7 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class EqualsStrategy extends AbstractCompareStrategy
 {
+    @Override
     public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
     {
         return true;
