@@ -59,6 +59,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
             logger.debug(getClass().getName() + " instantiated");
         }
 
+        setStorageManager(RendererProxyStorage.class, new DefaultRendererProxyStorageManager(), false);
         setStorageManager(GroupStorage.class, new DefaultGroupStorageManager(), false);
     }
 
