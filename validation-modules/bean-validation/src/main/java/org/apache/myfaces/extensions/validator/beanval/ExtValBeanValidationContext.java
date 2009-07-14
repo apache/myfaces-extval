@@ -77,10 +77,10 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         }
 
         this.groupStorage = ExtValUtils
-                .getOrInitStorage(GroupStorage.class, BeanValidation.class.getName());
+                .getStorage(GroupStorage.class, BeanValidation.class.getName());
 
         this.modelValidationStorage = ExtValUtils.
-                getOrInitStorage(ModelValidationStorage.class, ModelValidation.class.getName());
+                getStorage(ModelValidationStorage.class, ModelValidation.class.getName());
     }
 
     @SuppressWarnings({"unchecked"})

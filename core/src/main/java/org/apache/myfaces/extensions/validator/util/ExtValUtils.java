@@ -537,7 +537,7 @@ public class ExtValUtils
         }
     }
 
-    public static <T> T getOrInitStorage(Class<T> storageType, String storageName)
+    public static <T> T getStorage(Class<T> storageType, String storageName)
     {
         return (T)getStorageManagerFactory().create(storageType).create(storageName);
     }

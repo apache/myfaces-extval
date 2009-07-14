@@ -266,7 +266,7 @@ public class ExtValRendererProxy extends Renderer
 
     private RendererProxyStorage getRendererStorage()
     {
-        return ExtValUtils.getOrInitStorage(RendererProxyStorage.class, RendererProxyStorage.class.getName());
+        return ExtValUtils.getStorage(RendererProxyStorage.class, RendererProxyStorage.class.getName());
     }
 
     private void resetComponentProxyMapping()
