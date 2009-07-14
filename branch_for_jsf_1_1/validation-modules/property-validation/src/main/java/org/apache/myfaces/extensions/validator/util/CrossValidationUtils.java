@@ -39,7 +39,7 @@ public class CrossValidationUtils
 {
     public static CrossValidationStorage getOrInitCrossValidationStorage()
     {
-        return ExtValUtils.getOrInitStorage(CrossValidationStorage.class, CrossValidationStorage.class.getName());
+        return ExtValUtils.getStorage(CrossValidationStorage.class, CrossValidationStorage.class.getName());
     }
 
     public static void resetCrossValidationStorage()
@@ -49,7 +49,7 @@ public class CrossValidationUtils
 
     public static ProcessedInformationStorage getOrInitProcessedInformationStorage()
     {
-        return ExtValUtils.getOrInitStorage(
+        return ExtValUtils.getStorage(
                 ProcessedInformationStorage.class, ProcessedInformationStorage.class.getName());
     }
 
