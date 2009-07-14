@@ -46,6 +46,7 @@ public class DateIsStrategy extends AbstractCompareStrategy
     protected static final String COMPARED_VALUE_KEY = "target value";
     protected static final String REVERSE_COMPARED_VALUE_KEY = "reverse target value";
 
+    @Override
     public boolean useTargetComponentToDisplayErrorMsg(
             CrossValidationStorageEntry crossValidationStorageEntry)
     {

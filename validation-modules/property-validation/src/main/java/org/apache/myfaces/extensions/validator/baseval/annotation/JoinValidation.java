@@ -26,6 +26,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
+import java.lang.annotation.Documented;
 
 /**
  * @author Gerhard Petracek
@@ -33,6 +34,7 @@ import java.lang.annotation.Target;
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
+@Documented
 @UsageInformation(UsageCategory.API)
 public @interface JoinValidation
 {
