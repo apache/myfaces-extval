@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.renderkit;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-class RendererProxyEntry
+public class RendererProxyStorageEntry
 {
     private boolean decodeCalled = false;
     private boolean encodeBeginCalled = false;
