@@ -38,7 +38,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultCrossValidationStorageManager;
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessedInformationStorageManager;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;

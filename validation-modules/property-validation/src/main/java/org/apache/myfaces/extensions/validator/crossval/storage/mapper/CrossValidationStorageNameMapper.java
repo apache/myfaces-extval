@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.storage.mapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultCrossValidationStorage;
 
 /**

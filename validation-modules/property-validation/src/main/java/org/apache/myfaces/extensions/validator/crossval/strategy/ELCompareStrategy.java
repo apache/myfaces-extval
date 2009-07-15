@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
+import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
