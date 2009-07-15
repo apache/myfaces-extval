@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.crossval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
 
 import java.util.ArrayList;
 import java.util.List;

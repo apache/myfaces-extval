@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCrossValidationStrategy;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseEvent;
