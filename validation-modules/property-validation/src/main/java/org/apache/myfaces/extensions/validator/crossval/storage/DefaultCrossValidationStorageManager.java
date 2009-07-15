@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.crossval.storage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.core.storage.AbstractRequestScopeAwareStorageManager;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorage;
 
 /**
  * default storage-manager for cross-validation entries
