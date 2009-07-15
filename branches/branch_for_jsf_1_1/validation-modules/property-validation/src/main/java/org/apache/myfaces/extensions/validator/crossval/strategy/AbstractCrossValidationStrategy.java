@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;

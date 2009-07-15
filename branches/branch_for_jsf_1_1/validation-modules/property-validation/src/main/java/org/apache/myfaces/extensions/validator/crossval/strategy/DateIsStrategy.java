@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIs;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
