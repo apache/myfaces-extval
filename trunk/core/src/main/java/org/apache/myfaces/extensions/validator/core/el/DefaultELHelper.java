@@ -195,7 +195,7 @@ public class DefaultELHelper implements ELHelper
     }
 
     //keep in sync with DefaultELHelper#getPropertyDetailsOfValueBinding of branch!!!
-    private PropertyDetails getPropertyDetailsViaReflectionFallback(UIComponent uiComponent)
+    protected PropertyDetails getPropertyDetailsViaReflectionFallback(UIComponent uiComponent)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
