@@ -302,7 +302,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
-    private Object createStorageManagerFactory()
+    protected Object createStorageManagerFactory()
     {
         return new DefaultStorageManagerFactory();
     }
