@@ -191,7 +191,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
 
         if(!ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, convertedObject,
-                PropertyInformation.class.getName() ,propertyInformation))
+                PropertyInformation.class.getName() ,propertyInformation, getModuleKey()))
         {
             return;
         }
@@ -213,7 +213,7 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
             }
 
             ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, convertedObject,
-                    PropertyInformation.class.getName(), propertyInformation);
+                    PropertyInformation.class.getName(), propertyInformation, getModuleKey());
         }
     }
 
@@ -294,5 +294,11 @@ public class ValidationInterceptor extends AbstractRendererInterceptor
     {
         //override for custom skip validation support (if needed)
         return false;
+    }
+
+    protected Class getModuleKey()
+    {
+        //override if needed
+        return null;
     }
 }

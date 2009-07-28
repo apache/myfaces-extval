@@ -25,10 +25,12 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.ValidationModuleAware;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
+import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleKey;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
@@ -50,7 +52,7 @@ import java.lang.reflect.Method;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public class PropertyValidationGroupProvider implements PropertyValidationInterceptor
+public class PropertyValidationGroupProvider implements PropertyValidationInterceptor, ValidationModuleAware
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -483,5 +485,10 @@ public class PropertyValidationGroupProvider implements PropertyValidationInterc
                 "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
         }
         return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
+    }
+
+    public String[] getModuleKeys()
+    {
+        return new String[] {BeanValidationModuleKey.class.getName()};
     }
 }
