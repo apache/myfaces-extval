@@ -46,8 +46,8 @@ class RequiredInitializer extends TrinidadComponentInitializer
            metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION))
         {
             if((
-                    (!Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)) &&
-                    Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED))) ||
+                 (!Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)) &&
+                   Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED))) ||
                  Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
                 &&
                 Boolean.TRUE.equals(isComponentRequired(uiComponent)))
