@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCrossValidationStrategy;
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseEvent;
@@ -50,6 +51,7 @@ import javax.faces.context.FacesContext;
 public class CrossValidationPhaseListener implements PhaseListener
 {
     private boolean isInitialized = false;
+    private static final long serialVersionUID = -5333405897635742732L;
 
     public void afterPhase(PhaseEvent event)
     {
@@ -65,7 +67,8 @@ public class CrossValidationPhaseListener implements PhaseListener
                             entry.getComponent(),
                             entry.getConvertedObject(),
                             CrossValidationStorageEntry.class.getName(),
-                            entry))
+                            entry,
+                            PropertyValidationModuleKey.class))
                     {
                         continue;
                     }
@@ -131,7 +134,8 @@ public class CrossValidationPhaseListener implements PhaseListener
                             entry.getComponent(),
                             entry.getConvertedObject(),
                             CrossValidationStorageEntry.class.getName(),
-                            entry);
+                            entry,
+                            PropertyValidationModuleKey.class);
                 }
             }
         }

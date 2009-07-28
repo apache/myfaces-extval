@@ -43,4 +43,10 @@ public class ValidationInterceptorWithSkipValidationSupport extends ValidationIn
     {
         return PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
     }
+
+    @Override
+    protected Class getModuleKey()
+    {
+        return PropertyValidationModuleKey.class;
+    }
 }
