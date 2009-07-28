@@ -491,7 +491,8 @@ public class ExtValUtils
                                                                     UIComponent uiComponent,
                                                                     Object convertedObject,
                                                                     String propertyKey,
-                                                                    Object properties)
+                                                                    Object properties,
+                                                                    Class moduleKey)
     {
         Map<String, Object> propertyMap = new HashMap<String, Object>();
         boolean result = true;
@@ -502,7 +503,7 @@ public class ExtValUtils
         }
 
         List<PropertyValidationInterceptor> propertyValidationInterceptors =
-                ExtValContext.getContext().getPropertyValidationInterceptors();
+                ExtValContext.getContext().getPropertyValidationInterceptorsFor(moduleKey);
 
         for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
         {
@@ -519,7 +520,8 @@ public class ExtValUtils
                                                                 UIComponent uiComponent,
                                                                 Object convertedObject,
                                                                 String propertyKey,
-                                                                Object properties)
+                                                                Object properties,
+                                                                Class moduleKey)
     {
         Map<String, Object> propertyMap = new HashMap<String, Object>();
 
@@ -529,7 +531,7 @@ public class ExtValUtils
         }
 
         List<PropertyValidationInterceptor> propertyValidationInterceptors =
-                ExtValContext.getContext().getPropertyValidationInterceptors();
+                ExtValContext.getContext().getPropertyValidationInterceptorsFor(moduleKey);
 
         for(PropertyValidationInterceptor propertyValidationInterceptor : propertyValidationInterceptors)
         {
