@@ -61,6 +61,7 @@ public class ExtValContext
     private List<ComponentInitializer> componentInitializers;
     private List<ValidationExceptionInterceptor> validationExceptionInterceptors;
     private List<PropertyValidationInterceptor> propertyValidationInterceptors;
+    private Map<Class, List<PropertyValidationInterceptor>> moduleSpecificPropertyValidationInterceptors;
     private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors;
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
@@ -144,6 +145,8 @@ public class ExtValContext
         }
 
         this.propertyValidationInterceptors = new ArrayList<PropertyValidationInterceptor>();
+        this.moduleSpecificPropertyValidationInterceptors = new HashMap<Class, List<PropertyValidationInterceptor>>();
+
         List<String> validationInterceptorClassNames = new ArrayList<String>();
 
         validationInterceptorClassNames
@@ -161,12 +164,63 @@ public class ExtValContext
 
             if (propertyValidationInterceptor != null)
             {
-                propertyValidationInterceptors.add(propertyValidationInterceptor);
-
-                if(logger.isTraceEnabled())
+                if(propertyValidationInterceptor instanceof ValidationModuleAware)
                 {
-                    logger.trace(propertyValidationInterceptor.getClass().getName() + " added");
+                    addPropertyValidationInterceptorForModules(propertyValidationInterceptor);
                 }
+                else
+                {
+                    addPropertyValidationInterceptorForModule(null, propertyValidationInterceptor);
+                }
+            }
+        }
+    }
+
+    private void addPropertyValidationInterceptorForModules(PropertyValidationInterceptor propertyValidationInterceptor)
+    {
+        Class moduleKey;
+        for(String currentModuleKey : ((ValidationModuleAware)propertyValidationInterceptor).getModuleKeys())
+        {
+            moduleKey = ClassUtils.tryToLoadClassForName(currentModuleKey);
+
+            if(moduleKey == null)
+            {
+                continue;
+            }
+
+            addPropertyValidationInterceptorForModule(moduleKey, propertyValidationInterceptor);
+        }
+    }
+
+    private void addPropertyValidationInterceptorForModule(
+            Class moduleKey, PropertyValidationInterceptor propertyValidationInterceptor)
+    {
+        if(moduleKey == null)
+        {
+            propertyValidationInterceptors.add(propertyValidationInterceptor);
+
+            if(logger.isTraceEnabled())
+            {
+                logger.trace(propertyValidationInterceptor.getClass().getName() + " added");
+            }
+        }
+        else
+        {
+            List<PropertyValidationInterceptor> propertyValidationInterceptorList;
+            if(this.moduleSpecificPropertyValidationInterceptors.containsKey(moduleKey))
+            {
+                propertyValidationInterceptorList = this.moduleSpecificPropertyValidationInterceptors.get(moduleKey);
+            }
+            else
+            {
+                propertyValidationInterceptorList = new ArrayList<PropertyValidationInterceptor>();
+                this.moduleSpecificPropertyValidationInterceptors.put(moduleKey, propertyValidationInterceptorList);
+            }
+            propertyValidationInterceptorList.add(propertyValidationInterceptor);
+
+            if(logger.isTraceEnabled())
+            {
+                logger.trace(propertyValidationInterceptor.getClass().getName() + " added for " + moduleKey.getName());
             }
         }
     }
@@ -295,13 +349,40 @@ public class ExtValContext
     public void addPropertyValidationInterceptor(PropertyValidationInterceptor propertyValidationInterceptor)
     {
         lazyInitPropertyValidationInterceptors();
-        this.propertyValidationInterceptors.add(propertyValidationInterceptor);
+
+        if(propertyValidationInterceptor instanceof ValidationModuleAware)
+        {
+            addPropertyValidationInterceptorForModules(propertyValidationInterceptor);
+        }
+        else
+        {
+            addPropertyValidationInterceptorForModule(null, propertyValidationInterceptor);
+        }
     }
 
     public List<PropertyValidationInterceptor> getPropertyValidationInterceptors()
     {
         lazyInitPropertyValidationInterceptors();
         return this.propertyValidationInterceptors;
+    }
+
+    public List<PropertyValidationInterceptor> getPropertyValidationInterceptorsFor(Class moduleKey)
+    {
+        List<PropertyValidationInterceptor> generalInterceptors = getPropertyValidationInterceptors();
+
+        if(moduleKey == null || !this.moduleSpecificPropertyValidationInterceptors.containsKey(moduleKey))
+        {
+            return generalInterceptors;
+        }
+
+        List<PropertyValidationInterceptor> moduleSpecificInterceptors =
+                this.moduleSpecificPropertyValidationInterceptors.get(moduleKey);
+
+        List<PropertyValidationInterceptor> result = new ArrayList<PropertyValidationInterceptor>();
+        result.addAll(generalInterceptors);
+        result.addAll(moduleSpecificInterceptors);
+
+        return result;
     }
 
     public void addMetaDataExtractionInterceptor(MetaDataExtractionInterceptor metaDataExtractionInterceptor)

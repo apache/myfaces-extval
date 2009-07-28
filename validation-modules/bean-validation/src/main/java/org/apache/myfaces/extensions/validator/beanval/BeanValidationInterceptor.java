@@ -225,34 +225,38 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
 
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
 
-        //e.g.: extract groups for validation
-        if(!ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, convertedObject,
-                PropertyInformation.class.getName() ,propertyInformation))
-        {
-            return;
-        }
-
+        boolean validateProperty = processBeanValidationForProperty(propertyInformation);
         try
         {
-            if (logger.isTraceEnabled())
+            if(validateProperty)
             {
-                logger.trace("jsr303 start validation");
-            }
+                if (logger.isTraceEnabled())
+                {
+                    logger.trace("jsr303 start validation");
+                }
 
-            if(processBeanValidationForProperty(propertyInformation))
-            {
+                //e.g.: extract groups for validation
+                if(!ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, convertedObject,
+                        PropertyInformation.class.getName(), propertyInformation, BeanValidationModuleKey.class))
+                {
+                    return;
+                }
+
                 processFieldValidation(facesContext, uiComponent, convertedObject, propertyInformation);
             }
         }
         finally
         {
-            if (logger.isTraceEnabled())
+            if(validateProperty)
             {
-                logger.trace("jsr303 validation finished");
-            }
+                if (logger.isTraceEnabled())
+                {
+                    logger.trace("jsr303 validation finished");
+                }
 
-            ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, convertedObject,
-                    PropertyInformation.class.getName(), propertyInformation);
+                ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, convertedObject,
+                        PropertyInformation.class.getName(), propertyInformation, BeanValidationModuleKey.class);
+            }
         }
     }
 
