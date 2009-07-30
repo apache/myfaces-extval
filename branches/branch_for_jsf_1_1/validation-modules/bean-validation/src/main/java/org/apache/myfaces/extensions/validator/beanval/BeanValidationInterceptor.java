@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRendererInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.AbstractValidationInterceptor;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -38,9 +38,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.render.Renderer;
-import javax.faces.convert.ConverterException;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import javax.validation.Validation;
@@ -61,12 +59,14 @@ import java.io.IOException;
  */
 @ToDo(value = Priority.HIGH, description = "sync jsf 2.0 specific changes with bv-branch")
 @UsageInformation(UsageCategory.INTERNAL)
-public class BeanValidationInterceptor extends AbstractRendererInterceptor
+public class BeanValidationInterceptor extends AbstractValidationInterceptor
 {
     private ValidatorFactory validationFactory = Validation.buildDefaultValidatorFactory();
 
     @Override
-    @ToDo(value = Priority.HIGH, description = "the api is available - but hv v4 beta doesn't impl. the needed parts")
+    @ToDo.List({
+     @ToDo(value = Priority.HIGH, description = "the api is available - but hv v4 beta doesn't impl. the needed parts"),
+     @ToDo(value = Priority.HIGH, description = "remove this overridden method")})
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
@@ -179,43 +179,9 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
     }
 
     @Override
-    public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
-            throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
+    protected boolean recordProcessedInformation()
     {
-        Object convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
-
-        try
-        {
-            if(processComponent(uiComponent))
-            {
-                if ("".equals(convertedObject) && interpretEmptyStringAsNull())
-                {
-                    convertedObject = null;
-                }
-
-                if(convertedObject == null && !validateEmptyFields())
-                {
-                    if(this.logger.isDebugEnabled())
-                    {
-                        this.logger.debug("empty field validation is deactivated in the web.xml - see: " +
-                                "javax.faces.VALIDATE_EMPTY_FIELDS");
-                    }
-
-                    return;
-                }
-
-                processValidation(facesContext, uiComponent, convertedObject);
-            }
-        }
-        catch (ValidatorException e)
-        {
-            throw new ConverterException(e.getFacesMessage(), e);
-        }
-    }
-
-    protected boolean processComponent(UIComponent uiComponent)
-    {
-        return uiComponent instanceof EditableValueHolder;
+        return false;
     }
 
     @ToDo(value = Priority.HIGH, description = "use ExtValUtils#createFacesMessage")
@@ -271,16 +237,6 @@ public class BeanValidationInterceptor extends AbstractRendererInterceptor
         ElementDescriptor elementDescriptor = beanDescriptor.getConstraintsForProperty(propertyDetails.getProperty());
 
         return elementDescriptor != null;
-    }
-
-    protected boolean validateEmptyFields()
-    {
-        return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
-    }
-
-    protected boolean interpretEmptyStringAsNull()
-    {
-        return !"false".equalsIgnoreCase(WebXmlParameter.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL);
     }
 
     protected void processFieldValidation(FacesContext facesContext,

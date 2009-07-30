@@ -19,15 +19,6 @@
 package org.apache.myfaces.extensions.validator.trinidad.interceptor;
 
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRendererInterceptor;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.ComponentMetaDataExtractorFactory;
-import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.trinidad.util.TrinidadUtils;
@@ -37,9 +28,7 @@ import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -63,12 +52,6 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
 
     protected void initCoreOutputLabel(FacesContext facesContext, CoreOutputLabel coreOutputLabel)
     {
-        ValidationStrategy validationStrategy;
-        MetaDataTransformer metaDataTransformer;
-
-        MetaDataExtractor annotationExtractor = ExtValContext.getContext().getFactoryFinder().getFactory(
-            FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY, ComponentMetaDataExtractorFactory.class).create();
-
         UIComponent targetComponent = TrinidadUtils.findLabeledEditableComponent(coreOutputLabel);
 
         if(targetComponent == null || !isComponentEditable(targetComponent))
@@ -76,56 +59,10 @@ public class TrinidadRendererInterceptor extends AbstractRendererInterceptor
             return;
         }
 
-        Map<String, Object> metaData;
-        Map<String, Object> metaDataResult = new HashMap<String, Object>();
+        Map<String, Object> metaDataResult = ExtValUtils.getTransformedMetaData(facesContext, targetComponent);
 
-        for (MetaDataEntry entry : annotationExtractor.extract(facesContext, targetComponent).getMetaDataEntries())
-        {
-            metaData = new HashMap<String, Object>();
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
-
-            if (validationStrategy != null)
-            {
-                metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
-
-                if(metaDataTransformer != null)
-                {
-                    if(!(entry.getValue() instanceof Annotation &&
-                            ExtValUtils.getValidationParameterExtractor()
-                                    .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
-                                    .iterator().hasNext()))
-                    {
-                        metaData = metaDataTransformer.convertMetaData(entry);
-                    }
-                }
-                else
-                {
-                    metaData = null;
-                }
-
-                if(metaData == null)
-                {
-                    metaData = new HashMap<String, Object>();
-                }
-                else if(metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION))
-                {
-                    //execute skip validation strategy -> skip validation y/n in entry
-                    validationStrategy.validate(facesContext, targetComponent, entry, null);
-                    if(Boolean.TRUE.equals(entry.getProperty(CommonMetaDataKeys.SKIP_VALIDATION, Boolean.class)))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        //reset it - because the transformer set it in every case and the validator the final value
-                        metaData.remove(CommonMetaDataKeys.SKIP_VALIDATION);
-                    }
-                }
-
-                metaDataResult.putAll(metaData);
-            }
-        }
-
+        //get component initializer for the current component and configure it
+        //also in case of skipped validation to reset e.g. the required attribute
         if(!metaDataResult.isEmpty())
         {
             ExtValUtils.configureComponentWithMetaData(facesContext, coreOutputLabel, metaDataResult);
