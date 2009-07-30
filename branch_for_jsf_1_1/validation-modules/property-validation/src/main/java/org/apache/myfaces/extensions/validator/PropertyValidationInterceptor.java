@@ -20,30 +20,22 @@ package org.apache.myfaces.extensions.validator;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
-
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 
 /**
+ * the skip validation support was refactored to an independent mechanism
+ * see SkipValidationEvaluator
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ValidationInterceptorWithSkipValidationSupport extends ValidationInterceptor
+@ToDo(value = Priority.MEDIUM, description = "change the add-ons" +
+        "old name: ValidationInterceptorWithSkipValidationSupport")
+public class PropertyValidationInterceptor extends ValidationInterceptor
 {
-    @Override
-    protected boolean skipValidation(FacesContext facesContext,
-                                     UIComponent uiComponent,
-                                     ValidationStrategy validationStrategy,
-                                     MetaDataEntry metaDataEntry)
-    {
-        return PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
-    }
-
     @Override
     protected Class getModuleKey()
     {
