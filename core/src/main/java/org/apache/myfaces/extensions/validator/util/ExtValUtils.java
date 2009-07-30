@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
@@ -31,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
@@ -554,5 +556,68 @@ public class ExtValUtils
         return (ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, ClassMappingFactory.class));
+    }
+
+    public static Map<String, Object> getTransformedMetaData(FacesContext facesContext, UIComponent uiComponent)
+    {
+        ValidationStrategy validationStrategy;
+        MetaDataTransformer metaDataTransformer;
+
+        SkipValidationEvaluator skipValidationEvaluator = ExtValContext.getContext().getSkipValidationEvaluator();
+        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
+
+        Map<String, Object> metaData;
+        Map<String, Object> metaDataResult = new HashMap<String, Object>();
+
+        for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
+        {
+            metaData = new HashMap<String, Object>();
+            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+
+            if (validationStrategy != null)
+            {
+                if(!skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
+                {
+                    metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
+
+                    if(metaDataTransformer != null)
+                    {
+                        if(LOGGER.isDebugEnabled())
+                        {
+                            LOGGER.debug(metaDataTransformer.getClass().getName() + " instantiated");
+                        }
+
+                        if(!(entry.getValue() instanceof Annotation &&
+                                ExtValUtils.getValidationParameterExtractor()
+                                        .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
+                                        .iterator().hasNext()))
+                        {
+                            metaData = metaDataTransformer.convertMetaData(entry);
+                        }
+                    }
+                    else
+                    {
+                        metaData = null;
+                    }
+
+                    if(metaData == null)
+                    {
+                        metaData = new HashMap<String, Object>();
+                    }
+                }
+
+                if(metaData.isEmpty() ||
+                      (Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)) &&
+                        ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass())))
+                {
+                    //don't break maybe there are constraints which don't support the skip-mechanism
+                    continue;
+                }
+
+                metaDataResult.putAll(metaData);
+           }
+        }
+
+        return metaDataResult;
     }
 }
