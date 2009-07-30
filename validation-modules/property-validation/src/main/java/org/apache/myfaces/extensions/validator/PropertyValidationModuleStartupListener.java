@@ -63,6 +63,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         initDefaultValidationExceptionInterceptor();
         addSkipValidationSupport();
         initStorageManagerAndNameMappers();
+        initSkipValidationEvaluator();
     }
 
     private void initStaticStrategyMappings()
@@ -101,7 +102,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         }
 
         ExtValContext.getContext().denyRendererInterceptor(ValidationInterceptor.class);
-        ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptorWithSkipValidationSupport());
+        ExtValContext.getContext().registerRendererInterceptor(new PropertyValidationInterceptor());
 
         StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
         //it's just required to set the target
@@ -141,5 +142,10 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
             ((AbstractNameMapperAwareFactory<String>)storageManager)
                     .register(new PropertyValidationGroupStorageNameMapper());
         }
+    }
+
+    private void initSkipValidationEvaluator()
+    {
+        ExtValContext.getContext().setSkipValidationEvaluator(new PropertyValidationSkipValidationEvaluator(), false);
     }
 }
