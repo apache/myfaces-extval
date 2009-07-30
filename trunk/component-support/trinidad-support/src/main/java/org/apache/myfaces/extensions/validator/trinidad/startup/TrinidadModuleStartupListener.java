@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.trinidad.validation.message.Trini
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRendererProxy;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadRendererInterceptor;
+import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -41,6 +42,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadModuleStartupListener extends AbstractStartupListener
 {
+    private static final long serialVersionUID = -8034089244903966999L;
+
     protected void init()
     {
         initTrinidadSupport();
@@ -89,5 +92,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
                 .addGlobalProperty(ExtValRendererProxy.KEY, null);
            attention: it causes direct delegation without a check of double invocations
          */
+
+        ExtValContext.getContext().addMetaDataExtractionInterceptor(new TrinidadMetaDataExtractionInterceptor());
     }
 }

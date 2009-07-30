@@ -28,6 +28,9 @@ import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformatio
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
+import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -36,6 +39,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIComponent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +67,8 @@ public class ExtValContext
     private List<PropertyValidationInterceptor> propertyValidationInterceptors;
     private Map<Class, List<PropertyValidationInterceptor>> moduleSpecificPropertyValidationInterceptors;
     private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors;
+
+    private SkipValidationEvaluator skipValidationEvaluator;
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
@@ -277,6 +283,41 @@ public class ExtValContext
         {
             this.factoryFinder = factoryFinder;
         }
+    }
+
+    public void setSkipValidationEvaluator(SkipValidationEvaluator skipValidationEvaluator)
+    {
+        setSkipValidationEvaluator(skipValidationEvaluator, true);
+    }
+
+    public void setSkipValidationEvaluator(SkipValidationEvaluator skipValidationEvaluator, boolean forceOverride)
+    {
+        if(this.skipValidationEvaluator == null || forceOverride)
+        {
+            if(this.logger.isInfoEnabled())
+            {
+                this.logger.info(skipValidationEvaluator != null ?
+                        skipValidationEvaluator.getClass() : "no" + " is used");
+            }
+            this.skipValidationEvaluator = skipValidationEvaluator;
+        }
+    }
+
+    public SkipValidationEvaluator getSkipValidationEvaluator()
+    {
+        if(this.skipValidationEvaluator == null)
+        {
+            return new SkipValidationEvaluator()
+            {
+                public boolean skipValidation(FacesContext facesContext, UIComponent uiComponent,
+                                              ValidationStrategy validationStrategy, MetaDataEntry entry)
+                {
+                    return false;
+                }
+            };
+        }
+
+        return this.skipValidationEvaluator;
     }
 
     public List<RendererInterceptor> getRendererInterceptors()

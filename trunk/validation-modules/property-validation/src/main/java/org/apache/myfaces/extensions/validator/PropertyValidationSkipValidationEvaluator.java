@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
 
 import javax.faces.context.FacesContext;
@@ -30,23 +30,16 @@ import javax.faces.component.UIComponent;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ValidationInterceptorWithSkipValidationSupport extends ValidationInterceptor
+public class PropertyValidationSkipValidationEvaluator implements SkipValidationEvaluator
 {
-    @Override
-    protected boolean skipValidation(FacesContext facesContext,
+    public boolean skipValidation(FacesContext facesContext,
                                      UIComponent uiComponent,
                                      ValidationStrategy validationStrategy,
                                      MetaDataEntry metaDataEntry)
     {
         return PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
-    }
-
-    @Override
-    protected Class getModuleKey()
-    {
-        return PropertyValidationModuleKey.class;
     }
 }
