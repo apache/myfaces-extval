@@ -18,33 +18,23 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import static org.apache.myfaces.extensions.validator.internal.UsageCategory.REUSE;
-
-import javax.faces.context.FacesContext;
-import java.util.Map;
-import java.util.HashMap;
+import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultMetaDataStorageNameMapper;
 
 /**
- * generic storage manager implementation which stores the storage implementations in the request scope
+ * default storage-manager for property information entries
  *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(REUSE)
-public abstract class AbstractRequestScopeAwareStorageManager<T> extends AbstractStorageManager<T>
+class DefaultMetaDataStorageManager extends AbstractApplicationScopeAwareStorageManager<MetaDataStorage>
 {
-    protected Map<String, T> resolveStorageMap()
+    DefaultMetaDataStorageManager()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        Map<String, T> storageMap;
+        register(new DefaultMetaDataStorageNameMapper());
+    }
 
-        if(!requestMap.containsKey(getStorageManagerKey()))
-        {
-            storageMap = new HashMap<String, T>();
-            requestMap.put(getStorageManagerKey(), storageMap);
-        }
-
-        return (Map<String, T>)requestMap.get(getStorageManagerKey());
+    public String getStorageManagerKey()
+    {
+        return StorageManager.class.getName() + "_FOR_META_DATA_CACHE:KEY";
     }
 }
