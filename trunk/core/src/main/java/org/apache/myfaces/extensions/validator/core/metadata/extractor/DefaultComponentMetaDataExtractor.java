@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorage;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -97,19 +98,17 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         //create
         propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
-        /*
-         * find and add annotations
-         */
-        Class currentClass = entityClass;
-
-        while (!Object.class.getName().equals(currentClass.getName()))
+        if(isCached(entityClass, propertyDetails.getProperty()))
         {
-            addPropertyAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
-            addFieldAccessAnnotations(currentClass, propertyDetails.getProperty(), propertyInformation);
-
-            processInterfaces(currentClass, propertyDetails, propertyInformation);
-
-            currentClass = currentClass.getSuperclass();
+            for(MetaDataEntry metaDataEntry : getCachedMetaData(entityClass, propertyDetails.getProperty()))
+            {
+                propertyInformation.addMetaDataEntry(metaDataEntry);
+            }
+        }
+        else
+        {
+            extractAnnotations(propertyInformation, propertyDetails, entityClass);
+            cacheMetaData(propertyInformation);
         }
 
         if(logger.isTraceEnabled())
@@ -118,6 +117,40 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         }
 
         return propertyInformation;
+    }
+
+    private boolean isCached(Class entityClass, String property)
+    {
+        return getMetaDataStorage().containsMetaDataFor(entityClass, property);
+    }
+
+    private void cacheMetaData(PropertyInformation propertyInformation)
+    {
+        getMetaDataStorage().storeMetaDataOf(propertyInformation);
+    }
+
+    private MetaDataEntry[] getCachedMetaData(Class entityClass, String property)
+    {
+        return getMetaDataStorage().getMetaData(entityClass, property);
+    }
+
+    private MetaDataStorage getMetaDataStorage()
+    {
+        return ExtValUtils.getStorage(MetaDataStorage.class, MetaDataStorage.class.getName());
+    }
+
+    private void extractAnnotations(
+            PropertyInformation propertyInformation, PropertyDetails propertyDetails, Class entityClass)
+    {
+        while (!Object.class.getName().equals(entityClass.getName()))
+        {
+            addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+            addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+
+            processInterfaces(entityClass, propertyDetails, propertyInformation);
+
+            entityClass = entityClass.getSuperclass();
+        }
     }
 
     private void processInterfaces(
@@ -176,7 +209,22 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         {
             try
             {
-                field = entity.getDeclaredField("_" + property);
+                try
+                {
+                    if(property.length() > 1 &&
+                            Character.isUpperCase(property.charAt(0)) && Character.isUpperCase(property.charAt(1)))
+                    {
+                        field = entity.getDeclaredField(property.substring(0, 1).toLowerCase() + property.substring(1));
+                    }
+                    else
+                    {
+                        field = entity.getDeclaredField("_" + property);
+                    }
+                }
+                catch (Exception e1)
+                {
+                    field = entity.getDeclaredField("_" + property);
+                }
             }
             catch (NoSuchFieldException e1)
             {

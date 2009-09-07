@@ -61,6 +61,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
 
         setStorageManager(RendererProxyStorage.class, new DefaultRendererProxyStorageManager(), false);
         setStorageManager(GroupStorage.class, new DefaultGroupStorageManager(), false);
+        setStorageManager(MetaDataStorage.class, new DefaultMetaDataStorageManager(), false);
     }
 
     public StorageManager create(Class storageType)
@@ -90,7 +91,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
                 return storageManager;
             }
         }
-        return this.storageTypeToStorageManagerMap.get(storageType);
+        return getStorageManager(storageType);
     }
 
     private synchronized void addMapping(Class storageType, StorageManager storageManager)
