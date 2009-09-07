@@ -26,25 +26,25 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * generic storage manager implementation which stores the storage implementations in the request scope
+ * generic storage manager implementation which stores the storage implementations in the application scope
  *
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(REUSE)
-public abstract class AbstractRequestScopeAwareStorageManager<T> extends AbstractStorageManager<T>
+public abstract class AbstractApplicationScopeAwareStorageManager<T> extends AbstractStorageManager<T>
 {
     protected Map<String, T> resolveStorageMap()
     {
-        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        Map applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
         Map<String, T> storageMap;
 
-        if(!requestMap.containsKey(getStorageManagerKey()))
+        if(!applicationMap.containsKey(getStorageManagerKey()))
         {
             storageMap = new HashMap<String, T>();
-            requestMap.put(getStorageManagerKey(), storageMap);
+            applicationMap.put(getStorageManagerKey(), storageMap);
         }
 
-        return (Map<String, T>)requestMap.get(getStorageManagerKey());
+        return (Map<String, T>)applicationMap.get(getStorageManagerKey());
     }
 }
