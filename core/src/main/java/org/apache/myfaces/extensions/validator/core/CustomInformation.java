@@ -29,6 +29,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 public enum CustomInformation
 {
     BASE_PACKAGE,
+    EXTVAL_CONTEXT,
+
     COMPONENT_META_DATA_EXTRACTOR,
     VALIDATION_PARAMETER_EXTRACTOR,
 
