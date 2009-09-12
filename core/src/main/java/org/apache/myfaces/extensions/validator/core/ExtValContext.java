@@ -54,7 +54,7 @@ public class ExtValContext
 {
     private final Log logger = LogFactory.getLog(getClass());
 
-    private static ExtValContext extValContext = new ExtValContext();
+    private static ExtValContext extValContext;
 
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
@@ -269,6 +269,17 @@ public class ExtValContext
 
     public static ExtValContext getContext()
     {
+        if(extValContext == null)
+        {
+            extValContext = new ExtValContext();
+            Object customExtValContext = ExtValUtils.getELHelper().getBean(
+                    extValContext.getInformationProviderBean().get(CustomInformation.EXTVAL_CONTEXT));
+
+            if(customExtValContext instanceof ExtValContext)
+            {
+                extValContext = (ExtValContext)customExtValContext;
+            }
+        }
         return extValContext;
     }
 
