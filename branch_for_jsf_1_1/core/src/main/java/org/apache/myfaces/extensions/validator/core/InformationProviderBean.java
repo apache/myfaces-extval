@@ -75,7 +75,8 @@ public class InformationProviderBean
         }
 
         customizableInfos.put(CustomInformation.BASE_PACKAGE, basePackage);
-
+        customizableInfos.put(CustomInformation.EXTVAL_CONTEXT, "customExtValContext");
+        
         customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR,
                 "ComponentMetaDataExtractor");
         customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR,
@@ -141,6 +142,9 @@ public class InformationProviderBean
         switch (customInformation)
         {
             case BASE_PACKAGE:
+                return value;
+
+            case EXTVAL_CONTEXT:
                 return value;
 
             /*
