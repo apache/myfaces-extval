@@ -25,9 +25,17 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -36,10 +44,48 @@ import java.util.HashMap;
 @UsageInformation(INTERNAL)
 public class DefaultMetaDataStorage implements MetaDataStorage
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     private Map<String, PropertyInformation> cachedPropertyInformation = new HashMap<String, PropertyInformation>();
+
+    private List<MetaDataStorageFilter> metaDataStorageFilters = new ArrayList<MetaDataStorageFilter>();
+    private List<Class<? extends MetaDataStorageFilter>> deniedMetaDataFilters =
+            new ArrayList<Class<? extends MetaDataStorageFilter>>();
+
+    public DefaultMetaDataStorage()
+    {
+        initFilters();
+    }
+
+    private void initFilters()
+    {
+        List<String> metaDataStorageFilterClassNames = new ArrayList<String>();
+
+        metaDataStorageFilterClassNames
+            .add(WebXmlParameter.CUSTOM_META_DATA_STORAGE_FILTER);
+        metaDataStorageFilterClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean().get(
+                    CustomInformation.META_DATA_STORAGE_FILTER));
+
+        MetaDataStorageFilter metaDataStorageFilter;
+        for (String validationExceptionInterceptorName : metaDataStorageFilterClassNames)
+        {
+            metaDataStorageFilter =
+                (MetaDataStorageFilter)ClassUtils.tryToInstantiateClassForName(validationExceptionInterceptorName);
+
+            if (metaDataStorageFilter != null)
+            {
+                this.metaDataStorageFilters.add(metaDataStorageFilter);
+
+                logAddedFilter(metaDataStorageFilter.getClass());
+            }
+        }
+    }
 
     public void storeMetaDataOf(PropertyInformation propertyInformation)
     {
+        invokeFilters(propertyInformation);
+
         PropertyInformation propertyInformationToStore = new DefaultPropertyInformation();
 
         PropertyDetails propertyDetails = propertyInformation
@@ -50,6 +96,14 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         this.cachedPropertyInformation.put(
                 createKey(propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty()),
                 propertyInformationToStore);
+    }
+
+    private void invokeFilters(PropertyInformation propertyInformation)
+    {
+        for(MetaDataStorageFilter filter : this.metaDataStorageFilters)
+        {
+            filter.filter(propertyInformation);
+        }
     }
 
     public MetaDataEntry[] getMetaData(Class targetClass, String targetProperty)
@@ -68,6 +122,64 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         return this.cachedPropertyInformation.containsKey(createKey(targetClass, targetProperty));
     }
 
+    public void registerFilter(MetaDataStorageFilter storageFilter)
+    {
+        synchronized (this)
+        {
+            if(!isFilterDenied(storageFilter) && !isFilterAlreadyRegistered(storageFilter))
+            {
+                this.metaDataStorageFilters.add(storageFilter);
+                logAddedFilter(storageFilter.getClass());
+            }
+        }
+    }
+
+    private boolean isFilterDenied(MetaDataStorageFilter storageFilter)
+    {
+        return this.deniedMetaDataFilters.contains(storageFilter.getClass());
+    }
+
+    private boolean isFilterAlreadyRegistered(MetaDataStorageFilter storageFilter)
+    {
+        for(MetaDataStorageFilter filter : this.metaDataStorageFilters)
+        {
+            if(filter.getClass().equals(storageFilter.getClass()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void deregisterFilter(Class<? extends MetaDataStorageFilter> filterClass)
+    {
+        MetaDataStorageFilter storageFilter = ClassUtils.tryToInstantiateClass(filterClass);
+
+        synchronized (this)
+        {
+            this.metaDataStorageFilters.remove(storageFilter);
+        }
+
+        logRemovedFilter(storageFilter.getClass());
+    }
+
+    public void denyFilter(Class<? extends MetaDataStorageFilter> filterClass)
+    {
+        synchronized (this)
+        {
+            for(Class<? extends MetaDataStorageFilter> filterId : this.deniedMetaDataFilters)
+            {
+                if(filterId.equals(filterClass))
+                {
+                    return;
+                }
+            }
+            this.deniedMetaDataFilters.add(filterClass);
+        }
+
+        deregisterFilter(filterClass);
+    }
+
     private String createKey(Class targetClass, String targetProperty)
     {
         return targetClass.getName() + "#" + targetProperty;
@@ -83,6 +195,22 @@ public class DefaultMetaDataStorage implements MetaDataStorage
             newMetaDataEntry.setValue(metaDataEntry.getValue());
 
             target.addMetaDataEntry(newMetaDataEntry);
+        }
+    }
+
+    private void logAddedFilter(Class<? extends MetaDataStorageFilter> filterClass)
+    {
+        if(this.logger.isInfoEnabled())
+        {
+            this.logger.info(filterClass.getName() + " added");
+        }
+    }
+
+    private void logRemovedFilter(Class<? extends MetaDataStorageFilter> filterClass)
+    {
+        if(this.logger.isInfoEnabled())
+        {
+            this.logger.info(filterClass.getName() + " removed");
         }
     }
 }

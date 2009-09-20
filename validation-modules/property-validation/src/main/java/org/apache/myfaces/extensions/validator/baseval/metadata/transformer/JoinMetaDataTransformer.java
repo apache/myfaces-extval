@@ -30,6 +30,8 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
@@ -41,9 +43,30 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
+@Deprecated
 public class JoinMetaDataTransformer implements MetaDataTransformer
 {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
+    {
+        try
+        {
+            return convert(metaDataEntry);
+        }
+        catch (Throwable t)
+        {
+            if(this.logger.isWarnEnabled())
+            {
+                this.logger.warn("this class is replaced by a meta-data storage filter. " +
+                        "if it gets invoked and an exception occurs, a custom syntax is used." +
+                        "this class might be used by an old add-on. please check for a newer version.");
+            }
+            return new HashMap<String, Object>();
+        }
+    }
+
+    private Map<String, Object> convert(MetaDataEntry metaDataEntry)
     {
         MetaDataExtractor extractor = DefaultPropertyScanningMetaDataExtractor.getInstance();
 
