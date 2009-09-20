@@ -350,10 +350,9 @@ public class ExtValContext
         return true;
     }
 
-    public void deregisterRendererInterceptor(Class rendererInterceptorClass)
+    public void deregisterRendererInterceptor(Class<? extends RendererInterceptor> rendererInterceptorClass)
     {
-        RendererInterceptor rendererInterceptor =
-            (RendererInterceptor) ClassUtils.tryToInstantiateClass(rendererInterceptorClass);
+        RendererInterceptor rendererInterceptor = ClassUtils.tryToInstantiateClass(rendererInterceptorClass);
 
         synchronized (ExtValContext.class)
         {
@@ -362,14 +361,16 @@ public class ExtValContext
     }
 
     //if an interceptor hasn't been registered so far, it should be denied at future registrations
-    public void denyRendererInterceptor(Class rendererInterceptorClass)
+    public void denyRendererInterceptor(Class<? extends RendererInterceptor> rendererInterceptorClass)
     {
-        RendererInterceptor rendererInterceptor =
-            (RendererInterceptor) ClassUtils.tryToInstantiateClass(rendererInterceptorClass);
+        RendererInterceptor rendererInterceptor = ClassUtils.tryToInstantiateClass(rendererInterceptorClass);
 
         synchronized (ExtValContext.class)
         {
-            deniedInterceptors.add(rendererInterceptor.getInterceptorId());
+            if(!deniedInterceptors.contains(rendererInterceptor.getInterceptorId()))
+            {
+                deniedInterceptors.add(rendererInterceptor.getInterceptorId());
+            }
         }
         deregisterRendererInterceptor(rendererInterceptorClass);
     }
