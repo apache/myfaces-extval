@@ -86,7 +86,7 @@ public class RegistrationPage
         return "";
     }
 
-    @JoinValidation("person.email")
+    @JoinValidation("org.apache.myfaces.extensions.validator.demo.domain.Person:email")
     @Validator(EmailValidator.class)
     public String getEmail()
     {
