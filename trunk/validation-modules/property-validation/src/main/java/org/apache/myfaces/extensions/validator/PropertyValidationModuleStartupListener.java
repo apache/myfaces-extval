@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAw
 import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
+import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorage;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticResourceBundleConfiguration;
@@ -44,6 +45,7 @@ import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessed
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.CrossValidationStorageNameMapper;
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.ProcessedInformationStorageNameMapper;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
  * @author Gerhard Petracek
@@ -64,6 +66,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         addSkipValidationSupport();
         initStorageManagerAndNameMappers();
         initSkipValidationEvaluator();
+        initMetaDataStorageFilters();
     }
 
     private void initStaticStrategyMappings()
@@ -147,5 +150,13 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
     private void initSkipValidationEvaluator()
     {
         ExtValContext.getContext().setSkipValidationEvaluator(new PropertyValidationSkipValidationEvaluator(), false);
+    }
+
+    private void initMetaDataStorageFilters()
+    {
+         MetaDataStorage metaDataStorage = ExtValUtils.getStorage(
+                 MetaDataStorage.class, MetaDataStorage.class.getName());
+
+        metaDataStorage.registerFilter(new JoinValidationMetaDataStorageFilter());
     }
 }

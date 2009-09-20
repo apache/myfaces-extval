@@ -80,7 +80,7 @@ public class InformationProviderBean
         customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR,
                 "ComponentMetaDataExtractor");
         customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR,
-                "VALIDATION_PARAMETER_EXTRACTOR");
+                "ValidationParameterExtractor");
 
         customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_POSTFIX,
                 "ValidationStrategy");
@@ -99,11 +99,11 @@ public class InformationProviderBean
                 "MetaDataExtractionInterceptor");
 
         customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_TO_MSG_RESOLVER_NAME_MAPPER,
-            "ValidationStrategyToMsgResolverNameMapper");
+                "ValidationStrategyToMsgResolverNameMapper");
         customizableInfos.put(CustomInformation.META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER,
-            "MetaDataToValidationStrategyNameMapper");
+                "MetaDataToValidationStrategyNameMapper");
         customizableInfos.put(CustomInformation.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER,
-            "ValidationStrategyToMetaDataTransformerNameMapper");
+                "ValidationStrategyToMetaDataTransformerNameMapper");
 
         customizableInfos.put(CustomInformation.STARTUP_LISTENER,
                 "StartupListener");
@@ -115,11 +115,13 @@ public class InformationProviderBean
         customizableInfos.put(CustomInformation.COMPONENT_META_DATA_EXTRACTOR_FACTORY,
                 "ComponentMetaDataExtractorFactory");
         customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR_FACTORY,
-                "VALIDATION_PARAMETER_EXTRACTOR_FACTORY");
+                "ValidationParameterExtractorFactory");
         customizableInfos.put(CustomInformation.META_DATA_TRANSFORMER_FACTORY,
                 "MetaDataTransformerFactory");
         customizableInfos.put(CustomInformation.FACES_MESSAGE_FACTORY,
                 "FacesMessageFactory");
+        customizableInfos.put(CustomInformation.STORAGE_MANAGER_FACTORY,
+                "StorageManagerFactory");
 
         //conventions (the rest of the conventions are built with the help of name mappers,...
         customizableInfos.put(CustomInformation.MESSAGE_BUNDLE_NAME,
@@ -127,6 +129,9 @@ public class InformationProviderBean
         //static strategy mappings (name of property files)
         customizableInfos.put(CustomInformation.STATIC_STRATEGY_MAPPING_SOURCE,
                 "strategy_mappings");
+
+        customizableInfos.put(CustomInformation.META_DATA_STORAGE_FILTER,
+                "MetaDataStorageFilter");
     }
 
     @SuppressWarnings({"UnusedDeclaration"})

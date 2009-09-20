@@ -304,6 +304,26 @@ public class DefaultFactoryFinder implements FactoryFinder
 
     protected Object createStorageManagerFactory()
     {
-        return new DefaultStorageManagerFactory();
+        Object factory = null;
+
+        List<String> storageManagerFactoryClassNames = new ArrayList<String>();
+
+        storageManagerFactoryClassNames
+                .add(WebXmlParameter.CUSTOM_STORAGE_MANAGER_FACTORY);
+        storageManagerFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                .get(CustomInformation.STORAGE_MANAGER_FACTORY));
+        storageManagerFactoryClassNames.add(DefaultStorageManagerFactory.class.getName());
+
+        for (String className : storageManagerFactoryClassNames)
+        {
+            factory = ClassUtils.tryToInstantiateClassForName(className);
+
+            if (factory != null)
+            {
+                break;
+            }
+        }
+        return factory;
     }
 }
