@@ -21,24 +21,13 @@ package org.apache.myfaces.extensions.validator.core.storage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
-public interface MetaDataStorage
+public interface MetaDataStorageFilter
 {
-    void storeMetaDataOf(PropertyInformation propertyInformation);
-
-    MetaDataEntry[] getMetaData(Class targetClass, String targetProperty);
-
-    boolean containsMetaDataFor(Class targetClass, String targetProperty);
-
-    void registerFilter(MetaDataStorageFilter storageFilter);
-
-    void deregisterFilter(Class<? extends MetaDataStorageFilter> filterClass);
-
-    void denyFilter(Class<? extends MetaDataStorageFilter> filterClass);
+    void filter(PropertyInformation propertyInformation);
 }

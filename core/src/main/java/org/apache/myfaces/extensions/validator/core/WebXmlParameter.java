@@ -77,6 +77,12 @@ public interface WebXmlParameter
         .getInitParameter("CUSTOM_VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER");
 
     /*
+     * filter
+     */
+    static final String CUSTOM_META_DATA_STORAGE_FILTER = WebXmlUtils
+        .getInitParameter("CUSTOM_META_DATA_STORAGE_FILTER");
+    
+    /*
      * factories
      */
     static final String CUSTOM_VALIDATION_STRATEGY_FACTORY = WebXmlUtils
@@ -93,6 +99,9 @@ public interface WebXmlParameter
 
     static final String CUSTOM_META_DATA_TRANSFORMER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_TRANSFORMER_FACTORY");
+
+    static final String CUSTOM_STORAGE_MANAGER_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_STORAGE_MANAGER_FACTORY");
 
     static final String CUSTOM_FACES_MESSAGE_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_FACES_MESSAGE_FACTORY");
