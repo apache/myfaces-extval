@@ -32,17 +32,43 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.FacesException;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
+@Deprecated
 public class JoinValidationStrategy extends AbstractValidationStrategy
 {
     public void processValidation(FacesContext facesContext,
-            UIComponent uiComponent, MetaDataEntry metaDataEntry,
-            Object convertedObject) throws ValidatorException
+                                  UIComponent uiComponent, MetaDataEntry metaDataEntry,
+                                  Object convertedObject) throws ValidatorException
+    {
+        try
+        {
+            validateJoinValidation(facesContext, uiComponent, metaDataEntry, convertedObject);
+        }
+        catch (FacesException t)
+        {
+            throw t;
+        }
+        catch (Throwable t)
+        {
+            if(this.logger.isWarnEnabled())
+            {
+                this.logger.warn("this class is replaced by a meta-data storage filter. " +
+                        "if it gets invoked and an exception occurs, a custom syntax is used." +
+                        "this class might be used by an old add-on. please check for a newer version.");
+            }
+        }
+    }
+
+    private void validateJoinValidation(FacesContext facesContext,
+                                        UIComponent uiComponent,
+                                        MetaDataEntry metaDataEntry,
+                                        Object convertedObject)
     {
         MetaDataExtractor extractor = DefaultPropertyScanningMetaDataExtractor.getInstance();
 
