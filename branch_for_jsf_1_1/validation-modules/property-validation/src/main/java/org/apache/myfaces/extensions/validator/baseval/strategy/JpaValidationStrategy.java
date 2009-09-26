@@ -97,7 +97,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         {
             this.violation = VALIDATE_LENGTH;
             this.maxLength = column.length();
-            throw new ValidatorException(getValidationErrorFacesMassage(null));
+            throw new ValidatorException(getValidationErrorFacesMessage(null));
         }
     }
 
@@ -131,7 +131,7 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
         if (convertedObject == null || convertedObject.equals(""))
         {
             this.violation = CommonMetaDataKeys.REQUIRED;
-            throw new ValidatorException(getValidationErrorFacesMassage(null));
+            throw new ValidatorException(getValidationErrorFacesMessage(null));
         }
     }
 

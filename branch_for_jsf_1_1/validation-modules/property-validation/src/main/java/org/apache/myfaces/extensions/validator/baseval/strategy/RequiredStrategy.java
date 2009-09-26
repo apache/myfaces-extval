@@ -51,7 +51,7 @@ public class RequiredStrategy extends AbstractAnnotationValidationStrategy<Requi
                 (convertedObject instanceof Collection && ((Collection)convertedObject).isEmpty()) ||
                 (convertedObject instanceof Map && ((Map)convertedObject).isEmpty()))
         {
-            throw new ValidatorException(getValidationErrorFacesMassage(metaDataEntry.getValue(Required.class)));
+            throw new ValidatorException(getValidationErrorFacesMessage(metaDataEntry.getValue(Required.class)));
         }
     }
 
