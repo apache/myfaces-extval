@@ -52,6 +52,7 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(renderer.getClass());
         enhancer.setCallback(new ExtValGenericRendererWrapper(renderer));
+        enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         return (Renderer) enhancer.create();
     }
