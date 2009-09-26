@@ -51,6 +51,7 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(renderKit.getClass());
         enhancer.setCallback(new ExtValGenericRenderKit(renderKit));
+        enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
 
         return (RenderKit) enhancer.create();
     }
