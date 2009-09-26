@@ -77,7 +77,7 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
         return null;
     }
 
-    protected FacesMessage getValidationErrorFacesMassage(A annotation)
+    protected FacesMessage getValidationErrorFacesMessage(A annotation)
     {
         return ExtValUtils.createFacesMessage(getErrorMessageSummary(annotation), getErrorMessageDetail(annotation));
     }
