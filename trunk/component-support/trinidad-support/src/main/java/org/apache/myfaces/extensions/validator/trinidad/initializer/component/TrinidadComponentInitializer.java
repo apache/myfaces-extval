@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.trinidad.storage.TrinidadClientValidatorStorage;
 import org.apache.myfaces.trinidad.context.RequestContext;
 
 import javax.faces.component.UIComponent;
@@ -64,9 +66,16 @@ public class TrinidadComponentInitializer implements ComponentInitializer
         {
             if(componentInitializer.configureTrinidadComponent(facesContext, uiComponent, metaData))
             {
+                addComponentToStorage(uiComponent);
                 updateComponent(facesContext, uiComponent);
             }
         }
+    }
+
+    private void addComponentToStorage(UIComponent uiComponent)
+    {
+        ExtValUtils.getStorage(TrinidadClientValidatorStorage.class, TrinidadClientValidatorStorage.class.getName())
+                .addComponent(uiComponent);
     }
 
     protected boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
