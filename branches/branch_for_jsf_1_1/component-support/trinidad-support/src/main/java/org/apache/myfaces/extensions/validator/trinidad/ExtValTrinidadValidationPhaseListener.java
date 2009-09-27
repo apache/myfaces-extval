@@ -19,8 +19,10 @@
 package org.apache.myfaces.extensions.validator.trinidad;
 
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRenderKit;
+import org.apache.myfaces.extensions.validator.trinidad.storage.TrinidadClientValidatorStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -39,8 +41,12 @@ import javax.faces.render.RenderKitFactory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 {
+    private static final long serialVersionUID = 9109721831864146165L;
+
     public void afterPhase(PhaseEvent event)
     {
+        ExtValUtils.getStorage(TrinidadClientValidatorStorage.class, TrinidadClientValidatorStorage.class.getName())
+                .rollback();
     }
 
     public void beforePhase(PhaseEvent event)
