@@ -20,11 +20,14 @@ package org.apache.myfaces.extensions.validator.trinidad.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
 import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.trinidad.storage.TrinidadClientValidatorStorage;
+import org.apache.myfaces.extensions.validator.trinidad.storage.DefaultClientValidatorStorageManager;
 import org.apache.myfaces.extensions.validator.trinidad.validation.message.TrinidadFacesMessageFactory;
 import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRendererProxy;
 import org.apache.myfaces.extensions.validator.trinidad.interceptor.TrinidadValidationExceptionInterceptor;
@@ -94,5 +97,10 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
          */
 
         ExtValContext.getContext().addMetaDataExtractionInterceptor(new TrinidadMetaDataExtractionInterceptor());
+
+        ExtValContext.getContext().getFactoryFinder()
+                .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class)
+                .setStorageManager(TrinidadClientValidatorStorage.class,
+                        new DefaultClientValidatorStorageManager(), false);
     }
 }
