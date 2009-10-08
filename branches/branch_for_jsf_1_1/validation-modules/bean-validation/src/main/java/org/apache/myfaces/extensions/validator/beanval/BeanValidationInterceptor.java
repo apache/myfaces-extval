@@ -124,7 +124,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         Map<String, Object> metaData;
 
         for (ConstraintDescriptor<?> constraintDescriptor :
-                elementDescriptor.getUnorderdConstraintDescriptorsMatchingGroups(foundGroups))
+                elementDescriptor.findConstraints().unorderedAndMatchingGroups(foundGroups).getConstraintDescriptors())
         {
             //TODO check groups
             
