@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.startup;
 
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
+import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.LogFactory;
@@ -73,7 +74,17 @@ public abstract class AbstractStartupListener implements PhaseListener
 
                     try
                     {
-                        init();
+                        if(!isStartupListenerDeactivated())
+                        {
+                            init();
+                        }
+                        else
+                        {
+                            if(logger.isInfoEnabled())
+                            {
+                                logger.info("init of " + getClass().getName() + " deactivated");
+                            }
+                        }
 
                         if(logger.isInfoEnabled())
                         {
@@ -107,6 +118,11 @@ public abstract class AbstractStartupListener implements PhaseListener
     public PhaseId getPhaseId()
     {
         return PhaseId.RESTORE_VIEW;
+    }
+
+    protected boolean isStartupListenerDeactivated()
+    {
+        return "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(getClass().getName() + ":DEACTIVATED"));
     }
 
     protected abstract void init();
