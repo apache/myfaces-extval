@@ -384,7 +384,12 @@ public class ExtValContext
     public List<ComponentInitializer> getComponentInitializers()
     {
         lazyInitComponentInitializers();
-        return componentInitializers;
+        return isComponentInitializationActivated() ? componentInitializers : new ArrayList<ComponentInitializer>();
+    }
+
+    private boolean isComponentInitializationActivated()
+    {
+        return !"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_COMPONENT_INITIALIZATION);
     }
 
     public void addValidationExceptionInterceptor(ValidationExceptionInterceptor validationExceptionInterceptor)
