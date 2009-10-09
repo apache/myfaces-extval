@@ -49,13 +49,11 @@ public class ExtValMessageInterpolatorAdapter extends DefaultMessageInterpolator
     {
         if(this.messageResolver != null)
         {
-            if(messageOrKey.startsWith("{") && messageOrKey.endsWith("}"))
+            if(isBeanValidationMessageKeyFormat(messageOrKey))
             {
-                String newMessageOrKey = this.messageResolver
-                        .getMessage(messageOrKey.substring(1, messageOrKey.length() - 1), getCurrentLocale());
+                String newMessageOrKey = this.messageResolver.getMessage(extractKey(messageOrKey), getCurrentLocale());
 
-                if(!(newMessageOrKey.startsWith(AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER) &&
-                        newMessageOrKey.endsWith(AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER)))
+                if(isValideMessage(newMessageOrKey))
                 {
                     messageOrKey = newMessageOrKey;
                 }
@@ -70,5 +68,21 @@ public class ExtValMessageInterpolatorAdapter extends DefaultMessageInterpolator
             }
         }
         return super.interpolate(messageOrKey, context, getCurrentLocale());
+    }
+
+    private boolean isBeanValidationMessageKeyFormat(String messageOrKey)
+    {
+        return messageOrKey.startsWith("{") && messageOrKey.endsWith("}");
+    }
+
+    private String extractKey(String messageOrKey)
+    {
+        return messageOrKey.substring(1, messageOrKey.length() - 1);
+    }
+
+    private boolean isValideMessage(String newMessageOrKey)
+    {
+        return !(newMessageOrKey.startsWith(AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER) &&
+                        newMessageOrKey.endsWith(AbstractValidationErrorMessageResolver.MISSING_RESOURCE_MARKER));
     }
 }
