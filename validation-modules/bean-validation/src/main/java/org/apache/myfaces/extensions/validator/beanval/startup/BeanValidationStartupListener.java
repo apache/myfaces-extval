@@ -34,19 +34,18 @@ import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListe
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
+import javax.validation.ValidatorFactory;
+import javax.validation.Validation;
+
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@ToDo(value = Priority.HIGH, description = "add optional web.xml param to deactivate" +
-        "DefaultBeanValidationStrategyToMetaDataTransformerNameMapper")
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationStartupListener extends AbstractStartupListener
 {
@@ -54,36 +53,39 @@ public class BeanValidationStartupListener extends AbstractStartupListener
 
     protected void init()
     {
-        if(!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
-                .DEACTIVATE_DEFAULT_BEAN_VALIDATION_INTEGRATION))
-        {
-            registerBeanValidationInterceptor();
-            registerValidationGroupProvider();
-            registerMetaDataTransformerNameMapper();
-            registerGroupStorageNameMapper();
-            registerModelValidationStorageNameMapper();
-            registerModelValidationPhaseListener();
-        }
+        registerValidatorFactory();
+        registerBeanValidationInterceptor();
+        registerValidationGroupProvider();
+        registerMetaDataTransformerNameMapper();
+        registerGroupStorageNameMapper();
+        registerModelValidationStorageNameMapper();
+        registerModelValidationPhaseListener();
     }
 
-    private void registerBeanValidationInterceptor()
+    protected void registerValidatorFactory()
+    {
+        ExtValContext.getContext().addGlobalProperty(
+                ValidatorFactory.class.getName(), Validation.buildDefaultValidatorFactory(), false);
+    }
+
+    protected void registerBeanValidationInterceptor()
     {
         ExtValContext.getContext().registerRendererInterceptor(new BeanValidationInterceptor());
     }
 
-    private void registerValidationGroupProvider()
+    protected void registerValidationGroupProvider()
     {
         ExtValContext.getContext().addPropertyValidationInterceptor(new PropertyValidationGroupProvider());
     }
 
-    private void registerMetaDataTransformerNameMapper()
+    protected void registerMetaDataTransformerNameMapper()
     {
         ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
                 new DefaultBeanValidationStrategyToMetaDataTransformerNameMapper());
     }
 
     @SuppressWarnings({"unchecked"})
-    private void registerGroupStorageNameMapper()
+    protected void registerGroupStorageNameMapper()
     {
         StorageManager storageManager = getStorageManagerHolder().getStorageManager(GroupStorage.class);
 
@@ -103,11 +105,16 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         }
     }
 
-    private void registerModelValidationStorageNameMapper()
+    protected void registerModelValidationStorageNameMapper()
     {
         DefaultModelValidationStorageManager modelValidationStorageManager = new DefaultModelValidationStorageManager();
         modelValidationStorageManager.register(new ModelValidationStorageNameMapper());
         getStorageManagerHolder().setStorageManager(ModelValidationStorage.class, modelValidationStorageManager, false);
+    }
+
+    protected void registerModelValidationPhaseListener()
+    {
+        JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
     }
 
     private StorageManagerHolder getStorageManagerHolder()
@@ -115,10 +122,5 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         return (ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
-    }
-
-    private void registerModelValidationPhaseListener()
-    {
-        JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
     }
 }
