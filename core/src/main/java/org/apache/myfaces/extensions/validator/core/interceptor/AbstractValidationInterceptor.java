@@ -154,10 +154,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     protected boolean processComponent(UIComponent uiComponent)
     {
-        if (!(uiComponent instanceof EditableValueHolder))
+        if (!(uiComponent instanceof EditableValueHolder) || isComponentInitializationDeactivated())
         {
             return false;
         }
+
         try
         {
             return ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent) != null;
@@ -166,6 +167,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         {
             return false;
         }
+    }
+
+    private boolean isComponentInitializationDeactivated()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_COMPONENT_INITIALIZATION);
     }
 
     protected boolean recordProcessedInformation()

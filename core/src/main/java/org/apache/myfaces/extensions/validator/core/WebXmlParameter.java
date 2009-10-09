@@ -123,6 +123,9 @@ public interface WebXmlParameter
     static final String DEACTIVATE_EL_RESOLVER = WebXmlUtils
         .getInitParameter("DEACTIVATE_EL_RESOLVER");
 
+    static final String DEACTIVATE_COMPONENT_INITIALIZATION = WebXmlUtils
+        .getInitParameter("DEACTIVATE_COMPONENT_INITIALIZATION");
+
     //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
     //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
 
