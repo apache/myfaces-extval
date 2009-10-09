@@ -53,6 +53,21 @@ public class JsfUtils
         }
     }
 
+    public static void registerPhaseListener(PhaseListener phaseListener)
+    {
+        LifecycleFactory lifecycleFactory = (LifecycleFactory)FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+
+        String currentId;
+        Lifecycle currentLifecycle;
+        Iterator lifecycleIds = lifecycleFactory.getLifecycleIds();
+        while (lifecycleIds.hasNext())
+        {
+            currentId = (String) lifecycleIds.next();
+            currentLifecycle = lifecycleFactory.getLifecycle(currentId);
+            currentLifecycle.addPhaseListener(phaseListener);
+        }
+    }
+
     public static ResourceBundle getDefaultFacesMessageBundle()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
