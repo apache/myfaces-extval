@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.beanval;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -30,22 +29,20 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractValidationInterceptor;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.render.Renderer;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
-import javax.validation.Validation;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ElementDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
-import javax.validation.ValidatorFactory;
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 import java.util.Map;
@@ -61,8 +58,6 @@ import java.io.IOException;
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationInterceptor extends AbstractValidationInterceptor
 {
-    private ValidatorFactory validationFactory = Validation.buildDefaultValidatorFactory();
-
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
@@ -81,98 +76,112 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
             logger.trace("start to init component " + uiComponent.getClass().getName());
         }
 
-        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
+        PropertyDetails propertyDetails = extractPropertyDetails(facesContext, uiComponent);
 
-        PropertyDetails propertyDetails = metaDataExtractor.extract(facesContext, uiComponent)
-                .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
-
-        if(propertyDetails.getBaseObject() == null)
+        if(propertyDetails != null)
         {
-            if(this.logger.isWarnEnabled())
-            {
-                this.logger.warn("no base object at " + propertyDetails.getKey() +
-                        " component-id: " + uiComponent.getClientId(facesContext));
-            }
-            return;
-        }
-
-        //TODO extract groups - see PropertyValidationGroupProvider
-        Class[] foundGroups = ExtValBeanValidationContext.getCurrentInstance().getGroups(
-                facesContext.getViewRoot().getViewId(),
-                uiComponent.getClientId(facesContext));
-
-        /*TODO
-            foundGroups = mergeFoundGroupsWithValidatorGroups(
-                foundGroups, ((EditableValueHolder)uiComponent).getValidators());
-        */
-        BeanDescriptor beanDescriptor = this.validationFactory.getValidator().getConstraintsForClass(
-                propertyDetails.getBaseObject().getClass());
-
-        ElementDescriptor elementDescriptor = beanDescriptor.getConstraintsForProperty(propertyDetails.getProperty());
-
-        if(elementDescriptor == null)
-        {
-            return;
-        }
-        
-        ValidationStrategy validationStrategy;
-        MetaDataTransformer metaDataTransformer;
-        MetaDataEntry entry;
-        Map<String, Object> metaData;
-
-        for (ConstraintDescriptor<?> constraintDescriptor :
-                elementDescriptor.findConstraints().unorderedAndMatchingGroups(foundGroups).getConstraintDescriptors())
-        {
-            //TODO check groups
-            
-            validationStrategy = new BeanValidationStrategyAdapter(constraintDescriptor);
-
-            /*
-             * per default
-             * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.BeanValidationMetaDataTransformer
-             * is bound to BeanValidationStrategyAdapter
-             * don't use it directly - it's possible to deactivate
-             * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
-             *    .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper
-             */
-            metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
-
-            if (metaDataTransformer != null)
-            {
-                if (this.logger.isDebugEnabled())
-                {
-                    this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
-                }
-
-                entry = new MetaDataEntry();
-                entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());
-                entry.setValue(constraintDescriptor);
-                //TODO (?) add type of property for meta-data transformation (e.g. size: string vs. number)
-
-                metaData = metaDataTransformer.convertMetaData(entry);
-            }
-            else
-            {
-                metaData = null;
-            }
-
-            if (metaData == null)
-            {
-                continue;
-            }
-
-            //get component initializer for the current component and configure it
-            //also in case of skipped validation to reset e.g. the required attribute
-            if (!metaData.isEmpty())
-            {
-                ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
-            }
+            initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
         }
 
         if (logger.isTraceEnabled())
         {
             logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
         }
+    }
+
+    private PropertyDetails extractPropertyDetails(FacesContext facesContext, UIComponent uiComponent)
+    {
+        PropertyDetails result = ExtValUtils.getComponentMetaDataExtractor().extract(facesContext, uiComponent)
+                .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+
+        if(result.getBaseObject() == null && this.logger.isWarnEnabled())
+        {
+            this.logger.warn("no base object at " + result.getKey() +
+                    " component-id: " + uiComponent.getClientId(facesContext));
+        }
+
+        return result.getBaseObject() != null ? result : null;
+    }
+
+    private void initComponentWithPropertyDetails(
+            FacesContext facesContext, UIComponent uiComponent, PropertyDetails propertyDetails)
+    {
+        Class[] foundGroups = resolveGroups(facesContext, uiComponent);
+
+        if(foundGroups == null)
+        {
+            return;
+        }
+        
+        ElementDescriptor elementDescriptor = getDescriptorFor(
+                propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty());
+
+        if(elementDescriptor == null)
+        {
+            return;
+        }
+
+        Map<String, Object> metaData;
+
+        for (ConstraintDescriptor<?> constraintDescriptor :
+                elementDescriptor.findConstraints().unorderedAndMatchingGroups(foundGroups).getConstraintDescriptors())
+        {
+            metaData = transformConstraintDescriptorToMetaData(constraintDescriptor);
+
+            if (metaData != null && !metaData.isEmpty())
+            {
+                ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaData);
+            }
+        }
+    }
+
+    private Class[] resolveGroups(FacesContext facesContext, UIComponent uiComponent)
+    {
+        return ExtValBeanValidationContext.getCurrentInstance().getGroups(
+                facesContext.getViewRoot().getViewId(),
+                uiComponent.getClientId(facesContext));
+    }
+
+    private ElementDescriptor getDescriptorFor(Class targetClass, String property)
+    {
+        BeanDescriptor beanDescriptor = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
+                .getValidator().getConstraintsForClass(targetClass);
+
+        return beanDescriptor.getConstraintsForProperty(property);
+    }
+
+    @ToDo(Priority.HIGH)
+    private Map<String, Object> transformConstraintDescriptorToMetaData(ConstraintDescriptor<?> constraintDescriptor)
+    {
+        Map<String, Object> result = null;
+        MetaDataTransformer metaDataTransformer;
+        MetaDataEntry entry;
+        /*
+         * per default
+         * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.BeanValidationMetaDataTransformer
+         * is bound to BeanValidationStrategyAdapter
+         * don't use it directly - it's possible to deactivate
+         * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
+         *    .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper
+         */
+        metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(
+                new BeanValidationStrategyAdapter(constraintDescriptor));
+
+        if (metaDataTransformer != null)
+        {
+            if (this.logger.isDebugEnabled())
+            {
+                this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
+            }
+
+            entry = new MetaDataEntry();
+            entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());
+            entry.setValue(constraintDescriptor);
+            //TODO (?) add type of property for meta-data transformation (e.g. size: string vs. number)
+
+            result = metaDataTransformer.convertMetaData(entry);
+        }
+        return result;
     }
 
     @Override
@@ -228,8 +237,8 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         PropertyDetails propertyDetails = (propertyInformation.getInformation(
                 PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class));
 
-        BeanDescriptor beanDescriptor = this.validationFactory.getValidator().getConstraintsForClass(
-                propertyDetails.getBaseObject().getClass());
+        BeanDescriptor beanDescriptor = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
+                .getValidator().getConstraintsForClass(propertyDetails.getBaseObject().getClass());
 
         ElementDescriptor elementDescriptor = beanDescriptor.getConstraintsForProperty(propertyDetails.getProperty());
 
@@ -257,7 +266,8 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
             return;
         }
 
-        Set<ConstraintViolation> violations = this.validationFactory.usingContext()
+        Set<ConstraintViolation> violations = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
+                .usingContext()
                 .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
                 .getValidator()
                 .validateValue(baseBeanClass, propertyName, convertedObject, groups);

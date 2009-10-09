@@ -24,6 +24,9 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.validation.metadata.ConstraintDescriptor;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Map;
 
 /**
@@ -37,6 +40,7 @@ public class BeanValidationMetaDataTransformer implements MetaDataTransformer
     {
         if(isSupportedConstraint(metaData.getValue(ConstraintDescriptor.class)))
         {
+            
             //TODO
         }
 
@@ -51,9 +55,11 @@ public class BeanValidationMetaDataTransformer implements MetaDataTransformer
             return false;
         }
 
-        String simpleName = constraintDescriptor.getAnnotation().annotationType().getSimpleName();
+        String name = constraintDescriptor.getAnnotation().annotationType().getName();
 
-        return simpleName.equals("Size") || simpleName.equals("Pattern") || simpleName.equals("NotNull");
+        return NotNull.class.getName().equals(name) ||
+                Size.class.getName().equals(name) ||
+                Pattern.class.getName().equals(name);
     }
 
 }

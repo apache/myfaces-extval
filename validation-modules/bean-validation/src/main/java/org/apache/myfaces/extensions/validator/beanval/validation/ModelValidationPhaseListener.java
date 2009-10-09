@@ -36,8 +36,6 @@ import javax.faces.event.PhaseListener;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,7 +51,6 @@ public class ModelValidationPhaseListener implements PhaseListener
     private static final long serialVersionUID = -3482233893186708878L;
 
     protected final Log logger = LogFactory.getLog(getClass());
-    private ValidatorFactory validationFactory = Validation.buildDefaultValidatorFactory();
 
     public void afterPhase(PhaseEvent phaseEvent)
     {
@@ -65,7 +62,7 @@ public class ModelValidationPhaseListener implements PhaseListener
         List<ModelValidationEntry> modelValidationEntries = ExtValBeanValidationContext.getCurrentInstance()
                 .getModelValidationEntriesToValidate();
 
-        List processedValidationTargets = new ArrayList();
+        List<Object> processedValidationTargets = new ArrayList<Object>();
 
         for (ModelValidationEntry modelValidationEntry : modelValidationEntries)
         {
@@ -78,7 +75,8 @@ public class ModelValidationPhaseListener implements PhaseListener
         }
     }
 
-    private void processModelValidation(ModelValidationEntry modelValidationEntry, List processedValidationTargets)
+    private void processModelValidation(
+            ModelValidationEntry modelValidationEntry, List<Object> processedValidationTargets)
     {
         for (Object validationTarget : modelValidationEntry.getValidationTargets())
         {
@@ -93,7 +91,8 @@ public class ModelValidationPhaseListener implements PhaseListener
                 processedValidationTargets.add(validationTarget);
             }
 
-            Set<ConstraintViolation<Object>> violations = this.validationFactory.usingContext()
+            Set<ConstraintViolation<Object>> violations = ExtValBeanValidationContext.getCurrentInstance()
+                    .getValidatorFactory().usingContext()
                     .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
                     .getValidator()
                     .validate(validationTarget, modelValidationEntry.getGroups());
