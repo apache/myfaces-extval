@@ -19,11 +19,8 @@
 package org.apache.myfaces.extensions.validator.beanval.storage;
 
 import org.apache.myfaces.extensions.validator.core.storage.DefaultGroupStorage;
-import org.apache.myfaces.extensions.validator.beanval.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
-
-import javax.validation.groups.Default;
 
 /**
  * default storage implementation for bean-validation groups
@@ -41,10 +38,8 @@ public class DefaultBeanValidationGroupStorage extends DefaultGroupStorage
 
         if(result == null)
         {
-            if(!"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION))
-            {
-                return new Class[] {Default.class};
-            }
+            //the default group will be validated automatically
+            return new Class[] {};
         }
 
         return result;
