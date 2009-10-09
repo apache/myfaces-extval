@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.validator.beanval.validation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
-import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
+import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -59,12 +59,9 @@ public class ModelValidationPhaseListener implements PhaseListener
             logger.trace("jsr303 start model validation");
         }
 
-        List<ModelValidationEntry> modelValidationEntries = ExtValBeanValidationContext.getCurrentInstance()
-                .getModelValidationEntriesToValidate();
-
         List<Object> processedValidationTargets = new ArrayList<Object>();
 
-        for (ModelValidationEntry modelValidationEntry : modelValidationEntries)
+        for (ModelValidationEntry modelValidationEntry : getModelValidationEntriesToValidate())
         {
             processModelValidation(modelValidationEntry, processedValidationTargets);
         }
@@ -73,6 +70,11 @@ public class ModelValidationPhaseListener implements PhaseListener
         {
             logger.trace("jsr303 validation finished");
         }
+    }
+
+    private List<ModelValidationEntry> getModelValidationEntriesToValidate()
+    {
+        return ExtValBeanValidationContext.getCurrentInstance().getModelValidationEntriesToValidate();
     }
 
     private void processModelValidation(
@@ -91,39 +93,41 @@ public class ModelValidationPhaseListener implements PhaseListener
                 processedValidationTargets.add(validationTarget);
             }
 
-            Set<ConstraintViolation<Object>> violations = ExtValBeanValidationContext.getCurrentInstance()
-                    .getValidatorFactory().usingContext()
-                    .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
-                    .getValidator()
-                    .validate(validationTarget, modelValidationEntry.getGroups());
+            validateTarget(modelValidationEntry, validationTarget, modelValidationEntry.getGroups());
+        }
+    }
 
-            if (violations != null && violations.size() > 0)
+    private void validateTarget(ModelValidationEntry modelValidationEntry, Object validationTarget, Class[] groups)
+    {
+        Set<ConstraintViolation<Object>> violations = ExtValBeanValidationContext.getCurrentInstance()
+                .getValidatorFactory().usingContext()
+                .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
+                .getValidator()
+                .validate(validationTarget, groups);
+
+        if (violations != null && violations.size() > 0)
+        {
+            FacesContext.getCurrentInstance().renderResponse();
+
+            //jsf 2.0 is able to display multiple messages per component - so process all violations
+            //jsf < 2.0 will just use the first one (it's only a little overhead)
+            Iterator violationsIterator = violations.iterator();
+            ConstraintViolation constraintViolation;
+            while (violationsIterator.hasNext())
             {
-                FacesContext.getCurrentInstance().renderResponse();
-
-                //jsf 2.0 is able to display multiple messages per component - so process all violations
-                //jsf < 2.0 will just use the first one (it's only a little overhead)
-                Iterator violationsIterator = violations.iterator();
-                ConstraintViolation constraintViolation;
-                while (violationsIterator.hasNext())
+                constraintViolation = (ConstraintViolation) violationsIterator.next();
+                if (modelValidationEntry.getMetaData().displayInline())
                 {
-                    constraintViolation = (ConstraintViolation) violationsIterator.next();
-                    if (modelValidationEntry.getMetaData().displayInline())
-                    {
-                        processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, true);
-                    }
-                    else
-                    {
-                        processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, false);
-                    }
+                    processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, true);
+                }
+                else
+                {
+                    processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, false);
                 }
             }
         }
     }
 
-    @SuppressWarnings({"ThrowableInstanceNeverThrown"})
-    @ToDo(value = Priority.HIGH, description = "use ExtValUtils#createFacesMessage" +
-            "check ExtValUtils#executeAfterThrowingInterceptors")
     private void processConstraintViolation(final ConstraintViolation violation,
                                             ModelValidationEntry modelValidationEntry,
                                             final Object validationTarget,
@@ -131,8 +135,7 @@ public class ModelValidationPhaseListener implements PhaseListener
     {
         String violationMessage = violation.getMessage();
 
-        ValidatorException validatorException = new ValidatorException(
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
+        ValidatorException validatorException = createValidatorException(violationMessage);
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         UIComponent uiComponent = null;
@@ -144,46 +147,95 @@ public class ModelValidationPhaseListener implements PhaseListener
             clientId = modelValidationEntry.getComponent().getClientId(facesContext);
         }
 
-        if (!ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getMetaData().message()))
+        tryToChangeViolationMessage(modelValidationEntry, validationTarget, violation, validatorException);
+        executeValidationExceptionInterceptors(uiComponent, validationTarget, validatorException);
+        addViolationMessage(facesContext, clientId, violationMessage, validatorException);
+    }
+
+    private ValidatorException createValidatorException(String violationMessage)
+    {
+        return new ValidatorException(
+                ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
+    }
+
+    private void tryToChangeViolationMessage(ModelValidationEntry modelValidationEntry,
+                                    Object validationTarget,
+                                    ConstraintViolation violation,
+                                    ValidatorException validatorException)
+    {
+        if (!isDefaultMessage(modelValidationEntry))
         {
-            String validationErrorMessage = ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator()
-                    .interpolate(modelValidationEntry.getMetaData().message(),
-                            new MessageInterpolator.Context()
-                            {
+            String newValidationErrorMessage = interpolateValidationErrorMessage(
+                    modelValidationEntry, validationTarget, violation);
 
-                                public ConstraintDescriptor<?> getConstraintDescriptor()
-                                {
-                                    return violation.getConstraintDescriptor();
-                                }
-
-                                public Object getValidatedValue()
-                                {
-                                    return validationTarget;
-                                }
-                            }
-                    );
-
-            validatorException.getFacesMessage().setSummary(validationErrorMessage);
-            validatorException.getFacesMessage().setDetail(validationErrorMessage);
+            changeViolationMessage(validatorException.getFacesMessage(), newValidationErrorMessage);
         }
+    }
 
+    private boolean isDefaultMessage(ModelValidationEntry modelValidationEntry)
+    {
+        return ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getMetaData().message());
+    }
+
+    private String interpolateValidationErrorMessage(ModelValidationEntry modelValidationEntry,
+                                                     final Object validationTarget, final ConstraintViolation violation)
+    {
+        return ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator()
+                .interpolate(modelValidationEntry.getMetaData().message(),
+                        new MessageInterpolator.Context()
+                        {
+                            public ConstraintDescriptor<?> getConstraintDescriptor()
+                            {
+                                return violation.getConstraintDescriptor();
+                            }
+
+                            public Object getValidatedValue()
+                            {
+                                return validationTarget;
+                            }
+                        }
+                );
+    }
+
+    private void changeViolationMessage(FacesMessage facesMessage, String newMessage)
+    {
+        facesMessage.setSummary(newMessage);
+        facesMessage.setDetail(newMessage);
+    }
+
+    @ToDo(value = Priority.HIGH, description = "test compatibility")
+    private void executeValidationExceptionInterceptors(
+            UIComponent uiComponent, Object validationTarget, ValidatorException validatorException)
+    {
         ExtValUtils.executeAfterThrowingInterceptors(
                 uiComponent,
                 null,
                 validationTarget,
                 validatorException,
                 null);
+    }
 
-        if (violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
-                violationMessage.equals(validatorException.getFacesMessage().getDetail()))
+    private void addViolationMessage(
+            FacesContext facesContext, String clientId, String violationMessage, ValidatorException validatorException)
+    {
+        if (isMessageTextUnchanged(validatorException, violationMessage))
         {
+            //use old message text
             facesContext.addMessage(clientId,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
+                    ExtValUtils.createFacesMessage(validatorException.getFacesMessage().getSeverity(),
+                            violationMessage, violationMessage));
         }
         else
         {
+            //use new message text
             facesContext.addMessage(clientId, validatorException.getFacesMessage());
         }
+    }
+
+    private boolean isMessageTextUnchanged(ValidatorException validatorException, String violationMessage)
+    {
+        return violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
+                violationMessage.equals(validatorException.getFacesMessage().getDetail());
     }
 
     public void beforePhase(PhaseEvent phaseEvent)
