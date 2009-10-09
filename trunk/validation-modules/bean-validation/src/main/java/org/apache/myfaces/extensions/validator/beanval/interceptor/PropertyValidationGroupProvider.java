@@ -41,7 +41,6 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.validation.groups.Default;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -242,12 +241,6 @@ public class PropertyValidationGroupProvider implements PropertyValidationInterc
          */
         for(ModelValidationEntry modelValidationEntry : modelValidationEntryList)
         {
-            if(!"true".equalsIgnoreCase(org.apache.myfaces.extensions.validator.beanval.WebXmlParameter
-                    .DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION))
-            {
-                modelValidationEntry.addGroup(Default.class);
-            }
-
             for(Class restrictedGroup : restrictedGroupsForModelValidation)
             {
                 modelValidationEntry.removeGroup(restrictedGroup);

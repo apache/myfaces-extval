@@ -36,11 +36,10 @@ public class DefaultBeanValidationStrategyToMetaDataTransformerNameMapper
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        if(!(validationStrategy instanceof BeanValidationStrategyAdapter))
+        if(validationStrategy instanceof BeanValidationStrategyAdapter)
         {
-            return null;
+            return BeanValidationMetaDataTransformer.class.getName();
         }
-
-        return BeanValidationMetaDataTransformer.class.getName();
+        return null;
     }
 }
