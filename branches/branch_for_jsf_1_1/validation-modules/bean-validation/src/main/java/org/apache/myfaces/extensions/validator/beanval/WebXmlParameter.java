@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 
 /**
@@ -29,8 +31,13 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 @UsageInformation(UsageCategory.INTERNAL)
 public interface WebXmlParameter
 {
+    @ToDo(Priority.HIGH)
+    @Deprecated
     static final String DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION = WebXmlUtils
         .getInitParameter("DEACTIVATE_IMPLICIT_DEFAULT_GROUP_VALIDATION");
+
+    static final String DEACTIVATE_DEFAULT_BEAN_VALIDATION_INTEGRATION = WebXmlUtils
+        .getInitParameter("DEACTIVATE_DEFAULT_BEAN_VALIDATION_INTEGRATION");
 
     static final String DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS = WebXmlUtils
         .getInitParameter("DEACTIVATE_ADDITIONAL_GROUP_VALIDATION_ANNOTATIONS");
