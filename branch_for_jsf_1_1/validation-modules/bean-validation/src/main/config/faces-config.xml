@@ -26,8 +26,4 @@
     <lifecycle>
         <phase-listener>org.apache.myfaces.extensions.validator.beanval.startup.BeanValidationStartupListener</phase-listener>
     </lifecycle>
-
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener</phase-listener>
-    </lifecycle>
 </faces-config>
