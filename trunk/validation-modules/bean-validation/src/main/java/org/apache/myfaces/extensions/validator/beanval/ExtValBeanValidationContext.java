@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationSt
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -58,32 +59,17 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
     private ModelValidationStorage modelValidationStorage;
 
-    @ToDo(Priority.HIGH)
     private ExtValBeanValidationContext()
     {
-        this.messageResolver = ExtValUtils
-                .getMessageResolverForValidationStrategy(new BeanValidationStrategyAdapter(null));
+        initGroupStorage();
+        initModelValidationStorage();
 
-        Object foundBean = ExtValUtils.getELHelper().getBean(MessageInterpolator.class.getName().replace(".", "_"));
-
-        if(foundBean instanceof MessageInterpolator)
-        {
-            this.defaultMessageInterpolator = (MessageInterpolator)foundBean;
-        }
-        else
-        {
-            this.defaultMessageInterpolator = new DefaultMessageInterpolator(
-                Validation.buildDefaultValidatorFactory().getMessageInterpolator());
-        }
-
-        this.groupStorage = ExtValUtils
-                .getStorage(GroupStorage.class, BeanValidation.class.getName());
-
-        this.modelValidationStorage = ExtValUtils.
-                getStorage(ModelValidationStorage.class, ModelValidation.class.getName());
+        initMessageResolver();
+        initMessageInterpolator();
     }
 
     @SuppressWarnings({"unchecked"})
+    @ToDo(value = Priority.HIGH, description = "create extval-bv-context factory")
     public static ExtValBeanValidationContext getCurrentInstance()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -134,5 +120,43 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
     public List<ModelValidationEntry> getModelValidationEntriesToValidate()
     {
         return this.modelValidationStorage.getModelValidationEntriesToValidate();
+    }
+
+    private void initGroupStorage()
+    {
+        this.groupStorage = ExtValUtils
+                .getStorage(GroupStorage.class, BeanValidation.class.getName());
+    }
+
+    private void initModelValidationStorage()
+    {
+        this.modelValidationStorage = ExtValUtils.
+                getStorage(ModelValidationStorage.class, ModelValidation.class.getName());
+    }
+
+    @ToDo(value = Priority.HIGH, description = "create message interpolator factory")
+    private void initMessageInterpolator()
+    {
+        Object foundBean = ExtValUtils.getELHelper().getBean(MessageInterpolator.class.getName().replace(".", "_"));
+
+        if(foundBean instanceof MessageInterpolator)
+        {
+            this.defaultMessageInterpolator = (MessageInterpolator)foundBean;
+        }
+        else
+        {
+            this.defaultMessageInterpolator = new DefaultMessageInterpolator(
+                Validation.buildDefaultValidatorFactory().getMessageInterpolator());
+        }
+    }
+
+    private void initMessageResolver()
+    {
+        this.messageResolver = ExtValUtils.getMessageResolverForValidationStrategy(getBeanValidationStrategy());
+    }
+
+    private ValidationStrategy getBeanValidationStrategy()
+    {
+        return new BeanValidationStrategyAdapter(null);
     }
 }

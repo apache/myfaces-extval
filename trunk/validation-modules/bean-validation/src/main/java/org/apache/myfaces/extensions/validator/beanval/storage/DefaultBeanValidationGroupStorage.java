@@ -45,7 +45,6 @@ public class DefaultBeanValidationGroupStorage extends DefaultGroupStorage
             {
                 return new Class[] {Default.class};
             }
-            return null;
         }
 
         return result;

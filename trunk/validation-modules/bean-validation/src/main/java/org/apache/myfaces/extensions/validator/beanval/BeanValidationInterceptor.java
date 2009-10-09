@@ -64,15 +64,12 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
     private ValidatorFactory validationFactory = Validation.buildDefaultValidatorFactory();
 
     @Override
-    @ToDo.List({
-     @ToDo(value = Priority.HIGH, description = "the api is available - but hv v4 beta doesn't impl. the needed parts"),
-     @ToDo(value = Priority.HIGH, description = "remove this overridden method")})
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
         if(processComponent(uiComponent))
         {
-            //initComponent(facesContext, uiComponent);
+            initComponent(facesContext, uiComponent);
         }
     }
 
