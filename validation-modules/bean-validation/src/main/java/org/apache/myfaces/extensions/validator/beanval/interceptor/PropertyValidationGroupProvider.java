@@ -48,6 +48,8 @@ import java.util.Map;
 import java.lang.reflect.Method;
 
 /**
+ * validation interceptor which extracts all groups for the validation process
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
