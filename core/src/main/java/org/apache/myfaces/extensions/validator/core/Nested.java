@@ -16,25 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package util;
+package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+
 /**
+ * marker annotation e.g. to mark sub-name-mappers
+ * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class BeanValidationUtils
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
+@UsageInformation(UsageCategory.API)
+public @interface Nested
 {
-    @ToDo(value = Priority.LOW, description = "use it also in ModelValidationPhaseListener" +
-            "attention: only add one message per client id")
-    public static boolean supportMultipleViolationsPerField()
-    {
-        return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MULTIPLE_VIOLATION_MESSAGES_PER_FIELD);
-    }
 }

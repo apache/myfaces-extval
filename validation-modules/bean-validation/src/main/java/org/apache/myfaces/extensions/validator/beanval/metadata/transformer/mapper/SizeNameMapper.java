@@ -19,7 +19,9 @@
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper;
 
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.mapper.SubNameMapper;
+import org.apache.myfaces.extensions.validator.core.Nested;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .AbstractValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
@@ -32,8 +34,9 @@ import javax.validation.constraints.Size;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@Nested
 @UsageInformation({UsageCategory.INTERNAL})
-public class SizeNameMapper implements SubNameMapper<ValidationStrategy>
+public class SizeNameMapper extends AbstractValidationStrategyToMetaDataTransformerNameMapper
 {
     public String createName(ValidationStrategy source)
     {
