@@ -16,18 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.mapper;
+package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+
+import java.util.Map;
+import java.util.HashMap;
 
 /**
- * marker interface
- * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface SubNameMapper<T> extends NameMapper<T>
+public class NotNullMetaDataTransformer implements MetaDataTransformer
 {
+    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
+    {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
+        return results;
+    }
 }

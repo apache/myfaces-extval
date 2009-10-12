@@ -36,6 +36,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
+import javax.validation.groups.Default;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.metadata.ElementDescriptor;
@@ -49,11 +50,11 @@ import java.util.Set;
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-class BeanValidationInterceptorUtils
+class BeanValidationInterceptorInternals
 {
     private Log logger;
 
-    BeanValidationInterceptorUtils(Log logger)
+    BeanValidationInterceptorInternals(Log logger)
     {
         this.logger = logger;
     }
@@ -80,6 +81,10 @@ class BeanValidationInterceptorUtils
         if (foundGroups == null)
         {
             return;
+        }
+        else if(foundGroups.length == 0)
+        {
+            foundGroups = new Class[]{Default.class};
         }
 
         ElementDescriptor elementDescriptor = getDescriptorFor(
@@ -141,7 +146,7 @@ class BeanValidationInterceptorUtils
 
     boolean hasBeanValidationConstraints(PropertyInformation propertyInformation)
     {
-        PropertyDetails propertyDetails = getPropertyDetails(propertyInformation);
+        PropertyDetails propertyDetails = ExtValUtils.getPropertyDetails(propertyInformation);
 
         return getDescriptorFor(propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty()) != null;
     }
@@ -244,18 +249,12 @@ class BeanValidationInterceptorUtils
 
     private Class getBaseClassType(PropertyInformation propertyInformation)
     {
-        return getPropertyDetails(propertyInformation).getBaseObject().getClass();
+        return ExtValUtils.getPropertyDetails(propertyInformation).getBaseObject().getClass();
     }
 
     private String getPropertyToValidate(PropertyInformation propertyInformation)
     {
-        return getPropertyDetails(propertyInformation).getProperty();
-    }
-
-    private PropertyDetails getPropertyDetails(PropertyInformation propertyInformation)
-    {
-        return propertyInformation.getInformation(
-                PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+        return ExtValUtils.getPropertyDetails(propertyInformation).getProperty();
     }
 
     //override this method in the jsf 2.0 version

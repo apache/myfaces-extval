@@ -113,7 +113,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     protected Object transformValueForValidation(Object convertedObject)
     {
-        if ("".equals(convertedObject) && interpretEmptyStringAsNull())
+        if ("".equals(convertedObject) && interpretEmptyStringValuesAsNull())
         {
             return null;
         }
@@ -143,10 +143,9 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
     }
 
-    protected boolean interpretEmptyStringAsNull()
+    protected boolean interpretEmptyStringValuesAsNull()
     {
-        //to deactivate: the parameter has to be explicitly false
-        return !"false".equalsIgnoreCase(WebXmlParameter.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL);
+        return ExtValUtils.interpretEmptyStringValuesAsNull();
     }
 
     protected abstract void processValidation(
