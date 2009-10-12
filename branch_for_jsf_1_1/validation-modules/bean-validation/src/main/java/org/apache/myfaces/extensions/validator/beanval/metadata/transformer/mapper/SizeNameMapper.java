@@ -18,27 +18,37 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .AbstractValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.mapper.SubNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
-import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.BeanValidationMetaDataTransformer;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
+import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.StringSizeMetaDataTransformer;
+
+import javax.validation.metadata.ConstraintDescriptor;
+import javax.validation.constraints.Size;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation({UsageCategory.INTERNAL})
-public class DefaultBeanValidationStrategyToMetaDataTransformerNameMapper
-        extends AbstractValidationStrategyToMetaDataTransformerNameMapper
+public class SizeNameMapper implements SubNameMapper<ValidationStrategy>
 {
-    public String createName(ValidationStrategy validationStrategy)
+    public String createName(ValidationStrategy source)
     {
-        if(validationStrategy instanceof BeanValidationStrategyAdapter)
+        if(source instanceof BeanValidationVirtualValidationStrategy)
         {
-            return BeanValidationMetaDataTransformer.class.getName();
+            BeanValidationVirtualValidationStrategy beanValidationAdapter =
+                    (BeanValidationVirtualValidationStrategy)source;
+
+            ConstraintDescriptor descriptor = beanValidationAdapter.getConstraintDescriptor();
+
+            if(Size.class.getName().equals(descriptor.getAnnotation().annotationType().getName()) &&
+                    String.class.getName().equals(beanValidationAdapter.getElementClass().getName()))
+            {
+                return StringSizeMetaDataTransformer.class.getName();
+            }
         }
         return null;
     }
