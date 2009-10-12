@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.commons.logging.Log;
-import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -95,7 +95,8 @@ class BeanValidationInterceptorUtils
         for (ConstraintDescriptor<?> constraintDescriptor :
                 elementDescriptor.findConstraints().unorderedAndMatchingGroups(foundGroups).getConstraintDescriptors())
         {
-            metaData = transformConstraintDescriptorToMetaData(constraintDescriptor);
+            metaData = transformConstraintDescriptorToMetaData(
+                    constraintDescriptor, elementDescriptor.getElementClass());
 
             if (metaData != null && !metaData.isEmpty())
             {
@@ -105,21 +106,21 @@ class BeanValidationInterceptorUtils
     }
 
     @ToDo(Priority.HIGH)
-    private Map<String, Object> transformConstraintDescriptorToMetaData(ConstraintDescriptor<?> constraintDescriptor)
+    private Map<String, Object> transformConstraintDescriptorToMetaData(
+            ConstraintDescriptor<?> constraintDescriptor, Class elementClass)
     {
         Map<String, Object> result = null;
         MetaDataTransformer metaDataTransformer;
         MetaDataEntry entry;
         /*
         * per default
-        * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.BeanValidationMetaDataTransformer
-        * is bound to BeanValidationStrategyAdapter
+        * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.*
+        * is bound to BeanValidationVirtualValidationStrategy
         * don't use it directly - it's possible to deactivate
-        * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
-        *  .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper
+        * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.*
         */
         metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(
-                new BeanValidationStrategyAdapter(constraintDescriptor));
+                new BeanValidationVirtualValidationStrategy(constraintDescriptor, elementClass));
 
         if (metaDataTransformer != null)
         {

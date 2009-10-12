@@ -22,11 +22,16 @@ import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.IdentifiableValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
+import org.apache.myfaces.extensions.validator.core.mapper.SubNameMapper;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper.
+        ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -57,6 +62,8 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     private Map<String, String> validationStrategyToMetaDataTransformerMapping;
     private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
+    private List<SubNameMapper<ValidationStrategy>> subNameMapperList =
+            new ArrayList<SubNameMapper<ValidationStrategy>>();
 
     public DefaultMetaDataTransformerFactory()
     {
@@ -64,35 +71,57 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
         {
             logger.debug(getClass().getName() + " instantiated");
         }
+
+        //since there is no guarantee that the startup listener of the core gets executed first
+        register(new ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper());
     }
 
     public MetaDataTransformer create(ValidationStrategy validationStrategy)
     {
-        String validationStrategyName = null;
+        String validationStrategyName = createValidationStrategyName(validationStrategy);
 
-        //proxy check
-        if(validationStrategy.getClass().getPackage() != null)
+        tryToInitStaticMappings();
+
+        MetaDataTransformer metaDataTransformer =
+                tryToResolveCachedMetaDataTransformer(validationStrategy, validationStrategyName);
+
+        if(metaDataTransformer != null)
         {
-            validationStrategyName = validationStrategy.getClass().getName();
+            return metaDataTransformer;
         }
+
+        return createAndCacheMetaDataTransformer(validationStrategy, validationStrategyName);
+    }
+
+    private String createValidationStrategyName(ValidationStrategy validationStrategy)
+    {
+        boolean isProxyDetected = isProxy(validationStrategy);
         //in case of a proxy and the usage of a BeanValidationStrategyAdapter
-        else if (validationStrategy instanceof BeanValidationStrategyAdapter)
+        if (isProxyDetected && validationStrategy instanceof BeanValidationStrategyAdapter)
         {
-            validationStrategyName = ((BeanValidationStrategyAdapter)validationStrategy)
+            return ((BeanValidationStrategyAdapter)validationStrategy)
                                         .getValidationStrategyClassName();
         }
 
+        return !isProxyDetected ? validationStrategy.getClass().getName() : null;
+    }
+
+    private void tryToInitStaticMappings()
+    {
         if (validationStrategyToMetaDataTransformerMapping == null)
         {
             initStaticMappings();
         }
+    }
 
-        if (validationStrategyToMetaDataTransformerMapping.containsKey(validationStrategyName))
-        {
-            return (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(
-                validationStrategyToMetaDataTransformerMapping.get(validationStrategyName));
-        }
+    private boolean isProxy(ValidationStrategy validationStrategy)
+    {
+        return validationStrategy.getClass().getPackage() == null;
+    }
 
+    private MetaDataTransformer createAndCacheMetaDataTransformer(
+            ValidationStrategy validationStrategy, String validationStrategyName)
+    {
         MetaDataTransformer metaDataTransformer;
         String transformerName;
         //null -> use name mappers
@@ -105,16 +134,60 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
                 continue;
             }
 
-            metaDataTransformer = (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(transformerName);
+            metaDataTransformer = tryToCreateAndCacheMetaDataTransformer(
+                    validationStrategy, validationStrategyName, transformerName);
 
-            if (metaDataTransformer != null)
+            if(metaDataTransformer != null)
             {
-                if(validationStrategyName != null)
-                {
-                    addMapping(validationStrategyName, transformerName);
-                }
                 return metaDataTransformer;
             }
+        }
+
+        return null;
+    }
+
+    private MetaDataTransformer tryToResolveCachedMetaDataTransformer(
+            ValidationStrategy validationStrategy, String validationStrategyName)
+    {
+        if (validationStrategyToMetaDataTransformerMapping.containsKey(validationStrategyName))
+        {
+            return (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(
+                validationStrategyToMetaDataTransformerMapping.get(validationStrategyName));
+        }
+
+        if(validationStrategy instanceof IdentifiableValidationStrategy)
+        {
+            String newValidationStrategyName = validationStrategyName + IdentifiableValidationStrategy.ID_PREFIX +
+                    ((IdentifiableValidationStrategy)validationStrategy).getId();
+
+            if (validationStrategyToMetaDataTransformerMapping.containsKey(newValidationStrategyName))
+            {
+                return (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(
+                    validationStrategyToMetaDataTransformerMapping.get(newValidationStrategyName));
+            }
+        }
+
+        return null;
+    }
+
+    private MetaDataTransformer tryToCreateAndCacheMetaDataTransformer(
+            ValidationStrategy validationStrategy, String validationStrategyName, String transformerName)
+    {
+        MetaDataTransformer metaDataTransformer = (MetaDataTransformer)
+                ClassUtils.tryToInstantiateClassForName(transformerName);
+
+        if (metaDataTransformer != null)
+        {
+            if(validationStrategyName != null)
+            {
+                if(validationStrategy instanceof IdentifiableValidationStrategy)
+                {
+                    validationStrategyName += IdentifiableValidationStrategy.ID_PREFIX +
+                            ((IdentifiableValidationStrategy)validationStrategy).getId();
+                }
+                addMapping(validationStrategyName, transformerName);
+            }
+            return metaDataTransformer;
         }
 
         return null;
@@ -154,6 +227,36 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     protected List<NameMapper<ValidationStrategy>> getNameMapperList()
     {
-        return nameMapperList;
+        return new SortedNameMapperList<NameMapper<ValidationStrategy>, SubNameMapper<ValidationStrategy>>(
+                this.nameMapperList, this.subNameMapperList);
+    }
+
+    @Override
+    public void register(NameMapper<ValidationStrategy> validationStrategyNameMapper)
+    {
+        tryToInitNameMapperWithExistingSubMappers(validationStrategyNameMapper);
+        super.register(validationStrategyNameMapper);
+    }
+
+    /**
+     * it's a very special case due to the missing order in the execution of startup-listeners (phase listeners)
+     * packaged in faces-config.xml files of jars
+     *
+     * normally the default SubMapperAwareNameMapper should be enough
+     * anyway, if a module adds a new SubMapperAwareNameMapper,
+     * all previous added SubNameMappers have to be added to avoid confusion in special cases.
+     * if a SubMapperAwareNameMapper should be considered as final extend the interface and filter it in addNameMapper
+     * 
+     * @param validationStrategyNameMapper which has to be added
+     */
+    private void tryToInitNameMapperWithExistingSubMappers(NameMapper<ValidationStrategy> validationStrategyNameMapper)
+    {
+        if(validationStrategyNameMapper instanceof SubMapperAwareNameMapper)
+        {
+            for(SubNameMapper<ValidationStrategy> nameMapper : this.subNameMapperList)
+            {
+                ((SubMapperAwareNameMapper<ValidationStrategy>)validationStrategyNameMapper).addNameMapper(nameMapper);
+            }
+        }
     }
 }
