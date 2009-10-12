@@ -16,36 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.validation.strategy;
+package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.validation.metadata.ConstraintDescriptor;
 
 /**
+ * to map constraints directly to a meta-data transformer if there is no validation strategy (required by jsr 303)
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public class BeanValidationStrategyAdapter implements ValidationStrategy
+@UsageInformation(UsageCategory.REUSE)
+public abstract class AbstractVirtualValidationStrategy implements IdentifiableValidationStrategy
 {
-    private ConstraintDescriptor constraintDescriptor;
-
-    public BeanValidationStrategyAdapter(ConstraintDescriptor constraintDescriptor)
-    {
-        this.constraintDescriptor = constraintDescriptor;
-    }
-
-    public void validate(
+    public final void validate(
             FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry, Object convertedObject)
     {
-        throw new UnsupportedOperationException("this is just an adapter for component initialization");
-    }
-
-    public ConstraintDescriptor getConstraintDescriptor()
-    {
-        return constraintDescriptor;
+        throw new UnsupportedOperationException("this is just an adapter e.g. for component initialization");
     }
 }

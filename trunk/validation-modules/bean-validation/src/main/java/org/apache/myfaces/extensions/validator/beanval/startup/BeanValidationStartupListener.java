@@ -21,8 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.PropertyValidationGroupProvider;
-import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper
-        .DefaultBeanValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.SizeNameMapper;
 import org.apache.myfaces.extensions.validator.beanval.storage.DefaultModelValidationStorageManager;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationStorage;
 import org.apache.myfaces.extensions.validator.beanval.storage.mapper.BeanValidationGroupStorageNameMapper;
@@ -36,6 +35,8 @@ import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
@@ -78,10 +79,10 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         ExtValContext.getContext().addPropertyValidationInterceptor(new PropertyValidationGroupProvider());
     }
 
+    @ToDo(Priority.HIGH)
     protected void registerMetaDataTransformerNameMapper()
     {
-        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
-                new DefaultBeanValidationStrategyToMetaDataTransformerNameMapper());
+        ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(new SizeNameMapper());
     }
 
     @SuppressWarnings({"unchecked"})

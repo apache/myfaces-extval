@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.DefaultMessageInterpolator;
 import org.apache.myfaces.extensions.validator.beanval.validation.message.interpolator.ExtValMessageInterpolatorAdapter;
-import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationStrategyAdapter;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationStorage;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
@@ -171,6 +171,6 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
     private ValidationStrategy getBeanValidationStrategy()
     {
-        return new BeanValidationStrategyAdapter(null);
+        return new BeanValidationVirtualValidationStrategy(null, null);
     }
 }
