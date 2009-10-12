@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import util.BeanValidationUtils;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -61,12 +61,13 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
             logger.trace("start to init component " + uiComponent.getClass().getName());
         }
 
-        BeanValidationInterceptorUtils bviUtils = new BeanValidationInterceptorUtils(this.logger);
+        BeanValidationInterceptorInternals bviUtils = new BeanValidationInterceptorInternals(this.logger);
 
         PropertyDetails propertyDetails = bviUtils.extractPropertyDetails(facesContext, uiComponent);
 
         if (propertyDetails != null)
         {
+            BeanValidationUtils.addMetaDataToContext(uiComponent, propertyDetails);
             bviUtils.initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
         }
 
@@ -99,6 +100,9 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                     logger.trace("jsr303 start validation");
                 }
 
+                BeanValidationUtils.addMetaDataToContext(
+                        uiComponent, ExtValUtils.getPropertyDetails(propertyInformation));
+
                 if (!executeGlobalBeforeValidationInterceptors(
                         facesContext, uiComponent, convertedObject, propertyInformation))
                 {
@@ -125,7 +129,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 
     protected boolean hasBeanValidationConstraints(PropertyInformation propertyInformation)
     {
-        return new BeanValidationInterceptorUtils(this.logger).hasBeanValidationConstraints(propertyInformation);
+        return new BeanValidationInterceptorInternals(this.logger).hasBeanValidationConstraints(propertyInformation);
     }
 
     protected void processFieldValidation(FacesContext facesContext,
@@ -133,7 +137,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                                           Object convertedObject,
                                           PropertyInformation propertyInformation)
     {
-        new BeanValidationInterceptorUtils(this.logger).validate(
+        new BeanValidationInterceptorInternals(this.logger).validate(
                 facesContext, uiComponent, convertedObject, propertyInformation, supportMultipleViolationsPerField());
     }
 

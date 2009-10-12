@@ -16,50 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
+package org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
-import org.apache.myfaces.extensions.validator.core.Nested;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.Nested;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .AbstractValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
+import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.NotNullMetaDataTransformer;
 
-import java.util.List;
-import java.util.ArrayList;
+import javax.validation.metadata.ConstraintDescriptor;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@Nested
 @UsageInformation({UsageCategory.INTERNAL})
-public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
-    extends AbstractValidationStrategyToMetaDataTransformerNameMapper
-    implements SubMapperAwareNameMapper<ValidationStrategy>
+public class NotNullNameMapper extends AbstractValidationStrategyToMetaDataTransformerNameMapper
 {
-    private List<NameMapper<ValidationStrategy>> subNameMappers = new ArrayList<NameMapper<ValidationStrategy>>();
-
-    public void addNameMapper(NameMapper<ValidationStrategy> nameMapper)
-    {
-        if(!this.subNameMappers.contains(nameMapper) && nameMapper.getClass().isAnnotationPresent(Nested.class))
-        {
-            this.subNameMappers.add(nameMapper);
-        }
-    }
-
     public String createName(ValidationStrategy source)
     {
-        String result = null;
-
-        for(NameMapper<ValidationStrategy> mapper : this.subNameMappers)
+        if(source instanceof BeanValidationVirtualValidationStrategy)
         {
-            result = mapper.createName(source);
+            BeanValidationVirtualValidationStrategy beanValidationAdapter =
+                    (BeanValidationVirtualValidationStrategy)source;
 
-            if(result != null)
+            ConstraintDescriptor descriptor = beanValidationAdapter.getConstraintDescriptor();
+
+            if(NotNull.class.getName().equals(descriptor.getAnnotation().annotationType().getName()))
             {
-                return result;
+                return NotNullMetaDataTransformer.class.getName();
             }
         }
-        return result;
+        return null;
     }
 }
