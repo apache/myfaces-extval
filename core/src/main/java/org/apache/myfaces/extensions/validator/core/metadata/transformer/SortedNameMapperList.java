@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
-import org.apache.myfaces.extensions.validator.core.mapper.SubNameMapper;
+import org.apache.myfaces.extensions.validator.core.Nested;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -37,12 +37,12 @@ import java.util.ListIterator;
  * @since x.x.3
  */
 @UsageInformation({UsageCategory.INTERNAL})
-class SortedNameMapperList<T extends NameMapper, S extends SubNameMapper> implements List<T>
+class SortedNameMapperList<T extends NameMapper> implements List<T>
 {
     private List<T> wrapped;
-    private List<S> globalSubNameMapperList;
+    private List<T> globalSubNameMapperList;
 
-    SortedNameMapperList(List<T> wrapped, List<S> subNameMapperList)
+    SortedNameMapperList(List<T> wrapped, List<T> subNameMapperList)
     {
         this.wrapped = wrapped;
         this.globalSubNameMapperList = subNameMapperList;
@@ -50,9 +50,9 @@ class SortedNameMapperList<T extends NameMapper, S extends SubNameMapper> implem
 
     public boolean add(T t)
     {
-        if (t instanceof SubNameMapper /*due to a restriction in java*/)
+        if (t != null && t.getClass().isAnnotationPresent(Nested.class))
         {
-            return addSubNameMapper((S) t);
+            return addSubNameMapper(t);
         }
         else
         {
@@ -74,7 +74,7 @@ class SortedNameMapperList<T extends NameMapper, S extends SubNameMapper> implem
     }
 
     @SuppressWarnings({"unchecked"})
-    private boolean addSubNameMapper(S subNameMapper)
+    private boolean addSubNameMapper(T subNameMapper)
     {
         boolean result = false;
         for (NameMapper nameMapper : this.wrapped)
@@ -90,7 +90,7 @@ class SortedNameMapperList<T extends NameMapper, S extends SubNameMapper> implem
         return result;
     }
 
-    private void tryToAddMapperAsGlobalSubNameMapper(S subNameMapper)
+    private void tryToAddMapperAsGlobalSubNameMapper(T subNameMapper)
     {
         if(!this.globalSubNameMapperList.contains(subNameMapper))
         {

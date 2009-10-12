@@ -25,10 +25,10 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
-import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.StringSizeMetaDataTransformer;
+import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.NotNullMetaDataTransformer;
 
 import javax.validation.metadata.ConstraintDescriptor;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Gerhard Petracek
@@ -36,7 +36,7 @@ import javax.validation.constraints.Size;
  */
 @Nested
 @UsageInformation({UsageCategory.INTERNAL})
-public class SizeNameMapper extends AbstractValidationStrategyToMetaDataTransformerNameMapper
+public class NotNullNameMapper extends AbstractValidationStrategyToMetaDataTransformerNameMapper
 {
     public String createName(ValidationStrategy source)
     {
@@ -47,10 +47,9 @@ public class SizeNameMapper extends AbstractValidationStrategyToMetaDataTransfor
 
             ConstraintDescriptor descriptor = beanValidationAdapter.getConstraintDescriptor();
 
-            if(Size.class.getName().equals(descriptor.getAnnotation().annotationType().getName()) &&
-                    String.class.getName().equals(beanValidationAdapter.getElementClass().getName()))
+            if(NotNull.class.getName().equals(descriptor.getAnnotation().annotationType().getName()))
             {
-                return StringSizeMetaDataTransformer.class.getName();
+                return NotNullMetaDataTransformer.class.getName();
             }
         }
         return null;

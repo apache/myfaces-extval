@@ -16,18 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.mapper;
+package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+
 /**
- * marker interface
+ * marker annotation e.g. to mark sub-name-mappers
  * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
 @UsageInformation(UsageCategory.API)
-public interface SubNameMapper<T> extends NameMapper<T>
+public @interface Nested
 {
 }
