@@ -57,6 +57,6 @@
     </dependencies>
 
     <properties>
-        <trinidad.version>1.0.5</trinidad.version>
+        <trinidad.version>1.0.9</trinidad.version>
     </properties>
 </project>
