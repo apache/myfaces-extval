@@ -30,5 +30,5 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation(UsageCategory.API)
 public interface SubMapperAwareNameMapper<T> extends NameMapper<T>
 {
-    void addNameMapper(SubNameMapper<T> nameMapper);
+    void addNameMapper(NameMapper<T> nameMapper);
 }

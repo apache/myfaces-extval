@@ -16,25 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package util;
+package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class BeanValidationUtils
+public class NotNullMetaDataTransformer implements MetaDataTransformer
 {
-    @ToDo(value = Priority.LOW, description = "use it also in ModelValidationPhaseListener" +
-            "attention: only add one message per client id")
-    public static boolean supportMultipleViolationsPerField()
+    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
-        return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MULTIPLE_VIOLATION_MESSAGES_PER_FIELD);
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
+        return results;
     }
 }

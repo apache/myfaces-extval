@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Validat
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
@@ -619,5 +620,16 @@ public class ExtValUtils
         }
 
         return metaDataResult;
+    }
+
+    public static boolean interpretEmptyStringValuesAsNull()
+    {
+        //to deactivate: the parameter has to be explicitly false
+        return !"false".equalsIgnoreCase(WebXmlParameter.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL);
+    }
+
+    public static PropertyDetails getPropertyDetails(PropertyInformation propertyInformation)
+    {
+        return propertyInformation.getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
     }
 }

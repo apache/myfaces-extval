@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
-import org.apache.myfaces.extensions.validator.core.mapper.SubNameMapper;
+import org.apache.myfaces.extensions.validator.core.Nested;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -39,9 +39,9 @@ public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
 {
     private List<NameMapper<ValidationStrategy>> subNameMappers = new ArrayList<NameMapper<ValidationStrategy>>();
 
-    public void addNameMapper(SubNameMapper<ValidationStrategy> nameMapper)
+    public void addNameMapper(NameMapper<ValidationStrategy> nameMapper)
     {
-        if(!this.subNameMappers.contains(nameMapper))
+        if(!this.subNameMappers.contains(nameMapper) && nameMapper.getClass().isAnnotationPresent(Nested.class))
         {
             this.subNameMappers.add(nameMapper);
         }

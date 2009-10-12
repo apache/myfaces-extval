@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.BeanVali
 import org.apache.myfaces.extensions.validator.core.validation.strategy.IdentifiableValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
-import org.apache.myfaces.extensions.validator.core.mapper.SubNameMapper;
+import org.apache.myfaces.extensions.validator.core.Nested;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
@@ -62,8 +62,8 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     private Map<String, String> validationStrategyToMetaDataTransformerMapping;
     private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
-    private List<SubNameMapper<ValidationStrategy>> subNameMapperList =
-            new ArrayList<SubNameMapper<ValidationStrategy>>();
+    private List<NameMapper<ValidationStrategy>> subNameMapperList =
+            new ArrayList<NameMapper<ValidationStrategy>>();
 
     public DefaultMetaDataTransformerFactory()
     {
@@ -227,8 +227,7 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     protected List<NameMapper<ValidationStrategy>> getNameMapperList()
     {
-        return new SortedNameMapperList<NameMapper<ValidationStrategy>, SubNameMapper<ValidationStrategy>>(
-                this.nameMapperList, this.subNameMapperList);
+        return new SortedNameMapperList<NameMapper<ValidationStrategy>>(this.nameMapperList, this.subNameMapperList);
     }
 
     @Override
@@ -253,9 +252,13 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
     {
         if(validationStrategyNameMapper instanceof SubMapperAwareNameMapper)
         {
-            for(SubNameMapper<ValidationStrategy> nameMapper : this.subNameMapperList)
+            for(NameMapper<ValidationStrategy> nameMapper : this.subNameMapperList)
             {
-                ((SubMapperAwareNameMapper<ValidationStrategy>)validationStrategyNameMapper).addNameMapper(nameMapper);
+                if(nameMapper.getClass().isAnnotationPresent(Nested.class))
+                {
+                    ((SubMapperAwareNameMapper<ValidationStrategy>)validationStrategyNameMapper)
+                            .addNameMapper(nameMapper);
+                }
             }
         }
     }
