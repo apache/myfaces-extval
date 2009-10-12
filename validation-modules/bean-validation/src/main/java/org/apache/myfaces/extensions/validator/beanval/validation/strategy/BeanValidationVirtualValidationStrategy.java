@@ -18,34 +18,37 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.validation.strategy;
 
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractVirtualValidationStrategy;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 import javax.validation.metadata.ConstraintDescriptor;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public class BeanValidationStrategyAdapter implements ValidationStrategy
+public class BeanValidationVirtualValidationStrategy extends AbstractVirtualValidationStrategy
 {
     private ConstraintDescriptor constraintDescriptor;
+    private Class elementClass; //property type
 
-    public BeanValidationStrategyAdapter(ConstraintDescriptor constraintDescriptor)
+    public BeanValidationVirtualValidationStrategy(ConstraintDescriptor constraintDescriptor, Class elementClass)
     {
         this.constraintDescriptor = constraintDescriptor;
-    }
-
-    public void validate(
-            FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry, Object convertedObject)
-    {
-        throw new UnsupportedOperationException("this is just an adapter for component initialization");
+        this.elementClass = elementClass;
     }
 
     public ConstraintDescriptor getConstraintDescriptor()
     {
         return constraintDescriptor;
+    }
+
+    public Class getElementClass()
+    {
+        return elementClass;
+    }
+
+    public String getId()
+    {
+        return this.constraintDescriptor.getAnnotation().annotationType().getName();
     }
 }

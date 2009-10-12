@@ -20,46 +20,46 @@ package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 
-import javax.validation.metadata.ConstraintDescriptor;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.validation.metadata.ConstraintDescriptor;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@ToDo(value = Priority.HIGH, description = "select final transformer")
-public class BeanValidationMetaDataTransformer implements MetaDataTransformer
+public class StringSizeMetaDataTransformer implements MetaDataTransformer
 {
-    public Map<String, Object> convertMetaData(MetaDataEntry metaData)
+    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
-        if(isSupportedConstraint(metaData.getValue(ConstraintDescriptor.class)))
+        Map<String, Object> results = new HashMap<String, Object>();
+        Size annotation = (Size)metaDataEntry.getValue(ConstraintDescriptor.class).getAnnotation();
+
+        int minimum = annotation.min();
+
+        if(minimum != 0)
         {
-            
-            //TODO
+            results.put(CommonMetaDataKeys.MIN_LENGTH, minimum);
+            results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
+        }
+        else
+        {
+            results.put(CommonMetaDataKeys.MIN_LENGTH_DEFAULT, minimum);
         }
 
-        //TODO
-        return null;
-    }
-
-    protected boolean isSupportedConstraint(ConstraintDescriptor constraintDescriptor)
-    {
-        if(!constraintDescriptor.getAnnotation().annotationType().getName().startsWith("javax.validation.constraints"))
+        int maximum = annotation.max();
+        if(maximum != Integer.MAX_VALUE)
         {
-            return false;
+            results.put(CommonMetaDataKeys.MAX_LENGTH, maximum);
+        }
+        else
+        {
+            results.put(CommonMetaDataKeys.MAX_LENGTH_DEFAULT, maximum);
         }
 
-        String name = constraintDescriptor.getAnnotation().annotationType().getName();
-
-        return NotNull.class.getName().equals(name) ||
-                Size.class.getName().equals(name) ||
-                Pattern.class.getName().equals(name);
+        return results;
     }
-
 }
