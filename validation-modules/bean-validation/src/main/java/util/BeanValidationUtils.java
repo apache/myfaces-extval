@@ -35,6 +35,6 @@ public class BeanValidationUtils
             "attention: only add one message per client id")
     public static boolean supportMultipleViolationsPerField()
     {
-        return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MULTIPLE_VIOLATIONS_PER_FIELD);
+        return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MULTIPLE_VIOLATION_MESSAGES_PER_FIELD);
     }
 }
