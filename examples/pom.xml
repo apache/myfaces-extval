@@ -60,6 +60,7 @@
         <module>hello_world</module>
         <!--module>hello_bean-validation</module-->
         <module>feature-set_01</module>
+        <!--module>feature-set_02</module-->
     </modules>
 
     <profiles>
