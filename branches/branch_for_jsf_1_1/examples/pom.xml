@@ -60,6 +60,7 @@
         <module>hello_world</module>
         <!--module>hello_bean-validation</module-->
         <module>feature-set_01</module>
+        <!--module>feature-set_02</module-->
     </modules>
 
     <profiles>
@@ -89,7 +90,7 @@
     </profiles>
 
     <properties>
-        <trinidad.version>1.0.5</trinidad.version>
+        <trinidad.version>1.0.9</trinidad.version>
     </properties>
 
 </project>
