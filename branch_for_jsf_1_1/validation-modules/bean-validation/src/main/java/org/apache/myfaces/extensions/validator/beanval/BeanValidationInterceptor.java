@@ -54,7 +54,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         }
     }
 
-    @ToDo(value = Priority.HIGH, description = "possibility to deactivate initialization (in web.xml)")
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
         if (logger.isTraceEnabled())
