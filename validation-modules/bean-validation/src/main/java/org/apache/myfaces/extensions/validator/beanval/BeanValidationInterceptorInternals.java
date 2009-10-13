@@ -110,20 +110,13 @@ class BeanValidationInterceptorInternals
         }
     }
 
-    @ToDo(Priority.HIGH)
     private Map<String, Object> transformConstraintDescriptorToMetaData(
             ConstraintDescriptor<?> constraintDescriptor, Class elementClass)
     {
         Map<String, Object> result = null;
         MetaDataTransformer metaDataTransformer;
         MetaDataEntry entry;
-        /*
-        * per default
-        * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.*
-        * is bound to BeanValidationVirtualValidationStrategy
-        * don't use it directly - it's possible to deactivate
-        * org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.*
-        */
+
         metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(
                 new BeanValidationVirtualValidationStrategy(constraintDescriptor, elementClass));
 
@@ -137,7 +130,6 @@ class BeanValidationInterceptorInternals
             entry = new MetaDataEntry();
             entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());
             entry.setValue(constraintDescriptor);
-            //TODO (?) add type of property for meta-data transformation (e.g. size: string vs. number)
 
             result = metaDataTransformer.convertMetaData(entry);
         }

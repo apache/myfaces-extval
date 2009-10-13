@@ -444,7 +444,6 @@ public class BeanValidationUtils
         return result;
     }
 
-    @ToDo(value = Priority.HIGH, description = "move to util class - the original method is in LocalCompareStrategy")
     private static Object getValueOfProperty(Object base, String property)
     {
         property = property.substring(0, 1).toUpperCase() + property.substring(1, property.length());
