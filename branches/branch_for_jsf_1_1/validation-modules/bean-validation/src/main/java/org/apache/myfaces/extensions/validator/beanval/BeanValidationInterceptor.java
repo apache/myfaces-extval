@@ -83,7 +83,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         return false;
     }
 
-    @ToDo(value = Priority.HIGH, description = "use ExtValUtils#createFacesMessage")
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
     {
         MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
