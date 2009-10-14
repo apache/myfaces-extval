@@ -16,25 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
+package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.ExecutionOrder;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import java.lang.annotation.Target;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.ElementType.TYPE;
 
+@Target(TYPE)
+@Documented
 /**
- * Default implementation which maps ExtVal Annotations to ExtVal ValidationStrategies.
+ * marker annotation for easier usage
+ * it marks interfaces - instances of classes implementing these interfaces will be sorted
+ * @see ExecutionOrderComparator
  *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since x.x.3
  */
-@ExecutionOrder(300)
-@UsageInformation(UsageCategory.INTERNAL)
-public class DefaultAnnotationToValidationStrategyNameMapper extends AbstractMetaDataToValidationStrategyNameMapper
+public @interface ExecutionOrderSupport
 {
-    public String createName(String metaDataKey)
-    {
-        return InternalConventionProvider.getValidationStrategyClassName(metaDataKey);
-    }
 }
