@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RUNTIME)
 @Documented
 /**
- * allowed to use for classes which implement interfaces which have the marker @ExecutionOrderSupport
+ * allowed to use for classes which implement interfaces which have the marker @InvocationOrderSupport
  *
  * suggested ranges:
  * negative values for "extreme" cases
@@ -45,11 +45,11 @@ import static java.lang.annotation.ElementType.TYPE;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public @interface ExecutionOrder
+public @interface InvocationOrder
 {
     /**
      * default priority for custom artifacts (if they should get added after the internal versions
      * @return the priority of an artifact annotated with this annotation
      */
-    public abstract int value() default 1000;
+    int value() default 1000;
 }
