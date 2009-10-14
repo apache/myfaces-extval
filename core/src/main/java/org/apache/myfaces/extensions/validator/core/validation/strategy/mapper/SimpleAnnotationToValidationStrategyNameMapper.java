@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExecutionOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -29,6 +30,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@ExecutionOrder(400)
 @UsageInformation({UsageCategory.INTERNAL})
 public class SimpleAnnotationToValidationStrategyNameMapper extends AbstractMetaDataToValidationStrategyNameMapper
 {
