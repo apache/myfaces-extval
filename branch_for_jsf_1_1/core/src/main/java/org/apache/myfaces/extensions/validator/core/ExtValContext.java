@@ -62,12 +62,6 @@ public class ExtValContext
     private List<ProcessedInformationRecorder> processedInformationRecorders =
         new ArrayList<ProcessedInformationRecorder>();
 
-    private List<ComponentInitializer> componentInitializers;
-    private List<ValidationExceptionInterceptor> validationExceptionInterceptors;
-    private List<PropertyValidationInterceptor> propertyValidationInterceptors;
-    private Map<Class, List<PropertyValidationInterceptor>> moduleSpecificPropertyValidationInterceptors;
-    private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors;
-
     private SkipValidationEvaluator skipValidationEvaluator;
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
@@ -75,6 +69,12 @@ public class ExtValContext
     private Map<StaticConfigurationNames, List<StaticConfiguration<String, String>>> staticConfigMap
         = new HashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
 
+    //execution order support
+    private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors;
+    private List<ValidationExceptionInterceptor> validationExceptionInterceptors;
+    private List<PropertyValidationInterceptor> propertyValidationInterceptors;
+    private List<ComponentInitializer> componentInitializers;
+    private Map<Class, List<PropertyValidationInterceptor>> moduleSpecificPropertyValidationInterceptors;
 
     private void lazyInitComponentInitializers()
     {
