@@ -55,7 +55,6 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     {
         registerValidatorFactory();
         registerBeanValidationInterceptor();
-        registerValidationGroupProvider();
         registerMetaDataTransformerNameMapper();
         registerGroupStorageNameMapper();
         registerModelValidationStorageNameMapper();
@@ -72,12 +71,6 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void registerBeanValidationInterceptor()
     {
         ExtValContext.getContext().registerRendererInterceptor(new BeanValidationInterceptor());
-    }
-
-    @Deprecated
-    protected void registerValidationGroupProvider()
-    {
-        //ExtValContext.getContext().addPropertyValidationInterceptor(new PropertyValidationGroupProvider());
     }
 
     protected void registerMetaDataTransformerNameMapper()
