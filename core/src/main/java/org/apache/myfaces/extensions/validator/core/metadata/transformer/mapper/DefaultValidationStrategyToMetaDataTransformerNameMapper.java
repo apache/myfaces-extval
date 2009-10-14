@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.ExecutionOrder;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -30,7 +30,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ExecutionOrder(300)
+@InvocationOrder(300)
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultValidationStrategyToMetaDataTransformerNameMapper extends
     AbstractValidationStrategyToMetaDataTransformerNameMapper

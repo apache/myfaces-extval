@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core.mapper;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.ExecutionOrderSupport;
+import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 
 /**
  * Interface for name mappers.
@@ -30,7 +30,7 @@ import org.apache.myfaces.extensions.validator.core.ExecutionOrderSupport;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ExecutionOrderSupport
+@InvocationOrderSupport
 @UsageInformation(UsageCategory.API)
 public interface NameMapper<T>
 {
