@@ -18,20 +18,40 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import java.lang.annotation.Target;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.TYPE;
+import java.util.Comparator;
 
-@Target(TYPE)
-@Documented
 /**
- * marker annotation for easier usage
- * it marks interfaces - instances of classes implementing these interfaces will be sorted
- * @see ExecutionOrderComparator
- *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public @interface ExecutionOrderSupport
+public class InvocationOrderComparator<T> implements Comparator<T>
 {
+    public int compare(T nm1, T nm2)
+    {
+        if (hasPriority(nm1) && hasPriority(nm2))
+        {
+            return isPriorityHigher(nm1.getClass().getAnnotation(InvocationOrder.class),
+                    nm2.getClass().getAnnotation(InvocationOrder.class));
+        }
+        if (!hasPriority(nm1) && !hasPriority(nm2))
+        {
+            return 0;
+        }
+        return hasPriority(nm1) ? 1 : -1;
+    }
+
+    private int isPriorityHigher(InvocationOrder priority1, InvocationOrder priority2)
+    {
+        if (priority1.value() == priority2.value())
+        {
+            return 0;
+        }
+
+        return priority1.value() < priority2.value() ? -1 : 1;
+    }
+
+    private boolean hasPriority(Object nm)
+    {
+        return nm.getClass().isAnnotationPresent(InvocationOrder.class);
+    }
 }

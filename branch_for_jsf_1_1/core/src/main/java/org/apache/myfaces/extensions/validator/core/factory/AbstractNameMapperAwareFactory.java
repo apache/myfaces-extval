@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.factory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.ExecutionOrderComparator;
+import org.apache.myfaces.extensions.validator.core.InvocationOrderComparator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +49,7 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
 
     protected Comparator<NameMapper<T>> getComparator()
     {
-        return new ExecutionOrderComparator<NameMapper<T>>();
+        return new InvocationOrderComparator<NameMapper<T>>();
     }
 
     public synchronized void deregister(Class<? extends NameMapper> classToDeregister)
