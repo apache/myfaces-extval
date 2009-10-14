@@ -21,10 +21,13 @@ package org.apache.myfaces.extensions.validator.core.factory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.ExecutionOrderComparator;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author Gerhard Petracek
@@ -40,7 +43,13 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
         if(!deniedNameMapperList.contains(nameMapper.getClass()))
         {
             getNameMapperList().add(nameMapper);
+            Collections.sort(getNameMapperList(), getComparator());
         }
+    }
+
+    protected Comparator<NameMapper<T>> getComparator()
+    {
+        return new ExecutionOrderComparator<NameMapper<T>>();
     }
 
     public synchronized void deregister(Class<? extends NameMapper> classToDeregister)
