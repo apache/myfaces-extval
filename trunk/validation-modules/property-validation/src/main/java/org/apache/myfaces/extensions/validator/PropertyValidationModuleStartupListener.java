@@ -34,8 +34,6 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticInMemoryConfiguration;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.recorder.CrossValidationUserInputRecorder;
@@ -84,13 +82,11 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         }
     }
 
-    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     private void initDefaultComponentInitializer()
     {
         ExtValContext.getContext().addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
     }
 
-    @ToDo(value = Priority.MEDIUM, description = "web.xml parameter to deactivate it")
     private void initDefaultValidationExceptionInterceptor()
     {
         ExtValContext.getContext().addValidationExceptionInterceptor(
