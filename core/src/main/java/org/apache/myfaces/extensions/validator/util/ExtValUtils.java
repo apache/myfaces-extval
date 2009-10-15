@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
@@ -490,6 +492,7 @@ public class ExtValUtils
         }
     }
 
+    @ToDo(value = Priority.HIGH, description = "is renaming ok?")
     public static boolean executeGlobalBeforeValidationInterceptors(FacesContext facesContext,
                                                                     UIComponent uiComponent,
                                                                     Object convertedObject,
@@ -519,6 +522,7 @@ public class ExtValUtils
         return result;
     }
 
+    @ToDo(value = Priority.HIGH, description = "is renaming ok?")
     public static void executeGlobalAfterValidationInterceptors(FacesContext facesContext,
                                                                 UIComponent uiComponent,
                                                                 Object convertedObject,
