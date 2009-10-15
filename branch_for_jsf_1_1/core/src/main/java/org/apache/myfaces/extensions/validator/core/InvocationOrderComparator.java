@@ -37,7 +37,7 @@ public class InvocationOrderComparator<T> implements Comparator<T>
         {
             return 0;
         }
-        return hasPriority(nm1) ? 1 : -1;
+        return hasPriority(nm1) ? -1 : 1;
     }
 
     private int isPriorityHigher(InvocationOrder priority1, InvocationOrder priority2)

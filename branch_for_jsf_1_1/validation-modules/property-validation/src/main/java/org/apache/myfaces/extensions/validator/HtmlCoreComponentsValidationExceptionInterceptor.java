@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -54,6 +55,7 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@InvocationOrder(200)
 @UsageInformation(UsageCategory.INTERNAL)
 public class HtmlCoreComponentsValidationExceptionInterceptor implements ValidationExceptionInterceptor
 {
