@@ -22,13 +22,14 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.lang.reflect.Field;
 
 import javax.faces.FactoryFinder;
 import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.RenderKit;
@@ -38,8 +39,13 @@ import junit.framework.TestCase;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
+import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.test.crossval.MockValidationStrategyFactory;
+import org.apache.myfaces.extensions.validator.test.crossval.MockMessageResolverFactory;
+import org.apache.myfaces.extensions.validator.test.crossval.MockMetaDataTransformerFactory;
 import org.apache.myfaces.extensions.validator.test.util.TestUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
@@ -122,6 +128,8 @@ public abstract class AbstractExValViewControllerTestCase extends TestCase
         //for testing the fallback
         //servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER", "true");
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_VALIDATION_STRATEGY_FACTORY", MockValidationStrategyFactory.class.getName());
+        servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_MESSAGE_RESOLVER_FACTORY", MockMessageResolverFactory.class.getName());
+        servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_META_DATA_TRANSFORMER_FACTORY", MockMetaDataTransformerFactory.class.getName());
         config = new MockServletConfig(servletContext);
         session = new MockHttpSession();
         session.setServletContext(servletContext);
@@ -182,6 +190,9 @@ public abstract class AbstractExValViewControllerTestCase extends TestCase
      */
     protected void tearDown() throws Exception
     {
+        resetFactoryFinder();
+        resetExtValContext();
+
         application = null;
         config = null;
         externalContext = null;
@@ -199,9 +210,37 @@ public abstract class AbstractExValViewControllerTestCase extends TestCase
         threadContextClassLoader = null;
     }
     
+    private void resetFactoryFinder()
+    {
+        try
+        {
+            Field factoryMap = DefaultFactoryFinder.class.getDeclaredField("factoryMap");
+            factoryMap.setAccessible(true);
+            factoryMap.set(ExtValContext.getContext().getFactoryFinder(), new HashMap<FactoryNames, Object>());
+        }
+        catch (Throwable t)
+        {
+            throw new IllegalStateException("cannot reset the factory finder", t);
+        }
+    }
+
+    protected void resetExtValContext()
+    {
+        try
+        {
+            Field context = ExtValContext.class.getDeclaredField("extValContext");
+            context.setAccessible(true);
+            context.set(ExtValContext.getContext(), null);
+        }
+        catch (Throwable t)
+        {
+            throw new IllegalStateException("cannot reset the extval-context", t);
+        }
+    }
+
     protected void processCrossValValidation()
     {
-        new CrossValidationPhaseListener().afterPhase(new PhaseEvent((FacesContext)facesContext,PhaseId.ANY_PHASE,lifecycle));
+        new CrossValidationPhaseListener().afterPhase(new PhaseEvent(facesContext,PhaseId.ANY_PHASE,lifecycle));
     }
     
     protected void checkMessageCount(int expected)
