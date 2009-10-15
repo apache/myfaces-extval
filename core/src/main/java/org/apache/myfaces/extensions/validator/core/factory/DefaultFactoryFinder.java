@@ -56,7 +56,7 @@ public class DefaultFactoryFinder implements FactoryFinder
 
     private static FactoryFinder factoryFinder = new DefaultFactoryFinder();
 
-    private DefaultFactoryFinder()
+    protected DefaultFactoryFinder()
     {
         if(logger.isDebugEnabled())
         {

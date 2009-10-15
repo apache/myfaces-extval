@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -37,6 +38,7 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@InvocationOrder(300)
 @UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadComponentInitializer implements ComponentInitializer
 {
