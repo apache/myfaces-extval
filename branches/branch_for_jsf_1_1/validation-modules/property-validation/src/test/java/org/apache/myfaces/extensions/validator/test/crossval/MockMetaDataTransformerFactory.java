@@ -18,27 +18,18 @@
  */
 package org.apache.myfaces.extensions.validator.test.crossval;
 
-import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-public class MockValidationStrategyFactory extends DefaultValidationStrategyFactory
+public class MockMetaDataTransformerFactory extends DefaultMetaDataTransformerFactory
 {
-    @Override
-    public ValidationStrategy create(String metaDataKey)
-    {
-        //force init so that every test-case setup method can add a mock validation strategy via extval java-api
-        ReflectionUtils.tryToInvokeMethod(this,ReflectionUtils.tryToGetMethod(getClass(), "initStaticMappings"));
-        return super.create(metaDataKey);
-    }
-
-    public List<NameMapper<String>> getRegisteredNameMapperList()
+    public List<NameMapper<ValidationStrategy>> getRegisteredNameMapperList()
     {
         return super.getNameMapperList();
     }
