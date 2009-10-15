@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtracti
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.lang.annotation.Annotation;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(300)
 public class TrinidadMetaDataExtractionInterceptor implements MetaDataExtractionInterceptor
 {
     public void afterExtracting(PropertyInformation propertyInformation)

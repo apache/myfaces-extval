@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.trinidad.context.RequestContext;
@@ -38,6 +39,7 @@ import javax.faces.application.FacesMessage;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@InvocationOrder(300)
 @UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadValidationExceptionInterceptor implements ValidationExceptionInterceptor
 {

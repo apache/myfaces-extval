@@ -21,11 +21,13 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.2
  */
+@InvocationOrderSupport
 @UsageInformation(UsageCategory.API)
 public interface MetaDataExtractionInterceptor
 {

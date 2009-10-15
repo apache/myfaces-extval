@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@InvocationOrder(301)
+@InvocationOrder(310)
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultModuleValidationStrategyToMsgResolverNameMapper extends
     DefaultValidationStrategyToMsgResolverNameMapper
