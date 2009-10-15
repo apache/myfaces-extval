@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -30,6 +31,7 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrderSupport
 @UsageInformation(UsageCategory.API)
 public interface PropertyValidationInterceptor extends ValidationParameter
 {

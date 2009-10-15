@@ -30,13 +30,18 @@ import static java.lang.annotation.ElementType.TYPE;
 /**
  * allowed to use for classes which implement interfaces which have the marker @InvocationOrderSupport
  *
- * suggested ranges:
+ * suggested ranges (mainly for name-mappers):
  * negative values for "extreme" cases
  *
  * 0-49 for custom artifacts which should have the highest priority
  * 50-99 for add-ons which provide artifacts which should have a higher priority than the default artifacts
- * 100-999
+ * 100-999 internal artifacts
  * 1000+ for custom artifacts
+ *
+ * suggested ranges for artifacts like interceptors,...
+ * 1xx ... artifacts of the core
+ * 2xx ... artifacts of validation modules
+ * 3xx ... artifacts of component support modules
  *
  * a priority should be unique within one artifact-type - that means
  * if a name-mapper has priority 100, it's ok that an exception-interceptor also has priority 100.
