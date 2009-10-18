@@ -35,6 +35,9 @@
 
         <tr:inputText label="first name" value="#{bean.person.firstName}"/>
         <tr:inputText label="last name" value="#{bean.person.lastName}"/>
+        <!--
+        <tr:inputText label="last name" value="#{bean.person.lastName}" requiredMessageDetail="{0} is required"/>
+        -->
         <tr:inputDate label="birthday" value="#{bean.person.birthday}">
             <tr:convertDateTime type="date" pattern="dd.MM.yyyy"/>
         </tr:inputDate>

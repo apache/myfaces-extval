@@ -18,31 +18,33 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.Nested;
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
+        .AbstractValidationStrategyToMetaDataTransformerNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
-import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.StringSizeMetaDataTransformer;
-
-import javax.validation.constraints.Size;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@Nested
-@InvocationOrder(101)
-@UsageInformation({UsageCategory.INTERNAL})
-public class SizeNameMapper extends AbstractBeanValidationVirtualValidationStrategyToMetaDataTransformerNameMapper
+@UsageInformation({UsageCategory.REUSE})
+public abstract class AbstractBeanValidationVirtualValidationStrategyToMetaDataTransformerNameMapper
+    extends AbstractValidationStrategyToMetaDataTransformerNameMapper
 {
-    protected String createBeanValidationTransformerName(BeanValidationVirtualValidationStrategy adapter)
+    public final String createName(ValidationStrategy source)
     {
-        if(Size.class.getName().equals(adapter.getConstraintDescriptor().getAnnotation().annotationType().getName()) &&
-                String.class.getName().equals(adapter.getElementClass().getName()))
+        if(source instanceof BeanValidationVirtualValidationStrategy)
         {
-            return StringSizeMetaDataTransformer.class.getName();
+            BeanValidationVirtualValidationStrategy beanValidationAdapter =
+                    (BeanValidationVirtualValidationStrategy)source;
+
+            return createBeanValidationTransformerName(beanValidationAdapter);
         }
         return null;
     }
+
+    protected  abstract String createBeanValidationTransformerName(
+            BeanValidationVirtualValidationStrategy validationStrategy);
 }
