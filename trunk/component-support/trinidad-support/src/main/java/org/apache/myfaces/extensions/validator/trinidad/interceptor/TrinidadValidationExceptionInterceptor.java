@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
+import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -60,6 +61,8 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
         {
             FacesMessage facesMessage = validatorException.getFacesMessage();
 
+            handleRequiredValidatorException(uiComponent, validatorException);
+
             String label = getLabel(uiComponent);
 
             if(label == null)
@@ -89,6 +92,21 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
         return true;
     }
 
+    private void handleRequiredValidatorException(UIComponent uiComponent, ValidatorException validatorException)
+    {
+        if(validatorException instanceof RequiredValidatorException)
+        {
+            FacesMessage facesMessage = validatorException.getFacesMessage();
+            String inlineMessage = getInlineRequiredMessage(uiComponent);
+
+            if(inlineMessage != null)
+            {
+                facesMessage.setSummary(inlineMessage);
+                facesMessage.setDetail(inlineMessage);
+            }
+        }
+    }
+
     private void refreshComponent(UIComponent uiComponent)
     {
         if(RequestContext.getCurrentInstance().isPartialRequest(FacesContext.getCurrentInstance()))
@@ -107,5 +125,11 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
     {
         return (String)ReflectionUtils.tryToInvokeMethod(uiComponent,
                 ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getLabel"));
+    }
+
+    private String getInlineRequiredMessage(UIComponent uiComponent)
+    {
+        return (String)ReflectionUtils.tryToInvokeMethod(uiComponent,
+                ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getRequiredMessageDetail"));
     }
 }

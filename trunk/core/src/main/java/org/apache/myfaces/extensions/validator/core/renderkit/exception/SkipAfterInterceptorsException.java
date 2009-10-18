@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.renderkit.exception;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
@@ -28,4 +28,5 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.API)
 public class SkipAfterInterceptorsException extends Exception
 {
+    private static final long serialVersionUID = -1472790498766251346L;
 }

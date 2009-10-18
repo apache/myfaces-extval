@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
@@ -50,6 +49,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FacesMessageFactory;
@@ -592,10 +592,7 @@ public class ExtValUtils
                             LOGGER.debug(metaDataTransformer.getClass().getName() + " instantiated");
                         }
 
-                        if(!(entry.getValue() instanceof Annotation &&
-                                ExtValUtils.getValidationParameterExtractor()
-                                        .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
-                                        .iterator().hasNext()))
+                        if(isClientSideValidationEnabled(entry))
                         {
                             metaData = metaDataTransformer.convertMetaData(entry);
                         }
@@ -624,6 +621,14 @@ public class ExtValUtils
         }
 
         return metaDataResult;
+    }
+
+    private static boolean isClientSideValidationEnabled(MetaDataEntry entry)
+    {
+        List<String> keysToDisable = entry.getProperty(
+                                CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION, List.class);
+
+        return keysToDisable == null || !keysToDisable.contains(entry.getKey());
     }
 
     public static boolean interpretEmptyStringValuesAsNull()

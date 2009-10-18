@@ -18,15 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.test.baseval;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.apache.myfaces.extensions.validator.test.AbstractExValViewControllerTestCase;
+
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.el.ValueBinding;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import org.apache.myfaces.extensions.validator.test.AbstractExValViewControllerTestCase;
 
 /**
  * @author Leonardo Uribe
@@ -37,7 +36,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
     HtmlInputText inputComponent = null;
 
     UIViewRoot rootComponent = null;
-    
+
     BaseValTestBean bean = null;
 
     public BaseValTestCase(String name)
@@ -53,6 +52,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
         return new TestSuite(BaseValTestCase.class);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     @Override
     protected void setUp() throws Exception
     {
@@ -76,7 +76,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
         super.tearDown();
         inputComponent = null;
         rootComponent = null;
-        bean = null;        
+        bean = null;
     }
 
     public void testNameRequiredFail() throws Exception
@@ -132,7 +132,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
         assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
-    
+
     public void testPatternNameFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.patternName}");
@@ -146,7 +146,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
         assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
-    
+
     public void testPatternNameCorrect() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.patternName}");
@@ -159,7 +159,7 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
 
         assertTrue(inputComponent.isValid());
         checkMessageCount(0);
-    }    
+    }
 
     public void testDoubleValueFail() throws Exception
     {
@@ -188,8 +188,8 @@ public class BaseValTestCase extends AbstractExValViewControllerTestCase
         assertTrue(inputComponent.isValid());
         checkMessageCount(0);
         assertEquals(200d, inputComponent.getValue());
-        
+
         inputComponent.updateModel(facesContext);
         assertEquals(200d, bean.getDoubleValue1());
-    }    
+    }
 }

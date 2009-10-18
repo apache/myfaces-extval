@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.renderkit.exception;
 
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
@@ -32,6 +32,7 @@ public class SkipRendererDelegationException extends Exception
     protected RendererInterceptor exceptionSource;
     protected Object information;
     boolean skipOtherInterceptors = false;
+    private static final long serialVersionUID = 2343074077532915722L;
 
     public SkipRendererDelegationException()
     {
@@ -65,7 +66,7 @@ public class SkipRendererDelegationException extends Exception
 
     public Object getReturnValueOnException(Object currentReturnValue)
     {
-        if(this.exceptionSource != null)
+        if (this.exceptionSource != null)
         {
             return this.exceptionSource.getReturnValueOnSkipRendererDelegationException(this, currentReturnValue);
         }
