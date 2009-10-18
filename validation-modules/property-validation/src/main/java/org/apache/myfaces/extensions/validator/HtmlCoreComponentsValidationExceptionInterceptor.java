@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -75,6 +76,8 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
             String label = (String) ReflectionUtils.tryToInvokeMethod(uiComponent,
                 ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getLabel"));
 
+            handleRequiredValidatorException(uiComponent, validatorException);
+
             if(label == null)
             {
                 label = uiComponent.getClientId(facesContext);
@@ -111,6 +114,27 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
             }
         }
         return true;
+    }
+
+    private void handleRequiredValidatorException(UIComponent uiComponent, ValidatorException validatorException)
+    {
+        if(validatorException instanceof RequiredValidatorException)
+        {
+            FacesMessage facesMessage = validatorException.getFacesMessage();
+            String inlineMessage = getInlineRequiredMessage(uiComponent);
+
+            if(inlineMessage != null)
+            {
+                facesMessage.setSummary(inlineMessage);
+                facesMessage.setDetail(inlineMessage);
+            }
+        }
+    }
+
+    private String getInlineRequiredMessage(UIComponent uiComponent)
+    {
+        return (String)ReflectionUtils.tryToInvokeMethod(uiComponent,
+                ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getRequiredMessage"));
     }
 
     @ToDo(value = Priority.MEDIUM, description = "refactor to a generic parameter extractor")

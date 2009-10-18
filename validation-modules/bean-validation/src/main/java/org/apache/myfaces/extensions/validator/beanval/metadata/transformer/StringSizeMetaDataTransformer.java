@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
 
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 
 import javax.validation.constraints.Size;
@@ -31,12 +29,12 @@ import java.util.HashMap;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public class StringSizeMetaDataTransformer implements MetaDataTransformer
+public class StringSizeMetaDataTransformer extends AbstractBeanValidationMetaDataTransformer<Size>
 {
-    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
+    protected Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<Size> constraintDescriptor)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        Size annotation = (Size)metaDataEntry.getValue(ConstraintDescriptor.class).getAnnotation();
+        Size annotation = constraintDescriptor.getAnnotation();
 
         int minimum = annotation.min();
 

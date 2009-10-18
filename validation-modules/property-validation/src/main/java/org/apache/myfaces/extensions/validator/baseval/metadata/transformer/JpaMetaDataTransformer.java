@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -49,7 +50,7 @@ public class JpaMetaDataTransformer implements MetaDataTransformer
 
         if(annotation instanceof Column)
         {
-            if(!((Column) annotation).nullable())
+            if((!((Column) annotation).nullable()) && ExtValUtils.interpretEmptyStringValuesAsNull())
             {
                 results.put(CommonMetaDataKeys.REQUIRED, true);
             }

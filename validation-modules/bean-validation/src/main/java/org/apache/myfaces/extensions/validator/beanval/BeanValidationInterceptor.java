@@ -44,6 +44,8 @@ import java.io.IOException;
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationInterceptor extends AbstractValidationInterceptor
 {
+    private BeanValidationInterceptorInternals bviUtils = new BeanValidationInterceptorInternals(this.logger);
+
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
@@ -61,8 +63,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
             logger.trace("start to init component " + uiComponent.getClass().getName());
         }
 
-        BeanValidationInterceptorInternals bviUtils = new BeanValidationInterceptorInternals(this.logger);
-
         PropertyDetails propertyDetails = bviUtils.extractPropertyDetails(facesContext, uiComponent);
 
         if (propertyDetails != null)
@@ -75,12 +75,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         {
             logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
         }
-    }
-
-    @Override
-    protected boolean recordProcessedInformation()
-    {
-        return false;
     }
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
@@ -128,7 +122,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 
     protected boolean hasBeanValidationConstraints(PropertyInformation propertyInformation)
     {
-        return new BeanValidationInterceptorInternals(this.logger).hasBeanValidationConstraints(propertyInformation);
+        return this.bviUtils.hasBeanValidationConstraints(propertyInformation);
     }
 
     protected void processFieldValidation(FacesContext facesContext,
@@ -136,8 +130,8 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                                           Object convertedObject,
                                           PropertyInformation propertyInformation)
     {
-        new BeanValidationInterceptorInternals(this.logger).validate(
-                facesContext, uiComponent, convertedObject, propertyInformation, supportMultipleViolationsPerField());
+        this.bviUtils.validate(facesContext, uiComponent, convertedObject,
+                propertyInformation, supportMultipleViolationsPerField());
     }
 
     protected boolean supportMultipleViolationsPerField()

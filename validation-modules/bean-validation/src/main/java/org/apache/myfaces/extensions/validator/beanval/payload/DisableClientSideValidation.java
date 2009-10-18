@@ -16,25 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
+package org.apache.myfaces.extensions.validator.beanval.payload;
 
-import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.metadata.ConstraintDescriptor;
-import java.util.Map;
-import java.util.HashMap;
+import javax.validation.Payload;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public class NotNullMetaDataTransformer extends AbstractBeanValidationMetaDataTransformer<NotNull>
+@UsageInformation(UsageCategory.API)
+public interface DisableClientSideValidation extends Payload
 {
-    protected Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<NotNull> constraintDescriptor)
-    {
-        Map<String, Object> results = new HashMap<String, Object>();
-        results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
-        return results;
-    }
 }

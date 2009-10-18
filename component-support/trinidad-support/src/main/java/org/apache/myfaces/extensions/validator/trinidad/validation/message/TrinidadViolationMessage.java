@@ -22,8 +22,10 @@ import org.apache.myfaces.trinidad.util.LabeledFacesMessage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
+import javax.faces.application.FacesMessage;
 
 /**
  * @author Gerhard Petracek
@@ -33,6 +35,7 @@ import javax.faces.context.FacesContext;
 class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMessage
 {
     private static final long serialVersionUID = 6356800689961505154L;
+    public static final String MISSING_RESOURCE_MARKER = "???";
 
     public TrinidadViolationMessage(Severity severity, String summary, String detail)
     {
@@ -42,6 +45,51 @@ class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMes
     public String getLabelText()
     {
         return super.getLabelAsString(FacesContext.getCurrentInstance());
+    }
+
+    @Override
+    public String getSummary()
+    {
+        FacesMessage result = tryToPlaceLabel(super.getSummary());
+
+        if(result != null)
+        {
+            super.setSummary(result.getSummary());
+            return result.getSummary();
+        }
+
+        return super.getSummary();
+    }
+
+    @Override
+    public String getDetail()
+    {
+        FacesMessage result = tryToPlaceLabel(super.getDetail());
+
+        if(result != null)
+        {
+            super.setDetail(result.getDetail());
+            return result.getDetail();
+        }
+
+        return super.getDetail();
+    }
+
+    private FacesMessage tryToPlaceLabel(String originalMessage)
+    {
+        if(!(originalMessage != null &&
+                originalMessage.startsWith(MISSING_RESOURCE_MARKER) &&
+                originalMessage.endsWith(MISSING_RESOURCE_MARKER)))
+        {
+            FacesMessage newFacesMessage = new FacesMessage(super.getSeverity(), super.getSummary(), super.getDetail());
+            for(int i = 0; i < 3; i++)
+            {
+                ExtValUtils.tryToPlaceLabel(newFacesMessage, getLabelText(), i);
+            }
+            return newFacesMessage;
+        }
+
+        return null;
     }
 
     public void setLabelText(String label)
