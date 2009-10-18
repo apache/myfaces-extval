@@ -16,25 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
+package org.apache.myfaces.extensions.validator.core.validation.exception;
 
-import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.metadata.ConstraintDescriptor;
-import java.util.Map;
-import java.util.HashMap;
+import javax.faces.validator.ValidatorException;
+import javax.faces.application.FacesMessage;
 
 /**
+ * to handle special cases in ValidationExceptionInterceptors
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-public class NotNullMetaDataTransformer extends AbstractBeanValidationMetaDataTransformer<NotNull>
+public class RequiredValidatorException extends ValidatorException
 {
-    protected Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<NotNull> constraintDescriptor)
+    private static final long serialVersionUID = -4646331736428495884L;
+
+    public RequiredValidatorException(FacesMessage facesMessage)
     {
-        Map<String, Object> results = new HashMap<String, Object>();
-        results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
-        return results;
+        super(facesMessage);
+    }
+
+    public RequiredValidatorException(FacesMessage facesMessage, Throwable throwable)
+    {
+        super(facesMessage, throwable);
     }
 }

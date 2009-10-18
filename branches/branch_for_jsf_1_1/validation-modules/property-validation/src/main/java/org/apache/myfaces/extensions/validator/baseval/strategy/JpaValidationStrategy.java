@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
+import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -128,10 +129,10 @@ public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
     @ToDo(Priority.MEDIUM)
     private void checkRequiredConvertedObject(Object convertedObject) throws ValidatorException
     {
-        if (convertedObject == null || convertedObject.equals(""))
+        if (convertedObject == null || ("".equals(convertedObject) && ExtValUtils.interpretEmptyStringValuesAsNull()))
         {
             this.violation = CommonMetaDataKeys.REQUIRED;
-            throw new ValidatorException(getValidationErrorFacesMessage(null));
+            throw new RequiredValidatorException(getValidationErrorFacesMessage(null));
         }
     }
 

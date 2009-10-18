@@ -54,4 +54,5 @@ public interface CommonMetaDataKeys
 
     static final String CUSTOM = "custom";
     static final String SKIP_VALIDATION = "skip_validation";
+    static final String DISABLE_CLIENT_SIDE_VALIDATION = "disable_client_side_validation";
 }

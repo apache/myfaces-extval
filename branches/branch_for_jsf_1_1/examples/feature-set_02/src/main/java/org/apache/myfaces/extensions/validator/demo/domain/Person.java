@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.demo.domain;
 
+import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
+
 import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -28,7 +30,8 @@ public class Person
     @Size(min = 2, max = 20)
     private String firstName;
 
-    @Size(min = 2, max = 20)
+    @NotNull(payload = DisableClientSideValidation.class)
+    @Size(min = 2, max = 20, payload = DisableClientSideValidation.class)
     private String lastName;
 
     @Size(min = 2, max = 10)

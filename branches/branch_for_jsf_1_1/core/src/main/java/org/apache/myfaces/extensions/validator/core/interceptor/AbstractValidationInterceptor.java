@@ -176,6 +176,6 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     protected boolean recordProcessedInformation()
     {
         //override if needed
-        return true;
+        return false;
     }
 }

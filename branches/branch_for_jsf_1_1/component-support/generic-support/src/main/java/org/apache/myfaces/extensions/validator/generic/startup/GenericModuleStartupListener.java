@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.generic.startup;
 
-import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.generic.renderkit.GenericRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
@@ -33,6 +33,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class GenericModuleStartupListener extends AbstractStartupListener
 {
+    private static final long serialVersionUID = 4392156032877519556L;
+
     protected void init()
     {
         ExtValContext.getContext().getFactoryFinder().getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY,

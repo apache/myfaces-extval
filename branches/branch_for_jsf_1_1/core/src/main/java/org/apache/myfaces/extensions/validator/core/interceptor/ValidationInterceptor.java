@@ -162,6 +162,21 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
         }
     }
 
+    @Override
+    /**
+     * to ensure backward compatibility
+     */
+    protected boolean interpretEmptyStringValuesAsNull()
+    {
+        return false;
+    }
+
+    @Override
+    protected boolean recordProcessedInformation()
+    {
+        return true;
+    }
+
     protected Class getModuleKey()
     {
         //override if needed
