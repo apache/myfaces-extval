@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -87,8 +88,19 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
                 logger.trace("start processAfterValidatorException of " + getClass().getName());
             }
 
-            ValidatorException validatorException = new ValidatorException(
-                    ExtValUtils.convertFacesMessage(e.getFacesMessage()), e.getCause());
+            ValidatorException validatorException;
+
+            if(e instanceof RequiredValidatorException)
+            {
+                validatorException = new RequiredValidatorException(
+                        ExtValUtils.convertFacesMessage(e.getFacesMessage()), e.getCause());
+            }
+            else
+            {
+                validatorException = new ValidatorException(
+                        ExtValUtils.convertFacesMessage(e.getFacesMessage()), e.getCause());
+            }
+            
             if (processAfterValidatorException(
                     facesContext, uiComponent, metaDataEntry, convertedObject, validatorException))
             {

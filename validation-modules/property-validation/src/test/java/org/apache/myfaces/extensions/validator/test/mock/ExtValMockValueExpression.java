@@ -35,6 +35,7 @@ public class ExtValMockValueExpression extends MockValueExpression
 {
     private String[] elements = null;
     private String expression = null;
+    private static final long serialVersionUID = -8588716545619421041L;
 
     public ExtValMockValueExpression(String expression, Class expectedType)
     {

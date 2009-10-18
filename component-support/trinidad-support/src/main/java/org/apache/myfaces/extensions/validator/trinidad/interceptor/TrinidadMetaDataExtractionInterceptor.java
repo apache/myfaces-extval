@@ -18,16 +18,17 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad.interceptor;
 
-import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
@@ -38,27 +39,30 @@ public class TrinidadMetaDataExtractionInterceptor implements MetaDataExtraction
 {
     public void afterExtracting(PropertyInformation propertyInformation)
     {
-        List<MetaDataEntry> result = new ArrayList<MetaDataEntry>();
-
-        for(MetaDataEntry entry : propertyInformation.getMetaDataEntries())
+        for (MetaDataEntry entry : propertyInformation.getMetaDataEntries())
         {
-            if(!(entry.getValue() instanceof Annotation &&
-                    ExtValUtils.getValidationParameterExtractor()
-                            .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
-                            .iterator().hasNext()))
+            if (entry.getValue() instanceof Annotation && isClientValidationDisabled(entry))
             {
-                result.add(entry);
+                disableClientSideValidation(entry);
             }
         }
+    }
 
-        if(propertyInformation.getMetaDataEntries().length != result.size())
+    private boolean isClientValidationDisabled(MetaDataEntry entry)
+    {
+        return ExtValUtils.getValidationParameterExtractor()
+                .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
+                .iterator().hasNext();
+    }
+
+    private void disableClientSideValidation(MetaDataEntry entry)
+    {
+        if(entry.getProperty(CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION) == null)
         {
-            propertyInformation.resetMetaDataEntries();
-
-            for(MetaDataEntry entry : result)
-            {
-                propertyInformation.addMetaDataEntry(entry);
-            }
+            entry.setProperty(CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION, new ArrayList<String>());
         }
+
+        List<String> keysToDisable = entry.getProperty(CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION, List.class);
+        keysToDisable.add(entry.getKey());
     }
 }

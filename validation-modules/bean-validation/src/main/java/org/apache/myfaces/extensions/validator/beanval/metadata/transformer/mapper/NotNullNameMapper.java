@@ -18,16 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.Nested;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
-        .AbstractValidationStrategyToMetaDataTransformerNameMapper;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.NotNullMetaDataTransformer;
+import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.Nested;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -35,22 +32,15 @@ import javax.validation.constraints.NotNull;
  * @since x.x.3
  */
 @Nested
+@InvocationOrder(100)
 @UsageInformation({UsageCategory.INTERNAL})
-public class NotNullNameMapper extends AbstractValidationStrategyToMetaDataTransformerNameMapper
+public class NotNullNameMapper extends AbstractBeanValidationVirtualValidationStrategyToMetaDataTransformerNameMapper
 {
-    public String createName(ValidationStrategy source)
+    protected String createBeanValidationTransformerName(BeanValidationVirtualValidationStrategy adapter)
     {
-        if(source instanceof BeanValidationVirtualValidationStrategy)
+        if(NotNull.class.getName().equals(adapter.getConstraintDescriptor().getAnnotation().annotationType().getName()))
         {
-            BeanValidationVirtualValidationStrategy beanValidationAdapter =
-                    (BeanValidationVirtualValidationStrategy)source;
-
-            ConstraintDescriptor descriptor = beanValidationAdapter.getConstraintDescriptor();
-
-            if(NotNull.class.getName().equals(descriptor.getAnnotation().annotationType().getName()))
-            {
-                return NotNullMetaDataTransformer.class.getName();
-            }
+            return NotNullMetaDataTransformer.class.getName();
         }
         return null;
     }

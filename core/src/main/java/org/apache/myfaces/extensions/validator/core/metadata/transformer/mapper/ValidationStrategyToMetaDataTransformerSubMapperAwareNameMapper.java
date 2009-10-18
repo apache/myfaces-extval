@@ -21,12 +21,14 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
 import org.apache.myfaces.extensions.validator.core.Nested;
+import org.apache.myfaces.extensions.validator.core.InvocationOrderComparator;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Gerhard Petracek
@@ -44,7 +46,13 @@ public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
         if(!this.subNameMappers.contains(nameMapper) && nameMapper.getClass().isAnnotationPresent(Nested.class))
         {
             this.subNameMappers.add(nameMapper);
+            sortSubNameMappers();
         }
+    }
+
+    private void sortSubNameMappers()
+    {
+        Collections.sort(this.subNameMappers, new InvocationOrderComparator<NameMapper<ValidationStrategy>>());
     }
 
     public String createName(ValidationStrategy source)

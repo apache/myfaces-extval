@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
+import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -51,7 +52,8 @@ public class RequiredStrategy extends AbstractAnnotationValidationStrategy<Requi
                 (convertedObject instanceof Collection && ((Collection)convertedObject).isEmpty()) ||
                 (convertedObject instanceof Map && ((Map)convertedObject).isEmpty()))
         {
-            throw new ValidatorException(getValidationErrorFacesMessage(metaDataEntry.getValue(Required.class)));
+            throw new RequiredValidatorException(
+                    getValidationErrorFacesMessage(metaDataEntry.getValue(Required.class)));
         }
     }
 

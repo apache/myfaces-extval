@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
 import org.apache.myfaces.extensions.validator.crossval.annotation.NotEquals;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Length;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
+import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 
 import javax.persistence.Column;
 import javax.persistence.Temporal;
@@ -37,8 +39,9 @@ public class Person
     @Pattern("[A-Z][a-z]+")
     private String firstName;
 
-    @Length(minimum = 2)
-    @Column(nullable = false, length = 20)
+    @Required(parameters = DisableClientSideValidation.class)
+    @Length(minimum = 2, parameters = DisableClientSideValidation.class)
+    @Column(length = 20)
     private String lastName;
 
     @Column(nullable = false, length = 10)
