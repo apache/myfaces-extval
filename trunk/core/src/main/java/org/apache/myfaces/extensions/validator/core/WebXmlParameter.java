@@ -132,7 +132,10 @@ public interface WebXmlParameter
     //to display all violations via the messages-tag or to use the new jsf 2.0 support
     static final String ACTIVATE_MULTIPLE_VIOLATION_MESSAGES_PER_FIELD = WebXmlUtils
         .getInitParameter("ACTIVATE_MULTIPLE_VIOLATION_MESSAGES_PER_FIELD");
-                        
+
+    /*
+     * spec parameters
+     */
     static final String INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL = WebXmlUtils
         .getInitParameter("javax.faces", "INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL");
 

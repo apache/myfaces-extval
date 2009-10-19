@@ -28,6 +28,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -38,6 +39,7 @@ import javax.validation.groups.Default;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.metadata.ElementDescriptor;
+import java.util.MissingResourceException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +53,9 @@ import java.util.Set;
 class BeanValidationInterceptorInternals
 {
     private Log logger;
+    private final String defaultLabelMessageTemplate = "{1}: {0}";
+    private String labelMessageTemplate = defaultLabelMessageTemplate;
+    private final String JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE = "javax.faces.validator.BeanValidator.MESSAGE";
 
     BeanValidationInterceptorInternals(Log logger)
     {
@@ -197,12 +202,12 @@ class BeanValidationInterceptorInternals
     {
         String violationMessage = violation.getMessage();
 
-        String labeledMessage = "{0}: " + violationMessage;
+        String labeledMessage = createLabeledMessage(violationMessage);
+
         ValidatorException validatorException = createValidatorException(labeledMessage);
 
         executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException);
 
-        //check if the message has changed
         if (isMessageTextUnchanged(validatorException, labeledMessage))
         {
             violationMessages.add(violationMessage);
@@ -210,6 +215,34 @@ class BeanValidationInterceptorInternals
         else
         {
             violationMessages.add(validatorException.getFacesMessage().getSummary());
+        }
+    }
+
+    private String createLabeledMessage(String violationMessage)
+    {
+        if(labelMessageTemplate == null)
+        {
+            return this.defaultLabelMessageTemplate.replace("{0}", violationMessage);
+        }
+
+        this.labelMessageTemplate = loadStandardMessageTemplate();
+
+        if(labelMessageTemplate == null)
+        {
+            return createLabeledMessage(violationMessage);
+        }
+        return labelMessageTemplate.replace("{0}", violationMessage);
+    }
+
+    private String loadStandardMessageTemplate()
+    {
+        try
+        {
+            return JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE);
+        }
+        catch (MissingResourceException e)
+        {
+            return null;
         }
     }
 

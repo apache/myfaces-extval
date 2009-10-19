@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.startup;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
@@ -88,6 +89,7 @@ public class ExtValStartupListener extends AbstractStartupListener
                 .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
 
         initNameMappers();
+        initDefaultValidationExceptionInterceptor();
         executeCustomStartupListener();
     }
 
@@ -168,5 +170,11 @@ public class ExtValStartupListener extends AbstractStartupListener
                 logger.info("init of " + customStartupListener.getClass().getName() + " finished");
             }
         }
+    }
+
+    private void initDefaultValidationExceptionInterceptor()
+    {
+        ExtValContext.getContext().addValidationExceptionInterceptor(
+                new HtmlCoreComponentsValidationExceptionInterceptor());
     }
 }
