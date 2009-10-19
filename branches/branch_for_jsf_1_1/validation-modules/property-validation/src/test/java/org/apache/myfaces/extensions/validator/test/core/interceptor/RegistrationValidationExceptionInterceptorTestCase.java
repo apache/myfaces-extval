@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
-import org.apache.myfaces.extensions.validator.HtmlCoreComponentsValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
