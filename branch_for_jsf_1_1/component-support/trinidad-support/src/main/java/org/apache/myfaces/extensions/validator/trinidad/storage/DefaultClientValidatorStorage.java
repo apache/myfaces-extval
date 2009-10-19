@@ -58,13 +58,7 @@ public class DefaultClientValidatorStorage implements TrinidadClientValidatorSto
     {
         if (uiComponent instanceof EditableValueHolder)
         {
-            for (Validator validator : ((EditableValueHolder) uiComponent).getValidators())
-            {
-                if (validator instanceof ExtValTrinidadClientValidatorWrapper)
-                {
-                    ((EditableValueHolder) uiComponent).removeValidator(validator);
-                }
-            }
+            removeWrapperFromComponent(uiComponent);
         }
         else
         {
@@ -72,6 +66,17 @@ public class DefaultClientValidatorStorage implements TrinidadClientValidatorSto
             for (Object child : uiComponent.getChildren())
             {
                 removeTrinidadValidatorWrapper((UIComponent)child);
+            }
+        }
+    }
+
+    private void removeWrapperFromComponent(UIComponent uiComponent)
+    {
+        for (Validator validator : ((EditableValueHolder) uiComponent).getValidators())
+        {
+            if (validator instanceof ExtValTrinidadClientValidatorWrapper)
+            {
+                ((EditableValueHolder) uiComponent).removeValidator(validator);
             }
         }
     }
