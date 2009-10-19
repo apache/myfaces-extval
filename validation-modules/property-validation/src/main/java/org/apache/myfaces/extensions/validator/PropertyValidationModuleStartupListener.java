@@ -60,7 +60,6 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 
         initStaticStrategyMappings();
         initDefaultComponentInitializer();
-        initDefaultValidationExceptionInterceptor();
         addSkipValidationSupport();
         initStorageManagerAndNameMappers();
         initSkipValidationEvaluator();
@@ -85,12 +84,6 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
     private void initDefaultComponentInitializer()
     {
         ExtValContext.getContext().addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
-    }
-
-    private void initDefaultValidationExceptionInterceptor()
-    {
-        ExtValContext.getContext().addValidationExceptionInterceptor(
-                new HtmlCoreComponentsValidationExceptionInterceptor());
     }
 
     private void addSkipValidationSupport()
