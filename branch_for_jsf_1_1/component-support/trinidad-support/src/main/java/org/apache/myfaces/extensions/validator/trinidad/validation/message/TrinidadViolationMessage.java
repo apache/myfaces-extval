@@ -94,9 +94,14 @@ class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMes
 
     private void tryToPlaceLabelIn(FacesMessage newFacesMessage)
     {
-        for (int i = 0; i < 3; i++)
+        String label = getLabelText();
+
+        if(label != null)
         {
-            ExtValUtils.tryToPlaceLabel(newFacesMessage, getLabelText(), i);
+            for (int i = 0; i < 3; i++)
+            {
+                ExtValUtils.tryToPlaceLabel(newFacesMessage, label, i);
+            }
         }
     }
 
