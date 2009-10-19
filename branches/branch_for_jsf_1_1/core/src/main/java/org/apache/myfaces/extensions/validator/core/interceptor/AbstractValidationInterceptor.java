@@ -123,7 +123,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     protected boolean validateValue(Object convertedObject)
     {
-        if(convertedObject == null && !validateEmptyFields())
+        if(isValueToValidateEmpty(convertedObject) && !validateEmptyFields())
         {
             if(this.logger.isDebugEnabled())
             {
@@ -135,6 +135,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
 
         return true;
+    }
+
+    protected boolean isValueToValidateEmpty(Object convertedObject)
+    {
+        return convertedObject == null || "".equals(convertedObject);
     }
 
     protected boolean validateEmptyFields()
