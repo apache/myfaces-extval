@@ -18,14 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad.validation.message;
 
-import org.apache.myfaces.trinidad.util.LabeledFacesMessage;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.trinidad.util.LabeledFacesMessage;
 
-import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
@@ -52,7 +52,7 @@ class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMes
     {
         FacesMessage result = tryToPlaceLabel(super.getSummary());
 
-        if(result != null)
+        if (result != null)
         {
             super.setSummary(result.getSummary());
             return result.getSummary();
@@ -66,7 +66,7 @@ class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMes
     {
         FacesMessage result = tryToPlaceLabel(super.getDetail());
 
-        if(result != null)
+        if (result != null)
         {
             super.setDetail(result.getDetail());
             return result.getDetail();
@@ -77,19 +77,34 @@ class TrinidadViolationMessage extends LabeledFacesMessage implements LabeledMes
 
     private FacesMessage tryToPlaceLabel(String originalMessage)
     {
-        if(!(originalMessage != null &&
-                originalMessage.startsWith(MISSING_RESOURCE_MARKER) &&
-                originalMessage.endsWith(MISSING_RESOURCE_MARKER)))
+        if (isValidMessage(originalMessage))
         {
-            FacesMessage newFacesMessage = new FacesMessage(super.getSeverity(), super.getSummary(), super.getDetail());
-            for(int i = 0; i < 3; i++)
-            {
-                ExtValUtils.tryToPlaceLabel(newFacesMessage, getLabelText(), i);
-            }
+            FacesMessage newFacesMessage = createOriginalFacesMessage();
+            tryToPlaceLabelIn(newFacesMessage);
             return newFacesMessage;
         }
 
         return null;
+    }
+
+    private FacesMessage createOriginalFacesMessage()
+    {
+        return new FacesMessage(super.getSeverity(), super.getSummary(), super.getDetail());
+    }
+
+    private void tryToPlaceLabelIn(FacesMessage newFacesMessage)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            ExtValUtils.tryToPlaceLabel(newFacesMessage, getLabelText(), i);
+        }
+    }
+
+    private boolean isValidMessage(String originalMessage)
+    {
+        return !(originalMessage != null &&
+                originalMessage.startsWith(MISSING_RESOURCE_MARKER) &&
+                originalMessage.endsWith(MISSING_RESOURCE_MARKER));
     }
 
     public void setLabelText(String label)

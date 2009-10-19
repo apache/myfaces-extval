@@ -51,23 +51,36 @@ public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 
     public void beforePhase(PhaseEvent event)
     {
-        if(event.getPhaseId() != PhaseId.APPLY_REQUEST_VALUES && event.getPhaseId() != PhaseId.RENDER_RESPONSE)
-        {
-            return;
-        }
-
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKitFactory renderKitFactory = getRenderKitFactory();
 
-        String renderKitId = facesContext.getViewRoot().getRenderKitId();
+        String renderKitId = getRenderKitId(facesContext);
 
-        if(ExtValTrinidadRenderKit.ID.equals(renderKitId))
+        if(isIncompatibleRenderKit(renderKitId))
         {
-            return;
+            changeRenderKit(facesContext, renderKitFactory, renderKitId);
         }
+    }
 
+    private String getRenderKitId(FacesContext facesContext)
+    {
+        return facesContext.getViewRoot().getRenderKitId();
+    }
+
+    private RenderKitFactory getRenderKitFactory()
+    {
+        return (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+    }
+
+    private boolean isIncompatibleRenderKit(String renderKitId)
+    {
+        return !ExtValTrinidadRenderKit.ID.equals(renderKitId);
+    }
+
+    private void changeRenderKit(FacesContext facesContext, RenderKitFactory renderKitFactory, String renderKitId)
+    {
         RenderKit renderKit = renderKitFactory.getRenderKit(FacesContext.getCurrentInstance(), renderKitId);
         renderKitFactory.addRenderKit(ExtValTrinidadRenderKit.ID, new ExtValTrinidadRenderKit(renderKit));
         facesContext.getViewRoot().setRenderKitId(ExtValTrinidadRenderKit.ID);
