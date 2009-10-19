@@ -43,13 +43,13 @@ public class TrinidadUtils
     public static UIComponent findLabeledEditableComponent(CoreOutputLabel coreOutputLabel)
     {
         //TODO
-        if(coreOutputLabel.getFor() == null)
+        if(isLabelTargetAvailable(coreOutputLabel))
         {
             return null;
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIComponent result = facesContext.getViewRoot().findComponent(coreOutputLabel.getFor());
+        UIComponent result = resolveLabelTarget(facesContext, coreOutputLabel);
 
         if(result instanceof EditableValueHolder)
         {
@@ -62,5 +62,15 @@ public class TrinidadUtils
         }
 
         return null;
+    }
+
+    private static UIComponent resolveLabelTarget(FacesContext facesContext, CoreOutputLabel coreOutputLabel)
+    {
+        return facesContext.getViewRoot().findComponent(coreOutputLabel.getFor());
+    }
+
+    private static boolean isLabelTargetAvailable(CoreOutputLabel coreOutputLabel)
+    {
+        return coreOutputLabel.getFor() == null;
     }
 }
