@@ -49,46 +49,17 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     protected void init()
     {
-        initTrinidadSupport();
-    }
+        deactivateDefaultExtValRenderKitWrapperFactory();
 
-    private void initTrinidadSupport()
-    {
-        //deactivate default approach
-        ExtValContext.getContext().getFactoryFinder()
-            .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class).deactivate();
-        
-        String deactivateClientSideValidation = WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION;
+        initClientSideValidationSupport();
 
-        if(deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true"))
-        {
-            ExtValContext.getContext().addComponentInitializer(new TrinidadComponentInitializer());
-        }
+        initLabelInitializationSupport();
 
-        String deactivateInitCoreOutputLabel = WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION;
+        initValidationExceptionInterception();
 
-        if(deactivateInitCoreOutputLabel == null || !deactivateInitCoreOutputLabel.equalsIgnoreCase("true"))
-        {
-            ExtValContext.getContext().registerRendererInterceptor(new TrinidadRendererInterceptor());
-        }
+        replaceDefaultProxyWithTrinidadRendererProxy();
 
-        String deactivateTrinidadValidationExceptionInterceptor =
-                WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR;
-
-        if(deactivateTrinidadValidationExceptionInterceptor == null ||
-                !deactivateTrinidadValidationExceptionInterceptor.equalsIgnoreCase("true"))
-        {
-            ExtValContext.getContext().addValidationExceptionInterceptor(new TrinidadValidationExceptionInterceptor());
-        }
-
-        //deactivate extval renderer proxy - due to an incompatibility with the table renderer
-        ExtValContext.getContext()
-                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValTrinidadRendererProxy.class.getName());
-
-        ExtValContext.getContext()
-                .addGlobalProperty(
-                        FactoryNames.FACES_MESSAGE_FACTORY.name(),
-                        TrinidadFacesMessageFactory.class.getName());
+        initTrinidadFacesMessageFactory();
         /*
          * if there are further incompatible renderers use the following quick-fix:
          *         ExtValContext.getContext()
@@ -96,11 +67,81 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
            attention: it causes direct delegation without a check of double invocations
          */
 
-        ExtValContext.getContext().addMetaDataExtractionInterceptor(new TrinidadMetaDataExtractionInterceptor());
+        initTrinidadMetaDataExtractionInterceptor();
 
+        initTrinidadClientValidatorStorage();
+    }
+
+    private void deactivateDefaultExtValRenderKitWrapperFactory()
+    {
+        ExtValContext.getContext().getFactoryFinder()
+            .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class).deactivate();
+    }
+
+    private void initClientSideValidationSupport()
+    {
+        if(isClientSideValidationSupportEnabled(WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION))
+        {
+            ExtValContext.getContext().addComponentInitializer(new TrinidadComponentInitializer());
+        }
+    }
+
+    private void initLabelInitializationSupport()
+    {
+        if(isLabelInitializationEnabled(WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION))
+        {
+            ExtValContext.getContext().registerRendererInterceptor(new TrinidadRendererInterceptor());
+        }
+    }
+
+    private void initValidationExceptionInterception()
+    {
+        if(useValidationExceptionInterception(WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR))
+        {
+            ExtValContext.getContext().addValidationExceptionInterceptor(new TrinidadValidationExceptionInterceptor());
+        }
+    }
+
+    private void replaceDefaultProxyWithTrinidadRendererProxy()
+    {
+        ExtValContext.getContext()
+                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValTrinidadRendererProxy.class.getName());
+    }
+
+    private void initTrinidadFacesMessageFactory()
+    {
+        ExtValContext.getContext()
+                .addGlobalProperty(
+                        FactoryNames.FACES_MESSAGE_FACTORY.name(),
+                        TrinidadFacesMessageFactory.class.getName());
+    }
+
+    private void initTrinidadMetaDataExtractionInterceptor()
+    {
+        ExtValContext.getContext().addMetaDataExtractionInterceptor(new TrinidadMetaDataExtractionInterceptor());
+    }
+
+    private void initTrinidadClientValidatorStorage()
+    {
         ExtValContext.getContext().getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class)
                 .setStorageManager(TrinidadClientValidatorStorage.class,
                         new DefaultClientValidatorStorageManager(), false);
+    }
+
+    private boolean isLabelInitializationEnabled(String deactivateInitCoreOutputLabel)
+    {
+        return deactivateInitCoreOutputLabel == null || !deactivateInitCoreOutputLabel.equalsIgnoreCase("true");
+    }
+
+    private boolean isClientSideValidationSupportEnabled(String deactivateClientSideValidation)
+    {
+        return deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true");
+    }
+
+    private boolean useValidationExceptionInterception(String deactivateTrinidadValidationExceptionInterceptor)
+    {
+        return deactivateTrinidadValidationExceptionInterceptor == null ||
+                !deactivateTrinidadValidationExceptionInterceptor.equalsIgnoreCase("true");
     }
 }

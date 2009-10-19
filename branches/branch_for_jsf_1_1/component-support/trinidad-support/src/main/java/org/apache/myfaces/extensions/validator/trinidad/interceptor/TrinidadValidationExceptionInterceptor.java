@@ -55,44 +55,69 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
                                  ValidatorException validatorException,
                                  ValidationStrategy validatorExceptionSource)
     {
-        refreshComponent(uiComponent);
-
         if(processComponent(uiComponent))
         {
-            FacesMessage facesMessage = validatorException.getFacesMessage();
-
-            handleRequiredValidatorException(uiComponent, validatorException);
-
-            String label = getLabel(uiComponent);
-
-            if(label == null)
-            {
-                label = uiComponent.getClientId(FacesContext.getCurrentInstance());
-            }
-
-            //override the label if the annotation provides a label
-            if(metaDataEntry != null && metaDataEntry.getProperty(PropertyInformationKeys.LABEL) != null)
-            {
-                label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
-            }
-
-            if(facesMessage instanceof LabeledMessage)
-            {
-                ((LabeledMessage)facesMessage).setLabelText(label);
-            }
-            //if someone uses a normal faces message
-            else
-            {
-                for(int i = 0; i < 3; i++)
-                {
-                    ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
-                }
-            }
+            tryToRefreshComponent(uiComponent);
+            tryToPlaceLabelInFacesMessage(uiComponent, metaDataEntry, validatorException);
         }
         return true;
     }
 
-    private void handleRequiredValidatorException(UIComponent uiComponent, ValidatorException validatorException)
+    private void tryToPlaceLabelInFacesMessage(
+            UIComponent uiComponent, MetaDataEntry metaDataEntry, ValidatorException validatorException)
+    {
+        tryToHandleRequiredValidatorException(uiComponent, validatorException);
+
+        String label = detectLabelText(metaDataEntry, uiComponent);
+
+        processLabel(validatorException.getFacesMessage(), label);
+    }
+
+    private String detectLabelText(MetaDataEntry metaDataEntry, UIComponent uiComponent)
+    {
+        String label = getLabel(uiComponent);
+
+        label = getClientIdAsFallbackIfNeeded(uiComponent, label);
+
+        label = tryToOverrideLabelIfProvidedManually(metaDataEntry, label);
+        return label;
+    }
+
+    private void processLabel(FacesMessage facesMessage, String label)
+    {
+        if(facesMessage instanceof LabeledMessage)
+        {
+            ((LabeledMessage)facesMessage).setLabelText(label);
+        }
+        //if someone uses a normal faces message
+        else
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
+            }
+        }
+    }
+
+    private String tryToOverrideLabelIfProvidedManually(MetaDataEntry metaDataEntry, String label)
+    {
+        if(metaDataEntry != null && metaDataEntry.getProperty(PropertyInformationKeys.LABEL) != null)
+        {
+            return metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
+        }
+        return label;
+    }
+
+    private String getClientIdAsFallbackIfNeeded(UIComponent uiComponent, String label)
+    {
+        if(label == null)
+        {
+            return uiComponent.getClientId(FacesContext.getCurrentInstance());
+        }
+        return label;
+    }
+
+    private void tryToHandleRequiredValidatorException(UIComponent uiComponent, ValidatorException validatorException)
     {
         if(validatorException instanceof RequiredValidatorException)
         {
@@ -107,7 +132,7 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
         }
     }
 
-    private void refreshComponent(UIComponent uiComponent)
+    private void tryToRefreshComponent(UIComponent uiComponent)
     {
         if(RequestContext.getCurrentInstance().isPartialRequest(FacesContext.getCurrentInstance()))
         {
