@@ -641,4 +641,9 @@ public class ExtValUtils
     {
         return propertyInformation.getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
     }
+
+    public static boolean validateEmptyFields()
+    {
+        return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
+    }
 }
