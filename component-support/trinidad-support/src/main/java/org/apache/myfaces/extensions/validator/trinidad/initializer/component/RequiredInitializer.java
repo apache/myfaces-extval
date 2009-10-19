@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.trinidad.util.TrinidadUtils;
@@ -41,6 +42,11 @@ class RequiredInitializer extends TrinidadComponentInitializer
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
+        if(!validateEmptyFields())
+        {
+            return false;
+        }
+
         if(metaData.containsKey(CommonMetaDataKeys.REQUIRED) ||
            metaData.containsKey(CommonMetaDataKeys.WEAK_REQUIRED)||
            metaData.containsKey(CommonMetaDataKeys.SKIP_VALIDATION))
@@ -78,6 +84,11 @@ class RequiredInitializer extends TrinidadComponentInitializer
             }
         }
         return false;
+    }
+
+    protected boolean validateEmptyFields()
+    {
+        return ExtValUtils.validateEmptyFields();
     }
 
     protected Boolean isComponentRequired(UIComponent uiComponent)

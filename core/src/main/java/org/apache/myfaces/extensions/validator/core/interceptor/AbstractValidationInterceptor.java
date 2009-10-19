@@ -144,8 +144,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     protected boolean validateEmptyFields()
     {
-        //to deactivate: the parameter has to be explicitly false
-        return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
+        return ExtValUtils.validateEmptyFields();
     }
 
     protected boolean interpretEmptyStringValuesAsNull()
