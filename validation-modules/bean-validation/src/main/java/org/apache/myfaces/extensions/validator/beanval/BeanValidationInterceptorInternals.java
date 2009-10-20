@@ -27,6 +27,8 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
@@ -43,6 +45,7 @@ import java.util.MissingResourceException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -113,29 +116,60 @@ class BeanValidationInterceptorInternals
         }
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "ConstraintDescriptor#isReportAsSingleViolation")
     private Map<String, Object> transformConstraintDescriptorToMetaData(
             ConstraintDescriptor<?> constraintDescriptor, Class elementClass)
     {
-        Map<String, Object> result = null;
+        Map<String, Object> result = new HashMap<String, Object>();
         MetaDataTransformer metaDataTransformer;
-        MetaDataEntry entry;
 
         metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(
                 new BeanValidationVirtualValidationStrategy(constraintDescriptor, elementClass));
 
         if (metaDataTransformer != null)
         {
-            if (this.logger.isDebugEnabled())
-            {
-                this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
-            }
-
-            entry = new MetaDataEntry();
-            entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());
-            entry.setValue(constraintDescriptor);
-
-            result = metaDataTransformer.convertMetaData(entry);
+            result.putAll(transformMetaData(metaDataTransformer, constraintDescriptor));
         }
+
+        if(!constraintDescriptor.isReportAsSingleViolation())
+        {
+            Set<ConstraintDescriptor<?>> composingConstraints = constraintDescriptor.getComposingConstraints();
+            if(composingConstraints != null && !composingConstraints.isEmpty())
+            {
+                result.putAll(transformComposingConstraints(composingConstraints, elementClass));
+            }
+        }
+
+        return result;
+    }
+
+    private Map<String, Object> transformComposingConstraints(
+            Set<ConstraintDescriptor<?>> composingConstraints, Class elementClass)
+    {
+        Map<String, Object> result = new HashMap<String, Object>();
+        for(ConstraintDescriptor constraintDescriptor : composingConstraints)
+        {
+            result.putAll(transformConstraintDescriptorToMetaData(constraintDescriptor, elementClass));
+        }
+
+        return result;
+    }
+
+    private Map<String, Object> transformMetaData(
+            MetaDataTransformer metaDataTransformer, ConstraintDescriptor<?> constraintDescriptor)
+    {
+        MetaDataEntry entry;
+        Map<String, Object> result;
+        if (this.logger.isDebugEnabled())
+        {
+            this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
+        }
+
+        entry = new MetaDataEntry();
+        entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());
+        entry.setValue(constraintDescriptor);
+
+        result = metaDataTransformer.convertMetaData(entry);
         return result;
     }
 
