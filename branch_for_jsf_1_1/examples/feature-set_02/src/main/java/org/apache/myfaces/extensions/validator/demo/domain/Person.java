@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.demo.domain;
 
-import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.demo.constraints.Name;
+import org.apache.myfaces.extensions.validator.demo.constraints.Birthday;
 
 import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
@@ -27,18 +28,16 @@ import java.util.Date;
 
 public class Person
 {
-    @Size(min = 2, max = 20)
+    @Name(maxLength = 30)
     private String firstName;
 
-    @NotNull(payload = DisableClientSideValidation.class)
-    @Size(min = 2, max = 20, payload = DisableClientSideValidation.class)
+    @Name(maxLength = 30)
     private String lastName;
 
     @Size(min = 2, max = 10)
     private String password;
 
-    @Past
-    @NotNull
+    @Birthday
     private Date birthday;
 
     @Past
