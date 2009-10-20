@@ -637,13 +637,13 @@ public class ExtValUtils
         return !"false".equalsIgnoreCase(WebXmlParameter.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL);
     }
 
-    public static PropertyDetails getPropertyDetails(PropertyInformation propertyInformation)
-    {
-        return propertyInformation.getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
-    }
-
     public static boolean validateEmptyFields()
     {
         return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
+    }
+
+    public static PropertyDetails getPropertyDetails(PropertyInformation propertyInformation)
+    {
+        return propertyInformation.getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
     }
 }

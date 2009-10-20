@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.metadata.ConstraintDescriptor;
@@ -34,7 +35,11 @@ public class NotNullMetaDataTransformer extends AbstractBeanValidationMetaDataTr
     protected Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<NotNull> constraintDescriptor)
     {
         Map<String, Object> results = new HashMap<String, Object>();
-        results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
+
+        if(ExtValUtils.interpretEmptyStringValuesAsNull())
+        {
+            results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
+        }
         return results;
     }
 }
