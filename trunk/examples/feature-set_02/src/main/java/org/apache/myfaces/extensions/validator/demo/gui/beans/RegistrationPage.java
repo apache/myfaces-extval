@@ -19,16 +19,17 @@
 package org.apache.myfaces.extensions.validator.demo.gui.beans;
 
 import org.apache.myfaces.extensions.validator.demo.domain.Person;
+import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class RegistrationPage
 {
-    @NotNull
+    @NotNull(payload = DisableClientSideValidation.class)
     private String password;
 
-    @NotNull
+    @NotNull(payload = DisableClientSideValidation.class)
     private String passwordRepeated;
 
     private Person person;
