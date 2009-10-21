@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.demo.gui.beans;
 
 import org.apache.myfaces.extensions.validator.demo.domain.Person;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,7 +30,7 @@ public class RegistrationPage
     @NotNull(payload = DisableClientSideValidation.class)
     private String password;
 
-    @NotNull(payload = DisableClientSideValidation.class)
+    @NotNull(payload = ViolationSeverity.Warn.class)
     private String passwordRepeated;
 
     private Person person;

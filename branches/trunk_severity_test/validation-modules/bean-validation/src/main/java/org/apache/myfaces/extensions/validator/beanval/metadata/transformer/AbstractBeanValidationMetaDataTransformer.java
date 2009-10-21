@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.Payload;
@@ -41,14 +42,14 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
     {
         ConstraintDescriptor<? extends T> constraintDescriptor = metaDataEntry.getValue(ConstraintDescriptor.class);
 
-        if(isClientSideValidationEnabled(constraintDescriptor))
+        if(isClientSideValidationEnabled(constraintDescriptor) && isBlockingConstraint(constraintDescriptor))
         {
             return convertConstraintDescriptor((ConstraintDescriptor<T>)constraintDescriptor);
         }
         return new HashMap<String, Object>();
     }
 
-    private boolean isClientSideValidationEnabled(ConstraintDescriptor<? extends T> constraintDescriptor)
+    protected boolean isClientSideValidationEnabled(ConstraintDescriptor<? extends T> constraintDescriptor)
     {
         for(Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
@@ -60,5 +61,22 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
         return true;
     }
 
+    protected boolean isBlockingConstraint(ConstraintDescriptor<?> constraintDescriptor)
+    {
+        for (Class<? extends Payload> payload : constraintDescriptor.getPayload())
+        {
+            if (ViolationSeverity.Warn.class.isAssignableFrom(payload) ||
+                    ViolationSeverity.Info.class.isAssignableFrom(payload))
+            {
+                return false;
+            }
+            else if (ViolationSeverity.Error.class.isAssignableFrom(payload) ||
+                    ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            {
+                return true;
+            }
+        }
+        return true;
+    }
     protected abstract Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<T> constraintDescriptor);
 }
