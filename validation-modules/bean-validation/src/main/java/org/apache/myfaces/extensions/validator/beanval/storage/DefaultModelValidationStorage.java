@@ -48,21 +48,21 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
     {
         modelValidationEntry.setComponent(component);
 
-        String componentId = null;
+        String clientId = null;
 
         if(component != null)
         {
-            componentId = component.getClientId(FacesContext.getCurrentInstance());
-            this.componentsOfRequest.add(componentId);
+            clientId = component.getClientId(FacesContext.getCurrentInstance());
+            this.componentsOfRequest.add(clientId);
         }
 
         List<ModelValidationEntry> modelValidationEntryList =
-                this.modelValidationEntries.get(GroupUtils.getGroupKey(viewId, componentId));
+                this.modelValidationEntries.get(GroupUtils.getGroupKey(viewId, clientId));
 
         if(modelValidationEntryList == null)
         {
             modelValidationEntryList = new ArrayList<ModelValidationEntry>();
-            this.modelValidationEntries.put(GroupUtils.getGroupKey(viewId, componentId), modelValidationEntryList);
+            this.modelValidationEntries.put(GroupUtils.getGroupKey(viewId, clientId), modelValidationEntryList);
         }
 
         if(!modelValidationEntryList.contains(modelValidationEntry))
@@ -116,7 +116,7 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
         return getModelValidationEntries(viewId, null);
     }
 
-    private List<ModelValidationEntry> getModelValidationEntries(String viewId, String componentId)
+    private List<ModelValidationEntry> getModelValidationEntries(String viewId, String clientId)
     {
         if(this.modelValidationEntries.size() < 1)
         {
@@ -127,14 +127,14 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
         String key;
         List<ModelValidationEntry> resultListForPage = null;
 
-        if(!"*".equals(componentId))
+        if(!"*".equals(clientId))
         {
             key = GroupUtils.getGroupKey(viewId, null);
             resultListForPage =
                     buildModelValidationEntryList(key, this.modelValidationEntries);
         }
 
-        key = GroupUtils.getGroupKey(viewId, componentId);
+        key = GroupUtils.getGroupKey(viewId, clientId);
         List<ModelValidationEntry> resultListForComponent =
                 buildModelValidationEntryList(key, this.modelValidationEntries);
 

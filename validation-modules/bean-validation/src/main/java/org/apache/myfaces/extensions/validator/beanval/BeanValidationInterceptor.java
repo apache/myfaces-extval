@@ -130,8 +130,8 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                                           Object convertedObject,
                                           PropertyInformation propertyInformation)
     {
-        this.bviUtils.validate(facesContext, uiComponent, convertedObject,
-                propertyInformation, supportMultipleViolationsPerField());
+        /*not used yet supportMultipleViolationsPerField()*/
+        this.bviUtils.validate(facesContext, uiComponent, convertedObject, propertyInformation);
     }
 
     protected boolean supportMultipleViolationsPerField()

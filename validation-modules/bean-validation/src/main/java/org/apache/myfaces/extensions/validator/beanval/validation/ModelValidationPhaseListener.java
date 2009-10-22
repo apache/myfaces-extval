@@ -23,20 +23,22 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
-import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
+import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -61,10 +63,14 @@ public class ModelValidationPhaseListener implements PhaseListener
 
         List<Object> processedValidationTargets = new ArrayList<Object>();
 
+        Map<String, ModelValidationResult> results = new HashMap<String, ModelValidationResult>();
+
         for (ModelValidationEntry modelValidationEntry : getModelValidationEntriesToValidate())
         {
-            processModelValidation(modelValidationEntry, processedValidationTargets);
+            processModelValidation(modelValidationEntry, processedValidationTargets, results);
         }
+
+        processViolations(results);
 
         if (logger.isTraceEnabled())
         {
@@ -77,8 +83,9 @@ public class ModelValidationPhaseListener implements PhaseListener
         return ExtValBeanValidationContext.getCurrentInstance().getModelValidationEntriesToValidate();
     }
 
-    private void processModelValidation(
-            ModelValidationEntry modelValidationEntry, List<Object> processedValidationTargets)
+    private void processModelValidation(ModelValidationEntry modelValidationEntry,
+                                        List<Object> processedValidationTargets,
+                                        Map<String, ModelValidationResult> results)
     {
         for (Object validationTarget : modelValidationEntry.getValidationTargets())
         {
@@ -93,11 +100,15 @@ public class ModelValidationPhaseListener implements PhaseListener
                 processedValidationTargets.add(validationTarget);
             }
 
-            validateTarget(modelValidationEntry, validationTarget, modelValidationEntry.getGroups());
+            validateTarget(modelValidationEntry, validationTarget, modelValidationEntry.getGroups(), results);
         }
     }
 
-    private void validateTarget(ModelValidationEntry modelValidationEntry, Object validationTarget, Class[] groups)
+    @ToDo(value = Priority.HIGH, description = "refactor and remove FacesContext#renderResponse")
+    private void validateTarget(ModelValidationEntry modelValidationEntry,
+                                Object validationTarget,
+                                Class[] groups,
+                                Map<String, ModelValidationResult> results)
     {
         Set<ConstraintViolation<Object>> violations = ExtValBeanValidationContext.getCurrentInstance()
                 .getValidatorFactory().usingContext()
@@ -105,71 +116,120 @@ public class ModelValidationPhaseListener implements PhaseListener
                 .getValidator()
                 .validate(validationTarget, groups);
 
-        if (violations != null && violations.size() > 0)
+        if (violations != null && !violations.isEmpty())
         {
-            FacesContext.getCurrentInstance().renderResponse();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.renderResponse();
 
             //jsf 2.0 is able to display multiple messages per component - so process all violations
             //jsf < 2.0 will just use the first one (it's only a little overhead)
             Iterator violationsIterator = violations.iterator();
             ConstraintViolation constraintViolation;
+            ModelValidationResult result;
             while (violationsIterator.hasNext())
             {
+                if (!results.containsKey(modelValidationEntry.getComponent().getClientId(facesContext)))
+                {
+                    result = new ModelValidationResult();
+                    results.put(modelValidationEntry.getComponent().getClientId(facesContext), result);
+                }
+
+                result = results.get(modelValidationEntry.getComponent().getClientId(facesContext));
+
                 constraintViolation = (ConstraintViolation) violationsIterator.next();
                 if (modelValidationEntry.getMetaData().displayInline())
                 {
-                    processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, true);
+                    result.addFacesMessageHolder(createFacesMessageHolderForConstraintViolation(
+                            constraintViolation, modelValidationEntry, validationTarget, true));
                 }
                 else
                 {
-                    processConstraintViolation(constraintViolation, modelValidationEntry, validationTarget, false);
+                    result.addFacesMessageHolder(createFacesMessageHolderForConstraintViolation(
+                            constraintViolation, modelValidationEntry, validationTarget, false));
                 }
             }
         }
     }
 
-    private void processConstraintViolation(final ConstraintViolation violation,
-                                            ModelValidationEntry modelValidationEntry,
-                                            final Object validationTarget,
-                                            boolean displayAtComponent)
+    private FacesMessageHolder createFacesMessageHolderForConstraintViolation(final ConstraintViolation violation,
+                                                                        ModelValidationEntry modelValidationEntry,
+                                                                        final Object validationTarget,
+                                                                        boolean displayAtComponent)
     {
-        String violationMessage = violation.getMessage();
+        final String newViolationMessage = tryToChangeViolationMessage(
+                modelValidationEntry, validationTarget, violation);
 
-        ValidatorException validatorException = createValidatorException(violationMessage);
+        ConstraintViolation newConstraintViolation = new ConstraintViolation()
+        {
+            private ConstraintViolation wrapped = violation;
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+            public String getMessage()
+            {
+                return newViolationMessage;
+            }
+
+            public String getMessageTemplate()
+            {
+                return wrapped.getMessageTemplate();
+            }
+
+            public Object getRootBean()
+            {
+                return wrapped.getRootBean();
+            }
+
+            public Class getRootBeanClass()
+            {
+                return wrapped.getRootBeanClass();
+            }
+
+            public Object getLeafBean()
+            {
+                return wrapped.getLeafBean();
+            }
+
+            public Path getPropertyPath()
+            {
+                return wrapped.getPropertyPath();
+            }
+
+            public Object getInvalidValue()
+            {
+                return wrapped.getInvalidValue();
+            }
+
+            public ConstraintDescriptor getConstraintDescriptor()
+            {
+                return wrapped.getConstraintDescriptor();
+            }
+        };
+
+
         UIComponent uiComponent = null;
         String clientId = null;
 
         if (displayAtComponent)
         {
             uiComponent = modelValidationEntry.getComponent();
-            clientId = modelValidationEntry.getComponent().getClientId(facesContext);
+            clientId = uiComponent.getClientId(FacesContext.getCurrentInstance());
         }
 
-        tryToChangeViolationMessage(modelValidationEntry, validationTarget, violation, validatorException);
-        executeValidationExceptionInterceptors(uiComponent, validationTarget, validatorException);
-        addViolationMessage(facesContext, clientId, violationMessage, validatorException);
+        FacesMessageHolder result = new FacesMessageHolder(BeanValidationUtils
+                .createFacesMessageForConstraintViolation(uiComponent, validationTarget, newConstraintViolation));
+        result.setClientId(clientId);
+        return result;
     }
 
-    private ValidatorException createValidatorException(String violationMessage)
-    {
-        return new ValidatorException(
-                ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
-    }
-
-    private void tryToChangeViolationMessage(ModelValidationEntry modelValidationEntry,
-                                    Object validationTarget,
-                                    ConstraintViolation violation,
-                                    ValidatorException validatorException)
+    private String tryToChangeViolationMessage(ModelValidationEntry modelValidationEntry,
+                                               Object validationTarget,
+                                               ConstraintViolation violation)
     {
         if (!isDefaultMessage(modelValidationEntry))
         {
-            String newValidationErrorMessage = interpolateValidationErrorMessage(
-                    modelValidationEntry, validationTarget, violation);
-
-            changeViolationMessage(validatorException.getFacesMessage(), newValidationErrorMessage);
+            return interpolateValidationErrorMessage(
+                    modelValidationEntry.getMetaData().message(), validationTarget, violation);
         }
+        return violation.getMessage();
     }
 
     private boolean isDefaultMessage(ModelValidationEntry modelValidationEntry)
@@ -177,11 +237,12 @@ public class ModelValidationPhaseListener implements PhaseListener
         return ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getMetaData().message());
     }
 
-    private String interpolateValidationErrorMessage(ModelValidationEntry modelValidationEntry,
+    private String interpolateValidationErrorMessage(String extValInlineMessage,
                                                      final Object validationTarget, final ConstraintViolation violation)
     {
         return ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator()
-                .interpolate(modelValidationEntry.getMetaData().message(),
+                .interpolate(
+                        extValInlineMessage,
                         new MessageInterpolator.Context()
                         {
                             public ConstraintDescriptor<?> getConstraintDescriptor()
@@ -197,45 +258,12 @@ public class ModelValidationPhaseListener implements PhaseListener
                 );
     }
 
-    private void changeViolationMessage(FacesMessage facesMessage, String newMessage)
+    private void processViolations(Map<String, ModelValidationResult> results)
     {
-        facesMessage.setSummary(newMessage);
-        facesMessage.setDetail(newMessage);
-    }
-
-    @ToDo(value = Priority.HIGH, description = "test compatibility")
-    private void executeValidationExceptionInterceptors(
-            UIComponent uiComponent, Object validationTarget, ValidatorException validatorException)
-    {
-        ExtValUtils.executeAfterThrowingInterceptors(
-                uiComponent,
-                null,
-                validationTarget,
-                validatorException,
-                null);
-    }
-
-    private void addViolationMessage(
-            FacesContext facesContext, String clientId, String violationMessage, ValidatorException validatorException)
-    {
-        if (isMessageTextUnchanged(validatorException, violationMessage))
+        for (ModelValidationResult result : results.values())
         {
-            //use old message text
-            facesContext.addMessage(clientId,
-                    ExtValUtils.createFacesMessage(validatorException.getFacesMessage().getSeverity(),
-                            violationMessage, violationMessage));
+            BeanValidationUtils.processViolationMessages(result.getFacesMessageHolderList(), false);
         }
-        else
-        {
-            //use new message text
-            facesContext.addMessage(clientId, validatorException.getFacesMessage());
-        }
-    }
-
-    private boolean isMessageTextUnchanged(ValidatorException validatorException, String violationMessage)
-    {
-        return violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
-                violationMessage.equals(validatorException.getFacesMessage().getDetail());
     }
 
     public void beforePhase(PhaseEvent phaseEvent)
