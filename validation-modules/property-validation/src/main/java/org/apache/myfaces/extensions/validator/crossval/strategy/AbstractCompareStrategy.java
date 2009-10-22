@@ -166,7 +166,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
                     entryOfTarget.getComponent(), entryOfTarget.getMetaDataEntry(),
                     entryOfTarget.getConvertedObject(), validatorException, this))
             {
-                facesContext.addMessage(entryOfTarget.getClientId(),
+                ExtValUtils.tryToAddViolationMessageForComponentId(entryOfTarget.getClientId(),
                         ExtValUtils.convertFacesMessage(validatorException.getFacesMessage()));
             }
         }
@@ -184,7 +184,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         if (message.getSummary() != null || message.getDetail() != null)
         {
             //TODO
-            throw new ValidatorException(message);
+            ExtValUtils.tryToThrowValidatorExceptionForComponent(entryOfSource.getComponent(), message, null);
         }
         else
         {
@@ -206,12 +206,13 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
             if (message.getSummary() != null || message.getDetail() != null)
             {
                 //TODO
-                throw new ValidatorException(message);
+                ExtValUtils.tryToThrowValidatorExceptionForComponent(entryOfSource.getComponent(), message, null);
             }
         }
 
         //just throw a new message - the error message is at the target
-        throw new ValidatorException(new FacesMessage());
+        ExtValUtils.tryToThrowValidatorExceptionForComponent(
+                entryOfSource.getComponent(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, null), null);
     }
 
     protected FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String detail)

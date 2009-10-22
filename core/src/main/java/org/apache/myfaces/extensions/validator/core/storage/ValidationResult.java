@@ -20,22 +20,30 @@ package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
- * suggested interface for a group storage
- * used by the bvi module and add-ons
- * <p/>
- * it allows to manage groups for the current request
- * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface GroupStorage
+@ToDo(value = Priority.LOW, description = "refactor it")
+@UsageInformation(UsageCategory.INTERNAL)
+class ValidationResult
 {
-    void addGroup(Class groupClass, String viewId, String clientId);
+    private List<FacesMessageHolder> facesMessageHolderList = new ArrayList<FacesMessageHolder>();
 
-    void restrictGroup(Class groupClass, String viewId, String clientId);
+    public void addFacesMessageHolder(FacesMessageHolder facesMessageHolder)
+    {
+        this.facesMessageHolderList.add(facesMessageHolder);
+    }
 
-    Class[] getGroups(String viewId, String clientId);
+    public List<FacesMessageHolder> getFacesMessageHolderList()
+    {
+        return facesMessageHolderList;
+    }
 }

@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExcept
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -58,6 +59,7 @@ public class ExtValContext
 
     private static ExtValContext extValContext;
 
+    private ViolationSeverityInterpreter violationSeverityInterpreter;
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
     private List<String> deniedInterceptors = new ArrayList<String>();
@@ -96,9 +98,32 @@ public class ExtValContext
         return extValContext;
     }
 
+    public void setViolationSeverityInterpreter(ViolationSeverityInterpreter violationSeverityInterpreter)
+    {
+        setViolationSeverityInterpreter(violationSeverityInterpreter, true);
+    }
+
+    public void setViolationSeverityInterpreter(
+            ViolationSeverityInterpreter violationSeverityInterpreter, boolean forceOverride)
+    {
+        if (this.violationSeverityInterpreter == null || forceOverride)
+        {
+            if (this.logger.isInfoEnabled() && violationSeverityInterpreter != null)
+            {
+                this.logger.info(violationSeverityInterpreter.getClass() + " is used");
+            }
+            this.violationSeverityInterpreter = violationSeverityInterpreter;
+        }
+    }
+
+    public ViolationSeverityInterpreter getViolationSeverityInterpreter()
+    {
+        return this.violationSeverityInterpreter;
+    }
+
     /*
-     * FactoryFinder
-     */
+    * FactoryFinder
+    */
     public FactoryFinder getFactoryFinder()
     {
         return this.factoryFinder;
@@ -124,10 +149,9 @@ public class ExtValContext
     {
         if (this.skipValidationEvaluator == null || forceOverride)
         {
-            if (this.logger.isInfoEnabled())
+            if (this.logger.isInfoEnabled() && skipValidationEvaluator != null)
             {
-                this.logger.info(skipValidationEvaluator != null ?
-                        skipValidationEvaluator.getClass() : "no" + " is used");
+                this.logger.info(skipValidationEvaluator.getClass() + " is used");
             }
             this.skipValidationEvaluator = skipValidationEvaluator;
         }
