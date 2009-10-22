@@ -575,12 +575,14 @@ public class BeanValidationUtils
         List<FacesMessageHolder> facesMessageListWithHighSeverity =
                 getFacesMessageListWithHighSeverity(violationMessageHolderList);
 
-        addMessagesWithHighSeverity(facesContext, facesMessageListWithHighSeverity, firstErrorCausesAnException);
-        addMessagesWithLowSeverity(facesContext, facesMessageListWithLowSeverity);
+        addMessagesWithHighSeverity(facesMessageListWithHighSeverity, firstErrorCausesAnException);
+        addMessagesWithLowSeverity(facesMessageListWithLowSeverity);
 
         if (!facesMessageListWithHighSeverity.isEmpty() && firstErrorCausesAnException)
         {
-            throw new ValidatorException(facesMessageListWithHighSeverity.iterator().next().getFacesMessage());
+            FacesMessageHolder facesMessageHolder = facesMessageListWithHighSeverity.iterator().next();
+            ExtValUtils.tryToThrowValidatorException(
+                    facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage(), null);
         }
     }
 
@@ -616,8 +618,7 @@ public class BeanValidationUtils
         return result;
     }
 
-    private static void addMessagesWithHighSeverity(FacesContext facesContext,
-                                                    List<FacesMessageHolder> facesMessageHolderListWithHighSeverity,
+    private static void addMessagesWithHighSeverity(List<FacesMessageHolder> facesMessageHolderListWithHighSeverity,
                                                     boolean firstErrorCausesAnException)
     {
         boolean firstMessage = true;
@@ -630,17 +631,18 @@ public class BeanValidationUtils
             }
             else
             {
-                facesContext.addMessage(facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
+                ExtValUtils.tryToAddViolationMessage(
+                        facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
             }
         }
     }
 
-    private static void addMessagesWithLowSeverity(
-            FacesContext facesContext, List<FacesMessageHolder> facesMessageHolderListWithLowSeverity)
+    private static void addMessagesWithLowSeverity(List<FacesMessageHolder> facesMessageHolderListWithLowSeverity)
     {
         for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithLowSeverity)
         {
-            facesContext.addMessage(facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
+            ExtValUtils.tryToAddViolationMessage(
+                    facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
         }
     }
 }

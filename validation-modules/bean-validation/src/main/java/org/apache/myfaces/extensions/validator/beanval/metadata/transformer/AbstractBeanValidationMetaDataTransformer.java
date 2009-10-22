@@ -24,9 +24,11 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.Payload;
+import javax.faces.application.FacesMessage;
 import java.util.Map;
 import java.util.HashMap;
 import java.lang.annotation.Annotation;
@@ -63,20 +65,25 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
 
     protected boolean isBlockingConstraint(ConstraintDescriptor<?> constraintDescriptor)
     {
+        FacesMessage testMessage = new FacesMessage();
+        testMessage.setSeverity(ViolationSeverity.Error.VALUE);
+
         for (Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
-            if (ViolationSeverity.Warn.class.isAssignableFrom(payload) ||
-                    ViolationSeverity.Info.class.isAssignableFrom(payload))
+            if (ViolationSeverity.Warn.class.isAssignableFrom(payload))
             {
-                return false;
+                testMessage.setSeverity(ViolationSeverity.Warn.VALUE);
             }
-            else if (ViolationSeverity.Error.class.isAssignableFrom(payload) ||
-                    ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            else if(ViolationSeverity.Info.class.isAssignableFrom(payload))
             {
-                return true;
+                testMessage.setSeverity(ViolationSeverity.Info.VALUE);
+            }
+            else if(ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            {
+                testMessage.setSeverity(ViolationSeverity.Fatal.VALUE);
             }
         }
-        return true;
+        return ExtValUtils.severityBlocksSubmit(null, testMessage);
     }
     protected abstract Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<T> constraintDescriptor);
 }

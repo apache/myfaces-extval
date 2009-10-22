@@ -107,7 +107,15 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
         catch (ValidatorException e)
         {
-            throw new ConverterException(e.getFacesMessage(), e);
+            try
+            {
+                //ViolationSeverityInterpreter might decide that it isn't an exception
+                ExtValUtils.tryToThrowValidatorExceptionForComponent(uiComponent, e.getFacesMessage(), e);
+            }
+            catch (ValidatorException finalException)
+            {
+                throw new ConverterException(e.getFacesMessage(), e);
+            }
         }
     }
 

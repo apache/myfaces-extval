@@ -27,6 +27,8 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.LongRange;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.custom.emailvalidator.EmailValidator;
 
 public class RegistrationPage
@@ -42,10 +44,11 @@ public class RegistrationPage
 
     @Equals("passwordRepeated")
     //combine gui related annotations with the annoations of the domain model
-    @JoinValidation(value = "#{registrationPage.person.password}")
+    //@JoinValidation(value = "#{registrationPage.person.password}")
     private String password;
 
-    @Required(validationErrorMsgKey = "repeated_password_required")
+    @Required(validationErrorMsgKey = "repeated_password_required",
+            parameters = {DisableClientSideValidation.class, ViolationSeverity.Warn.class})
     private String passwordRepeated;
 
     //use #{registrationPage.person.nickName}, #{person.nickName}
