@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
@@ -92,7 +93,8 @@ public class ExtValStartupListener extends AbstractStartupListener
 
         initNameMappers();
         initValidationExceptionInterceptors();
-        initViolationSeverityInterpreters();
+        initViolationSeverityInterceptors();
+        initPropertyValidationInterceptors();
         executeCustomStartupListener();
     }
 
@@ -183,8 +185,13 @@ public class ExtValStartupListener extends AbstractStartupListener
                 new ViolationSeverityValidationExceptionInterceptor());
     }
 
-    private void initViolationSeverityInterpreters()
+    private void initViolationSeverityInterceptors()
     {
         ExtValContext.getContext().setViolationSeverityInterpreter(new DefaultViolationSeverityInterpreter(), false);
+    }
+
+    private void initPropertyValidationInterceptors()
+    {
+        ExtValContext.getContext().addPropertyValidationInterceptor(new FacesMessagePropertyValidationInterceptor());
     }
 }

@@ -581,7 +581,7 @@ public class BeanValidationUtils
         if (!facesMessageListWithHighSeverity.isEmpty() && firstErrorCausesAnException)
         {
             FacesMessageHolder facesMessageHolder = facesMessageListWithHighSeverity.iterator().next();
-            ExtValUtils.tryToThrowValidatorException(
+            ExtValUtils.tryToThrowValidatorExceptionForComponentId(
                     facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage(), null);
         }
     }
@@ -631,7 +631,7 @@ public class BeanValidationUtils
             }
             else
             {
-                ExtValUtils.tryToAddViolationMessage(
+                ExtValUtils.tryToAddViolationMessageForComponentId(
                         facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
             }
         }
@@ -641,7 +641,7 @@ public class BeanValidationUtils
     {
         for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithLowSeverity)
         {
-            ExtValUtils.tryToAddViolationMessage(
+            ExtValUtils.tryToAddViolationMessageForComponentId(
                     facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
         }
     }

@@ -16,44 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.validation.message;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.application.FacesMessage;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@Deprecated
-@ToDo(Priority.HIGH)
-@UsageInformation(UsageCategory.INTERNAL)
-public class FacesMessageHolder
+@UsageInformation(UsageCategory.API)
+public interface FacesMessageStorage
 {
-    private FacesMessage facesMessage;
-    private String clientId;
+    void addFacesMessage(String componentId, FacesMessage facesMessage);
 
-    public FacesMessageHolder(FacesMessage facesMessage)
-    {
-        this.facesMessage = facesMessage;
-    }
+    Map<String, FacesMessage> getFacesMessages();
 
-    public FacesMessage getFacesMessage()
-    {
-        return facesMessage;
-    }
-
-    public String getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(String clientId)
-    {
-        this.clientId = clientId;
-    }
+    void addAll();
 }

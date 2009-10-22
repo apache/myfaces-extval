@@ -166,7 +166,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
                     entryOfTarget.getComponent(), entryOfTarget.getMetaDataEntry(),
                     entryOfTarget.getConvertedObject(), validatorException, this))
             {
-                ExtValUtils.tryToAddViolationMessage(entryOfTarget.getClientId(),
+                ExtValUtils.tryToAddViolationMessageForComponentId(entryOfTarget.getClientId(),
                         ExtValUtils.convertFacesMessage(validatorException.getFacesMessage()));
             }
         }

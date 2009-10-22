@@ -83,7 +83,7 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
                 testMessage.setSeverity(ViolationSeverity.Fatal.VALUE);
             }
         }
-        return ExtValUtils.severityBlocksSubmit(null, testMessage);
+        return ExtValUtils.severityBlocksSubmitForComponentId(null, testMessage);
     }
     protected abstract Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<T> constraintDescriptor);
 }
