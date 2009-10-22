@@ -28,8 +28,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class GroupUtils
 {
-    public static String getGroupKey(String viewId, String componentId)
+    public static String getGroupKey(String viewId, String clientId)
     {
-        return componentId == null ? viewId : viewId + "@" + componentId;
+        return clientId == null ? viewId : viewId + "@" + clientId;
     }
 }

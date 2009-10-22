@@ -32,9 +32,9 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 public class DefaultBeanValidationGroupStorage extends DefaultGroupStorage
 {
     @Override
-    public Class[] getGroups(String viewId, String componentId)
+    public Class[] getGroups(String viewId, String clientId)
     {
-        Class[] result = super.getGroups(viewId, componentId);
+        Class[] result = super.getGroups(viewId, clientId);
 
         if(result == null)
         {
