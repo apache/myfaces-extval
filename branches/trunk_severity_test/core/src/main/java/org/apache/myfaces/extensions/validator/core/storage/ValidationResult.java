@@ -16,44 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.validation.message;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
-import javax.faces.application.FacesMessage;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@Deprecated
-@ToDo(Priority.HIGH)
+@ToDo(value = Priority.LOW, description = "refactor it")
 @UsageInformation(UsageCategory.INTERNAL)
-public class FacesMessageHolder
+class ValidationResult
 {
-    private FacesMessage facesMessage;
-    private String clientId;
+    private List<FacesMessageHolder> facesMessageHolderList = new ArrayList<FacesMessageHolder>();
 
-    public FacesMessageHolder(FacesMessage facesMessage)
+    public void addFacesMessageHolder(FacesMessageHolder facesMessageHolder)
     {
-        this.facesMessage = facesMessage;
+        this.facesMessageHolderList.add(facesMessageHolder);
     }
 
-    public FacesMessage getFacesMessage()
+    public List<FacesMessageHolder> getFacesMessageHolderList()
     {
-        return facesMessage;
-    }
-
-    public String getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(String clientId)
-    {
-        this.clientId = clientId;
+        return facesMessageHolderList;
     }
 }

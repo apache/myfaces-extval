@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.validation.message;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -29,10 +29,9 @@ import javax.faces.application.FacesMessage;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@Deprecated
-@ToDo(Priority.HIGH)
+@ToDo(value = Priority.LOW, description = "refactor it")
 @UsageInformation(UsageCategory.INTERNAL)
-public class FacesMessageHolder
+class FacesMessageHolder
 {
     private FacesMessage facesMessage;
     private String clientId;
@@ -40,6 +39,12 @@ public class FacesMessageHolder
     public FacesMessageHolder(FacesMessage facesMessage)
     {
         this.facesMessage = facesMessage;
+    }
+
+    FacesMessageHolder(FacesMessage facesMessage, String clientId)
+    {
+        this.facesMessage = facesMessage;
+        setClientId(clientId);
     }
 
     public FacesMessage getFacesMessage()
@@ -54,6 +59,9 @@ public class FacesMessageHolder
 
     public void setClientId(String clientId)
     {
-        this.clientId = clientId;
+        if(!"*".equals(clientId))
+        {
+            this.clientId = clientId;
+        }
     }
 }
