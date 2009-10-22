@@ -16,44 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.validation.message;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-
-import javax.faces.application.FacesMessage;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultFacesMessageStorageNameMapper;
 
 /**
+ * default storage-manager for faces messages
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@Deprecated
-@ToDo(Priority.HIGH)
-@UsageInformation(UsageCategory.INTERNAL)
-public class FacesMessageHolder
+@UsageInformation(INTERNAL)
+class DefaultFacesMessageStorageManager extends AbstractRequestScopeAwareStorageManager<FacesMessageStorage>
 {
-    private FacesMessage facesMessage;
-    private String clientId;
-
-    public FacesMessageHolder(FacesMessage facesMessage)
+    DefaultFacesMessageStorageManager()
     {
-        this.facesMessage = facesMessage;
+        register(new DefaultFacesMessageStorageNameMapper());
     }
 
-    public FacesMessage getFacesMessage()
+    public String getStorageManagerKey()
     {
-        return facesMessage;
-    }
-
-    public String getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(String clientId)
-    {
-        this.clientId = clientId;
+        return StorageManager.class.getName() + "_FOR_FACES_MESSAGES:KEY";
     }
 }

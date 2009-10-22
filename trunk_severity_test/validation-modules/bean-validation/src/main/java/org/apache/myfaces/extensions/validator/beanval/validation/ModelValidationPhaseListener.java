@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.beanval.validation.message.FacesM
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -102,6 +104,7 @@ public class ModelValidationPhaseListener implements PhaseListener
         }
     }
 
+    @ToDo(value = Priority.HIGH, description = "refactor and remove FacesContext#renderResponse")
     private void validateTarget(ModelValidationEntry modelValidationEntry,
                                 Object validationTarget,
                                 Class[] groups,

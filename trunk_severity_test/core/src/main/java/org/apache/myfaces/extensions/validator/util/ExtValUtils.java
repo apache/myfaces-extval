@@ -31,6 +31,7 @@ import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManager;
+import org.apache.myfaces.extensions.validator.core.storage.FacesMessageStorage;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
@@ -653,7 +654,8 @@ public class ExtValUtils
         return propertyInformation.getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
     }
 
-    public static void tryToThrowValidatorException(String clientId, FacesMessage facesMessage, Throwable throwable)
+    public static void tryToThrowValidatorExceptionForComponentId(
+            String clientId, FacesMessage facesMessage, Throwable throwable)
     {
         UIComponent targetComponent = findComponent(clientId);
 
@@ -685,21 +687,20 @@ public class ExtValUtils
         }
     }
 
-    public static void tryToAddViolationMessage(String clientId, FacesMessage facesMessage)
+    public static void tryToAddViolationMessageForComponentId(String clientId, FacesMessage facesMessage)
     {
         UIComponent targetComponent = findComponent(clientId);
 
         if(targetComponent == null && clientId != null)
         {
-            //workaround for testcases
-            tryToAddViolationMessageForClientId(clientId, facesMessage);
+            tryToAddViolationMessageForTestClientId(clientId, facesMessage);
             return;
         }
         tryToAddViolationMessageForComponent(targetComponent, facesMessage);
     }
 
-    @ToDo(Priority.MEDIUM)
-    private static void tryToAddViolationMessageForClientId(String clientId, FacesMessage facesMessage)
+    @ToDo(value = Priority.MEDIUM, description = "required for test frameworks - goal: remove it")
+    private static void tryToAddViolationMessageForTestClientId(String clientId, FacesMessage facesMessage)
     {
         ViolationSeverityInterpreter interpreter =
                 ExtValContext.getContext().getViolationSeverityInterpreter();
@@ -708,7 +709,7 @@ public class ExtValUtils
 
         if(interpreter.severityCausesViolationMessage(facesContext, null, facesMessage.getSeverity()))
         {
-            facesContext.addMessage(null, facesMessage);
+            addFacesMessage(clientId, facesMessage);
         }
         tryToBlocksNavigationForComponent(null, facesMessage);
     }
@@ -724,7 +725,7 @@ public class ExtValUtils
         {
             if(uiComponent != null)
             {
-                facesContext.addMessage(uiComponent.getClientId(facesContext), facesMessage);
+                addFacesMessage(uiComponent.getClientId(facesContext), facesMessage);
             }
             else
             {
@@ -738,7 +739,26 @@ public class ExtValUtils
         tryToBlocksNavigationForComponent(uiComponent, facesMessage);
     }
 
-    public static void tryToBlocksNavigation(String clientId, FacesMessage facesMessage)
+    public static void addFacesMessage(FacesMessage facesMessage)
+    {
+        addFacesMessage(null, facesMessage);
+    }
+
+    public static void addFacesMessage(String clientId, FacesMessage facesMessage)
+    {
+        FacesMessageStorage storage = getStorage(FacesMessageStorage.class, FacesMessageStorage.class.getName());
+
+        if(storage != null)
+        {
+            storage.addFacesMessage(clientId, facesMessage);
+        }
+        else
+        {
+            FacesContext.getCurrentInstance().addMessage(clientId, facesMessage);
+        }
+    }
+
+    public static void tryToBlocksNavigationForComponentId(String clientId, FacesMessage facesMessage)
     {
         UIComponent targetComponent = findComponent(clientId);
 
@@ -758,7 +778,7 @@ public class ExtValUtils
         }
     }
 
-    public static boolean severityBlocksSubmit(String clientId, FacesMessage facesMessage)
+    public static boolean severityBlocksSubmitForComponentId(String clientId, FacesMessage facesMessage)
     {
         ViolationSeverityInterpreter interpreter =
                 ExtValContext.getContext().getViolationSeverityInterpreter();
@@ -769,7 +789,7 @@ public class ExtValUtils
         return interpreter.severityBlocksSubmit(facesContext, targetComponent, facesMessage.getSeverity());
     }
 
-    public static boolean severityShowsIndication(String clientId, FacesMessage facesMessage)
+    public static boolean severityShowsIndicationForComponentId(String clientId, FacesMessage facesMessage)
     {
         ViolationSeverityInterpreter interpreter =
                 ExtValContext.getContext().getViolationSeverityInterpreter();
