@@ -19,23 +19,25 @@
 package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultFacesMessageStorageNameMapper;
 
 /**
- * suggested interface for a group storage
- * used by the bvi module and add-ons
- * <p/>
- * it allows to manage groups for the current request
- * 
+ * default storage-manager for faces messages
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface GroupStorage
+@UsageInformation(INTERNAL)
+class DefaultFacesMessageStorageManager extends AbstractRequestScopeAwareStorageManager<FacesMessageStorage>
 {
-    void addGroup(Class groupClass, String viewId, String clientId);
+    DefaultFacesMessageStorageManager()
+    {
+        register(new DefaultFacesMessageStorageNameMapper());
+    }
 
-    void restrictGroup(Class groupClass, String viewId, String clientId);
-
-    Class[] getGroups(String viewId, String clientId);
+    public String getStorageManagerKey()
+    {
+        return StorageManager.class.getName() + "_FOR_FACES_MESSAGES:KEY";
+    }
 }

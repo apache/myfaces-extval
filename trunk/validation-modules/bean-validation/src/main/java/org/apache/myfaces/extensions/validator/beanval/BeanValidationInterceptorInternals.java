@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.commons.logging.Log;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -30,20 +31,14 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
 import javax.validation.groups.Default;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.metadata.ElementDescriptor;
-import java.util.MissingResourceException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
@@ -56,9 +51,6 @@ import java.util.Set;
 class BeanValidationInterceptorInternals
 {
     private Log logger;
-    private final String defaultLabelMessageTemplate = "{1}: {0}";
-    private String labelMessageTemplate = defaultLabelMessageTemplate;
-    private final String JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE = "javax.faces.validator.BeanValidator.MESSAGE";
 
     BeanValidationInterceptorInternals(Log logger)
     {
@@ -184,7 +176,7 @@ class BeanValidationInterceptorInternals
     void validate(FacesContext facesContext,
                   UIComponent uiComponent,
                   Object convertedObject,
-                  PropertyInformation propertyInformation, boolean supportMultipleViolationsPerField)
+                  PropertyInformation propertyInformation)
     {
         Class baseBeanClass = getBaseClassType(propertyInformation);
         String propertyName = getPropertyToValidate(propertyInformation);
@@ -202,106 +194,11 @@ class BeanValidationInterceptorInternals
                 .getValidator()
                 .validateValue(baseBeanClass, propertyName, convertedObject, groups);
 
-        processConstraintViolations(
-                facesContext, uiComponent, convertedObject, violations, supportMultipleViolationsPerField);
-    }
-
-    private void processConstraintViolations(FacesContext facesContext,
-                                             UIComponent uiComponent,
-                                             Object convertedObject,
-                                             Set<ConstraintViolation> violations,
-                                             boolean supportMultipleViolationsPerField)
-    {
-        List<String> violationMessages = new ArrayList<String>();
-        for (ConstraintViolation violation : violations)
+        if(violations != null && !violations.isEmpty())
         {
-            processConstraintViolation(uiComponent, convertedObject, violation, violationMessages);
-
-            if (!supportMultipleViolationsPerField)
-            {
-                break;
-            }
+            BeanValidationUtils
+                    .processConstraintViolations(facesContext, uiComponent, convertedObject, violations, true);
         }
-
-        if (!violationMessages.isEmpty())
-        {
-            throwException(facesContext, uiComponent, violationMessages, supportMultipleViolationsPerField);
-        }
-    }
-
-    private void processConstraintViolation(UIComponent uiComponent,
-                                            Object convertedObject,
-                                            ConstraintViolation violation,
-                                            List<String> violationMessages)
-    {
-        String violationMessage = violation.getMessage();
-
-        String labeledMessage = createLabeledMessage(violationMessage);
-
-        ValidatorException validatorException = createValidatorException(labeledMessage);
-
-        executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException);
-
-        if (isMessageTextUnchanged(validatorException, labeledMessage))
-        {
-            violationMessages.add(violationMessage);
-        }
-        else
-        {
-            violationMessages.add(validatorException.getFacesMessage().getSummary());
-        }
-    }
-
-    private String createLabeledMessage(String violationMessage)
-    {
-        if(labelMessageTemplate == null)
-        {
-            return this.defaultLabelMessageTemplate.replace("{0}", violationMessage);
-        }
-
-        this.labelMessageTemplate = loadStandardMessageTemplate();
-
-        if(labelMessageTemplate == null)
-        {
-            return createLabeledMessage(violationMessage);
-        }
-        return labelMessageTemplate.replace("{0}", violationMessage);
-    }
-
-    private String loadStandardMessageTemplate()
-    {
-        try
-        {
-            return JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE);
-        }
-        catch (MissingResourceException e)
-        {
-            return null;
-        }
-    }
-
-    private void executeAfterThrowingInterceptors(UIComponent uiComponent,
-                                                  Object convertedObject,
-                                                  ValidatorException validatorException)
-    {
-        ExtValUtils.executeAfterThrowingInterceptors(
-                uiComponent,
-                null,
-                convertedObject,
-                validatorException,
-                null);
-    }
-
-    private boolean isMessageTextUnchanged(ValidatorException validatorException, String violationMessage)
-    {
-        return violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
-                violationMessage.equals(validatorException.getFacesMessage().getDetail());
-    }
-
-    private ValidatorException createValidatorException(String violationMessage)
-    {
-        return new ValidatorException(
-                ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_ERROR, violationMessage, violationMessage));
     }
 
     private Class getBaseClassType(PropertyInformation propertyInformation)
@@ -312,31 +209,6 @@ class BeanValidationInterceptorInternals
     private String getPropertyToValidate(PropertyInformation propertyInformation)
     {
         return ExtValUtils.getPropertyDetails(propertyInformation).getProperty();
-    }
-
-    //override this method in the jsf 2.0 version
-    private void throwException(FacesContext facesContext, UIComponent uiComponent,
-                                List<String> violationMessages, boolean supportMultipleViolationsPerField)
-    {
-        if (supportMultipleViolationsPerField)
-        {
-            boolean firstMessage = false;
-            for (String message : violationMessages)
-            {
-                if (!firstMessage)
-                {
-                    firstMessage = true;
-                }
-                else
-                {
-                    facesContext.addMessage(uiComponent.getClientId(facesContext),
-                            ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_ERROR, message, message));
-                }
-            }
-        }
-
-        throw new ValidatorException(ExtValUtils.createFacesMessage(
-                FacesMessage.SEVERITY_ERROR, violationMessages.get(0), violationMessages.get(0)));
     }
 
     private Class[] resolveGroups(FacesContext facesContext, UIComponent uiComponent)

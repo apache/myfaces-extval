@@ -62,6 +62,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
         setStorageManager(RendererProxyStorage.class, new DefaultRendererProxyStorageManager(), false);
         setStorageManager(GroupStorage.class, new DefaultGroupStorageManager(), false);
         setStorageManager(MetaDataStorage.class, new DefaultMetaDataStorageManager(), false);
+        setStorageManager(FacesMessageStorage.class, new DefaultFacesMessageStorageManager(), false);
     }
 
     public StorageManager create(Class storageType)

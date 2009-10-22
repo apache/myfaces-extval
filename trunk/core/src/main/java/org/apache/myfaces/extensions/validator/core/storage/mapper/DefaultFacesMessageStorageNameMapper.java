@@ -16,26 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.storage;
+package org.apache.myfaces.extensions.validator.core.storage.mapper;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.storage.DefaultFacesMessageStorage;
+import org.apache.myfaces.extensions.validator.core.storage.FacesMessageStorage;
 
 /**
- * suggested interface for a group storage
- * used by the bvi module and add-ons
- * <p/>
- * it allows to manage groups for the current request
- * 
+ * use a public class to allow optional deregistration
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface GroupStorage
+public class DefaultFacesMessageStorageNameMapper implements NameMapper<String>
 {
-    void addGroup(Class groupClass, String viewId, String clientId);
-
-    void restrictGroup(Class groupClass, String viewId, String clientId);
-
-    Class[] getGroups(String viewId, String clientId);
+    public String createName(String source)
+    {
+        return (FacesMessageStorage.class.getName().equals(source)) ?
+                DefaultFacesMessageStorage.class.getName() : null;
+    }
 }

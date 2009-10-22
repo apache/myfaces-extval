@@ -20,22 +20,21 @@ package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
+
+import javax.faces.application.FacesMessage;
+import java.util.List;
 
 /**
- * suggested interface for a group storage
- * used by the bvi module and add-ons
- * <p/>
- * it allows to manage groups for the current request
- * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
-public interface GroupStorage
+public interface FacesMessageStorage
 {
-    void addGroup(Class groupClass, String viewId, String clientId);
+    void addFacesMessage(String clientId, FacesMessage facesMessage);
 
-    void restrictGroup(Class groupClass, String viewId, String clientId);
+    List<FacesMessageHolder> getFacesMessages();
 
-    Class[] getGroups(String viewId, String clientId);
+    void addAll();
 }

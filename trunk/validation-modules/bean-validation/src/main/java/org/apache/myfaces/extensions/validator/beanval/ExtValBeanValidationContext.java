@@ -112,19 +112,19 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         return this.defaultMessageInterpolator;
     }
 
-    public void addGroup(Class groupClass, String viewId, String componentId)
+    public void addGroup(Class groupClass, String viewId, String clientId)
     {
-        this.groupStorage.addGroup(groupClass, viewId, componentId);
+        this.groupStorage.addGroup(groupClass, viewId, clientId);
     }
 
-    public void restrictGroup(Class groupClass, String viewId, String componentId)
+    public void restrictGroup(Class groupClass, String viewId, String clientId)
     {
-        this.groupStorage.restrictGroup(groupClass, viewId, componentId);
+        this.groupStorage.restrictGroup(groupClass, viewId, clientId);
     }
 
-    public Class[] getGroups(String viewId, String componentId)
+    public Class[] getGroups(String viewId, String clientId)
     {
-        return this.groupStorage.getGroups(viewId, componentId);
+        return this.groupStorage.getGroups(viewId, clientId);
     }
 
     public void addModelValidationEntry(ModelValidationEntry modelValidationEntry, String viewId, UIComponent component)
