@@ -44,17 +44,17 @@ public class DefaultGroupStorage implements GroupStorage
 
     private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
 
-    public void addGroup(Class groupClass, String viewId, String componentId)
+    public void addGroup(Class groupClass, String viewId, String clientId)
     {
-        addGroupToGroupStorage(groupClass, viewId, componentId, this.addedGroups);
+        addGroupToGroupStorage(groupClass, viewId, clientId, this.addedGroups);
     }
 
-    public void restrictGroup(Class groupClass, String viewId, String componentId)
+    public void restrictGroup(Class groupClass, String viewId, String clientId)
     {
-        addGroupToGroupStorage(groupClass, viewId, componentId, this.restrictedGroups);
+        addGroupToGroupStorage(groupClass, viewId, clientId, this.restrictedGroups);
     }
 
-    public Class[] getGroups(String viewId, String componentId)
+    public Class[] getGroups(String viewId, String clientId)
     {
         if(this.addedGroups.size() < 1)
         {
@@ -65,14 +65,14 @@ public class DefaultGroupStorage implements GroupStorage
         String key = GroupUtils.getGroupKey(viewId, null);
         List<Class> resultListForPage = buildGroupList(key, this.addedGroups);
 
-        key = GroupUtils.getGroupKey(viewId, componentId);
+        key = GroupUtils.getGroupKey(viewId, clientId);
         List<Class> resultListForComponent = buildGroupList(key, this.addedGroups);
 
         //remove restricted groups
         Class[] resultsForPage =
                 filterGroupList(GroupUtils.getGroupKey(viewId, null), resultListForPage);
         Class[] resultsForComponent =
-                filterGroupList(GroupUtils.getGroupKey(viewId, componentId), resultListForComponent);
+                filterGroupList(GroupUtils.getGroupKey(viewId, clientId), resultListForComponent);
 
         if(resultsForPage.length == 0)
         {
@@ -95,15 +95,15 @@ public class DefaultGroupStorage implements GroupStorage
         return mergeResults(resultsForPage, resultsForComponent);
     }
 
-    private void addGroupToGroupStorage(Class groupClass, String viewId, String componentId,
+    private void addGroupToGroupStorage(Class groupClass, String viewId, String clientId,
                                         Map<String, List<Class>> groupStorage)
     {
-        List<Class> groupList = groupStorage.get(GroupUtils.getGroupKey(viewId, componentId));
+        List<Class> groupList = groupStorage.get(GroupUtils.getGroupKey(viewId, clientId));
 
         if(groupList == null)
         {
             groupList = new ArrayList<Class>();
-            groupStorage.put(GroupUtils.getGroupKey(viewId, componentId), groupList);
+            groupStorage.put(GroupUtils.getGroupKey(viewId, clientId), groupList);
         }
 
         if(!groupList.contains(groupClass))

@@ -110,7 +110,8 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
                         ": throw original exception after processAfterValidatorException");
                 }
 
-                throw validatorException;
+                ExtValUtils.tryToThrowValidatorExceptionForComponent(
+                        uiComponent, validatorException.getFacesMessage(), validatorException);
             }
 
             if(logger.isTraceEnabled())

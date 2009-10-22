@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.test.AbstractExValViewControllerT
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -57,7 +58,7 @@ public class RegistrationPropertyValidationInterceptorTestCase extends AbstractE
 
         List<PropertyValidationInterceptor> result = ExtValContext.getContext().getPropertyValidationInterceptors();
 
-        int resultLength = 5;
+        int resultLength = 6;
         assertEquals(resultLength, result.size());
 
         for(int i = 0; i < resultLength; i++)
@@ -74,9 +75,12 @@ public class RegistrationPropertyValidationInterceptorTestCase extends AbstractE
                     assertEquals(TestMetaDataExtractionInterceptor3.class, result.get(i).getClass());
                     break;
                 case 3:
-                    assertEquals(TestMetaDataExtractionInterceptor1000.class, result.get(i).getClass());
+                    assertEquals(FacesMessagePropertyValidationInterceptor.class, result.get(i).getClass());
                     break;
                 case 4:
+                    assertEquals(TestMetaDataExtractionInterceptor1000.class, result.get(i).getClass());
+                    break;
+                case 5:
                     assertEquals(TestComponentInitializer.class, result.get(i).getClass());
                     break;
             }

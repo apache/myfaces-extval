@@ -24,8 +24,10 @@ import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationConte
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
@@ -38,12 +40,17 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
+import javax.validation.ConstraintViolation;
+import javax.validation.Payload;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -53,8 +60,9 @@ import java.util.List;
 public class BeanValidationUtils
 {
     private static final Log LOG = LogFactory.getLog(BeanValidationUtils.class);
+    private static LabeledMessageInternals labeledMessageInternals = new LabeledMessageInternals();
 
-    @ToDo(value = Priority.LOW, description = "use it also in ModelValidationPhaseListener" +
+    @ToDo(value = Priority.HIGH, description = "use it - also in ModelValidationPhaseListener" +
             "attention: only add one message per client id")
     public static boolean supportMultipleViolationsPerField()
     {
@@ -460,5 +468,180 @@ public class BeanValidationUtils
                     "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
         }
         return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
+    }
+
+    public static void processConstraintViolations(FacesContext facesContext,
+                                                   UIComponent uiComponent,
+                                                   Object convertedObject,
+                                                   Set<ConstraintViolation> violations,
+                                                   boolean firstErrorCausesAnException)
+    {
+        List<FacesMessageHolder> facesMessageHolderList = new ArrayList<FacesMessageHolder>();
+        FacesMessageHolder facesMessageHolder;
+
+        for (ConstraintViolation violation : violations)
+        {
+            facesMessageHolder = new FacesMessageHolder(
+                    createFacesMessageForConstraintViolation(uiComponent, convertedObject, violation));
+            facesMessageHolder.setClientId(uiComponent.getClientId(facesContext));
+
+            facesMessageHolderList.add(facesMessageHolder);
+        }
+
+        processViolationMessages(facesMessageHolderList, firstErrorCausesAnException);
+    }
+
+    @ToDo(value = Priority.HIGH, description = "support severity.warn and .info")
+    public static FacesMessage createFacesMessageForConstraintViolation(UIComponent uiComponent,
+                                                                        Object convertedObject,
+                                                                        ConstraintViolation violation)
+    {
+        String violationMessage = violation.getMessage();
+
+        String labeledMessage = createLabeledMessage(violationMessage);
+
+        FacesMessage.Severity severity = calcSeverity(violation);
+
+        ValidatorException validatorException = createValidatorException(labeledMessage, severity);
+
+        executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException);
+
+        if (isMessageTextUnchanged(validatorException, labeledMessage))
+        {
+            return ExtValUtils.createFacesMessage(severity, violationMessage, violationMessage);
+        }
+        else
+        {
+            String newMessage = validatorException.getFacesMessage().getSummary();
+            return ExtValUtils.createFacesMessage(severity, newMessage, newMessage);
+        }
+    }
+
+    private static String createLabeledMessage(String violationMessage)
+    {
+        return labeledMessageInternals.createLabeledMessage(violationMessage);
+    }
+
+    private static FacesMessage.Severity calcSeverity(ConstraintViolation<?> violation)
+    {
+        for (Class<? extends Payload> payload : violation.getConstraintDescriptor().getPayload())
+        {
+            if (ViolationSeverity.Warn.class.isAssignableFrom(payload))
+            {
+                return FacesMessage.SEVERITY_WARN;
+            }
+            else if (ViolationSeverity.Info.class.isAssignableFrom(payload))
+            {
+                return FacesMessage.SEVERITY_INFO;
+            }
+            else if (ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            {
+                return FacesMessage.SEVERITY_FATAL;
+            }
+        }
+        return FacesMessage.SEVERITY_ERROR;
+    }
+
+    private static void executeAfterThrowingInterceptors(UIComponent uiComponent,
+                                                         Object convertedObject,
+                                                         ValidatorException validatorException)
+    {
+        ExtValUtils.executeAfterThrowingInterceptors(
+                uiComponent,
+                null,
+                convertedObject,
+                validatorException,
+                null);
+    }
+
+    private static boolean isMessageTextUnchanged(ValidatorException validatorException, String violationMessage)
+    {
+        return violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
+                violationMessage.equals(validatorException.getFacesMessage().getDetail());
+    }
+
+    private static ValidatorException createValidatorException(String violationMessage, FacesMessage.Severity severity)
+    {
+        return new ValidatorException(
+                ExtValUtils.createFacesMessage(severity, violationMessage, violationMessage));
+    }
+
+    public static void processViolationMessages(List<FacesMessageHolder> violationMessageHolderList,
+                                                boolean firstErrorCausesAnException)
+    {
+        List<FacesMessageHolder> facesMessageListWithLowSeverity =
+                getFacesMessageListWithLowSeverity(violationMessageHolderList);
+        List<FacesMessageHolder> facesMessageListWithHighSeverity =
+                getFacesMessageListWithHighSeverity(violationMessageHolderList);
+
+        addMessagesWithHighSeverity(facesMessageListWithHighSeverity, firstErrorCausesAnException);
+        addMessagesWithLowSeverity(facesMessageListWithLowSeverity);
+
+        if (!facesMessageListWithHighSeverity.isEmpty() && firstErrorCausesAnException)
+        {
+            FacesMessageHolder facesMessageHolder = facesMessageListWithHighSeverity.iterator().next();
+            ExtValUtils.tryToThrowValidatorExceptionForComponentId(
+                    facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage(), null);
+        }
+    }
+
+    private static List<FacesMessageHolder> getFacesMessageListWithLowSeverity(
+            List<FacesMessageHolder> violationMessages)
+    {
+        List<FacesMessageHolder> result = new ArrayList<FacesMessageHolder>();
+
+        for (FacesMessageHolder facesMessageHolder : violationMessages)
+        {
+            if (FacesMessage.SEVERITY_WARN.equals(facesMessageHolder.getFacesMessage().getSeverity()) ||
+                    FacesMessage.SEVERITY_INFO.equals(facesMessageHolder.getFacesMessage().getSeverity()))
+            {
+                result.add(facesMessageHolder);
+            }
+        }
+        return result;
+    }
+
+    private static List<FacesMessageHolder> getFacesMessageListWithHighSeverity(
+            List<FacesMessageHolder> violationMessageHolderList)
+    {
+        List<FacesMessageHolder> result = new ArrayList<FacesMessageHolder>();
+
+        for (FacesMessageHolder facesMessageHolder : violationMessageHolderList)
+        {
+            if (FacesMessage.SEVERITY_ERROR.equals(facesMessageHolder.getFacesMessage().getSeverity()) ||
+                    FacesMessage.SEVERITY_FATAL.equals(facesMessageHolder.getFacesMessage().getSeverity()))
+            {
+                result.add(facesMessageHolder);
+            }
+        }
+        return result;
+    }
+
+    private static void addMessagesWithHighSeverity(List<FacesMessageHolder> facesMessageHolderListWithHighSeverity,
+                                                    boolean firstErrorCausesAnException)
+    {
+        boolean firstMessage = true;
+        for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithHighSeverity)
+        {
+            if (firstMessage && firstErrorCausesAnException)
+            {
+                //the first error will be thrown as exception
+                firstMessage = false;
+            }
+            else
+            {
+                ExtValUtils.tryToAddViolationMessageForComponentId(
+                        facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
+            }
+        }
+    }
+
+    private static void addMessagesWithLowSeverity(List<FacesMessageHolder> facesMessageHolderListWithLowSeverity)
+    {
+        for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithLowSeverity)
+        {
+            ExtValUtils.tryToAddViolationMessageForComponentId(
+                    facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
+        }
     }
 }

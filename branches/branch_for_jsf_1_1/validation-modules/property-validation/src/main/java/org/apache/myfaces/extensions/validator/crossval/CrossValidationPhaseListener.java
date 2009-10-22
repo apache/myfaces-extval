@@ -121,10 +121,10 @@ public class CrossValidationPhaseListener implements PhaseListener
                         if (facesMessage != null &&
                                 facesMessage.getSummary() != null && facesMessage.getDetail() != null)
                         {
-                            event.getFacesContext().addMessage(entry.getClientId(), facesMessage);
+                            ExtValUtils.tryToAddViolationMessageForComponentId(entry.getClientId(), facesMessage);
                         }
 
-                        event.getFacesContext().renderResponse();
+                        ExtValUtils.tryToBlocksNavigationForComponentId(entry.getClientId(), facesMessage);
                     }
                 }
                 finally

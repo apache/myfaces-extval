@@ -16,26 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.storage;
+package org.apache.myfaces.extensions.validator.beanval.payload;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
+import javax.validation.Payload;
+import javax.faces.application.FacesMessage;
+
 /**
- * suggested interface for a group storage
- * used by the bvi module and add-ons
- * <p/>
- * it allows to manage groups for the current request
- * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
-public interface GroupStorage
+public interface ViolationSeverity
 {
-    void addGroup(Class groupClass, String viewId, String clientId);
+    interface Info extends Payload
+    {
+        FacesMessage.Severity VALUE = FacesMessage.SEVERITY_INFO;
+    }
 
-    void restrictGroup(Class groupClass, String viewId, String clientId);
+    interface Warn extends Payload
+    {
+        FacesMessage.Severity VALUE = FacesMessage.SEVERITY_WARN;
+    }
 
-    Class[] getGroups(String viewId, String clientId);
+    interface Error extends Payload
+    {
+        FacesMessage.Severity VALUE = FacesMessage.SEVERITY_ERROR;
+    }
+
+    interface Fatal extends Payload
+    {
+        FacesMessage.Severity VALUE = FacesMessage.SEVERITY_FATAL;
+    }
 }

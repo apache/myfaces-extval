@@ -23,9 +23,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.Payload;
+import javax.faces.application.FacesMessage;
 import java.util.Map;
 import java.util.HashMap;
 import java.lang.annotation.Annotation;
@@ -41,14 +44,14 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
     {
         ConstraintDescriptor<? extends T> constraintDescriptor = metaDataEntry.getValue(ConstraintDescriptor.class);
 
-        if(isClientSideValidationEnabled(constraintDescriptor))
+        if(isClientSideValidationEnabled(constraintDescriptor) && isBlockingConstraint(constraintDescriptor))
         {
             return convertConstraintDescriptor((ConstraintDescriptor<T>)constraintDescriptor);
         }
         return new HashMap<String, Object>();
     }
 
-    private boolean isClientSideValidationEnabled(ConstraintDescriptor<? extends T> constraintDescriptor)
+    protected boolean isClientSideValidationEnabled(ConstraintDescriptor<? extends T> constraintDescriptor)
     {
         for(Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
@@ -60,5 +63,27 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
         return true;
     }
 
+    protected boolean isBlockingConstraint(ConstraintDescriptor<?> constraintDescriptor)
+    {
+        FacesMessage testMessage = new FacesMessage();
+        testMessage.setSeverity(ViolationSeverity.Error.VALUE);
+
+        for (Class<? extends Payload> payload : constraintDescriptor.getPayload())
+        {
+            if (ViolationSeverity.Warn.class.isAssignableFrom(payload))
+            {
+                testMessage.setSeverity(ViolationSeverity.Warn.VALUE);
+            }
+            else if(ViolationSeverity.Info.class.isAssignableFrom(payload))
+            {
+                testMessage.setSeverity(ViolationSeverity.Info.VALUE);
+            }
+            else if(ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            {
+                testMessage.setSeverity(ViolationSeverity.Fatal.VALUE);
+            }
+        }
+        return ExtValUtils.severityBlocksSubmitForComponentId(null, testMessage);
+    }
     protected abstract Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<T> constraintDescriptor);
 }

@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
@@ -55,6 +57,7 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
         .DefaultModuleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
         .SimpleValidationStrategyToMsgResolverNameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -89,7 +92,9 @@ public class ExtValStartupListener extends AbstractStartupListener
                 .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
 
         initNameMappers();
-        initDefaultValidationExceptionInterceptor();
+        initValidationExceptionInterceptors();
+        initViolationSeverityInterceptors();
+        initPropertyValidationInterceptors();
         executeCustomStartupListener();
     }
 
@@ -172,9 +177,21 @@ public class ExtValStartupListener extends AbstractStartupListener
         }
     }
 
-    private void initDefaultValidationExceptionInterceptor()
+    private void initValidationExceptionInterceptors()
     {
         ExtValContext.getContext().addValidationExceptionInterceptor(
                 new HtmlCoreComponentsValidationExceptionInterceptor());
+        ExtValContext.getContext().addValidationExceptionInterceptor(
+                new ViolationSeverityValidationExceptionInterceptor());
+    }
+
+    private void initViolationSeverityInterceptors()
+    {
+        ExtValContext.getContext().setViolationSeverityInterpreter(new DefaultViolationSeverityInterpreter(), false);
+    }
+
+    private void initPropertyValidationInterceptors()
+    {
+        ExtValContext.getContext().addPropertyValidationInterceptor(new FacesMessagePropertyValidationInterceptor());
     }
 }
