@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -55,7 +54,7 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@InvocationOrder(200)
+@InvocationOrder(100)
 @UsageInformation(UsageCategory.INTERNAL)
 @ToDo(value = Priority.HIGH, description = "check compatibility with bv-integration")
 public class HtmlCoreComponentsValidationExceptionInterceptor implements ValidationExceptionInterceptor
@@ -104,9 +103,10 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
 
             if(metaDataEntry != null && metaDataEntry.getValue() instanceof Annotation)
             {
-                if(!displayAsException(facesMessage, metaDataEntry.getValue(Annotation.class)))
+                //correct severity is e.g. provided by ViolationSeverityValidationExceptionInterceptor
+                ExtValUtils.tryToBlocksNavigationForComponent(uiComponent, facesMessage);
+                if(!FacesContext.getCurrentInstance().getRenderResponse())
                 {
-                    facesContext.addMessage(uiComponent.getClientId(facesContext), facesMessage);
                     //it's a special case - since validation will continue it's essential to reset it
                     ((EditableValueHolder)uiComponent).setRequired(false);
                     return false;
@@ -135,24 +135,6 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
     {
         return (String)ReflectionUtils.tryToInvokeMethod(uiComponent,
                 ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getRequiredMessage"));
-    }
-
-    @ToDo(value = Priority.MEDIUM, description = "refactor to a generic parameter extractor")
-    private boolean displayAsException(FacesMessage facesMessage, Annotation annotation)
-    {
-        boolean isError = true;
-
-        for(FacesMessage.Severity severity : ExtValUtils.getValidationParameterExtractor()
-                .extract(annotation, ViolationSeverity.class, FacesMessage.Severity.class))
-        {
-            if(severity.compareTo(facesMessage.getSeverity()) < 0)
-            {
-                facesMessage.setSeverity(severity);
-                isError = false;
-            }
-        }
-
-        return isError;
     }
 
     protected boolean processComponent(UIComponent uiComponent)

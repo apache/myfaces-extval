@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
@@ -178,6 +179,11 @@ public class ExtValUtils
     {
         boolean result = true;
 
+        if(metaDataEntry == null)
+        {
+            metaDataEntry = new MetaDataEntry();
+        }
+        
         for(ValidationExceptionInterceptor validationExceptionInterceptor : ExtValContext.getContext()
                 .getValidationExceptionInterceptors())
         {
@@ -645,5 +651,143 @@ public class ExtValUtils
     public static PropertyDetails getPropertyDetails(PropertyInformation propertyInformation)
     {
         return propertyInformation.getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
+    }
+
+    public static void tryToThrowValidatorException(String clientId, FacesMessage facesMessage, Throwable throwable)
+    {
+        UIComponent targetComponent = findComponent(clientId);
+
+        tryToThrowValidatorExceptionForComponent(targetComponent, facesMessage, throwable);
+    }
+
+    public static void tryToThrowValidatorExceptionForComponent(
+            UIComponent uiComponent, FacesMessage facesMessage, Throwable throwable)
+    {
+        ViolationSeverityInterpreter interpreter =
+                ExtValContext.getContext().getViolationSeverityInterpreter();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if(interpreter.severityCausesValidatorException(facesContext, uiComponent, facesMessage.getSeverity()))
+        {
+            if(throwable == null)
+            {
+                throw new ValidatorException(facesMessage);
+            }
+            else
+            {
+                throw new ValidatorException(facesMessage, throwable);
+            }
+        }
+        else
+        {
+            tryToAddViolationMessageForComponent(uiComponent, facesMessage);
+        }
+    }
+
+    public static void tryToAddViolationMessage(String clientId, FacesMessage facesMessage)
+    {
+        UIComponent targetComponent = findComponent(clientId);
+
+        if(targetComponent == null && clientId != null)
+        {
+            //workaround for testcases
+            tryToAddViolationMessageForClientId(clientId, facesMessage);
+            return;
+        }
+        tryToAddViolationMessageForComponent(targetComponent, facesMessage);
+    }
+
+    @ToDo(Priority.MEDIUM)
+    private static void tryToAddViolationMessageForClientId(String clientId, FacesMessage facesMessage)
+    {
+        ViolationSeverityInterpreter interpreter =
+                ExtValContext.getContext().getViolationSeverityInterpreter();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if(interpreter.severityCausesViolationMessage(facesContext, null, facesMessage.getSeverity()))
+        {
+            facesContext.addMessage(null, facesMessage);
+        }
+        tryToBlocksNavigationForComponent(null, facesMessage);
+    }
+
+    public static void tryToAddViolationMessageForComponent(UIComponent uiComponent, FacesMessage facesMessage)
+    {
+        ViolationSeverityInterpreter interpreter =
+                ExtValContext.getContext().getViolationSeverityInterpreter();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if(interpreter.severityCausesViolationMessage(facesContext, uiComponent, facesMessage.getSeverity()))
+        {
+            if(uiComponent != null)
+            {
+                facesContext.addMessage(uiComponent.getClientId(facesContext), facesMessage);
+            }
+            else
+            {
+                if(LOGGER.isWarnEnabled())
+                {
+                    LOGGER.warn("no component was found that might happen with test-frameworks" +
+                            " and shouldn't happen in real applications");
+                }
+            }
+        }
+        tryToBlocksNavigationForComponent(uiComponent, facesMessage);
+    }
+
+    public static void tryToBlocksNavigation(String clientId, FacesMessage facesMessage)
+    {
+        UIComponent targetComponent = findComponent(clientId);
+
+        tryToBlocksNavigationForComponent(targetComponent, facesMessage);
+    }
+
+    public static void tryToBlocksNavigationForComponent(UIComponent uiComponent, FacesMessage facesMessage)
+    {
+        ViolationSeverityInterpreter interpreter =
+                ExtValContext.getContext().getViolationSeverityInterpreter();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if(interpreter.severityBlocksNavigation(facesContext, uiComponent, facesMessage.getSeverity()))
+        {
+            FacesContext.getCurrentInstance().renderResponse();
+        }
+    }
+
+    public static boolean severityBlocksSubmit(String clientId, FacesMessage facesMessage)
+    {
+        ViolationSeverityInterpreter interpreter =
+                ExtValContext.getContext().getViolationSeverityInterpreter();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UIComponent targetComponent = findComponent(clientId);
+
+        return interpreter.severityBlocksSubmit(facesContext, targetComponent, facesMessage.getSeverity());
+    }
+
+    public static boolean severityShowsIndication(String clientId, FacesMessage facesMessage)
+    {
+        ViolationSeverityInterpreter interpreter =
+                ExtValContext.getContext().getViolationSeverityInterpreter();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UIComponent targetComponent = findComponent(clientId);
+
+        return interpreter.severityShowsIndication(facesContext, targetComponent, facesMessage.getSeverity());
+    }
+
+    private static UIComponent findComponent(String clientId)
+    {
+        UIComponent targetComponent = null;
+
+        if(clientId != null)
+        {
+            targetComponent = FacesContext.getCurrentInstance().getViewRoot().findComponent(clientId);
+        }
+        return targetComponent;
     }
 }
