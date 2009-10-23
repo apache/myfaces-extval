@@ -34,7 +34,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputSecret;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
@@ -105,12 +104,6 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
             {
                 //correct severity is e.g. provided by ViolationSeverityValidationExceptionInterceptor
                 ExtValUtils.tryToBlocksNavigationForComponent(uiComponent, facesMessage);
-                if(!FacesContext.getCurrentInstance().getRenderResponse())
-                {
-                    //it's a special case - since validation will continue it's essential to reset it
-                    ((EditableValueHolder)uiComponent).setRequired(false);
-                    return false;
-                }
             }
         }
         return true;
