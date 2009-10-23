@@ -26,11 +26,13 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataE
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
+import javax.faces.render.Renderer;
 import java.util.Map;
 import java.lang.annotation.Annotation;
 
@@ -41,6 +43,21 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ValidationInterceptor extends AbstractValidationInterceptor
 {
+    @Override
+    public void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
+            throws SkipAfterInterceptorsException
+    {
+        /*
+         * component initialization sets a component to required if there are constraints which indicate it
+         * the required flag in a component leads to problems with h:messages (additional message) as well as
+         * incompatibilities with skip validation and severities
+         */
+        if(uiComponent instanceof EditableValueHolder)
+        {
+            ((EditableValueHolder)uiComponent).setRequired(false);
+        }
+    }
+
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
         if(logger.isTraceEnabled())
@@ -111,9 +128,6 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
             {
                 if(skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
                 {
-                    //required is a special case - reset it
-                    ((EditableValueHolder)uiComponent).setRequired(false);
-
                     //don't break maybe there are constraints which don't support the skip-mechanism
                     continue;
                 }
