@@ -165,11 +165,12 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     protected boolean processComponent(UIComponent uiComponent)
     {
-        if (!(uiComponent instanceof EditableValueHolder) || isComponentInitializationDeactivated())
-        {
-            return false;
-        }
+        return uiComponent instanceof EditableValueHolder &&
+                !isComponentInitializationDeactivated() && isValueBindingOfComponentValid(uiComponent);
+    }
 
+    private boolean isValueBindingOfComponentValid(UIComponent uiComponent)
+    {
         try
         {
             return ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent) != null;

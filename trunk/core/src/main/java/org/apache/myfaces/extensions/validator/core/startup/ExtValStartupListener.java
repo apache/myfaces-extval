@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessageProp
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.PhaseIdRecordingPhaseListener;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
         .BeanValidationStrategyToMetaDataTransformerNameMapper;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
@@ -61,6 +62,7 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Default
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 /**
@@ -93,8 +95,9 @@ public class ExtValStartupListener extends AbstractStartupListener
 
         initNameMappers();
         initValidationExceptionInterceptors();
-        initViolationSeverityInterceptors();
+        initViolationSeverityInterpreter();
         initPropertyValidationInterceptors();
+        initPhaseListeners();
         executeCustomStartupListener();
     }
 
@@ -185,7 +188,7 @@ public class ExtValStartupListener extends AbstractStartupListener
                 new ViolationSeverityValidationExceptionInterceptor());
     }
 
-    private void initViolationSeverityInterceptors()
+    private void initViolationSeverityInterpreter()
     {
         ExtValContext.getContext().setViolationSeverityInterpreter(new DefaultViolationSeverityInterpreter(), false);
     }
@@ -193,5 +196,10 @@ public class ExtValStartupListener extends AbstractStartupListener
     private void initPropertyValidationInterceptors()
     {
         ExtValContext.getContext().addPropertyValidationInterceptor(new FacesMessagePropertyValidationInterceptor());
+    }
+
+    private void initPhaseListeners()
+    {
+        JsfUtils.registerPhaseListener(new PhaseIdRecordingPhaseListener());
     }
 }

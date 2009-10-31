@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.validation.parameter;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -76,12 +78,15 @@ public interface ViolationSeverityInterpreter
             FacesContext facesContext, UIComponent uiComponent, FacesMessage.Severity severity);
 
     /**
+     * available for add-ons not used internally due to performance reasons
+     *
      * @param facesContext current faces context
      * @param uiComponent current component
      * @param severity jsf severity for faces messages
      * @return true if the constraint with the given severity
      * should cause e.g. a required marker independent of client-side validation (if supported)
      */
+    @ToDo(Priority.HIGH)
     boolean severityShowsIndication(
             FacesContext facesContext, UIComponent uiComponent, FacesMessage.Severity severity);
 }

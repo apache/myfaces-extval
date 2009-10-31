@@ -23,8 +23,4 @@
     <lifecycle>
         <phase-listener>org.apache.myfaces.extensions.validator.PropertyValidationModuleStartupListener</phase-listener>
     </lifecycle>
-
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener</phase-listener>
-    </lifecycle>
 </faces-config>

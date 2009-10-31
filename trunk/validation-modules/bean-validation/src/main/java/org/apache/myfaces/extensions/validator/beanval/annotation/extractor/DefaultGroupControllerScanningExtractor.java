@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultCo
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 
 import javax.faces.context.FacesContext;
 
@@ -44,7 +45,8 @@ public class DefaultGroupControllerScanningExtractor extends DefaultComponentMet
         Class entityClass = propertyDetails.getBaseObject().getClass();
 
         PropertyInformation propertyInformation = new DefaultPropertyInformation();
-        
+        propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
+
         /*
          * find and add annotations
          */

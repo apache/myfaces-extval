@@ -51,7 +51,6 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FacesMessageFactory;
@@ -279,13 +278,12 @@ public class ExtValUtils
                                                                                   String targetExpression)
     {
         Object baseObject;
-        if(ExtValUtils.getELHelper().isELTermWellFormed(targetExpression))
+        if(getELHelper().isELTermWellFormed(targetExpression))
         {
             ValueBindingExpression vbe = new ValueBindingExpression(targetExpression);
 
             String expression = vbe.getExpressionString();
-            baseObject = ExtValUtils.getELHelper()
-                    .getValueOfExpression(FacesContext.getCurrentInstance(), vbe.getBaseExpression());
+            baseObject = getELHelper().getValueOfExpression(FacesContext.getCurrentInstance(), vbe.getBaseExpression());
             return new PropertyDetails(
                 expression.substring(2, expression.length() - 1), baseObject, vbe.getProperty());
         }
@@ -369,9 +367,9 @@ public class ExtValUtils
 
     public static boolean isSkipableValidationStrategy(Class<? extends ValidationStrategy> targetClass)
     {
-        for(Class currentClass : ExtValUtils.getSkipValidationSupportClassList())
+        for(Class currentClass : getSkipValidationSupportClassList())
         {
-            if(ExtValUtils.isSkipValidationSupported(currentClass, targetClass))
+            if(isSkipValidationSupported(currentClass, targetClass))
             {
                 return true;
             }
@@ -383,7 +381,7 @@ public class ExtValUtils
     public static boolean processMetaDataEntryAfterSkipValidation(
             Class<? extends ValidationStrategy> targetClass, MetaDataEntry entry)
     {
-        return ExtValUtils.isSkipableValidationStrategy(targetClass) &&
+        return isSkipableValidationStrategy(targetClass) &&
                 Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class));
     }
 
@@ -573,10 +571,9 @@ public class ExtValUtils
     public static Map<String, Object> getTransformedMetaData(FacesContext facesContext, UIComponent uiComponent)
     {
         ValidationStrategy validationStrategy;
-        MetaDataTransformer metaDataTransformer;
 
         SkipValidationEvaluator skipValidationEvaluator = ExtValContext.getContext().getSkipValidationEvaluator();
-        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
+        MetaDataExtractor metaDataExtractor = getComponentMetaDataExtractor();
 
         Map<String, Object> metaData;
         Map<String, Object> metaDataResult = new HashMap<String, Object>();
@@ -584,58 +581,62 @@ public class ExtValUtils
         for (MetaDataEntry entry : metaDataExtractor.extract(facesContext, uiComponent).getMetaDataEntries())
         {
             metaData = new HashMap<String, Object>();
-            validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
+            validationStrategy = getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null)
             {
-                if(!skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
-                {
-                    metaDataTransformer = ExtValUtils.getMetaDataTransformerForValidationStrategy(validationStrategy);
+                metaData = transformMetaData(
+                        facesContext, uiComponent, validationStrategy, skipValidationEvaluator, metaData, entry);
 
-                    if(metaDataTransformer != null)
-                    {
-                        if(LOGGER.isDebugEnabled())
-                        {
-                            LOGGER.debug(metaDataTransformer.getClass().getName() + " instantiated");
-                        }
-
-                        if(isClientSideValidationEnabled(entry))
-                        {
-                            metaData = metaDataTransformer.convertMetaData(entry);
-                        }
-                    }
-                    else
-                    {
-                        metaData = null;
-                    }
-
-                    if(metaData == null)
-                    {
-                        metaData = new HashMap<String, Object>();
-                    }
-                }
-
-                if(metaData.isEmpty() ||
-                      (Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)) &&
-                        ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass())))
+                if(!isComponentInitializationSkipped(metaData, entry, validationStrategy))
                 {
                     //don't break maybe there are constraints which don't support the skip-mechanism
-                    continue;
+                    metaDataResult.putAll(metaData);
                 }
-
-                metaDataResult.putAll(metaData);
            }
         }
 
         return metaDataResult;
     }
 
-    private static boolean isClientSideValidationEnabled(MetaDataEntry entry)
+    private static Map<String, Object> transformMetaData(FacesContext facesContext,
+                                                         UIComponent uiComponent,
+                                                         ValidationStrategy validationStrategy,
+                                                         SkipValidationEvaluator skipValidationEvaluator,
+                                                         Map<String, Object> metaData, MetaDataEntry entry)
     {
-        List<String> keysToDisable = entry.getProperty(
-                                CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION, List.class);
+        if(!skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
+        {
+            MetaDataTransformer metaDataTransformer = getMetaDataTransformerForValidationStrategy(validationStrategy);
 
-        return keysToDisable == null || !keysToDisable.contains(entry.getKey());
+            if(metaDataTransformer != null)
+            {
+                if(LOGGER.isDebugEnabled())
+                {
+                    LOGGER.debug(metaDataTransformer.getClass().getName() + " instantiated");
+                }
+
+                metaData = metaDataTransformer.convertMetaData(entry);
+            }
+            else
+            {
+                metaData = null;
+            }
+
+            if(metaData == null)
+            {
+                return new HashMap<String, Object>();
+            }
+        }
+        return metaData;
+    }
+
+    private static boolean isComponentInitializationSkipped(Map<String, Object> metaData, MetaDataEntry entry,
+                                                            ValidationStrategy validationStrategy)
+    {
+        return metaData.isEmpty() ||
+              (Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)) &&
+                isSkipableValidationStrategy(validationStrategy.getClass()));
     }
 
     public static boolean interpretEmptyStringValuesAsNull()
@@ -729,11 +730,7 @@ public class ExtValUtils
             }
             else
             {
-                if(LOGGER.isWarnEnabled())
-                {
-                    LOGGER.warn("no component was found that might happen with test-frameworks" +
-                            " and shouldn't happen in real applications");
-                }
+                addFacesMessage(null, facesMessage);
             }
         }
         tryToBlocksNavigationForComponent(uiComponent, facesMessage);
@@ -789,6 +786,7 @@ public class ExtValUtils
         return interpreter.severityBlocksSubmit(facesContext, targetComponent, facesMessage.getSeverity());
     }
 
+    //available for add-ons not used internally due to performance reasons
     public static boolean severityShowsIndicationForComponentId(String clientId, FacesMessage facesMessage)
     {
         ViolationSeverityInterpreter interpreter =
