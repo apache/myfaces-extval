@@ -58,8 +58,8 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         registerMetaDataTransformerNameMapper();
         registerGroupStorageNameMapper();
         registerModelValidationStorageNameMapper();
-        registerModelValidationPhaseListener();
         registerComponentInitializers();
+        registerPhaseListeners();
     }
 
     protected void registerValidatorFactory()
@@ -107,20 +107,20 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         getStorageManagerHolder().setStorageManager(ModelValidationStorage.class, modelValidationStorageManager, false);
     }
 
-    protected void registerModelValidationPhaseListener()
-    {
-        JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
-    }
-
     protected void registerComponentInitializers()
     {
         ExtValContext.getContext().addComponentInitializer(new HtmlCoreComponentsComponentInitializer());
     }
 
-    private StorageManagerHolder getStorageManagerHolder()
+    protected StorageManagerHolder getStorageManagerHolder()
     {
         return (ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
+    }
+
+    protected void registerPhaseListeners()
+    {
+        JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
     }
 }

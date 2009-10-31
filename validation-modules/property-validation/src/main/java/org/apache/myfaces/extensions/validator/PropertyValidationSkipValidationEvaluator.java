@@ -23,10 +23,15 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.event.PhaseId;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
@@ -40,6 +45,31 @@ public class PropertyValidationSkipValidationEvaluator implements SkipValidation
                                      ValidationStrategy validationStrategy,
                                      MetaDataEntry metaDataEntry)
     {
-        return PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
+        boolean result = false;
+        
+        if(isRenderResponsePhase())
+        {
+            result = !isClientSideValidationEnabled(metaDataEntry);
+        }
+        return result || PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
+    }
+
+    private boolean isRenderResponsePhase()
+    {
+        return PhaseId.RENDER_RESPONSE.equals(getFacesInformationStorage().getCurrentPhaseId());
+    }
+
+    private FacesInformationStorage getFacesInformationStorage()
+    {
+        return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private boolean isClientSideValidationEnabled(MetaDataEntry entry)
+    {
+        List<String> keysToDisable = entry.getProperty(
+                                CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION, List.class);
+
+        return keysToDisable == null || !keysToDisable.contains(entry.getKey());
     }
 }

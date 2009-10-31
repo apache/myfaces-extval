@@ -21,12 +21,16 @@ package org.apache.myfaces.extensions.validator.beanval.validation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
+import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleKey;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -72,6 +76,8 @@ public class ModelValidationPhaseListener implements PhaseListener
 
         processViolations(results);
 
+        executeGlobalAfterValidationInterceptorsFor(results);
+
         if (logger.isTraceEnabled())
         {
             logger.trace("jsr303 validation finished");
@@ -87,8 +93,19 @@ public class ModelValidationPhaseListener implements PhaseListener
                                         List<Object> processedValidationTargets,
                                         Map<String, ModelValidationResult> results)
     {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        PropertyInformation propertyInformation;
+
         for (Object validationTarget : modelValidationEntry.getValidationTargets())
         {
+            propertyInformation = createPropertyInformation(modelValidationEntry, validationTarget);
+
+            if(!executeGlobalBeforeValidationInterceptors(
+                    facesContext, modelValidationEntry.getComponent(), validationTarget, propertyInformation))
+            {
+                return;
+            }
+
             if (processedValidationTargets.contains(validationTarget) &&
                     !modelValidationEntry.getMetaData().displayInline())
             {
@@ -104,7 +121,43 @@ public class ModelValidationPhaseListener implements PhaseListener
         }
     }
 
-    @ToDo(value = Priority.HIGH, description = "refactor and remove FacesContext#renderResponse")
+    private PropertyInformation createPropertyInformation(
+            ModelValidationEntry modelValidationEntry, Object validationTarget)
+    {
+        PropertyInformation propertyInformation;
+        PropertyDetails propertyDetails;
+        propertyInformation = new DefaultPropertyInformation();
+        if(modelValidationEntry.getComponent() != null)
+        {
+            propertyDetails = ExtValUtils.getELHelper()
+                    .getPropertyDetailsOfValueBinding(modelValidationEntry.getComponent());
+        }
+        else
+        {
+            propertyDetails = new PropertyDetails(null, validationTarget, null);
+        }
+        propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
+        return propertyInformation;
+    }
+
+    private boolean executeGlobalBeforeValidationInterceptors(FacesContext facesContext,
+                                                              UIComponent uiComponent,
+                                                              Object validationTarget,
+                                                              PropertyInformation propertyInformation)
+    {
+        return ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, validationTarget,
+                PropertyInformation.class.getName(), propertyInformation, BeanValidationModuleKey.class);
+    }
+
+    private void executeGlobalAfterValidationInterceptors(FacesContext facesContext,
+                                                          UIComponent uiComponent,
+                                                          Object validationTarget,
+                                                          PropertyInformation propertyInformation)
+    {
+        ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, validationTarget,
+                PropertyInformation.class.getName(), propertyInformation, BeanValidationModuleKey.class);
+    }
+    
     private void validateTarget(ModelValidationEntry modelValidationEntry,
                                 Object validationTarget,
                                 Class[] groups,
@@ -119,7 +172,6 @@ public class ModelValidationPhaseListener implements PhaseListener
         if (violations != null && !violations.isEmpty())
         {
             FacesContext facesContext = FacesContext.getCurrentInstance();
-            facesContext.renderResponse();
 
             //jsf 2.0 is able to display multiple messages per component - so process all violations
             //jsf < 2.0 will just use the first one (it's only a little overhead)
@@ -263,6 +315,24 @@ public class ModelValidationPhaseListener implements PhaseListener
         for (ModelValidationResult result : results.values())
         {
             BeanValidationUtils.processViolationMessages(result.getFacesMessageHolderList(), false);
+        }
+    }
+
+    private void executeGlobalAfterValidationInterceptorsFor(Map<String, ModelValidationResult> results)
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        UIComponent component;
+        for (ModelValidationResult result : results.values())
+        {
+            for(FacesMessageHolder facesMessageHolder : result.getFacesMessageHolderList())
+            {
+                component = null;
+                if(facesMessageHolder.getClientId() != null && !facesMessageHolder.getClientId().equals("*"))
+                {
+                    component = facesContext.getViewRoot().findComponent(facesMessageHolder.getClientId());
+                }
+                executeGlobalAfterValidationInterceptors(facesContext, component, null, null);
+            }
         }
     }
 

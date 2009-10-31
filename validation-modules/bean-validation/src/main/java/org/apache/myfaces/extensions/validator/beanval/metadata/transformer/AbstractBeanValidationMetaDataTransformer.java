@@ -40,6 +40,7 @@ import java.lang.annotation.Annotation;
 @UsageInformation({UsageCategory.REUSE})
 public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annotation> implements MetaDataTransformer
 {
+    @SuppressWarnings({"unchecked"})
     public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
         ConstraintDescriptor<? extends T> constraintDescriptor = metaDataEntry.getValue(ConstraintDescriptor.class);
