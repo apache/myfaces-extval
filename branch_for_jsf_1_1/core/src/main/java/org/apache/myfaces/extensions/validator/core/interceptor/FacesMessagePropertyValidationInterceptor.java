@@ -55,6 +55,7 @@ public class FacesMessagePropertyValidationInterceptor implements PropertyValida
         if(facesMessageStorage != null)
         {
             facesMessageStorage.addAll();
+            ExtValUtils.resetStorage(FacesMessageStorage.class, FacesMessageStorage.class.getName());
         }
     }
 }

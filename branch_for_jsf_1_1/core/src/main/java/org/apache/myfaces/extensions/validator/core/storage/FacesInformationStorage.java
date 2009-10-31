@@ -16,25 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.storage;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.util.List;
+import javax.faces.event.PhaseId;
 
 /**
- * suggested interface for a model-validation storage
- * <p/>
- * it allows to manage model-validation-entries for the current request
- * 
+ * storage for additional information about the current faces request
+ * for now it just contains information about the current phase of the lifecycle
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
-public interface ModelValidationStorage
+public interface FacesInformationStorage
 {
-    void addModelValidationEntry(ModelValidationEntry modelValidationEntry);
+    void setCurrentPhaseId(PhaseId phaseId);
 
-    List<ModelValidationEntry> getModelValidationEntriesToValidate();
+    PhaseId getCurrentPhaseId();
 }

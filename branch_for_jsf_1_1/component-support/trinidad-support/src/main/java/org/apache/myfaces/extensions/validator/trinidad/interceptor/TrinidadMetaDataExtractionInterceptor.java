@@ -19,7 +19,8 @@
 package org.apache.myfaces.extensions.validator.trinidad.interceptor;
 
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor
+        .ComponentInitializationAwareMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
@@ -35,17 +36,28 @@ import java.util.List;
  * @since x.x.3
  */
 @InvocationOrder(300)
-public class TrinidadMetaDataExtractionInterceptor implements MetaDataExtractionInterceptor
+public class TrinidadMetaDataExtractionInterceptor extends ComponentInitializationAwareMetaDataExtractionInterceptor
 {
-    public void afterExtracting(PropertyInformation propertyInformation)
+    protected void afterExtractingForComponentInitialization(PropertyInformation propertyInformation)
     {
-        for (MetaDataEntry entry : propertyInformation.getMetaDataEntries())
+        processMetaDataEntries(propertyInformation.getMetaDataEntries());
+    }
+
+    private void processMetaDataEntries(MetaDataEntry[] metaDataEntries)
+    {
+        for (MetaDataEntry entry : metaDataEntries)
         {
-            if (entry.getValue() instanceof Annotation && isClientValidationDisabled(entry))
+            if (processEntry(entry) && isClientValidationDisabled(entry))
             {
                 disableClientSideValidation(entry);
             }
         }
+    }
+
+    //e.g. returns false for jsr303 entries
+    private boolean processEntry(MetaDataEntry entry)
+    {
+        return entry.getValue() instanceof Annotation;
     }
 
     private boolean isClientValidationDisabled(MetaDataEntry entry)
@@ -55,6 +67,7 @@ public class TrinidadMetaDataExtractionInterceptor implements MetaDataExtraction
                 .iterator().hasNext();
     }
 
+    @SuppressWarnings({"unchecked"})
     private void disableClientSideValidation(MetaDataEntry entry)
     {
         if(entry.getProperty(CommonMetaDataKeys.DISABLE_CLIENT_SIDE_VALIDATION) == null)

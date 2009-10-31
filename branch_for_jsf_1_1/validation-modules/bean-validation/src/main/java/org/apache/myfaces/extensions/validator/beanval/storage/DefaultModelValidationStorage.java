@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.util.GroupUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.Map;
@@ -43,26 +42,25 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
 
     private List<String> componentsOfRequest = new ArrayList<String>();
 
-    public void addModelValidationEntry(
-            ModelValidationEntry modelValidationEntry, String viewId, UIComponent component)
+    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry)
     {
-        modelValidationEntry.setComponent(component);
-
         String clientId = null;
 
-        if(component != null)
+        if(modelValidationEntry.getComponent() != null)
         {
-            clientId = component.getClientId(FacesContext.getCurrentInstance());
+            clientId = modelValidationEntry.getComponent().getClientId(FacesContext.getCurrentInstance());
             this.componentsOfRequest.add(clientId);
         }
 
         List<ModelValidationEntry> modelValidationEntryList =
-                this.modelValidationEntries.get(GroupUtils.getGroupKey(viewId, clientId));
+                this.modelValidationEntries.get(GroupUtils.getGroupKey(
+                        modelValidationEntry.getViewId(), clientId));
 
         if(modelValidationEntryList == null)
         {
             modelValidationEntryList = new ArrayList<ModelValidationEntry>();
-            this.modelValidationEntries.put(GroupUtils.getGroupKey(viewId, clientId), modelValidationEntryList);
+            this.modelValidationEntries.put(GroupUtils.getGroupKey(
+                    modelValidationEntry.getViewId(), clientId), modelValidationEntryList);
         }
 
         if(!modelValidationEntryList.contains(modelValidationEntry))
