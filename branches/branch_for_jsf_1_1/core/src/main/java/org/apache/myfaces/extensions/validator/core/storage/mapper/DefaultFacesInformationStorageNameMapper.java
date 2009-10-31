@@ -16,25 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.storage;
+package org.apache.myfaces.extensions.validator.core.storage.mapper;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.util.List;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
+import org.apache.myfaces.extensions.validator.core.storage.DefaultFacesInformationStorage;
 
 /**
- * suggested interface for a model-validation storage
- * <p/>
- * it allows to manage model-validation-entries for the current request
- * 
+ * use a public class to allow optional deregistration
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface ModelValidationStorage
+public class DefaultFacesInformationStorageNameMapper implements NameMapper<String>
 {
-    void addModelValidationEntry(ModelValidationEntry modelValidationEntry);
-
-    List<ModelValidationEntry> getModelValidationEntriesToValidate();
+    public String createName(String source)
+    {
+        return (FacesInformationStorage.class.getName().equals(source)) ?
+                DefaultFacesInformationStorage.class.getName() : null;
+    }
 }

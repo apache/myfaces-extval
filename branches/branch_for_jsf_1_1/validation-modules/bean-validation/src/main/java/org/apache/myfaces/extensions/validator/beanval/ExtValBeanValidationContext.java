@@ -34,7 +34,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
@@ -127,9 +126,9 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         return this.groupStorage.getGroups(viewId, clientId);
     }
 
-    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry, String viewId, UIComponent component)
+    public void addModelValidationEntry(ModelValidationEntry modelValidationEntry)
     {
-        this.modelValidationStorage.addModelValidationEntry(modelValidationEntry, viewId, component);
+        this.modelValidationStorage.addModelValidationEntry(modelValidationEntry);
     }
 
     public List<ModelValidationEntry> getModelValidationEntriesToValidate()

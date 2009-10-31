@@ -43,7 +43,9 @@ import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessed
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.CrossValidationStorageNameMapper;
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.ProcessedInformationStorageNameMapper;
+import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 /**
  * @author Gerhard Petracek
@@ -56,14 +58,19 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 
     protected void init()
     {
-        ExtValContext.getContext().addProcessedInformationRecorder(new CrossValidationUserInputRecorder());
-
+        initProcessedInformationRecorders();
         initStaticStrategyMappings();
         initDefaultComponentInitializer();
         addSkipValidationSupport();
         initStorageManagerAndNameMappers();
         initSkipValidationEvaluator();
         initMetaDataStorageFilters();
+        initPhaseListeners();
+    }
+
+    private void initProcessedInformationRecorders()
+    {
+        ExtValContext.getContext().addProcessedInformationRecorder(new CrossValidationUserInputRecorder());
     }
 
     private void initStaticStrategyMappings()
@@ -147,5 +154,10 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
                  MetaDataStorage.class, MetaDataStorage.class.getName());
 
         metaDataStorage.registerFilter(new JoinValidationMetaDataStorageFilter());
+    }
+
+    private void initPhaseListeners()
+    {
+        JsfUtils.registerPhaseListener(new CrossValidationPhaseListener());
     }
 }
