@@ -16,25 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.storage;
+package org.apache.myfaces.extensions.validator.core.storage;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import java.util.List;
+import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultFacesInformationStorageNameMapper;
 
 /**
- * suggested interface for a model-validation storage
- * <p/>
- * it allows to manage model-validation-entries for the current request
- * 
+ * default storage-manager for jsf information not available via jsf-api
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
-public interface ModelValidationStorage
+class DefaultFacesInformationStorageManager extends
+        AbstractRequestScopeAwareStorageManager<FacesInformationStorage>
 {
-    void addModelValidationEntry(ModelValidationEntry modelValidationEntry);
+    DefaultFacesInformationStorageManager()
+    {
+        register(new DefaultFacesInformationStorageNameMapper());
+    }
 
-    List<ModelValidationEntry> getModelValidationEntriesToValidate();
+    public String getStorageManagerKey()
+    {
+        return StorageManager.class.getName() + "_FOR_FACES_INFORMATION_STORAGE:KEY";
+    }
 }

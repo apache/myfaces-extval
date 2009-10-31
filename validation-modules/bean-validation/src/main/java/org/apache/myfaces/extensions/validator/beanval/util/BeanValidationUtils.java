@@ -126,7 +126,7 @@ public class BeanValidationUtils
         processRestrictedGroups(extValBeanValidationContext, currentViewId, clientId,
                 restrictedGroupsForPropertyValidation);
 
-        initModelValidation(extValBeanValidationContext, currentViewId, component, propertyDetails,
+        initModelValidation(extValBeanValidationContext, component, propertyDetails,
                 modelValidationEntryList, restrictedGroupsForModelValidation);
     }
 
@@ -220,7 +220,6 @@ public class BeanValidationUtils
     }
 
     private static void initModelValidation(ExtValBeanValidationContext extValBeanValidationContext,
-                                            String currentViewId,
                                             UIComponent component,
                                             PropertyDetails propertyDetails,
                                             List<ModelValidationEntry> modelValidationEntryList,
@@ -239,7 +238,8 @@ public class BeanValidationUtils
             if (modelValidationEntry.getGroups().length > 0)
             {
                 addTargetsForModelValidation(modelValidationEntry, propertyDetails.getBaseObject());
-                extValBeanValidationContext.addModelValidationEntry(modelValidationEntry, currentViewId, component);
+                modelValidationEntry.setComponent(component);
+                extValBeanValidationContext.addModelValidationEntry(modelValidationEntry);
             }
         }
     }
@@ -477,15 +477,18 @@ public class BeanValidationUtils
                                                    boolean firstErrorCausesAnException)
     {
         List<FacesMessageHolder> facesMessageHolderList = new ArrayList<FacesMessageHolder>();
-        FacesMessageHolder facesMessageHolder;
 
+        FacesMessage facesMessage;
         for (ConstraintViolation violation : violations)
         {
-            facesMessageHolder = new FacesMessageHolder(
-                    createFacesMessageForConstraintViolation(uiComponent, convertedObject, violation));
-            facesMessageHolder.setClientId(uiComponent.getClientId(facesContext));
+            facesMessage = createFacesMessageForConstraintViolation(uiComponent, convertedObject, violation);
 
-            facesMessageHolderList.add(facesMessageHolder);
+            if(facesMessage == null)
+            {
+                continue;
+            }
+
+            processFacesMessage(facesContext, uiComponent, facesMessageHolderList, facesMessage);
         }
 
         processViolationMessages(facesMessageHolderList, firstErrorCausesAnException);
@@ -504,7 +507,10 @@ public class BeanValidationUtils
 
         ValidatorException validatorException = createValidatorException(labeledMessage, severity);
 
-        executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException);
+        if(!executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException))
+        {
+            return null;
+        }
 
         if (isMessageTextUnchanged(validatorException, labeledMessage))
         {
@@ -542,11 +548,21 @@ public class BeanValidationUtils
         return FacesMessage.SEVERITY_ERROR;
     }
 
-    private static void executeAfterThrowingInterceptors(UIComponent uiComponent,
+    private static void processFacesMessage(FacesContext facesContext, UIComponent uiComponent,
+                                            List<FacesMessageHolder> facesMessageHolderList, FacesMessage facesMessage)
+    {
+        FacesMessageHolder facesMessageHolder = new FacesMessageHolder(facesMessage);
+
+        facesMessageHolder.setClientId(uiComponent.getClientId(facesContext));
+
+        facesMessageHolderList.add(facesMessageHolder);
+    }
+
+    private static boolean executeAfterThrowingInterceptors(UIComponent uiComponent,
                                                          Object convertedObject,
                                                          ValidatorException validatorException)
     {
-        ExtValUtils.executeAfterThrowingInterceptors(
+        return ExtValUtils.executeAfterThrowingInterceptors(
                 uiComponent,
                 null,
                 convertedObject,
@@ -569,6 +585,11 @@ public class BeanValidationUtils
     public static void processViolationMessages(List<FacesMessageHolder> violationMessageHolderList,
                                                 boolean firstErrorCausesAnException)
     {
+        if(violationMessageHolderList == null || violationMessageHolderList.isEmpty())
+        {
+            return;
+        }
+
         List<FacesMessageHolder> facesMessageListWithLowSeverity =
                 getFacesMessageListWithLowSeverity(violationMessageHolderList);
         List<FacesMessageHolder> facesMessageListWithHighSeverity =

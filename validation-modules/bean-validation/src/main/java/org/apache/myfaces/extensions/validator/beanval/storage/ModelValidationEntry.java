@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class ModelValidationEntry
     private List<Class> groups = new ArrayList<Class>();
     private List<Object> validationTargets = new ArrayList<Object>();
     private Object metaDataSourceObject;
+    private String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
     public void addGroup(Class group)
     {
@@ -122,7 +124,7 @@ public class ModelValidationEntry
 
     public void setValidationTargets(List<Object> validationTargets)
     {
-        this.validationTargets = new ArrayList<Object>();
+        this.validationTargets = validationTargets;
     }
 
     public Object getMetaDataSourceObject()
@@ -135,6 +137,7 @@ public class ModelValidationEntry
         this.metaDataSourceObject = metaDataSourceObject;
     }
 
+    @SuppressWarnings({"RedundantIfStatement"})
     @Override
     public boolean equals(Object o)
     {
@@ -172,5 +175,15 @@ public class ModelValidationEntry
         result = 31 * result + groups.hashCode();
         result = 31 * result + validationTargets.hashCode();
         return result;
+    }
+
+    public String getViewId()
+    {
+        return viewId;
+    }
+
+    public void setViewId(String viewId)
+    {
+        this.viewId = viewId;
     }
 }
