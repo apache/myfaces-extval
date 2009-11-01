@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
 
 import javax.faces.context.FacesContext;
 
@@ -45,7 +46,8 @@ public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMe
 
     public static MetaDataExtractor getInstance()
     {
-        return ExtValUtils.createInterceptedMetaDataExtractor(new DefaultPropertyScanningMetaDataExtractor());
+        return ExtValUtils.createInterceptedMetaDataExtractorFor(
+                new DefaultPropertyScanningMetaDataExtractor(), PropertyValidationModuleKey.class);
     }
 
     @Override

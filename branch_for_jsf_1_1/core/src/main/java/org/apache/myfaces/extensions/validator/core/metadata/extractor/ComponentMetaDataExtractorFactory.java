@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
+import java.util.Map;
+
 /**
  * The interface for all factories which create meta-data extractors
  * 
@@ -31,4 +33,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 public interface ComponentMetaDataExtractorFactory
 {
     MetaDataExtractor create();
+
+    MetaDataExtractor createWith(Map<String, Object> properties);
 }
