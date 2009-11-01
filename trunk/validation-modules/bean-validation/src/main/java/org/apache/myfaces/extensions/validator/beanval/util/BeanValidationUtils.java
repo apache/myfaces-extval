@@ -404,8 +404,8 @@ public class BeanValidationUtils
         ModelValidationEntry modelValidationEntry = new ModelValidationEntry();
 
         modelValidationEntry.setGroups(Arrays.asList(beanValidation.useGroups()));
-        modelValidationEntry.setDisplayInline(beanValidation.modelValidation().displayInline());
-        modelValidationEntry.setMessage(beanValidation.modelValidation().message());
+        modelValidationEntry.setDisplayMessageInline(beanValidation.modelValidation().displayInline());
+        modelValidationEntry.setCustomMessage(beanValidation.modelValidation().message());
         modelValidationEntry.setMetaDataSourceObject(metaDataSourceObject);
 
         for(String validationTargetExpression : beanValidation.modelValidation().validationTargets())
