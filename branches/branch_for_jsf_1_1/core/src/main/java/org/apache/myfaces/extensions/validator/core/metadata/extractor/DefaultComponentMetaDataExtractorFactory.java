@@ -32,6 +32,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This factory creates a meta-data extractor which extracts the meta-data
@@ -65,6 +66,11 @@ public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDa
     @ToDo(value = Priority.MEDIUM, description = "logging")
     public MetaDataExtractor create()
     {
+        return createWith(null);
+    }
+
+    public MetaDataExtractor createWith(Map<String, Object> properties)
+    {
         if (metaDataExtractor == null)
         {
             List<String> metaDataExtractorClassNames = new ArrayList<String>();
@@ -91,6 +97,6 @@ public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDa
             logger.trace(metaDataExtractor.getClass().getName() + " created");
         }
 
-        return ExtValUtils.createInterceptedMetaDataExtractor(metaDataExtractor);
+        return ExtValUtils.createInterceptedMetaDataExtractorWith(metaDataExtractor, properties);
     }
 }

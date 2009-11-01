@@ -22,10 +22,12 @@ import org.apache.commons.logging.Log;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -59,7 +61,8 @@ class BeanValidationInterceptorInternals
 
     PropertyDetails extractPropertyDetails(FacesContext facesContext, UIComponent uiComponent)
     {
-        PropertyDetails result = ExtValUtils.getComponentMetaDataExtractor().extract(facesContext, uiComponent)
+        PropertyDetails result = getComponentMetaDataExtractor(uiComponent)
+                .extract(facesContext, uiComponent)
                 .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
         if (result.getBaseObject() == null && this.logger.isWarnEnabled())
@@ -69,6 +72,19 @@ class BeanValidationInterceptorInternals
         }
 
         return result.getBaseObject() != null ? result : null;
+    }
+
+    /*
+     * also invokes meta-data extraction interceptors
+     * (see e.g. ExtValBeanValidationMetaDataExtractionInterceptor)
+     */
+    MetaDataExtractor getComponentMetaDataExtractor(UIComponent uiComponent)
+    {
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put(ValidationModuleKey.class.getName(), BeanValidationModuleKey.class);
+        properties.put(UIComponent.class.getName(), uiComponent);
+
+        return ExtValUtils.getComponentMetaDataExtractorWith(properties);
     }
 
     void initComponentWithPropertyDetails(
