@@ -44,6 +44,7 @@ class ExtValContextInvocationOrderAwareInternals
     private final Log logger = LogFactory.getLog(getClass());
 
     private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors = null;
+    private Map<Class, List<MetaDataExtractionInterceptor>> moduleSpecificMetaDataExtractionInterceptors = null;
     private List<ValidationExceptionInterceptor> validationExceptionInterceptors = null;
     private List<PropertyValidationInterceptor> propertyValidationInterceptors = null;
     private Map<Class, List<PropertyValidationInterceptor>> moduleSpecificPropertyValidationInterceptors = null;
@@ -92,16 +93,14 @@ class ExtValContextInvocationOrderAwareInternals
     {
         if (propertyValidationInterceptor instanceof ValidationModuleAware)
         {
-            addPropertyValidationInterceptorForModules(propertyValidationInterceptor,
-                    this.propertyValidationInterceptors, this.moduleSpecificPropertyValidationInterceptors);
+            addPropertyValidationInterceptorForModules(propertyValidationInterceptor);
+            sortModuleSpecificPropertyValidationInterceptors();
         }
         else
         {
-            addPropertyValidationInterceptorForModule(null, propertyValidationInterceptor,
-                    this.propertyValidationInterceptors, this.moduleSpecificPropertyValidationInterceptors);
+            addPropertyValidationInterceptorForModule(null, propertyValidationInterceptor);
+            sortPropertyValidationInterceptors();
         }
-
-        sortPropertyValidationInterceptors();
     }
 
     List<PropertyValidationInterceptor> getPropertyValidationInterceptors()
@@ -111,28 +110,18 @@ class ExtValContextInvocationOrderAwareInternals
 
     List<PropertyValidationInterceptor> getPropertyValidationInterceptorsFor(Class moduleKey)
     {
-        List<PropertyValidationInterceptor> generalInterceptors = getPropertyValidationInterceptors();
-
-        if (moduleKey == null || !this.moduleSpecificPropertyValidationInterceptors.containsKey(moduleKey))
-        {
-            return generalInterceptors;
-        }
-
-        List<PropertyValidationInterceptor> moduleSpecificInterceptors =
-                this.moduleSpecificPropertyValidationInterceptors.get(moduleKey);
-
         List<PropertyValidationInterceptor> result = new ArrayList<PropertyValidationInterceptor>();
-        result.addAll(generalInterceptors);
-        result.addAll(moduleSpecificInterceptors);
 
-        sortPropertyValidationInterceptors(result);
-        return result;
+        result.addAll(getPropertyValidationInterceptors());
+
+        if (moduleKey != null && this.moduleSpecificPropertyValidationInterceptors.containsKey(moduleKey))
+        {
+            result.addAll(this.moduleSpecificPropertyValidationInterceptors.get(moduleKey));
+        }
+        return sortPropertyValidationInterceptorList(result);
     }
 
-    private void addPropertyValidationInterceptorForModules(PropertyValidationInterceptor propertyValidationInterceptor,
-                                                    List<PropertyValidationInterceptor> propertyValidationInterceptors,
-                                                    Map<Class, List<PropertyValidationInterceptor>>
-                                                            moduleSpecificPropertyValidationInterceptors)
+    private void addPropertyValidationInterceptorForModules(PropertyValidationInterceptor propertyValidationInterceptor)
     {
         Class moduleKey;
         for (String currentModuleKey : ((ValidationModuleAware) propertyValidationInterceptor).getModuleKeys())
@@ -144,43 +133,35 @@ class ExtValContextInvocationOrderAwareInternals
                 continue;
             }
 
-            addPropertyValidationInterceptorForModule(moduleKey,
-                    propertyValidationInterceptor,
-                    propertyValidationInterceptors,
-                    moduleSpecificPropertyValidationInterceptors);
+            addPropertyValidationInterceptorForModule(moduleKey, propertyValidationInterceptor);
         }
     }
 
-    private void addPropertyValidationInterceptorForModule(Class moduleKey,
-                                                   PropertyValidationInterceptor propertyValidationInterceptor,
-                                                   List<PropertyValidationInterceptor> propertyValidationInterceptors,
-                                                   Map<Class, List<PropertyValidationInterceptor>>
-                                                           moduleSpecificPropertyValidationInterceptors)
+    private void addPropertyValidationInterceptorForModule(
+            Class moduleKey, PropertyValidationInterceptor propertyValidationInterceptor)
     {
         if (moduleKey == null)
         {
-            propertyValidationInterceptors.add(propertyValidationInterceptor);
+            this.propertyValidationInterceptors.add(propertyValidationInterceptor);
 
             if (logger.isTraceEnabled())
             {
-                logger.trace(propertyValidationInterceptor.getClass().getName() + " added");
+                logger.trace(propertyValidationInterceptor.getClass().getName() + " added as global interceptor");
             }
         }
         else
         {
             List<PropertyValidationInterceptor> propertyValidationInterceptorList;
-            if (moduleSpecificPropertyValidationInterceptors.containsKey(moduleKey))
+            if (this.moduleSpecificPropertyValidationInterceptors.containsKey(moduleKey))
             {
-                propertyValidationInterceptorList = moduleSpecificPropertyValidationInterceptors.get(moduleKey);
+                propertyValidationInterceptorList = this.moduleSpecificPropertyValidationInterceptors.get(moduleKey);
             }
             else
             {
                 propertyValidationInterceptorList = new ArrayList<PropertyValidationInterceptor>();
-                moduleSpecificPropertyValidationInterceptors.put(moduleKey, propertyValidationInterceptorList);
+                this.moduleSpecificPropertyValidationInterceptors.put(moduleKey, propertyValidationInterceptorList);
             }
             propertyValidationInterceptorList.add(propertyValidationInterceptor);
-
-            sortModuleSpecificPropertyValidationInterceptors(propertyValidationInterceptorList);
 
             if (logger.isTraceEnabled())
             {
@@ -194,13 +175,99 @@ class ExtValContextInvocationOrderAwareInternals
      */
     void addMetaDataExtractionInterceptor(MetaDataExtractionInterceptor metaDataExtractionInterceptor)
     {
-        this.metaDataExtractionInterceptors.add(metaDataExtractionInterceptor);
-        sortMetaDataExtractionInterceptors();
+        if(metaDataExtractionInterceptor instanceof ValidationModuleAware)
+        {
+            addMetaDataExtractionInterceptorForModules(metaDataExtractionInterceptor);
+            sortModuleSpecificMetaDataExtractionInterceptors();
+        }
+        else
+        {
+            addMetaDataExtractionInterceptorForModule(null, metaDataExtractionInterceptor);
+            sortMetaDataExtractionInterceptors();
+        }
+    }
+
+    private void addMetaDataExtractionInterceptorForModules(MetaDataExtractionInterceptor metaDataExtractionInterceptor)
+    {
+        Class moduleKey;
+        for (String currentModuleKey : ((ValidationModuleAware) metaDataExtractionInterceptor).getModuleKeys())
+        {
+            moduleKey = ClassUtils.tryToLoadClassForName(currentModuleKey);
+
+            if (moduleKey == null)
+            {
+                continue;
+            }
+
+            addMetaDataExtractionInterceptorForModule(moduleKey, metaDataExtractionInterceptor);
+        }
+    }
+
+    private void addMetaDataExtractionInterceptorForModule(
+            Class moduleKey, MetaDataExtractionInterceptor metaDataExtractionInterceptor)
+    {
+        if (moduleKey == null)
+        {
+            this.metaDataExtractionInterceptors.add(metaDataExtractionInterceptor);
+
+            if (logger.isTraceEnabled())
+            {
+                logger.trace(metaDataExtractionInterceptor.getClass().getName() + " added as global interceptor");
+            }
+        }
+        else
+        {
+            List<MetaDataExtractionInterceptor> metaDataExtractionInterceptorList;
+            if (this.moduleSpecificMetaDataExtractionInterceptors.containsKey(moduleKey))
+            {
+                metaDataExtractionInterceptorList = this.moduleSpecificMetaDataExtractionInterceptors.get(moduleKey);
+            }
+            else
+            {
+                metaDataExtractionInterceptorList = new ArrayList<MetaDataExtractionInterceptor>();
+                this.moduleSpecificMetaDataExtractionInterceptors.put(moduleKey, metaDataExtractionInterceptorList);
+            }
+            metaDataExtractionInterceptorList.add(metaDataExtractionInterceptor);
+
+            if (logger.isTraceEnabled())
+            {
+                logger.trace(metaDataExtractionInterceptor.getClass().getName() + " added for " + moduleKey.getName());
+            }
+        }
     }
 
     List<MetaDataExtractionInterceptor> getMetaDataExtractionInterceptors()
     {
         return this.metaDataExtractionInterceptors;
+    }
+
+    List<MetaDataExtractionInterceptor> getMetaDataExtractionInterceptorsWith(Map<String, Object> properties)
+    {
+        List<MetaDataExtractionInterceptor> result = new ArrayList<MetaDataExtractionInterceptor>();
+
+        result.addAll(getMetaDataExtractionInterceptors());
+
+        Class moduleKey = tryToResolveModuleKey(properties);
+        if(moduleKey != null && this.moduleSpecificMetaDataExtractionInterceptors.containsKey(moduleKey))
+        {
+            result.addAll(this.moduleSpecificMetaDataExtractionInterceptors.get(moduleKey));
+        }
+
+        return sortMetaDataExtractionInterceptorList(result);
+    }
+
+    private Class tryToResolveModuleKey(Map<String, Object> properties)
+    {
+        Class moduleKey = null;
+        if(properties != null && properties.containsKey(ValidationModuleKey.class.getName()))
+        {
+            Object foundValue = properties.get(ValidationModuleKey.class.getName());
+            if(foundValue instanceof Class)
+            {
+                moduleKey = (Class)foundValue;
+            }
+        }
+        return moduleKey;
     }
 
     /*
@@ -250,6 +317,7 @@ class ExtValContextInvocationOrderAwareInternals
         }
 
         metaDataExtractionInterceptors = new ArrayList<MetaDataExtractionInterceptor>();
+        moduleSpecificMetaDataExtractionInterceptors = new HashMap<Class, List<MetaDataExtractionInterceptor>>();
 
         List<String> metaDataExtractionInterceptorClassNames = new ArrayList<String>();
 
@@ -268,12 +336,7 @@ class ExtValContextInvocationOrderAwareInternals
 
             if (metaDataExtractionInterceptor != null)
             {
-                metaDataExtractionInterceptors.add(metaDataExtractionInterceptor);
-
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace(metaDataExtractionInterceptor.getClass().getName() + " added");
-                }
+                addMetaDataExtractionInterceptor(metaDataExtractionInterceptor);
             }
         }
     }
@@ -339,15 +402,11 @@ class ExtValContextInvocationOrderAwareInternals
             {
                 if (propertyValidationInterceptor instanceof ValidationModuleAware)
                 {
-                    addPropertyValidationInterceptorForModules(propertyValidationInterceptor,
-                            propertyValidationInterceptors,
-                            moduleSpecificPropertyValidationInterceptors);
+                    addPropertyValidationInterceptorForModules(propertyValidationInterceptor);
                 }
                 else
                 {
-                    addPropertyValidationInterceptorForModule(null, propertyValidationInterceptor,
-                            propertyValidationInterceptors,
-                            moduleSpecificPropertyValidationInterceptors);
+                    addPropertyValidationInterceptorForModule(null, propertyValidationInterceptor);
                 }
             }
         }
@@ -361,15 +420,29 @@ class ExtValContextInvocationOrderAwareInternals
         Collections.sort(this.componentInitializers, new InvocationOrderComparator<ComponentInitializer>());
     }
 
-    private void sortPropertyValidationInterceptors(List<PropertyValidationInterceptor> result)
-    {
-        Collections.sort(result, new InvocationOrderComparator<PropertyValidationInterceptor>());
-    }
-
     private void sortPropertyValidationInterceptors()
     {
         Collections.sort(this.propertyValidationInterceptors,
                 new InvocationOrderComparator<PropertyValidationInterceptor>());
+    }
+
+    //sort all - it isn't a huge overhead since it's just done during the init-phase
+    private void sortModuleSpecificPropertyValidationInterceptors()
+    {
+        for(List<PropertyValidationInterceptor> propertyValidationInterceptorList :
+                this.moduleSpecificPropertyValidationInterceptors.values())
+        {
+            sortPropertyValidationInterceptorList(propertyValidationInterceptorList);
+        }
+    }
+
+    private List<PropertyValidationInterceptor> sortPropertyValidationInterceptorList(
+            List<PropertyValidationInterceptor> propertyValidationInterceptorList)
+    {
+        Collections.sort(propertyValidationInterceptorList,
+                    new InvocationOrderComparator<PropertyValidationInterceptor>());
+
+        return propertyValidationInterceptorList;
     }
 
     private void sortValidationExceptionInterceptors()
@@ -378,18 +451,28 @@ class ExtValContextInvocationOrderAwareInternals
                 new InvocationOrderComparator<ValidationExceptionInterceptor>());
     }
 
-    private void sortModuleSpecificPropertyValidationInterceptors(
-            List<PropertyValidationInterceptor> propertyValidationInterceptorList)
-    {
-        if (propertyValidationInterceptorList != null)
-        {
-            Collections.sort(propertyValidationInterceptorList, new InvocationOrderComparator<Object>());
-        }
-    }
-
     private void sortMetaDataExtractionInterceptors()
     {
         Collections.sort(this.metaDataExtractionInterceptors,
                 new InvocationOrderComparator<MetaDataExtractionInterceptor>());
+    }
+
+    //sort all - it isn't a huge overhead since it's just done during the init-phase
+    private void sortModuleSpecificMetaDataExtractionInterceptors()
+    {
+        for(List<MetaDataExtractionInterceptor> metaDataExtractionInterceptorList :
+                this.moduleSpecificMetaDataExtractionInterceptors.values())
+        {
+            sortMetaDataExtractionInterceptorList(metaDataExtractionInterceptorList);
+        }
+    }
+
+    private List<MetaDataExtractionInterceptor> sortMetaDataExtractionInterceptorList(
+            List<MetaDataExtractionInterceptor> metaDataExtractionInterceptorList)
+    {
+        Collections.sort(metaDataExtractionInterceptorList,
+                    new InvocationOrderComparator<MetaDataExtractionInterceptor>());
+
+        return metaDataExtractionInterceptorList;
     }
 }

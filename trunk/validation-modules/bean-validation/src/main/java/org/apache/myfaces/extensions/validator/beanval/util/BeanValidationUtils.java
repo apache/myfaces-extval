@@ -169,7 +169,7 @@ public class BeanValidationUtils
         {
             if (metaDataEntry.getValue() instanceof BeanValidation)
             {
-                processMetaData((BeanValidation) metaDataEntry.getValue(),
+                tryToProcessMetaData((BeanValidation) metaDataEntry.getValue(),
                         base,
                         foundGroupsForPropertyValidation,
                         restrictedGroupsForPropertyValidation,
@@ -180,7 +180,7 @@ public class BeanValidationUtils
             {
                 for (BeanValidation currentBeanValidation : ((BeanValidation.List) metaDataEntry.getValue()).value())
                 {
-                    processMetaData(currentBeanValidation,
+                    tryToProcessMetaData(currentBeanValidation,
                             base,
                             foundGroupsForPropertyValidation,
                             restrictedGroupsForPropertyValidation,
@@ -253,7 +253,7 @@ public class BeanValidationUtils
     {
         if (objectToInspect.getClass().isAnnotationPresent(BeanValidation.class))
         {
-            processMetaData(objectToInspect.getClass().getAnnotation(BeanValidation.class),
+            tryToProcessMetaData(objectToInspect.getClass().getAnnotation(BeanValidation.class),
                     objectToInspect,
                     foundGroupsForPropertyValidation,
                     restrictedGroupsForPropertyValidation,
@@ -265,7 +265,7 @@ public class BeanValidationUtils
             for (BeanValidation currentBeanValidation :
                     (objectToInspect.getClass().getAnnotation(BeanValidation.List.class)).value())
             {
-                processMetaData(currentBeanValidation,
+                tryToProcessMetaData(currentBeanValidation,
                         objectToInspect,
                         foundGroupsForPropertyValidation,
                         restrictedGroupsForPropertyValidation,
@@ -298,7 +298,7 @@ public class BeanValidationUtils
         }
     }
 
-    private static void processMetaData(BeanValidation beanValidation,
+    private static void tryToProcessMetaData(BeanValidation beanValidation,
                                         Object metaDataSourceObject,
                                         List<Class> foundGroupsForPropertyValidation,
                                         List<Class> restrictedGroupsForPropertyValidation,
@@ -307,23 +307,42 @@ public class BeanValidationUtils
     {
         for (String currentViewId : beanValidation.viewIds())
         {
-            if ((currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
-                    currentViewId.equals("*")) && isValidationPermitted(beanValidation))
+            if (useMetaDataForViewId(beanValidation, currentViewId))
             {
-                if (isModelValidation(beanValidation))
-                {
-                    addModelValidationEntry(
-                            beanValidation, metaDataSourceObject,
-                            modelValidationEntryList, restrictedGroupsForModelValidation);
-                }
-                else
-                {
-                    processGroups(
-                            beanValidation, foundGroupsForPropertyValidation, restrictedGroupsForPropertyValidation);
-                }
-
-                return;
+                processMetaData(beanValidation,
+                        metaDataSourceObject,
+                        foundGroupsForPropertyValidation,
+                        restrictedGroupsForPropertyValidation,
+                        modelValidationEntryList,
+                        restrictedGroupsForModelValidation);
+                break;
             }
+        }
+    }
+
+    private static boolean useMetaDataForViewId(BeanValidation beanValidation, String currentViewId)
+    {
+        return (currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
+                currentViewId.equals("*")) && isValidationPermitted(beanValidation);
+    }
+
+    private static void processMetaData(BeanValidation beanValidation,
+                                                 Object metaDataSourceObject,
+                                                 List<Class> foundGroupsForPropertyValidation,
+                                                 List<Class> restrictedGroupsForPropertyValidation,
+                                                 List<ModelValidationEntry> modelValidationEntryList,
+                                                 List<Class> restrictedGroupsForModelValidation)
+    {
+        if (isModelValidation(beanValidation))
+        {
+            addModelValidationEntry(
+                    beanValidation, metaDataSourceObject,
+                    modelValidationEntryList, restrictedGroupsForModelValidation);
+        }
+        else
+        {
+            processGroups(
+                    beanValidation, foundGroupsForPropertyValidation, restrictedGroupsForPropertyValidation);
         }
     }
 

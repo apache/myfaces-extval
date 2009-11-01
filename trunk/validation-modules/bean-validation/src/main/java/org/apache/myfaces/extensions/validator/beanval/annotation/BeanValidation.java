@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.beanval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.validation.groups.Default;
 import java.lang.annotation.Target;
@@ -49,7 +47,6 @@ public @interface BeanValidation
 
     Class[] restrictGroups() default {};
 
-    @ToDo(value = Priority.HIGH, description = "support property chain syntax")
     String[] conditions() default "#{true}";
 
     ModelValidation modelValidation() default @ModelValidation;
