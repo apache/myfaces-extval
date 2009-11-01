@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.storage;
 
-import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -35,9 +35,11 @@ import java.util.ArrayList;
 public class ModelValidationEntry
 {
     private UIComponent component;
-    private ModelValidation metaData;
     private List<Class> groups = new ArrayList<Class>();
     private List<Object> validationTargets = new ArrayList<Object>();
+    private List<String> validationTargetExpressions = new ArrayList<String>();
+    private boolean displayInline = false;
+    private String message = ModelValidation.DEFAULT_MESSAGE;
     private Object metaDataSourceObject;
     private String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
@@ -84,6 +86,14 @@ public class ModelValidationEntry
         }
     }
 
+    public void addValidationTargetExpression(String targetExpression)
+    {
+        if(!this.validationTargetExpressions.contains(targetExpression))
+        {
+            this.validationTargetExpressions.add(targetExpression);
+        }
+    }
+
     /*
      * generated
      */
@@ -95,16 +105,6 @@ public class ModelValidationEntry
     public void setComponent(UIComponent component)
     {
         this.component = component;
-    }
-
-    public ModelValidation getMetaData()
-    {
-        return metaData;
-    }
-
-    public void setMetaData(ModelValidation metaData)
-    {
-        this.metaData = metaData;
     }
 
     public Class[] getGroups()
@@ -125,6 +125,16 @@ public class ModelValidationEntry
     public void setValidationTargets(List<Object> validationTargets)
     {
         this.validationTargets = validationTargets;
+    }
+
+    public List<String> getValidationTargetExpressions()
+    {
+        return validationTargetExpressions;
+    }
+
+    public void setValidationTargetExpressions(List<String> validationTargetExpressions)
+    {
+        this.validationTargetExpressions = validationTargetExpressions;
     }
 
     public Object getMetaDataSourceObject()
@@ -166,6 +176,26 @@ public class ModelValidationEntry
         }
 
         return true;
+    }
+
+    public boolean isDisplayInline()
+    {
+        return displayInline;
+    }
+
+    public void setDisplayInline(boolean displayInline)
+    {
+        this.displayInline = displayInline;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
     }
 
     @Override

@@ -329,27 +329,38 @@ public class BeanValidationUtils
 
     private static void addTargetsForModelValidation(ModelValidationEntry modelValidationEntry, Object defaultTarget)
     {
-        if (modelValidationEntry.getMetaData().validationTargets().length == 1 &&
-                modelValidationEntry.getMetaData().validationTargets()[0].equals(ModelValidation.DEFAULT_TARGET))
+        if (isDefaultTarget(modelValidationEntry))
         {
             modelValidationEntry.addValidationTarget(defaultTarget);
         }
         else
         {
-            Object target;
-            for (String modelValidationTarget : modelValidationEntry.getMetaData().validationTargets())
+            addValidationTargets(modelValidationEntry);
+        }
+    }
+
+    private static boolean isDefaultTarget(ModelValidationEntry modelValidationEntry)
+    {
+        return modelValidationEntry.getValidationTargetExpressions().size() == 1 &&
+                modelValidationEntry.getValidationTargetExpressions().iterator().next()
+                        .equals(ModelValidation.DEFAULT_TARGET);
+    }
+
+    private static void addValidationTargets(ModelValidationEntry modelValidationEntry)
+    {
+        Object target;
+        for (String modelValidationTarget : modelValidationEntry.getValidationTargetExpressions())
+        {
+            target = resolveTarget(modelValidationEntry.getMetaDataSourceObject(), modelValidationTarget);
+
+            if (target == null && LOG.isErrorEnabled())
             {
-                target = resolveTarget(modelValidationEntry.getMetaDataSourceObject(), modelValidationTarget);
-
-                if (target == null && LOG.isErrorEnabled())
-                {
-                    LOG.error("target unreachable - source class: " +
-                            modelValidationEntry.getMetaDataSourceObject().getClass().getName() +
-                            " target to resolve: " + modelValidationTarget);
-                }
-
-                modelValidationEntry.addValidationTarget(target);
+                LOG.error("target unreachable - source class: " +
+                        modelValidationEntry.getMetaDataSourceObject().getClass().getName() +
+                        " target to resolve: " + modelValidationTarget);
             }
+
+            modelValidationEntry.addValidationTarget(target);
         }
     }
 
@@ -393,8 +404,14 @@ public class BeanValidationUtils
         ModelValidationEntry modelValidationEntry = new ModelValidationEntry();
 
         modelValidationEntry.setGroups(Arrays.asList(beanValidation.useGroups()));
-        modelValidationEntry.setMetaData(beanValidation.modelValidation());
+        modelValidationEntry.setDisplayInline(beanValidation.modelValidation().displayInline());
+        modelValidationEntry.setMessage(beanValidation.modelValidation().message());
         modelValidationEntry.setMetaDataSourceObject(metaDataSourceObject);
+
+        for(String validationTargetExpression : beanValidation.modelValidation().validationTargets())
+        {
+            modelValidationEntry.addValidationTargetExpression(validationTargetExpression);
+        }
 
         if (beanValidation.restrictGroups().length > 0)
         {
