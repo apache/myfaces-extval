@@ -38,8 +38,8 @@ public class ModelValidationEntry
     private List<Class> groups = new ArrayList<Class>();
     private List<Object> validationTargets = new ArrayList<Object>();
     private List<String> validationTargetExpressions = new ArrayList<String>();
-    private boolean displayInline = false;
-    private String message = ModelValidation.DEFAULT_MESSAGE;
+    private boolean displayMessageInline = false;
+    private String customMessage = ModelValidation.DEFAULT_MESSAGE;
     private Object metaDataSourceObject;
     private String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
@@ -178,24 +178,24 @@ public class ModelValidationEntry
         return true;
     }
 
-    public boolean isDisplayInline()
+    public boolean isDisplayMessageInline()
     {
-        return displayInline;
+        return displayMessageInline;
     }
 
-    public void setDisplayInline(boolean displayInline)
+    public void setDisplayMessageInline(boolean displayMessageInline)
     {
-        this.displayInline = displayInline;
+        this.displayMessageInline = displayMessageInline;
     }
 
-    public String getMessage()
+    public String getCustomMessage()
     {
-        return message;
+        return customMessage;
     }
 
-    public void setMessage(String message)
+    public void setCustomMessage(String customMessage)
     {
-        this.message = message;
+        this.customMessage = customMessage;
     }
 
     @Override
