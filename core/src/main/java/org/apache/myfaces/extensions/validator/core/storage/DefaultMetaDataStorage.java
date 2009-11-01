@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -185,6 +187,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         return targetClass.getName() + "#" + targetProperty;
     }
 
+    @ToDo(Priority.MEDIUM)
     private void copyMetaData(PropertyInformation source, PropertyInformation target)
     {
         MetaDataEntry newMetaDataEntry;

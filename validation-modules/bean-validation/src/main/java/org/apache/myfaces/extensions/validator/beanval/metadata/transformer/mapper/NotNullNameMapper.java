@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
  * @since x.x.3
  */
 @Nested
-@InvocationOrder(100)
+@InvocationOrder(200)
 @UsageInformation({UsageCategory.INTERNAL})
 public class NotNullNameMapper extends AbstractBeanValidationVirtualValidationStrategyToMetaDataTransformerNameMapper
 {
