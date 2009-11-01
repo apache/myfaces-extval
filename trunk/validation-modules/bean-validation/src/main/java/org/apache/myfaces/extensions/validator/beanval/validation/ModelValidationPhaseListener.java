@@ -107,7 +107,7 @@ public class ModelValidationPhaseListener implements PhaseListener
             }
 
             if (processedValidationTargets.contains(validationTarget) &&
-                    !modelValidationEntry.getMetaData().displayInline())
+                    !modelValidationEntry.isDisplayInline())
             {
                 continue;
             }
@@ -189,7 +189,7 @@ public class ModelValidationPhaseListener implements PhaseListener
                 result = results.get(modelValidationEntry.getComponent().getClientId(facesContext));
 
                 constraintViolation = (ConstraintViolation) violationsIterator.next();
-                if (modelValidationEntry.getMetaData().displayInline())
+                if (modelValidationEntry.isDisplayInline())
                 {
                     result.addFacesMessageHolder(createFacesMessageHolderForConstraintViolation(
                             constraintViolation, modelValidationEntry, validationTarget, true));
@@ -279,14 +279,14 @@ public class ModelValidationPhaseListener implements PhaseListener
         if (!isDefaultMessage(modelValidationEntry))
         {
             return interpolateValidationErrorMessage(
-                    modelValidationEntry.getMetaData().message(), validationTarget, violation);
+                    modelValidationEntry.getMessage(), validationTarget, violation);
         }
         return violation.getMessage();
     }
 
     private boolean isDefaultMessage(ModelValidationEntry modelValidationEntry)
     {
-        return ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getMetaData().message());
+        return ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getMessage());
     }
 
     private String interpolateValidationErrorMessage(String extValInlineMessage,
