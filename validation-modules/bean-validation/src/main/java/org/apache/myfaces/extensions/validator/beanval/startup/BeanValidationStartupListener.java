@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
+import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.SizeNameMapper;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.NotNullNameMapper;
@@ -59,6 +60,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         registerGroupStorageNameMapper();
         registerModelValidationStorageNameMapper();
         registerComponentInitializers();
+        registerMetaDataExtractionInterceptors();
         registerPhaseListeners();
     }
 
@@ -117,6 +119,12 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         return (ExtValContext.getContext()
                 .getFactoryFinder()
                 .getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, StorageManagerHolder.class));
+    }
+
+    protected void registerMetaDataExtractionInterceptors()
+    {
+        ExtValContext.getContext()
+                .addMetaDataExtractionInterceptor(new ExtValBeanValidationMetaDataExtractionInterceptor());
     }
 
     protected void registerPhaseListeners()

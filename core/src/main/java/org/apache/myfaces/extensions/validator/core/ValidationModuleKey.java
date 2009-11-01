@@ -16,41 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.annotation;
-
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
+package org.apache.myfaces.extensions.validator.core;
 
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.FIELD;
 
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
 /**
+ * marker annotation for module keys
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-
-@Target({METHOD, FIELD, TYPE})
-@Retention(RUNTIME)
-@UsageInformation(UsageCategory.API)
-@Documented
-public @interface ModelValidation
+public @interface ValidationModuleKey
 {
-    public static final String DEFAULT_TARGET = "base";
-    public static final String DEFAULT_MESSAGE = "org.apache.myfaces.extensions.validator.bv_message";
-
-    boolean isActive() default false;
-
-    boolean displayInline() default false;
-
-    @ToDo(value = Priority.HIGH, description = "support property chain syntax")
-    String[] validationTargets() default DEFAULT_TARGET;
-
-    String message() default DEFAULT_MESSAGE;
 }

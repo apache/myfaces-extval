@@ -36,8 +36,6 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Violati
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -260,8 +258,9 @@ public class ExtValContext
         this.invocationOrderAwareContextHelper.addPropertyValidationInterceptor(propertyValidationInterceptor);
     }
 
-    @Deprecated
-    @ToDo(value = Priority.HIGH, description = "not used")
+    /**
+     * @return all global validation interceptors
+     */
     public List<PropertyValidationInterceptor> getPropertyValidationInterceptors()
     {
         this.invocationOrderAwareContextHelper.lazyInitPropertyValidationInterceptors();
@@ -283,10 +282,30 @@ public class ExtValContext
         this.invocationOrderAwareContextHelper.addMetaDataExtractionInterceptor(metaDataExtractionInterceptor);
     }
 
+    /**
+     * @return all global meta-data extraction interceptors
+     */
     public List<MetaDataExtractionInterceptor> getMetaDataExtractionInterceptors()
     {
         this.invocationOrderAwareContextHelper.lazyInitMetaDataExtractionInterceptors();
         return this.invocationOrderAwareContextHelper.getMetaDataExtractionInterceptors();
+    }
+
+    public List<MetaDataExtractionInterceptor> getMetaDataExtractionInterceptorsFor(Class moduleKey)
+    {
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        if(moduleKey != null)
+        {
+            properties.put(ValidationModuleKey.class.getName(), moduleKey);
+        }
+        return getMetaDataExtractionInterceptorsWith(properties);
+    }
+
+    public List<MetaDataExtractionInterceptor> getMetaDataExtractionInterceptorsWith(Map<String, Object> properties)
+    {
+        this.invocationOrderAwareContextHelper.lazyInitMetaDataExtractionInterceptors();
+        return this.invocationOrderAwareContextHelper.getMetaDataExtractionInterceptorsWith(properties);
     }
 
     /*

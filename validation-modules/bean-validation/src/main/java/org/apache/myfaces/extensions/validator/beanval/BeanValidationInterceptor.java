@@ -67,7 +67,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 
         if (propertyDetails != null)
         {
-            BeanValidationUtils.addMetaDataToContext(uiComponent, propertyDetails);
             bviUtils.initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
         }
 
@@ -79,7 +78,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
     {
-        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractor();
+        MetaDataExtractor metaDataExtractor = bviUtils.getComponentMetaDataExtractor(uiComponent);
 
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
 
@@ -92,9 +91,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                 {
                     logger.trace("jsr303 start validation");
                 }
-
-                BeanValidationUtils.addMetaDataToContext(
-                        uiComponent, ExtValUtils.getPropertyDetails(propertyInformation));
 
                 if (!executeGlobalBeforeValidationInterceptors(
                         facesContext, uiComponent, convertedObject, propertyInformation))
