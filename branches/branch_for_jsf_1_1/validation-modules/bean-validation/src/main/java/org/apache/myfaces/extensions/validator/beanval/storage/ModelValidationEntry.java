@@ -122,19 +122,9 @@ public class ModelValidationEntry
         return validationTargets;
     }
 
-    public void setValidationTargets(List<Object> validationTargets)
-    {
-        this.validationTargets = validationTargets;
-    }
-
     public List<String> getValidationTargetExpressions()
     {
         return validationTargetExpressions;
-    }
-
-    public void setValidationTargetExpressions(List<String> validationTargetExpressions)
-    {
-        this.validationTargetExpressions = validationTargetExpressions;
     }
 
     public Object getMetaDataSourceObject()
