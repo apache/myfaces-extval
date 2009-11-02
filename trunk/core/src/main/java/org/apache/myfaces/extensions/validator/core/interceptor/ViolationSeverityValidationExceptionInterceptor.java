@@ -52,11 +52,16 @@ public class ViolationSeverityValidationExceptionInterceptor implements Validati
                                  ValidatorException validatorException,
                                  ValidationStrategy validatorExceptionSource)
     {
-        if(metaDataEntry.getValue() instanceof Annotation)
+        if(isExtValMetaData(metaDataEntry))
         {
             tryToPlaceSeverity(validatorException, metaDataEntry.getValue(Annotation.class));
         }
         return true;
+    }
+
+    private boolean isExtValMetaData(MetaDataEntry metaDataEntry)
+    {
+        return metaDataEntry.getValue() instanceof Annotation;
     }
 
     private void tryToPlaceSeverity(ValidatorException validatorException, Annotation annotation)
