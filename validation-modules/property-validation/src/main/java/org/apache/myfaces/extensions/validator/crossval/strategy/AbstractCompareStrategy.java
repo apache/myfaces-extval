@@ -18,15 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.lang.annotation.Annotation;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
@@ -42,8 +41,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@SuppressWarnings({"unchecked"})
 @UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractCompareStrategy extends AbstractCrossValidationStrategy
+public abstract class AbstractCompareStrategy<A extends Annotation> extends AbstractCrossValidationStrategy
 {
     protected static List<ReferencingStrategy> referencingStrategies;
     protected Map<Object, Object> violationResultStorage = new HashMap<Object, Object>();
@@ -84,8 +84,8 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     {
         //initCrossValidation is done in the CrossValidationPhaseListener
 
-        String[] validationTargets = getValidationTargets(
-            crossValidationStorageEntry.getMetaDataEntry().getValue(Annotation.class));
+        String[] validationTargets = getValidationTargets((A)
+            crossValidationStorageEntry.getMetaDataEntry().getValue());
 
         for (String validationTarget : validationTargets)
         {
@@ -130,11 +130,9 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
             return;
         }
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
         //get validation error messages for the target component
-        String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
-        String details = getErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class), true);
+        String summary = getErrorMessageSummary((A)entryOfSource.getMetaDataEntry().getValue(), true);
+        String details = getErrorMessageDetail((A)entryOfSource.getMetaDataEntry().getValue(), true);
 
         //validation target isn't bound to a component withing the current page 
         //(see validateFoundEntry, tryToValidateLocally and tryToValidateBindingOnly)
@@ -146,15 +144,13 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         FacesMessage message;
         if (entryOfTarget.getMetaDataEntry() != null)
         {
-            message = getTargetComponentErrorMessage(
-                entryOfTarget.getMetaDataEntry().getValue(Annotation.class), summary, details);
+            message = getTargetComponentErrorMessage((A)entryOfTarget.getMetaDataEntry().getValue(), summary, details);
         }
         else
         {
             //TODO document possible side effects
             //due to a missing target annotation (see: tryToValidateLocally)
-            message = getTargetComponentErrorMessage(
-                entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
+            message = getTargetComponentErrorMessage((A)entryOfSource.getMetaDataEntry().getValue(), summary, details);
         }
 
         if ((message.getSummary() != null || message.getDetail() != null) &&
@@ -175,11 +171,11 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     private void processTargetComponentAsSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
     {
         //get validation error messages for the current component
-        String summary = getReverseErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class));
-        String details = getReverseErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class));
+        String summary = getReverseErrorMessageSummary((A)entryOfSource.getMetaDataEntry().getValue());
+        String details = getReverseErrorMessageDetail((A)entryOfSource.getMetaDataEntry().getValue());
 
         FacesMessage message = getSourceComponentErrorMessage(
-            entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
+                (A)entryOfSource.getMetaDataEntry().getValue(), summary, details);
 
         if (message.getSummary() != null || message.getDetail() != null)
         {
@@ -197,11 +193,11 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         if (handleSourceViolation(entryOfSource))
         {
             //get validation error messages for the current component
-            String summary = getErrorMessageSummary(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
-            String details = getErrorMessageDetail(entryOfSource.getMetaDataEntry().getValue(Annotation.class), false);
+            String summary = getErrorMessageSummary((A)entryOfSource.getMetaDataEntry().getValue(), false);
+            String details = getErrorMessageDetail((A)entryOfSource.getMetaDataEntry().getValue(), false);
 
             FacesMessage message = getSourceComponentErrorMessage(
-                entryOfSource.getMetaDataEntry().getValue(Annotation.class), summary, details);
+                (A)entryOfSource.getMetaDataEntry().getValue(), summary, details);
 
             if (message.getSummary() != null || message.getDetail() != null)
             {
@@ -215,22 +211,22 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
                 entryOfSource.getComponent(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, null), null);
     }
 
-    protected FacesMessage getSourceComponentErrorMessage(Annotation annotation, String summary, String detail)
+    protected FacesMessage getSourceComponentErrorMessage(A annotation, String summary, String detail)
     {
         return ExtValUtils.createFacesMessage(summary, detail);
     }
 
-    protected FacesMessage getTargetComponentErrorMessage(Annotation foundAnnotation, String summary, String detail)
+    protected FacesMessage getTargetComponentErrorMessage(A foundAnnotation, String summary, String detail)
     {
         return ExtValUtils.createFacesMessage(summary, detail);
     }
 
-    protected String getErrorMessageSummary(Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessageSummary(A annotation, boolean isTargetComponent)
     {
         return resolveMessage(getValidationErrorMsgKey(annotation, isTargetComponent));
     }
 
-    protected String getErrorMessageDetail(Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessageDetail(A annotation, boolean isTargetComponent)
     {
         try
         {
@@ -248,9 +244,9 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
         return null;
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation)
+    protected final String getValidationErrorMsgKey(Annotation annotation)
     {
-        return getValidationErrorMsgKey(annotation, false);
+        return getValidationErrorMsgKey((A)annotation, false);
     }
 
     protected boolean handleTargetViolation(
@@ -273,7 +269,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     /*
      * no target component (validation against the model) -> get reverse message for source component
      */
-    protected String getReverseErrorMessageSummary(Annotation annotation)
+    protected String getReverseErrorMessageSummary(A annotation)
     {
         //if the message is neutral
         return getErrorMessageSummary(annotation, true);
@@ -282,7 +278,7 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
     /*
      * no target component (validation against the model) -> get reverse message for source component
      */
-    protected String getReverseErrorMessageDetail(Annotation annotation)
+    protected String getReverseErrorMessageDetail(A annotation)
     {
         //if the message is neutral
         return getErrorMessageDetail(annotation, true);
@@ -292,18 +288,18 @@ public abstract class AbstractCompareStrategy extends AbstractCrossValidationStr
      * abstract methods
      */
 
-    protected abstract String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent);
+    protected abstract String getValidationErrorMsgKey(A annotation, boolean isTargetComponent);
 
     /*
      * implements the specific validation logic
      */
 
-    public abstract boolean isViolation(Object object1, Object object2, Annotation annotation);
+    public abstract boolean isViolation(Object object1, Object object2, A annotation);
 
     /*
      * returns the referenced validation targets of the annotation
      * e.g. @DateIs(type = DateIsType.before, value = "finalExam")
      * -> method returns an array with one value ("finalExam")
      */
-    public abstract String[] getValidationTargets(Annotation annotation);
+    public abstract String[] getValidationTargets(A annotation);
 }
