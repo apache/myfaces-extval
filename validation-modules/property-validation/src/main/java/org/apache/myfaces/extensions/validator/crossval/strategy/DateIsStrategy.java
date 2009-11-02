@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
-import java.lang.annotation.Annotation;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.MissingResourceException;
@@ -37,7 +36,7 @@ import java.util.MissingResourceException;
  */
 @SkipValidationSupport
 @UsageInformation(UsageCategory.INTERNAL)
-public class DateIsStrategy extends AbstractCompareStrategy
+public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
 {
     protected static final String TOO_EARLY = "early";
     protected static final String TOO_LATE = "late";
@@ -60,11 +59,11 @@ public class DateIsStrategy extends AbstractCompareStrategy
         return false;
     }
 
-    public boolean isViolation(Object object1, Object object2, Annotation annotation)
+    public boolean isViolation(Object object1, Object object2, DateIs annotation)
     {
         boolean violationFound;
 
-        if (((DateIs) annotation).type().equals(DateIsType.same))
+        if (annotation.type().equals(DateIsType.same))
         {
             violationFound = object1 != null && !object1.equals(object2);
 
@@ -73,7 +72,7 @@ public class DateIsStrategy extends AbstractCompareStrategy
                 this.violationResultStorage.put(RESULT_KEY, NOT_EQUAL_DATE_TIME);
             }
         }
-        else if (((DateIs) annotation).type().equals(DateIsType.before))
+        else if (annotation.type().equals(DateIsType.before))
         {
             violationFound = object1 != null && object2 != null &&
                             (!new Date(((Date) object1).getTime()).before((Date) object2) || object1.equals(object2));
@@ -103,15 +102,15 @@ public class DateIsStrategy extends AbstractCompareStrategy
         return violationFound;
     }
 
-    public String[] getValidationTargets(Annotation annotation)
+    public String[] getValidationTargets(DateIs annotation)
     {
-        return ((DateIs) annotation).valueOf();
+        return annotation.valueOf();
     }
 
     /*
      * protected
      */
-    protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)
+    protected String getValidationErrorMsgKey(DateIs annotation, boolean isTargetComponent)
     {
         String result = (String) this.violationResultStorage.get(RESULT_KEY);
 
@@ -122,15 +121,15 @@ public class DateIsStrategy extends AbstractCompareStrategy
 
         if (TOO_EARLY.equals(result))
         {
-            return getNotAfterErrorMsgKey((DateIs) annotation);
+            return getNotAfterErrorMsgKey(annotation);
         }
         else if (TOO_LATE.equals(result))
         {
-            return getNotBeforeErrorMsgKey((DateIs) annotation);
+            return getNotBeforeErrorMsgKey(annotation);
         }
         else
         {
-            return getNotEqualErrorMsgKey((DateIs) annotation);
+            return getNotEqualErrorMsgKey(annotation);
         }
     }
 
@@ -147,7 +146,7 @@ public class DateIsStrategy extends AbstractCompareStrategy
     }
 
     @Override
-    protected String getErrorMessageSummary(Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessageSummary(DateIs annotation, boolean isTargetComponent)
     {
         if (!isTargetComponent)
         {
@@ -158,7 +157,7 @@ public class DateIsStrategy extends AbstractCompareStrategy
     }
 
     @Override
-    protected String getErrorMessageDetail(Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessageDetail(DateIs annotation, boolean isTargetComponent)
     {
         if (!isTargetComponent)
         {
@@ -182,13 +181,13 @@ public class DateIsStrategy extends AbstractCompareStrategy
     }
 
     @Override
-    protected String getReverseErrorMessageSummary(Annotation annotation)
+    protected String getReverseErrorMessageSummary(DateIs annotation)
     {
         return getErrorMessage(getValidationErrorMsgKey(annotation, false), annotation, false);
     }
 
     @Override
-    protected String getReverseErrorMessageDetail(Annotation annotation)
+    protected String getReverseErrorMessageDetail(DateIs annotation)
     {
         try
         {
@@ -206,11 +205,11 @@ public class DateIsStrategy extends AbstractCompareStrategy
         return null;
     }
 
-    protected String getErrorMessage(String key, Annotation annotation, boolean isTargetComponent)
+    protected String getErrorMessage(String key, DateIs annotation, boolean isTargetComponent)
     {
         String message = resolveMessage(key);
 
-        DateFormat dateFormat = DateFormat.getDateInstance(((DateIs) annotation).errorMessageDateStyle(),
+        DateFormat dateFormat = DateFormat.getDateInstance(annotation.errorMessageDateStyle(),
             FacesContext.getCurrentInstance().getViewRoot().getLocale());
 
         String result;

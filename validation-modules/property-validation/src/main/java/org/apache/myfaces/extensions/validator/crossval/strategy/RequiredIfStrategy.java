@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.validator.ValidatorException;
-import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -36,7 +35,7 @@ import java.lang.annotation.Annotation;
  */
 @SkipValidationSupport
 @UsageInformation(UsageCategory.INTERNAL)
-public class RequiredIfStrategy extends AbstractCompareStrategy
+public class RequiredIfStrategy extends AbstractCompareStrategy<RequiredIf>
 {
     private boolean useFacesBundle = false;
 
@@ -60,20 +59,20 @@ public class RequiredIfStrategy extends AbstractCompareStrategy
         return result;
     }
 
-    protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)
+    protected String getValidationErrorMsgKey(RequiredIf annotation, boolean isTargetComponent)
     {
-        return ((RequiredIf) annotation).validationErrorMsgKey();
+        return annotation.validationErrorMsgKey();
     }
 
-    public boolean isViolation(Object object1, Object object2, Annotation annotation)
+    public boolean isViolation(Object object1, Object object2, RequiredIf annotation)
     {
         boolean violationFound = false;
 
-        if (((RequiredIf) annotation).is().equals(RequiredIfType.empty))
+        if (annotation.is().equals(RequiredIfType.empty))
         {
             violationFound = (object2 == null || object2.equals("")) && (object1 == null || object1.equals(""));
         }
-        else if (((RequiredIf) annotation).is().equals(RequiredIfType.not_empty))
+        else if (annotation.is().equals(RequiredIfType.not_empty))
         {
             violationFound = (object2 != null && !object2.equals("")) && (object1 == null || object1.equals(""));
         }
@@ -81,9 +80,9 @@ public class RequiredIfStrategy extends AbstractCompareStrategy
         return violationFound;
     }
 
-    public String[] getValidationTargets(Annotation annotation)
+    public String[] getValidationTargets(RequiredIf annotation)
     {
-        return ((RequiredIf) annotation).valueOf();
+        return annotation.valueOf();
     }
 
     @Override
