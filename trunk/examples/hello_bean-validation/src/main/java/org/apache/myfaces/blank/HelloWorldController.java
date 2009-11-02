@@ -29,10 +29,14 @@ import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidatio
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
  */
 
-//in case of deactivated default validation
-@BeanValidation
+//adds the default group on form1 in case of group validation* for properties which contain this bean in the path
+//in this case every value binding which starts with helloWorld e.g. #{helloWorld.person.firstName}
+//*in this example the User group is used
+@BeanValidation(viewIds = "/form1.jsp")
 public class HelloWorldController
 {
+    //adds the default group on form1 in case of group validation for properties which contain this property in the path
+    //in this case every value binding which starts with helloWorld.person e.g. #{helloWorld.person.firstName}
     //@BeanValidation(viewIds = "/form1.jsp")
     private Person person = new Person();
 
@@ -43,9 +47,6 @@ public class HelloWorldController
     {
     }
 
-    /**
-     * Method that is backed to a submit button of a form.
-     */
     public String send()
     {
         //do real logic, return a string which will be used for the navigation system of JSF
@@ -53,7 +54,6 @@ public class HelloWorldController
     }
 
     @BeanValidation.List({
-            @BeanValidation(viewIds = "/helloWorld.jsp"),
             @BeanValidation(viewIds = "/form1.jsp", useGroups = User.class),
             @BeanValidation(viewIds = "/form2.jsp", useGroups = Admin.class),
             @BeanValidation(viewIds = "/violation.jsp", useGroups = Admin.class),
