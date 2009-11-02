@@ -37,9 +37,10 @@ public class ModelValidationEntry
     private UIComponent component;
     private List<Class> groups = new ArrayList<Class>();
     private List<Object> validationTargets = new ArrayList<Object>();
-    private List<String> validationTargetExpressions = new ArrayList<String>();
     private boolean displayMessageInline = false;
     private String customMessage = ModelValidation.DEFAULT_MESSAGE;
+    
+    //the original source where the extval-bv meta-data has been found
     private Object metaDataSourceObject;
     private String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
@@ -86,14 +87,6 @@ public class ModelValidationEntry
         }
     }
 
-    public void addValidationTargetExpression(String targetExpression)
-    {
-        if(!this.validationTargetExpressions.contains(targetExpression))
-        {
-            this.validationTargetExpressions.add(targetExpression);
-        }
-    }
-
     /*
      * generated
      */
@@ -120,11 +113,6 @@ public class ModelValidationEntry
     public List<Object> getValidationTargets()
     {
         return validationTargets;
-    }
-
-    public List<String> getValidationTargetExpressions()
-    {
-        return validationTargetExpressions;
     }
 
     public Object getMetaDataSourceObject()
