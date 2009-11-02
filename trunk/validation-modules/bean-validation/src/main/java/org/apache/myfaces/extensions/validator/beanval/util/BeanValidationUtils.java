@@ -368,15 +368,15 @@ public class BeanValidationUtils
     private static void addValidationTargets(ModelValidationEntry modelValidationEntry)
     {
         Object target;
-        for (String modelValidationTarget : modelValidationEntry.getValidationTargetExpressions())
+        for (String modelValidationTargetExpression : modelValidationEntry.getValidationTargetExpressions())
         {
-            target = resolveTarget(modelValidationEntry.getMetaDataSourceObject(), modelValidationTarget);
+            target = resolveTarget(modelValidationEntry.getMetaDataSourceObject(), modelValidationTargetExpression);
 
             if (target == null && LOG.isErrorEnabled())
             {
                 LOG.error("target unreachable - source class: " +
                         modelValidationEntry.getMetaDataSourceObject().getClass().getName() +
-                        " target to resolve: " + modelValidationTarget);
+                        " target to resolve: " + modelValidationTargetExpression);
             }
 
             modelValidationEntry.addValidationTarget(target);
@@ -452,27 +452,27 @@ public class BeanValidationUtils
         }
     }
 
-    private static Object resolveTarget(Object metaDataSourceObject, String modelValidationTarget)
+    private static Object resolveTarget(Object metaDataSourceObject, String modelValidationTargetExpression)
     {
         ELHelper elHelper = ExtValUtils.getELHelper();
 
-        if (elHelper.isELTermWellFormed(modelValidationTarget))
+        if (elHelper.isELTermWellFormed(modelValidationTargetExpression))
         {
-            if (elHelper.isELTermValid(FacesContext.getCurrentInstance(), modelValidationTarget))
+            if (elHelper.isELTermValid(FacesContext.getCurrentInstance(), modelValidationTargetExpression))
             {
                 return elHelper.getValueOfExpression(
-                        FacesContext.getCurrentInstance(), new ValueBindingExpression(modelValidationTarget));
+                        FacesContext.getCurrentInstance(), new ValueBindingExpression(modelValidationTargetExpression));
             }
             else
             {
                 if (LOG.isErrorEnabled())
                 {
-                    LOG.error("an invalid binding is used: " + modelValidationTarget);
+                    LOG.error("an invalid binding is used: " + modelValidationTargetExpression);
                 }
             }
         }
 
-        String[] properties = modelValidationTarget.split("\\.");
+        String[] properties = modelValidationTargetExpression.split("\\.");
 
         Object result = metaDataSourceObject;
         for (String property : properties)

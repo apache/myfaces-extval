@@ -142,8 +142,9 @@ public class TrinidadValidationExceptionInterceptor implements ValidationExcepti
 
     protected boolean processComponent(UIComponent uiComponent)
     {
-        return TRINIDAD_CORE_INPUT_TEXT.equals(uiComponent.getClass().getName()) ||
-               TRINIDAD_CORE_INPUT_DATE.equals(uiComponent.getClass().getName());
+        return uiComponent != null &&
+                (TRINIDAD_CORE_INPUT_TEXT.equals(uiComponent.getClass().getName()) ||
+                 TRINIDAD_CORE_INPUT_DATE.equals(uiComponent.getClass().getName()));
     }
 
     private String getLabel(UIComponent uiComponent)
