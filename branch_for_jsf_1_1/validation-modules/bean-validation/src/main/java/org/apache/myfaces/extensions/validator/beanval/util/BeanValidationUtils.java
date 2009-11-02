@@ -409,8 +409,7 @@ public class BeanValidationUtils
             if (elHelper.isELTermWellFormed(condition) &&
                     elHelper.isELTermValid(FacesContext.getCurrentInstance(), condition))
             {
-                if (Boolean.TRUE.equals(
-                        elHelper.getValueOfExpression(
+                if (Boolean.TRUE.equals(elHelper.getValueOfExpression(
                                 FacesContext.getCurrentInstance(), new ValueBindingExpression(condition))))
                 {
                     return true;
