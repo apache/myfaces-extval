@@ -44,14 +44,33 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
 
     public void addModelValidationEntry(ModelValidationEntry modelValidationEntry)
     {
+        String clientId = getCurrentClientId(modelValidationEntry);
+
+        List<ModelValidationEntry> modelValidationEntryList = resolveModelValidationEntryList(
+                modelValidationEntry, clientId);
+
+        addModelValidationEntry(modelValidationEntryList, modelValidationEntry);
+    }
+
+    private String getCurrentClientId(ModelValidationEntry modelValidationEntry)
+    {
         String clientId = null;
 
         if(modelValidationEntry.getComponent() != null)
         {
             clientId = modelValidationEntry.getComponent().getClientId(FacesContext.getCurrentInstance());
-            this.componentsOfRequest.add(clientId);
-        }
 
+            if(!this.componentsOfRequest.contains(clientId))
+            {
+                this.componentsOfRequest.add(clientId);
+            }
+        }
+        return clientId;
+    }
+
+    private List<ModelValidationEntry> resolveModelValidationEntryList(
+            ModelValidationEntry modelValidationEntry, String clientId)
+    {
         List<ModelValidationEntry> modelValidationEntryList =
                 this.modelValidationEntries.get(GroupUtils.getGroupKey(
                         modelValidationEntry.getViewId(), clientId));
@@ -62,7 +81,12 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
             this.modelValidationEntries.put(GroupUtils.getGroupKey(
                     modelValidationEntry.getViewId(), clientId), modelValidationEntryList);
         }
+        return modelValidationEntryList;
+    }
 
+    private void addModelValidationEntry(
+            List<ModelValidationEntry> modelValidationEntryList, ModelValidationEntry modelValidationEntry)
+    {
         if(!modelValidationEntryList.contains(modelValidationEntry))
         {
             modelValidationEntryList.add(modelValidationEntry);
@@ -74,16 +98,24 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
         String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
         List<ModelValidationEntry> result = new ArrayList<ModelValidationEntry>();
 
-        //add entries for specific components
+        addEntriesForComponents(viewId, result);
+
+        addEntriesForPage(viewId, result);
+
+        return result;
+    }
+
+    private void addEntriesForComponents(String viewId, List<ModelValidationEntry> result)
+    {
         for(String currentClientId : this.componentsOfRequest)
         {
             result.addAll(getModelValidationEntries(viewId, currentClientId));
         }
+    }
 
-        //add entries for the whole page
+    private void addEntriesForPage(String viewId, List<ModelValidationEntry> result)
+    {
         result.addAll(getModelValidationEntries(viewId));
-
-        return result;
     }
 
     private List<ModelValidationEntry> buildModelValidationEntryList(
@@ -145,7 +177,12 @@ public class DefaultModelValidationStorage implements ModelValidationStorage
             return resultListForPage;
         }
 
-        //merge results
+        return mergeResults(resultListForPage, resultListForComponent);
+    }
+
+    private List<ModelValidationEntry> mergeResults(
+            List<ModelValidationEntry> resultListForPage, List<ModelValidationEntry> resultListForComponent)
+    {
         List<ModelValidationEntry> mergedResult = new ArrayList<ModelValidationEntry>();
         mergedResult.addAll(resultListForPage);
         mergedResult.addAll(resultListForComponent);

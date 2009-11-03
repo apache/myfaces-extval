@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -128,11 +127,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
     {
         /*not used yet supportMultipleViolationsPerField()*/
         this.bviUtils.validate(facesContext, uiComponent, convertedObject, propertyInformation);
-    }
-
-    protected boolean supportMultipleViolationsPerField()
-    {
-        return BeanValidationUtils.supportMultipleViolationsPerField();
     }
 
     /*
