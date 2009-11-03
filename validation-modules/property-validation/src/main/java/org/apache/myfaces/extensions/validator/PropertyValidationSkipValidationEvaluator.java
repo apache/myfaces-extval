@@ -24,13 +24,11 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.event.PhaseId;
 import java.util.List;
 
 /**
@@ -47,21 +45,11 @@ public class PropertyValidationSkipValidationEvaluator implements SkipValidation
     {
         boolean result = false;
         
-        if(isRenderResponsePhase())
+        if(JsfUtils.isRenderResponsePhase())
         {
             result = !isClientSideValidationEnabled(metaDataEntry);
         }
         return result || PropertyValidationUtils.isValidationSkipped(facesContext, validationStrategy, metaDataEntry);
-    }
-
-    private boolean isRenderResponsePhase()
-    {
-        return PhaseId.RENDER_RESPONSE.equals(getFacesInformationStorage().getCurrentPhaseId());
-    }
-
-    private FacesInformationStorage getFacesInformationStorage()
-    {
-        return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
     }
 
     @SuppressWarnings({"unchecked"})

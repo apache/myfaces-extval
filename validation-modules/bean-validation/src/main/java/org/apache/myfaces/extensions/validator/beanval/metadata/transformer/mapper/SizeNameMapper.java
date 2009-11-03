@@ -38,11 +38,17 @@ public class SizeNameMapper extends AbstractBeanValidationVirtualValidationStrat
 {
     protected String createBeanValidationTransformerName(BeanValidationVirtualValidationStrategy adapter)
     {
-        if(Size.class.getName().equals(adapter.getConstraintDescriptor().getAnnotation().annotationType().getName()) &&
-                String.class.getName().equals(adapter.getElementClass().getName()))
+        if(isStringSizeConstraint(adapter))
         {
             return StringSizeMetaDataTransformer.class.getName();
         }
         return null;
+    }
+
+    private boolean isStringSizeConstraint(BeanValidationVirtualValidationStrategy adapter)
+    {
+        return Size.class.getName().equals(
+                adapter.getConstraintDescriptor().getAnnotation().annotationType().getName()) &&
+                String.class.getName().equals(adapter.getElementClass().getName());
     }
 }

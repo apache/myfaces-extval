@@ -20,35 +20,19 @@ package org.apache.myfaces.extensions.validator.beanval.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
-import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
-import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
-import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
-import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
-import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
-import org.apache.myfaces.extensions.validator.core.el.ELHelper;
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
-import javax.validation.Payload;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -60,14 +44,7 @@ import java.util.Set;
 public class BeanValidationUtils
 {
     private static final Log LOG = LogFactory.getLog(BeanValidationUtils.class);
-    private static LabeledMessageInternals labeledMessageInternals = new LabeledMessageInternals();
-
-    @ToDo(value = Priority.HIGH, description = "use it - also in ModelValidationPhaseListener" +
-            "attention: only add one message per client id")
-    public static boolean supportMultipleViolationsPerField()
-    {
-        return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MULTIPLE_VIOLATION_MESSAGES_PER_FIELD);
-    }
+    private static ExtValBeanValidationMetaDataInternals bvmi = new ExtValBeanValidationMetaDataInternals(LOG);
 
     public static void addMetaDataToContext(
             UIComponent component, PropertyDetails propertyDetails, boolean processModelValidation)
@@ -81,413 +58,21 @@ public class BeanValidationUtils
         List<ModelValidationEntry> modelValidationEntryList = new ArrayList<ModelValidationEntry>();
         List<Class> restrictedGroupsForModelValidation = new ArrayList<Class>();
 
-        //extract bv-controller-annotation of
-
-        //first bean
-        processClass(firstBean,
-                foundGroupsForPropertyValidation,
-                restrictedGroupsForPropertyValidation,
-                modelValidationEntryList,
-                restrictedGroupsForModelValidation,
-                processModelValidation);
-
-        //first property
-        processFieldsAndProperties(key[0] + "." + key[1],
+        bvmi.extractExtValBeanValidationMetaData(propertyDetails,
+                processModelValidation,
+                key,
                 firstBean,
-                key[1],
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
-                restrictedGroupsForModelValidation,
-                processModelValidation);
+                restrictedGroupsForModelValidation);
 
-        //base object (of target property)
-        processClass(propertyDetails.getBaseObject(),
+        bvmi.processExtValBeanValidationMetaData(component,
+                propertyDetails,
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
-                restrictedGroupsForModelValidation,
-                processModelValidation);
-
-        //last property
-        processFieldsAndProperties(
-                propertyDetails.getKey(),
-                propertyDetails.getBaseObject(),
-                propertyDetails.getProperty(),
-                foundGroupsForPropertyValidation,
-                restrictedGroupsForPropertyValidation,
-                modelValidationEntryList,
-                restrictedGroupsForModelValidation,
-                processModelValidation);
-
-        ExtValBeanValidationContext extValBeanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
-        String currentViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-
-        String clientId = component.getClientId(FacesContext.getCurrentInstance());
-
-        processFoundGroups(extValBeanValidationContext, currentViewId, clientId,
-                foundGroupsForPropertyValidation);
-
-        processRestrictedGroups(extValBeanValidationContext, currentViewId, clientId,
-                restrictedGroupsForPropertyValidation);
-
-        initModelValidation(extValBeanValidationContext, component, propertyDetails,
-                modelValidationEntryList, restrictedGroupsForModelValidation);
-    }
-
-    private static void processClass(Object objectToInspect,
-                                     List<Class> foundGroupsForPropertyValidation,
-                                     List<Class> restrictedGroupsForPropertyValidation,
-                                     List<ModelValidationEntry> modelValidationEntryList,
-                                     List<Class> restrictedGroupsForModelValidation,
-                                     boolean processModelValidation)
-    {
-        Class classToInspect = objectToInspect.getClass();
-        while (!Object.class.getName().equals(classToInspect.getName()))
-        {
-            transferGroupValidationInformationToFoundGroups(objectToInspect,
-                    foundGroupsForPropertyValidation,
-                    restrictedGroupsForPropertyValidation,
-                    modelValidationEntryList,
-                    restrictedGroupsForModelValidation,
-                    processModelValidation);
-
-            processInterfaces(objectToInspect.getClass(), objectToInspect,
-                    foundGroupsForPropertyValidation,
-                    restrictedGroupsForPropertyValidation,
-                    modelValidationEntryList,
-                    restrictedGroupsForModelValidation,
-                    processModelValidation);
-
-            classToInspect = classToInspect.getSuperclass();
-        }
-    }
-
-    private static void processFieldsAndProperties(String key,
-                                                   Object base,
-                                                   String property,
-                                                   List<Class> foundGroupsForPropertyValidation,
-                                                   List<Class> restrictedGroupsForPropertyValidation,
-                                                   List<ModelValidationEntry> modelValidationEntryList,
-                                                   List<Class> restrictedGroupsForModelValidation,
-                                                   boolean processModelValidation)
-    {
-        PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
-                .extract(FacesContext.getCurrentInstance(), new PropertyDetails(key, base, property));
-
-        for (MetaDataEntry metaDataEntry : propertyInformation.getMetaDataEntries())
-        {
-            if (metaDataEntry.getValue() instanceof BeanValidation)
-            {
-                tryToProcessMetaData((BeanValidation) metaDataEntry.getValue(),
-                        tryToCreateNewTarget(base, property),
-                        foundGroupsForPropertyValidation,
-                        restrictedGroupsForPropertyValidation,
-                        modelValidationEntryList,
-                        restrictedGroupsForModelValidation,
-                        processModelValidation);
-            }
-            else if (metaDataEntry.getValue() instanceof BeanValidation.List)
-            {
-                for (BeanValidation currentBeanValidation : ((BeanValidation.List) metaDataEntry.getValue()).value())
-                {
-                    tryToProcessMetaData(currentBeanValidation,
-                            tryToCreateNewTarget(base, property),
-                            foundGroupsForPropertyValidation,
-                            restrictedGroupsForPropertyValidation,
-                            modelValidationEntryList,
-                            restrictedGroupsForModelValidation,
-                            processModelValidation);
-                }
-            }
-        }
-    }
-
-    private static Object tryToCreateNewTarget(Object base, String property)
-    {
-        Object result = getValueOfProperty(base, property);
-
-        if (result == null)
-        {
-            return base;
-        }
-
-        return result;
-    }
-
-    private static Object getValueOfProperty(Object base, String property)
-    {
-        property = property.substring(0, 1).toUpperCase() + property.substring(1, property.length());
-        Method targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "get" + property);
-
-        if (targetMethod == null)
-        {
-            targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "is" + property);
-        }
-
-        if (targetMethod == null)
-        {
-            throw new IllegalStateException(
-                    "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
-        }
-        return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
-    }
-
-    private static void processFoundGroups(ExtValBeanValidationContext extValBeanValidationContext,
-                                           String currentViewId,
-                                           String clientId,
-                                           List<Class> foundGroupsForPropertyValidation)
-    {
-        /*
-         * add found groups to context
-         */
-        for (Class currentGroupClass : foundGroupsForPropertyValidation)
-        {
-            extValBeanValidationContext.addGroup(currentGroupClass, currentViewId, clientId);
-        }
-    }
-
-    private static void processRestrictedGroups(ExtValBeanValidationContext extValBeanValidationContext,
-                                                String currentViewId,
-                                                String clientId,
-                                                List<Class> restrictedGroupsForPropertyValidation)
-    {
-        /*
-         * add restricted groups
-         */
-        for (Class currentGroupClass : restrictedGroupsForPropertyValidation)
-        {
-            extValBeanValidationContext.restrictGroup(currentGroupClass, currentViewId, clientId);
-        }
-    }
-
-    private static void initModelValidation(ExtValBeanValidationContext extValBeanValidationContext,
-                                            UIComponent component,
-                                            PropertyDetails propertyDetails,
-                                            List<ModelValidationEntry> modelValidationEntryList,
-                                            List<Class> restrictedGroupsForModelValidation)
-    {
-        /*
-         * add model validation entry list
-         */
-        for (ModelValidationEntry modelValidationEntry : modelValidationEntryList)
-        {
-            for (Class restrictedGroup : restrictedGroupsForModelValidation)
-            {
-                modelValidationEntry.removeGroup(restrictedGroup);
-            }
-
-            if (modelValidationEntry.getGroups().length > 0)
-            {
-                if(modelValidationEntry.getValidationTargets().isEmpty())
-                {
-                    modelValidationEntry.addValidationTarget(propertyDetails.getBaseObject());
-                }
-                modelValidationEntry.setComponent(component);
-                extValBeanValidationContext.addModelValidationEntry(modelValidationEntry);
-            }
-        }
-    }
-
-    private static void transferGroupValidationInformationToFoundGroups(
-            Object objectToInspect,
-            List<Class> foundGroupsForPropertyValidation,
-            List<Class> restrictedGroupsForPropertyValidation,
-            List<ModelValidationEntry> modelValidationEntryList,
-            List<Class> restrictedGroupsForModelValidation,
-            boolean processModelValidation)
-    {
-        if (objectToInspect.getClass().isAnnotationPresent(BeanValidation.class))
-        {
-            tryToProcessMetaData(objectToInspect.getClass().getAnnotation(BeanValidation.class),
-                    objectToInspect,
-                    foundGroupsForPropertyValidation,
-                    restrictedGroupsForPropertyValidation,
-                    modelValidationEntryList,
-                    restrictedGroupsForModelValidation,
-                    processModelValidation);
-        }
-        else if (objectToInspect.getClass().isAnnotationPresent(BeanValidation.List.class))
-        {
-            for (BeanValidation currentBeanValidation :
-                    (objectToInspect.getClass().getAnnotation(BeanValidation.List.class)).value())
-            {
-                tryToProcessMetaData(currentBeanValidation,
-                        objectToInspect,
-                        foundGroupsForPropertyValidation,
-                        restrictedGroupsForPropertyValidation,
-                        modelValidationEntryList,
-                        restrictedGroupsForModelValidation,
-                        processModelValidation);
-            }
-        }
-    }
-
-    private static void processInterfaces(Class currentClass,
-                                          Object metaDataSourceObject,
-                                          List<Class> foundGroupsForPropertyValidation,
-                                          List<Class> restrictedGroupsForPropertyValidation,
-                                          List<ModelValidationEntry> modelValidationEntryList,
-                                          List<Class> restrictedGroupsForModelValidation,
-                                          boolean processModelValidation)
-    {
-        for (Class currentInterface : currentClass.getInterfaces())
-        {
-            transferGroupValidationInformationToFoundGroups(metaDataSourceObject,
-                    foundGroupsForPropertyValidation,
-                    restrictedGroupsForPropertyValidation,
-                    modelValidationEntryList,
-                    restrictedGroupsForModelValidation,
-                    processModelValidation);
-
-            processInterfaces(currentInterface, metaDataSourceObject,
-                    foundGroupsForPropertyValidation,
-                    restrictedGroupsForPropertyValidation,
-                    modelValidationEntryList,
-                    restrictedGroupsForModelValidation,
-                    processModelValidation);
-        }
-    }
-
-    private static void tryToProcessMetaData(BeanValidation beanValidation,
-                                        Object metaDataSourceObject,
-                                        List<Class> foundGroupsForPropertyValidation,
-                                        List<Class> restrictedGroupsForPropertyValidation,
-                                        List<ModelValidationEntry> modelValidationEntryList,
-                                        List<Class> restrictedGroupsForModelValidation,
-                                        boolean processModelValidation)
-    {
-        for (String currentViewId : beanValidation.viewIds())
-        {
-            if (useMetaDataForViewId(beanValidation, currentViewId))
-            {
-                processMetaData(beanValidation,
-                        metaDataSourceObject,
-                        foundGroupsForPropertyValidation,
-                        restrictedGroupsForPropertyValidation,
-                        modelValidationEntryList,
-                        restrictedGroupsForModelValidation,
-                        processModelValidation);
-                break;
-            }
-        }
-    }
-
-    private static boolean useMetaDataForViewId(BeanValidation beanValidation, String currentViewId)
-    {
-        return (currentViewId.equals(FacesContext.getCurrentInstance().getViewRoot().getViewId()) ||
-                currentViewId.equals("*")) && isValidationPermitted(beanValidation);
-    }
-
-    private static void processMetaData(BeanValidation beanValidation,
-                                                 Object metaDataSourceObject,
-                                                 List<Class> foundGroupsForPropertyValidation,
-                                                 List<Class> restrictedGroupsForPropertyValidation,
-                                                 List<ModelValidationEntry> modelValidationEntryList,
-                                                 List<Class> restrictedGroupsForModelValidation,
-                                                 boolean processModelValidation)
-    {
-        if (processModelValidation && isModelValidation(beanValidation))
-        {
-            addModelValidationEntry(
-                    beanValidation, metaDataSourceObject,
-                    modelValidationEntryList, restrictedGroupsForModelValidation);
-        }
-        else if(!isModelValidation(beanValidation))
-        {
-            processGroups(
-                    beanValidation, foundGroupsForPropertyValidation, restrictedGroupsForPropertyValidation);
-        }
-    }
-
-    private static boolean isValidationPermitted(BeanValidation beanValidation)
-    {
-        ELHelper elHelper = ExtValUtils.getELHelper();
-
-        for (String condition : beanValidation.conditions())
-        {
-            if (elHelper.isELTermWellFormed(condition) &&
-                    elHelper.isELTermValid(FacesContext.getCurrentInstance(), condition))
-            {
-                if (Boolean.TRUE.equals(elHelper.getValueOfExpression(
-                                FacesContext.getCurrentInstance(), new ValueBindingExpression(condition))))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (LOG.isErrorEnabled())
-                {
-                    LOG.error("an invalid condition is used: " + condition);
-                }
-            }
-        }
-        return false;
-    }
-
-    private static boolean isModelValidation(BeanValidation beanValidation)
-    {
-        return beanValidation.modelValidation().isActive();
-    }
-
-    private static void addModelValidationEntry(BeanValidation beanValidation,
-                                                Object metaDataSourceObject,
-                                                List<ModelValidationEntry> modelValidationEntryList,
-                                                List<Class> restrictedGroupsForModelValidation)
-    {
-        ModelValidationEntry modelValidationEntry = new ModelValidationEntry();
-
-        modelValidationEntry.setGroups(Arrays.asList(beanValidation.useGroups()));
-        modelValidationEntry.setDisplayMessageInline(beanValidation.modelValidation().displayInline());
-        modelValidationEntry.setCustomMessage(beanValidation.modelValidation().message());
-        modelValidationEntry.setMetaDataSourceObject(metaDataSourceObject);
-
-        Object validationTarget;
-        for(String validationTargetExpression : beanValidation.modelValidation().validationTargets())
-        {
-            if(ModelValidation.DEFAULT_TARGET.equals(validationTargetExpression))
-            {
-                continue;
-            }
-
-            validationTarget = tryToResolveValidationTargetExpression(validationTargetExpression);
-            if(validationTarget != null)
-            {
-                modelValidationEntry.addValidationTarget(validationTarget);
-            }
-        }
-
-        if (beanValidation.restrictGroups().length > 0)
-        {
-            restrictedGroupsForModelValidation.addAll(Arrays.asList(beanValidation.restrictGroups()));
-        }
-
-        if(modelValidationEntry.getValidationTargets().isEmpty())
-        {
-            modelValidationEntry.addValidationTarget(metaDataSourceObject);
-        }
-
-        modelValidationEntryList.add(modelValidationEntry);
-    }
-
-    private static Object tryToResolveValidationTargetExpression(String validationTargetExpression)
-    {
-        ValueBindingExpression valueBindingExpression = new ValueBindingExpression(validationTargetExpression);
-        return ExtValUtils.getELHelper()
-                .getValueOfExpression(FacesContext.getCurrentInstance(), valueBindingExpression);
-    }
-
-    private static void processGroups(BeanValidation beanValidation,
-                                      List<Class> foundGroupsForPropertyValidation,
-                                      List<Class> restrictedGroupsForPropertyValidation)
-    {
-        foundGroupsForPropertyValidation.addAll(Arrays.asList(beanValidation.useGroups()));
-
-        if (beanValidation.restrictGroups().length > 0)
-        {
-            restrictedGroupsForPropertyValidation.addAll(Arrays.asList(beanValidation.restrictGroups()));
-        }
+                restrictedGroupsForModelValidation);
     }
 
     public static void processConstraintViolations(FacesContext facesContext,
@@ -503,36 +88,35 @@ public class BeanValidationUtils
         {
             facesMessage = createFacesMessageForConstraintViolation(uiComponent, convertedObject, violation);
 
-            if(facesMessage == null)
+            if (facesMessage == null)
             {
                 continue;
             }
 
-            processFacesMessage(facesContext, uiComponent, facesMessageHolderList, facesMessage);
+            bvmi.processFacesMessage(facesContext, uiComponent, facesMessageHolderList, facesMessage);
         }
 
         processViolationMessages(facesMessageHolderList, firstErrorCausesAnException);
     }
 
-    @ToDo(value = Priority.HIGH, description = "support severity.warn and .info")
     public static FacesMessage createFacesMessageForConstraintViolation(UIComponent uiComponent,
                                                                         Object convertedObject,
                                                                         ConstraintViolation violation)
     {
         String violationMessage = violation.getMessage();
 
-        String labeledMessage = createLabeledMessage(violationMessage);
+        String labeledMessage = bvmi.createLabeledMessage(violationMessage);
 
-        FacesMessage.Severity severity = calcSeverity(violation);
+        FacesMessage.Severity severity = bvmi.calcSeverity(violation);
 
-        ValidatorException validatorException = createValidatorException(labeledMessage, severity);
+        ValidatorException validatorException = bvmi.createValidatorException(labeledMessage, severity);
 
-        if(!executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException))
+        if (!bvmi.executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException))
         {
             return null;
         }
 
-        if (isMessageTextUnchanged(validatorException, labeledMessage))
+        if (bvmi.isMessageTextUnchanged(validatorException, labeledMessage))
         {
             return ExtValUtils.createFacesMessage(severity, violationMessage, violationMessage);
         }
@@ -543,146 +127,27 @@ public class BeanValidationUtils
         }
     }
 
-    private static String createLabeledMessage(String violationMessage)
-    {
-        return labeledMessageInternals.createLabeledMessage(violationMessage);
-    }
-
-    private static FacesMessage.Severity calcSeverity(ConstraintViolation<?> violation)
-    {
-        for (Class<? extends Payload> payload : violation.getConstraintDescriptor().getPayload())
-        {
-            if (ViolationSeverity.Warn.class.isAssignableFrom(payload))
-            {
-                return FacesMessage.SEVERITY_WARN;
-            }
-            else if (ViolationSeverity.Info.class.isAssignableFrom(payload))
-            {
-                return FacesMessage.SEVERITY_INFO;
-            }
-            else if (ViolationSeverity.Fatal.class.isAssignableFrom(payload))
-            {
-                return FacesMessage.SEVERITY_FATAL;
-            }
-        }
-        return FacesMessage.SEVERITY_ERROR;
-    }
-
-    private static void processFacesMessage(FacesContext facesContext, UIComponent uiComponent,
-                                            List<FacesMessageHolder> facesMessageHolderList, FacesMessage facesMessage)
-    {
-        FacesMessageHolder facesMessageHolder = new FacesMessageHolder(facesMessage);
-
-        facesMessageHolder.setClientId(uiComponent.getClientId(facesContext));
-
-        facesMessageHolderList.add(facesMessageHolder);
-    }
-
-    private static boolean executeAfterThrowingInterceptors(UIComponent uiComponent,
-                                                         Object convertedObject,
-                                                         ValidatorException validatorException)
-    {
-        return ExtValUtils.executeAfterThrowingInterceptors(
-                uiComponent,
-                null,
-                convertedObject,
-                validatorException,
-                null);
-    }
-
-    private static boolean isMessageTextUnchanged(ValidatorException validatorException, String violationMessage)
-    {
-        return violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
-                violationMessage.equals(validatorException.getFacesMessage().getDetail());
-    }
-
-    private static ValidatorException createValidatorException(String violationMessage, FacesMessage.Severity severity)
-    {
-        return new ValidatorException(
-                ExtValUtils.createFacesMessage(severity, violationMessage, violationMessage));
-    }
-
     public static void processViolationMessages(List<FacesMessageHolder> violationMessageHolderList,
                                                 boolean firstErrorCausesAnException)
     {
-        if(violationMessageHolderList == null || violationMessageHolderList.isEmpty())
+        if (violationMessageHolderList == null || violationMessageHolderList.isEmpty())
         {
             return;
         }
 
         List<FacesMessageHolder> facesMessageListWithLowSeverity =
-                getFacesMessageListWithLowSeverity(violationMessageHolderList);
+                bvmi.getFacesMessageListWithLowSeverity(violationMessageHolderList);
         List<FacesMessageHolder> facesMessageListWithHighSeverity =
-                getFacesMessageListWithHighSeverity(violationMessageHolderList);
+                bvmi.getFacesMessageListWithHighSeverity(violationMessageHolderList);
 
-        addMessagesWithHighSeverity(facesMessageListWithHighSeverity, firstErrorCausesAnException);
-        addMessagesWithLowSeverity(facesMessageListWithLowSeverity);
+        bvmi.addMessagesWithHighSeverity(facesMessageListWithHighSeverity, firstErrorCausesAnException);
+        bvmi.addMessagesWithLowSeverity(facesMessageListWithLowSeverity);
 
         if (!facesMessageListWithHighSeverity.isEmpty() && firstErrorCausesAnException)
         {
             FacesMessageHolder facesMessageHolder = facesMessageListWithHighSeverity.iterator().next();
             ExtValUtils.tryToThrowValidatorExceptionForComponentId(
                     facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage(), null);
-        }
-    }
-
-    private static List<FacesMessageHolder> getFacesMessageListWithLowSeverity(
-            List<FacesMessageHolder> violationMessages)
-    {
-        List<FacesMessageHolder> result = new ArrayList<FacesMessageHolder>();
-
-        for (FacesMessageHolder facesMessageHolder : violationMessages)
-        {
-            if (FacesMessage.SEVERITY_WARN.equals(facesMessageHolder.getFacesMessage().getSeverity()) ||
-                    FacesMessage.SEVERITY_INFO.equals(facesMessageHolder.getFacesMessage().getSeverity()))
-            {
-                result.add(facesMessageHolder);
-            }
-        }
-        return result;
-    }
-
-    private static List<FacesMessageHolder> getFacesMessageListWithHighSeverity(
-            List<FacesMessageHolder> violationMessageHolderList)
-    {
-        List<FacesMessageHolder> result = new ArrayList<FacesMessageHolder>();
-
-        for (FacesMessageHolder facesMessageHolder : violationMessageHolderList)
-        {
-            if (FacesMessage.SEVERITY_ERROR.equals(facesMessageHolder.getFacesMessage().getSeverity()) ||
-                    FacesMessage.SEVERITY_FATAL.equals(facesMessageHolder.getFacesMessage().getSeverity()))
-            {
-                result.add(facesMessageHolder);
-            }
-        }
-        return result;
-    }
-
-    private static void addMessagesWithHighSeverity(List<FacesMessageHolder> facesMessageHolderListWithHighSeverity,
-                                                    boolean firstErrorCausesAnException)
-    {
-        boolean firstMessage = true;
-        for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithHighSeverity)
-        {
-            if (firstMessage && firstErrorCausesAnException)
-            {
-                //the first error will be thrown as exception
-                firstMessage = false;
-            }
-            else
-            {
-                ExtValUtils.tryToAddViolationMessageForComponentId(
-                        facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
-            }
-        }
-    }
-
-    private static void addMessagesWithLowSeverity(List<FacesMessageHolder> facesMessageHolderListWithLowSeverity)
-    {
-        for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithLowSeverity)
-        {
-            ExtValUtils.tryToAddViolationMessageForComponentId(
-                    facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
         }
     }
 }

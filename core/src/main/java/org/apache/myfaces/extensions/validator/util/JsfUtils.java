@@ -20,11 +20,13 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
@@ -79,5 +81,20 @@ public class JsfUtils
         }
 
         return ResourceBundle.getBundle(bundleName, facesContext.getViewRoot().getLocale());
+    }
+
+    public static boolean isRenderResponsePhase()
+    {
+        return PhaseId.RENDER_RESPONSE.equals(getFacesInformationStorage().getCurrentPhaseId());
+    }
+
+    public static PhaseId getCurrentPhaseId()
+    {
+        return getFacesInformationStorage().getCurrentPhaseId();
+    }
+
+    private static FacesInformationStorage getFacesInformationStorage()
+    {
+        return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
     }
 }

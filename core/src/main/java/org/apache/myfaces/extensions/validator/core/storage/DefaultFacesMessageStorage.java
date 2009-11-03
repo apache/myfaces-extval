@@ -30,11 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@ToDo(value = Priority.LOW, description = "optional parameter to deactivate sorting")
 @UsageInformation(UsageCategory.API)
 public class DefaultFacesMessageStorage implements FacesMessageStorage
 {
@@ -83,9 +86,63 @@ public class DefaultFacesMessageStorage implements FacesMessageStorage
         }
     }
 
-    @ToDo(Priority.HIGH)
     private void sortFacesMessageHolderList(List<FacesMessageHolder> facesMessageHolderList)
     {
-        //sort severities
+        Collections.sort(facesMessageHolderList, new Comparator<FacesMessageHolder>() {
+            public int compare(FacesMessageHolder holder1, FacesMessageHolder holder2)
+            {
+                if(holder1.getFacesMessage().getSeverity() == null)
+                {
+                    return 1;
+                }
+                if(isSameSeverity(holder1, holder2))
+                {
+                    return compareMessageText(holder1.getFacesMessage(), holder2.getFacesMessage());
+                }
+
+                if(holder1.getFacesMessage().getSeverity().getOrdinal() >
+                        holder2.getFacesMessage().getSeverity().getOrdinal())
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+
+            private int compareMessageText(FacesMessage facesMessage1, FacesMessage facesMessage2)
+            {
+                String text1 = facesMessage1.getSummary();
+                String text2 = facesMessage2.getSummary();
+
+                if(text1 == null)
+                {
+                    text1 = facesMessage1.getDetail();
+                }
+
+                if(text2 == null)
+                {
+                    text2 = facesMessage2.getDetail();
+                }
+
+                if(text1 == null)
+                {
+                    return 1;
+                }
+
+                if(text2 == null)
+                {
+                    return -1;
+                }
+
+                return text1.compareToIgnoreCase(text2);
+            }
+        });
+    }
+
+    private boolean isSameSeverity(FacesMessageHolder holder1, FacesMessageHolder holder2)
+    {
+        return holder1.getFacesMessage().getSeverity().equals(holder2.getFacesMessage().getSeverity());
     }
 }
