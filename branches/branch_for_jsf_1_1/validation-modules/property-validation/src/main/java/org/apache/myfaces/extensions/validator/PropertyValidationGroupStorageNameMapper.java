@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultGroupStorage;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
@@ -30,6 +31,7 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(200)
 @UsageInformation(INTERNAL)
 public class PropertyValidationGroupStorageNameMapper implements NameMapper<String>
 {

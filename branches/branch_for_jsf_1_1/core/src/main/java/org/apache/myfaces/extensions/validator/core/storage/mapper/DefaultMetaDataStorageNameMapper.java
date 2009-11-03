@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.storage.mapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorage;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultMetaDataStorage;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 
 /**
  * use a public class to allow optional deregistration
@@ -28,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.storage.DefaultMetaDataStora
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(100)
 public class DefaultMetaDataStorageNameMapper implements NameMapper<String>
 {
     public String createName(String source)
