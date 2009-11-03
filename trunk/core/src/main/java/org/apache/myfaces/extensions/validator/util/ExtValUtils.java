@@ -563,7 +563,7 @@ public class ExtValUtils
         }
     }
 
-    @ToDo(value = Priority.HIGH, description = "is renaming ok?")
+    @ToDo(value = Priority.MEDIUM, description = "is renaming ok?")
     public static boolean executeGlobalBeforeValidationInterceptors(FacesContext facesContext,
                                                                     UIComponent uiComponent,
                                                                     Object convertedObject,
@@ -594,7 +594,7 @@ public class ExtValUtils
         return result;
     }
 
-    @ToDo(value = Priority.HIGH, description = "is renaming ok?")
+    @ToDo(value = Priority.MEDIUM, description = "is renaming ok?")
     public static void executeGlobalAfterValidationInterceptors(FacesContext facesContext,
                                                                 UIComponent uiComponent,
                                                                 Object convertedObject,

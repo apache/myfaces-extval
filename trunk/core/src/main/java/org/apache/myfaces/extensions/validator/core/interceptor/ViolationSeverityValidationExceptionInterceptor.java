@@ -24,8 +24,6 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Violati
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,7 +39,6 @@ import java.lang.annotation.Annotation;
  */
 @InvocationOrder(90)
 @UsageInformation(UsageCategory.INTERNAL)
-@ToDo(value = Priority.HIGH, description = "check compatibility with bv-integration")
 public class ViolationSeverityValidationExceptionInterceptor implements ValidationExceptionInterceptor
 {
     protected final Log logger = LogFactory.getLog(getClass());

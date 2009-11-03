@@ -20,21 +20,18 @@ package org.apache.myfaces.extensions.validator.beanval.interceptor;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleAware;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleKey;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 import javax.faces.component.UIComponent;
-import javax.faces.event.PhaseId;
 import java.util.Map;
 
 /**
@@ -72,7 +69,7 @@ public class ExtValBeanValidationMetaDataExtractionInterceptor
      */
     private void processExtValBeanValidationMetaData(UIComponent uiComponent, PropertyDetails propertyDetails)
     {
-        if(isRenderResponsePhase())
+        if(JsfUtils.isRenderResponsePhase())
         {
             BeanValidationUtils.addMetaDataToContext(uiComponent, propertyDetails, false);
         }
@@ -80,17 +77,6 @@ public class ExtValBeanValidationMetaDataExtractionInterceptor
         {
             BeanValidationUtils.addMetaDataToContext(uiComponent, propertyDetails, true);
         }
-    }
-
-    @ToDo(value = Priority.MEDIUM, description = "move to util class")
-    private boolean isRenderResponsePhase()
-    {
-        return PhaseId.RENDER_RESPONSE.equals(getFacesInformationStorage().getCurrentPhaseId());
-    }
-
-    private FacesInformationStorage getFacesInformationStorage()
-    {
-        return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
     }
 
     public String[] getModuleKeys()

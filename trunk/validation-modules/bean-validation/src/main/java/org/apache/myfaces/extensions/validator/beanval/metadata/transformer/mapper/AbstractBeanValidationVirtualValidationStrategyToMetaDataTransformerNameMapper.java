@@ -35,7 +35,7 @@ public abstract class AbstractBeanValidationVirtualValidationStrategyToMetaDataT
 {
     public final String createName(ValidationStrategy source)
     {
-        if(source instanceof BeanValidationVirtualValidationStrategy)
+        if(isBeanValidationStrategy(source))
         {
             BeanValidationVirtualValidationStrategy beanValidationAdapter =
                     (BeanValidationVirtualValidationStrategy)source;
@@ -43,6 +43,11 @@ public abstract class AbstractBeanValidationVirtualValidationStrategyToMetaDataT
             return createBeanValidationTransformerName(beanValidationAdapter);
         }
         return null;
+    }
+
+    private boolean isBeanValidationStrategy(ValidationStrategy source)
+    {
+        return source instanceof BeanValidationVirtualValidationStrategy;
     }
 
     protected  abstract String createBeanValidationTransformerName(
