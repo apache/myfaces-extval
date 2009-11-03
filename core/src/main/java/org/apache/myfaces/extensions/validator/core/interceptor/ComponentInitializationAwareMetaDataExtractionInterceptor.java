@@ -22,10 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
-import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-
-import javax.faces.event.PhaseId;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 /**
  * @author Gerhard Petracek
@@ -37,21 +34,11 @@ public abstract class ComponentInitializationAwareMetaDataExtractionInterceptor 
 {
     public final void afterExtracting(PropertyInformation propertyInformation)
     {
-        if(isRenderResponsePhase())
+        if(JsfUtils.isRenderResponsePhase())
         {
             afterExtractingForComponentInitialization(propertyInformation);
         }
     }
 
     protected abstract void afterExtractingForComponentInitialization(PropertyInformation propertyInformation);
-
-    private boolean isRenderResponsePhase()
-    {
-        return PhaseId.RENDER_RESPONSE.equals(getFacesInformationStorage().getCurrentPhaseId());
-    }
-
-    private FacesInformationStorage getFacesInformationStorage()
-    {
-        return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
-    }
 }

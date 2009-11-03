@@ -49,7 +49,7 @@ public @interface ModelValidation
 
     boolean displayInline() default false;
 
-    @ToDo(value = Priority.HIGH, description = "support property chain syntax")
+    @ToDo(value = Priority.MEDIUM, description = "support property chain syntax")
     String[] validationTargets() default DEFAULT_TARGET;
 
     String message() default DEFAULT_MESSAGE;

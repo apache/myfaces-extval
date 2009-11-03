@@ -47,12 +47,16 @@ public class DefaultGroupControllerScanningExtractor extends DefaultComponentMet
         PropertyInformation propertyInformation = new DefaultPropertyInformation();
         propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
-        /*
-         * find and add annotations
-         */
-        addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
-        addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+        findAndAddAnnotations(propertyInformation, propertyDetails, entityClass);
 
         return propertyInformation;
+    }
+
+    private void findAndAddAnnotations(PropertyInformation propertyInformation,
+                                       PropertyDetails propertyDetails,
+                                       Class entityClass)
+    {
+        addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+        addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
     }
 }

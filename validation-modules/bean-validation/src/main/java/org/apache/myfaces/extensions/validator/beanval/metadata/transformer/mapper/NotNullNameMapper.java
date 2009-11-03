@@ -38,10 +38,16 @@ public class NotNullNameMapper extends AbstractBeanValidationVirtualValidationSt
 {
     protected String createBeanValidationTransformerName(BeanValidationVirtualValidationStrategy adapter)
     {
-        if(NotNull.class.getName().equals(adapter.getConstraintDescriptor().getAnnotation().annotationType().getName()))
+        if(isNotNullConstraint(adapter))
         {
             return NotNullMetaDataTransformer.class.getName();
         }
         return null;
+    }
+
+    private boolean isNotNullConstraint(BeanValidationVirtualValidationStrategy adapter)
+    {
+        return NotNull.class.getName().equals(
+                adapter.getConstraintDescriptor().getAnnotation().annotationType().getName());
     }
 }
