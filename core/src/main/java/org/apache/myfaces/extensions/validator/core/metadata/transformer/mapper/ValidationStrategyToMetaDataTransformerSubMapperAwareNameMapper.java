@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
 import org.apache.myfaces.extensions.validator.core.Nested;
 import org.apache.myfaces.extensions.validator.core.InvocationOrderComparator;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -34,6 +35,7 @@ import java.util.Collections;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(100)
 @UsageInformation({UsageCategory.INTERNAL})
 public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
     extends AbstractValidationStrategyToMetaDataTransformerNameMapper

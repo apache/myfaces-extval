@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.beanval.storage.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.storage.DefaultModelValidationStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -28,6 +29,7 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(200)
 @UsageInformation(INTERNAL)
 public class ModelValidationStorageNameMapper implements NameMapper<String>
 {
