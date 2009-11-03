@@ -49,7 +49,7 @@ public class RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCa
     {
         return new TestSuite(RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCase.class);
     }
-    public void testValidationStrategyToMessageResolverNameMapperInitialization()
+    public void testValidationStrategyToMetaDataTransformerMapperInitialization()
     {
         ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
                 new TestMetaDataTransformerNameMapper());
@@ -81,33 +81,36 @@ public class RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCa
                     assertEquals(CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
                     break;
                 case 2:
-                    assertEquals(TestMetaDataTransformerNameMapper150.class, result.get(i).getClass());
+                    assertEquals(ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper.class, result.get(i).getClass());
                     break;
                 case 3:
-                    assertEquals(CustomConventionValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
+                    assertEquals(TestMetaDataTransformerNameMapper150.class, result.get(i).getClass());
                     break;
                 case 4:
-                    assertEquals(TestMetaDataTransformerNameMapper250.class, result.get(i).getClass());
+                    assertEquals(CustomConventionValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
                     break;
                 case 5:
-                    assertEquals(DefaultValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
+                    assertEquals(TestMetaDataTransformerNameMapper250.class, result.get(i).getClass());
                     break;
                 case 6:
-                    assertEquals(TestMetaDataTransformerNameMapper350.class, result.get(i).getClass());
+                    assertEquals(DefaultValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
                     break;
                 case 7:
-                    assertEquals(SimpleValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
+                    assertEquals(TestMetaDataTransformerNameMapper350.class, result.get(i).getClass());
                     break;
                 case 8:
-                    assertEquals(TestMetaDataTransformerNameMapper450.class, result.get(i).getClass());
+                    assertEquals(SimpleValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
                     break;
                 case 9:
-                    assertEquals(BeanValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
+                    assertEquals(TestMetaDataTransformerNameMapper450.class, result.get(i).getClass());
                     break;
                 case 10:
-                    assertEquals(TestMetaDataTransformerNameMapper550.class, result.get(i).getClass());
+                    assertEquals(BeanValidationStrategyToMetaDataTransformerNameMapper.class, result.get(i).getClass());
                     break;
                 case 11:
+                    assertEquals(TestMetaDataTransformerNameMapper550.class, result.get(i).getClass());
+                    break;
+                case 12:
                     assertEquals(TestMetaDataTransformerNameMapper.class, result.get(i).getClass());
                     break;
             }
