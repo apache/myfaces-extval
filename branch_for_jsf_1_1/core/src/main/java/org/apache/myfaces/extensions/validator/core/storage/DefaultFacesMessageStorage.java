@@ -88,7 +88,12 @@ public class DefaultFacesMessageStorage implements FacesMessageStorage
 
     private void sortFacesMessageHolderList(List<FacesMessageHolder> facesMessageHolderList)
     {
-        Collections.sort(facesMessageHolderList, new Comparator<FacesMessageHolder>() {
+        Collections.sort(facesMessageHolderList, getFacesMessageComparator());
+    }
+
+    protected Comparator<FacesMessageHolder> getFacesMessageComparator()
+    {
+        return new Comparator<FacesMessageHolder>() {
             public int compare(FacesMessageHolder holder1, FacesMessageHolder holder2)
             {
                 if(holder1.getFacesMessage().getSeverity() == null)
@@ -113,17 +118,17 @@ public class DefaultFacesMessageStorage implements FacesMessageStorage
 
             private int compareMessageText(FacesMessage facesMessage1, FacesMessage facesMessage2)
             {
-                String text1 = facesMessage1.getSummary();
-                String text2 = facesMessage2.getSummary();
+                String text1 = facesMessage1.getDetail();
+                String text2 = facesMessage2.getDetail();
 
                 if(text1 == null)
                 {
-                    text1 = facesMessage1.getDetail();
+                    text1 = facesMessage1.getSummary();
                 }
 
                 if(text2 == null)
                 {
-                    text2 = facesMessage2.getDetail();
+                    text2 = facesMessage2.getSummary();
                 }
 
                 if(text1 == null)
@@ -138,7 +143,7 @@ public class DefaultFacesMessageStorage implements FacesMessageStorage
 
                 return text1.compareToIgnoreCase(text2);
             }
-        });
+        };
     }
 
     private boolean isSameSeverity(FacesMessageHolder holder1, FacesMessageHolder holder2)
