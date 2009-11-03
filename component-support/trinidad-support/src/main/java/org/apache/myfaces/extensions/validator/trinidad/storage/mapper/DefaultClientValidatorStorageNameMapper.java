@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.trinidad.storage.mapper;
 
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.trinidad.storage.TrinidadClientValidatorStorage;
 import org.apache.myfaces.extensions.validator.trinidad.storage.DefaultClientValidatorStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -30,6 +31,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(300)
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultClientValidatorStorageNameMapper implements NameMapper<String>
 {

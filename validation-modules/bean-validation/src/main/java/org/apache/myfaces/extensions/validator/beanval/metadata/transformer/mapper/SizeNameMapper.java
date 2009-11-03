@@ -32,7 +32,7 @@ import javax.validation.constraints.Size;
  * @since x.x.3
  */
 @Nested
-@InvocationOrder(201)
+@InvocationOrder(210)
 @UsageInformation({UsageCategory.INTERNAL})
 public class SizeNameMapper extends AbstractBeanValidationVirtualValidationStrategyToMetaDataTransformerNameMapper
 {

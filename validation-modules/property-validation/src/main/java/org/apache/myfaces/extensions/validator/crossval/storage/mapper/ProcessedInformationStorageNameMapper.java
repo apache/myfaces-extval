@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.crossval.storage.mapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessedInformationStorage;
 
@@ -28,6 +29,7 @@ import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessed
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@InvocationOrder(200)
 @UsageInformation(INTERNAL)
 public class ProcessedInformationStorageNameMapper implements NameMapper<String>
 {
