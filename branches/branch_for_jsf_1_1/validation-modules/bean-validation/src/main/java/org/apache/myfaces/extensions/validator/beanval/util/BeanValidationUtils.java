@@ -105,25 +105,28 @@ public class BeanValidationUtils
     {
         String violationMessage = violation.getMessage();
 
-        String labeledMessage = bvmi.createLabeledMessage(violationMessage);
+        String labeledMessageSummary = bvmi.createLabeledMessage(violationMessage, false);
+        String labeledMessageDetail = bvmi.createLabeledMessage(violationMessage, true);
 
         FacesMessage.Severity severity = bvmi.calcSeverity(violation);
 
-        ValidatorException validatorException = bvmi.createValidatorException(labeledMessage, severity);
+        ValidatorException validatorException = bvmi
+                .createValidatorException(labeledMessageSummary, labeledMessageDetail, severity);
 
         if (!bvmi.executeAfterThrowingInterceptors(uiComponent, convertedObject, validatorException))
         {
             return null;
         }
 
-        if (bvmi.isMessageTextUnchanged(validatorException, labeledMessage))
+        if (bvmi.isMessageTextUnchanged(validatorException, labeledMessageSummary, labeledMessageDetail))
         {
             return ExtValUtils.createFacesMessage(severity, violationMessage, violationMessage);
         }
         else
         {
-            String newMessage = validatorException.getFacesMessage().getSummary();
-            return ExtValUtils.createFacesMessage(severity, newMessage, newMessage);
+            return ExtValUtils.createFacesMessage(severity,
+                    validatorException.getFacesMessage().getSummary(),
+                    validatorException.getFacesMessage().getDetail());
         }
     }
 
