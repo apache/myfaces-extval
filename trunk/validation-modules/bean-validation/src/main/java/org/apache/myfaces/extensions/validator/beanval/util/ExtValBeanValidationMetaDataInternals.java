@@ -544,9 +544,9 @@ class ExtValBeanValidationMetaDataInternals
         }
     }
 
-    String createLabeledMessage(String violationMessage)
+    String createLabeledMessage(String violationMessage, boolean isDetailMessage)
     {
-        return labeledMessageInternals.createLabeledMessage(violationMessage);
+        return this.labeledMessageInternals.createLabeledMessage(violationMessage, isDetailMessage);
     }
 
     FacesMessage.Severity calcSeverity(ConstraintViolation<?> violation)
@@ -591,16 +591,18 @@ class ExtValBeanValidationMetaDataInternals
                 null);
     }
 
-    boolean isMessageTextUnchanged(ValidatorException validatorException, String violationMessage)
+    boolean isMessageTextUnchanged(
+            ValidatorException validatorException, String violationSummaryMessage, String violationDetailMessage)
     {
-        return violationMessage.equals(validatorException.getFacesMessage().getSummary()) ||
-                violationMessage.equals(validatorException.getFacesMessage().getDetail());
+        return violationSummaryMessage.equals(validatorException.getFacesMessage().getSummary()) &&
+                violationDetailMessage.equals(validatorException.getFacesMessage().getDetail());
     }
 
-    ValidatorException createValidatorException(String violationMessage, FacesMessage.Severity severity)
+    ValidatorException createValidatorException(
+            String violationSummaryMessage, String violationDetailMessage, FacesMessage.Severity severity)
     {
         return new ValidatorException(
-                ExtValUtils.createFacesMessage(severity, violationMessage, violationMessage));
+                ExtValUtils.createFacesMessage(severity, violationSummaryMessage, violationDetailMessage));
     }
 
     List<FacesMessageHolder> getFacesMessageListWithLowSeverity(

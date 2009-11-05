@@ -32,32 +32,73 @@ import java.util.MissingResourceException;
 class LabeledMessageInternals
 {
     //there is no concurrency issue here - it always leads to the same result
-    private final String defaultLabelMessageTemplate = "{1}: {0}";
-    private String labelMessageTemplate = defaultLabelMessageTemplate;
+    private final String defaultSummaryMessageTemplate = "{1}: {0}";
+    private final String defaultDetailMessageTemplate = "{1}: {0}";
+    private String summaryMessageTemplate = defaultSummaryMessageTemplate;
+    private String detailMessageTemplate = defaultDetailMessageTemplate;
     private static final String JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE =
             "javax.faces.validator.BeanValidator.MESSAGE";
+    private static final String JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE_DETAIL =
+            "javax.faces.validator.BeanValidator.MESSAGE_detail";
 
-    String createLabeledMessage(String violationMessage)
+    String createLabeledMessage(String violationMessage, boolean isDetailMessage)
     {
-        if(labelMessageTemplate == null)
+        if(isDetailMessage)
         {
-            return this.defaultLabelMessageTemplate.replace("{0}", violationMessage);
+            return tryToResolveDetailMessage(violationMessage);
         }
-
-        this.labelMessageTemplate = loadStandardMessageTemplate();
-
-        if(labelMessageTemplate == null)
+        else
         {
-            return createLabeledMessage(violationMessage);
+            return tryToResolveSummaryMessage(violationMessage);
         }
-        return labelMessageTemplate.replace("{0}", violationMessage);
     }
 
-    private String loadStandardMessageTemplate()
+    private String tryToResolveSummaryMessage(String violationMessage)
+    {
+        if(summaryMessageTemplate == null)
+        {
+            return this.defaultSummaryMessageTemplate.replace("{0}", violationMessage);
+        }
+
+        this.summaryMessageTemplate = loadStandardMessageTemplate(false);
+
+        if(summaryMessageTemplate == null)
+        {
+            return createLabeledMessage(violationMessage, false);
+        }
+        return summaryMessageTemplate.replace("{0}", violationMessage);
+    }
+
+    private String tryToResolveDetailMessage(String violationMessage)
+    {
+        if(detailMessageTemplate == null)
+        {
+            return this.defaultDetailMessageTemplate.replace("{0}", violationMessage);
+        }
+
+        this.detailMessageTemplate = loadStandardMessageTemplate(true);
+
+        if(detailMessageTemplate == null)
+        {
+            return createLabeledMessage(violationMessage, true);
+        }
+        return detailMessageTemplate.replace("{0}", violationMessage);
+    }
+
+    private String loadStandardMessageTemplate(boolean isDetailMessage)
     {
         try
         {
-            return JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE);
+            if(isDetailMessage)
+            {
+                return JsfUtils.getDefaultFacesMessageBundle()
+                        .getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE_DETAIL);
+            }
+            else
+            {
+                return JsfUtils.getDefaultFacesMessageBundle()
+                        .getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE);
+            }
         }
         catch (MissingResourceException e)
         {
