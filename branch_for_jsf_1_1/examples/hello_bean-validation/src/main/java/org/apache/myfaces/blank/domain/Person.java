@@ -21,12 +21,14 @@ package org.apache.myfaces.blank.domain;
 import org.apache.myfaces.blank.validation.group.Admin;
 import org.apache.myfaces.blank.validation.group.User;
 import org.apache.myfaces.blank.validation.group.Address;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Person
 {
+    @NotNull(payload = ViolationSeverity.Warn.class)
     private String firstName;
 
     //demo for bean validation based validation support

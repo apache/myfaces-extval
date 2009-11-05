@@ -25,13 +25,13 @@
         <f:view>
             <h:form id="mainForm">
               <h:panelGrid columns="3">
-                <h:outputLabel for="first_name" value="First name:"/>
+                <h:outputLabel for="first_name" value="First name*:"/>
                 <h:inputText id="first_name" value="#{helloWorld.person.firstName}"/>
-                <h:message for="first_name" showSummary="true" showDetail="false"/>
+                <h:message for="first_name" showSummary="false" showDetail="true" errorStyle="color: red;" warnStyle="color: orange;"/>
 
-                <h:outputLabel for="last_name" value="Last name:"/>
+                <h:outputLabel for="last_name" value="Last name**:"/>
                 <h:inputText id="last_name" value="#{helloWorld.person.lastName}"/>
-                <h:message for="last_name" showSummary="true" showDetail="false"/>
+                <h:message for="last_name" showSummary="false" showDetail="true" errorStyle="color: red;" warnStyle="color: orange;"/>
 
                 <h:commandButton value="Press me" action="#{helloWorld.send}"/>
                 <h:panelGroup/>
@@ -39,5 +39,8 @@
               </h:panelGrid>
             </h:form>
         </f:view>
+        <hr/>
+        * none blocking warn mode<br/>
+        ** blocking error mode
     </body>
 </html>
