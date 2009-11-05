@@ -19,13 +19,14 @@
 package org.apache.myfaces.blank.domain;
 
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 
 import javax.persistence.Column;
 
 public class Person
 {
     //hello world demo
-    @Required
+    @Required(parameters = ViolationSeverity.Warn.class)
     private String firstName;
 
     //demo for jpa based validation support
