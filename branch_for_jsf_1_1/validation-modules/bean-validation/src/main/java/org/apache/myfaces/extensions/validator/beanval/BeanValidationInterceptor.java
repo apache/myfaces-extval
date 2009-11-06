@@ -29,11 +29,14 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
+import javax.validation.ConstraintViolation;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -77,9 +80,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
     {
-        MetaDataExtractor metaDataExtractor = bviUtils.getComponentMetaDataExtractor(uiComponent);
-
-        PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
+        PropertyInformation propertyInformation = getPropertyInformation(facesContext, uiComponent);
 
         boolean validateProperty = hasBeanValidationConstraints(propertyInformation);
         try
@@ -115,6 +116,13 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         }
     }
 
+    protected PropertyInformation getPropertyInformation(FacesContext facesContext, UIComponent uiComponent)
+    {
+        MetaDataExtractor metaDataExtractor = bviUtils.getComponentMetaDataExtractor(uiComponent);
+
+        return metaDataExtractor.extract(facesContext, uiComponent);
+    }
+
     protected boolean hasBeanValidationConstraints(PropertyInformation propertyInformation)
     {
         return this.bviUtils.hasBeanValidationConstraints(propertyInformation);
@@ -126,7 +134,14 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                                           PropertyInformation propertyInformation)
     {
         /*not used yet supportMultipleViolationsPerField()*/
-        this.bviUtils.validate(facesContext, uiComponent, convertedObject, propertyInformation);
+        Set<ConstraintViolation> violations = this.bviUtils
+                .validate(facesContext, uiComponent, convertedObject, propertyInformation);
+
+        if(violations != null && !violations.isEmpty())
+        {
+            BeanValidationUtils
+                    .processConstraintViolations(facesContext, uiComponent, convertedObject, violations, true);
+        }
     }
 
     /*
