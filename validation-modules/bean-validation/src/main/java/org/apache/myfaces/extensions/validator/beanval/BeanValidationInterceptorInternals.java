@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.commons.logging.Log;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
-import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
@@ -189,7 +188,7 @@ class BeanValidationInterceptorInternals
     }
 
     @SuppressWarnings({"unchecked"})
-    void validate(FacesContext facesContext,
+    Set<ConstraintViolation> validate(FacesContext facesContext,
                   UIComponent uiComponent,
                   Object convertedObject,
                   PropertyInformation propertyInformation)
@@ -201,20 +200,14 @@ class BeanValidationInterceptorInternals
 
         if (groups == null)
         {
-            return;
+            return null;
         }
 
-        Set<ConstraintViolation> violations = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
+        return ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
                 .usingContext()
                 .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
                 .getValidator()
                 .validateValue(baseBeanClass, propertyName, convertedObject, groups);
-
-        if(violations != null && !violations.isEmpty())
-        {
-            BeanValidationUtils
-                    .processConstraintViolations(facesContext, uiComponent, convertedObject, violations, true);
-        }
     }
 
     private Class getBaseClassType(PropertyInformation propertyInformation)
