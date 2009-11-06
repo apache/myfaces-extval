@@ -71,50 +71,34 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
             FacesContext facesContext = FacesContext.getCurrentInstance();
             FacesMessage facesMessage = ExtValUtils.convertFacesMessage(validatorException.getFacesMessage());
 
-            String label = (String) ReflectionUtils.tryToInvokeMethod(uiComponent,
-                ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getLabel"));
+            tryToUseInlineMessage(uiComponent, validatorException);
 
-            handleRequiredValidatorException(uiComponent, validatorException);
+            tryToUseLabel(facesContext, uiComponent, metaDataEntry, facesMessage);
 
-            if(label == null)
-            {
-                label = uiComponent.getClientId(facesContext);
-            }
-
-            //override the label if the annotation provides a label
-            if(metaDataEntry != null && metaDataEntry.getProperty(PropertyInformationKeys.LABEL) != null)
-            {
-                label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
-            }
-
-            if(facesMessage instanceof LabeledMessage)
-            {
-                ((LabeledMessage)facesMessage).setLabelText(label);
-            }
-            //if someone uses a normal faces message
-            else
-            {
-                for(int i = 0; i < 3; i++)
-                {
-                    ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
-                }
-            }
-
-            if(metaDataEntry != null && metaDataEntry.getValue() instanceof Annotation)
-            {
-                //correct severity is e.g. provided by ViolationSeverityValidationExceptionInterceptor
-                ExtValUtils.tryToBlocksNavigationForComponent(uiComponent, facesMessage);
-            }
+            tryToBlocksNavigation(uiComponent, metaDataEntry, facesMessage);
         }
         return true;
     }
 
-    private void handleRequiredValidatorException(UIComponent uiComponent, ValidatorException validatorException)
+    private void tryToUseInlineMessage(UIComponent uiComponent, ValidatorException validatorException)
     {
+        FacesMessage facesMessage = validatorException.getFacesMessage();
+        String inlineMessage;
+
         if(validatorException instanceof RequiredValidatorException)
         {
-            FacesMessage facesMessage = validatorException.getFacesMessage();
-            String inlineMessage = getInlineRequiredMessage(uiComponent);
+            inlineMessage = getInlineRequiredMessage(uiComponent);
+
+            if(inlineMessage != null)
+            {
+                facesMessage.setSummary(inlineMessage);
+                facesMessage.setDetail(inlineMessage);
+            }
+        }
+        else
+        {
+            //
+            inlineMessage = getInlineValidatorMessage(uiComponent);
 
             if(inlineMessage != null)
             {
@@ -124,10 +108,59 @@ public class HtmlCoreComponentsValidationExceptionInterceptor implements Validat
         }
     }
 
+    private void tryToUseLabel(FacesContext facesContext,
+                               UIComponent uiComponent,
+                               MetaDataEntry metaDataEntry,
+                               FacesMessage facesMessage)
+    {
+        String label = (String) ReflectionUtils.tryToInvokeMethod(uiComponent,
+            ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getLabel"));
+
+        if(label == null)
+        {
+            label = uiComponent.getClientId(facesContext);
+        }
+
+        //override the label if the annotation provides a label
+        if(metaDataEntry != null && metaDataEntry.getProperty(PropertyInformationKeys.LABEL) != null)
+        {
+            label = metaDataEntry.getProperty(PropertyInformationKeys.LABEL, String.class);
+        }
+
+        if(facesMessage instanceof LabeledMessage)
+        {
+            ((LabeledMessage)facesMessage).setLabelText(label);
+        }
+        //if someone uses a normal faces message
+        else
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                ExtValUtils.tryToPlaceLabel(facesMessage, label, i);
+            }
+        }
+    }
+
+    @ToDo(value = Priority.MEDIUM, description = "check if it is still required here")
+    private void tryToBlocksNavigation(UIComponent uiComponent, MetaDataEntry metaDataEntry, FacesMessage facesMessage)
+    {
+        if(metaDataEntry != null && metaDataEntry.getValue() instanceof Annotation)
+        {
+            //correct severity is e.g. provided by ViolationSeverityValidationExceptionInterceptor
+            ExtValUtils.tryToBlocksNavigationForComponent(uiComponent, facesMessage);
+        }
+    }
+
     private String getInlineRequiredMessage(UIComponent uiComponent)
     {
         return (String)ReflectionUtils.tryToInvokeMethod(uiComponent,
                 ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getRequiredMessage"));
+    }
+
+    private String getInlineValidatorMessage(UIComponent uiComponent)
+    {
+        return (String)ReflectionUtils.tryToInvokeMethod(uiComponent,
+                ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "getValidatorMessage"));
     }
 
     protected boolean processComponent(UIComponent uiComponent)
