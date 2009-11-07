@@ -31,7 +31,7 @@ import java.util.HashMap;
  */
 public class StringSizeMetaDataTransformer extends AbstractBeanValidationMetaDataTransformer<Size>
 {
-    protected Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<Size> constraintDescriptor)
+    protected Map<String, Object> transformMetaData(ConstraintDescriptor<Size> constraintDescriptor)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         Size annotation = constraintDescriptor.getAnnotation();
