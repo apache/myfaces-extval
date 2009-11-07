@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.SizeNameMapper;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.NotNullNameMapper;
@@ -62,6 +63,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         registerComponentInitializers();
         registerMetaDataExtractionInterceptors();
         registerPhaseListeners();
+        registerExceptionInterceptor();
     }
 
     protected void registerValidatorFactory()
@@ -130,5 +132,10 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void registerPhaseListeners()
     {
         JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
+    }
+
+    protected void registerExceptionInterceptor()
+    {
+        ExtValContext.getContext().addValidationExceptionInterceptor(new BeanValidationExceptionInterceptor());
     }
 }
