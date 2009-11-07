@@ -32,7 +32,7 @@ import java.util.HashMap;
  */
 public class NotNullMetaDataTransformer extends AbstractBeanValidationMetaDataTransformer<NotNull>
 {
-    protected Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<NotNull> constraintDescriptor)
+    protected Map<String, Object> transformMetaData(ConstraintDescriptor<NotNull> constraintDescriptor)
     {
         Map<String, Object> results = new HashMap<String, Object>();
 

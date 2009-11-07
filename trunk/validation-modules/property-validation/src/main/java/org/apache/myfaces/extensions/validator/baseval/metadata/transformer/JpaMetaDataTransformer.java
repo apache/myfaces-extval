@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -39,14 +38,14 @@ import java.lang.annotation.Annotation;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class JpaMetaDataTransformer implements MetaDataTransformer
+public class JpaMetaDataTransformer extends AbstractValidationParameterAwareTransformer
 {
     @ToDo(value = Priority.MEDIUM, description = "impl. the rest")
-    public Map<String, Object> convertMetaData(MetaDataEntry metaData)
+    protected Map<String, Object> transformMetaData(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
 
-        Annotation annotation = metaData.getValue(Annotation.class);
+        Annotation annotation = metaDataEntry.getValue(Annotation.class);
 
         if(annotation instanceof Column)
         {
