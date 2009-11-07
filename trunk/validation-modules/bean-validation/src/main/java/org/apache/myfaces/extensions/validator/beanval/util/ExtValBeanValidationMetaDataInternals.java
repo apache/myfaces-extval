@@ -637,26 +637,7 @@ class ExtValBeanValidationMetaDataInternals
         return result;
     }
 
-    void addMessagesWithHighSeverity(List<FacesMessageHolder> facesMessageHolderListWithHighSeverity,
-                                     boolean firstErrorCausesAnException)
-    {
-        boolean firstMessage = true;
-        for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithHighSeverity)
-        {
-            if (firstMessage && firstErrorCausesAnException)
-            {
-                //the first error will be thrown as exception
-                firstMessage = false;
-            }
-            else
-            {
-                ExtValUtils.tryToAddViolationMessageForComponentId(
-                        facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
-            }
-        }
-    }
-
-    void addMessagesWithLowSeverity(List<FacesMessageHolder> facesMessageHolderListWithLowSeverity)
+    void addMessages(List<FacesMessageHolder> facesMessageHolderListWithLowSeverity)
     {
         for (FacesMessageHolder facesMessageHolder : facesMessageHolderListWithLowSeverity)
         {

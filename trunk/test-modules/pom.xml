@@ -169,6 +169,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/Abstract*.java</exclude>
+                        <exclude>**/Base*.java</exclude>
                         <exclude>**/TestUtils.java</exclude>
                         <exclude>**/*Bean.java</exclude>
                     </excludes>

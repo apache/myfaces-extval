@@ -119,7 +119,7 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
 
-        processCrossValValidation();
+        processCrossValidation();
 
         //no update model needed
     }
@@ -154,7 +154,7 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent1.validate(facesContext);
 
-        processCrossValValidation();
+        processCrossValidation();
 
         //no update model needed
     }

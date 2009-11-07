@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -426,11 +428,12 @@ public class ModelValidationPhaseListener implements PhaseListener
                 );
     }
 
+    @ToDo(Priority.MEDIUM)
     private void processModelValidationResults(Map<String, ModelValidationResult> results)
     {
         for (ModelValidationResult result : results.values())
         {
-            BeanValidationUtils.processViolationMessages(result.getFacesMessageHolderList(), false);
+            BeanValidationUtils.processViolationMessages(result.getFacesMessageHolderList(), null);
         }
     }
 
