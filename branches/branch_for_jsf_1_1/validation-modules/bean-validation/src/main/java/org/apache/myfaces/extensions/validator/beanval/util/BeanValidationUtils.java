@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
@@ -78,8 +79,7 @@ public class BeanValidationUtils
     public static void processConstraintViolations(FacesContext facesContext,
                                                    UIComponent uiComponent,
                                                    Object convertedObject,
-                                                   Set<ConstraintViolation> violations,
-                                                   boolean firstErrorCausesAnException)
+                                                   Set<ConstraintViolation> violations)
     {
         List<FacesMessageHolder> facesMessageHolderList = new ArrayList<FacesMessageHolder>();
 
@@ -96,7 +96,7 @@ public class BeanValidationUtils
             bvmi.processFacesMessage(facesContext, uiComponent, facesMessageHolderList, facesMessage);
         }
 
-        processViolationMessages(facesMessageHolderList, firstErrorCausesAnException);
+        processViolationMessages(facesMessageHolderList, uiComponent);
     }
 
     public static FacesMessage createFacesMessageForConstraintViolation(UIComponent uiComponent,
@@ -131,7 +131,7 @@ public class BeanValidationUtils
     }
 
     public static void processViolationMessages(List<FacesMessageHolder> violationMessageHolderList,
-                                                boolean firstErrorCausesAnException)
+                                                UIComponent uiComponent)
     {
         if (violationMessageHolderList == null || violationMessageHolderList.isEmpty())
         {
@@ -143,14 +143,21 @@ public class BeanValidationUtils
         List<FacesMessageHolder> facesMessageListWithHighSeverity =
                 bvmi.getFacesMessageListWithHighSeverity(violationMessageHolderList);
 
-        bvmi.addMessagesWithHighSeverity(facesMessageListWithHighSeverity, firstErrorCausesAnException);
-        bvmi.addMessagesWithLowSeverity(facesMessageListWithLowSeverity);
+        tryToSetComponentInvalid(uiComponent, facesMessageListWithHighSeverity);
 
-        if (!facesMessageListWithHighSeverity.isEmpty() && firstErrorCausesAnException)
+        bvmi.addMessages(facesMessageListWithHighSeverity);
+        bvmi.addMessages(facesMessageListWithLowSeverity);
+    }
+
+    private static void tryToSetComponentInvalid(
+            UIComponent uiComponent, List<FacesMessageHolder> facesMessageListWithHighSeverity)
+    {
+        if(!facesMessageListWithHighSeverity.isEmpty())
         {
-            FacesMessageHolder facesMessageHolder = facesMessageListWithHighSeverity.iterator().next();
-            ExtValUtils.tryToThrowValidatorExceptionForComponentId(
-                    facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage(), null);
+            if(uiComponent instanceof EditableValueHolder)
+            {
+                ((EditableValueHolder)uiComponent).setValid(false);
+            }
         }
     }
 }

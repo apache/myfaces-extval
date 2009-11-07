@@ -110,7 +110,7 @@ public class PropertyChainCrossValTestCase extends AbstractPropertyValidationTes
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
 
-        processCrossValValidation();
+        processCrossValidation();
 
         //no update model needed
     }
@@ -143,7 +143,7 @@ public class PropertyChainCrossValTestCase extends AbstractPropertyValidationTes
         //validate
         inputComponent1.validate(facesContext);
 
-        processCrossValValidation();
+        processCrossValidation();
 
         //no update model needed
     }

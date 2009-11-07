@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import javax.faces.FactoryFinder;
 import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.faces.render.RenderKit;
@@ -252,6 +253,21 @@ public abstract class AbstractExValTestCase extends TestCase
         }
 
         assertEquals("Complete message count", expected, actual);
+    }
+
+    protected void checkMessageSeverities(FacesMessage.Severity... severities)
+    {
+        int i = 0;
+        for(Iterator messages = facesContext.getMessages(); messages.hasNext();)
+        {
+            assertEquals(severities[i], ((FacesMessage)messages.next()).getSeverity());
+            i++;
+        }
+    }
+
+    protected void assertNavigationBlocked(boolean isBlocked)
+    {
+        assertEquals(isBlocked, this.facesContext.getRenderResponse());
     }
 
     /**
