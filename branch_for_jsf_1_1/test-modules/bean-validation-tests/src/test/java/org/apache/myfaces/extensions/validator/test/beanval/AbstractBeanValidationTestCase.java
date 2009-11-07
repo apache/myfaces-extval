@@ -16,26 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.test.propval;
+package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.base.AbstractExValTestCase;
-import org.apache.myfaces.extensions.validator.PropertyValidationModuleStartupListener;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
+import org.apache.myfaces.extensions.validator.beanval.startup.BeanValidationStartupListener;
+import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 
-public abstract class AbstractPropertyValidationTestCase extends AbstractExValTestCase
+public class AbstractBeanValidationTestCase extends AbstractExValTestCase
 {
-    public AbstractPropertyValidationTestCase(String name)
+    public AbstractBeanValidationTestCase(String name)
     {
         super(name);
     }
 
     protected void invokeStartupListeners()
     {
-        new PropertyValidationModuleStartupListener(){
-            private static final long serialVersionUID = 423076920926752646L;
+        new BeanValidationStartupListener() {
+
+            private static final long serialVersionUID = -3124182355444754497L;
 
             @Override
             protected void init()
@@ -45,8 +46,8 @@ public abstract class AbstractPropertyValidationTestCase extends AbstractExValTe
         }.init();
     }
 
-    protected void processCrossValidation()
+    protected void processModelValidation()
     {
-        new CrossValidationPhaseListener().afterPhase(new PhaseEvent(facesContext, PhaseId.ANY_PHASE,lifecycle));
+        new ModelValidationPhaseListener().afterPhase(new PhaseEvent(facesContext, PhaseId.UPDATE_MODEL_VALUES, lifecycle));
     }
 }
