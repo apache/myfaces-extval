@@ -89,7 +89,7 @@ public class CrossValTestCase extends AbstractPropertyValidationTestCase
         inputComponent1.validate(facesContext);
         inputComponent2.validate(facesContext);
 
-        processCrossValValidation();
+        processCrossValidation();
         checkMessageCount(0);
 
         //no update model needed
@@ -109,7 +109,7 @@ public class CrossValTestCase extends AbstractPropertyValidationTestCase
         inputComponent2.validate(facesContext);
 
 
-        processCrossValValidation();
+        processCrossValidation();
         checkMessageCount(2);
 
         //no update model needed
