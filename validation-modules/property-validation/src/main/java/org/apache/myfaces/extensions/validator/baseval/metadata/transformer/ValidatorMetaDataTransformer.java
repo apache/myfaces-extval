@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Validator;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -35,9 +34,9 @@ import java.util.ArrayList;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ValidatorMetaDataTransformer implements MetaDataTransformer
+public class ValidatorMetaDataTransformer  extends AbstractValidationParameterAwareTransformer
 {
-    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
+    protected Map<String, Object> transformMetaData(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         Validator annotation = metaDataEntry.getValue(Validator.class);

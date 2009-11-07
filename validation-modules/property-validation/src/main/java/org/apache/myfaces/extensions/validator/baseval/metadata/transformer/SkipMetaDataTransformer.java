@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -32,9 +31,9 @@ import java.util.Map;
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class SkipMetaDataTransformer implements MetaDataTransformer
+public class SkipMetaDataTransformer  extends AbstractValidationParameterAwareTransformer
 {
-    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
+    protected Map<String, Object> transformMetaData(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         results.put(CommonMetaDataKeys.SKIP_VALIDATION, true);

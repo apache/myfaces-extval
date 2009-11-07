@@ -47,7 +47,7 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
 
         if(isClientSideValidationEnabled(constraintDescriptor) && isBlockingConstraint(constraintDescriptor))
         {
-            return convertConstraintDescriptor((ConstraintDescriptor<T>)constraintDescriptor);
+            return transformMetaData((ConstraintDescriptor<T>)constraintDescriptor);
         }
         return new HashMap<String, Object>();
     }
@@ -86,5 +86,5 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
         }
         return ExtValUtils.severityBlocksSubmitForComponentId(null, testMessage);
     }
-    protected abstract Map<String, Object> convertConstraintDescriptor(ConstraintDescriptor<T> constraintDescriptor);
+    protected abstract Map<String, Object> transformMetaData(ConstraintDescriptor<T> constraintDescriptor);
 }
