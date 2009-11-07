@@ -139,8 +139,7 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 
         if(violations != null && !violations.isEmpty())
         {
-            BeanValidationUtils
-                    .processConstraintViolations(facesContext, uiComponent, convertedObject, violations, true);
+            BeanValidationUtils.processConstraintViolations(facesContext, uiComponent, convertedObject, violations);
         }
     }
 
