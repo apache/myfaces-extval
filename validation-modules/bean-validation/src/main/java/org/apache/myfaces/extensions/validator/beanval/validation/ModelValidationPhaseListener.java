@@ -433,7 +433,7 @@ public class ModelValidationPhaseListener implements PhaseListener
     {
         for (ModelValidationResult result : results.values())
         {
-            BeanValidationUtils.processViolationMessages(result.getFacesMessageHolderList(), null);
+            BeanValidationUtils.processViolationMessages(result.getFacesMessageHolderList());
         }
     }
 
