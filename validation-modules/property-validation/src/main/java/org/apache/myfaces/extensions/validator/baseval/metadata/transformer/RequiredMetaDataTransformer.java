@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -32,9 +31,9 @@ import java.util.Map;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class RequiredMetaDataTransformer implements MetaDataTransformer
+public class RequiredMetaDataTransformer extends AbstractValidationParameterAwareTransformer
 {
-    public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
+    public Map<String, Object> transformMetaData(MetaDataEntry metaDataEntry)
     {
         Map<String, Object> results = new HashMap<String, Object>();
         results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
