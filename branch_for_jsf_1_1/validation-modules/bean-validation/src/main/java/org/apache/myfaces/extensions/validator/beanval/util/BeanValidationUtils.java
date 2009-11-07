@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
@@ -96,7 +95,7 @@ public class BeanValidationUtils
             bvmi.processFacesMessage(facesContext, uiComponent, facesMessageHolderList, facesMessage);
         }
 
-        processViolationMessages(facesMessageHolderList, uiComponent);
+        processViolationMessages(facesMessageHolderList);
     }
 
     public static FacesMessage createFacesMessageForConstraintViolation(UIComponent uiComponent,
@@ -130,8 +129,7 @@ public class BeanValidationUtils
         }
     }
 
-    public static void processViolationMessages(List<FacesMessageHolder> violationMessageHolderList,
-                                                UIComponent uiComponent)
+    public static void processViolationMessages(List<FacesMessageHolder> violationMessageHolderList)
     {
         if (violationMessageHolderList == null || violationMessageHolderList.isEmpty())
         {
@@ -143,21 +141,7 @@ public class BeanValidationUtils
         List<FacesMessageHolder> facesMessageListWithHighSeverity =
                 bvmi.getFacesMessageListWithHighSeverity(violationMessageHolderList);
 
-        tryToSetComponentInvalid(uiComponent, facesMessageListWithHighSeverity);
-
         bvmi.addMessages(facesMessageListWithHighSeverity);
         bvmi.addMessages(facesMessageListWithLowSeverity);
-    }
-
-    private static void tryToSetComponentInvalid(
-            UIComponent uiComponent, List<FacesMessageHolder> facesMessageListWithHighSeverity)
-    {
-        if(!facesMessageListWithHighSeverity.isEmpty())
-        {
-            if(uiComponent instanceof EditableValueHolder)
-            {
-                ((EditableValueHolder)uiComponent).setValid(false);
-            }
-        }
     }
 }
