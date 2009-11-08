@@ -41,11 +41,14 @@ import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListene
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
+import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
+import org.apache.myfaces.extensions.validator.test.base.mock.MockELHelper;
 import org.apache.myfaces.extensions.validator.test.base.util.TestUtils;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
 import org.apache.shale.test.mock.MockApplication;
@@ -164,6 +167,17 @@ public abstract class AbstractExValTestCase extends TestCase
         TestUtils.addDefaultRenderers(facesContext);
         TestUtils.addDefaultValidators(facesContext);
 
+        final ELHelper defaultElHelper = ExtValUtils.getELHelper();
+        ExtValContext.getContext().getFactoryFinder()
+                .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class)
+                .setCustomELHelperFactory(new AbstractELHelperFactory() {
+
+                    protected ELHelper createELHelper()
+                    {
+                        return new MockELHelper(defaultElHelper);
+                    }
+                });
+        
         //execute startup listener
         new ExtValStartupListener() {
             @Override
