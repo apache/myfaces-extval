@@ -24,17 +24,17 @@ import junit.framework.TestSuite;
 
 import javax.faces.application.FacesMessage;
 
-public class ModelValidationTestCase extends
+public class ModelValidation1TestCase extends
         BaseBeanValPropertyValidationTestCase<ModelValidationTestCase1PageBean>
 {
-    public ModelValidationTestCase(String name)
+    public ModelValidation1TestCase(String name)
     {
         super(name);
     }
 
     public static Test suite()
     {
-        return new TestSuite(ModelValidationTestCase.class);
+        return new TestSuite(ModelValidation1TestCase.class);
     }
 
     protected ModelValidationTestCase1PageBean getBeanToTest()
@@ -42,7 +42,7 @@ public class ModelValidationTestCase extends
         return new ModelValidationTestCase1PageBean();
     }
 
-    public void testClassLevelValidation()
+    public void testModelValidation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
         setValueToValidate(this.inputComponent1, "123");
@@ -59,7 +59,7 @@ public class ModelValidationTestCase extends
         checkMessageCount(0);
     }
 
-    public void testClassLevelViolationWithGlobalViolationMessageViaProperty()
+    public void testModelViolationWithGlobalViolationMessageViaProperty()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
         setValueToValidate(this.inputComponent1, "123");
@@ -77,7 +77,7 @@ public class ModelValidationTestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
-    public void testClassLevelViolationWithInlineViolationMessageViaProperty()
+    public void testModelViolationWithInlineViolationMessageViaProperty()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model2.property1}");
         setValueToValidate(this.inputComponent1, "123");
@@ -98,7 +98,7 @@ public class ModelValidationTestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }
 
-    public void testClassLevelViolationWithGlobalViolationMessageViaField()
+    public void testModelViolationWithGlobalViolationMessageViaField()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model3.property1}");
         setValueToValidate(this.inputComponent1, "123");
@@ -116,7 +116,7 @@ public class ModelValidationTestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
-    public void testClassLevelViolationWithInlineViolationMessageViaField()
+    public void testModelViolationWithInlineViolationMessageViaField()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model4.property1}");
         setValueToValidate(this.inputComponent1, "123");
