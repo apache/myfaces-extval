@@ -24,29 +24,35 @@ import org.apache.myfaces.extensions.validator.test.beanval.model.ModelValidatio
 
 public class ModelValidationTestCase1PageBean
 {
-    @BeanValidation(modelValidation = @ModelValidation(isActive = true))
     private ModelValidationTestCase1Bean model1 = new ModelValidationTestCase1Bean();
 
-    @BeanValidation(modelValidation = @ModelValidation(isActive = true, displayInline = true))
     private ModelValidationTestCase1Bean model2 = new ModelValidationTestCase1Bean();
 
+    @BeanValidation(modelValidation = @ModelValidation(isActive = true))
+    private ModelValidationTestCase1Bean model3 = new ModelValidationTestCase1Bean();
+
+    @BeanValidation(modelValidation = @ModelValidation(isActive = true, displayInline = true))
+    private ModelValidationTestCase1Bean model4 = new ModelValidationTestCase1Bean();
+
+    @BeanValidation(modelValidation = @ModelValidation(isActive = true))
     public ModelValidationTestCase1Bean getModel1()
     {
         return model1;
     }
 
-    public void setModel1(ModelValidationTestCase1Bean model1)
-    {
-        this.model1 = model1;
-    }
-
+    @BeanValidation(modelValidation = @ModelValidation(isActive = true, displayInline = true))
     public ModelValidationTestCase1Bean getModel2()
     {
         return model2;
     }
 
-    public void setModel2(ModelValidationTestCase1Bean model2)
+    public ModelValidationTestCase1Bean getModel3()
     {
-        this.model2 = model2;
+        return model3;
+    }
+
+    public ModelValidationTestCase1Bean getModel4()
+    {
+        return model4;
     }
 }
