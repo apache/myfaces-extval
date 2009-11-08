@@ -50,7 +50,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
-        if(processComponent(uiComponent))
+        if(processComponent(uiComponent) && !isComponentInitializationDeactivated())
         {
             initComponent(facesContext, uiComponent);
         }
@@ -165,8 +165,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     protected boolean processComponent(UIComponent uiComponent)
     {
-        return uiComponent instanceof EditableValueHolder &&
-                !isComponentInitializationDeactivated() && isValueBindingOfComponentValid(uiComponent);
+        return uiComponent instanceof EditableValueHolder && isValueBindingOfComponentValid(uiComponent);
     }
 
     private boolean isValueBindingOfComponentValid(UIComponent uiComponent)

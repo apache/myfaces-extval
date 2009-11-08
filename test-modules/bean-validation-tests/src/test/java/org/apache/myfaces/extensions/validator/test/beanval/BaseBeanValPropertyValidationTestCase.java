@@ -109,6 +109,13 @@ public abstract class BaseBeanValPropertyValidationTestCase<T> extends AbstractB
         inputComponent3.processValidators(facesContext);
     }
 
+    protected void updateComponents()
+    {
+        inputComponent1.processUpdates(facesContext);
+        inputComponent2.processUpdates(facesContext);
+        inputComponent3.processUpdates(facesContext);
+    }
+
     protected void assertComponentValid(UIInput uiInput)
     {
         assertTrue(isComponentValid(uiInput));
