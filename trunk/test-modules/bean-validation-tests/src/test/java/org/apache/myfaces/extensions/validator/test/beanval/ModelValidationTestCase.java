@@ -24,17 +24,17 @@ import junit.framework.TestSuite;
 
 import javax.faces.application.FacesMessage;
 
-public class ClassLevelValidationTestCase extends
+public class ModelValidationTestCase extends
         BaseBeanValPropertyValidationTestCase<ModelValidationTestCase1PageBean>
 {
-    public ClassLevelValidationTestCase(String name)
+    public ModelValidationTestCase(String name)
     {
         super(name);
     }
 
     public static Test suite()
     {
-        return new TestSuite(ClassLevelValidationTestCase.class);
+        return new TestSuite(ModelValidationTestCase.class);
     }
 
     protected ModelValidationTestCase1PageBean getBeanToTest()
@@ -59,7 +59,7 @@ public class ClassLevelValidationTestCase extends
         checkMessageCount(0);
     }
 
-    public void testClassLevelViolationWithGlobalViolationMessage()
+    public void testClassLevelViolationWithGlobalViolationMessageViaProperty()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
         setValueToValidate(this.inputComponent1, "123");
@@ -77,7 +77,7 @@ public class ClassLevelValidationTestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
-    public void testClassLevelViolationWithInlineViolationMessage()
+    public void testClassLevelViolationWithInlineViolationMessageViaProperty()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model2.property1}");
         setValueToValidate(this.inputComponent1, "123");
@@ -93,6 +93,46 @@ public class ClassLevelValidationTestCase extends
         assertComponentInvalid(this.inputComponent2);
         assertNavigationBlocked(true);
 
+        //due to displayMessageInline
+        checkMessageCount(2);
+        checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
+    }
+
+    public void testClassLevelViolationWithGlobalViolationMessageViaField()
+    {
+        createValueBindingForComponent(this.inputComponent1, "#{testBean.model3.property1}");
+        setValueToValidate(this.inputComponent1, "123");
+
+        createValueBindingForComponent(this.inputComponent2, "#{testBean.model3.property2}");
+        setValueToValidate(this.inputComponent2, "456");
+
+        validateComponents();
+        updateComponents();
+        processModelValidation();
+
+        assertNavigationBlocked(true);
+
+        checkMessageCount(1);
+        checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
+    }
+
+    public void testClassLevelViolationWithInlineViolationMessageViaField()
+    {
+        createValueBindingForComponent(this.inputComponent1, "#{testBean.model4.property1}");
+        setValueToValidate(this.inputComponent1, "123");
+
+        createValueBindingForComponent(this.inputComponent2, "#{testBean.model4.property2}");
+        setValueToValidate(this.inputComponent2, "456");
+
+        validateComponents();
+        updateComponents();
+        processModelValidation();
+
+        assertComponentInvalid(this.inputComponent1);
+        assertComponentInvalid(this.inputComponent2);
+        assertNavigationBlocked(true);
+
+        //due to displayMessageInline
         checkMessageCount(2);
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }

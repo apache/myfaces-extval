@@ -54,6 +54,7 @@ import java.util.Set;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@ToDo(value = Priority.MEDIUM, description = "refactor implementation details")
 public class ModelValidationPhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -3482233893186708878L;
@@ -107,19 +108,18 @@ public class ModelValidationPhaseListener implements PhaseListener
             if (!executeGlobalBeforeValidationInterceptors(
                     facesContext, modelValidationEntry.getComponent(), validationTarget, propertyInformation))
             {
-                return;
+                continue;
             }
 
             groupsToValidate = filterGroupsToValidate(
                     modelValidationEntry, validationTarget, processedValidationTargets);
 
-            //TODO
-            if (!addProcessedTarget(
-                    modelValidationEntry, processedValidationTargets, validationTarget, groupsToValidate))
+            if(!shouldContinueValidation(modelValidationEntry, groupsToValidate))
             {
                 continue;
             }
 
+            addProcessedTarget(validationTarget, groupsToValidate, processedValidationTargets);
             violations = validateTarget(validationTarget, groupsToValidate);
 
             if (violations != null && !violations.isEmpty())
@@ -151,48 +151,15 @@ public class ModelValidationPhaseListener implements PhaseListener
         return result.toArray(new Class[result.size()]);
     }
 
-    private boolean addProcessedTarget(ModelValidationEntry modelValidationEntry,
-                                             Map<Object, List<Class>> processedValidationTargets,
-                                             Object validationTarget,
-                                             Class[] groups)
+    private boolean shouldContinueValidation(ModelValidationEntry modelValidationEntry, Class[] groupsToValidate)
     {
-        if (isTargetAlreadyProcessedForGroups(
-                processedValidationTargets, validationTarget, groups) &&
-                !modelValidationEntry.isDisplayMessageInline())
-        {
-            return false;
-        }
-
-        if (!isTargetAlreadyProcessedForGroups(
-                processedValidationTargets, validationTarget, groups))
-        {
-            addTarget(processedValidationTargets, validationTarget, groups);
-        }
-        return true;
+        return !(groupsToValidate == null || groupsToValidate.length == 0) ||
+                modelValidationEntry.isDisplayMessageInline();
     }
 
-    private boolean isTargetAlreadyProcessedForGroups(
-            Map<Object, List<Class>> processedValidationTargets, Object validationTarget, Class[] groups)
-    {
-        List<Class> groupList;
-        if(processedValidationTargets.containsKey(validationTarget))
-        {
-            groupList = processedValidationTargets.get(processedValidationTargets);
-
-            for(Class group : groups)
-            {
-                if(!groupList.contains(group))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private void addTarget(
-            Map<Object, List<Class>> processedValidationTargets, Object validationTarget, Class[] groups)
+    private void addProcessedTarget(Object validationTarget,
+                                    Class[] groups,
+                                    Map<Object, List<Class>> processedValidationTargets)
     {
         if(!processedValidationTargets.containsKey(validationTarget))
         {
@@ -263,7 +230,7 @@ public class ModelValidationPhaseListener implements PhaseListener
                                    Map<String, ModelValidationResult> results)
     {
         //jsf 2.0 is able to display multiple messages per component - so process all violations
-        //jsf < 2.0 will just use the first one (it's only a little overhead)
+        //jsf < 2.0 will just use the first one (for inline messages - so it's only a little overhead)
         Iterator<ConstraintViolation<Object>> violationsIterator = violations.iterator();
         ConstraintViolation<Object> constraintViolation;
         ModelValidationResult result;
