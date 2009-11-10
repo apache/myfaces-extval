@@ -18,20 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval.validation;
 
-import javax.validation.Payload;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-@java.lang.annotation.Target(TYPE)
-@java.lang.annotation.Retention(RUNTIME)
-@java.lang.annotation.Documented
-@javax.validation.Constraint(validatedBy = {ClassLevelEqualsValidator1.class, ClassLevelEqualsValidator2.class})
-public @interface ClassLevelEqual
+public interface Group1
 {
-    String message() default "class-level equal violation";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
-
 }

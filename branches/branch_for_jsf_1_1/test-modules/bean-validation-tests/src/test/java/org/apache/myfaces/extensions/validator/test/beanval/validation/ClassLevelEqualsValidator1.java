@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.test.beanval.model.ModelValidatio
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class ClassLevelEqualsValidator implements
+public class ClassLevelEqualsValidator1 implements
         ConstraintValidator<ClassLevelEqual, ModelValidationTestCase1Bean>
 {
     public void initialize(ClassLevelEqual parameters)
