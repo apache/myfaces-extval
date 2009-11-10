@@ -18,20 +18,25 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval.validation;
 
-import javax.validation.Payload;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.apache.myfaces.extensions.validator.test.beanval.model.ModelValidationTestCase2Bean;
 
-@java.lang.annotation.Target(TYPE)
-@java.lang.annotation.Retention(RUNTIME)
-@java.lang.annotation.Documented
-@javax.validation.Constraint(validatedBy = {ClassLevelEqualsValidator1.class, ClassLevelEqualsValidator2.class})
-public @interface ClassLevelEqual
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class ClassLevelEqualsValidator2 implements
+        ConstraintValidator<ClassLevelEqual, ModelValidationTestCase2Bean>
 {
-    String message() default "class-level equal violation";
+    public void initialize(ClassLevelEqual parameters)
+    {
+    }
 
-    Class<?>[] groups() default {};
+    public boolean isValid(ModelValidationTestCase2Bean pageBean,
+                           ConstraintValidatorContext constraintValidatorContext)
+    {
+        String property1 = pageBean.getProperty1();
+        String property2 = pageBean.getProperty2();
 
-    Class<? extends Payload>[] payload() default {};
+        return property1 == null && property2 == null || property1 != null && property1.equals(property2);
 
+    }
 }
