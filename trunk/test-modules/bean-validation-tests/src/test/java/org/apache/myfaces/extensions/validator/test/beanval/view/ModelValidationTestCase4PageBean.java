@@ -16,22 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.test.beanval.validation;
+package org.apache.myfaces.extensions.validator.test.beanval.view;
 
-import javax.validation.Payload;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.apache.myfaces.extensions.validator.test.beanval.model.ModelValidationTestCase2Bean;
 
-@java.lang.annotation.Target(TYPE)
-@java.lang.annotation.Retention(RUNTIME)
-@java.lang.annotation.Documented
-@javax.validation.Constraint(validatedBy = {ClassLevelEqualsValidator1.class, ClassLevelEqualsValidator2.class})
-public @interface ClassLevelEqual
+public class ModelValidationTestCase4PageBean
 {
-    String message() default "class-level equal violation";
+    private ModelValidationTestCase2Bean model = new ModelValidationTestCase2Bean();
 
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
-
+    public ModelValidationTestCase2Bean getModel()
+    {
+        return model;
+    }
 }
