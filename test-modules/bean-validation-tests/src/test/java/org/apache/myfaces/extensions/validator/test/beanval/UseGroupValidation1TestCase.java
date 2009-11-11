@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.test.beanval;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.view.UseGroupValidationTestCase1PageBean;
+import org.apache.myfaces.extensions.validator.test.beanval.model.SimulatedUserInformation;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -162,25 +163,5 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
 
         checkMessageCount(2);
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
-    }
-
-    public class SimulatedUserInformation
-    {
-        private String value;
-
-        SimulatedUserInformation(String value)
-        {
-            this.value = value;
-        }
-
-        public boolean isAdminRole()
-        {
-            return "admin".equals(value);
-        }
-
-        public boolean isUserRole()
-        {
-            return "user".equals(value);
-        }
     }
 }
