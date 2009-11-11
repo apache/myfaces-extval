@@ -34,6 +34,9 @@ public class ModelValidationTestCase1PageBean
     @BeanValidation(modelValidation = @ModelValidation(isActive = true, displayInline = true))
     private ModelValidationTestCase1Bean model4 = new ModelValidationTestCase1Bean();
 
+    @BeanValidation(conditions = "#{currentUser.userRole}", modelValidation = @ModelValidation(isActive = true))
+    private ModelValidationTestCase1Bean model5 = new ModelValidationTestCase1Bean();
+
     @BeanValidation(modelValidation = @ModelValidation(isActive = true))
     public ModelValidationTestCase1Bean getModel1()
     {
@@ -54,5 +57,10 @@ public class ModelValidationTestCase1PageBean
     public ModelValidationTestCase1Bean getModel4()
     {
         return model4;
+    }
+
+    public ModelValidationTestCase1Bean getModel5()
+    {
+        return model5;
     }
 }

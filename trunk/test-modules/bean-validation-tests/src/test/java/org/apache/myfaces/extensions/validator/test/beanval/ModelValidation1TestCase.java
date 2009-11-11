@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.view.ModelValidationTestCase1PageBean;
+import org.apache.myfaces.extensions.validator.test.beanval.model.SimulatedUserInformation;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -135,5 +136,44 @@ public class ModelValidation1TestCase extends
         //due to displayMessageInline
         checkMessageCount(2);
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
+    }
+
+    public void testModelViolationWithAdminRole()
+    {
+        createRequestScopedBean("currentUser", new SimulatedUserInformation("admin"));
+
+        createValueBindingForComponent(this.inputComponent1, "#{testBean.model5.property1}");
+        setValueToValidate(this.inputComponent1, "123");
+
+        createValueBindingForComponent(this.inputComponent2, "#{testBean.model5.property2}");
+        setValueToValidate(this.inputComponent2, "456");
+
+        validateComponents();
+        updateComponents();
+        processModelValidation();
+
+        assertNavigationBlocked(false);
+
+        checkMessageCount(0);
+    }
+
+    public void testModelViolationWithUserRole()
+    {
+        createRequestScopedBean("currentUser", new SimulatedUserInformation("user"));
+
+        createValueBindingForComponent(this.inputComponent1, "#{testBean.model5.property1}");
+        setValueToValidate(this.inputComponent1, "123");
+
+        createValueBindingForComponent(this.inputComponent2, "#{testBean.model5.property2}");
+        setValueToValidate(this.inputComponent2, "456");
+
+        validateComponents();
+        updateComponents();
+        processModelValidation();
+
+        assertNavigationBlocked(true);
+
+        checkMessageCount(1);
+        checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 }
