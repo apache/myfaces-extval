@@ -85,12 +85,20 @@ public class ExtValContext
         if (extValContext == null)
         {
             extValContext = new ExtValContext();
-            Object customExtValContext = ExtValUtils.getELHelper().getBean(
-                    extValContext.getInformationProviderBean().get(CustomInformation.EXTVAL_CONTEXT));
 
-            if (customExtValContext instanceof ExtValContext)
+            if(ExtValUtils.isApplicationInitialized())
             {
-                extValContext = (ExtValContext) customExtValContext;
+                Object customExtValContext = ExtValUtils.getELHelper().getBean(
+                        extValContext.getInformationProviderBean().get(CustomInformation.EXTVAL_CONTEXT));
+
+                if (customExtValContext instanceof ExtValContext)
+                {
+                    extValContext = (ExtValContext) customExtValContext;
+                }
+            }
+            else
+            {
+                //TODO try to use web.xml context-param
             }
         }
         return extValContext;
