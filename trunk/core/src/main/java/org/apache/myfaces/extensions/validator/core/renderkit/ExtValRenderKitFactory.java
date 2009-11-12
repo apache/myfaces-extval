@@ -42,7 +42,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 {
     protected final Log logger = LogFactory.getLog(getClass());
     private RenderKitFactory wrapped;
-    private LazyRenderKitWrapperFactory lazyRenderKitWrapperFactory = new LazyRenderKitWrapperFactory();
+    private DefaultRenderKitWrapperFactory defaultRenderKitWrapperFactory = new DefaultRenderKitWrapperFactory();
 
     public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
     {
@@ -72,7 +72,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
         //test early config in case of mojarra
         if(!ExtValUtils.isApplicationInitialized())
         {
-            return this.lazyRenderKitWrapperFactory.createWrapper(renderKit);
+            return this.defaultRenderKitWrapperFactory.createWrapper(renderKit);
         }
 
         return tryToCreateWrapperWithWrapperFactory(renderKit);
