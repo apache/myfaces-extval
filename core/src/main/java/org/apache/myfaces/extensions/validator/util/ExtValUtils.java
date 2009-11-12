@@ -894,4 +894,19 @@ public class ExtValUtils
         }
         return targetComponent;
     }
+
+    public static boolean isApplicationInitialized()
+    {
+        try
+        {
+            //simple test for early config in case of mojarra
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().isEmpty();
+        }
+        catch (Throwable e)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }
