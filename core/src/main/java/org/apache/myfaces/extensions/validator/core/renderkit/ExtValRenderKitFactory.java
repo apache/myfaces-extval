@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,6 +42,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 {
     protected final Log logger = LogFactory.getLog(getClass());
     private RenderKitFactory wrapped;
+    private LazyRenderKitWrapperFactory lazyRenderKitWrapperFactory = new LazyRenderKitWrapperFactory();
 
     public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
     {
@@ -67,6 +69,17 @@ public class ExtValRenderKitFactory extends RenderKitFactory
             return null;
         }
 
+        //test early config in case of mojarra
+        if(!ExtValUtils.isApplicationInitialized())
+        {
+            return this.lazyRenderKitWrapperFactory.createWrapper(renderKit);
+        }
+
+        return tryToCreateWrapperWithWrapperFactory(renderKit);
+    }
+
+    private RenderKit tryToCreateWrapperWithWrapperFactory(RenderKit renderKit)
+    {
         AbstractRenderKitWrapperFactory wrapperFactory = ExtValContext.getContext().getFactoryFinder()
             .getFactory(FactoryNames.RENDERKIT_WRAPPER_FACTORY, AbstractRenderKitWrapperFactory.class);
 
