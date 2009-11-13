@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.render.RenderKit;
+import javax.faces.context.FacesContext;
 
 /**
  * Base for all RenderKitWrapperFactories to force a specific behaviour
@@ -102,4 +103,18 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     }
 
     protected abstract RenderKit createWrapper(RenderKit renderKit);
+
+    /**
+     * simple test for early config in case of mojarra (incl. the combination with trinidad).
+     * use a custom extval context impl. (see EXTVAL-58) to optimize this check for the target runtime.
+     * this check works for all current implementations since the jsf internals are autom. ready during a request
+     * @return true if the jsf impl. is initialized and it's possible to use it as expected
+     */
+    protected boolean isApplicationInitialized()
+    {
+        return FacesContext.getCurrentInstance().getClass().getName().startsWith("org.apache.myfaces") ||
+                FacesContext.getCurrentInstance().getExternalContext().getRequestMap() != null &&
+                !FacesContext.getCurrentInstance().getExternalContext().getRequestMap().isEmpty();
+
+    }
 }
