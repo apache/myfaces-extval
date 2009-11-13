@@ -22,7 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -42,7 +43,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 {
     protected final Log logger = LogFactory.getLog(getClass());
     private RenderKitFactory wrapped;
-    private DefaultRenderKitWrapperFactory defaultRenderKitWrapperFactory = new DefaultRenderKitWrapperFactory();
+    private AbstractRenderKitWrapperFactory defaultRenderKitWrapperFactory;
 
     public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
     {
@@ -69,13 +70,36 @@ public class ExtValRenderKitFactory extends RenderKitFactory
             return null;
         }
 
+        tryToInitDefaultRenderKitWrapperFactory();
+
         //test early config in case of mojarra
-        if(!ExtValUtils.isApplicationInitialized())
+        if(!this.defaultRenderKitWrapperFactory.isApplicationInitialized())
         {
             return this.defaultRenderKitWrapperFactory.createWrapper(renderKit);
         }
 
         return tryToCreateWrapperWithWrapperFactory(renderKit);
+    }
+
+    private synchronized void tryToInitDefaultRenderKitWrapperFactory()
+    {
+        if(this.defaultRenderKitWrapperFactory == null)
+        {
+            //workaround for mojarra to allow a custom factory during the early config phase
+            //just create the factory with the given name
+            //+it should extend your custom implementation which you register as usual
+            Object customFactory = ClassUtils.tryToInstantiateClassForName(
+                    ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.RenderKitWrapperFactory");
+
+            if(customFactory instanceof AbstractRenderKitWrapperFactory)
+            {
+                this.defaultRenderKitWrapperFactory = (AbstractRenderKitWrapperFactory)customFactory;
+            }
+            else
+            {
+                this.defaultRenderKitWrapperFactory = new DefaultRenderKitWrapperFactory();
+            }
+        }
     }
 
     private RenderKit tryToCreateWrapperWithWrapperFactory(RenderKit renderKit)
