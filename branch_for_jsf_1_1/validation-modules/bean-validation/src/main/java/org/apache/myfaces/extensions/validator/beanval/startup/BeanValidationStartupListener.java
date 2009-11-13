@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
+import org.apache.myfaces.extensions.validator.beanval.BeanAwareValidatorFactory;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
@@ -68,8 +69,8 @@ public class BeanValidationStartupListener extends AbstractStartupListener
 
     protected void registerValidatorFactory()
     {
-        ExtValContext.getContext().addGlobalProperty(
-                ValidatorFactory.class.getName(), Validation.buildDefaultValidatorFactory(), false);
+        ExtValContext.getContext().addGlobalProperty(ValidatorFactory.class.getName(),
+                new BeanAwareValidatorFactory(Validation.buildDefaultValidatorFactory()), false);
     }
 
     protected void registerBeanValidationInterceptor()
