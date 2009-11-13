@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
-import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -894,20 +893,5 @@ public class ExtValUtils
             targetComponent = FacesContext.getCurrentInstance().getViewRoot().findComponent(clientId);
         }
         return targetComponent;
-    }
-
-    public static boolean isApplicationInitialized()
-    {
-        try
-        {
-            //simple test for early config in case of mojarra
-            ExtValUtils.getELHelper().getBean(InformationProviderBean.CUSTOM_BEAN.replace(".", "_"));
-        }
-        catch (Throwable e)
-        {
-            return false;
-        }
-
-        return true;
     }
 }
