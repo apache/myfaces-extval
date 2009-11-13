@@ -36,6 +36,7 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.validation.ConstraintViolation;
+import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
@@ -203,9 +204,12 @@ class BeanValidationInterceptorInternals
             return null;
         }
 
-        return ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
+        ValidatorFactory validatorFactory = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory();
+        return validatorFactory
                 .usingContext()
                 .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
+                .constraintValidatorFactory(validatorFactory.getConstraintValidatorFactory())
+                .traversableResolver(validatorFactory.getTraversableResolver())
                 .getValidator()
                 .validateValue(baseBeanClass, propertyName, convertedObject, groups);
     }
