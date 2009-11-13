@@ -37,7 +37,6 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -57,6 +56,10 @@ public class ExtValContext
 
     private static ExtValContext extValContext;
 
+    //don't try to resolve it dynamically e.g. via InformationProviderBean - there's a mojarra issue
+    private static final String CUSTOM_EXTVAL_CONTEXT_CLASS_NAME =
+            ExtValContext.class.getName().replace(".core.", ".custom.");
+
     private ViolationSeverityInterpreter violationSeverityInterpreter;
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
     private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
@@ -74,7 +77,7 @@ public class ExtValContext
     private ExtValContextInternals contextHelper;
     private ExtValContextInvocationOrderAwareInternals invocationOrderAwareContextHelper;
 
-    private ExtValContext()
+    protected ExtValContext()
     {
         this.contextHelper = new ExtValContextInternals();
         this.invocationOrderAwareContextHelper = new ExtValContextInvocationOrderAwareInternals(this.contextHelper);
@@ -86,22 +89,19 @@ public class ExtValContext
         {
             extValContext = new ExtValContext();
 
-            if(ExtValUtils.isApplicationInitialized())
-            {
-                Object customExtValContext = ExtValUtils.getELHelper().getBean(
-                        extValContext.getInformationProviderBean().get(CustomInformation.EXTVAL_CONTEXT));
-
-                if (customExtValContext instanceof ExtValContext)
-                {
-                    extValContext = (ExtValContext) customExtValContext;
-                }
-            }
-            else
-            {
-                //TODO try to use web.xml context-param
-            }
+            tryToCreateCustomExtValContext();
         }
         return extValContext;
+    }
+
+    private static void tryToCreateCustomExtValContext()
+    {
+        Object customExtValContext = ClassUtils.tryToInstantiateClassForName(CUSTOM_EXTVAL_CONTEXT_CLASS_NAME);
+
+        if (customExtValContext instanceof ExtValContext)
+        {
+            extValContext = (ExtValContext) customExtValContext;
+        }
     }
 
     public void setViolationSeverityInterpreter(ViolationSeverityInterpreter violationSeverityInterpreter)
