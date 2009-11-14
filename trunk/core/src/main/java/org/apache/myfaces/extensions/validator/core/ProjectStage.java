@@ -40,10 +40,10 @@ public enum ProjectStage
 
     private static ProjectStage getCurrentProjectStage()
     {
+        //set ProjectStageResolver to null to tweak the performance
         Object projectStageResolver = ExtValContext.getContext()
                 .getGlobalProperty(ProjectStageResolver.class.getName());
 
-        //set it to null to tweek the performance
         if(projectStageResolver instanceof ProjectStageResolver)
         {
             return ((ProjectStageResolver)projectStageResolver).getCurrentProjectStage();
