@@ -27,6 +27,8 @@ import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessageProp
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
+import org.apache.myfaces.extensions.validator.core.DefaultProjectStageResolver;
 import org.apache.myfaces.extensions.validator.core.PhaseIdRecordingPhaseListener;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
         .BeanValidationStrategyToMetaDataTransformerNameMapper;
@@ -98,6 +100,7 @@ public class ExtValStartupListener extends AbstractStartupListener
         initViolationSeverityInterpreter();
         initPropertyValidationInterceptors();
         initPhaseListeners();
+        initProjectStageResolver();
         executeCustomStartupListener();
     }
 
@@ -201,5 +204,11 @@ public class ExtValStartupListener extends AbstractStartupListener
     private void initPhaseListeners()
     {
         JsfUtils.registerPhaseListener(new PhaseIdRecordingPhaseListener());
+    }
+
+    private void initProjectStageResolver()
+    {
+        ExtValContext.getContext()
+                .addGlobalProperty(ProjectStageResolver.class.getName(), new DefaultProjectStageResolver(), false);
     }
 }
