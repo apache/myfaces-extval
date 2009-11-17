@@ -158,6 +158,11 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
         {
             ValidatorException validatorException = new ValidatorException(message);
 
+            if(entryOfTarget.getMetaDataEntry() == null)
+            {
+                entryOfTarget.setMetaDataEntry(entryOfSource.getMetaDataEntry());
+            }
+            
             if(ExtValUtils.executeAfterThrowingInterceptors(
                     entryOfTarget.getComponent(), entryOfTarget.getMetaDataEntry(),
                     entryOfTarget.getConvertedObject(), validatorException, this))
@@ -168,6 +173,7 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
         }
     }
 
+    @SuppressWarnings({"ThrowableInstanceNeverThrown"})
     private void processTargetComponentAsSourceComponentAfterViolation(CrossValidationStorageEntry entryOfSource)
     {
         //get validation error messages for the current component
@@ -180,7 +186,14 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
         if (message.getSummary() != null || message.getDetail() != null)
         {
             //TODO
-            ExtValUtils.tryToThrowValidatorExceptionForComponent(entryOfSource.getComponent(), message, null);
+            if(ExtValUtils.executeAfterThrowingInterceptors(entryOfSource.getComponent(),
+                    entryOfSource.getMetaDataEntry(),
+                    entryOfSource.getConvertedObject(),
+                    new ValidatorException(message),
+                    this))
+            {
+                ExtValUtils.tryToThrowValidatorExceptionForComponent(entryOfSource.getComponent(), message, null);
+            }
         }
         else
         {

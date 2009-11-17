@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEn
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationStorage;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
@@ -37,7 +38,6 @@ import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.validation.MessageInterpolator;
-import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.util.Map;
 import java.util.List;
@@ -100,7 +100,7 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         {
             this.logger.warn("fallback to the default bv validator factory");
         }
-        return Validation.buildDefaultValidatorFactory();
+        return BeanValidationUtils.getDefaultValidatorFactory();
     }
 
     public MessageInterpolator getMessageInterpolator()
@@ -162,7 +162,7 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         else
         {
             this.defaultMessageInterpolator = new DefaultMessageInterpolator(
-                Validation.buildDefaultValidatorFactory().getMessageInterpolator());
+                BeanValidationUtils.getDefaultValidatorFactory().getMessageInterpolator());
         }
     }
 

@@ -32,9 +32,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
+import javax.validation.ValidatorFactory;
+import javax.validation.Validation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -45,6 +48,7 @@ public class BeanValidationUtils
 {
     private static final Log LOG = LogFactory.getLog(BeanValidationUtils.class);
     private static ExtValBeanValidationMetaDataInternals bvmi = new ExtValBeanValidationMetaDataInternals(LOG);
+    private static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 
     public static void addMetaDataToContext(
             UIComponent component, PropertyDetails propertyDetails, boolean processModelValidation)
@@ -143,5 +147,26 @@ public class BeanValidationUtils
 
         bvmi.addMessages(facesMessageListWithHighSeverity);
         bvmi.addMessages(facesMessageListWithLowSeverity);
+    }
+
+    public static ValidatorFactory getDefaultValidatorFactory()
+    {
+        Map<String, Object> applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        ValidatorFactory validatorFactory = null;
+
+        if (applicationMap.containsKey(VALIDATOR_FACTORY_KEY))
+        {
+            if (applicationMap.get(VALIDATOR_FACTORY_KEY) instanceof ValidatorFactory)
+            {
+                validatorFactory = (ValidatorFactory) applicationMap.get(VALIDATOR_FACTORY_KEY);
+            }
+        }
+
+        if (validatorFactory == null)
+        {
+            validatorFactory = Validation.buildDefaultValidatorFactory();
+            applicationMap.put(VALIDATOR_FACTORY_KEY, validatorFactory);
+        }
+        return validatorFactory;
     }
 }
