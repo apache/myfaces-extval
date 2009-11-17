@@ -111,8 +111,17 @@ public class ModelValidationPhaseListener implements PhaseListener
                 continue;
             }
 
-            groupsToValidate = filterGroupsToValidate(
-                    modelValidationEntry, validationTarget, processedValidationTargets);
+            if(modelValidationEntry.isDisplayMessageInline())
+            {
+                groupsToValidate = modelValidationEntry.getGroups();
+            }
+            //if violation should displayed inline validation has to take place with all groups
+            //which means: global messages -> filter groups already used for the validation target
+            else
+            {
+                groupsToValidate = filterGroupsToValidate(
+                        modelValidationEntry, validationTarget, processedValidationTargets);
+            }
 
             if(!shouldContinueValidation(modelValidationEntry, groupsToValidate))
             {
@@ -216,6 +225,11 @@ public class ModelValidationPhaseListener implements PhaseListener
 
     private Set<ConstraintViolation<Object>> validateTarget(Object validationTarget, Class[] groups)
     {
+        if(groups == null || groups.length == 0)
+        {
+            return null;
+        }
+
         return ExtValBeanValidationContext.getCurrentInstance()
                 .getValidatorFactory().usingContext()
                 .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
