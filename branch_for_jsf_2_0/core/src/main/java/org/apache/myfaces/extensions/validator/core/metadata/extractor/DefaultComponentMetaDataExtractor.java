@@ -139,7 +139,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         return ExtValUtils.getStorage(MetaDataStorage.class, MetaDataStorage.class.getName());
     }
 
-    private void extractAnnotations(
+    protected void extractAnnotations(
             PropertyInformation propertyInformation, PropertyDetails propertyDetails, Class entityClass)
     {
         while (!Object.class.getName().equals(entityClass.getName()))

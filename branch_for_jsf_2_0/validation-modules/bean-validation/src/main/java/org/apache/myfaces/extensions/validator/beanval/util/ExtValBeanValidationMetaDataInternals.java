@@ -84,7 +84,8 @@ class ExtValBeanValidationMetaDataInternals
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
-                restrictedGroupsForModelValidation);
+                restrictedGroupsForModelValidation,
+                key.length == 2);
 
         inspectBaseOfProperty(propertyDetails,
                 processModelValidation,
@@ -144,7 +145,8 @@ class ExtValBeanValidationMetaDataInternals
                                       List<Class> foundGroupsForPropertyValidation,
                                       List<Class> restrictedGroupsForPropertyValidation,
                                       List<ModelValidationEntry> modelValidationEntryList,
-                                      List<Class> restrictedGroupsForModelValidation)
+                                      List<Class> restrictedGroupsForModelValidation,
+                                      boolean isLastProperty)
     {
         processFieldsAndProperties(key[0] + "." + key[1],
                 firstBean,
@@ -153,7 +155,8 @@ class ExtValBeanValidationMetaDataInternals
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
                 restrictedGroupsForModelValidation,
-                processModelValidation);
+                processModelValidation,
+                isLastProperty);
     }
 
     private void inspectBaseOfProperty(PropertyDetails propertyDetails,
@@ -186,7 +189,8 @@ class ExtValBeanValidationMetaDataInternals
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
                 restrictedGroupsForModelValidation,
-                processModelValidation);
+                processModelValidation,
+                true);
     }
 
     private void processClass(Object objectToInspect,
@@ -224,7 +228,8 @@ class ExtValBeanValidationMetaDataInternals
                                             List<Class> restrictedGroupsForPropertyValidation,
                                             List<ModelValidationEntry> modelValidationEntryList,
                                             List<Class> restrictedGroupsForModelValidation,
-                                            boolean processModelValidation)
+                                            boolean processModelValidation,
+                                            boolean isLastProperty)
     {
         PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
                 .extract(FacesContext.getCurrentInstance(), new PropertyDetails(key, base, property));
@@ -234,7 +239,7 @@ class ExtValBeanValidationMetaDataInternals
             if (metaDataEntry.getValue() instanceof BeanValidation)
             {
                 tryToProcessMetaData((BeanValidation) metaDataEntry.getValue(),
-                        tryToCreateNewTarget(base, property),
+                        tryToCreateNewTarget(base, property, isLastProperty),
                         foundGroupsForPropertyValidation,
                         restrictedGroupsForPropertyValidation,
                         modelValidationEntryList,
@@ -246,7 +251,7 @@ class ExtValBeanValidationMetaDataInternals
                 for (BeanValidation currentBeanValidation : ((BeanValidation.List) metaDataEntry.getValue()).value())
                 {
                     tryToProcessMetaData(currentBeanValidation,
-                            tryToCreateNewTarget(base, property),
+                            tryToCreateNewTarget(base, property, isLastProperty),
                             foundGroupsForPropertyValidation,
                             restrictedGroupsForPropertyValidation,
                             modelValidationEntryList,
@@ -257,8 +262,13 @@ class ExtValBeanValidationMetaDataInternals
         }
     }
 
-    private Object tryToCreateNewTarget(Object base, String property)
+    private Object tryToCreateNewTarget(Object base, String property, boolean isLastProperty)
     {
+        if(isLastProperty)
+        {
+            return base;
+        }
+        
         Object result = getValueOfProperty(base, property);
 
         if (result == null)
