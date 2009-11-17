@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
 import org.apache.myfaces.extensions.validator.beanval.BeanAwareValidatorFactory;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
@@ -43,7 +44,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 import javax.validation.ValidatorFactory;
-import javax.validation.Validation;
 
 /**
  * @author Gerhard Petracek
@@ -70,7 +70,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void registerValidatorFactory()
     {
         ExtValContext.getContext().addGlobalProperty(ValidatorFactory.class.getName(),
-                new BeanAwareValidatorFactory(Validation.buildDefaultValidatorFactory()), false);
+                new BeanAwareValidatorFactory(BeanValidationUtils.getDefaultValidatorFactory()), false);
     }
 
     protected void registerBeanValidationInterceptor()
