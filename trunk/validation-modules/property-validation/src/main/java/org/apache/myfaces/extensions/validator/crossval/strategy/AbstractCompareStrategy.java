@@ -158,9 +158,12 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
         {
             ValidatorException validatorException = new ValidatorException(message);
 
+            boolean isSourceMetaDataUsed = false;
+
             if(entryOfTarget.getMetaDataEntry() == null)
             {
-                entryOfTarget.setMetaDataEntry(entryOfSource.getMetaDataEntry());
+                prepareTargetMetaDataForSeverityAwareInterception(entryOfSource, entryOfTarget);
+                isSourceMetaDataUsed = true;
             }
             
             if(ExtValUtils.executeAfterThrowingInterceptors(
@@ -170,7 +173,23 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
                 ExtValUtils.tryToAddViolationMessageForComponentId(entryOfTarget.getClientId(),
                         ExtValUtils.convertFacesMessage(validatorException.getFacesMessage()));
             }
+
+            if(isSourceMetaDataUsed)
+            {
+                resetTargetMetaData(entryOfTarget);
+            }
         }
+    }
+
+    private void prepareTargetMetaDataForSeverityAwareInterception(
+            CrossValidationStorageEntry entryOfSource, CrossValidationStorageEntry entryOfTarget)
+    {
+        entryOfTarget.setMetaDataEntry(entryOfSource.getMetaDataEntry());
+    }
+
+    private void resetTargetMetaData(CrossValidationStorageEntry entryOfTarget)
+    {
+        entryOfTarget.setMetaDataEntry(null);
     }
 
     @SuppressWarnings({"ThrowableInstanceNeverThrown"})
