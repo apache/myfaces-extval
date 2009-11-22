@@ -64,20 +64,36 @@ public class RequiredIfStrategy extends AbstractCompareStrategy<RequiredIf>
         return annotation.validationErrorMsgKey();
     }
 
-    public boolean isViolation(Object object1, Object object2, RequiredIf annotation)
+    public boolean isViolation(Object source, Object target, RequiredIf annotation)
     {
         boolean violationFound = false;
 
         if (annotation.is().equals(RequiredIfType.empty))
         {
-            violationFound = (object2 == null || object2.equals("")) && (object1 == null || object1.equals(""));
+            violationFound = (isTargetEmpty(target) || Boolean.FALSE.equals(target)) && isSourceEmpty(source);
         }
         else if (annotation.is().equals(RequiredIfType.not_empty))
         {
-            violationFound = (object2 != null && !object2.equals("")) && (object1 == null || object1.equals(""));
+            violationFound = (isTargetNotEmpty(target) && isSourceEmpty(source) && !(target instanceof Boolean)) ||
+                    (Boolean.TRUE.equals(target) && isSourceEmpty(source));
         }
 
         return violationFound;
+    }
+
+    private boolean isTargetEmpty(Object target)
+    {
+        return target == null || target.equals("");
+    }
+
+    private boolean isSourceEmpty(Object source)
+    {
+        return source == null || source.equals("");
+    }
+
+    private boolean isTargetNotEmpty(Object target)
+    {
+        return target != null && !target.equals("");
     }
 
     public String[] getValidationTargets(RequiredIf annotation)
