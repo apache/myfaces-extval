@@ -105,14 +105,25 @@ public class ExtValMockValueExpression extends MockValueExpression
         {
             String getter = "get" + createPropertyString();
 
+            Method getterMethod;
             try
             {
-                Method getterMethod = base.getClass().getDeclaredMethod(getter);
+                getterMethod = base.getClass().getDeclaredMethod(getter);
                 return getterMethod.getReturnType();
             }
             catch (NoSuchMethodException e)
             {
-                throw new IllegalStateException();
+                getter = "is" + createPropertyString();
+
+                try
+                {
+                    getterMethod = base.getClass().getDeclaredMethod(getter);
+                    return getterMethod.getReturnType();
+                }
+                catch (NoSuchMethodException e1)
+                {
+                    throw new IllegalStateException();
+                }
             }
         }
     }
