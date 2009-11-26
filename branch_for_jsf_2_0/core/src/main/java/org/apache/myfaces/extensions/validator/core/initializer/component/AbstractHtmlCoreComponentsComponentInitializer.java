@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.initializer.component;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
@@ -88,6 +90,7 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
      * @param uiComponent component which implements the EditableValueHolder interface
      * @return false to overrule the annotated property e.g. if component is readonly
      */
+    @ToDo(value = Priority.MEDIUM, description = "refactor")
     protected Boolean isComponentRequired(UIComponent uiComponent)
     {
         boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
@@ -114,6 +117,11 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
             {
                 HtmlInputText htmlInputText = (HtmlInputText)uiComponent;
                 htmlInputText.setMaxlength((Integer)maxLength);
+            }
+            else if(uiComponent instanceof HtmlInputSecret)
+            {
+                HtmlInputSecret htmlInputSecret = (HtmlInputSecret)uiComponent;
+                htmlInputSecret.setMaxlength((Integer)maxLength);
             }
         }
     }
