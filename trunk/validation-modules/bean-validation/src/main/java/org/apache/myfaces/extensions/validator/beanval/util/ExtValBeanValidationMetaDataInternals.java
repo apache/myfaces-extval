@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationConte
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.extractor.DefaultGroupControllerScanningExtractor;
-import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -563,15 +562,15 @@ class ExtValBeanValidationMetaDataInternals
     {
         for (Class<? extends Payload> payload : violation.getConstraintDescriptor().getPayload())
         {
-            if (ViolationSeverity.Warn.class.isAssignableFrom(payload))
+            if (BeanValidationUtils.getWarnClass().isAssignableFrom(payload))
             {
                 return FacesMessage.SEVERITY_WARN;
             }
-            else if (ViolationSeverity.Info.class.isAssignableFrom(payload))
+            else if (BeanValidationUtils.getInfoClass().isAssignableFrom(payload))
             {
                 return FacesMessage.SEVERITY_INFO;
             }
-            else if (ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            else if (BeanValidationUtils.getFatalClass().isAssignableFrom(payload))
             {
                 return FacesMessage.SEVERITY_FATAL;
             }
