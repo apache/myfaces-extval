@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
 import org.apache.myfaces.extensions.validator.beanval.BeanAwareValidatorFactory;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationExceptionInterceptor;
@@ -65,6 +66,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         registerMetaDataExtractionInterceptors();
         registerPhaseListeners();
         registerExceptionInterceptor();
+        registerViolationSeverityPayload();
     }
 
     protected void registerValidatorFactory()
@@ -139,5 +141,15 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void registerExceptionInterceptor()
     {
         ExtValContext.getContext().addValidationExceptionInterceptor(new BeanValidationExceptionInterceptor());
+    }
+
+    protected void registerViolationSeverityPayload()
+    {
+        ExtValContext extValContext = ExtValContext.getContext();
+
+        extValContext.addGlobalProperty(ViolationSeverity.Info.class.getName(), ViolationSeverity.Info.class, false);
+        extValContext.addGlobalProperty(ViolationSeverity.Warn.class.getName(), ViolationSeverity.Warn.class, false);
+        extValContext.addGlobalProperty(ViolationSeverity.Error.class.getName(), ViolationSeverity.Error.class, false);
+        extValContext.addGlobalProperty(ViolationSeverity.Fatal.class.getName(), ViolationSeverity.Fatal.class, false);
     }
 }
