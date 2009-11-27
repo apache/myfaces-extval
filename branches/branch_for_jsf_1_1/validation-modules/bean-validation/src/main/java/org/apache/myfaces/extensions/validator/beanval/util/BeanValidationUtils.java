@@ -225,7 +225,6 @@ public class BeanValidationUtils
                     .addMessage(null, ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
         }
 
-
         if(LOGGER.isWarnEnabled())
         {
             LOGGER.warn(message);
