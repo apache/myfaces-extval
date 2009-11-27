@@ -214,7 +214,7 @@ public class ExtValStartupListener extends AbstractStartupListener
                 .addGlobalProperty(ProjectStageResolver.class.getName(), new DefaultProjectStageResolver(), false);
     }
 
-    protected void initViolationSeverityKey()
+    private void initViolationSeverityKey()
     {
         ExtValContext.getContext().addGlobalProperty(ViolationSeverity.class.getName(), ViolationSeverity.class, false);
     }
