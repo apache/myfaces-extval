@@ -149,7 +149,8 @@ public class BeanValidationStartupListener extends AbstractStartupListener
 
         extValContext.addGlobalProperty(ViolationSeverity.Info.class.getName(), ViolationSeverity.Info.class, false);
         extValContext.addGlobalProperty(ViolationSeverity.Warn.class.getName(), ViolationSeverity.Warn.class, false);
-        extValContext.addGlobalProperty(ViolationSeverity.Error.class.getName(), ViolationSeverity.Error.class, false);
         extValContext.addGlobalProperty(ViolationSeverity.Fatal.class.getName(), ViolationSeverity.Fatal.class, false);
+
+        //no need to register "error" it's the default
     }
 }
