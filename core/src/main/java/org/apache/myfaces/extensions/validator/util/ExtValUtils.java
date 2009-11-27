@@ -914,11 +914,17 @@ public class ExtValUtils
 
     private static void tryToCreateMessageInDevMode()
     {
+        String message = "[dev-mode warning] fallback to " + ViolationSeverity.class.getName();
+
         if(ProjectStage.is(ProjectStage.Development))
         {
-            String message = "[dev-mode warning] fallback to " + ViolationSeverity.class.getName();
             FacesContext.getCurrentInstance()
                     .addMessage(null, createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
+        }
+
+        if(LOGGER.isWarnEnabled())
+        {
+            LOGGER.warn(message);
         }
     }
 }
