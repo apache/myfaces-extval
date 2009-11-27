@@ -49,8 +49,8 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationUtils
 {
-    private static final Log LOG = LogFactory.getLog(BeanValidationUtils.class);
-    private static ExtValBeanValidationMetaDataInternals bvmi = new ExtValBeanValidationMetaDataInternals(LOG);
+    private static final Log LOGGER = LogFactory.getLog(BeanValidationUtils.class);
+    private static ExtValBeanValidationMetaDataInternals bvmi = new ExtValBeanValidationMetaDataInternals(LOGGER);
     private static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 
     public static void addMetaDataToContext(
@@ -217,11 +217,18 @@ public class BeanValidationUtils
 
     private static void tryToCreateMessageInDevMode(Class usedFallback)
     {
+        String message = "[dev-mode warning] fallback to " + usedFallback.getName();
+
         if(ProjectStage.is(ProjectStage.Development))
         {
-            String message = "[dev-mode warning] fallback to " + usedFallback.getName();
             FacesContext.getCurrentInstance()
                     .addMessage(null, ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
+        }
+
+
+        if(LOGGER.isWarnEnabled())
+        {
+            LOGGER.warn(message);
         }
     }
 
