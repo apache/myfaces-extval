@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.validation.metadata.ConstraintDescriptor;
@@ -71,15 +72,15 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
 
         for (Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
-            if (ViolationSeverity.Warn.class.isAssignableFrom(payload))
+            if (BeanValidationUtils.getWarnClass().isAssignableFrom(payload))
             {
                 testMessage.setSeverity(ViolationSeverity.Warn.VALUE);
             }
-            else if(ViolationSeverity.Info.class.isAssignableFrom(payload))
+            else if(BeanValidationUtils.getInfoClass().isAssignableFrom(payload))
             {
                 testMessage.setSeverity(ViolationSeverity.Info.VALUE);
             }
-            else if(ViolationSeverity.Fatal.class.isAssignableFrom(payload))
+            else if(BeanValidationUtils.getFatalClass().isAssignableFrom(payload))
             {
                 testMessage.setSeverity(ViolationSeverity.Fatal.VALUE);
             }

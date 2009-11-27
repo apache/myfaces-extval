@@ -61,6 +61,7 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper
         .SimpleValidationStrategyToMsgResolverNameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultViolationSeverityInterpreter;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -101,6 +102,7 @@ public class ExtValStartupListener extends AbstractStartupListener
         initPropertyValidationInterceptors();
         initPhaseListeners();
         initProjectStageResolver();
+        initViolationSeverityKey();
         executeCustomStartupListener();
     }
 
@@ -210,5 +212,10 @@ public class ExtValStartupListener extends AbstractStartupListener
     {
         ExtValContext.getContext()
                 .addGlobalProperty(ProjectStageResolver.class.getName(), new DefaultProjectStageResolver(), false);
+    }
+
+    protected void initViolationSeverityKey()
+    {
+        ExtValContext.getContext().addGlobalProperty(ViolationSeverity.class.getName(), ViolationSeverity.class, false);
     }
 }
