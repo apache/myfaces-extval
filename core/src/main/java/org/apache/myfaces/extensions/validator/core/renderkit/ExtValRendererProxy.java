@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorageEntry;
 import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage;
+import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,6 +31,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.ConverterException;
+import javax.faces.application.FacesMessage;
 import java.io.IOException;
 
 /**
@@ -77,10 +79,7 @@ public class ExtValRendererProxy extends Renderer
         }
         else
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("double call of method 'decode' filtered");
-            }
+            tryToCreateMessage("decode");
         }
     }
 
@@ -110,10 +109,7 @@ public class ExtValRendererProxy extends Renderer
         }
         else
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("double call of method 'encodeBegin' filtered");
-            }
+            tryToCreateMessage("encodeBegin");
         }
     }
 
@@ -144,10 +140,7 @@ public class ExtValRendererProxy extends Renderer
         }
         else
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("double call of method 'encodeChildren' filtered");
-            }
+            tryToCreateMessage("encodeChildren");
         }
     }
 
@@ -178,10 +171,7 @@ public class ExtValRendererProxy extends Renderer
         }
         else
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("double call of method 'encodeEnd' filtered");
-            }
+            tryToCreateMessage("encodeEnd");
         }
     }
 
@@ -233,10 +223,7 @@ public class ExtValRendererProxy extends Renderer
         }
         else
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("double call of method 'getConvertedValue' filtered");
-            }
+            tryToCreateMessage("getConvertedValue");
         }
         return entry.getConvertedValue();
     }
@@ -273,5 +260,30 @@ public class ExtValRendererProxy extends Renderer
     {
         //reset component proxy mapping
         ExtValUtils.resetStorage(RendererProxyStorage.class, RendererProxyStorage.class.getName());
+    }
+
+    private void tryToCreateMessage(String methodName)
+    {
+        if(ProjectStage.is(ProjectStage.Development))
+        {
+            String message = "double call of " + this.wrapped.getClass().getName() + "#" + methodName + " filtered. " +
+                    "this optimization might lead to incompatibilities with some component libs. " +
+                    "in such a case use the support module for the component lib or use: " +
+                    "ExtValContext.getContext().addGlobalProperty(ExtValRendererProxy.KEY, null); " +
+                    "in a startup listener";
+
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
+
+            if(logger.isWarnEnabled())
+            {
+                logger.warn(message);
+            }
+        }
+
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("turn on the development mode for further information, if something is displayed wrong.");
+        }
     }
 }
