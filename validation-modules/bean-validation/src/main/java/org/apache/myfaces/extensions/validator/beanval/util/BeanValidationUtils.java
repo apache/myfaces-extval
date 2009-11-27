@@ -21,8 +21,11 @@ package org.apache.myfaces.extensions.validator.beanval.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
+import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
+import org.apache.myfaces.extensions.validator.core.ProjectStage;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -169,4 +172,57 @@ public class BeanValidationUtils
         }
         return validatorFactory;
     }
+
+    public static Class getWarnClass()
+    {
+        Object globalProperty = ExtValContext.getContext().getGlobalProperty(ViolationSeverity.Warn.class.getName());
+
+        if(globalProperty instanceof Class)
+        {
+            return (Class)globalProperty;
+        }
+
+        tryToCreateMessageInDevMode(ViolationSeverity.Warn.class);
+
+        return ViolationSeverity.Warn.class;
+    }
+
+    public static Class getInfoClass()
+    {
+        Object globalProperty = ExtValContext.getContext().getGlobalProperty(ViolationSeverity.Info.class.getName());
+
+        if(globalProperty instanceof Class)
+        {
+            return (Class)globalProperty;
+        }
+
+        tryToCreateMessageInDevMode(ViolationSeverity.Info.class);
+
+        return ViolationSeverity.Info.class;
+    }
+
+    public static Class getFatalClass()
+    {
+        Object globalProperty = ExtValContext.getContext().getGlobalProperty(ViolationSeverity.Fatal.class.getName());
+
+        if(globalProperty instanceof Class)
+        {
+            return (Class)globalProperty;
+        }
+
+        tryToCreateMessageInDevMode(ViolationSeverity.Fatal.class);
+
+        return ViolationSeverity.Fatal.class;
+    }
+
+    private static void tryToCreateMessageInDevMode(Class usedFallback)
+    {
+        if(ProjectStage.is(ProjectStage.Development))
+        {
+            String message = "[dev-mode warning] fallback to " + usedFallback.getName();
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
+        }
+    }
+
 }
