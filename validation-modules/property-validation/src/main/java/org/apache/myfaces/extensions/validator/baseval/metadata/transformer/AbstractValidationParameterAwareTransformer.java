@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.baseval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -66,8 +65,10 @@ public abstract class AbstractValidationParameterAwareTransformer implements Met
 
     private FacesMessage.Severity tryToTransformViolationSeverity(MetaDataEntry metaDataEntry)
     {
-        List<FacesMessage.Severity> result = ExtValUtils.getValidationParameterExtractor().extract(
-                metaDataEntry.getValue(Annotation.class), ViolationSeverity.class, FacesMessage.Severity.class);
+        List<FacesMessage.Severity> result = ExtValUtils.getValidationParameterExtractor()
+                .extract(metaDataEntry.getValue(Annotation.class),
+                        ExtValUtils.getViolationSeverityKey(),
+                        FacesMessage.Severity.class);
 
         if (result != null && !result.isEmpty())
         {
