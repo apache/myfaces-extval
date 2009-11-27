@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
+import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -52,6 +53,7 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -893,5 +895,30 @@ public class ExtValUtils
             targetComponent = FacesContext.getCurrentInstance().getViewRoot().findComponent(clientId);
         }
         return targetComponent;
+    }
+
+
+    public static Class getViolationSeverityKey()
+    {
+        Object globalProperty = ExtValContext.getContext().getGlobalProperty(ViolationSeverity.class.getName());
+
+        if(globalProperty instanceof Class)
+        {
+            return (Class)globalProperty;
+        }
+
+        tryToCreateMessageInDevMode();
+
+        return ViolationSeverity.class;
+    }
+
+    private static void tryToCreateMessageInDevMode()
+    {
+        if(ProjectStage.is(ProjectStage.Development))
+        {
+            String message = "[dev-mode warning] fallback to " + ViolationSeverity.class.getName();
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
+        }
     }
 }
