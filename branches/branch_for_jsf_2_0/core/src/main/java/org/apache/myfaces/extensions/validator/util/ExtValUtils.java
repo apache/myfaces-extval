@@ -507,9 +507,39 @@ public class ExtValUtils
 
     public static ValidationParameterExtractor getValidationParameterExtractor()
     {
+        if(isValidationParameterExtractionDeactivated())
+        {
+            return new ValidationParameterExtractor() {
+
+                public Map<Object, List<Object>> extract(Annotation annotation)
+                {
+                    return new HashMap<Object, List<Object>>();
+                }
+
+                public List<Object> extract(Annotation annotation, Object key)
+                {
+                    return new ArrayList<Object>();
+                }
+
+                public <T> List<T> extract(Annotation annotation, Object key, Class<T> valueType)
+                {
+                    return new ArrayList<T>();
+                }
+
+                public <T> T extract(Annotation annotation, Object key, Class<T> valueType, Class valueId)
+                {
+                    return null;
+                }
+            };
+        }
         return ExtValContext.getContext().getFactoryFinder().getFactory(
                 FactoryNames.VALIDATION_PARAMETER_EXTRACTOR_FACTORY, ValidationParameterExtractorFactory.class)
                 .create();
+    }
+
+    private static boolean isValidationParameterExtractionDeactivated()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_VALIDATION_PARAMETERS);
     }
 
     public static boolean executeLocalBeforeValidationInterceptors(FacesContext facesContext,
@@ -874,7 +904,7 @@ public class ExtValUtils
         return interpreter.severityBlocksSubmit(facesContext, targetComponent, facesMessage.getSeverity());
     }
 
-    //available for add-ons not used internally due to performance reasons
+    //available for add-ons - not used internally due to performance reasons
     public static boolean severityShowsIndicationForComponentId(String clientId, FacesMessage facesMessage)
     {
         ViolationSeverityInterpreter interpreter =

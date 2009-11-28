@@ -18,22 +18,28 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
-import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorage;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorage;
+import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -55,7 +61,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
     public DefaultComponentMetaDataExtractor()
     {
-        if(logger.isDebugEnabled())
+        if (logger.isDebugEnabled())
         {
             logger.debug(getClass().getName() + " instantiated");
         }
@@ -69,7 +75,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         //should never occur
         if (!(object instanceof UIComponent))
         {
-            if(this.logger.isWarnEnabled() && object != null)
+            if (this.logger.isWarnEnabled() && object != null)
             {
                 this.logger.warn(object.getClass() + " is no valid component");
             }
@@ -78,7 +84,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         UIComponent uiComponent = (UIComponent) object;
 
-        if(logger.isTraceEnabled())
+        if (logger.isTraceEnabled())
         {
             logger.trace("start extracting meta-data of " + uiComponent.getClass().getName());
         }
@@ -98,9 +104,9 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         //create
         propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
-        if(isCached(entityClass, propertyDetails.getProperty()))
+        if (isCached(entityClass, propertyDetails.getProperty()))
         {
-            for(MetaDataEntry metaDataEntry : getCachedMetaData(entityClass, propertyDetails.getProperty()))
+            for (MetaDataEntry metaDataEntry : getCachedMetaData(entityClass, propertyDetails.getProperty()))
             {
                 propertyInformation.addMetaDataEntry(metaDataEntry);
             }
@@ -111,7 +117,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             cacheMetaData(propertyInformation);
         }
 
-        if(logger.isTraceEnabled())
+        if (logger.isTraceEnabled())
         {
             logger.trace("extract finished");
         }
@@ -137,6 +143,49 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
     private MetaDataStorage getMetaDataStorage()
     {
         return ExtValUtils.getStorage(MetaDataStorage.class, MetaDataStorage.class.getName());
+    }
+
+    private boolean isCachedField(Class entity, String property)
+    {
+        return getPropertyStorage().containsField(entity, property);
+    }
+
+    private void tryToCachedField(Class entity, String property, Field field)
+    {
+        PropertyStorage propertyStorage = getPropertyStorage();
+        if (!propertyStorage.containsField(entity, property))
+        {
+            propertyStorage.storeField(entity, property, field);
+        }
+    }
+
+    private Field getCachedField(Class entity, String property)
+    {
+        return getPropertyStorage().getField(entity, property);
+    }
+
+    private boolean isCachedMethod(Class entity, String property)
+    {
+        return getPropertyStorage().containsMethod(entity, property);
+    }
+
+    private void tryToCachedMethod(Class entity, String property, Method method)
+    {
+        PropertyStorage propertyStorage = getPropertyStorage();
+        if (!propertyStorage.containsMethod(entity, property))
+        {
+            propertyStorage.storeMethod(entity, property, method);
+        }
+    }
+
+    private Method getCachedMethod(Class entity, String property)
+    {
+        return getPropertyStorage().getMethod(entity, property);
+    }
+
+    private PropertyStorage getPropertyStorage()
+    {
+        return ExtValUtils.getStorage(PropertyStorage.class, PropertyStorage.class.getName());
     }
 
     protected void extractAnnotations(
@@ -167,33 +216,79 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
     protected void addPropertyAccessAnnotations(Class entity, String property,
                                                 PropertyInformation propertyInformation)
     {
-        property = property.substring(0, 1).toUpperCase() + property.substring(1);
+        Method method = tryToGetReadMethod(entity, property);
 
-        Method method;
+        if (method == null)
+        {
+            method = tryToGetReadMethodManually(entity, property);
+        }
+
+        if (method != null)
+        {
+            tryToCachedMethod(entity, property, method);
+            addAnnotationToAnnotationEntries(Arrays.asList(method.getAnnotations()), propertyInformation);
+        }
+    }
+
+    private Method tryToGetReadMethod(Class entity, String property)
+    {
+        if (isCachedMethod(entity, property))
+        {
+            return getCachedMethod(entity, property);
+        }
+
+        if (useBeanInfo())
+        {
+            try
+            {
+                BeanInfo beanInfo = Introspector.getBeanInfo(entity);
+                for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors())
+                {
+                    if (property.equals(propertyDescriptor.getName()) && propertyDescriptor.getReadMethod() != null)
+                    {
+                        return propertyDescriptor.getReadMethod();
+                    }
+                }
+            }
+            catch (IntrospectionException e)
+            {
+                //do nothing
+            }
+        }
+        return null;
+    }
+
+    private boolean useBeanInfo()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty(BeanInfo.class.getName()));
+    }
+
+    private Method tryToGetReadMethodManually(Class entity, String property)
+    {
+        property = property.substring(0, 1).toUpperCase() + property.substring(1);
 
         try
         {
-            method = entity.getDeclaredMethod("get" + property);
+            //changed to official bean spec. due to caching there is no performance issue any more
+            return entity.getDeclaredMethod("is" + property);
         }
         catch (NoSuchMethodException e)
         {
             try
             {
-                method = entity.getDeclaredMethod("is" + property);
+                return entity.getDeclaredMethod("get" + property);
             }
             catch (NoSuchMethodException e1)
             {
-                if(logger.isTraceEnabled())
+                if (logger.isTraceEnabled())
                 {
                     logger.trace("method not found - class: " + entity.getName()
-                        + " - methods: " + "get" + property + " " + "is" + property);
+                            + " - methods: " + "get" + property + " " + "is" + property);
                 }
 
-                return;
+                return null;
             }
         }
-
-        addAnnotationToAnnotationEntries(Arrays.asList(method.getAnnotations()), propertyInformation);
     }
 
     protected void addFieldAccessAnnotations(Class entity, String property,
@@ -203,7 +298,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         try
         {
-            field = entity.getDeclaredField(property);
+            field = getDeclaredField(entity, property);
         }
         catch (Exception e)
         {
@@ -211,24 +306,26 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             {
                 try
                 {
-                    if(property.length() > 1 &&
-                            Character.isUpperCase(property.charAt(0)) && Character.isUpperCase(property.charAt(1)))
+                    field = entity.getDeclaredField("_" + property);
+                }
+                catch (Exception e1)
+                {
+                    if (property.length() > 1 &&
+                            Character.isUpperCase(property.charAt(0)) &&
+                            Character.isUpperCase(property.charAt(1)))
                     {
+                        //don't use Introspector#decapitalize here
                         field = entity.getDeclaredField(property.substring(0, 1).toLowerCase() + property.substring(1));
                     }
                     else
                     {
-                        field = entity.getDeclaredField("_" + property);
+                        field = entity.getDeclaredField(Introspector.decapitalize(property));
                     }
-                }
-                catch (Exception e1)
-                {
-                    field = entity.getDeclaredField("_" + property);
                 }
             }
             catch (NoSuchFieldException e1)
             {
-                if(logger.isTraceEnabled())
+                if (logger.isTraceEnabled())
                 {
                     logger.trace("field " + property + " or _" + property + " not found", e1);
                 }
@@ -237,17 +334,31 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             }
         }
 
-        addAnnotationToAnnotationEntries(Arrays.asList(field.getAnnotations()), propertyInformation);
+        if (field != null)
+        {
+            tryToCachedField(entity, property, field);
+            addAnnotationToAnnotationEntries(Arrays.asList(field.getAnnotations()), propertyInformation);
+        }
+    }
+
+    private Field getDeclaredField(Class entity, String property) throws NoSuchFieldException
+    {
+        if (isCachedField(entity, property))
+        {
+            return getCachedField(entity, property);
+        }
+
+        return entity.getDeclaredField(property);
     }
 
     protected void addAnnotationToAnnotationEntries(
-        List<Annotation> annotations, PropertyInformation propertyInformation)
+            List<Annotation> annotations, PropertyInformation propertyInformation)
     {
         for (Annotation annotation : annotations)
         {
             propertyInformation.addMetaDataEntry(createMetaDataEntryForAnnotation(annotation));
 
-            if(logger.isTraceEnabled())
+            if (logger.isTraceEnabled())
             {
                 logger.trace(annotation.getClass().getName() + " found");
             }
