@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
+import java.beans.Introspector;
+
 /**
  * Name Mapper which delegates the name mapping, extract the name and convert it to a bean name + prefix
  * target: configure a validation strategy via a managed bean facility -> allows to inject other beans
@@ -58,6 +60,6 @@ public class AnnotationToValidationStrategyBeanNameMapper extends AbstractMetaDa
         }
 
         name = name.substring(name.lastIndexOf(".") + 1);
-        return PREFIX_FOR_BEAN_MAPPING + name.substring(0, 1).toLowerCase() + name.substring(1);
+        return PREFIX_FOR_BEAN_MAPPING + Introspector.decapitalize(name);
     }
 }
