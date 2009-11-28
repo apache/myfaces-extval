@@ -24,8 +24,6 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -42,7 +40,6 @@ import java.util.Set;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@ToDo(value = Priority.HIGH, description = "sync jsf 2.0 specific changes with bv-branch")
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationInterceptor extends AbstractValidationInterceptor
 {
