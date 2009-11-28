@@ -23,7 +23,7 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultPropertyStorageNameMapper;
 
 /**
- * default storage-manager for groups
+ * default storage-manager for property information
  *
  * @author Gerhard Petracek
  * @since x.x.3
