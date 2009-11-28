@@ -37,6 +37,7 @@ import javax.faces.context.FacesContext;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@Deprecated
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMetaDataExtractor
 {
