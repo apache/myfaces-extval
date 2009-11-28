@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.validation.ConstraintValidatorFactory;
 import javax.validation.ConstraintValidator;
+import java.beans.Introspector;
 
 /**
  * @author Gerhard Petracek
@@ -66,6 +67,6 @@ class BeanAwareConstraintValidatorFactory implements ConstraintValidatorFactory
 
     private String createBeanName(String validatorClassName)
     {
-        return validatorClassName.substring(0, 1).toLowerCase() + validatorClassName.substring(1);
+        return Introspector.decapitalize(validatorClassName);
     }
 }

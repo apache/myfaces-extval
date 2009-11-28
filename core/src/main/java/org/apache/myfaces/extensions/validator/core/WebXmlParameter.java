@@ -122,7 +122,10 @@ public interface WebXmlParameter
 
     static final String DEACTIVATE_COMPONENT_INITIALIZATION = WebXmlUtils
         .getInitParameter("DEACTIVATE_COMPONENT_INITIALIZATION");
-    
+
+    static final String DEACTIVATE_VALIDATION_PARAMETERS = WebXmlUtils
+        .getInitParameter("DEACTIVATE_VALIDATION_PARAMETERS");
+
     //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
     //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
 

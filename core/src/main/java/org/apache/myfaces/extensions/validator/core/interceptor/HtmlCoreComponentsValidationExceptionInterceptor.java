@@ -55,7 +55,6 @@ import java.lang.annotation.Annotation;
  */
 @InvocationOrder(100)
 @UsageInformation(UsageCategory.INTERNAL)
-@ToDo(value = Priority.HIGH, description = "check compatibility with bv-integration")
 public class HtmlCoreComponentsValidationExceptionInterceptor implements ValidationExceptionInterceptor
 {
     protected final Log logger = LogFactory.getLog(getClass());
