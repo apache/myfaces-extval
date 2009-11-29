@@ -23,7 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
-import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -53,8 +52,6 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -538,6 +535,14 @@ public class ExtValUtils
                 .create();
     }
 
+    public static Class getValidationParameterClassFor(Class source)
+    {
+         ClassMappingFactory<Class, Class> validationParameterFactory = ExtValContext.getContext().getFactoryFinder()
+                 .getFactory(FactoryNames.VALIDATION_PARAMETER_FACTORY, ClassMappingFactory.class);
+
+        return validationParameterFactory.create(source);
+    }
+
     private static boolean isValidationParameterExtractionDeactivated()
     {
         return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_VALIDATION_PARAMETERS);
@@ -926,51 +931,5 @@ public class ExtValUtils
             targetComponent = FacesContext.getCurrentInstance().getViewRoot().findComponent(clientId);
         }
         return targetComponent;
-    }
-
-
-    public static Class getViolationSeverityKey()
-    {
-        Object globalProperty = ExtValContext.getContext().getGlobalProperty(ViolationSeverity.class.getName());
-
-        if(globalProperty instanceof Class)
-        {
-            return (Class)globalProperty;
-        }
-
-        tryToCreateMessageInDevMode(ViolationSeverity.class);
-
-        return ViolationSeverity.class;
-    }
-
-    public static Class getDisableClientSideValidationKey()
-    {
-        Object globalProperty = ExtValContext.getContext()
-                .getGlobalProperty(DisableClientSideValidation.class.getName());
-
-        if(globalProperty instanceof Class)
-        {
-            return (Class)globalProperty;
-        }
-
-        tryToCreateMessageInDevMode(DisableClientSideValidation.class);
-
-        return DisableClientSideValidation.class;
-    }
-
-    private static void tryToCreateMessageInDevMode(Class fallbackClass)
-    {
-        String message = "[dev-mode warning] fallback to " + fallbackClass.getName();
-
-        if(ProjectStage.is(ProjectStage.Development))
-        {
-            FacesContext.getCurrentInstance()
-                    .addMessage(null, createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
-        }
-
-        if(LOGGER.isWarnEnabled())
-        {
-            LOGGER.warn(message);
-        }
     }
 }
