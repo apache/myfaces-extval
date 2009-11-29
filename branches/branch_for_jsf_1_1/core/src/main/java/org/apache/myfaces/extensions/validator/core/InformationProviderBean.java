@@ -115,6 +115,8 @@ public class InformationProviderBean
                 "ComponentMetaDataExtractorFactory");
         customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR_FACTORY,
                 "ValidationParameterExtractorFactory");
+        customizableInfos.put(CustomInformation.VALIDATION_PARAMETER_FACTORY,
+                "ValidationParameterFactory");
         customizableInfos.put(CustomInformation.META_DATA_TRANSFORMER_FACTORY,
                 "MetaDataTransformerFactory");
         customizableInfos.put(CustomInformation.FACES_MESSAGE_FACTORY,
