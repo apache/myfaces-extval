@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyVali
 import org.apache.myfaces.extensions.validator.test.propval.CustomSeverityTestBean;
 import org.apache.myfaces.extensions.validator.test.propval.custom.CustomViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticInMemoryConfiguration;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 
 public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
@@ -81,10 +83,32 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
         bean = null;
     }
 
-    public void testCustomValidationParameter() throws Exception
+    public void testCustomValidationParameterViaGlobalProperty() throws Exception
     {
         ExtValContext.getContext()
                 .addGlobalProperty(ViolationSeverity.class.getName(), CustomViolationSeverity.class);
+
+        createValueBinding(inputComponent, "value", "#{testBean.name}");
+
+        inputComponent.setSubmittedValue("");
+
+        inputComponent.validate(facesContext);
+
+        assertTrue(inputComponent.isValid());
+
+        assertNavigationBlocked(false);
+
+        checkMessageCount(1);
+        checkMessageSeverities(FacesMessage.SEVERITY_WARN);
+    }
+
+    public void testCustomValidationParameterViaStaticConfig() throws Exception
+    {
+        StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
+        config.addMapping(ViolationSeverity.class.getName(), CustomViolationSeverity.class.getName());
+
+        ExtValContext.getContext()
+                .addStaticConfiguration(StaticConfigurationNames.VALIDATION_PARAMETER_CONFIG, config);
 
         createValueBinding(inputComponent, "value", "#{testBean.name}");
 

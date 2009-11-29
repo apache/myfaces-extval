@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.test.beanval.view.CustomSeverityT
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
+import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticInMemoryConfiguration;
 
 import javax.faces.application.FacesMessage;
 
@@ -44,10 +46,30 @@ public class CustomSeverity1TestCase extends BaseBeanValPropertyValidationTestCa
         return new CustomSeverityTestCase1PageBean();
     }
 
-    public void testCustomPayload()
+    public void testCustomPayloadViaGlobalProperty()
     {
         ExtValContext.getContext()
                 .addGlobalProperty(ViolationSeverity.Warn.class.getName(), CustomViolationSeverity.Warning.class);
+
+        createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
+        setValueToValidate(this.inputComponent1, "");
+
+        validateComponents();
+
+        assertComponentValid(this.inputComponent1);
+        assertNavigationBlocked(false);
+
+        checkMessageCount(1);
+        checkMessageSeverities(FacesMessage.SEVERITY_WARN);
+    }
+
+    public void testCustomPayloadViaStaticConfig()
+    {
+        StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
+        config.addMapping(ViolationSeverity.Warn.class.getName(), CustomViolationSeverity.Warning.class.getName());
+
+        ExtValContext.getContext()
+                .addStaticConfiguration(StaticConfigurationNames.VALIDATION_PARAMETER_CONFIG, config);
 
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
         setValueToValidate(this.inputComponent1, "");

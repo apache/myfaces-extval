@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -63,7 +64,9 @@ public class ViolationSeverityValidationExceptionInterceptor implements Validati
     private void tryToPlaceSeverity(ValidatorException validatorException, Annotation annotation)
     {
         for(FacesMessage.Severity severity : ExtValUtils.getValidationParameterExtractor()
-                .extract(annotation, ExtValUtils.getViolationSeverityKey(), FacesMessage.Severity.class))
+                .extract(annotation,
+                        ExtValUtils.getValidationParameterClassFor(ViolationSeverity.class),
+                        FacesMessage.Severity.class))
         {
             validatorException.getFacesMessage().setSeverity(severity);
         }
