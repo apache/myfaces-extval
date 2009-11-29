@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.core.interceptor
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.lang.annotation.Annotation;
@@ -63,7 +62,7 @@ public class TrinidadMetaDataExtractionInterceptor extends ComponentInitializati
     private boolean isClientValidationDisabled(MetaDataEntry entry)
     {
         return ExtValUtils.getValidationParameterExtractor()
-                .extract(entry.getValue(Annotation.class), DisableClientSideValidation.class)
+                .extract(entry.getValue(Annotation.class), ExtValUtils.getDisableClientSideValidationKey())
                 .iterator().hasNext();
     }
 
