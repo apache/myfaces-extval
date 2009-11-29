@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
-import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
+import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.validation.metadata.ConstraintDescriptor;
@@ -56,7 +56,7 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
     {
         for(Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
-            if(BeanValidationUtils.getDisableClientSideValidationKey().isAssignableFrom(payload))
+            if(ExtValUtils.getValidationParameterClassFor(DisableClientSideValidation.class).isAssignableFrom(payload))
             {
                 return false;
             }
@@ -71,15 +71,15 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
 
         for (Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
-            if (BeanValidationUtils.getWarnClass().isAssignableFrom(payload))
+            if (ExtValUtils.getValidationParameterClassFor(ViolationSeverity.Warn.class).isAssignableFrom(payload))
             {
                 testMessage.setSeverity(ViolationSeverity.Warn.VALUE);
             }
-            else if(BeanValidationUtils.getInfoClass().isAssignableFrom(payload))
+            else if(ExtValUtils.getValidationParameterClassFor(ViolationSeverity.Info.class).isAssignableFrom(payload))
             {
                 testMessage.setSeverity(ViolationSeverity.Info.VALUE);
             }
-            else if(BeanValidationUtils.getFatalClass().isAssignableFrom(payload))
+            else if(ExtValUtils.getValidationParameterClassFor(ViolationSeverity.Fatal.class).isAssignableFrom(payload))
             {
                 testMessage.setSeverity(ViolationSeverity.Fatal.VALUE);
             }
