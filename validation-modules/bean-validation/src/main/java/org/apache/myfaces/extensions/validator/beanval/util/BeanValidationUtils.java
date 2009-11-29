@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 import org.apache.myfaces.extensions.validator.core.ProjectStage;
@@ -213,6 +214,21 @@ public class BeanValidationUtils
         tryToCreateMessageInDevMode(ViolationSeverity.Fatal.class);
 
         return ViolationSeverity.Fatal.class;
+    }
+
+    public static Class getDisableClientSideValidationKey()
+    {
+        Object globalProperty = ExtValContext.getContext()
+                .getGlobalProperty(DisableClientSideValidation.class.getName());
+
+        if(globalProperty instanceof Class)
+        {
+            return (Class)globalProperty;
+        }
+
+        tryToCreateMessageInDevMode(DisableClientSideValidation.class);
+
+        return DisableClientSideValidation.class;
     }
 
     private static void tryToCreateMessageInDevMode(Class usedFallback)

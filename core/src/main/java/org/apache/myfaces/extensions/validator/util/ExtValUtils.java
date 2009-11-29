@@ -54,6 +54,7 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Validat
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -937,14 +938,29 @@ public class ExtValUtils
             return (Class)globalProperty;
         }
 
-        tryToCreateMessageInDevMode();
+        tryToCreateMessageInDevMode(ViolationSeverity.class);
 
         return ViolationSeverity.class;
     }
 
-    private static void tryToCreateMessageInDevMode()
+    public static Class getDisableClientSideValidationKey()
     {
-        String message = "[dev-mode warning] fallback to " + ViolationSeverity.class.getName();
+        Object globalProperty = ExtValContext.getContext()
+                .getGlobalProperty(DisableClientSideValidation.class.getName());
+
+        if(globalProperty instanceof Class)
+        {
+            return (Class)globalProperty;
+        }
+
+        tryToCreateMessageInDevMode(DisableClientSideValidation.class);
+
+        return DisableClientSideValidation.class;
+    }
+
+    private static void tryToCreateMessageInDevMode(Class fallbackClass)
+    {
+        String message = "[dev-mode warning] fallback to " + fallbackClass.getName();
 
         if(ProjectStage.is(ProjectStage.Development))
         {
