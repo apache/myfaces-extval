@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -57,7 +56,7 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
     {
         for(Class<? extends Payload> payload : constraintDescriptor.getPayload())
         {
-            if(DisableClientSideValidation.class.isAssignableFrom(payload))
+            if(BeanValidationUtils.getDisableClientSideValidationKey().isAssignableFrom(payload))
             {
                 return false;
             }
