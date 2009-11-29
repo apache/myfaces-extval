@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.beanval.BeanValidationInterceptor
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
 import org.apache.myfaces.extensions.validator.beanval.BeanAwareValidatorFactory;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
+import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationExceptionInterceptor;
@@ -67,6 +68,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         registerPhaseListeners();
         registerExceptionInterceptor();
         registerViolationSeverityPayload();
+        registerDisableClientSideValidationPayload();
     }
 
     protected void registerValidatorFactory()
@@ -151,5 +153,11 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         extValContext.addGlobalProperty(ViolationSeverity.Fatal.class.getName(), ViolationSeverity.Fatal.class, false);
 
         //no need to register "error" it's the default
+    }
+
+    private void registerDisableClientSideValidationPayload()
+    {
+        ExtValContext.getContext().addGlobalProperty(
+                DisableClientSideValidation.class.getName(), DisableClientSideValidation.class, false);
     }
 }
