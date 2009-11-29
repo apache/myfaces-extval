@@ -49,6 +49,9 @@ public interface WebXmlParameter
     static final String CUSTOM_VALIDATION_PARAMETER_EXTRACTOR = WebXmlUtils
         .getInitParameter("CUSTOM_VALIDATION_PARAMETER_EXTRACTOR");
 
+    static final String CUSTOM_VALIDATION_PARAMETER_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_VALIDATION_PARAMETER_FACTORY");
+
     static final String CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING = WebXmlUtils
         .getInitParameter("CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING");
 
