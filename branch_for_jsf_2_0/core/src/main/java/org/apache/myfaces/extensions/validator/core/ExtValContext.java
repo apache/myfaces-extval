@@ -384,8 +384,13 @@ public class ExtValContext
 
             if (this.logger.isInfoEnabled())
             {
-                logger.info("override global property '" + name + "'");
+                this.logger.info("override global property '" + name + "'");
             }
+        }
+
+        if(ProjectStage.is(ProjectStage.Development) && this.logger.isInfoEnabled())
+        {
+            this.logger.info("global property [" + name + "] added");
         }
 
         this.globalProperties.put(name, value);
