@@ -97,6 +97,9 @@ public interface WebXmlParameter
     static final String CUSTOM_VALIDATION_PARAMETER_EXTRACTOR_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_VALIDATION_PARAMETER_EXTRACTOR_FACTORY");
 
+    static final String CUSTOM_VALIDATION_PARAMETER_FACTORY = WebXmlUtils
+        .getInitParameter("CUSTOM_VALIDATION_PARAMETER_FACTORY");
+
     static final String CUSTOM_META_DATA_TRANSFORMER_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_META_DATA_TRANSFORMER_FACTORY");
 

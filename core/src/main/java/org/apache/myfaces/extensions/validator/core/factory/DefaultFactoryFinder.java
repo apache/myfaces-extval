@@ -34,6 +34,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultV
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultMessageResolverFactory;
 import org.apache.myfaces.extensions.validator.core.validation.message.DefaultFacesMessageFactory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterExtractorFactory;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterFactory;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -119,6 +120,10 @@ public class DefaultFactoryFinder implements FactoryFinder
 
             case STORAGE_MANAGER_FACTORY:
                 factory = createStorageManagerFactory();
+                break;
+
+            case VALIDATION_PARAMETER_FACTORY:
+                factory = createValidationParameterFactory();
                 break;
              
             default: //required by checkstyle
@@ -326,4 +331,30 @@ public class DefaultFactoryFinder implements FactoryFinder
         }
         return factory;
     }
+
+    private Object createValidationParameterFactory()
+    {
+        Object factory = null;
+
+        List<String> validationParameterFactoryClassNames = new ArrayList<String>();
+
+        validationParameterFactoryClassNames
+                .add(WebXmlParameter.CUSTOM_VALIDATION_PARAMETER_FACTORY);
+        validationParameterFactoryClassNames
+            .add(ExtValContext.getContext().getInformationProviderBean()
+                .get(CustomInformation.VALIDATION_PARAMETER_FACTORY));
+        validationParameterFactoryClassNames.add(DefaultValidationParameterFactory.class.getName());
+
+        for (String className : validationParameterFactoryClassNames)
+        {
+            factory = ClassUtils.tryToInstantiateClassForName(className);
+
+            if (factory != null)
+            {
+                break;
+            }
+        }
+        return factory;
+    }
+
 }
