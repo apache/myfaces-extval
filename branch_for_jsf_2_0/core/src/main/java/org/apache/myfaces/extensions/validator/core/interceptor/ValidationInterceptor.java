@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
+import org.apache.myfaces.extensions.validator.core.validation.NullAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
@@ -125,7 +127,8 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
         {
             validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
-            if (validationStrategy != null)
+            if (validationStrategy != null &&
+                    isValidationStrategyCompatibleWithValue(validationStrategy,  convertedObject))
             {
                 if(skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
                 {
@@ -172,14 +175,22 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
                     }
                 }
             }
-            else
+            else if(validationStrategy == null && logger.isTraceEnabled())
             {
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace("no validation strategy found for " + entry.getValue());
-                }
+                logger.trace("no validation strategy found for " + entry.getValue());
             }
         }
+    }
+
+    protected boolean isValidationStrategyCompatibleWithValue(ValidationStrategy validationStrategy, Object value)
+    {
+        if(value == null)
+        {
+            return validationStrategy.getClass().isAnnotationPresent(NullAwareValidationStrategy.class);
+        }
+
+        return !"".equals(value) || validationStrategy.getClass()
+                .isAnnotationPresent(EmptyValueAwareValidationStrategy.class);
     }
 
     @Override
