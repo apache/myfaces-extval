@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
+import org.apache.myfaces.extensions.validator.core.validation.NullAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -44,6 +46,8 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@NullAwareValidationStrategy
+@EmptyValueAwareValidationStrategy
 @UsageInformation(UsageCategory.INTERNAL)
 public class JpaValidationStrategy extends AbstractAnnotationValidationStrategy
 {

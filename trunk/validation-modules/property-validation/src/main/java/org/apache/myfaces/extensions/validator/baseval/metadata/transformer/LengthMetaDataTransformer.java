@@ -44,7 +44,6 @@ public class LengthMetaDataTransformer  extends AbstractValidationParameterAware
         if(minimum != 0)
         {
             results.put(CommonMetaDataKeys.MIN_LENGTH, minimum);
-            results.put(CommonMetaDataKeys.WEAK_REQUIRED, true);
         }
         else
         {
