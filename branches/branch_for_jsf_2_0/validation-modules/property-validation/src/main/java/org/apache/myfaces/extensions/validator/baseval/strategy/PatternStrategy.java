@@ -46,9 +46,7 @@ public class PatternStrategy extends AbstractAnnotationValidationStrategy<Patter
 
         for (String expression : annotation.value())
         {
-            if (convertedObject == null
-                    || !java.util.regex.Pattern.compile(expression).matcher(
-                            convertedObject.toString()).matches())
+            if (!java.util.regex.Pattern.compile(expression).matcher(convertedObject.toString()).matches())
             {
                 throw new ValidatorException(new FacesMessage(
                         FacesMessage.SEVERITY_ERROR,
