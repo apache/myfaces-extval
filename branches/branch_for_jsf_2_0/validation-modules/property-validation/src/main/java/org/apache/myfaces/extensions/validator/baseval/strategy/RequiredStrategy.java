@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractAnnotationValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.exception.RequiredValidatorException;
+import org.apache.myfaces.extensions.validator.core.validation.NullAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -39,6 +41,8 @@ import java.util.Collection;
  * @since 1.x.1
  */
 @SkipValidationSupport
+@NullAwareValidationStrategy
+@EmptyValueAwareValidationStrategy
 @UsageInformation(UsageCategory.INTERNAL)
 public class RequiredStrategy extends AbstractAnnotationValidationStrategy<Required>
 {
