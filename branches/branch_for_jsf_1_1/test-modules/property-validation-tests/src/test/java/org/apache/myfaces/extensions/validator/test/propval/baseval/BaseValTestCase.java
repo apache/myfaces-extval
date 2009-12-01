@@ -134,6 +134,20 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         checkMessageCount(1);
     }
 
+    public void testName1NoLenght() throws Exception
+    {
+        createValueBinding(inputComponent, "value", "#{testBean.name1}");
+
+        //decode
+        inputComponent.setSubmittedValue("");
+
+        //validate
+        inputComponent.validate(facesContext);
+
+        assertTrue(inputComponent.isValid());
+        checkMessageCount(0);
+    }
+
     public void testPatternNameFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.patternName}");
@@ -146,6 +160,20 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
 
         assertFalse(inputComponent.isValid());
         checkMessageCount(1);
+    }
+
+    public void testPatternNoName() throws Exception
+    {
+        createValueBinding(inputComponent, "value", "#{testBean.patternName}");
+
+        //decode
+        inputComponent.setSubmittedValue("");
+
+        //validate
+        inputComponent.validate(facesContext);
+
+        assertTrue(inputComponent.isValid());
+        checkMessageCount(0);
     }
 
     public void testPatternNameCorrect() throws Exception
@@ -192,5 +220,19 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
 
         inputComponent.updateModel(facesContext);
         assertEquals(200d, bean.getDoubleValue1());
+    }
+
+    public void testDoubleNoValue() throws Exception
+    {
+        createValueBinding(inputComponent, "value", "#{testBean.doubleValue1}");
+
+        //decode
+        inputComponent.setSubmittedValue("");
+
+        //validate
+        inputComponent.validate(facesContext);
+
+        assertTrue(inputComponent.isValid());
+        checkMessageCount(0);
     }
 }
