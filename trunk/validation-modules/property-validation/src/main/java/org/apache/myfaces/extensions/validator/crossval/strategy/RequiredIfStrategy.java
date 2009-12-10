@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
-import org.apache.myfaces.extensions.validator.core.validation.NullAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.NullValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -36,7 +36,7 @@ import javax.faces.validator.ValidatorException;
  * @since 1.x.1
  */
 @SkipValidationSupport
-@NullAwareValidationStrategy
+@NullValueAwareValidationStrategy
 @EmptyValueAwareValidationStrategy
 @UsageInformation(UsageCategory.INTERNAL)
 public class RequiredIfStrategy extends AbstractCompareStrategy<RequiredIf>
