@@ -510,7 +510,7 @@ class ExtValBeanValidationMetaDataInternals
         Object validationTarget;
         for (String validationTargetExpression : beanValidation.modelValidation().validationTargets())
         {
-            if (ModelValidation.DEFAULT_TARGET.equals(validationTargetExpression))
+            if (ModelValidation.DEFAULT.equals(validationTargetExpression))
             {
                 continue;
             }
