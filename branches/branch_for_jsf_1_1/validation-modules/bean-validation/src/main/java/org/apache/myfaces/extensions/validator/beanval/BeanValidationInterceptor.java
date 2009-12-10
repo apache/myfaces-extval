@@ -22,19 +22,15 @@ import org.apache.myfaces.extensions.validator.core.interceptor.AbstractValidati
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
-import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.render.Renderer;
 import javax.validation.ConstraintViolation;
-import java.io.IOException;
 import java.util.Set;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -45,16 +41,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 {
     private BeanValidationInterceptorInternals bviUtils = new BeanValidationInterceptorInternals(this.logger);
 
-    @Override
-    public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
-            throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
-    {
-        if (processComponent(uiComponent))
-        {
-            initComponent(facesContext, uiComponent);
-        }
-    }
-
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
         if (logger.isTraceEnabled())
@@ -62,7 +48,8 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
             logger.trace("start to init component " + uiComponent.getClass().getName());
         }
 
-        PropertyDetails propertyDetails = bviUtils.extractPropertyDetails(facesContext, uiComponent);
+        PropertyDetails propertyDetails = bviUtils.extractPropertyDetails(
+                facesContext, uiComponent, getPropertiesForComponentMetaDataExtractor(uiComponent));
 
         if (propertyDetails != null)
         {
@@ -89,12 +76,6 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                     logger.trace("jsr303 start validation");
                 }
 
-                if (!executeGlobalBeforeValidationInterceptors(
-                        facesContext, uiComponent, convertedObject, propertyInformation))
-                {
-                    return;
-                }
-
                 processFieldValidation(facesContext, uiComponent, convertedObject, propertyInformation);
             }
         }
@@ -106,18 +87,13 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
                 {
                     logger.trace("jsr303 validation finished");
                 }
-
-                executeGlobalAfterValidationInterceptors(
-                        facesContext, uiComponent, convertedObject, propertyInformation);
             }
         }
     }
 
-    protected PropertyInformation getPropertyInformation(FacesContext facesContext, UIComponent uiComponent)
+    protected MetaDataExtractor getComponentMetaDataExtractor(Map<String, Object> properties)
     {
-        MetaDataExtractor metaDataExtractor = bviUtils.getComponentMetaDataExtractor(uiComponent);
-
-        return metaDataExtractor.extract(facesContext, uiComponent);
+        return bviUtils.getComponentMetaDataExtractor(properties);
     }
 
     protected boolean hasBeanValidationConstraints(PropertyInformation propertyInformation)
@@ -140,24 +116,9 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
         }
     }
 
-    /*
-     * e.g. extract groups for validation
-     */
-    private boolean executeGlobalBeforeValidationInterceptors(FacesContext facesContext,
-                                                              UIComponent uiComponent,
-                                                              Object convertedObject,
-                                                              PropertyInformation propertyInformation)
+    @Override
+    protected Class getModuleKey()
     {
-        return ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, convertedObject,
-                PropertyInformation.class.getName(), propertyInformation, BeanValidationModuleKey.class);
-    }
-
-    private void executeGlobalAfterValidationInterceptors(FacesContext facesContext,
-                                                          UIComponent uiComponent,
-                                                          Object convertedObject,
-                                                          PropertyInformation propertyInformation)
-    {
-        ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, convertedObject,
-                PropertyInformation.class.getName(), propertyInformation, BeanValidationModuleKey.class);
+        return BeanValidationModuleKey.class;
     }
 }

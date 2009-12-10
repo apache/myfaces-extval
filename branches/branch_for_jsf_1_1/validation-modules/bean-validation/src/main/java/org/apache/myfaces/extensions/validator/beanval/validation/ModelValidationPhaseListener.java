@@ -385,7 +385,7 @@ public class ModelValidationPhaseListener implements PhaseListener
 
     private boolean isDefaultMessage(ModelValidationEntry modelValidationEntry)
     {
-        return ModelValidation.DEFAULT_MESSAGE.equals(modelValidationEntry.getCustomMessage());
+        return ModelValidation.DEFAULT.equals(modelValidationEntry.getCustomMessage());
     }
 
     private String interpolateValidationErrorMessage(String extValInlineMessage,
