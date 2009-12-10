@@ -22,6 +22,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
+import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.core.storage.RendererInterceptorPropertyStorage;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
@@ -35,6 +39,8 @@ import javax.faces.render.Renderer;
 import javax.faces.validator.ValidatorException;
 import javax.el.PropertyNotFoundException;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -76,6 +82,8 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
             throw r;
         }
 
+        setRendererInterceptorProperties(uiComponent);
+        
         if(recordProcessedInformation())
         {
             //recorde user input e.g. for cross-component validation
@@ -96,7 +104,8 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
             {
                 convertedObject = transformValueForValidation(convertedObject);
 
-                if(validateValue(convertedObject))
+                if(validateValue(convertedObject) &&
+                        processBeforeValidation(facesContext, uiComponent, convertedObject))
                 {
                     processValidation(facesContext, uiComponent, convertedObject);
                 }
@@ -114,7 +123,47 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
                 throw new ConverterException(e.getFacesMessage(), e);
             }
         }
+        finally
+        {
+            processAfterValidation(facesContext, uiComponent, convertedObject);
+            resetRendererInterceptorProperties(uiComponent);
+        }
     }
+
+    protected boolean processBeforeValidation(FacesContext facesContext, UIComponent uiComponent, Object value)
+    {
+        return ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, value,
+                PropertyInformation.class.getName(), getPropertyInformation(facesContext, uiComponent), getModuleKey());
+    }
+
+    protected void processAfterValidation(FacesContext facesContext, UIComponent uiComponent, Object value)
+    {
+        ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, value,
+                PropertyInformation.class.getName(), getPropertyInformation(facesContext, uiComponent), getModuleKey());
+    }
+
+    protected PropertyInformation getPropertyInformation(FacesContext facesContext, UIComponent uiComponent)
+    {
+        Map<String, Object> properties = getPropertiesForComponentMetaDataExtractor(uiComponent);
+
+        MetaDataExtractor metaDataExtractor = getComponentMetaDataExtractor(properties);
+
+        return metaDataExtractor.extract(facesContext, uiComponent);
+    }
+
+    protected Map<String, Object> getPropertiesForComponentMetaDataExtractor(UIComponent uiComponent)
+    {
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        if(getModuleKey() != null)
+        {
+            properties.put(ValidationModuleKey.class.getName(), getModuleKey());
+        }
+        properties.put(UIComponent.class.getName(), uiComponent);
+        return properties;
+    }
+
+    protected abstract MetaDataExtractor getComponentMetaDataExtractor(Map<String, Object> properties);
 
     protected Object transformValueForValidation(Object convertedObject)
     {
@@ -186,5 +235,51 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     {
         //override if needed
         return false;
+    }
+
+    protected Class getModuleKey()
+    {
+        //override if needed
+        return null;
+    }
+
+    protected Map<String, Object> getInterceptorProperties(UIComponent uiComponent)
+    {
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        if(getModuleKey() != null)
+        {
+            result.put(ValidationModuleKey.class.getName(), getModuleKey());
+        }
+        result.put(UIComponent.class.getName(), uiComponent);
+
+        return result;
+    }
+
+    private void setRendererInterceptorProperties(UIComponent uiComponent)
+    {
+        RendererInterceptorPropertyStorage interceptorPropertyStorage = getRendererInterceptorPropertyStorage();
+
+        Map<String, Object> properties = getInterceptorProperties(uiComponent);
+        for(String key : properties.keySet())
+        {
+            interceptorPropertyStorage.setProperty(key, properties.get(key));
+        }
+    }
+
+    private void resetRendererInterceptorProperties(UIComponent uiComponent)
+    {
+        RendererInterceptorPropertyStorage interceptorPropertyStorage = getRendererInterceptorPropertyStorage();
+
+        for(String key : getInterceptorProperties(uiComponent).keySet())
+        {
+            interceptorPropertyStorage.removeProperty(key);
+        }
+    }
+
+    private RendererInterceptorPropertyStorage getRendererInterceptorPropertyStorage()
+    {
+        return ExtValUtils.getStorage(RendererInterceptorPropertyStorage.class,
+                RendererInterceptorPropertyStorage.class.getName());
     }
 }
