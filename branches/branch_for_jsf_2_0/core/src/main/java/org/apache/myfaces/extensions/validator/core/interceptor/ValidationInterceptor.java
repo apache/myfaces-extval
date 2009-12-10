@@ -85,15 +85,10 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
     {
-        MetaDataExtractor metaDataExtractor = ExtValUtils.getComponentMetaDataExtractorFor(getModuleKey());
+        MetaDataExtractor metaDataExtractor = ExtValUtils
+                .getComponentMetaDataExtractorWith(getPropertiesForComponentMetaDataExtractor(uiComponent));
 
         PropertyInformation propertyInformation = metaDataExtractor.extract(facesContext, uiComponent);
-
-        if(!ExtValUtils.executeGlobalBeforeValidationInterceptors(facesContext, uiComponent, convertedObject,
-                PropertyInformation.class.getName() ,propertyInformation, getModuleKey()))
-        {
-            return;
-        }
 
         try
         {
@@ -110,10 +105,12 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
             {
                 logger.trace("validation finished");
             }
-
-            ExtValUtils.executeGlobalAfterValidationInterceptors(facesContext, uiComponent, convertedObject,
-                    PropertyInformation.class.getName(), propertyInformation, getModuleKey());
         }
+    }
+
+    protected MetaDataExtractor getComponentMetaDataExtractor(Map<String, Object> properties)
+    {
+        return ExtValUtils.getComponentMetaDataExtractorWith(properties);
     }
 
     protected void processFieldValidation(FacesContext facesContext,
@@ -206,11 +203,5 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
     protected boolean recordProcessedInformation()
     {
         return true;
-    }
-
-    protected Class getModuleKey()
-    {
-        //override if needed
-        return null;
     }
 }
