@@ -16,40 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.annotation;
+package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-
-import java.lang.annotation.Target;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.FIELD;
 
 /**
+ * a storage which isn't used internally. it's for add-ons to easily store properties of interceptors.
+ * without braking backward compatibility, it's possible to use these properties in custom artifacts.
+ * rendering interception is an internal concept. so properties,... of it won't get into the api.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
-
-@Target({METHOD, FIELD, TYPE})
-@Retention(RUNTIME)
 @UsageInformation(UsageCategory.API)
-@Documented
-public @interface ModelValidation
+public interface RendererInterceptorPropertyStorage
 {
-    public static final String DEFAULT = "";
+    void setProperty(String key, Object value);
 
-    boolean isActive() default false;
+    Object getProperty(String key);
 
-    boolean displayInline() default false;
+    <T> T getProperty(String key, Class<T> targetClass);
 
-    @ToDo(value = Priority.MEDIUM, description = "support property chain syntax")
-    String[] validationTargets() default DEFAULT;
-
-    String message() default DEFAULT;
+    void removeProperty(String key);
 }
