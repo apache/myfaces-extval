@@ -35,6 +35,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 @UsageInformation(UsageCategory.API)
-public @interface NullAwareValidationStrategy
+public @interface NullValueAwareValidationStrategy
 {
 }
