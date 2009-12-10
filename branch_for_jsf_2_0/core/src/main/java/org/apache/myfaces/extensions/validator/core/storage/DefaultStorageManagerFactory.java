@@ -59,11 +59,18 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
             logger.debug(getClass().getName() + " instantiated");
         }
 
-        setStorageManager(RendererProxyStorage.class, new DefaultRendererProxyStorageManager(), false);
-        setStorageManager(GroupStorage.class, new DefaultGroupStorageManager(), false);
-        setStorageManager(MetaDataStorage.class, new DefaultMetaDataStorageManager(), false);
-        setStorageManager(FacesMessageStorage.class, new DefaultFacesMessageStorageManager(), false);
-        setStorageManager(PropertyStorage.class, new DefaultPropertyStorageManager(), false);
+        setStorageManager(RendererProxyStorage.class,
+                new DefaultRendererProxyStorageManager(), false);
+        setStorageManager(GroupStorage.class,
+                new DefaultGroupStorageManager(), false);
+        setStorageManager(MetaDataStorage.class,
+                new DefaultMetaDataStorageManager(), false);
+        setStorageManager(FacesMessageStorage.class,
+                new DefaultFacesMessageStorageManager(), false);
+        setStorageManager(PropertyStorage.class,
+                new DefaultPropertyStorageManager(), false);
+        setStorageManager(RendererInterceptorPropertyStorage.class,
+                new DefaultRendererInterceptorPropertyStorageManager(), false);
 
         setStorageManager(
                 FacesInformationStorage.class, new DefaultFacesInformationStorageManager(), false);

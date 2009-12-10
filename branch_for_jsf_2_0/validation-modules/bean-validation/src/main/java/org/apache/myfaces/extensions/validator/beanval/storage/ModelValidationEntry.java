@@ -38,7 +38,7 @@ public class ModelValidationEntry
     private List<Class> groups = new ArrayList<Class>();
     private List<Object> validationTargets = new ArrayList<Object>();
     private boolean displayMessageInline = false;
-    private String customMessage = ModelValidation.DEFAULT_MESSAGE;
+    private String customMessage = ModelValidation.DEFAULT;
     
     //the original source where the extval-bv meta-data has been found
     private Object metaDataSourceObject;

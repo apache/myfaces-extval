@@ -162,17 +162,6 @@ public class ExtValUtils
                 .create();
     }
 
-    public static MetaDataExtractor getComponentMetaDataExtractorFor(Class moduleKey)
-    {
-        Map<String, Object> properties = new HashMap<String, Object>();
-
-        if(moduleKey != null)
-        {
-            properties.put(ValidationModuleKey.class.getName(), moduleKey);
-        }
-        return getComponentMetaDataExtractorWith(properties);
-    }
-
     public static MetaDataExtractor getComponentMetaDataExtractorWith(Map<String, Object> properties)
     {
         return ExtValContext.getContext().getFactoryFinder()
