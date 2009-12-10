@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
-import org.apache.myfaces.extensions.validator.core.validation.NullAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.NullValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
@@ -186,7 +186,7 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
     {
         if(value == null)
         {
-            return validationStrategy.getClass().isAnnotationPresent(NullAwareValidationStrategy.class);
+            return validationStrategy.getClass().isAnnotationPresent(NullValueAwareValidationStrategy.class);
         }
 
         return !"".equals(value) || validationStrategy.getClass()

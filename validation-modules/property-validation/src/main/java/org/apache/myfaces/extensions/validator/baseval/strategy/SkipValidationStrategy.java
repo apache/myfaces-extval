@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.validation.NullAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.NullValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -37,7 +37,7 @@ import javax.faces.validator.ValidatorException;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@NullAwareValidationStrategy
+@NullValueAwareValidationStrategy
 @EmptyValueAwareValidationStrategy
 @UsageInformation(UsageCategory.INTERNAL)
 public class SkipValidationStrategy implements ValidationStrategy
