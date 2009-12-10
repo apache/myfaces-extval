@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
-import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -59,9 +58,10 @@ class BeanValidationInterceptorInternals
         this.logger = logger;
     }
 
-    PropertyDetails extractPropertyDetails(FacesContext facesContext, UIComponent uiComponent)
+    PropertyDetails extractPropertyDetails(
+            FacesContext facesContext, UIComponent uiComponent, Map<String, Object> propertiesForExtraction)
     {
-        PropertyDetails result = getComponentMetaDataExtractor(uiComponent)
+        PropertyDetails result = getComponentMetaDataExtractor(propertiesForExtraction)
                 .extract(facesContext, uiComponent)
                 .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
@@ -78,12 +78,8 @@ class BeanValidationInterceptorInternals
      * also invokes meta-data extraction interceptors
      * (see e.g. ExtValBeanValidationMetaDataExtractionInterceptor)
      */
-    MetaDataExtractor getComponentMetaDataExtractor(UIComponent uiComponent)
+    MetaDataExtractor getComponentMetaDataExtractor(Map<String, Object> properties)
     {
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(ValidationModuleKey.class.getName(), BeanValidationModuleKey.class);
-        properties.put(UIComponent.class.getName(), uiComponent);
-
         return ExtValUtils.getComponentMetaDataExtractorWith(properties);
     }
 
