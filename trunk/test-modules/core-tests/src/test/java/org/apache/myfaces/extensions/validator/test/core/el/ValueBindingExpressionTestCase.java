@@ -56,22 +56,22 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{bean1.property1}");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1.property1}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        Assert.assertEquals("#{bean1.property1}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
 
         valueBindingExpression = new ValueBindingExpression("#{bean1['property1']}");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1['property1']}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        Assert.assertEquals("#{bean1['property1']}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
 
         valueBindingExpression = new ValueBindingExpression("#{bean1['bean2'].property1}");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1['bean2'].property1}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1['bean2']}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getBaseExpression().getExpressionString(), "#{bean1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        Assert.assertEquals("#{bean1['bean2'].property1}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1['bean2']}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("#{bean1}", valueBindingExpression.getBaseExpression().getBaseExpression().getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
     }
 
     public void testStandardSyntaxReplaceProperty() throws Exception
@@ -80,27 +80,27 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
 
         valueBindingExpression = ValueBindingExpression.replaceProperty(valueBindingExpression, "property2");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1.property2}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property2");
+        Assert.assertEquals("#{bean1.property2}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("property2", valueBindingExpression.getProperty());
 
         valueBindingExpression = new ValueBindingExpression("#{bean1['property1']}");
 
         valueBindingExpression = ValueBindingExpression.replaceProperty(valueBindingExpression, "property2");
 
         //TODO restore original syntax
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1.property2}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property2");
+        Assert.assertEquals("#{bean1.property2}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("property2", valueBindingExpression.getProperty());
 
         valueBindingExpression = new ValueBindingExpression("#{bean1['bean2'].property1}");
 
         valueBindingExpression = ValueBindingExpression.replaceProperty(valueBindingExpression, "property2");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1['bean2'].property2}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1['bean2']}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getBaseExpression().getExpressionString(), "#{bean1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property2");
+        Assert.assertEquals("#{bean1['bean2'].property2}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1['bean2']}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("#{bean1}", valueBindingExpression.getBaseExpression().getBaseExpression().getExpressionString());
+        Assert.assertEquals("property2", valueBindingExpression.getProperty());
     }
 
     public void testStandardSyntaxAddProperty() throws Exception
@@ -109,36 +109,36 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
 
         valueBindingExpression = ValueBindingExpression.addProperty(valueBindingExpression, "property1");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1.bean2.property1}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1.bean2}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        Assert.assertEquals("#{bean1.bean2.property1}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1.bean2}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
 
         valueBindingExpression = new ValueBindingExpression("#{bean1['bean2']}");
 
         valueBindingExpression = ValueBindingExpression.addProperty(valueBindingExpression, "property1");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1['bean2'].property1}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1['bean2']}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        Assert.assertEquals("#{bean1['bean2'].property1}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1['bean2']}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
 
         valueBindingExpression = new ValueBindingExpression("#{bean1['bean2'].bean3}");
 
         valueBindingExpression = ValueBindingExpression.addProperty(valueBindingExpression, "property1");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{bean1['bean2'].bean3.property1}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{bean1['bean2'].bean3}");
-        Assert.assertEquals(valueBindingExpression
-                .getBaseExpression().getBaseExpression().getExpressionString(), "#{bean1['bean2']}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        Assert.assertEquals("#{bean1['bean2'].bean3.property1}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{bean1['bean2'].bean3}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("#{bean1['bean2']}",
+                valueBindingExpression.getBaseExpression().getBaseExpression().getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
     }
 
     public void testFaceletsCustomComponentSyntax() throws Exception
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{entity[fieldName]}");
 
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{entity[fieldName]}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{entity}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "fieldName");
+        Assert.assertEquals("#{entity[fieldName]}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{entity}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("fieldName", valueBindingExpression.getProperty());
     }
 
     public void testFaceletsCustomComponentSyntaxReplaceProperty() throws Exception
@@ -148,9 +148,9 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
         valueBindingExpression = ValueBindingExpression.replaceProperty(valueBindingExpression, "newFieldName");
 
         //TODO restore original syntax
-        Assert.assertEquals(valueBindingExpression.getExpressionString(), "#{entity.newFieldName}");
-        Assert.assertEquals(valueBindingExpression.getBaseExpression().getExpressionString(), "#{entity}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "newFieldName");
+        Assert.assertEquals("#{entity.newFieldName}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("#{entity}", valueBindingExpression.getBaseExpression().getExpressionString());
+        Assert.assertEquals("newFieldName", valueBindingExpression.getProperty());
     }
 
     public void testComplexMapSyntax() throws Exception
@@ -159,8 +159,7 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
                 = new ValueBindingExpression("#{bean1[bean2[bean3['key1']]].property1}");
 
         //TODO
-        //assertEquals(valueBindingExpression.getExpressionString(), "#{bean1[bean2[bean3['key1']]].property1}");
-        Assert.assertEquals(valueBindingExpression.getProperty(), "property1");
+        //assertEquals("#{bean1[bean2[bean3['key1']]].property1}", valueBindingExpression.getExpressionString());
+        Assert.assertEquals("property1", valueBindingExpression.getProperty());
     }
-
 }
