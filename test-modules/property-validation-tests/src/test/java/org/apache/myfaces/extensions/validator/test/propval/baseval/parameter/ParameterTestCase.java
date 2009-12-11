@@ -46,7 +46,7 @@ public class ParameterTestCase extends TestCase
 
         assertNotNull(extractor.extract(required).containsKey(ViolationSeverity.class));
         assertNotNull(extractor.extract(required, ViolationSeverity.class).iterator().next());
-        assertEquals(extractor.extract(required, ViolationSeverity.class).iterator().next(), FacesMessage.SEVERITY_WARN);
+        assertEquals(FacesMessage.SEVERITY_WARN, extractor.extract(required, ViolationSeverity.class).iterator().next());
     }
 
     public void testParameterStyleTwo() throws Exception
@@ -58,7 +58,7 @@ public class ParameterTestCase extends TestCase
 
         assertNotNull(extractor.extract(required).containsKey("client_side_validation_support"));
         assertNotNull(extractor.extract(required, "client_side_validation_support").iterator().next());
-        assertEquals(extractor.extract(required, "client_side_validation_support").iterator().next(), false);
+        assertEquals(false, extractor.extract(required, "client_side_validation_support").iterator().next());
     }
 
     public void testParameterStyleThree() throws Exception
@@ -70,10 +70,10 @@ public class ParameterTestCase extends TestCase
 
         assertNotNull(extractor.extract(required).containsKey(TestPriority.class));
         assertNotNull(extractor.extract(required, TestPriority.class).iterator().next());
-        assertEquals(extractor.extract(required, TestPriority.class, Integer.class).iterator().next(), new Integer(1));
-        assertEquals(extractor.extract(required, TestPriority.class, String.class).size(), 2);
-        assertEquals(extractor.extract(required, TestPriority.class, String.class, TestPriority.ShortDescription.class), "do it asap");
-        assertEquals(extractor.extract(required, TestPriority.class, String.class, TestPriority.LongDescription.class), "do it immediately");
+        assertEquals(new Integer(1), extractor.extract(required, TestPriority.class, Integer.class).iterator().next());
+        assertEquals(2, extractor.extract(required, TestPriority.class, String.class).size());
+        assertEquals("do it asap", extractor.extract(required, TestPriority.class, String.class, TestPriority.ShortDescription.class));
+        assertEquals("do it immediately", extractor.extract(required, TestPriority.class, String.class, TestPriority.LongDescription.class));
     }
 
     public void testParameterStyleFour() throws Exception
@@ -85,8 +85,8 @@ public class ParameterTestCase extends TestCase
 
         assertNotNull(extractor.extract(required).containsKey(PropertyValidationInterceptor.class));
         assertNotNull(extractor.extract(required, PropertyValidationInterceptor.class).iterator().next());
-        assertEquals(extractor.extract(required, PropertyValidationInterceptor.class).size(), 1);
-        assertEquals(extractor.extract(required, PropertyValidationInterceptor.class, PropertyValidationInterceptor.class).iterator().next().getClass().getName(), TestValidationInterceptor.class.getName());
+        assertEquals(1, extractor.extract(required, PropertyValidationInterceptor.class).size());
+        assertEquals(TestValidationInterceptor.class.getName(), extractor.extract(required, PropertyValidationInterceptor.class, PropertyValidationInterceptor.class).iterator().next().getClass().getName());
     }
 
     public void testParameterStyleFive() throws Exception
@@ -98,9 +98,9 @@ public class ParameterTestCase extends TestCase
 
         assertNotNull(extractor.extract(required).containsKey(DisableClientSideValidation.class));
         assertNotNull(extractor.extract(required, DisableClientSideValidation.class).iterator().next());
-        assertEquals(extractor.extract(required, DisableClientSideValidation.class).size(), 1);
-        assertEquals(extractor.extract(required, DisableClientSideValidation.class, Class.class).size(), 1);
-        assertEquals(extractor.extract(required, DisableClientSideValidation.class, Class.class).iterator().next().getName(), DisableClientSideValidation.class.getName());
+        assertEquals(1, extractor.extract(required, DisableClientSideValidation.class).size());
+        assertEquals(1, extractor.extract(required, DisableClientSideValidation.class, Class.class).size());
+        assertEquals(DisableClientSideValidation.class.getName(), extractor.extract(required, DisableClientSideValidation.class, Class.class).iterator().next().getName());
     }
 
     /*
@@ -116,7 +116,7 @@ public class ParameterTestCase extends TestCase
 
         assertNotNull(extractor.extract(required).containsKey(TestValidatorProvider.class));
         assertNotNull(extractor.extract(required, TestValidatorProvider.class).iterator().next());
-        assertEquals(extractor.extract(required, TestValidatorProvider.class, Class.class).size(), 2);
+        assertEquals(2, extractor.extract(required, TestValidatorProvider.class, Class.class).size());
     }
 
     public void testParameterStyleSeven() throws Exception
