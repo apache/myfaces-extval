@@ -105,6 +105,7 @@ public class ExtValStartupListener extends AbstractStartupListener
         initProjectStageResolver();
         initViolationSeverityKey();
         initDisableClientSideValidationKey();
+        initRequiredInitialization();
         executeCustomStartupListener();
     }
 
@@ -225,5 +226,12 @@ public class ExtValStartupListener extends AbstractStartupListener
     {
         ExtValContext.getContext().addGlobalProperty(
                 DisableClientSideValidation.class.getName(), DisableClientSideValidation.class, false);
+    }
+
+    private void initRequiredInitialization()
+    {
+        boolean requiredInitialization = !"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_REQUIRED_INITIALIZATION);
+
+        ExtValContext.getContext().addGlobalProperty("init:required", requiredInitialization);
     }
 }
