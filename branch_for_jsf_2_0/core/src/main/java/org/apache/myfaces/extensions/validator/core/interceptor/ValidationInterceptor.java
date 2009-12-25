@@ -54,10 +54,15 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
          * the required flag in a component leads to problems with h:messages (additional message) as well as
          * incompatibilities with skip validation and severities
          */
-        if(uiComponent instanceof EditableValueHolder)
+        if(uiComponent instanceof EditableValueHolder && isRequiredInitializationActive())
         {
             ((EditableValueHolder)uiComponent).setRequired(false);
         }
+    }
+
+    private boolean isRequiredInitializationActive()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("init:required"));
     }
 
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
