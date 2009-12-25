@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -51,7 +52,7 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     {
         if(processComponent(uiComponent))
         {
-            if(validateEmptyFields())
+            if(validateEmptyFields() && isRequiredInitializationActive())
             {
                 configureRequiredAttribute(facesContext, uiComponent, metaData);
             }
@@ -63,6 +64,11 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     protected boolean validateEmptyFields()
     {
         return ExtValUtils.validateEmptyFields();
+    }
+
+    private boolean isRequiredInitializationActive()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("init:required"));
     }
 
     protected abstract void configureRequiredAttribute(FacesContext facesContext,
