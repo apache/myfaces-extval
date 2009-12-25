@@ -73,14 +73,33 @@ public class JsfUtils
     public static ResourceBundle getDefaultFacesMessageBundle()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        return ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, facesContext.getViewRoot().getLocale());
+    }
+
+    public static ResourceBundle getCustomFacesMessageBundle()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         String bundleName = facesContext.getApplication().getMessageBundle();
 
         if(bundleName == null)
         {
-            bundleName = FacesMessage.FACES_MESSAGES;
+            return null;
         }
 
         return ResourceBundle.getBundle(bundleName, facesContext.getViewRoot().getLocale());
+    }
+
+    public static String getMessageFromApplicationMessageBundle(String messageKey)
+    {
+        ResourceBundle customResourceBundle = getCustomFacesMessageBundle();
+
+        if(customResourceBundle != null && customResourceBundle.containsKey(messageKey))
+        {
+            return customResourceBundle.getString(messageKey);
+        }
+
+        return getDefaultFacesMessageBundle().getString(messageKey);
     }
 
     public static boolean isRenderResponsePhase()
