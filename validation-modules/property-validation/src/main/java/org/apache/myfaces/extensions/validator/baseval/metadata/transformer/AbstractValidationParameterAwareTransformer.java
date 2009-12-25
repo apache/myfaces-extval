@@ -27,9 +27,9 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.application.FacesMessage;
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 /**
  * @author Gerhard Petracek
@@ -44,7 +44,7 @@ public abstract class AbstractValidationParameterAwareTransformer implements Met
         {
             return transformMetaData(metaData);
         }
-        return new HashMap<String, Object>();
+        return Collections.emptyMap();
     }
 
     protected abstract Map<String, Object> transformMetaData(MetaDataEntry metaData);
