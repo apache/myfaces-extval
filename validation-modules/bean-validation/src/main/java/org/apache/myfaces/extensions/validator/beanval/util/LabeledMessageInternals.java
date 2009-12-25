@@ -91,13 +91,13 @@ class LabeledMessageInternals
         {
             if(isDetailMessage)
             {
-                return JsfUtils.getDefaultFacesMessageBundle()
-                        .getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE_DETAIL);
+                return JsfUtils.getMessageFromApplicationMessageBundle(
+                        JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE_DETAIL);
             }
             else
             {
-                return JsfUtils.getDefaultFacesMessageBundle()
-                        .getString(JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE);
+                return JsfUtils.getMessageFromApplicationMessageBundle(
+                        JAVAX_FACES_VALIDATOR_BEANVALIDATOR_MESSAGE);
             }
         }
         catch (MissingResourceException e)
