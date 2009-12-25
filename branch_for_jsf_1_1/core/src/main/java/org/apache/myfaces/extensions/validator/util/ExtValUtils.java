@@ -371,16 +371,16 @@ public class ExtValUtils
     @UsageInformation(UsageCategory.INTERNAL)
     public static void replaceWithDefaultMaximumMessage(FacesMessage facesMessage, int maxLength)
     {
-        String facesRequiredMessage = JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM);
+        String facesRequiredMessage = JsfUtils.getMessageFromApplicationMessageBundle(JAVAX_FACES_MAXIMUM);
         String facesRequiredMessageDetail = facesRequiredMessage;
 
         //use try/catch for easier sync between trunk/branch
         try
         {
-            if (JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM_DETAIL) != null)
+            if (JsfUtils.getMessageFromApplicationMessageBundle(JAVAX_FACES_MAXIMUM_DETAIL) != null)
             {
                 facesRequiredMessageDetail = JsfUtils
-                        .getDefaultFacesMessageBundle().getString(JAVAX_FACES_MAXIMUM_DETAIL);
+                        .getMessageFromApplicationMessageBundle(JAVAX_FACES_MAXIMUM_DETAIL);
             }
         }
         catch (MissingResourceException missingResourceException)
@@ -398,16 +398,16 @@ public class ExtValUtils
     @UsageInformation(UsageCategory.INTERNAL)
     public static void replaceWithDefaultRequiredMessage(FacesMessage facesMessage)
     {
-        String facesRequiredMessage = JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED);
+        String facesRequiredMessage = JsfUtils.getMessageFromApplicationMessageBundle(JAVAX_FACES_REQUIRED);
         String facesRequiredMessageDetail = facesRequiredMessage;
 
         //use try/catch for easier sync between trunk/branch
         try
         {
-            if (JsfUtils.getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL) != null)
+            if (JsfUtils.getMessageFromApplicationMessageBundle(JAVAX_FACES_REQUIRED_DETAIL) != null)
             {
                 facesRequiredMessageDetail = JsfUtils
-                        .getDefaultFacesMessageBundle().getString(JAVAX_FACES_REQUIRED_DETAIL);
+                        .getMessageFromApplicationMessageBundle(JAVAX_FACES_REQUIRED_DETAIL);
             }
         }
         catch (MissingResourceException missingResourceException)

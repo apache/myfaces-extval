@@ -30,7 +30,7 @@ import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.Payload;
 import javax.faces.application.FacesMessage;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Collections;
 import java.lang.annotation.Annotation;
 
 /**
@@ -49,7 +49,7 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
         {
             return transformMetaData((ConstraintDescriptor<T>)constraintDescriptor);
         }
-        return new HashMap<String, Object>();
+        return Collections.emptyMap();
     }
 
     protected boolean isClientSideValidationEnabled(ConstraintDescriptor<? extends T> constraintDescriptor)

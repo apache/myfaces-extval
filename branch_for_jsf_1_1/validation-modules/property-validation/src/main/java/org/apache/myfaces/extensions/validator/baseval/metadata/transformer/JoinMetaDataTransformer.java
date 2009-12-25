@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 import java.lang.annotation.Annotation;
 
 /**
@@ -62,7 +63,7 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
                         "if it gets invoked and an exception occurs, a custom syntax is used." +
                         "this class might be used by an old add-on. please check for a newer version.");
             }
-            return new HashMap<String, Object>();
+            return Collections.emptyMap();
         }
     }
 
