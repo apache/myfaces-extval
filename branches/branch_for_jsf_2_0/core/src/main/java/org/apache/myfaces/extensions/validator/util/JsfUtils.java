@@ -18,18 +18,19 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseListener;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 
@@ -82,7 +83,7 @@ public class JsfUtils
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String bundleName = facesContext.getApplication().getMessageBundle();
 
-        if(bundleName == null)
+        if (bundleName == null)
         {
             return null;
         }
@@ -94,9 +95,16 @@ public class JsfUtils
     {
         ResourceBundle customResourceBundle = getCustomFacesMessageBundle();
 
-        if(customResourceBundle != null && customResourceBundle.containsKey(messageKey))
+        try
         {
-            return customResourceBundle.getString(messageKey);
+            if (customResourceBundle != null)
+            {
+                return customResourceBundle.getString(messageKey);
+            }
+        }
+        catch (MissingResourceException e)
+        {
+            //no custom message is available - do nothing
         }
 
         return getDefaultFacesMessageBundle().getString(messageKey);
