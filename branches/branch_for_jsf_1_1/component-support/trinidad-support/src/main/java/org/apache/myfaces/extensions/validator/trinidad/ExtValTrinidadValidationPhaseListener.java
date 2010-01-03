@@ -18,11 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad;
 
-import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRenderKit;
-import org.apache.myfaces.extensions.validator.trinidad.storage.TrinidadClientValidatorStorage;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.trinidad.renderkit.ExtValTrinidadRenderKit;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -45,8 +43,6 @@ public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 
     public void afterPhase(PhaseEvent event)
     {
-        ExtValUtils.getStorage(TrinidadClientValidatorStorage.class, TrinidadClientValidatorStorage.class.getName())
-                .rollback();
     }
 
     public void beforePhase(PhaseEvent event)
@@ -57,7 +53,7 @@ public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 
         String renderKitId = getRenderKitId(facesContext);
 
-        if(isIncompatibleRenderKit(renderKitId))
+        if (isIncompatibleRenderKit(renderKitId))
         {
             changeRenderKit(facesContext, renderKitFactory, renderKitId);
         }
@@ -70,8 +66,7 @@ public class ExtValTrinidadValidationPhaseListener implements PhaseListener
 
     private RenderKitFactory getRenderKitFactory()
     {
-        return (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        return (RenderKitFactory)FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
     }
 
     private boolean isIncompatibleRenderKit(String renderKitId)
