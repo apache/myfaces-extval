@@ -71,6 +71,8 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
                 new DefaultPropertyStorageManager(), false);
         setStorageManager(RendererInterceptorPropertyStorage.class,
                 new DefaultRendererInterceptorPropertyStorageManager(), false);
+        setStorageManager(ViolationSeverityInterpreterStorage.class,
+                new DefaultViolationSeverityInterpreterStorageManager(), false);
 
         setStorageManager(
                 FacesInformationStorage.class, new DefaultFacesInformationStorageManager(), false);
