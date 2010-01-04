@@ -124,6 +124,14 @@ public class ExtValContext
 
     public ViolationSeverityInterpreter getViolationSeverityInterpreter()
     {
+        ViolationSeverityInterpreter requestScopedInterpreter = this.contextHelper
+                .getRequestScopedViolationSeverityInterpreter();
+
+        if(requestScopedInterpreter != null)
+        {
+            return requestScopedInterpreter;
+        }
+
         return this.violationSeverityInterpreter;
     }
 

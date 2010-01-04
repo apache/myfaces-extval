@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.core.storage.ViolationSeverityInterpreterStorage;
+import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -91,5 +93,12 @@ class ExtValContextInternals
             return initInformationProviderBean(applicationMap);
         }
         return bean;
+    }
+
+    ViolationSeverityInterpreter getRequestScopedViolationSeverityInterpreter()
+    {
+        return ExtValUtils.getStorage(
+                ViolationSeverityInterpreterStorage.class, ViolationSeverityInterpreterStorage.class.getName())
+                .getViolationSeverityInterpreter();
     }
 }
