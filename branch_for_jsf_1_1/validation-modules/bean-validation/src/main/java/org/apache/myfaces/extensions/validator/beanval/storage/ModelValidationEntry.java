@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.beanval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
 import javax.faces.component.UIComponent;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(INTERNAL)
+@UsageInformation(API)
 public class ModelValidationEntry
 {
     private UIComponent component;
