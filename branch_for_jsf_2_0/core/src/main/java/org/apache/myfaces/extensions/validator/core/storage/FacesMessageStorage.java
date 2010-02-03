@@ -29,7 +29,7 @@ import java.util.List;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface FacesMessageStorage
 {
     void addFacesMessage(String clientId, FacesMessage facesMessage);
