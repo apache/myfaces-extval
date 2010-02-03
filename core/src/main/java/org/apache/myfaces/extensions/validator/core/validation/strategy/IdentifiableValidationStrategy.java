@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.REUSE)
+@UsageInformation(UsageCategory.API)
 public interface IdentifiableValidationStrategy extends ValidationStrategy
 {
     String ID_PREFIX = ":";
