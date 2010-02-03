@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.beanval.validation.message.inter
 
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.validation.MessageInterpolator;
 import java.util.Locale;
@@ -28,6 +30,7 @@ import java.util.Locale;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValMessageInterpolatorAdapter extends DefaultMessageInterpolator
 {
     private MessageResolver messageResolver;
