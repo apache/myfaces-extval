@@ -37,7 +37,7 @@ import java.util.Map;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultValidationParameterFactory implements ClassMappingFactory<Class, Class>
 {
     private Map<Class, Class> parameterMapping = new HashMap<Class, Class>();

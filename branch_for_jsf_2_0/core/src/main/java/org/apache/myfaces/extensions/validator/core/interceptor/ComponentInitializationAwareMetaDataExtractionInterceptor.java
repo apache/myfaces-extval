@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.util.JsfUtils;
  * @since x.x.3
  */
 @InvocationOrderSupport
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.REUSE)
 public abstract class ComponentInitializationAwareMetaDataExtractionInterceptor implements MetaDataExtractionInterceptor
 {
     public final void afterExtracting(PropertyInformation propertyInformation)
