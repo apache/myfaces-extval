@@ -70,6 +70,8 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
         initTrinidadMetaDataExtractionInterceptor();
 
         initTrinidadClientValidatorStorage();
+
+        initRequiredInitialization();
     }
 
     private void deactivateDefaultExtValRenderKitWrapperFactory()
@@ -143,5 +145,19 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
     {
         return deactivateTrinidadValidationExceptionInterceptor == null ||
                 !deactivateTrinidadValidationExceptionInterceptor.equalsIgnoreCase("true");
+    }
+
+    private void initRequiredInitialization()
+    {
+        if(!isRequiredInitializationDeactivated())
+        {
+            ExtValContext.getContext().addGlobalProperty("init:required", Boolean.TRUE, false);
+        }
+    }
+
+    private boolean isRequiredInitializationDeactivated()
+    {
+        return "false".equalsIgnoreCase(
+                org.apache.myfaces.extensions.validator.core.WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
     }
 }
