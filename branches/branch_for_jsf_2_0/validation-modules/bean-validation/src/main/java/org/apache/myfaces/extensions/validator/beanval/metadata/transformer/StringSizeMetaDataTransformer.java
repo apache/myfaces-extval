@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.beanval.metadata.transformer;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.validation.constraints.Size;
 import javax.validation.metadata.ConstraintDescriptor;
@@ -29,6 +31,7 @@ import java.util.HashMap;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class StringSizeMetaDataTransformer extends AbstractBeanValidationMetaDataTransformer<Size>
 {
     protected Map<String, Object> transformMetaData(ConstraintDescriptor<Size> constraintDescriptor)

@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
 
@@ -33,6 +35,7 @@ import javax.faces.context.FacesContext;
  * @since x.x.3
  */
 @ToDo(value = Priority.MEDIUM, description = "use meta-data storage - but a special impl.")
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultGroupControllerScanningExtractor extends DefaultComponentMetaDataExtractor
 {
     @Override
