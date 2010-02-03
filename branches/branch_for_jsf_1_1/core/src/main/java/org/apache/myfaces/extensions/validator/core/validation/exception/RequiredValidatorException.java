@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.exception;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 
@@ -27,6 +30,7 @@ import javax.faces.application.FacesMessage;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.API)
 public class RequiredValidatorException extends ValidatorException
 {
     private static final long serialVersionUID = -4646331736428495884L;

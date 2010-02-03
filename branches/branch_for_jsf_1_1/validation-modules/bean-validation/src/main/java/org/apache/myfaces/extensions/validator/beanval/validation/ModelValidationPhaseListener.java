@@ -33,6 +33,8 @@ import org.apache.myfaces.extensions.validator.core.validation.message.FacesMess
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -55,6 +57,7 @@ import java.util.Set;
  * @since x.x.3
  */
 @ToDo(value = Priority.MEDIUM, description = "refactor implementation details")
+@UsageInformation(UsageCategory.INTERNAL)
 public class ModelValidationPhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -3482233893186708878L;
