@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.beanval.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractVirtualValidationStrategy;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.validation.metadata.ConstraintDescriptor;
 
@@ -26,6 +28,7 @@ import javax.validation.metadata.ConstraintDescriptor;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationVirtualValidationStrategy extends AbstractVirtualValidationStrategy
 {
     private ConstraintDescriptor constraintDescriptor;

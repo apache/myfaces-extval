@@ -33,6 +33,8 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -46,6 +48,7 @@ import java.util.List;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.API)
 public class ExtValBeanValidationContext implements GroupStorage, ModelValidationStorage
 {
     protected final Log logger = LogFactory.getLog(getClass());
