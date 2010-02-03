@@ -19,13 +19,13 @@
 package org.apache.myfaces.extensions.validator.crossval.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(API)
+@UsageInformation(INTERNAL)
 public interface ProcessedInformationStorage
 {
     void setEntry(String key, ProcessedInformationStorageEntry entry);

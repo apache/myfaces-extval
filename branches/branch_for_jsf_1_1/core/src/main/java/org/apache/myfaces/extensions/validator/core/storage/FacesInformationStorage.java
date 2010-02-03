@@ -30,7 +30,7 @@ import javax.faces.event.PhaseId;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface FacesInformationStorage
 {
     void setCurrentPhaseId(PhaseId phaseId);
