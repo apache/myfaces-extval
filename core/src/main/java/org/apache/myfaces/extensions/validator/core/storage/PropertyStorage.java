@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface PropertyStorage
 {
     void storeField(Class targetClass, String property, Field field);
