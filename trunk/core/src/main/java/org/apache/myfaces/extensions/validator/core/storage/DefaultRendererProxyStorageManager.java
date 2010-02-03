@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultRendererProxyStorageNameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * default storage-manager for renderer proxy entries
@@ -27,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultRender
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 class DefaultRendererProxyStorageManager
     extends AbstractRequestScopeAwareStorageManager<RendererProxyStorage>
 {

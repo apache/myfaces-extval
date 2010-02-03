@@ -38,7 +38,7 @@ import java.util.Comparator;
  * @since x.x.3
  */
 @ToDo(value = Priority.LOW, description = "optional parameter to deactivate sorting")
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultFacesMessageStorage implements FacesMessageStorage
 {
     Map<String, ValidationResult> results = new HashMap<String, ValidationResult>();
