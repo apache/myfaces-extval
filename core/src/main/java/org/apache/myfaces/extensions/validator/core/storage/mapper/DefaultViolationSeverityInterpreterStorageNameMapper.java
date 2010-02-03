@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultViolationSeverityInterpreterStorage;
 import org.apache.myfaces.extensions.validator.core.storage.ViolationSeverityInterpreterStorage;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * use a public class to allow optional deregistration
@@ -30,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.storage.ViolationSeverityInt
  * @since x.x.3
  */
 @InvocationOrder(100)
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultViolationSeverityInterpreterStorageNameMapper implements NameMapper<String>
 {
     public String createName(String source)

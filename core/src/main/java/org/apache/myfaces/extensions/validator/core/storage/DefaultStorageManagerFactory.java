@@ -146,11 +146,11 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
             ExtValContext.getContext().getStaticConfiguration(
                 StaticConfigurationNames.STORAGE_TYPE_TO_STORAGE_MANAGER_CONFIG))
         {
-            setupStrategyMappings(staticConfig.getMapping());
+            setupMappings(staticConfig.getMapping());
         }
     }
 
-    private void setupStrategyMappings(List<StaticConfigurationEntry<String, String>> mappings)
+    private void setupMappings(List<StaticConfigurationEntry<String, String>> mappings)
     {
         for(StaticConfigurationEntry<String, String> mapping : mappings)
         {

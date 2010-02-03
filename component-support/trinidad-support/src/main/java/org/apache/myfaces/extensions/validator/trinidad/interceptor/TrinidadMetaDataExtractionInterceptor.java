@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import java.util.List;
  * @since x.x.3
  */
 @InvocationOrder(300)
+@UsageInformation(UsageCategory.INTERNAL)
 public class TrinidadMetaDataExtractionInterceptor extends ComponentInitializationAwareMetaDataExtractionInterceptor
 {
     protected void afterExtractingForComponentInitialization(PropertyInformation propertyInformation)

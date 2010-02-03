@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.beanval.validation.message.inter
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.validation.MessageInterpolator;
 import javax.faces.context.FacesContext;
@@ -29,6 +31,7 @@ import java.util.Locale;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultMessageInterpolator implements MessageInterpolator
 {
     protected final Log logger = LogFactory.getLog(getClass());
