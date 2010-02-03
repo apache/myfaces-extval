@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import java.lang.annotation.Target;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.TYPE;
@@ -32,6 +35,7 @@ import static java.lang.annotation.ElementType.TYPE;
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.API)
 public @interface InvocationOrderSupport
 {
 }

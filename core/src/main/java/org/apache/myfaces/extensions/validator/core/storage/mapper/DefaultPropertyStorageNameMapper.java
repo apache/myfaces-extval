@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultPropertyStorage;
 import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * use a public class to allow optional deregistration
@@ -30,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
  * @since x.x.3
  */
 @InvocationOrder(100)
+@UsageInformation(UsageCategory.INTERNAL)
 public class DefaultPropertyStorageNameMapper implements NameMapper<String>
 {
     public String createName(String source)

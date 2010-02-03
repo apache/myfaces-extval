@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultMetaDataStorageNameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * default storage-manager for property information entries
@@ -26,6 +28,7 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultMetaDa
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 class DefaultMetaDataStorageManager extends AbstractApplicationScopeAwareStorageManager<MetaDataStorage>
 {
     DefaultMetaDataStorageManager()

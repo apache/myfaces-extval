@@ -18,12 +18,16 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+
 import java.util.Comparator;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class InvocationOrderComparator<T> implements Comparator<T>
 {
     public int compare(T nm1, T nm2)

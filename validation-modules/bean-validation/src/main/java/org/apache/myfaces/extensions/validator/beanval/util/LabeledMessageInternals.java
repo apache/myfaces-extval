@@ -28,7 +28,7 @@ import java.util.MissingResourceException;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 class LabeledMessageInternals
 {
     //there is no concurrency issue here - it always leads to the same result

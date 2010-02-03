@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultFacesInformationStorageNameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * default storage-manager for jsf information not available via jsf-api
@@ -26,6 +28,7 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultFacesI
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 class DefaultFacesInformationStorageManager extends
         AbstractRequestScopeAwareStorageManager<FacesInformationStorage>
 {

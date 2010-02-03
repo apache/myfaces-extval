@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultViolationSeverityInterpreterStorageNameMapper;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * default storage-manager for a custom ViolationSeverityInterpreter
@@ -26,6 +28,7 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultViolat
  * @author Gerhard Petracek
  * @since x.x.3
  */
+@UsageInformation(UsageCategory.INTERNAL)
 class DefaultViolationSeverityInterpreterStorageManager extends
         AbstractRequestScopeAwareStorageManager<ViolationSeverityInterpreterStorage>
 {
