@@ -230,8 +230,11 @@ public class ExtValStartupListener extends AbstractStartupListener
 
     private void initRequiredInitialization()
     {
-        boolean requiredInitialization = !"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_REQUIRED_INITIALIZATION);
+        if(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION != null)
+        {
+            boolean requiredInitialization = "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
 
-        ExtValContext.getContext().addGlobalProperty("init:required", requiredInitialization);
+            ExtValContext.getContext().addGlobalProperty("init:required", requiredInitialization);
+        }
     }
 }
