@@ -110,6 +110,12 @@ public interface WebXmlParameter
         .getInitParameter("CUSTOM_FACES_MESSAGE_FACTORY");
 
     /*
+     * activate
+     */
+    static final String ACTIVATE_REQUIRED_INITIALIZATION = WebXmlUtils
+        .getInitParameter("ACTIVATE_REQUIRED_INITIALIZATION");
+    
+    /*
      * deactivate
      */
     @Deprecated
@@ -131,9 +137,6 @@ public interface WebXmlParameter
 
     static final String DEACTIVATE_VALIDATION_PARAMETERS = WebXmlUtils
         .getInitParameter("DEACTIVATE_VALIDATION_PARAMETERS");
-
-    static final String DEACTIVATE_REQUIRED_INITIALIZATION = WebXmlUtils
-        .getInitParameter("DEACTIVATE_REQUIRED_INITIALIZATION");
 
     //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
     //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
