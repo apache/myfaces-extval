@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since x.x.3
  */
-@UsageInformation(UsageCategory.API)
+@UsageInformation(UsageCategory.INTERNAL)
 public interface RendererInterceptorPropertyStorage
 {
     void setProperty(String key, Object value);
