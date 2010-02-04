@@ -28,6 +28,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.storage.RendererInterceptorPropertyStorage;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
+import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -49,6 +50,32 @@ import java.util.HashMap;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractValidationInterceptor extends AbstractRendererInterceptor
 {
+    protected boolean isRequiredInitializationSupported()
+    {
+        return false;
+    }
+
+    @Override
+    public void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
+            throws SkipAfterInterceptorsException
+    {
+        /*
+         * component initialization sets a component to required if there are constraints which indicate it
+         * the required flag in a component leads to problems with h:messages (additional message) as well as
+         * incompatibilities with skip validation and severities
+         */
+        if(uiComponent instanceof EditableValueHolder &&
+                isRequiredInitializationSupported() && isRequiredInitializationActive())
+        {
+            ((EditableValueHolder)uiComponent).setRequired(false);
+        }
+    }
+
+    private boolean isRequiredInitializationActive()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("init:required"));
+    }
+
     @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
