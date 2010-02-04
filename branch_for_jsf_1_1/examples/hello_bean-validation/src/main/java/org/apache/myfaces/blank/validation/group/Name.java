@@ -18,6 +18,6 @@
  */
 package org.apache.myfaces.blank.validation.group;
 
-public interface Address
+public interface Name
 {
 }
