@@ -64,16 +64,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
          * the required flag in a component leads to problems with h:messages (additional message) as well as
          * incompatibilities with skip validation and severities
          */
-        if(uiComponent instanceof EditableValueHolder &&
-                isRequiredInitializationSupported() && isRequiredInitializationActive())
+        if(uiComponent instanceof EditableValueHolder && ExtValUtils.isRequiredResetActivated() &&
+                isRequiredInitializationSupported() && ExtValUtils.isRequiredInitializationActive())
         {
             ((EditableValueHolder)uiComponent).setRequired(false);
         }
-    }
-
-    private boolean isRequiredInitializationActive()
-    {
-        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("init:required"));
     }
 
     @Override

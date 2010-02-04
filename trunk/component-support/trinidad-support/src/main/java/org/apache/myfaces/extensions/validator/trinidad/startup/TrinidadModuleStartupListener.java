@@ -147,11 +147,14 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
                 !deactivateTrinidadValidationExceptionInterceptor.equalsIgnoreCase("true");
     }
 
-    private void initRequiredInitialization()
+    protected void initRequiredInitialization()
     {
         if(!isRequiredInitializationDeactivated())
         {
-            ExtValContext.getContext().addGlobalProperty("init:required", Boolean.TRUE, false);
+            ExtValContext.getContext().addGlobalProperty("mode:init:required", Boolean.TRUE, true);
+
+            //there is no support for client-side severity aware validation -> don't reset the value
+            ExtValContext.getContext().addGlobalProperty("mode:reset:required", Boolean.FALSE, false);
         }
     }
 

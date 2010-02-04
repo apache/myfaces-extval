@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.trinidad.initializer.component;
 
 import org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -43,7 +42,7 @@ class RequiredInitializer extends TrinidadComponentInitializer
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
-        if(!validateEmptyFields() && isRequiredInitializationActive())
+        if(!validateEmptyFields() && ExtValUtils.isRequiredInitializationActive())
         {
             return false;
         }
@@ -73,7 +72,7 @@ class RequiredInitializer extends TrinidadComponentInitializer
             else if(Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.SKIP_VALIDATION)) &&
                    !Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)))
             {
-                if(uiComponent instanceof EditableValueHolder)
+                if(uiComponent instanceof EditableValueHolder && ExtValUtils.isRequiredResetActivated())
                 {
                     ((EditableValueHolder)uiComponent).setRequired(false);
                 }
@@ -85,11 +84,6 @@ class RequiredInitializer extends TrinidadComponentInitializer
             }
         }
         return false;
-    }
-
-    private boolean isRequiredInitializationActive()
-    {
-        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("init:required"));
     }
 
     protected boolean validateEmptyFields()
