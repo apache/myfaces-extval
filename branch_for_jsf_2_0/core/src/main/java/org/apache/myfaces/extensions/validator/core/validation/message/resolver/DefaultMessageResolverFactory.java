@@ -119,11 +119,11 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
             ExtValContext.getContext().getStaticConfiguration(
                 StaticConfigurationNames.VALIDATION_STRATEGY_TO_MESSAGE_RESOLVER_CONFIG))
         {
-            setupStrategyMappings(staticConfig.getMapping());
+            setupMappings(staticConfig.getMapping());
         }
     }
 
-    private void setupStrategyMappings(List<StaticConfigurationEntry<String,String>> mappings)
+    private void setupMappings(List<StaticConfigurationEntry<String,String>> mappings)
     {
         for(StaticConfigurationEntry<String, String> mapping : mappings)
         {

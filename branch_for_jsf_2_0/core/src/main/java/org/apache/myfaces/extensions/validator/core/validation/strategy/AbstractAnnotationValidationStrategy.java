@@ -102,7 +102,7 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
                 facesContext, uiComponent, metaDataEntry, convertedObject, validatorException);
     }
 
-    //for custom annotations - override if needed
+    //e.g. for custom annotations - override if needed
     protected String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
     {
         return null;
