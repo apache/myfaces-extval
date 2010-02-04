@@ -97,7 +97,23 @@
             </build>
         </profile>
     </profiles>
-    
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-doap-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <category>web-framework, validation</category>
+                    <language>Java</language>
+                    <shortdesc>JSF centric validation framework for metadata based validation.</shortdesc>
+                    <pmc>http://myfaces.apache.org</pmc>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <properties>
         <jsf.version>1.2.4</jsf.version>
     </properties>
