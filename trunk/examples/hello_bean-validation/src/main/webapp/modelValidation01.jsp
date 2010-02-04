@@ -26,19 +26,25 @@
             <h:form id="mainForm">
               <h:panelGrid columns="3">
                 <h:outputLabel for="first_name" value="First name:"/>
-                <h:inputText id="first_name" label="First name" value="#{helloWorld['person'].firstName}"/>
+                <h:inputText id="first_name" label="First name" value="#{helloGroupValidationController['person'].firstName}"/>
                 <h:message for="first_name" showSummary="true" showDetail="false"/>
 
                 <h:outputLabel for="last_name" value="Last name:"/>
-                <h:inputText id="last_name" label="Last name" value="#{helloWorld.person.lastName}"/>
+                <h:inputText id="last_name" label="Last name" value="#{helloGroupValidationController.person.lastName}"/>
                 <h:message for="last_name" showSummary="true" showDetail="false"/>
 
-                <h:commandButton value="Press me" action="#{helloWorld.send}"/>
+                <h:commandButton value="Press me" action="#{helloGroupValidationController.send}"/>
                 <h:panelGroup/>
                 <h:panelGroup/>
               </h:panelGrid>
             </h:form>
             <h:messages globalOnly="true" showDetail="true" showSummary="false"/>
         </f:view>
+        <hr/>
+        it isn't possible to submit this form!<br/>
+        reason: model-validation is triggered -> address group is validated
+
+        * not required<br/>
+        ** not required; length of provided value: 3-12 characters
     </body>
 </html>
