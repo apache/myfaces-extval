@@ -25,11 +25,11 @@
         <f:view>
             <h:form id="mainForm">
               <h:panelGrid columns="3">
-                <h:outputLabel for="first_name" value="First name:"/>
+                <h:outputLabel for="first_name" value="First name*:"/>
                 <h:inputText id="first_name" label="First name" value="#{helloGroupValidationController['person'].firstName}"/>
                 <h:message for="first_name" showSummary="true" showDetail="false"/>
 
-                <h:outputLabel for="last_name" value="Last name:"/>
+                <h:outputLabel for="last_name" value="Last name**:"/>
                 <h:inputText id="last_name" label="Last name" value="#{helloGroupValidationController.person.lastName}"/>
                 <h:message for="last_name" showSummary="true" showDetail="false"/>
 
@@ -41,8 +41,7 @@
             <h:messages globalOnly="true" showDetail="true" showSummary="false"/>
         </f:view>
         <hr/>
-        it isn't possible to submit this form!<br/>
-        reason: model-validation is triggered -> address group is validated
+        model validation: first and last name have to be different<br/>
 
         * not required<br/>
         ** not required; length of provided value: 3-12 characters
