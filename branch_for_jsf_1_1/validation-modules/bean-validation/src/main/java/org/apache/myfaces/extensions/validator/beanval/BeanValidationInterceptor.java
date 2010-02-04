@@ -41,6 +41,12 @@ public class BeanValidationInterceptor extends AbstractValidationInterceptor
 {
     private BeanValidationInterceptorInternals bviUtils = new BeanValidationInterceptorInternals(this.logger);
 
+    @Override
+    protected boolean isRequiredInitializationSupported()
+    {
+        return true;
+    }
+
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
         if (logger.isTraceEnabled())

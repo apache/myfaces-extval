@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
+ * it isn't linked to jsr 303
+ *
  * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
  * e.g. spring creates a proxy for it.
 
