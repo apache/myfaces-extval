@@ -31,15 +31,33 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	
-	<!-- navigation rules for helloWorld.jsp -->
-	<navigation-rule>
-		<from-view-id>*</from-view-id>
-		<navigation-case>
-			<from-outcome>success</from-outcome>
-			<to-view-id>/result.jsp</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	
+    <managed-bean>
+        <managed-bean-name>helloGroupValidationController</managed-bean-name>
+        <managed-bean-class>org.apache.myfaces.blank.HelloGroupValidationController</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <!-- navigation rules for helloWorld.jsp -->
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/result.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>example01</from-outcome>
+            <to-view-id>/groupValidation01.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>example02</from-outcome>
+            <to-view-id>/groupValidation02.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>example03</from-outcome>
+            <to-view-id>/modelValidation01.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
 	<!-- navigation rules for result.jsp -->
 	<navigation-rule>
 		<from-view-id>/result.jsp</from-view-id>
