@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.validator.core.el;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.el.ELResolver;
 import javax.el.ELContext;
@@ -36,6 +38,7 @@ import java.beans.FeatureDescriptor;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class ExtValELResolver extends ELResolver
 {
     protected final Log logger = LogFactory.getLog(getClass());
