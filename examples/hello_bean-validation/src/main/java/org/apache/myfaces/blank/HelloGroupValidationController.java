@@ -19,18 +19,30 @@
 package org.apache.myfaces.blank;
 
 import org.apache.myfaces.blank.domain.Person;
+import org.apache.myfaces.blank.validation.group.Admin;
+import org.apache.myfaces.blank.validation.group.User;
+import org.apache.myfaces.blank.validation.group.Address;
+import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
+import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
  */
-public class HelloWorldController
+public class HelloGroupValidationController
 {
+    @BeanValidation.List({
+            @BeanValidation(viewIds = "/groupValidation01.jsp", useGroups = User.class),
+            @BeanValidation(viewIds = "/groupValidation02.jsp", useGroups = Admin.class),
+            @BeanValidation(viewIds = "/modelValidation01.jsp", useGroups = Admin.class),
+            @BeanValidation(viewIds = "/modelValidation01.jsp", useGroups = Address.class,
+                    modelValidation = @ModelValidation(isActive = true))
+    })
     private Person person = new Person();
 
     /**
      * default empty constructor
      */
-    public HelloWorldController()
+    public HelloGroupValidationController()
     {
     }
 
