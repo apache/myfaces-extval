@@ -21,7 +21,7 @@ package org.apache.myfaces.blank;
 import org.apache.myfaces.blank.domain.Person;
 import org.apache.myfaces.blank.validation.group.Admin;
 import org.apache.myfaces.blank.validation.group.User;
-import org.apache.myfaces.blank.validation.group.Address;
+import org.apache.myfaces.blank.validation.group.Name;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
@@ -34,7 +34,7 @@ public class HelloGroupValidationController
             @BeanValidation(viewIds = "/groupValidation01.jsp", useGroups = User.class),
             @BeanValidation(viewIds = "/groupValidation02.jsp", useGroups = Admin.class),
             @BeanValidation(viewIds = "/modelValidation01.jsp", useGroups = Admin.class),
-            @BeanValidation(viewIds = "/modelValidation01.jsp", useGroups = Address.class,
+            @BeanValidation(viewIds = "/modelValidation01.jsp", useGroups = Name.class,
                     modelValidation = @ModelValidation(isActive = true))
     })
     private Person person = new Person();

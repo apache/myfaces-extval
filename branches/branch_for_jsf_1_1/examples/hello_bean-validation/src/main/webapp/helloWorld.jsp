@@ -41,7 +41,7 @@
               <hr/>
               <h:commandLink value="group validation example 1" action="example01" immediate="true"/><br/>
               <h:commandLink value="group validation example 2" action="example02" immediate="true"/><br/>
-              <h:commandLink value="model validation example 1 (forced validation error)" action="example03" immediate="true"/><br/>
+              <h:commandLink value="model validation example 1" action="example03" immediate="true"/><br/>
             </h:form>
           </f:view>
           <hr/>
