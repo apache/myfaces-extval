@@ -234,7 +234,21 @@ public class ExtValStartupListener extends AbstractStartupListener
         {
             boolean requiredInitialization = "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
 
-            ExtValContext.getContext().addGlobalProperty("init:required", requiredInitialization);
+            ExtValContext.getContext().addGlobalProperty("mode:init:required", requiredInitialization, false);
+
+            if(requiredInitialization)
+            {
+                deactivateRequiredAttributeSupport();
+            }
         }
+    }
+
+    /**
+     * if it's configured that required init should happen,
+     * it's required to deactivate the support for the required attribute
+     */
+    private void deactivateRequiredAttributeSupport()
+    {
+        ExtValContext.getContext().addGlobalProperty("mode:reset:required", Boolean.TRUE, false);
     }
 }
