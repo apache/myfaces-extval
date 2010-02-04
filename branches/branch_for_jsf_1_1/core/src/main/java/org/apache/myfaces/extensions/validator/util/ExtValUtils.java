@@ -921,4 +921,24 @@ public class ExtValUtils
         }
         return targetComponent;
     }
+
+    /**
+     * @return true if component initialization for required validation is activated
+     */
+    public static boolean isRequiredInitializationActive()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("mode:init:required"));
+    }
+
+    /**
+     * needed for some component libs - if required initialization is used e.g. for visual indicators
+     * but features like severity aware validation aren't used.
+     * in such a case it's possible to use the required attribute.
+     * 
+     * @return false to deactivate the final reset of the value of the required attribute
+     */
+    public static boolean isRequiredResetActivated()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("mode:reset:required"));
+    }
 }
