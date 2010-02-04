@@ -202,11 +202,11 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
             ExtValContext.getContext().getStaticConfiguration(
                 StaticConfigurationNames.VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_CONFIG))
         {
-            setupStrategyMappings(staticConfig.getMapping());
+            setupMappings(staticConfig.getMapping());
         }
     }
 
-    private void setupStrategyMappings(List<StaticConfigurationEntry<String, String>> mappings)
+    private void setupMappings(List<StaticConfigurationEntry<String, String>> mappings)
     {
         for(StaticConfigurationEntry<String, String> mapping : mappings)
         {
