@@ -25,12 +25,15 @@ import org.apache.myfaces.blank.validation.group.Name;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 
+import javax.validation.groups.Default;
+
 /**
  * A typical simple backing bean, that is backed to <code>helloworld.jsp</code>
  */
 public class HelloGroupValidationController
 {
     @BeanValidation.List({
+            @BeanValidation(useGroups = Default.class),
             @BeanValidation(viewIds = "/groupValidation01.jsp", useGroups = User.class),
             @BeanValidation(viewIds = "/groupValidation02.jsp", useGroups = Admin.class),
             @BeanValidation(viewIds = "/modelValidation01.jsp", useGroups = Admin.class),
