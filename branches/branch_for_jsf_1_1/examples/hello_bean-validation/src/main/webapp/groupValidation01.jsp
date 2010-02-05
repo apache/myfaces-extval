@@ -25,13 +25,13 @@
         <f:view>
             <h:form id="mainForm">
               <h:panelGrid columns="3">
-                <h:outputLabel for="first_name" value="First name:"/>
+                <h:outputLabel for="first_name" value="First name*:"/>
                 <h:inputText id="first_name" value="#{helloGroupValidationController['person'].firstName}"/>
-                <h:message for="first_name" showSummary="true" showDetail="false"/>
+                <h:message for="first_name" showSummary="true" showDetail="false" errorStyle="color: red;" warnStyle="color: orange;"/>
 
-                <h:outputLabel for="last_name" value="Last name:"/>
+                <h:outputLabel for="last_name" value="Last name**:"/>
                 <h:inputText id="last_name" value="#{helloGroupValidationController.person.lastName}"/>
-                <h:message for="last_name" showSummary="true" showDetail="false"/>
+                <h:message for="last_name" showSummary="true" showDetail="false" errorStyle="color: red;" warnStyle="color: orange;"/>
 
                 <h:commandButton value="Press me" action="#{helloGroupValidationController.send}"/>
                 <h:panelGroup/>
@@ -42,7 +42,7 @@
         </f:view>
         <hr/>
 
-        * not required<br/>
-        ** not required; length of provided value: 3-6 characters
+        * required<br/>
+        ** required; length: 3-6 characters
     </body>
 </html>
