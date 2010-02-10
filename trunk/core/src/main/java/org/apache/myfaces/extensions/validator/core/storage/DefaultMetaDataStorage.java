@@ -184,7 +184,18 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
     private String createKey(Class targetClass, String targetProperty)
     {
-        return targetClass.getName() + "#" + targetProperty;
+        String targetClassName = getTargetClassName(targetClass);
+        return targetClassName + "#" + targetProperty;
+    }
+
+    private String getTargetClassName(Class currentClass)
+    {
+        if (currentClass.getName().contains("$$EnhancerByCGLIB$$")
+            || currentClass.getName().contains("$$FastClassByCGLIB$$"))
+        {
+            return currentClass.getName().substring(0, currentClass.getName().indexOf("$"));
+        }
+        return currentClass.getName();
     }
 
     @ToDo(Priority.MEDIUM)
