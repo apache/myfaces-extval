@@ -37,9 +37,10 @@ import java.util.Map;
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class BeanValidationInterceptor extends AbstractValidationInterceptor
+public class BeanValidationModuleValidationInterceptor extends AbstractValidationInterceptor
 {
-    private BeanValidationInterceptorInternals bviUtils = new BeanValidationInterceptorInternals(this.logger);
+    private BeanValidationModuleValidationInterceptorInternals bviUtils =
+            new BeanValidationModuleValidationInterceptorInternals(this.logger);
 
     @Override
     protected boolean isRequiredInitializationSupported()
