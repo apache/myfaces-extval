@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
-import org.apache.myfaces.extensions.validator.PropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.PropertyValidationModuleValidationInterceptor;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -65,7 +65,7 @@ public class RegistrationRendererInterceptorTestCase extends AbstractExValCoreTe
             tmp = result.get(i);
             assertTrue(tmp instanceof TestComponentInitializer ||
                     tmp instanceof ValidationInterceptor ||  /*due to a junit issue*/
-                    tmp instanceof PropertyValidationInterceptor);
+                    tmp instanceof PropertyValidationModuleValidationInterceptor);
         }
     }
 
