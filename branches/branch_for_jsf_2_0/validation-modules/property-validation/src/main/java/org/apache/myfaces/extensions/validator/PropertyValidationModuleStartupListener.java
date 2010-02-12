@@ -101,7 +101,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         }
 
         ExtValContext.getContext().denyRendererInterceptor(ValidationInterceptor.class);
-        ExtValContext.getContext().registerRendererInterceptor(new PropertyValidationInterceptor());
+        ExtValContext.getContext().registerRendererInterceptor(new PropertyValidationModuleValidationInterceptor());
 
         StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
         //it's just required to set the target

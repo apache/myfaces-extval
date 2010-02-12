@@ -34,7 +34,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterc
 @UsageInformation(UsageCategory.INTERNAL)
 @ToDo(value = Priority.MEDIUM, description = "change the add-ons" +
         "old name: ValidationInterceptorWithSkipValidationSupport")
-public class PropertyValidationInterceptor extends ValidationInterceptor
+public class PropertyValidationModuleValidationInterceptor extends ValidationInterceptor
 {
     @Override
     protected Class getModuleKey()
