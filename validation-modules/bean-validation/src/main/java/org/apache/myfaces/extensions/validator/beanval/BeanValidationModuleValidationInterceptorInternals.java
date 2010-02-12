@@ -49,11 +49,11 @@ import java.util.Set;
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-class BeanValidationInterceptorInternals
+class BeanValidationModuleValidationInterceptorInternals
 {
     private Log logger;
 
-    BeanValidationInterceptorInternals(Log logger)
+    BeanValidationModuleValidationInterceptorInternals(Log logger)
     {
         this.logger = logger;
     }
