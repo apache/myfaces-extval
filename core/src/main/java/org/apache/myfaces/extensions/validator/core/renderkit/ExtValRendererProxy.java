@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorageEntry;
 import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage;
-import org.apache.myfaces.extensions.validator.core.ProjectStage;
+import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -264,7 +264,7 @@ public class ExtValRendererProxy extends Renderer
 
     private void tryToCreateMessage(String methodName)
     {
-        if(ProjectStage.is(ProjectStage.Development))
+        if(JsfProjectStage.is(JsfProjectStage.Development))
         {
             String message = "double call of " + this.wrapped.getClass().getName() + "#" + methodName + " filtered. " +
                     "this optimization might lead to incompatibilities with some component libs. " +
