@@ -396,7 +396,7 @@ public class ExtValContext
             }
         }
 
-        if(ProjectStage.is(ProjectStage.Development) && this.logger.isInfoEnabled())
+        if(JsfProjectStage.is(JsfProjectStage.Development) && this.logger.isInfoEnabled())
         {
             this.logger.info("global property [" + name + "] added");
         }
