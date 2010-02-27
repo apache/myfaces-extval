@@ -18,65 +18,65 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.stage;
 
-import org.apache.myfaces.extensions.validator.core.ProjectStage;
+import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class ProjectStageTestCase extends AbstractExValCoreTestCase
+public class JsfProjectStageTestCase extends AbstractExValCoreTestCase
 {
     private static final String PROJECT_STAGE = "javax.faces.PROJECT_STAGE";
-    public ProjectStageTestCase(String name)
+    public JsfProjectStageTestCase(String name)
     {
         super(name);
     }
 
     public static Test suite()
     {
-        return new TestSuite(ProjectStageTestCase.class);
+        return new TestSuite(JsfProjectStageTestCase.class);
     }
 
     public void testDevelopmentStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "Development");
-        assertTrue(ProjectStage.is(ProjectStage.Development));
+        assertTrue(JsfProjectStage.is(JsfProjectStage.Development));
     }
 
     public void testUnitTestStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "UnitTest");
-        assertTrue(ProjectStage.is(ProjectStage.UnitTest));
+        assertTrue(JsfProjectStage.is(JsfProjectStage.UnitTest));
     }
 
     public void testSystemTestStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "SystemTest");
-        assertTrue(ProjectStage.is(ProjectStage.SystemTest));
+        assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
     }
 
     public void testProductionStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "Production");
-        assertTrue(ProjectStage.is(ProjectStage.Production));
+        assertTrue(JsfProjectStage.is(JsfProjectStage.Production));
     }
 
     public void testDefaultStage()
     {
-        assertTrue(ProjectStage.is(ProjectStage.Production));
+        assertTrue(JsfProjectStage.is(JsfProjectStage.Production));
     }
 
     public void testWrongDefaultStage1()
     {
-        assertFalse(ProjectStage.is(ProjectStage.Development));
+        assertFalse(JsfProjectStage.is(JsfProjectStage.Development));
     }
 
     public void testWrongDefaultStage2()
     {
-        assertFalse(ProjectStage.is(ProjectStage.UnitTest));
+        assertFalse(JsfProjectStage.is(JsfProjectStage.UnitTest));
     }
 
     public void testWrongDefaultStage3()
     {
-        assertFalse(ProjectStage.is(ProjectStage.SystemTest));
+        assertFalse(JsfProjectStage.is(JsfProjectStage.SystemTest));
     }
 }
