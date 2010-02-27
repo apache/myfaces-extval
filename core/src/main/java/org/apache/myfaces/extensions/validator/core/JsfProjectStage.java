@@ -20,50 +20,32 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 /**
- * extensible project stage implementation
+ * project stage equivalent to jsf 2.0
+ * extval 2.x has a special resolver which redirects the call to the new jsf api
  *
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ProjectStage
+public enum JsfProjectStage
 {
-    private ProjectStageName value;
+    Development(ProjectStage.createStageName("Development")),
+    UnitTest(ProjectStage.createStageName("UnitTest")),
+    SystemTest(ProjectStage.createStageName("SystemTest")),
+    Production(ProjectStage.createStageName("Production"));
 
-    private ProjectStage(ProjectStageName value)
+    private final ProjectStageName value;
+
+    JsfProjectStage(ProjectStageName value)
     {
         this.value = value;
     }
 
-    public static ProjectStageName createStageName(String name)
+    public static boolean is(JsfProjectStage jsfProjectStage)
     {
-        return JsfUtils.createProjectStageName(name);
-    }
-
-    public static ProjectStage createStage(ProjectStageName name)
-    {
-        return new ProjectStage(name);
-    }
-
-    public static boolean is(ProjectStageName projectStage)
-    {
-        return getCurrentProjectStage().equals(projectStage);
-    }
-
-    private static ProjectStageName getCurrentProjectStage()
-    {
-        //set ProjectStageResolver to null to tweak the performance
-        Object projectStageResolver = ExtValContext.getContext()
-                .getGlobalProperty(ProjectStageResolver.class.getName());
-
-        if(projectStageResolver instanceof ProjectStageResolver)
-        {
-            return ((ProjectStageResolver)projectStageResolver).getCurrentProjectStage().getValue();
-        }
-        return JsfUtils.getDefaultStageName();
+        return ProjectStage.is(jsfProjectStage.getValue());
     }
 
     public ProjectStageName getValue()

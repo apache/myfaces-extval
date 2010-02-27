@@ -22,6 +22,9 @@ import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
+import org.apache.myfaces.extensions.validator.core.DefaultProjectStageResolver;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
@@ -46,6 +49,8 @@ public abstract class AbstractStartupListener implements PhaseListener
     //don't remove - it's a fallback if there is a problem with deregistration
     //target: don't process init logic more than once
     private static List<Class> initializedListeners = new ArrayList<Class>();
+
+    private static boolean defaultProjectStageResolverInitialized = false;
 
     protected AbstractStartupListener()
     {
@@ -76,6 +81,8 @@ public abstract class AbstractStartupListener implements PhaseListener
                     {
                         if(!isStartupListenerDeactivated())
                         {
+                            initProjectStageResolver();
+
                             init();
                         }
                         else
@@ -123,6 +130,21 @@ public abstract class AbstractStartupListener implements PhaseListener
     protected boolean isStartupListenerDeactivated()
     {
         return "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(getClass().getName() + ":DEACTIVATED"));
+    }
+
+    protected void initProjectStageResolver()
+    {
+        if(!defaultProjectStageResolverInitialized)
+        {
+            ExtValContext.getContext()
+                    .addGlobalProperty(ProjectStageResolver.class.getName(), getProjectStageResolver(), false);
+            defaultProjectStageResolverInitialized = true;
+        }
+    }
+
+    protected ProjectStageResolver getProjectStageResolver()
+    {
+        return new DefaultProjectStageResolver();
     }
 
     protected abstract void init();

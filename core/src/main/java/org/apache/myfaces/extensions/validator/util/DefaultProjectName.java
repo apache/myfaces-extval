@@ -16,49 +16,66 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core;
+package org.apache.myfaces.extensions.validator.util;
 
+import org.apache.myfaces.extensions.validator.core.ProjectStageName;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.JsfUtils;
-
-import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
- * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class DefaultProjectStageResolver implements ProjectStageResolver
+class DefaultProjectName implements ProjectStageName
 {
-    public ProjectStage getCurrentProjectStage()
-    {
-        //don't use the default extval mechanism to avoid too early evaluation with mojarra
-        String result;
-        try
-        {
-            result = FacesContext.getCurrentInstance()
-                    .getExternalContext().getInitParameter("javax.faces.PROJECT_STAGE");
-        }
-        catch (Throwable t)
-        {
-            return createProjectStage(getDefaultProjectStage());
-        }
+    private final String name;
 
-        if(result == null || "".equals(result))
-        {
-            return createProjectStage(getDefaultProjectStage());
-        }
-        return createProjectStage(ProjectStage.createStageName(result.trim()));
+    @SuppressWarnings({"UnusedDeclaration"})
+    private DefaultProjectName()
+    {
+        this.name = null;
     }
 
-    protected ProjectStage createProjectStage(ProjectStageName projectStageName)
+    private DefaultProjectName(String name)
     {
-        return ProjectStage.createStage(projectStageName);
+        this.name = name;
     }
 
-    private ProjectStageName getDefaultProjectStage()
+    static ProjectStageName createProjectStageName(String name)
     {
-        return JsfUtils.getDefaultStageName();
+        return new DefaultProjectName(name);
+    }
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof DefaultProjectName))
+        {
+            return false;
+        }
+
+        DefaultProjectName that = (DefaultProjectName) o;
+
+        if (!name.equals(that.name))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return name.hashCode();
     }
 }
