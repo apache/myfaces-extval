@@ -41,6 +41,7 @@ import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListene
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -183,6 +184,8 @@ public abstract class AbstractExValTestCase extends TestCase
             @Override
             protected void init()
             {
+                ExtValContext.getContext()
+                        .addGlobalProperty(ProjectStageResolver.class.getName(), getProjectStageResolver(), false);
                 super.init();
             }
         }.init();

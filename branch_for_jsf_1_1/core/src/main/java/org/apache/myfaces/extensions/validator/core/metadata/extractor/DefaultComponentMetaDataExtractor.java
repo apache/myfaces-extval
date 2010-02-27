@@ -341,6 +341,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         }
     }
 
+    @ToDo(value = Priority.HIGH, description = "add support for instances wrapped with cglib")
     private Field getDeclaredField(Class entity, String property) throws NoSuchFieldException
     {
         if (isCachedField(entity, property))
