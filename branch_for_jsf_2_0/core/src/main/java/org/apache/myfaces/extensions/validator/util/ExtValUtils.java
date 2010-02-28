@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
+import org.apache.myfaces.extensions.validator.core.ProjectStageName;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
@@ -940,5 +941,15 @@ public class ExtValUtils
     public static boolean isRequiredResetActivated()
     {
         return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("mode:reset:required"));
+    }
+
+    public static ProjectStageName getDefaultStageName()
+    {
+        return createProjectStageName("Production");
+    }
+
+    public static ProjectStageName createProjectStageName(String name)
+    {
+        return DefaultProjectName.createProjectStageName(name);
     }
 }

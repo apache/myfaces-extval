@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.JsfUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
  * extensible project stage implementation
@@ -40,7 +40,7 @@ public class ProjectStage
 
     public static ProjectStageName createStageName(String name)
     {
-        return JsfUtils.createProjectStageName(name);
+        return ExtValUtils.createProjectStageName(name);
     }
 
     public static ProjectStage createStage(ProjectStageName name)
@@ -63,7 +63,7 @@ public class ProjectStage
         {
             return ((ProjectStageResolver)projectStageResolver).getCurrentProjectStage().getValue();
         }
-        return JsfUtils.getDefaultStageName();
+        return ExtValUtils.getDefaultStageName();
     }
 
     public ProjectStageName getValue()
