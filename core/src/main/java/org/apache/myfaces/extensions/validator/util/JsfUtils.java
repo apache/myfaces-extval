@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.core.storage.FacesInformationStorage;
-import org.apache.myfaces.extensions.validator.core.ProjectStageName;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -124,15 +123,5 @@ public class JsfUtils
     private static FacesInformationStorage getFacesInformationStorage()
     {
         return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
-    }
-
-    public static ProjectStageName getDefaultStageName()
-    {
-        return createProjectStageName("Production");
-    }
-
-    public static ProjectStageName createProjectStageName(String name)
-    {
-        return DefaultProjectName.createProjectStageName(name);
     }
 }
