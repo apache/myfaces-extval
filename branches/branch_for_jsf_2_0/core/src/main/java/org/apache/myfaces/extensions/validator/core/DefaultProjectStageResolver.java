@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.JsfUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.context.FacesContext;
 
@@ -58,6 +58,6 @@ public class DefaultProjectStageResolver implements ProjectStageResolver
 
     private ProjectStageName getDefaultProjectStage()
     {
-        return JsfUtils.getDefaultStageName();
+        return ExtValUtils.getDefaultStageName();
     }
 }
