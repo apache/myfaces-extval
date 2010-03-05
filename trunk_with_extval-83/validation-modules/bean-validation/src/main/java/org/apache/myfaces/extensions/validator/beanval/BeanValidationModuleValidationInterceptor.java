@@ -39,7 +39,7 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationModuleValidationInterceptor extends AbstractValidationInterceptor
 {
-    private BeanValidationModuleValidationInterceptorInternals bviUtils =
+    BeanValidationModuleValidationInterceptorInternals bviUtils =
             new BeanValidationModuleValidationInterceptorInternals(this.logger);
 
     @Override
@@ -60,13 +60,20 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
 
         if (propertyDetails != null)
         {
-            bviUtils.initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
+            initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
         }
 
         if (logger.isTraceEnabled())
         {
             logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
         }
+    }
+
+    protected void initComponentWithPropertyDetails(FacesContext facesContext,
+                                                    UIComponent uiComponent,
+                                                    PropertyDetails propertyDetails)
+    {
+        this.bviUtils.initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
     }
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
@@ -117,6 +124,14 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
         Set<ConstraintViolation> violations = this.bviUtils
                 .validate(facesContext, uiComponent, convertedObject, propertyInformation);
 
+        processConstraintViolations(facesContext, uiComponent, convertedObject, violations);
+    }
+
+    protected void processConstraintViolations(FacesContext facesContext,
+                                             UIComponent uiComponent,
+                                             Object convertedObject,
+                                             Set<ConstraintViolation> violations)
+    {
         if(violations != null && !violations.isEmpty())
         {
             BeanValidationUtils.processConstraintViolations(facesContext, uiComponent, convertedObject, violations);
