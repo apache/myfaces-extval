@@ -26,10 +26,10 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import javax.faces.component.UIComponent;
@@ -40,8 +40,8 @@ import javax.validation.groups.Default;
 import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.metadata.ElementDescriptor;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -92,7 +92,7 @@ class BeanValidationModuleValidationInterceptorInternals
         {
             return;
         }
-        else if(foundGroups.length == 0)
+        else if (foundGroups.length == 0)
         {
             foundGroups = new Class[]{Default.class};
         }
@@ -105,6 +105,14 @@ class BeanValidationModuleValidationInterceptorInternals
             return;
         }
 
+        processElementDescriptor(facesContext, uiComponent, foundGroups, elementDescriptor);
+    }
+
+    void processElementDescriptor(FacesContext facesContext,
+                                  UIComponent uiComponent,
+                                  Class[] foundGroups,
+                                  ElementDescriptor elementDescriptor)
+    {
         Map<String, Object> metaData;
 
         for (ConstraintDescriptor<?> constraintDescriptor :
@@ -135,10 +143,10 @@ class BeanValidationModuleValidationInterceptorInternals
             result.putAll(transformMetaData(metaDataTransformer, constraintDescriptor));
         }
 
-        if(!constraintDescriptor.isReportAsSingleViolation())
+        if (!constraintDescriptor.isReportAsSingleViolation())
         {
             Set<ConstraintDescriptor<?>> composingConstraints = constraintDescriptor.getComposingConstraints();
-            if(composingConstraints != null && !composingConstraints.isEmpty())
+            if (composingConstraints != null && !composingConstraints.isEmpty())
             {
                 result.putAll(transformComposingConstraints(composingConstraints, elementClass));
             }
@@ -151,7 +159,7 @@ class BeanValidationModuleValidationInterceptorInternals
             Set<ConstraintDescriptor<?>> composingConstraints, Class elementClass)
     {
         Map<String, Object> result = new HashMap<String, Object>();
-        for(ConstraintDescriptor constraintDescriptor : composingConstraints)
+        for (ConstraintDescriptor constraintDescriptor : composingConstraints)
         {
             result.putAll(transformConstraintDescriptorToMetaData(constraintDescriptor, elementClass));
         }
@@ -186,9 +194,9 @@ class BeanValidationModuleValidationInterceptorInternals
 
     @SuppressWarnings({"unchecked"})
     Set<ConstraintViolation> validate(FacesContext facesContext,
-                  UIComponent uiComponent,
-                  Object convertedObject,
-                  PropertyInformation propertyInformation)
+                                      UIComponent uiComponent,
+                                      Object convertedObject,
+                                      PropertyInformation propertyInformation)
     {
         Class baseBeanClass = getBaseClassType(propertyInformation);
         String propertyName = getPropertyToValidate(propertyInformation);
@@ -210,24 +218,24 @@ class BeanValidationModuleValidationInterceptorInternals
                 .validateValue(baseBeanClass, propertyName, convertedObject, groups);
     }
 
-    private Class getBaseClassType(PropertyInformation propertyInformation)
+    Class getBaseClassType(PropertyInformation propertyInformation)
     {
         return ExtValUtils.getPropertyDetails(propertyInformation).getBaseObject().getClass();
     }
 
-    private String getPropertyToValidate(PropertyInformation propertyInformation)
+    String getPropertyToValidate(PropertyInformation propertyInformation)
     {
         return ExtValUtils.getPropertyDetails(propertyInformation).getProperty();
     }
 
-    private Class[] resolveGroups(FacesContext facesContext, UIComponent uiComponent)
+    Class[] resolveGroups(FacesContext facesContext, UIComponent uiComponent)
     {
         return ExtValBeanValidationContext.getCurrentInstance().getGroups(
                 facesContext.getViewRoot().getViewId(),
                 uiComponent.getClientId(facesContext));
     }
 
-    private ElementDescriptor getDescriptorFor(Class targetClass, String property)
+    ElementDescriptor getDescriptorFor(Class targetClass, String property)
     {
         BeanDescriptor beanDescriptor = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
                 .getValidator().getConstraintsForClass(targetClass);
