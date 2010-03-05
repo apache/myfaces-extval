@@ -61,6 +61,10 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
+import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
+import org.apache.myfaces.extensions.validator.core.validation.IgnoreConstraintSource;
+import org.apache.myfaces.extensions.validator.core.validation.TargetProperty;
+import org.apache.myfaces.extensions.validator.core.validation.TargetPropertyId;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -103,6 +107,8 @@ public class ExtValStartupListener extends AbstractStartupListener
         initViolationSeverityKey();
         initDisableClientSideValidationKey();
         initRequiredInitialization();
+        initDefaultConstraintSourceAnnotations();
+
         executeCustomStartupListener();
     }
 
@@ -232,6 +238,18 @@ public class ExtValStartupListener extends AbstractStartupListener
                 deactivateRequiredAttributeSupport();
             }
         }
+    }
+
+    private void initDefaultConstraintSourceAnnotations()
+    {
+        ExtValContext.getContext()
+                .addGlobalProperty(ConstraintSource.class.getName(), ConstraintSource.class, false);
+        ExtValContext.getContext()
+                .addGlobalProperty(IgnoreConstraintSource.class.getName(), IgnoreConstraintSource.class, false);
+        ExtValContext.getContext()
+                .addGlobalProperty(TargetProperty.class.getName(), TargetProperty.class, false);
+        ExtValContext.getContext()
+                .addGlobalProperty(TargetPropertyId.class.getName(), TargetPropertyId.class, false);
     }
 
     /**
