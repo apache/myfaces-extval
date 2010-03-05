@@ -40,7 +40,10 @@ public class DefaultMappedConstraintSourceStorage implements MappedConstraintSou
 
     public void storeMapping(Class originalClass, String originalProperty, PropertyDetails targetPropertyDetails)
     {
-        this.propertyDetailsMap.put(createKey(originalClass, originalProperty), targetPropertyDetails);
+        PropertyDetails propertyDetails = new PropertyDetails(targetPropertyDetails.getKey(),
+                targetPropertyDetails.getBaseObject(), targetPropertyDetails.getProperty());
+
+        this.propertyDetailsMap.put(createKey(originalClass, originalProperty), propertyDetails);
     }
 
     public PropertyDetails getMappedConstraintSource(Class originalClass, String originalProperty)
