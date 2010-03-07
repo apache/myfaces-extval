@@ -44,6 +44,7 @@ import javax.faces.event.PhaseListener;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Path;
+import javax.validation.ValidatorFactory;
 import javax.validation.metadata.ConstraintDescriptor;
 import java.util.Map;
 import java.util.HashMap;
@@ -233,9 +234,12 @@ public class ModelValidationPhaseListener implements PhaseListener
             return null;
         }
 
-        return ExtValBeanValidationContext.getCurrentInstance()
-                .getValidatorFactory().usingContext()
+        ValidatorFactory validatorFactory = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory();
+        return validatorFactory
+                .usingContext()
                 .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
+                .constraintValidatorFactory(validatorFactory.getConstraintValidatorFactory())
+                .traversableResolver(validatorFactory.getTraversableResolver())
                 .getValidator()
                 .validate(validationTarget, groups);
     }
