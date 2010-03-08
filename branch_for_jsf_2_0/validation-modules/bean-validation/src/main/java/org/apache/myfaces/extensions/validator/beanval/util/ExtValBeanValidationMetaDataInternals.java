@@ -35,6 +35,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -201,6 +202,12 @@ class ExtValBeanValidationMetaDataInternals
                               boolean processModelValidation)
     {
         Class classToInspect = objectToInspect.getClass();
+
+        if(ClassUtils.isProxiedClass(classToInspect))
+        {
+            classToInspect = ClassUtils.tryToLoadClassForName(ClassUtils.getClassName(classToInspect));
+        }
+
         while (!Object.class.getName().equals(classToInspect.getName()))
         {
             transferGroupValidationInformationToFoundGroups(objectToInspect,

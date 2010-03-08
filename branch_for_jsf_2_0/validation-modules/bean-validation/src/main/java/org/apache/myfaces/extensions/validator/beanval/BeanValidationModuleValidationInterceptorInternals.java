@@ -31,6 +31,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -220,7 +221,13 @@ class BeanValidationModuleValidationInterceptorInternals
 
     Class getBaseClassType(PropertyInformation propertyInformation)
     {
-        return ExtValUtils.getPropertyDetails(propertyInformation).getBaseObject().getClass();
+        Class result = ExtValUtils.getPropertyDetails(propertyInformation).getBaseObject().getClass();
+
+        if(ClassUtils.isProxiedClass(result))
+        {
+            result = ClassUtils.tryToLoadClassForName(ClassUtils.getClassName(result));
+        }
+        return result;
     }
 
     String getPropertyToValidate(PropertyInformation propertyInformation)
