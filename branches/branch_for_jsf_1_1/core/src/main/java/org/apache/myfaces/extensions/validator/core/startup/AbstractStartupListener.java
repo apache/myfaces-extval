@@ -129,7 +129,7 @@ public abstract class AbstractStartupListener implements PhaseListener
 
     protected boolean isStartupListenerDeactivated()
     {
-        return "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(getClass().getName() + ":DEACTIVATED"));
+        return "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(null, getClass().getName() + ":DEACTIVATED"));
     }
 
     protected void initProjectStageResolver()

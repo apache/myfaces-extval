@@ -135,6 +135,9 @@ public interface WebXmlParameter
     static final String DEACTIVATE_VALIDATION_PARAMETERS = WebXmlUtils
         .getInitParameter("DEACTIVATE_VALIDATION_PARAMETERS");
 
+    static final String DEACTIVATE_RENDER_KIT_FACTORY = WebXmlUtils
+        .getInitParameter("DEACTIVATE_RENDER_KIT_FACTORY");
+
     //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
     //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
 
