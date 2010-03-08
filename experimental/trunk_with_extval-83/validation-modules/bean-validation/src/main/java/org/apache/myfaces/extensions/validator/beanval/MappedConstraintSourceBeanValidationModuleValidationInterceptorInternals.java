@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -47,6 +48,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.Collections;
 
 /**
  * @author Gerhard Petracek
@@ -112,6 +114,11 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
         PropertyDetails constraintSourcePropertyDetails =
                 resolveMappedConstraintSourceFor(originalKey, baseBeanClass, propertyName);
 
+        if(constraintSourcePropertyDetails == null)
+        {
+            return Collections.emptySet();
+        }
+
         baseBeanClass = (Class) constraintSourcePropertyDetails.getBaseObject();
         propertyName = constraintSourcePropertyDetails.getProperty();
 
@@ -148,11 +155,18 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
             return getMappedConstraintSource(baseBeanClass, property);
         }
 
+        //unproxy class
+        if(ClassUtils.isProxiedClass(baseBeanClass))
+        {
+            baseBeanClass = ClassUtils.tryToLoadClassForName(ClassUtils.getClassName(baseBeanClass));
+        }
+
         Class newBaseBeanClass = findMappedClass(baseBeanClass, property);
 
         //mapped source is ignored via @IgnoreConstraintSource or there is just no mapping annotation at the target
         if(newBaseBeanClass == null)
         {
+            tryToCacheMappedConstraintSourceMetaData(baseBeanClass, property, null);
             return null;
         }
 

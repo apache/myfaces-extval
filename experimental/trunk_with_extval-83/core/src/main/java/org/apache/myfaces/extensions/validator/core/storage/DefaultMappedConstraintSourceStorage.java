@@ -23,9 +23,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * @author Gerhard Petracek
@@ -36,36 +38,68 @@ public class DefaultMappedConstraintSourceStorage implements MappedConstraintSou
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private Map<String, PropertyDetails> propertyDetailsMap = new HashMap<String, PropertyDetails>();
+    private Map<String, Map<String, PropertyDetails>> propertyDetailsMap =
+            new HashMap<String, Map<String, PropertyDetails>>();
 
     public void storeMapping(Class originalClass, String originalProperty, PropertyDetails targetPropertyDetails)
     {
+        if(targetPropertyDetails == null)
+        {
+            if(isFilteredClass(originalClass))
+            {
+                return;
+            }
+
+            Map<String, PropertyDetails> classMap = getMapForClass(originalClass);
+            classMap.put(originalProperty, null);
+            return;
+        }
+
         PropertyDetails propertyDetails = new PropertyDetails(targetPropertyDetails.getKey(),
                 targetPropertyDetails.getBaseObject(), targetPropertyDetails.getProperty());
 
-        this.propertyDetailsMap.put(createKey(originalClass, originalProperty), propertyDetails);
+        getMapForClass(originalClass).put(originalProperty, propertyDetails);
+    }
+
+    protected boolean isFilteredClass(Class originalClass)
+    {
+        return ResourceBundle.class.isAssignableFrom(originalClass);
     }
 
     public PropertyDetails getMappedConstraintSource(Class originalClass, String originalProperty)
     {
-        PropertyDetails foundEntry = this.propertyDetailsMap.get(createKey(originalClass, originalProperty));
-        PropertyDetails result = null;
-
-        if(foundEntry != null)
+        if(isFilteredClass(originalClass))
         {
-            result = new PropertyDetails(foundEntry.getKey(), foundEntry.getBaseObject(), foundEntry.getProperty());
+            return null;
         }
-        
-        return result;
+
+        PropertyDetails foundEntry = getMapForClass(originalClass).get(originalProperty);
+
+        if(foundEntry == null)
+        {
+            return null;
+        }
+
+        return new PropertyDetails(foundEntry.getKey(), foundEntry.getBaseObject(), foundEntry.getProperty());
     }
 
     public boolean containsMapping(Class originalClass, String originalProperty)
     {
-        return this.propertyDetailsMap.containsKey(createKey(originalClass, originalProperty));
+        if(isFilteredClass(originalClass))
+        {
+            //avoid scanning process
+            return true;
+        }
+        return getMapForClass(originalClass).containsKey(originalProperty);
     }
 
-    private String createKey(Class originalClass, String originalProperty)
+    private Map<String, PropertyDetails> getMapForClass(Class target)
     {
-        return originalClass.getName() + "#" + originalProperty;
+        String key = ClassUtils.getClassName(target);
+        if(!this.propertyDetailsMap.containsKey(key))
+        {
+            this.propertyDetailsMap.put(key, new HashMap<String, PropertyDetails>());
+        }
+        return this.propertyDetailsMap.get(key);
     }
 }
