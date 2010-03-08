@@ -452,4 +452,28 @@ public class ModelValidationPhaseListener implements PhaseListener
     {
         return PhaseId.UPDATE_MODEL_VALUES;
     }
+
+    /*
+     * generated
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof ModelValidationPhaseListener))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
 }
