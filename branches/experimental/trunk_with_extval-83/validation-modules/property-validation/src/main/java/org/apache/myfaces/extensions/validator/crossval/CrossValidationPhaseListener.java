@@ -165,4 +165,25 @@ public class CrossValidationPhaseListener implements PhaseListener
     {
         return PhaseId.ANY_PHASE;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof CrossValidationPhaseListener))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
 }
