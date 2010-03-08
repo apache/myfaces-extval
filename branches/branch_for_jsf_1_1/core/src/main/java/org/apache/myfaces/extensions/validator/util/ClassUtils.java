@@ -120,4 +120,19 @@ public class ClassUtils
             return null;
         }
     }
+
+    public static String getClassName(Class currentClass)
+    {
+        if (isProxiedClass(currentClass))
+        {
+            return currentClass.getName().substring(0, currentClass.getName().indexOf("$"));
+        }
+        return currentClass.getName();
+    }
+
+    public static boolean isProxiedClass(Class currentClass)
+    {
+        return currentClass.getName().contains("$$EnhancerByCGLIB$$")
+            || currentClass.getName().contains("$$FastClassByCGLIB$$");
+    }
 }
