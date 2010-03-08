@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
@@ -44,6 +45,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
     protected final Log logger = LogFactory.getLog(getClass());
     private RenderKitFactory wrapped;
     private AbstractRenderKitWrapperFactory defaultRenderKitWrapperFactory;
+    private Boolean isDeactivated;
 
     public ExtValRenderKitFactory(RenderKitFactory renderKitFactory)
     {
@@ -57,7 +59,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 
     public void addRenderKit(String s, RenderKit renderKit)
     {
-        wrapped.addRenderKit(s, renderKit);
+        this.wrapped.addRenderKit(s, renderKit);
     }
 
     public RenderKit getRenderKit(FacesContext facesContext, String s)
@@ -72,6 +74,13 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 
         tryToInitDefaultRenderKitWrapperFactory();
 
+        checkRenderKitFactoryDeactivation();
+
+        if(this.isDeactivated)
+        {
+            return renderKit;
+        }
+
         //test early config in case of mojarra
         if(!this.defaultRenderKitWrapperFactory.isApplicationInitialized())
         {
@@ -79,6 +88,21 @@ public class ExtValRenderKitFactory extends RenderKitFactory
         }
 
         return tryToCreateWrapperWithWrapperFactory(renderKit);
+    }
+
+    private void checkRenderKitFactoryDeactivation()
+    {
+        if(this.isDeactivated == null)
+        {
+            if(this.defaultRenderKitWrapperFactory.isApplicationInitialized())
+            {
+                this.isDeactivated = isRenderKitFactoryDeactivatedViaWebXml();
+            }
+            else
+            {
+                this.isDeactivated = isRenderKitFactoryDeactivatedViaVMParameter();
+            }
+        }
     }
 
     private synchronized void tryToInitDefaultRenderKitWrapperFactory()
@@ -119,6 +143,18 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 
     public Iterator<String> getRenderKitIds()
     {
-        return wrapped.getRenderKitIds();
+        return this.wrapped.getRenderKitIds();
+    }
+
+    private boolean isRenderKitFactoryDeactivatedViaWebXml()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_RENDER_KIT_FACTORY);
+    }
+
+    private boolean isRenderKitFactoryDeactivatedViaVMParameter()
+    {
+        return "true".equalsIgnoreCase(System
+                .getProperty(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME +
+                    ".DEACTIVATE_RENDER_KIT_FACTORY", "false"));
     }
 }
