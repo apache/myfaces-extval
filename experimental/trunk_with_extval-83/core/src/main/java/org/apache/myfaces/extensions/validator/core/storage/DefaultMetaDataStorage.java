@@ -48,7 +48,8 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private Map<String, PropertyInformation> cachedPropertyInformation = new HashMap<String, PropertyInformation>();
+    private Map<String, Map<String, PropertyInformation>> cachedPropertyInformation =
+            new HashMap<String, Map<String, PropertyInformation>>();
 
     private List<MetaDataStorageFilter> metaDataStorageFilters = new ArrayList<MetaDataStorageFilter>();
     private List<Class<? extends MetaDataStorageFilter>> deniedMetaDataFilters =
@@ -95,9 +96,8 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
         copyMetaData(propertyInformation, propertyInformationToStore);
 
-        this.cachedPropertyInformation.put(
-                createKey(propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty()),
-                propertyInformationToStore);
+        getMapForClass(propertyDetails.getBaseObject().getClass())
+                .put(propertyDetails.getProperty(), propertyInformationToStore);
     }
 
     private void invokeFilters(PropertyInformation propertyInformation)
@@ -110,8 +110,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
     public MetaDataEntry[] getMetaData(Class targetClass, String targetProperty)
     {
-        PropertyInformation propertyInformation = this.cachedPropertyInformation
-                .get(createKey(targetClass, targetProperty));
+        PropertyInformation propertyInformation = getMapForClass(targetClass).get(targetProperty);
 
         PropertyInformation clonedPropertyInformation = new DefaultPropertyInformation();
         copyMetaData(propertyInformation, clonedPropertyInformation);
@@ -121,7 +120,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
     public boolean containsMetaDataFor(Class targetClass, String targetProperty)
     {
-        return this.cachedPropertyInformation.containsKey(createKey(targetClass, targetProperty));
+        return getMapForClass(targetClass).containsKey(targetProperty);
     }
 
     public void registerFilter(MetaDataStorageFilter storageFilter)
@@ -182,22 +181,6 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         deregisterFilter(filterClass);
     }
 
-    private String createKey(Class targetClass, String targetProperty)
-    {
-        String targetClassName = getTargetClassName(targetClass);
-        return targetClassName + "#" + targetProperty;
-    }
-
-    private String getTargetClassName(Class currentClass)
-    {
-        if (currentClass.getName().contains("$$EnhancerByCGLIB$$")
-            || currentClass.getName().contains("$$FastClassByCGLIB$$"))
-        {
-            return currentClass.getName().substring(0, currentClass.getName().indexOf("$"));
-        }
-        return currentClass.getName();
-    }
-
     @ToDo(Priority.MEDIUM)
     private void copyMetaData(PropertyInformation source, PropertyInformation target)
     {
@@ -226,5 +209,15 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         {
             this.logger.info(filterClass.getName() + " removed");
         }
+    }
+
+    private Map<String, PropertyInformation> getMapForClass(Class target)
+    {
+        String key = ClassUtils.getClassName(target);
+        if(!this.cachedPropertyInformation.containsKey(key))
+        {
+            this.cachedPropertyInformation.put(key, new HashMap<String, PropertyInformation>());
+        }
+        return this.cachedPropertyInformation.get(key);
     }
 }

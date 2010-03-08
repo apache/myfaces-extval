@@ -18,15 +18,16 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
-import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -37,41 +38,56 @@ public class DefaultPropertyStorage implements PropertyStorage
 {
     protected final Log logger = LogFactory.getLog(getClass());
 
-    private Map<String, Field> fieldMap = new HashMap<String, Field>();
-    private Map<String, Method> methodMap = new HashMap<String, Method>();
+    private Map<String, Map<String, Field>> fieldMap = new HashMap<String, Map<String, Field>>();
+    private Map<String, Map<String, Method>> methodMap = new HashMap<String, Map<String, Method>>();
 
     public void storeField(Class targetClass, String property, Field field)
     {
-        this.fieldMap.put(createKey(targetClass, property), field);
+        getFieldMapForClass(targetClass).put(property, field);
     }
 
     public void storeMethod(Class targetClass, String property, Method method)
     {
-        this.methodMap.put(createKey(targetClass, property), method);
+        getMethodMapForClass(targetClass).put(property,  method);
     }
 
     public Field getField(Class targetClass, String property)
     {
-        return this.fieldMap.get(createKey(targetClass, property));
+        return getFieldMapForClass(targetClass).get(property);
     }
 
     public Method getMethod(Class targetClass, String property)
     {
-        return this.methodMap.get(createKey(targetClass, property));
+        return getMethodMapForClass(targetClass).get(property);
     }
 
     public boolean containsField(Class targetClass, String property)
     {
-        return this.fieldMap.containsKey(createKey(targetClass, property));
+        return getFieldMapForClass(targetClass).containsKey(property);
     }
 
     public boolean containsMethod(Class targetClass, String property)
     {
-        return this.methodMap.containsKey(createKey(targetClass, property));
+        return getMethodMapForClass(targetClass).containsKey(property);
     }
 
-    private String createKey(Class targetClass, String property)
+    private Map<String, Field> getFieldMapForClass(Class target)
     {
-        return targetClass + "#" + property;
+        String key = ClassUtils.getClassName(target);
+        if (!this.fieldMap.containsKey(key))
+        {
+            this.fieldMap.put(key, new HashMap<String, Field>());
+        }
+        return this.fieldMap.get(key);
+    }
+
+    private Map<String, Method> getMethodMapForClass(Class target)
+    {
+        String key = ClassUtils.getClassName(target);
+        if (!this.methodMap.containsKey(key))
+        {
+            this.methodMap.put(key, new HashMap<String, Method>());
+        }
+        return this.methodMap.get(key);
     }
 }
