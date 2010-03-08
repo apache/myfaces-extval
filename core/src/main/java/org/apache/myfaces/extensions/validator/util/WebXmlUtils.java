@@ -38,7 +38,12 @@ public class WebXmlUtils
 
     public static String getInitParameter(String prefix, String name)
     {
-        String value = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(prefix + "." + name);
+        String parameterName = name;
+        if(prefix != null)
+        {
+            parameterName = prefix + "." + name;
+        }
+        String value = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(parameterName);
         return (value != null) ? value.replace(" ", "").trim() : null;
     }
 }
