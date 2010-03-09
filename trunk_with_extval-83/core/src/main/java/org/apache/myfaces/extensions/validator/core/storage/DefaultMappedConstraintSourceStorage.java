@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +95,7 @@ public class DefaultMappedConstraintSourceStorage implements MappedConstraintSou
 
     private Map<String, PropertyDetails> getMapForClass(Class target)
     {
-        String key = ClassUtils.getClassName(target);
+        String key = ProxyUtils.getClassName(target);
         if(!this.propertyDetailsMap.containsKey(key))
         {
             this.propertyDetailsMap.put(key, new HashMap<String, PropertyDetails>());
