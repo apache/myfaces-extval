@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -65,7 +66,7 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
 
     public MessageResolver create(ValidationStrategy validationStrategy)
     {
-        String strategyName = validationStrategy.getClass().getName();
+        String strategyName = ProxyUtils.getClassName(validationStrategy.getClass());
 
         if (strategyMessageResolverMapping == null)
         {
@@ -86,7 +87,7 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
             resolverName = nameMapper.createName(validationStrategy);
 
             //name wasn't mapped
-            if (resolverName == null || validationStrategy.getClass().getName().equals(resolverName))
+            if (resolverName == null || ProxyUtils.getClassName(validationStrategy.getClass()).equals(resolverName))
             {
                 continue;
             }
