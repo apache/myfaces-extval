@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Abstract
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -88,7 +89,8 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
 
                 if (validationStrategy != null)
                 {
-                    if(ExtValUtils.processMetaDataEntryAfterSkipValidation(validationStrategy.getClass(), entry))
+                    if(ExtValUtils.processMetaDataEntryAfterSkipValidation(ProxyUtils.getUnproxiedClass(
+                            validationStrategy.getClass(), ValidationStrategy.class), entry))
                     {
                         continue;
                     }
