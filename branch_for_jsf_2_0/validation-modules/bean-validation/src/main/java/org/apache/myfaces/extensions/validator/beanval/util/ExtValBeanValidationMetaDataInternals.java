@@ -33,9 +33,11 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
+import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -201,12 +203,7 @@ class ExtValBeanValidationMetaDataInternals
                               List<Class> restrictedGroupsForModelValidation,
                               boolean processModelValidation)
     {
-        Class classToInspect = objectToInspect.getClass();
-
-        if(ClassUtils.isProxiedClass(classToInspect))
-        {
-            classToInspect = ClassUtils.tryToLoadClassForName(ClassUtils.getClassName(classToInspect));
-        }
+        Class classToInspect = ProxyUtils.getUnproxiedClass(objectToInspect.getClass());
 
         while (!Object.class.getName().equals(classToInspect.getName()))
         {
@@ -289,17 +286,20 @@ class ExtValBeanValidationMetaDataInternals
     private Object getValueOfProperty(Object base, String property)
     {
         property = property.substring(0, 1).toUpperCase() + property.substring(1, property.length());
-        Method targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "get" + property);
+
+        Class targetClass = ProxyUtils.getUnproxiedClass(base.getClass());
+
+        Method targetMethod = ReflectionUtils.tryToGetMethod(targetClass, "get" + property);
 
         if (targetMethod == null)
         {
-            targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "is" + property);
+            targetMethod = ReflectionUtils.tryToGetMethod(targetClass, "is" + property);
         }
 
         if (targetMethod == null)
         {
             throw new IllegalStateException(
-                    "class " + base.getClass() + " has no public get/is " + property.toLowerCase());
+                    "class " + targetClass + " has no public get/is " + property.toLowerCase());
         }
         return ReflectionUtils.tryToInvokeMethod(base, targetMethod);
     }
@@ -360,6 +360,7 @@ class ExtValBeanValidationMetaDataInternals
         }
     }
 
+    @ToDo(value = Priority.MEDIUM, description = "test proxy support")
     private void transferGroupValidationInformationToFoundGroups(
             Object objectToInspect,
             List<Class> foundGroupsForPropertyValidation,
