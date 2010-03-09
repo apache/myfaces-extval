@@ -32,7 +32,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -155,11 +155,7 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
             return getMappedConstraintSource(baseBeanClass, property);
         }
 
-        //unproxy class
-        if(ClassUtils.isProxiedClass(baseBeanClass))
-        {
-            baseBeanClass = ClassUtils.tryToLoadClassForName(ClassUtils.getClassName(baseBeanClass));
-        }
+        baseBeanClass = ProxyUtils.getUnproxiedClass(baseBeanClass);
 
         Class newBaseBeanClass = findMappedClass(baseBeanClass, property);
 
