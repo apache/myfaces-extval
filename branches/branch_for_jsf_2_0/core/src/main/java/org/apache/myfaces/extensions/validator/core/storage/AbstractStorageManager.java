@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.storage;
 import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.REUSE;
 import org.apache.commons.logging.Log;
@@ -95,7 +96,7 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
 
         if(storageMap != null && storageMap.containsKey(storageKey))
         {
-            Class storageClass = storageMap.get(storageKey).getClass();
+            Class storageClass = ProxyUtils.getUnproxiedClass(storageMap.get(storageKey).getClass());
             storageMap.put(storageKey, (T)ClassUtils.tryToInstantiateClass(storageClass));
         }
     }

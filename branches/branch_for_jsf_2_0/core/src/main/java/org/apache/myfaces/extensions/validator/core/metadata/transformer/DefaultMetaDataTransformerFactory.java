@@ -33,6 +33,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper.
         ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
@@ -103,7 +104,7 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
                                         .getValidationStrategyClassName();
         }
 
-        return !isProxyDetected ? validationStrategy.getClass().getName() : null;
+        return !isProxyDetected ? ProxyUtils.getClassName(validationStrategy.getClass()) : null;
     }
 
     private void tryToInitStaticMappings()

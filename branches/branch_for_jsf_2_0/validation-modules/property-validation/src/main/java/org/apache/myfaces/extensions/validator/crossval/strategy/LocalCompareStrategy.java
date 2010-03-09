@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -118,11 +119,12 @@ class LocalCompareStrategy implements ReferencingStrategy
     protected Object getValueOfProperty(Object base, String property)
     {
         property = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
-        Method targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "get" + property);
+        Class targetClass = ProxyUtils.getUnproxiedClass(base.getClass());
+        Method targetMethod = ReflectionUtils.tryToGetMethod(targetClass, "get" + property);
 
         if(targetMethod == null)
         {
-            targetMethod = ReflectionUtils.tryToGetMethod(base.getClass(), "is" + property);
+            targetMethod = ReflectionUtils.tryToGetMethod(targetClass, "is" + property);
         }
 
         if(targetMethod == null)

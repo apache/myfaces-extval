@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.commons.logging.Log;
@@ -70,7 +71,7 @@ public class DefaultELHelper implements ELHelper
     {
         //due to a restriction with the ri
         Object bean = getValueOfExpression(facesContext, valueBindingExpression);
-        return (bean != null) ? bean.getClass() : null;
+        return (bean != null) ? ProxyUtils.getUnproxiedClass(bean.getClass()) : null;
     }
 
     public Object getBean(String beanName)
@@ -281,10 +282,12 @@ public class DefaultELHelper implements ELHelper
 
         Method currentMethod;
         String currentPropertyName;
+        Class currentClassOfPropertyValue;
         for(int i = 1; i < properties.length; i++)
         {
             currentPropertyName = properties[i];
-            currentMethod = ReflectionUtils.tryToGetMethod(currentPropertyValue.getClass(),
+            currentClassOfPropertyValue = ProxyUtils.getUnproxiedClass(currentPropertyValue.getClass());
+            currentMethod = ReflectionUtils.tryToGetMethod(currentClassOfPropertyValue,
                 "get" + currentPropertyName.substring(0, 1).toUpperCase() + currentPropertyName.substring(1));
 
             if(currentMethod == null && currentPropertyValue instanceof Map)
