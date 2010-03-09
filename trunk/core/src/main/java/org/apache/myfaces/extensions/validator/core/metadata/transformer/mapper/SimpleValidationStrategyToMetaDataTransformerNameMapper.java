@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 /**
  * It's an alternative Mapper to place ValidationStrategies and MetaDataTransformers in the same package.
@@ -38,12 +39,15 @@ public class SimpleValidationStrategyToMetaDataTransformerNameMapper extends
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        if(validationStrategy.getClass().getPackage() == null)
+        Class<? extends ValidationStrategy> validationStrategyClass =
+                ProxyUtils.getUnproxiedClass(validationStrategy.getClass(), ValidationStrategy.class);
+
+        if(validationStrategyClass.getPackage() == null)
         {
             return null;
         }
-        return getSimpleMetaDataTransformerName(validationStrategy.getClass().getPackage().getName() + ".",
-                                                validationStrategy.getClass().getSimpleName());
+        return getSimpleMetaDataTransformerName(validationStrategyClass.getPackage().getName() + ".",
+                                                validationStrategyClass.getSimpleName());
     }
 
     public String getSimpleMetaDataTransformerName(String validationStrategyPackageName,

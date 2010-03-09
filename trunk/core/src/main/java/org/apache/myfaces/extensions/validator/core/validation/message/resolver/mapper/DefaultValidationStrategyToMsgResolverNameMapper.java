@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 /**
  * Default implementation which maps ExtVal ValidationStrategies to ExtVal MessageResolvers.
@@ -37,8 +38,10 @@ public class DefaultValidationStrategyToMsgResolverNameMapper extends
 {
     public String createName(ValidationStrategy validationStrategy)
     {
-        return InternalConventionProvider.getMessageResolverClassName(validationStrategy.getClass(),
-                                                     getClassName(validationStrategy.getClass().getSimpleName()));
+        Class<? extends ValidationStrategy> validationStrategyClass = ProxyUtils
+                .getUnproxiedClass(validationStrategy.getClass(), ValidationStrategy.class);
+        return InternalConventionProvider.getMessageResolverClassName(validationStrategyClass,
+                                                     getClassName(validationStrategyClass.getSimpleName()));
     }
 
     protected String getClassName(String strategyClassName)

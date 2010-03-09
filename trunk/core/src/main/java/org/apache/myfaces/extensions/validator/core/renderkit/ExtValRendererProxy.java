@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage
 import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage;
 import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -248,7 +249,7 @@ public class ExtValRendererProxy extends Renderer
 
     protected String getRendererKey()
     {
-        return this.wrapped.getClass().getName();
+        return ProxyUtils.getClassName(this.wrapped.getClass());
     }
 
     private RendererProxyStorage getRendererStorage()
