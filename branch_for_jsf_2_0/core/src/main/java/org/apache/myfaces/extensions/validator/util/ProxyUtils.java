@@ -67,6 +67,12 @@ public class ProxyUtils
     {
         if (proxyHelper == null)
         {
+            //workaround for mojarra
+            if(!JsfUtils.isApplicationInitialized())
+            {
+                return new DefaultProxyHelper();
+            }
+
             proxyHelper = createProxyHelper();
         }
         return proxyHelper;
