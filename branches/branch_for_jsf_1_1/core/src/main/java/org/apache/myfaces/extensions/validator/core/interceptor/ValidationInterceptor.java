@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -171,10 +172,11 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
     {
         if(value == null)
         {
-            return validationStrategy.getClass().isAnnotationPresent(NullValueAwareValidationStrategy.class);
+            Class validationStrategyClass = ProxyUtils.getUnproxiedClass(validationStrategy.getClass());
+            return validationStrategyClass.isAnnotationPresent(NullValueAwareValidationStrategy.class);
         }
 
-        return !"".equals(value) || validationStrategy.getClass()
+        return !"".equals(value) || ProxyUtils.getUnproxiedClass(validationStrategy.getClass())
                 .isAnnotationPresent(EmptyValueAwareValidationStrategy.class);
     }
 

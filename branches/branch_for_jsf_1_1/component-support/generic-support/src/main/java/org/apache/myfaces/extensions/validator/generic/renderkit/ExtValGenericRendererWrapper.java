@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.generic.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererWrapper;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -43,8 +44,7 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         Class currentClass = renderer.getClass();
 
         //to avoid re-wrapping - occurs e.g. under solaris + bea weblogic
-        if (currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
-            currentClass.getName().contains("$$FastClassByCGLIB$$"))
+        if (ProxyUtils.isProxiedClass(currentClass))
         {
             return renderer;
         }
