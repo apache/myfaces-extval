@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.context.FacesContext;
 
@@ -48,7 +49,7 @@ public class DefaultGroupControllerScanningExtractor extends DefaultComponentMet
 
         PropertyDetails propertyDetails = (PropertyDetails)object;
 
-        Class entityClass = propertyDetails.getBaseObject().getClass();
+        Class entityClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
         PropertyInformation propertyInformation = new DefaultPropertyInformation();
         propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);

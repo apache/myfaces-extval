@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
 
 import javax.faces.context.FacesContext;
@@ -64,7 +65,7 @@ public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMe
 
         PropertyDetails propertyDetails = (PropertyDetails)object;
 
-        Class entityClass = propertyDetails.getBaseObject().getClass();
+        Class entityClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
         //TODO test with complex components
         propertyInformation.setInformation(

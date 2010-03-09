@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.el.ELResolver;
 import javax.el.ELContext;
@@ -124,7 +125,7 @@ public class ExtValELResolver extends ELResolver
                         propertyExists = true;
                     }
                 }
-                else if(base.getClass().getMethod("get" + propertyName) != null)
+                else if(ProxyUtils.getUnproxiedClass(base.getClass()).getMethod("get" + propertyName) != null)
                 {
                     propertyExists = true;
                 }
@@ -133,7 +134,7 @@ public class ExtValELResolver extends ELResolver
             {
                 try
                 {
-                    if(base.getClass().getMethod("is" + propertyName) != null)
+                    if(ProxyUtils.getUnproxiedClass(base.getClass()).getMethod("is" + propertyName) != null)
                     {
                         propertyExists = true;
                     }
