@@ -18,8 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.proxy.ProxyHelper;
+import org.apache.myfaces.extensions.validator.core.proxy.DefaultProxyHelper;
+import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
@@ -28,33 +31,62 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ProxyUtils
 {
+    private static ProxyHelper proxyHelper;
+
     public static <T> Class<T> getUnproxiedClass(Class currentClass, Class<T> targetType)
     {
-        return (Class<T>)getUnproxiedClass(currentClass);
+        return getProxyHelper().getUnproxiedClass(currentClass, targetType);
     }
 
     public static Class getUnproxiedClass(Class currentClass)
     {
-        if(isProxiedClass(currentClass))
-        {
-            return ClassUtils.tryToLoadClassForName(getClassName(currentClass));
-        }
-        return currentClass;
+        return getProxyHelper().getUnproxiedClass(currentClass);
     }
 
     public static String getClassName(Class proxiedClass)
     {
-        if (isProxiedClass(proxiedClass))
-        {
-            return proxiedClass.getName().substring(0, proxiedClass.getName().indexOf("$"));
-        }
-        return proxiedClass.getName();
+        return getProxyHelper().getNameOfClass(proxiedClass);
+    }
+
+    public static String getClassNameOfObject(Object proxiedObject)
+    {
+        return getProxyHelper().getClassNameOfObject(proxiedObject);
     }
 
     public static boolean isProxiedClass(Class currentClass)
     {
-        return currentClass.getName().contains("$$EnhancerByCGLIB$$")
-            || currentClass.getName().contains("$$FastClassByCGLIB$$");
+        return getProxyHelper().isProxiedClass(currentClass);
     }
 
+    public static boolean isProxiedObject(Object proxiedObject)
+    {
+        return getProxyHelper().isProxiedObject(proxiedObject);
+    }
+
+    private static ProxyHelper getProxyHelper()
+    {
+        if (proxyHelper == null)
+        {
+            proxyHelper = createProxyHelper();
+        }
+        return proxyHelper;
+    }
+
+    //don't use the default approach (factory finder) - ProxyHelper is called too often...
+    private static ProxyHelper createProxyHelper()
+    {
+        String customProxyHelperClassName = WebXmlParameter.CUSTOM_PROXY_HELPER;
+
+        ProxyHelper result = null;
+        if(customProxyHelperClassName != null && !"".equals(customProxyHelperClassName))
+        {
+            result = (ProxyHelper)ClassUtils.tryToInstantiateClassForName(customProxyHelperClassName);
+        }
+        if(result == null)
+        {
+            result = new DefaultProxyHelper();
+        }
+
+        return result;
+    }
 }
