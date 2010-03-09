@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 /**
  * Default implementation which maps ExtVal ValidationStrategies to MetaDataTransformers.
@@ -37,8 +38,12 @@ public class DefaultValidationStrategyToMetaDataTransformerNameMapper extends
 {
     public String createName(ValidationStrategy validationStrategy)
     {
+        Class<? extends ValidationStrategy> validationStrategyClass =
+                ProxyUtils.getUnproxiedClass(validationStrategy.getClass(), ValidationStrategy.class);
+
         return InternalConventionProvider.getMetaDataTransformerClassName(
-                validationStrategy.getClass(), getClassName(validationStrategy.getClass().getSimpleName()));
+                validationStrategyClass,
+                getClassName(validationStrategyClass.getSimpleName()));
     }
 
     protected String getClassName(String validationStrategyClassName)
