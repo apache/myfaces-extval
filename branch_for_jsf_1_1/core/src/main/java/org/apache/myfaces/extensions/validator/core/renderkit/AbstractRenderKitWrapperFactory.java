@@ -21,11 +21,11 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
+import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.render.RenderKit;
-import javax.faces.context.FacesContext;
 
 /**
  * Base for all RenderKitWrapperFactories to force a specific behaviour
@@ -112,9 +112,6 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
      */
     protected boolean isApplicationInitialized()
     {
-        return FacesContext.getCurrentInstance().getClass().getName().startsWith("org.apache.myfaces") ||
-                FacesContext.getCurrentInstance().getExternalContext().getRequestMap() != null &&
-                !FacesContext.getCurrentInstance().getExternalContext().getRequestMap().isEmpty();
-
+        return JsfUtils.isApplicationInitialized();
     }
 }
