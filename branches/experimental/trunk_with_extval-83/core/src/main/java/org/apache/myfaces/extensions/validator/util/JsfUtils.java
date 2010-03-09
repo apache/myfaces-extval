@@ -120,6 +120,17 @@ public class JsfUtils
         return getFacesInformationStorage().getCurrentPhaseId();
     }
 
+    /**
+     * simple test for early config in case of mojarra
+     * @return true if the jsf impl. is initialized and it's possible to use it as expected
+     */
+    public static boolean isApplicationInitialized()
+    {
+        return FacesContext.getCurrentInstance().getClass().getName().startsWith("org.apache.myfaces") ||
+                FacesContext.getCurrentInstance().getExternalContext().getRequestMap() != null &&
+                        !FacesContext.getCurrentInstance().getExternalContext().getRequestMap().isEmpty();
+    }
+
     private static FacesInformationStorage getFacesInformationStorage()
     {
         return ExtValUtils.getStorage(FacesInformationStorage.class, FacesInformationStorage.class.getName());
