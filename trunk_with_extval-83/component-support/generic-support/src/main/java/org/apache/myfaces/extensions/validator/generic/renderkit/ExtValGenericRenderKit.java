@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.generic.renderkit;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKit;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
@@ -42,8 +43,7 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
         Class currentClass = renderKit.getClass();
 
         //it's not possible to wrap the converter again - occurs e.g. under solaris + bea weblogic
-        if (currentClass.getName().contains("$$EnhancerByCGLIB$$")
-            || currentClass.getName().contains("$$FastClassByCGLIB$$"))
+        if (ProxyUtils.isProxiedClass(currentClass))
         {
             return renderKit;
         }

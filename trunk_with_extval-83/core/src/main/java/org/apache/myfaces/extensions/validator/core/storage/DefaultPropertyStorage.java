@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -73,7 +73,7 @@ public class DefaultPropertyStorage implements PropertyStorage
 
     private Map<String, Field> getFieldMapForClass(Class target)
     {
-        String key = ClassUtils.getClassName(target);
+        String key = ProxyUtils.getClassName(target);
         if (!this.fieldMap.containsKey(key))
         {
             this.fieldMap.put(key, new HashMap<String, Field>());
@@ -83,7 +83,7 @@ public class DefaultPropertyStorage implements PropertyStorage
 
     private Map<String, Method> getMethodMapForClass(Class target)
     {
-        String key = ClassUtils.getClassName(target);
+        String key = ProxyUtils.getClassName(target);
         if (!this.methodMap.containsKey(key))
         {
             this.methodMap.put(key, new HashMap<String, Method>());
