@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -98,8 +98,11 @@ class BeanValidationModuleValidationInterceptorInternals
             foundGroups = new Class[]{Default.class};
         }
 
-        ElementDescriptor elementDescriptor = getDescriptorFor(
-                propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty());
+        Class targetClass = propertyDetails.getBaseObject().getClass();
+
+        targetClass = ProxyUtils.getUnproxiedClass(targetClass);
+
+        ElementDescriptor elementDescriptor = getDescriptorFor(targetClass, propertyDetails.getProperty());
 
         if (elementDescriptor == null)
         {
@@ -190,7 +193,9 @@ class BeanValidationModuleValidationInterceptorInternals
     {
         PropertyDetails propertyDetails = ExtValUtils.getPropertyDetails(propertyInformation);
 
-        return getDescriptorFor(propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty()) != null;
+        Class targetClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
+
+        return getDescriptorFor(targetClass, propertyDetails.getProperty()) != null;
     }
 
     @SuppressWarnings({"unchecked"})
@@ -223,11 +228,7 @@ class BeanValidationModuleValidationInterceptorInternals
     {
         Class result = ExtValUtils.getPropertyDetails(propertyInformation).getBaseObject().getClass();
 
-        if(ClassUtils.isProxiedClass(result))
-        {
-            result = ClassUtils.tryToLoadClassForName(ClassUtils.getClassName(result));
-        }
-        return result;
+        return ProxyUtils.getUnproxiedClass(result);
     }
 
     String getPropertyToValidate(PropertyInformation propertyInformation)

@@ -185,7 +185,7 @@ public class ReflectionUtils
             }
 
             //no is - it's only possible at properties not at bean level
-            currentMethod = tryToGetMethod(currentBase.getClass(),
+            currentMethod = tryToGetMethod(ProxyUtils.getUnproxiedClass(currentBase.getClass()),
                 "get" + currentProperty.substring(0, 1).toUpperCase() +
                     currentProperty.substring(1, currentProperty.length()));
             currentBase = tryToInvokeMethod(currentBase, currentMethod);

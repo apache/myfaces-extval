@@ -28,6 +28,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorageFilter;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -177,8 +178,9 @@ public class JoinValidationMetaDataStorageFilter implements MetaDataStorageFilte
     {
         PropertyDetails propertyDetails = ExtValUtils.createPropertyDetailsForNewTarget(metaDataEntry, target);
 
+        Class targetClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
         return new StaticSyntaxMetaDataExtractor().extract(
-                propertyDetails.getBaseObject().getClass(), propertyDetails.getProperty()).getMetaDataEntries();
+                targetClass, propertyDetails.getProperty()).getMetaDataEntries();
     }
 
     private class StaticSyntaxMetaDataExtractor extends DefaultComponentMetaDataExtractor

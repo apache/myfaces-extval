@@ -750,7 +750,8 @@ public class ExtValUtils
     {
         return metaData.isEmpty() ||
                 (Boolean.TRUE.equals(entry.getProperty(PropertyInformationKeys.SKIP_VALIDATION, Boolean.class)) &&
-                        isSkipableValidationStrategy(validationStrategy.getClass()));
+                        isSkipableValidationStrategy(ProxyUtils.getUnproxiedClass(
+                                validationStrategy.getClass(), ValidationStrategy.class)));
     }
 
     public static boolean interpretEmptyStringValuesAsNull()

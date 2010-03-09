@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.crossval.strategy.AbstractCrossValidationStrategy;
@@ -79,7 +80,7 @@ public class CrossValidationPhaseListener implements PhaseListener
                         ReflectionUtils.tryToInvokeMethod(
                                 entry.getValidationStrategy(),
                                 ReflectionUtils.tryToGetMethod(
-                                        entry.getValidationStrategy().getClass(),
+                                        ProxyUtils.getUnproxiedClass(entry.getValidationStrategy().getClass()),
                                         "initCrossValidation",
                                         CrossValidationStorageEntry.class),
                                 entry);
@@ -101,7 +102,7 @@ public class CrossValidationPhaseListener implements PhaseListener
                             addMessage = (Boolean)ReflectionUtils.tryToInvokeMethod(
                                     entry.getValidationStrategy(),
                                     ReflectionUtils.tryToGetMethod(
-                                            entry.getValidationStrategy().getClass(),
+                                            ProxyUtils.getUnproxiedClass(entry.getValidationStrategy().getClass()),
                                             "processAfterCrossValidatorException",
                                             CrossValidationStorageEntry.class,
                                             validatorException.getClass()),

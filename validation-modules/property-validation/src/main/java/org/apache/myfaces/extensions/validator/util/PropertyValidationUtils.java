@@ -42,7 +42,8 @@ public class PropertyValidationUtils
                                          ValidationStrategy validationStrategy,
                                          MetaDataEntry metaDataEntry)
     {
-        if(ExtValUtils.isSkipableValidationStrategy(validationStrategy.getClass()))
+        if(ExtValUtils.isSkipableValidationStrategy(
+                ProxyUtils.getUnproxiedClass(validationStrategy.getClass(), ValidationStrategy.class)))
         {
             Boolean skipValidation = metaDataEntry.getProperty(
                 PropertyInformationKeys.SKIP_VALIDATION, Boolean.class);

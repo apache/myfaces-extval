@@ -31,6 +31,7 @@ import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -96,7 +97,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
         copyMetaData(propertyInformation, propertyInformationToStore);
 
-        getMapForClass(propertyDetails.getBaseObject().getClass())
+        getMapForClass(ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass()))
                 .put(propertyDetails.getProperty(), propertyInformationToStore);
     }
 
@@ -137,14 +138,14 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
     private boolean isFilterDenied(MetaDataStorageFilter storageFilter)
     {
-        return this.deniedMetaDataFilters.contains(storageFilter.getClass());
+        return this.deniedMetaDataFilters.contains(getStorageFilterClass(storageFilter));
     }
 
     private boolean isFilterAlreadyRegistered(MetaDataStorageFilter storageFilter)
     {
         for(MetaDataStorageFilter filter : this.metaDataStorageFilters)
         {
-            if(filter.getClass().equals(storageFilter.getClass()))
+            if(filter.getClass().equals(getStorageFilterClass(storageFilter)))
             {
                 return true;
             }
@@ -213,11 +214,16 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
     private Map<String, PropertyInformation> getMapForClass(Class target)
     {
-        String key = ClassUtils.getClassName(target);
+        String key = ProxyUtils.getClassName(target);
         if(!this.cachedPropertyInformation.containsKey(key))
         {
             this.cachedPropertyInformation.put(key, new HashMap<String, PropertyInformation>());
         }
         return this.cachedPropertyInformation.get(key);
+    }
+
+    private Class<? extends MetaDataStorageFilter> getStorageFilterClass(MetaDataStorageFilter storageFilter)
+    {
+        return ProxyUtils.getUnproxiedClass(storageFilter.getClass(), MetaDataStorageFilter.class);
     }
 }
