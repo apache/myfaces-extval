@@ -109,6 +109,9 @@ public interface WebXmlParameter
     static final String CUSTOM_FACES_MESSAGE_FACTORY = WebXmlUtils
         .getInitParameter("CUSTOM_FACES_MESSAGE_FACTORY");
 
+    static final String CUSTOM_PROXY_HELPER = WebXmlUtils
+        .getInitParameter("CUSTOM_PROXY_HELPER");
+
     /*
      * activate
      */
