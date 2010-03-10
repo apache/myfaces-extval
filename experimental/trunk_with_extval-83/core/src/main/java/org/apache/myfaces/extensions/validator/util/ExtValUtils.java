@@ -58,6 +58,7 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -952,5 +953,12 @@ public class ExtValUtils
     public static ProjectStageName createProjectStageName(String name)
     {
         return DefaultProjectName.createProjectStageName(name);
+    }
+
+    public static boolean isExtValDeactivated()
+    {
+        return "true".equalsIgnoreCase(System
+                .getProperty(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME +
+                    ".DEACTIVATE_ALL", "false"));
     }
 }

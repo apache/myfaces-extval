@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.startup;
 
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -129,7 +130,8 @@ public abstract class AbstractStartupListener implements PhaseListener
 
     protected boolean isStartupListenerDeactivated()
     {
-        return "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(null, getClass().getName() + ":DEACTIVATED"));
+        return ExtValUtils.isExtValDeactivated() ||
+                "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(null, getClass().getName() + ":DEACTIVATED"));
     }
 
     protected void initProjectStageResolver()
