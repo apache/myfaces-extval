@@ -59,7 +59,13 @@ public class DefaultProxyHelper implements ProxyHelper
     {
         if (isProxiedClass(proxiedClass))
         {
-            return proxiedClass.getName().substring(0, proxiedClass.getName().indexOf("$"));
+            String result = proxiedClass.getName().substring(0, proxiedClass.getName().indexOf("$"));
+
+            if(result.endsWith("_") && proxiedClass.getName().contains("javassist"))
+            {
+                return result.substring(0, result.length() - 1);
+            }
+            return result;
         }
         return proxiedClass.getName();
     }
@@ -75,8 +81,9 @@ public class DefaultProxyHelper implements ProxyHelper
 
     public boolean isProxiedClass(Class currentClass)
     {
-        return currentClass.getName().contains("$$EnhancerByCGLIB$$")
-            || currentClass.getName().contains("$$FastClassByCGLIB$$");
+        return currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
+            currentClass.getName().contains("$$FastClassByCGLIB$$") ||
+            currentClass.getName().contains("_$$_javassist");
     }
 
     public boolean isProxiedObject(Object proxiedObject)
