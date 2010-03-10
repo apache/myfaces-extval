@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -94,6 +95,12 @@ public class ExtValRenderKitFactory extends RenderKitFactory
     {
         if(this.isDeactivated == null)
         {
+            if(ExtValUtils.isExtValDeactivated())
+            {
+                this.isDeactivated = true;
+                return;
+            }
+
             if(this.defaultRenderKitWrapperFactory.isApplicationInitialized())
             {
                 this.isDeactivated = isRenderKitFactoryDeactivatedViaWebXml();
