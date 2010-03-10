@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
  * @author Gerhard Petracek
@@ -50,31 +49,25 @@ public class DefaultProxyHelper implements ProxyHelper
     {
         if(isProxiedClass(currentClass))
         {
-            return ClassUtils.tryToLoadClassForName(getNameOfClass(currentClass));
+            return currentClass.getSuperclass();
         }
         return currentClass;
     }
 
-    public String getNameOfClass(Class proxiedClass)
+    public String getNameOfClass(Class currentClass)
     {
-        if (isProxiedClass(proxiedClass))
+        if (isProxiedClass(currentClass))
         {
-            String result = proxiedClass.getName().substring(0, proxiedClass.getName().indexOf("$"));
-
-            if(result.endsWith("_") && proxiedClass.getName().contains("javassist"))
-            {
-                return result.substring(0, result.length() - 1);
-            }
-            return result;
+            return currentClass.getSuperclass().getName();
         }
-        return proxiedClass.getName();
+        return currentClass.getName();
     }
 
-    public String getClassNameOfObject(Object proxiedObject)
+    public String getClassNameOfObject(Object object)
     {
-        if(proxiedObject != null)
+        if(object != null)
         {
-            return getNameOfClass(proxiedObject.getClass());
+            return getNameOfClass(object.getClass());
         }
         return null;
     }
