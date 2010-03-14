@@ -31,8 +31,6 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.commons.logging.Log;
@@ -153,7 +151,6 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
                 getStorage(ModelValidationStorage.class, ModelValidation.class.getName());
     }
 
-    @ToDo(Priority.HIGH)
     private void initMessageInterpolator()
     {
         Object foundBean = ExtValUtils.getELHelper().getBean(MessageInterpolator.class.getName().replace(".", "_"));
