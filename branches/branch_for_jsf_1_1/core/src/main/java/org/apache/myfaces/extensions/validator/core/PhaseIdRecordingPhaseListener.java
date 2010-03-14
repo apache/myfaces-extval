@@ -56,4 +56,28 @@ public class PhaseIdRecordingPhaseListener implements PhaseListener
     {
         return PhaseId.ANY_PHASE;
     }
+
+    /*
+     * generated
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof PhaseIdRecordingPhaseListener))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
 }
