@@ -85,4 +85,28 @@ public class ExtValTrinidadValidationPhaseListener implements PhaseListener
     {
         return PhaseId.RENDER_RESPONSE;
     }
+
+    /*
+     * generated
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof ExtValTrinidadValidationPhaseListener))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
 }
