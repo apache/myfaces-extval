@@ -76,7 +76,59 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             return key;
         }
 
-        ResourceBundle resourceBundle = null;
+        String customMessage = null;
+
+        try
+        {
+            customMessage = tryToFindCustomMessage(key, locale);
+        }
+        catch (Throwable t)
+        {
+            //do nothing
+        }
+
+        if (customMessage != null)
+        {
+            return customMessage;
+        }
+
+        /*
+         * try to use the convention for the message bundle
+         */
+        try
+        {
+            customMessage = tryToUseMessageBundleConvention(key, locale);
+        }
+        catch (Throwable t)
+        {
+            //do nothing
+        }
+
+        if (customMessage != null)
+        {
+            return customMessage;
+        }
+
+        /*
+         * no message bundle or message found (with the convention)?
+         */
+
+        //try to load custom messages
+        try
+        {
+            customMessage = tryToFindCustomMessageInCustomResourceBundle(key, locale);
+        }
+        catch (Throwable t)
+        {
+            //do nothing - it was just a try
+        }
+
+        return determineMessage(key, locale, customMessage);
+    }
+
+    private String tryToFindCustomMessage(String key, Locale locale)
+    {
+        ResourceBundle resourceBundle;
         String customMessage = null;
 
         //only in case of a ValidationErrorMessageResolver which is configured as bean
@@ -114,66 +166,11 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             }
         }
 
-        if (customMessage != null)
-        {
-            return customMessage;
-        }
-
-        /*
-         * try to use the convention for the message bundle
-         */
-        customMessage = tryToUseMessageBundleConvention(key, locale);
-
-        if (customMessage != null)
-        {
-            return customMessage;
-        }
-
-        /*
-         * no message bundle or message found (with the convention)?
-         */
-
-        //try to load custom messages
-        try
-        {
-            resourceBundle = ResourceBundle.getBundle(getCustomBaseName(), locale);
-        }
-        catch (Throwable t)
-        {
-            //do nothing - it was just a try
-        }
-
-        if (resourceBundle != null)
-        {
-            try
-            {
-                customMessage = resourceBundle.getString(key);
-            }
-            catch (MissingResourceException e)
-            {
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace("no custom message for " + key + " within " + getCustomBaseName(), e);
-                }
-            }
-        }
-
-        //use custom name (if possible) otherwise: fallback to default message (if possible)
-        try
-        {
-            return (customMessage != null) ? customMessage
-                : (getBaseName() != null) ? ResourceBundle.getBundle(getBaseName(), locale).getString(key) : null;
-        }
-        catch (MissingResourceException e)
-        {
-            return MISSING_RESOURCE_MARKER + key + MISSING_RESOURCE_MARKER;
-        }
+        return customMessage;
     }
 
     private String tryToUseMessageBundleConvention(String key, Locale locale)
     {
-        String customMessage = null;
-
         if ((deactivateDefaultConvention == null || !deactivateDefaultConvention.equalsIgnoreCase("true"))
             && isDefaultMessageBundleConventionActive())
         {
@@ -193,18 +190,57 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
             if (defaultBundle != null)
             {
-                try
-                {
-                    customMessage = defaultBundle.getString(key);
-                }
-                catch (MissingResourceException e)
-                {
-                    //do nothing
-                }
+                return defaultBundle.getString(key);
             }
         }
 
-        return customMessage;
+        return null;
+    }
+
+    private String tryToFindCustomMessageInCustomResourceBundle(String key, Locale locale)
+    {
+        ResourceBundle resourceBundle = tryToLoadCustomResourceBundle(locale);
+
+        if (resourceBundle != null)
+        {
+            try
+            {
+                return resourceBundle.getString(key);
+            }
+            catch (MissingResourceException e)
+            {
+                if(logger.isTraceEnabled())
+                {
+                    logger.trace("no custom message for " + key + " within " + getCustomBaseName(), e);
+                }
+            }
+        }
+        return null;
+    }
+
+    private ResourceBundle tryToLoadCustomResourceBundle(Locale locale)
+    {
+        String customBaseName = getCustomBaseName();
+
+        if(customBaseName != null)
+        {
+            return ResourceBundle.getBundle(customBaseName, locale);
+        }
+        return null;
+    }
+
+    private String determineMessage(String key, Locale locale, String customMessage)
+    {
+        //use custom name (if possible) otherwise: fallback to default message (if possible)
+        try
+        {
+            return (customMessage != null) ? customMessage
+                    : (getBaseName() != null) ? ResourceBundle.getBundle(getBaseName(), locale).getString(key) : null;
+        }
+        catch (MissingResourceException e)
+        {
+            return MISSING_RESOURCE_MARKER + key + MISSING_RESOURCE_MARKER;
+        }
     }
 
     protected boolean isDefaultMessageBundleConventionActive()
