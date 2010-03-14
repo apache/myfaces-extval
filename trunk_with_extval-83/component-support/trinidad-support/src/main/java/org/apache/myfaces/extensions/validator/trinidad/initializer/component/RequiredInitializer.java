@@ -42,7 +42,7 @@ class RequiredInitializer extends TrinidadComponentInitializer
     public boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,
                                               Map<String, Object> metaData)
     {
-        if(!validateEmptyFields() && ExtValUtils.isRequiredInitializationActive())
+        if(!validateEmptyFields() || !ExtValUtils.isRequiredInitializationActive())
         {
             return false;
         }
