@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>myfaces-extval-assembly12</artifactId>
+    <artifactId>myfaces-extval-assembly20</artifactId>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions Validator Assembly</name>
     <description>MyFaces Extensions Validator Assembly is used to generate 
@@ -122,7 +122,7 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/coresrc.xml</descriptor>
                             </descriptors>
-                            <finalName>myfaces-extval12-${version}-src</finalName>
+                            <finalName>myfaces-extval20-${version}-src</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>target/assembly/out</outputDirectory>
                             <workDirectory>target/assembly/work</workDirectory>
@@ -138,7 +138,7 @@
                             <descriptors>
                                 <descriptor>${basedir}/src/main/assembly/corebin.xml</descriptor>
                             </descriptors>
-                            <finalName>myfaces-extval12-${version}-bin</finalName>
+                            <finalName>myfaces-extval20-${version}-bin</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>target/assembly/out</outputDirectory>
                             <workDirectory>target/assembly/work</workDirectory>
