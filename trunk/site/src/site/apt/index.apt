@@ -9,6 +9,6 @@ Apache MyFaces Extensions Validator Overview
     It offers powerful and easy to use field based validation based on annotations.
 It has a pluggable architecture, so it is possible to add new validation modules or support for component libraries like Trinidad or other 3rd party frameworks.
 
-    MyFaces Extensions Validator is compatible with JSF 1.1.x and JSF 1.2.x. Both versions require Java 1.5+
+    MyFaces Extensions Validator is compatible with JSF 1.x and JSF 2.x. All versions require Java 1.5+
 
     Further information are available at the {{{http://wiki.apache.org/myfaces/Extensions/Validator/}Wiki}}.
