@@ -50,7 +50,7 @@
         </snapshotRepository>
         <site>
             <id>apache-site</id>
-            <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator12</url>
+            <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator20</url>
         </site>
     </distributionManagement>
 
