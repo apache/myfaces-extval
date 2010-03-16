@@ -45,12 +45,12 @@
                                     <version>${generic-support.version}</version>
                                     <classifier>javadoc</classifier>
                                 </artifactItem>
-                                <!-- artifactItem>
+                                <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
                                     <artifactId>myfaces-extval-trinidad-support</artifactId>
                                     <version>${trinidad-support.version}</version>
                                     <classifier>javadoc</classifier>
-                                </artifactItem -->
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
                                     <artifactId>myfaces-extval-property-validation</artifactId>
@@ -87,12 +87,12 @@
                                     <version>${generic-support.version}</version>
                                     <classifier>sources</classifier>
                                 </artifactItem>
-                                <!-- artifactItem>
+                                <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
                                     <artifactId>myfaces-extval-trinidad-support</artifactId>
                                     <version>${trinidad-support.version}</version>
                                     <classifier>sources</classifier>
-                                </artifactItem -->
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
                                     <artifactId>myfaces-extval-property-validation</artifactId>
@@ -174,12 +174,12 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- dependency>
+        <dependency>
             <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
             <artifactId>myfaces-extval-trinidad-support</artifactId>
             <version>${trinidad-support.version}</version>
             <scope>compile</scope>
-        </dependency -->
+        </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
