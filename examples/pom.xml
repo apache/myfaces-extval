@@ -89,7 +89,7 @@
     </profiles>
 
     <properties>
-        <trinidad.version>1.2.9</trinidad.version>
+        <trinidad.version>2.0.0-alpha-2</trinidad.version>
     </properties>
 
 </project>
