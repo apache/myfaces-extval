@@ -37,7 +37,7 @@
     <version>2.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Project Parent</name>
-    <url>http://myfaces.apache.org/extensions/validator12</url>
+    <url>http://myfaces.apache.org/extensions/validator20</url>
 
     <issueManagement>
         <system>jira</system>
@@ -163,7 +163,7 @@
             
 
             <plugin>
-                <!-- Set compile source at 1.5, since the target JSF impl is 1.2 -->
+                <!-- Set compile source at 1.5, since the target JSF impl is 2.0 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -242,7 +242,7 @@
         </snapshotRepository>
         <site>
             <id>apache-site</id>
-            <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator12</url>
+            <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator20</url>
         </site>
     </distributionManagement>
 
