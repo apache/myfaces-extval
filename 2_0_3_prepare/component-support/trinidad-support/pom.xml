@@ -24,9 +24,9 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
-    <artifactId>myfaces-extval-generic-support</artifactId>
+    <artifactId>myfaces-extval-trinidad-support</artifactId>
 
-    <name>MyFaces Extensions-Validator Generic Support Module</name>
+    <name>MyFaces Extensions-Validator Trinidad Support Module</name>
     <version>2.0.3-SNAPSHOT</version>
 
     <parent>
@@ -44,18 +44,19 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
-            <scope>compile</scope>
+            <groupId>org.apache.myfaces.trinidad</groupId>
+            <artifactId>trinidad-api</artifactId>
+            <version>${trinidad.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.1_3</version>
-            <scope>compile</scope>
+            <groupId>org.apache.myfaces.trinidad</groupId>
+            <artifactId>trinidad-impl</artifactId>
+            <version>${trinidad.version}</version>
+            <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
     <build>
