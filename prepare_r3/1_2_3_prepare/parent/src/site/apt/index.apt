@@ -4,4 +4,4 @@ Overview
 
 Apache MyFaces Extensions Validator for JSF 1.2
 
-  Apache MyFaces Extensions Validator provides versions for JSF 1.1 and 1.2
+    MyFaces Extensions Validator is compatible with JSF 1.x and JSF 2.x. All versions require Java 1.5+
