@@ -1,4 +1,4 @@
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,17 +15,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
+ */
+package org.apache.myfaces.extensions.validator.trinidad.storage;
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-              version="2.0">
-    <factory>
-        <render-kit-factory>org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKitFactory</render-kit-factory>
-    </factory>
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-    <lifecycle>
-        <phase-listener>org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener</phase-listener>
-    </lifecycle>
-</faces-config>
+import javax.faces.component.UIComponent;
+
+/**
+ * extval injects client-validators into trinidad components based on meta-data.
+ * so client-side validation is supported. some app-servers show a different behaviour.
+ * that's the reason for storing these components and remove the injected validators after the rendering phase.
+ *
+ * @author Gerhard Petracek
+ * @since x.x.3
+ */
+@UsageInformation(UsageCategory.INTERNAL)
+public interface TrinidadClientValidatorStorage
+{
+    void addComponent(UIComponent trinidadComponent);
+    void rollback();
+}
