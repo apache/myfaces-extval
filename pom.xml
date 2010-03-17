@@ -12,7 +12,7 @@
     <version>2.0.3</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Module</name>
-    <url>http://myfaces.apache.org/extensions/validator12</url>
+    <url>http://myfaces.apache.org/extensions/validator20</url>
 
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/2_0_3</connection>
