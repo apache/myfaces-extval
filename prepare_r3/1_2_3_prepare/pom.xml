@@ -9,15 +9,15 @@
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-module</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Module</name>
     <url>http://myfaces.apache.org/extensions/validator12</url>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_3</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_3</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/1_2_3</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/trunk/</url>
     </scm>
 
     <distributionManagement>
