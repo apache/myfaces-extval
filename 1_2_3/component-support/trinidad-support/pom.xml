@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
+    <artifactId>myfaces-extval-trinidad-support</artifactId>
+
+    <name>MyFaces Extensions-Validator Trinidad Support Module</name>
+    <version>1.2.3</version>
+
+    <parent>
+        <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
+        <artifactId>component-support-modules-project</artifactId>
+        <version>1.2.3</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>${jsf.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.trinidad</groupId>
+            <artifactId>trinidad-api</artifactId>
+            <version>${trinidad.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.trinidad</groupId>
+            <artifactId>trinidad-impl</artifactId>
+            <version>${trinidad.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/config</directory>
+                <includes>
+                    <include>**/*xml</include>
+                </includes>
+                <targetPath>/META-INF</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>LICENSE.txt</include>
+                    <include>NOTICE.txt</include>
+                </includes>
+                <targetPath>/META-INF</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*properties</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
