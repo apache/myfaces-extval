@@ -178,6 +178,12 @@
             <artifactId>myfaces-extval-bean-validation</artifactId>
             <version>${bean-validation.version}</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.validation</groupId>
+                    <artifactId>validation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -185,12 +191,6 @@
             <artifactId>myfaces-extval-trinidad-support</artifactId>
             <version>${trinidad-support.version}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.validation</groupId>
-                    <artifactId>validation-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
