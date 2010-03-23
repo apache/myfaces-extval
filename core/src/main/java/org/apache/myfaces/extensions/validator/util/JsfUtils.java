@@ -127,6 +127,7 @@ public class JsfUtils
     public static boolean isApplicationInitialized()
     {
         return FacesContext.getCurrentInstance().getClass().getName().startsWith("org.apache.myfaces") ||
+                FacesContext.getCurrentInstance() == null ||
                 FacesContext.getCurrentInstance().getExternalContext().getRequestMap() != null &&
                         !FacesContext.getCurrentInstance().getExternalContext().getRequestMap().isEmpty();
     }
