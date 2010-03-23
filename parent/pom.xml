@@ -34,7 +34,7 @@
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-parent</artifactId>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.2.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Project Parent</name>
     <url>http://myfaces.apache.org/extensions/validator12</url>
@@ -228,9 +228,9 @@
     </reporting>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_2_rc/parent</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_2_rc/parent</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/1_2_2_rc/parent</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_4_rc/parent</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_4_rc/parent</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/1_2_4_rc/parent</url>
     </scm>
 
     <distributionManagement>
