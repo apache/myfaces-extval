@@ -27,19 +27,19 @@
     <artifactId>myfaces-extval-core-tests</artifactId>
 
     <name>MyFaces Extensions-Validator Core-Tests</name>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.1.4-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.test-modules</groupId>
         <artifactId>test-modules-project</artifactId>
-        <version>1.1.3-SNAPSHOT</version>
+        <version>1.1.4-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.test-modules</groupId>
             <artifactId>myfaces-extval-base-test-infrastructure</artifactId>
-            <version>1.1.3-SNAPSHOT</version>
+            <version>1.1.4-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
