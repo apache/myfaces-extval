@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
 import org.apache.myfaces.extensions.validator.beanval.BeanAwareValidatorFactory;
+import org.apache.myfaces.extensions.validator.beanval.MappedConstraintSourceBeanValidationModuleValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
@@ -59,7 +60,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void init()
     {
         registerValidatorFactory();
-        registerBeanValidationInterceptor();
+        registerBeanValidationInterceptors();
         registerMetaDataTransformerNameMapper();
         registerGroupStorageNameMapper();
         registerModelValidationStorageNameMapper();
@@ -77,9 +78,12 @@ public class BeanValidationStartupListener extends AbstractStartupListener
                 new BeanAwareValidatorFactory(BeanValidationUtils.getDefaultValidatorFactory()), false);
     }
 
-    protected void registerBeanValidationInterceptor()
+    protected void registerBeanValidationInterceptors()
     {
-        ExtValContext.getContext().registerRendererInterceptor(new BeanValidationModuleValidationInterceptor());
+        ExtValContext.getContext().registerRendererInterceptor(
+                new BeanValidationModuleValidationInterceptor());
+        ExtValContext.getContext().registerRendererInterceptor(
+                new MappedConstraintSourceBeanValidationModuleValidationInterceptor());
     }
 
     protected void registerMetaDataTransformerNameMapper()
