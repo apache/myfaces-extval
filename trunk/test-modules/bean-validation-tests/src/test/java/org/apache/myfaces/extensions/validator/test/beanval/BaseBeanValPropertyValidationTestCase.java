@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.interceptor.SingleViolationPropertyValidationInterceptor;
+
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.UIViewRoot;
@@ -53,6 +56,8 @@ public abstract class BaseBeanValPropertyValidationTestCase<T> extends AbstractB
         bindBeanToExpression();
 
         createComponents();
+
+        ExtValContext.getContext().addPropertyValidationInterceptor(new SingleViolationPropertyValidationInterceptor());
     }
 
     private void createComponents()
