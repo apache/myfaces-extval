@@ -53,11 +53,15 @@
         <item name="Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
         <item name="ExtVal for JSF 1.1"          href="http://myfaces.apache.org/extensions/validator11/index.html">
               <item name="Core Module"           href="http://myfaces.apache.org/extensions/validator11/myfaces-extval-core/index.html"/>
+              <item name="Bean Validation"   href="http://myfaces.apache.org/extensions/validator11/validation-modules-project/myfaces-extval-bean-validation/index.html"/>
               <item name="Property Validation"   href="http://myfaces.apache.org/extensions/validator11/validation-modules-project/myfaces-extval-property-validation/index.html"/>
               <item name="Trinidad Support"      href="http://myfaces.apache.org/extensions/validator11/component-support-modules-project/myfaces-extval-trinidad-support/index.html"/>
               <item name="Generic Support"       href="http://myfaces.apache.org/extensions/validator11/component-support-modules-project/myfaces-extval-generic-support/index.html"/>
         </item>
         <item name="ExtVal for JSF 1.2"   href="http://myfaces.apache.org/extensions/validator12/index.html" collapse="true">
+            <item name="dummy"        href="dummy"/>
+        </item>
+        <item name="ExtVal for JSF 2.0"   href="http://myfaces.apache.org/extensions/validator20/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
     </menu>
