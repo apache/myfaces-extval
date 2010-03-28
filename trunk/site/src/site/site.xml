@@ -57,6 +57,9 @@
         <item name="ExtVal for JSF 1.2"       href="http://myfaces.apache.org/extensions/validator12/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
+        <item name="ExtVal for JSF 2.0"       href="http://myfaces.apache.org/extensions/validator20/index.html" collapse="true">
+            <item name="dummy"        href="dummy"/>
+        </item>
     </menu>
 
     <menu name="Documentation">
