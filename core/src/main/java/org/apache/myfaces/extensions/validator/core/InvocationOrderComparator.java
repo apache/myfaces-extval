@@ -22,14 +22,17 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.Comparator;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class InvocationOrderComparator<T> implements Comparator<T>
+public class InvocationOrderComparator<T> implements Comparator<T>, Serializable
 {
+    private static final long serialVersionUID = 2287258656373616584L;
+
     public int compare(T nm1, T nm2)
     {
         if (hasPriority(nm1) && hasPriority(nm2))

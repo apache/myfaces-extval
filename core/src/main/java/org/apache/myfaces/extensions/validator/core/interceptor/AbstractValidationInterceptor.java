@@ -283,9 +283,9 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         RendererInterceptorPropertyStorage interceptorPropertyStorage = getRendererInterceptorPropertyStorage();
 
         Map<String, Object> properties = getInterceptorProperties(uiComponent);
-        for(String key : properties.keySet())
+        for(Map.Entry<String, Object> entry : properties.entrySet())
         {
-            interceptorPropertyStorage.setProperty(key, properties.get(key));
+            interceptorPropertyStorage.setProperty(entry.getKey(), entry.getValue());
         }
     }
 
