@@ -54,14 +54,8 @@ public abstract class AbstractBeanValidationMetaDataTransformer<T extends Annota
 
     protected boolean isClientSideValidationEnabled(ConstraintDescriptor<? extends T> constraintDescriptor)
     {
-        for(Class<? extends Payload> payload : constraintDescriptor.getPayload())
-        {
-            if(ExtValUtils.getValidationParameterClassFor(DisableClientSideValidation.class).isAssignableFrom(payload))
-            {
-                return false;
-            }
-        }
-        return true;
+        return !constraintDescriptor.getPayload().contains(
+                ExtValUtils.getValidationParameterClassFor(DisableClientSideValidation.class));
     }
 
     protected boolean isBlockingConstraint(ConstraintDescriptor<?> constraintDescriptor)
