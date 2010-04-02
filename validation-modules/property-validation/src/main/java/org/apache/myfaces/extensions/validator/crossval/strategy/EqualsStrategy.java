@@ -18,13 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
-import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.validation.NullValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.core.validation.NullValueAwareValidationStrategy;
+import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
+import org.apache.myfaces.extensions.validator.crossval.parameter.CaseInsensitive;
+import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.lang.annotation.Annotation;
 
@@ -51,11 +53,25 @@ public class EqualsStrategy extends AbstractCompareStrategy
 
     public boolean isViolation(Object object1, Object object2, Annotation annotation)
     {
+        if (object1 instanceof String && object2 instanceof String)
+        {
+            if (!isCaseSensitiveCompare(annotation))
+            {
+                return !((String) object1).equalsIgnoreCase((String) object2);
+            }
+        }
         return object1 != null && !object1.equals(object2);
     }
 
     public String[] getValidationTargets(Annotation annotation)
     {
         return ((Equals) annotation).value();
+    }
+
+    protected boolean isCaseSensitiveCompare(Annotation annotation)
+    {
+        return !ExtValUtils.getValidationParameterExtractor()
+                .extract(annotation, ExtValUtils.getValidationParameterClassFor(CaseInsensitive.class))
+                .iterator().hasNext();
     }
 }
