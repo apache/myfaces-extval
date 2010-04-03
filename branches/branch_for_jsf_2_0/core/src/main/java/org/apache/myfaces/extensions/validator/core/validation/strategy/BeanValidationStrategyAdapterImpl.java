@@ -23,11 +23,10 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDat
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.BeanMetaDataTransformerAdapter;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import java.util.logging.Logger;
 
 /**
  * it isn't linked to jsr 303
@@ -44,7 +43,7 @@ import javax.faces.context.FacesContext;
 @UsageInformation({UsageCategory.REUSE})
 public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategyAdapter
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private MetaDataTransformer metaDataTransformer;
     private ValidationStrategy validationStrategy;
@@ -53,10 +52,7 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
 
     public BeanValidationStrategyAdapterImpl()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public void validate(FacesContext facesContext,

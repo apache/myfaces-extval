@@ -21,10 +21,9 @@ package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
@@ -41,7 +40,7 @@ import java.util.Map;
 @UsageInformation({UsageCategory.REUSE})
 public class BeanMetaDataTransformerAdapterImpl implements MetaDataTransformer, BeanMetaDataTransformerAdapter
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;

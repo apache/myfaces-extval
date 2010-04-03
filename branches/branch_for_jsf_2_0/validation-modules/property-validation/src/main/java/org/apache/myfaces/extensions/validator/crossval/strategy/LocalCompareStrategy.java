@@ -30,10 +30,9 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 /**
  * "[property_name]" ... local validation -> cross-component, but no cross-entity validation
@@ -44,7 +43,7 @@ import java.lang.reflect.Method;
 @UsageInformation(UsageCategory.INTERNAL)
 class LocalCompareStrategy implements ReferencingStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public boolean evaluateReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
@@ -163,11 +162,8 @@ class LocalCompareStrategy implements ReferencingStrategy
 
     private void unsupportedCase(CrossValidationStorageEntry crossValidationStorageEntry)
     {
-        if(logger.isWarnEnabled())
-        {
-            logger.warn("couldn't find converted object for " +  crossValidationStorageEntry.getMetaDataEntry()
-            .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class).getKey());
-        }
+        logger.warning("couldn't find converted object for " +  crossValidationStorageEntry.getMetaDataEntry()
+        .getProperty(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class).getKey());
     }
 
     private void processCrossComponentValidation(

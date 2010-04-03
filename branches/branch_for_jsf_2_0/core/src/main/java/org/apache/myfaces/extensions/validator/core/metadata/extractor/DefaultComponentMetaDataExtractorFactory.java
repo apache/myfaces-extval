@@ -27,12 +27,11 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This factory creates a meta-data extractor which extracts the meta-data
@@ -51,16 +50,13 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDataExtractorFactory
 {
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private static MetaDataExtractor metaDataExtractor = null;
 
     public DefaultComponentMetaDataExtractorFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     @ToDo(value = Priority.MEDIUM, description = "logging")
@@ -92,10 +88,7 @@ public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDa
             }
         }
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace(metaDataExtractor.getClass().getName() + " created");
-        }
+        logger.finest(metaDataExtractor.getClass().getName() + " created");
 
         return ExtValUtils.createInterceptedMetaDataExtractorWith(metaDataExtractor, properties);
     }

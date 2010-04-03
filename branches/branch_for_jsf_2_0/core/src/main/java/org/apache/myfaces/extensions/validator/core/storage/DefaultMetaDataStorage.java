@@ -32,13 +32,12 @@ import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -47,7 +46,7 @@ import java.util.ArrayList;
 @UsageInformation(INTERNAL)
 public class DefaultMetaDataStorage implements MetaDataStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Map<String, PropertyInformation>> cachedPropertyInformation =
             new HashMap<String, Map<String, PropertyInformation>>();
@@ -198,18 +197,12 @@ public class DefaultMetaDataStorage implements MetaDataStorage
 
     private void logAddedFilter(Class<? extends MetaDataStorageFilter> filterClass)
     {
-        if(this.logger.isInfoEnabled())
-        {
-            this.logger.info(filterClass.getName() + " added");
-        }
+        this.logger.info(filterClass.getName() + " added");
     }
 
     private void logRemovedFilter(Class<? extends MetaDataStorageFilter> filterClass)
     {
-        if(this.logger.isInfoEnabled())
-        {
-            this.logger.info(filterClass.getName() + " removed");
-        }
+        this.logger.info(filterClass.getName() + " removed");
     }
 
     private Map<String, PropertyInformation> getMapForClass(Class target)

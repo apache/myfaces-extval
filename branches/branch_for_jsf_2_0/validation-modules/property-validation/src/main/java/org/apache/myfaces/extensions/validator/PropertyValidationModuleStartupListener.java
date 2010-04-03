@@ -95,10 +95,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 
     private void addSkipValidationSupport()
     {
-        if(logger.isInfoEnabled())
-        {
-            logger.info("adding support for @SkipValidation");
-        }
+        logger.info("adding support for @SkipValidation");
 
         ExtValContext.getContext().denyRendererInterceptor(ValidationInterceptor.class);
         ExtValContext.getContext().registerRendererInterceptor(new PropertyValidationModuleValidationInterceptor());

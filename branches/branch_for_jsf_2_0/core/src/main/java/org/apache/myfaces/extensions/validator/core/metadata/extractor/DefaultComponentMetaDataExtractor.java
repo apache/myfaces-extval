@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
@@ -46,6 +44,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * Default implementation which extracts meta-data (e.g. the annotations) of the value binding of a component.
@@ -58,14 +58,11 @@ import java.util.List;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public DefaultComponentMetaDataExtractor()
     {
-        if (logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     @ToDo(Priority.MEDIUM)
@@ -76,19 +73,16 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         //should never occur
         if (!(object instanceof UIComponent))
         {
-            if (this.logger.isWarnEnabled() && object != null)
+            if (object != null)
             {
-                this.logger.warn(object.getClass() + " is no valid component");
+                this.logger.warning(object.getClass() + " is no valid component");
             }
             return propertyInformation;
         }
 
         UIComponent uiComponent = (UIComponent) object;
 
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("start extracting meta-data of " + uiComponent.getClass().getName());
-        }
+        logger.finest("start extracting meta-data of " + uiComponent.getClass().getName());
 
         PropertyDetails propertyDetails = ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
 
@@ -118,10 +112,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             cacheMetaData(propertyInformation);
         }
 
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("extract finished");
-        }
+        logger.finest("extract finished");
 
         return propertyInformation;
     }
@@ -281,11 +272,8 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             }
             catch (NoSuchMethodException e1)
             {
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("method not found - class: " + entity.getName()
-                            + " - methods: " + "get" + property + " " + "is" + property);
-                }
+                logger.finest("method not found - class: " + entity.getName()
+                        + " - methods: " + "get" + property + " " + "is" + property);
 
                 return null;
             }
@@ -326,10 +314,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             }
             catch (NoSuchFieldException e1)
             {
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("field " + property + " or _" + property + " not found", e1);
-                }
+                logger.log(Level.FINEST, "field " + property + " or _" + property + " not found", e1);
 
                 return;
             }
@@ -359,10 +344,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         {
             propertyInformation.addMetaDataEntry(createMetaDataEntryForAnnotation(annotation));
 
-            if (logger.isTraceEnabled())
-            {
-                logger.trace(annotation.getClass().getName() + " found");
-            }
+            logger.finest(annotation.getClass().getName() + " found");
         }
     }
 

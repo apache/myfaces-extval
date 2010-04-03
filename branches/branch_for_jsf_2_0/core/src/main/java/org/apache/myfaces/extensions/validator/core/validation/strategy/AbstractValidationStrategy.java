@@ -23,12 +23,11 @@ import org.apache.myfaces.extensions.validator.core.validation.exception.Require
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import java.util.logging.Logger;
 
 /**
  * Provides the ability to use ValidatorException (as expected by the user) instead of ConverterException.
@@ -42,51 +41,33 @@ import javax.faces.validator.ValidatorException;
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})
 public abstract class AbstractValidationStrategy implements ValidationStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     protected AbstractValidationStrategy()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          MetaDataEntry metaDataEntry, Object convertedObject)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("start initValidation of " + getClass().getName());
-        }
+        logger.finest("start initValidation of " + getClass().getName());
 
         initValidation(facesContext, uiComponent, metaDataEntry, convertedObject);
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("initValidation of " + getClass().getName() + " finished");
-        }
+        logger.finest("initValidation of " + getClass().getName() + " finished");
 
         try
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("start processValidation of " + getClass().getName());
-            }
+            logger.finest("start processValidation of " + getClass().getName());
 
             processValidation(facesContext, uiComponent, metaDataEntry, convertedObject);
 
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("processValidation of " + getClass().getName() + " finished");
-            }
+            logger.finest("processValidation of " + getClass().getName() + " finished");
         }
         catch (ValidatorException e)
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("start processAfterValidatorException of " + getClass().getName());
-            }
+            logger.finest("start processAfterValidatorException of " + getClass().getName());
 
             ValidatorException validatorException;
 
@@ -104,21 +85,15 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
             if (processAfterValidatorException(
                     facesContext, uiComponent, metaDataEntry, convertedObject, validatorException))
             {
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace(getClass().getName() +
-                        ": throw original exception after processAfterValidatorException");
-                }
+                logger.finest(getClass().getName() +
+                    ": throw original exception after processAfterValidatorException");
 
                 ExtValUtils.tryToThrowValidatorExceptionForComponent(
                         uiComponent, validatorException.getFacesMessage(), validatorException);
             }
 
-            if(logger.isTraceEnabled())
-            {
-                logger.trace(getClass().getName() +
-                    ": original exception after processAfterValidatorException not thrown");
-            }
+            logger.finest(getClass().getName() +
+                ": original exception after processAfterValidatorException not thrown");
         }
     }
 

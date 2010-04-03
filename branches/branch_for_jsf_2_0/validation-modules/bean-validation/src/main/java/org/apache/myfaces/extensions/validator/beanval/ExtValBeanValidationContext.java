@@ -33,14 +33,13 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorFactory;
 import java.util.Map;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -49,7 +48,7 @@ import java.util.List;
 @UsageInformation(UsageCategory.API)
 public class ExtValBeanValidationContext implements GroupStorage, ModelValidationStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private static final String KEY = ExtValBeanValidationContext.class.getName() + ":KEY";
 
@@ -97,10 +96,7 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
             return (ValidatorFactory)validatorFactory;
         }
 
-        if(this.logger.isWarnEnabled())
-        {
-            this.logger.warn("fallback to the default bv validator factory");
-        }
+        this.logger.warning("fallback to the default bv validator factory");
         return BeanValidationUtils.getDefaultValidatorFactory();
     }
 

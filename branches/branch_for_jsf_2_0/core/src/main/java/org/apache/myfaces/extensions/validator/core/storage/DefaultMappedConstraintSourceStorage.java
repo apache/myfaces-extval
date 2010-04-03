@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -28,6 +26,7 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -36,7 +35,7 @@ import java.util.ResourceBundle;
 @UsageInformation(INTERNAL)
 public class DefaultMappedConstraintSourceStorage implements MappedConstraintSourceStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Map<String, PropertyDetails>> propertyDetailsMap =
             new HashMap<String, Map<String, PropertyDetails>>();
