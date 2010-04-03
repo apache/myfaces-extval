@@ -109,7 +109,7 @@ public class CrossValidationPhaseListener implements PhaseListener
                                     entry,
                                     validatorException);
                         }
-                        catch (Throwable e)
+                        catch (Exception e)
                         {
                             throw new FacesException(e);
                         }

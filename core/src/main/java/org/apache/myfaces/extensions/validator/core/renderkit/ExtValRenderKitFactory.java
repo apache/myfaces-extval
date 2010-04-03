@@ -26,13 +26,12 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.context.FacesContext;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * central mechanism which is responsible to create a wrapper for a renderer - starting point of extval.
@@ -43,7 +42,7 @@ import java.util.Iterator;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValRenderKitFactory extends RenderKitFactory
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
     private RenderKitFactory wrapped;
     private AbstractRenderKitWrapperFactory defaultRenderKitWrapperFactory;
     private Boolean isDeactivated;
@@ -52,10 +51,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
     {
         this.wrapped = renderKitFactory;
 
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public void addRenderKit(String s, RenderKit renderKit)

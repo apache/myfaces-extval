@@ -27,14 +27,13 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * default implementation for storage-manager creation and caching
@@ -46,7 +45,7 @@ import java.util.HashMap;
 public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory<Class>
         implements ClassMappingFactory<Class, StorageManager>, StorageManagerHolder
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private boolean lazyStaticMappingApplied = false;
     private List<NameMapper<Class>> nameMapperList = new ArrayList<NameMapper<Class>>();
@@ -54,10 +53,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
 
     public DefaultStorageManagerFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
 
         setStorageManager(RendererProxyStorage.class,
                 new DefaultRendererProxyStorageManager(), false);
@@ -116,19 +112,13 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
         if(storageType == null)
         {
             isValidEntry = false;
-            if(this.logger.isErrorEnabled())
-            {
-                this.logger.error("you tried to add an invalid storage type");
-            }
+            this.logger.severe("you tried to add an invalid storage type");
         }
 
         if(storageManager == null)
         {
             isValidEntry = false;
-            if(this.logger.isErrorEnabled())
-            {
-                this.logger.error("you tried to add an invalid storage manager");
-            }
+            this.logger.severe("you tried to add an invalid storage manager");
         }
 
         if(!isValidEntry)
@@ -172,11 +162,8 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
                 (this.storageTypeToStorageManagerMap.containsKey(storageType) && override))
         {
 
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("adding type to storage-manager mapping: "
-                    + storageType.getName() + " -> " + storageManager.getClass().getName());
-            }
+            logger.finest("adding type to storage-manager mapping: "
+                + storageType.getName() + " -> " + storageManager.getClass().getName());
 
             this.storageTypeToStorageManagerMap.put(storageType, storageManager);
         }

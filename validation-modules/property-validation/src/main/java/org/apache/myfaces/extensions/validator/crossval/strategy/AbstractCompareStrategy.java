@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.logging.Level;
 import java.lang.annotation.Annotation;
 
 import javax.faces.application.FacesMessage;
@@ -267,11 +268,8 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
         }
         catch (MissingResourceException e)
         {
-            if(logger.isWarnEnabled())
-            {
-                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
-                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
-            }
+            logger.log(Level.WARNING, "couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
+                + DETAIL_MESSAGE_KEY_POSTFIX, e);
         }
         return null;
     }

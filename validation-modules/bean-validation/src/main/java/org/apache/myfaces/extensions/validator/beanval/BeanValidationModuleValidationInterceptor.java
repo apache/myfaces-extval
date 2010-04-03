@@ -50,10 +50,7 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
 
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("start to init component " + uiComponent.getClass().getName());
-        }
+        logger.finest("start to init component " + uiComponent.getClass().getName());
 
         PropertyDetails propertyDetails = bviUtils.extractPropertyDetails(
                 facesContext, uiComponent, getPropertiesForComponentMetaDataExtractor(uiComponent));
@@ -63,10 +60,7 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
             initComponentWithPropertyDetails(facesContext, uiComponent, propertyDetails);
         }
 
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
-        }
+        logger.finest("init component of " + uiComponent.getClass().getName() + " finished");
     }
 
     protected void initComponentWithPropertyDetails(FacesContext facesContext,
@@ -85,10 +79,7 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
         {
             if (validateProperty)
             {
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("jsr303 start validation");
-                }
+                logger.finest("jsr303 start validation");
 
                 processFieldValidation(facesContext, uiComponent, convertedObject, propertyInformation);
             }
@@ -97,10 +88,7 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
         {
             if (validateProperty)
             {
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("jsr303 validation finished");
-                }
+                logger.finest("jsr303 validation finished");
             }
         }
     }
