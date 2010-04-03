@@ -23,12 +23,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.trinidad.component.core.output.CoreOutputLabel;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.context.FacesContext;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -38,7 +37,7 @@ import javax.faces.context.FacesContext;
 @ToDo(value = Priority.MEDIUM, description = "check subform")
 public class TrinidadUtils
 {
-    protected static final Log LOG = LogFactory.getLog(TrinidadUtils.class);
+    protected static final Logger LOG = Logger.getLogger(TrinidadUtils.class.getName());
 
     public static UIComponent findLabeledEditableComponent(CoreOutputLabel coreOutputLabel)
     {
@@ -56,10 +55,7 @@ public class TrinidadUtils
             return result;
         }
 
-        if(LOG.isTraceEnabled())
-        {
-            LOG.trace(coreOutputLabel.getClientId(facesContext) + " doesn't reference an editable component");
-        }
+        LOG.finest(coreOutputLabel.getClientId(facesContext) + " doesn't reference an editable component");
 
         return null;
     }

@@ -43,7 +43,7 @@ public class ReflectionUtils
         {
             return getMethod(targetClass, targetMethodName, parameterTypes);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing - it's just a try
             return null;
@@ -121,7 +121,7 @@ public class ReflectionUtils
         {
             return invokeMethodOfClass(target, method, args);
         }
-        catch (Throwable e)
+        catch (Exception e)
         {
             //do nothing - it's just a try
             return null;
@@ -146,7 +146,7 @@ public class ReflectionUtils
         {
             return invokeMethod(target, method, args);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing - it's just a try
             return null;

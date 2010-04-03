@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.validator.test.base.util;
 
 import java.io.IOException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -26,13 +28,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public final class TestUtils
 {
     /** Default Logger */
-    private static final Log log = LogFactory.getLog(TestUtils.class);
+    private static final Logger log = Logger.getLogger(TestUtils.class.getName());
 
     /** utility class, do not instantiate */
     private TestUtils()
@@ -206,7 +205,7 @@ public final class TestUtils
         }
         catch (ClassNotFoundException e)
         {
-            log.error("Class " + type + " not found", e);
+            log.log(Level.SEVERE, "Class " + type + " not found", e);
             throw new FacesException(e);
         }
     }
@@ -244,17 +243,17 @@ public final class TestUtils
         }
         catch (NoClassDefFoundError e)
         {
-            log.error("Class : " + clazz.getName() + " not found.", e);
+            log.log(Level.SEVERE, "Class : " + clazz.getName() + " not found.", e);
             throw new FacesException(e);
         }
         catch (InstantiationException e)
         {
-            log.error(e.getMessage(), e);
+            log.log(Level.SEVERE, e.getMessage(), e);
             throw new FacesException(e);
         }
         catch (IllegalAccessException e)
         {
-            log.error(e.getMessage(), e);
+            log.log(Level.SEVERE, e.getMessage(), e);
             throw new FacesException(e);
         }
     }

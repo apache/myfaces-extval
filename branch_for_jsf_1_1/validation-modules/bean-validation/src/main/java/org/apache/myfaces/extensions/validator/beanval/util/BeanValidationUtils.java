@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
@@ -38,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -46,7 +45,7 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationUtils
 {
-    private static final Log LOGGER = LogFactory.getLog(BeanValidationUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(BeanValidationUtils.class.getName());
     private static ExtValBeanValidationMetaDataInternals bvmi = new ExtValBeanValidationMetaDataInternals(LOGGER);
     private static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 

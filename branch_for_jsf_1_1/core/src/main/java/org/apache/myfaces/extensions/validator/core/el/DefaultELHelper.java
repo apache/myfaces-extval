@@ -26,8 +26,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -35,6 +33,7 @@ import javax.faces.el.ValueBinding;
 import java.io.Externalizable;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * in order to centralize the jsf version dependency within the core
@@ -52,14 +51,11 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultELHelper implements ELHelper
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public DefaultELHelper()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public Class getTypeOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression)
@@ -94,11 +90,8 @@ public class DefaultELHelper implements ELHelper
         //(e.g. for special component libs -> issue with ExtValRendererWrapper#encodeBegin)
         if(valueBindingExpression == null)
         {
-            if(this.logger.isTraceEnabled())
-            {
-                this.logger.trace(
-                        uiComponent.getClass() + " has no value binding - component id: " + uiComponent.getId());
-            }
+            this.logger.finest(
+                    uiComponent.getClass() + " has no value binding - component id: " + uiComponent.getId());
             return null;
         }
 
@@ -115,10 +108,7 @@ public class DefaultELHelper implements ELHelper
 
             if(result == null)
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("couldn't resolve expression: " + valueBindingExpression);
-                }
+                logger.warning("couldn't resolve expression: " + valueBindingExpression);
                 return null;
             }
 
@@ -127,10 +117,7 @@ public class DefaultELHelper implements ELHelper
 
             if(entityClass == null)
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("couldn't resolve expression: " + result.getExpressionString());
-                }
+                logger.warning("couldn't resolve expression: " + result.getExpressionString());
 
                 return null;
             }
@@ -227,11 +214,8 @@ public class DefaultELHelper implements ELHelper
         }
         else
         {
-            if(this.logger.isErrorEnabled())
-            {
-                this.logger.error("unexpected value within map syntax: " + propertyChain +
-                        " last property name: " + currentPropertyValue);
-            }
+            this.logger.severe("unexpected value within map syntax: " + propertyChain +
+                    " last property name: " + currentPropertyValue);
             return null;
         }
     }
