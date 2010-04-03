@@ -30,8 +30,6 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
@@ -48,6 +46,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 import java.lang.annotation.Annotation;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -57,7 +56,7 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class HtmlCoreComponentsValidationExceptionInterceptor implements ValidationExceptionInterceptor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public boolean afterThrowing(UIComponent uiComponent,
                                  MetaDataEntry metaDataEntry,

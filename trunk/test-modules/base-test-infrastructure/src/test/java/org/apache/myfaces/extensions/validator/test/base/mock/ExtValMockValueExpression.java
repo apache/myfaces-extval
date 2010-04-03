@@ -80,7 +80,7 @@ public class ExtValMockValueExpression extends MockValueExpression
                 Method setterMethod = base.getClass().getDeclaredMethod(setter, value != null ? value.getClass() : Object.class);
                 setterMethod.invoke(base, value);
             }
-            catch (Throwable e)
+            catch (Exception e)
             {
                 throw new IllegalStateException();
             }

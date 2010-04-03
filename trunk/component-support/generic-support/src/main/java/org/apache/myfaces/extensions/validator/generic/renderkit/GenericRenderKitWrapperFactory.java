@@ -33,10 +33,7 @@ public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
 {
     protected RenderKit createWrapper(RenderKit renderKit)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib");
-        }
+        logger.finest("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib");
 
         return ExtValGenericRenderKit.newInstance(renderKit);
     }

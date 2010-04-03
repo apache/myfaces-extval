@@ -22,13 +22,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -45,7 +45,7 @@ import java.lang.reflect.Modifier;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultValidationParameterExtractor implements ValidationParameterExtractor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public Map<Object, List<Object>> extract(Annotation annotation)
     {
@@ -134,12 +134,9 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                     processParameterValue(annotation, (Class)parameterValue, result, valueId);
                 }
             }
-            catch (Throwable e)
+            catch (Exception e)
             {
-                if(this.logger.isWarnEnabled())
-                {
-                    this.logger.warn(e);
-                }
+                this.logger.log(Level.WARNING, "invalid method", e);
             }
         }
 
@@ -278,12 +275,9 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
             {
                 newKey = currentField.get(instance);
             }
-            catch (Throwable e)
+            catch (Exception e)
             {
-                if(this.logger.isWarnEnabled())
-                {
-                    this.logger.warn(e);
-                }
+                this.logger.log(Level.WARNING, "invalid field", e);
             }
         }
         //no "else if" to allow both at one field
@@ -296,12 +290,9 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                 {
                     paramValues.add(currentField.get(instance));
                 }
-                catch (Throwable e)
+                catch (Exception e)
                 {
-                    if(this.logger.isWarnEnabled())
-                    {
-                        this.logger.warn(e);
-                    }
+                    this.logger.log(Level.WARNING, "invalid field", e);
                 }
             }
         }
@@ -322,12 +313,9 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                     newKey = currentMethod.invoke(paramClass.newInstance());
                 }
             }
-            catch (Throwable e)
+            catch (Exception e)
             {
-                if(this.logger.isWarnEnabled())
-                {
-                    this.logger.warn(e);
-                }
+                this.logger.log(Level.WARNING, "invalid method", e);
             }
         }
         //no "else if" to allow both at one field
@@ -340,16 +328,16 @@ public class DefaultValidationParameterExtractor implements ValidationParameterE
                 {
                     parameterValues.add(currentMethod.invoke(paramClass.newInstance()));
                 }
-                catch (Throwable e)
+                catch (Exception e)
                 {
                     //check if it's a none-static inner class -> return this class
                     if(paramClass.getEnclosingClass() != null)
                     {
                         parameterValues.add(paramClass);
                     }
-                    else if(this.logger.isWarnEnabled())
+                    else
                     {
-                        this.logger.warn(e);
+                        this.logger.log(Level.WARNING, "invalid method", e);
                     }
                 }
             }

@@ -51,10 +51,7 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
 
     protected void initComponent(FacesContext facesContext, UIComponent uiComponent)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("start to init component " + uiComponent.getClass().getName());
-        }
+        logger.finest("start to init component " + uiComponent.getClass().getName());
 
         Map<String, Object> metaDataResult = ExtValUtils
                 .getTransformedMetaDataFor(facesContext, uiComponent, getModuleKey());
@@ -66,10 +63,7 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
             ExtValUtils.configureComponentWithMetaData(facesContext, uiComponent, metaDataResult);
         }
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("init component of " + uiComponent.getClass().getName() + " finished");
-        }
+        logger.finest("init component of " + uiComponent.getClass().getName() + " finished");
     }
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
@@ -81,19 +75,13 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
 
         try
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("start validation");
-            }
+            logger.finest("start validation");
 
             processFieldValidation(facesContext, uiComponent, convertedObject, propertyInformation);
         }
         finally
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("validation finished");
-            }
+            logger.finest("validation finished");
         }
     }
 
@@ -118,19 +106,13 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
             {
                 if(skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
                 {
-                    if(logger.isTraceEnabled())
-                    {
-                        logger.trace("skip validation of " + entry.getValue() +
-                                " with " + validationStrategy.getClass().getName());
-                    }
+                    logger.finest("skip validation of " + entry.getValue() +
+                            " with " + validationStrategy.getClass().getName());
                     //don't break maybe there are constraints which don't support the skip-mechanism
                     continue;
                 }
 
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace("validate " + entry.getValue() + " with " + validationStrategy.getClass().getName());
-                }
+                logger.finest("validate " + entry.getValue() + " with " + validationStrategy.getClass().getName());
 
                 try
                 {
@@ -161,9 +143,9 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
                     }
                 }
             }
-            else if(validationStrategy == null && logger.isTraceEnabled())
+            else if(validationStrategy == null)
             {
-                logger.trace("no validation strategy found for " + entry.getValue());
+                logger.finest("no validation strategy found for " + entry.getValue());
             }
         }
     }

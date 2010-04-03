@@ -23,14 +23,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -39,14 +38,11 @@ import java.io.IOException;
 @UsageInformation(UsageCategory.INTERNAL)
 public abstract class AbstractRendererInterceptor implements RendererInterceptor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     protected AbstractRendererInterceptor()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+            logger.fine(getClass().getName() + " instantiated");
     }
 
     public final String getInterceptorId()

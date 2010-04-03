@@ -36,13 +36,12 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 /**
@@ -59,7 +58,7 @@ import java.util.Map;
 public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFactory<ValidationStrategy>
         implements ClassMappingFactory<ValidationStrategy, MetaDataTransformer>
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, String> validationStrategyToMetaDataTransformerMapping;
     private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
@@ -68,10 +67,7 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     public DefaultMetaDataTransformerFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
 
         //since there is no guarantee that the startup listener of the core gets executed first
         register(new ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper());
@@ -217,11 +213,8 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     private synchronized void addMapping(String validationStrategyName, String transformerName)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("adding validation strategy to meta-data transformer mapping: "
-                + validationStrategyName + " -> " + transformerName);
-        }
+        logger.finest("adding validation strategy to meta-data transformer mapping: "
+            + validationStrategyName + " -> " + transformerName);
 
         validationStrategyToMetaDataTransformerMapping.put(validationStrategyName, transformerName);
     }

@@ -70,7 +70,7 @@ class FaceletsTaglibExpressionHelper
             }
             return vbe;
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             return new ValueBindingExpression(faceletsValueBindingExpression);
         }

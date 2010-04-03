@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -31,6 +29,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.convert.ConverterException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.logging.Logger;
 
 /**
  * to support a custom proxy
@@ -41,7 +40,7 @@ import java.lang.reflect.Constructor;
 @UsageInformation(UsageCategory.INTERNAL)
 class ExtValLazyRendererProxy extends Renderer
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Renderer wrapped;
 
@@ -49,10 +48,7 @@ class ExtValLazyRendererProxy extends Renderer
     {
         this.wrapped = renderer;
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("simple proxy created for " + renderer.getClass().getName());
-        }
+        logger.finest("simple proxy created for " + renderer.getClass().getName());
     }
 
     @Override
@@ -122,12 +118,9 @@ class ExtValLazyRendererProxy extends Renderer
                 Constructor constructor = targetClass.getConstructor(argClasses);
                 return (Renderer)constructor.newInstance(this.wrapped);
             }
-            catch (Throwable t)
+            catch (Exception e)
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("couldn't create: " + targetClass.getName());
-                }
+                logger.warning("couldn't create: " + targetClass.getName());
 
                 return this.wrapped;
             }

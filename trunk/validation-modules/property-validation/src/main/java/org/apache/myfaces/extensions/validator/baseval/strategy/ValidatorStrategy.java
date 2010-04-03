@@ -54,10 +54,7 @@ public class ValidatorStrategy extends AbstractValidationStrategy
 
             if (validator == null)
             {
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace(validatorClassName.getName() + " not found");
-                }
+                logger.finest(validatorClassName.getName() + " not found");
 
                 continue;
             }

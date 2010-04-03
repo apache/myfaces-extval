@@ -34,6 +34,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.faces.FacesException;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -55,14 +56,11 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
         {
             throw t;
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
-            if(this.logger.isWarnEnabled())
-            {
-                this.logger.warn("this class is replaced by a meta-data storage filter. " +
-                        "if it gets invoked and an exception occurs, a custom syntax is used." +
-                        "this class might be used by an old add-on. please check for a newer version.");
-            }
+            this.logger.log(Level.WARNING, "this class is replaced by a meta-data storage filter. " +
+                    "if it gets invoked and an exception occurs, a custom syntax is used." +
+                    "this class might be used by an old add-on. please check for a newer version.", e);
         }
     }
 
@@ -99,10 +97,7 @@ public class JoinValidationStrategy extends AbstractValidationStrategy
                 }
                 else
                 {
-                    if(logger.isTraceEnabled())
-                    {
-                        logger.trace("no validation strategy found for " + entry.getValue());
-                    }
+                    logger.finest("no validation strategy found for " + entry.getValue());
                 }
             }
         }
