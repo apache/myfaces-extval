@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
@@ -28,6 +26,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -36,7 +35,7 @@ import java.util.Map;
 @UsageInformation(INTERNAL)
 public class DefaultPropertyStorage implements PropertyStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Map<String, Field>> fieldMap = new HashMap<String, Map<String, Field>>();
     private Map<String, Map<String, Method>> methodMap = new HashMap<String, Map<String, Method>>();

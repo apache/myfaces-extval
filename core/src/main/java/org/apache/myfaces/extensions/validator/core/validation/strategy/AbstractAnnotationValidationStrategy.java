@@ -32,6 +32,7 @@ import javax.faces.validator.ValidatorException;
 import java.lang.annotation.Annotation;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.logging.Level;
 
 /**
  * Provides the ability of message resolving to ValidationStrategies
@@ -68,11 +69,8 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
         }
         catch (MissingResourceException e)
         {
-            if(logger.isWarnEnabled())
-            {
-                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX,
-                        e);
-            }
+            logger.log(Level.WARNING,
+                    "couldn't find key " + getValidationErrorMsgKey(annotation) + DETAIL_MESSAGE_KEY_POSTFIX, e);
         }
         return null;
     }

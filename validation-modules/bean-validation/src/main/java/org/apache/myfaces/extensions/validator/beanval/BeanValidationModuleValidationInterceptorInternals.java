@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval;
 
-import org.apache.commons.logging.Log;
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
@@ -44,6 +43,7 @@ import javax.validation.metadata.ElementDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -52,9 +52,9 @@ import java.util.Set;
 @UsageInformation(UsageCategory.INTERNAL)
 class BeanValidationModuleValidationInterceptorInternals
 {
-    private Log logger;
+    private Logger logger;
 
-    BeanValidationModuleValidationInterceptorInternals(Log logger)
+    BeanValidationModuleValidationInterceptorInternals(Logger logger)
     {
         this.logger = logger;
     }
@@ -66,9 +66,9 @@ class BeanValidationModuleValidationInterceptorInternals
                 .extract(facesContext, uiComponent)
                 .getInformation(PropertyInformationKeys.PROPERTY_DETAILS, PropertyDetails.class);
 
-        if (result.getBaseObject() == null && this.logger.isWarnEnabled())
+        if (result.getBaseObject() == null)
         {
-            this.logger.warn("no base object at " + result.getKey() +
+            this.logger.warning("no base object at " + result.getKey() +
                     " component-id: " + uiComponent.getClientId(facesContext));
         }
 
@@ -176,10 +176,8 @@ class BeanValidationModuleValidationInterceptorInternals
     {
         MetaDataEntry entry;
         Map<String, Object> result;
-        if (this.logger.isDebugEnabled())
-        {
-            this.logger.debug(metaDataTransformer.getClass().getName() + " instantiated");
-        }
+        
+        this.logger.fine(metaDataTransformer.getClass().getName() + " instantiated");
 
         entry = new MetaDataEntry();
         entry.setKey(constraintDescriptor.getAnnotation().annotationType().getName());

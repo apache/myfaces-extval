@@ -63,11 +63,8 @@ public class ExtValMessageInterpolatorAdapter extends DefaultMessageInterpolator
             }
             else
             {
-                if(this.logger.isTraceEnabled())
-                {
-                    this.logger.trace("you tried to use an extval message-resolver for" +
-                            "jsr303 validation with an invalid key -> using a default interpolator");
-                }
+                this.logger.finest("you tried to use an extval message-resolver for" +
+                        "jsr303 validation with an invalid key -> using a default interpolator");
             }
         }
         return super.interpolate(messageOrKey, context, getCurrentLocale());

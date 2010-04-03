@@ -36,14 +36,13 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.logging.Logger;
 
 
 /**
@@ -56,17 +55,14 @@ import java.util.MissingResourceException;
 public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFactory<String>
         implements ClassMappingFactory<String, ValidationStrategy>
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, String> metaDataKeyToValidationStrategyMapping = null;
     private List<NameMapper<String>> nameMapperList = new ArrayList<NameMapper<String>>();
 
     public DefaultValidationStrategyFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public ValidationStrategy create(String metaDataKey)
@@ -120,11 +116,8 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
 
     private synchronized void addMapping(String metaDataKey, String validationStrategyName)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("adding meta-data key to validation strategy mapping: "
-                + metaDataKey + " -> " + validationStrategyName);
-        }
+        logger.finest("adding meta-data key to validation strategy mapping: "
+            + metaDataKey + " -> " + validationStrategyName);
 
         metaDataKeyToValidationStrategyMapping.put(metaDataKey, validationStrategyName);
     }
@@ -152,7 +145,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
 
             setupStrategyMappings(staticConfig.getMapping());
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing - it was just a try
         }

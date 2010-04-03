@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.MissingResourceException;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -171,11 +172,8 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
         }
         catch (MissingResourceException e)
         {
-            if(logger.isWarnEnabled())
-            {
-                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
-                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
-            }
+            logger.log(Level.WARNING, "couldn't find key " + getValidationErrorMsgKey(annotation, isTargetComponent)
+                + DETAIL_MESSAGE_KEY_POSTFIX, e);
         }
         return null;
     }
@@ -196,11 +194,8 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
         }
         catch (MissingResourceException e)
         {
-            if(logger.isWarnEnabled())
-            {
-                logger.warn("couldn't find key " + getValidationErrorMsgKey(annotation)
-                    + DETAIL_MESSAGE_KEY_POSTFIX, e);
-            }
+            logger.log(Level.WARNING, "couldn't find key " + getValidationErrorMsgKey(annotation)
+                + DETAIL_MESSAGE_KEY_POSTFIX, e);
         }
         return null;
     }

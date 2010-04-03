@@ -22,10 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.render.RenderKit;
+import java.util.logging.Logger;
 
 /**
  * Base for all RenderKitWrapperFactories to force a specific behaviour
@@ -36,25 +35,19 @@ import javax.faces.render.RenderKit;
 @UsageInformation(UsageCategory.API)
 public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFactory<RenderKit, RenderKit>
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     protected AbstractRenderKitWrapperFactory wrapped;
     private boolean deactivated = false;
 
     protected AbstractRenderKitWrapperFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public void addRenderKitWrapperFactory(AbstractRenderKitWrapperFactory renderKitWrapperFactory)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace(renderKitWrapperFactory.getClass().getName() + " added");
-        }
+        logger.finest(renderKitWrapperFactory.getClass().getName() + " added");
 
         if(this.wrapped != null)
         {
@@ -67,10 +60,7 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
 
     public void deactivate()
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace(getClass().getName() + " deactivated");
-        }
+        logger.finest(getClass().getName() + " deactivated");
 
         this.deactivated = true;
     }

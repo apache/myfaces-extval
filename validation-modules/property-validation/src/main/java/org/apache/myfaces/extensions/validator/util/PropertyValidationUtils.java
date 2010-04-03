@@ -24,10 +24,9 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.baseval.strategy.SkipValidationStrategy;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -36,7 +35,7 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.INTERNAL)
 public class PropertyValidationUtils
 {
-    private static final Log LOGGER = LogFactory.getLog(PropertyValidationUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(PropertyValidationUtils.class.getName());
 
     public static boolean isValidationSkipped(FacesContext facesContext,
                                          ValidationStrategy validationStrategy,
@@ -50,10 +49,7 @@ public class PropertyValidationUtils
 
             if(Boolean.TRUE.equals(skipValidation))
             {
-                if(LOGGER.isTraceEnabled())
-                {
-                    LOGGER.trace("validation of " + validationStrategy.getClass().getName() + " canceled");
-                }
+                LOGGER.finest("validation of " + validationStrategy.getClass().getName() + " canceled");
 
                 return true;
             }

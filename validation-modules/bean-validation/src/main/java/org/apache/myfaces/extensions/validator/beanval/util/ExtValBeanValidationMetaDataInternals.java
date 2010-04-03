@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.util;
 
-import org.apache.commons.logging.Log;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
@@ -49,6 +48,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -57,10 +57,10 @@ import java.util.List;
 @UsageInformation(UsageCategory.INTERNAL)
 class ExtValBeanValidationMetaDataInternals
 {
-    private Log logger;
+    private Logger logger;
     private LabeledMessageInternals labeledMessageInternals = new LabeledMessageInternals();
 
-    ExtValBeanValidationMetaDataInternals(Log logger)
+    ExtValBeanValidationMetaDataInternals(Logger logger)
     {
         this.logger = logger;
     }
@@ -489,10 +489,7 @@ class ExtValBeanValidationMetaDataInternals
             }
             else
             {
-                if (this.logger.isErrorEnabled())
-                {
-                    this.logger.error("an invalid condition is used: " + condition);
-                }
+                this.logger.severe("an invalid condition is used: " + condition);
             }
         }
         return false;

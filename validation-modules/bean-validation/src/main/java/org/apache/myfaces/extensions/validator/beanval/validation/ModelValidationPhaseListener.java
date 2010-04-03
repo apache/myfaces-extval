@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.validation;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleKey;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
@@ -52,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -63,14 +62,11 @@ public class ModelValidationPhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -3482233893186708878L;
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public void afterPhase(PhaseEvent phaseEvent)
     {
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("jsr303 start model validation");
-        }
+        logger.finest("jsr303 start model validation");
 
         Map<Object, List<Class>> processedValidationTargets = new HashMap<Object, List<Class>>();
 
@@ -85,10 +81,7 @@ public class ModelValidationPhaseListener implements PhaseListener
 
         executeGlobalAfterValidationInterceptorsFor(results);
 
-        if (logger.isTraceEnabled())
-        {
-            logger.trace("jsr303 validation finished");
-        }
+        logger.finest("jsr303 validation finished");
     }
 
     private List<ModelValidationEntry> getModelValidationEntriesToValidate()

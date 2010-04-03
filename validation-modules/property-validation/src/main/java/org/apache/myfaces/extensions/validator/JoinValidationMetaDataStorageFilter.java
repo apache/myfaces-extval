@@ -136,7 +136,7 @@ public class JoinValidationMetaDataStorageFilter implements MetaDataStorageFilte
                 addMetaData(result, extractDynamicMetaData(metaDataEntry, target));
             }
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing a different filter might introduce a new syntax which causes the exception
         }

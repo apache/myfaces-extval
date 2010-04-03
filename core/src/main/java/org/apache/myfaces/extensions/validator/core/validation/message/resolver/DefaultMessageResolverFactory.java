@@ -32,13 +32,12 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Factory which creates a MessageResolver for a given ValidationStrategy
@@ -51,17 +50,14 @@ import java.util.Map;
 public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactory<ValidationStrategy>
         implements ClassMappingFactory<ValidationStrategy, MessageResolver>
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, String> strategyMessageResolverMapping;
     private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
 
     public DefaultMessageResolverFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public MessageResolver create(ValidationStrategy validationStrategy)
@@ -98,10 +94,7 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
             {
                 addMapping(strategyName, resolverName);
 
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace(resolverName + " used for " + strategyName);
-                }
+                logger.finest(resolverName + " used for " + strategyName);
 
                 return messageResolver;
             }
@@ -135,11 +128,8 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
     @ToDo(value = Priority.MEDIUM, description = "logging")
     private synchronized void addMapping(String validationStrategyName, String messageResolverName)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("adding static validation strategy to message resolver mapping: "
-                + validationStrategyName + " -> " + messageResolverName);
-        }
+        logger.finest("adding static validation strategy to message resolver mapping: "
+            + validationStrategyName + " -> " + messageResolverName);
 
         strategyMessageResolverMapping.put(validationStrategyName, messageResolverName);
     }
