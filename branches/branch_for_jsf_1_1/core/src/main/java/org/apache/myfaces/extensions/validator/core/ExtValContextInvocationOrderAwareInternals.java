@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
@@ -33,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -41,7 +40,7 @@ import java.util.Collections;
 @UsageInformation(UsageCategory.INTERNAL)
 class ExtValContextInvocationOrderAwareInternals
 {
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private List<MetaDataExtractionInterceptor> metaDataExtractionInterceptors = null;
     private Map<Class, List<MetaDataExtractionInterceptor>> moduleSpecificMetaDataExtractionInterceptors = null;
@@ -144,10 +143,7 @@ class ExtValContextInvocationOrderAwareInternals
         {
             this.propertyValidationInterceptors.add(propertyValidationInterceptor);
 
-            if (logger.isTraceEnabled())
-            {
-                logger.trace(propertyValidationInterceptor.getClass().getName() + " added as global interceptor");
-            }
+            logger.finest(propertyValidationInterceptor.getClass().getName() + " added as global interceptor");
         }
         else
         {
@@ -163,10 +159,7 @@ class ExtValContextInvocationOrderAwareInternals
             }
             propertyValidationInterceptorList.add(propertyValidationInterceptor);
 
-            if (logger.isTraceEnabled())
-            {
-                logger.trace(propertyValidationInterceptor.getClass().getName() + " added for " + moduleKey.getName());
-            }
+            logger.finest(propertyValidationInterceptor.getClass().getName() + " added for " + moduleKey.getName());
         }
     }
 
@@ -210,10 +203,7 @@ class ExtValContextInvocationOrderAwareInternals
         {
             this.metaDataExtractionInterceptors.add(metaDataExtractionInterceptor);
 
-            if (logger.isTraceEnabled())
-            {
-                logger.trace(metaDataExtractionInterceptor.getClass().getName() + " added as global interceptor");
-            }
+            logger.finest(metaDataExtractionInterceptor.getClass().getName() + " added as global interceptor");
         }
         else
         {
@@ -229,10 +219,7 @@ class ExtValContextInvocationOrderAwareInternals
             }
             metaDataExtractionInterceptorList.add(metaDataExtractionInterceptor);
 
-            if (logger.isTraceEnabled())
-            {
-                logger.trace(metaDataExtractionInterceptor.getClass().getName() + " added for " + moduleKey.getName());
-            }
+            logger.finest(metaDataExtractionInterceptor.getClass().getName() + " added for " + moduleKey.getName());
         }
     }
 
@@ -301,10 +288,7 @@ class ExtValContextInvocationOrderAwareInternals
             {
                 validationExceptionInterceptors.add(validationExceptionInterceptor);
 
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace(validationExceptionInterceptor.getClass().getName() + " added");
-                }
+                logger.finest(validationExceptionInterceptor.getClass().getName() + " added");
             }
         }
     }
@@ -365,10 +349,7 @@ class ExtValContextInvocationOrderAwareInternals
             {
                 componentInitializers.add(componentInitializer);
 
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace(componentInitializer.getClass().getName() + " added");
-                }
+                logger.finest(componentInitializer.getClass().getName() + " added");
             }
         }
     }

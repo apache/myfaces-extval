@@ -82,16 +82,13 @@ public class ExtValStartupListener extends AbstractStartupListener
 
     protected void init()
     {
-        if(logger.isInfoEnabled())
+        if(ExtValInformation.VERSION != null)
         {
-            if(ExtValInformation.VERSION != null)
-            {
-                logger.info("starting up MyFaces Extensions Validator v" + ExtValInformation.VERSION);
-            }
-            else
-            {
-                logger.info("starting up MyFaces Extensions Validator");
-            }
+            logger.info("starting up MyFaces Extensions Validator v" + ExtValInformation.VERSION);
+        }
+        else
+        {
+            logger.info("starting up MyFaces Extensions Validator");
         }
 
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
@@ -177,17 +174,11 @@ public class ExtValStartupListener extends AbstractStartupListener
 
         if(customStartupListener != null)
         {
-            if(logger.isInfoEnabled())
-            {
-                logger.info("start init of " + customStartupListener.getClass().getName());
-            }
+            logger.info("start init of " + customStartupListener.getClass().getName());
 
             customStartupListener.init();
 
-            if(logger.isInfoEnabled())
-            {
-                logger.info("init of " + customStartupListener.getClass().getName() + " finished");
-            }
+            logger.info("init of " + customStartupListener.getClass().getName() + " finished");
         }
     }
 

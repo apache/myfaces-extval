@@ -24,12 +24,11 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.REUSE;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * generic storage manager implementation
@@ -41,16 +40,13 @@ import java.util.Map;
 public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareFactory<String>
         implements StorageManager<T>
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private List<NameMapper<String>> nameMapperList = new ArrayList<NameMapper<String>>();
 
     public AbstractStorageManager()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public T create(String storageName)

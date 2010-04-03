@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.core.proxy;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -30,14 +30,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultProxyHelper implements ProxyHelper
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public DefaultProxyHelper()
     {
-        if (logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public <T> Class<T> getUnproxiedClass(Class currentClass, Class<T> targetType)

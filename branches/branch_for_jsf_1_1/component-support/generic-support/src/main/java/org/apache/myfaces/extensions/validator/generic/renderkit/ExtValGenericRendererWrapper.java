@@ -89,10 +89,7 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         }
         else
         {
-            if(logger.isTraceEnabled())
-            {
-                logger.trace("method " + method.getName() + " called without rendering-interceptors");
-            }
+            logger.finest("method " + method.getName() + " called without rendering-interceptors");
 
             return proxy.invokeSuper(obj, args);
         }

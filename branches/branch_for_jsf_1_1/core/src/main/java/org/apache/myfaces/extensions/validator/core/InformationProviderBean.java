@@ -21,11 +21,10 @@ package org.apache.myfaces.extensions.validator.core;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * centralized in order that these information aren't spread over the complete code base
@@ -40,7 +39,7 @@ import java.util.HashMap;
 @UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})
 public class InformationProviderBean
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public static final String BEAN_NAME = ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME
         + "." + InformationProviderBean.class.getSimpleName();
@@ -50,10 +49,7 @@ public class InformationProviderBean
 
     public InformationProviderBean()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
 
         setupCustomizableInformation();
         applyCustomValues(this.customizableInfos);

@@ -25,8 +25,6 @@ import org.apache.myfaces.extensions.validator.core.storage.RendererProxyStorage
 import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -34,6 +32,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.convert.ConverterException;
 import javax.faces.application.FacesMessage;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * to avoid multiple calls of renderer methods within renderer interceptors (e.g. for encode, decode,...)
@@ -45,18 +44,15 @@ import java.io.IOException;
 public class ExtValRendererProxy extends Renderer
 {
     public static final String KEY = ExtValRendererProxy.class.getName() + ":KEY";
-    protected final Log logger = LogFactory.getLog(getClass());
-    
+    protected final Logger logger = Logger.getLogger(getClass().getName());
+
     protected Renderer wrapped;
 
     public ExtValRendererProxy(Renderer renderer)
     {
         this.wrapped = renderer;
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("proxy created for " + renderer.getClass().getName());
-        }
+        logger.finest("proxy created for " + renderer.getClass().getName());
     }
 
     @Override
@@ -276,15 +272,9 @@ public class ExtValRendererProxy extends Renderer
             FacesContext.getCurrentInstance()
                     .addMessage(null, ExtValUtils.createFacesMessage(FacesMessage.SEVERITY_WARN, message, message));
 
-            if(logger.isWarnEnabled())
-            {
-                logger.warn(message);
-            }
+            logger.warning(message);
         }
 
-        if(logger.isDebugEnabled())
-        {
-            logger.debug("turn on the development mode for further information, if something is displayed wrong.");
-        }
+        logger.fine("turn on the development mode for further information, if something is displayed wrong.");
     }
 }

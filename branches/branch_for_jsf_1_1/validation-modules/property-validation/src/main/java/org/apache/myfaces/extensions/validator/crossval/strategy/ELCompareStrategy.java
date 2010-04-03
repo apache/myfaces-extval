@@ -29,10 +29,9 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
+import java.util.logging.Logger;
 
 /**
  * referencing validation targets - possible formats:
@@ -44,7 +43,7 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.INTERNAL)
 class ELCompareStrategy implements ReferencingStrategy
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public boolean evaluateReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,

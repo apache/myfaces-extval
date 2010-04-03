@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -31,13 +31,10 @@ import org.apache.commons.logging.LogFactory;
 @UsageInformation(UsageCategory.INTERNAL)
 public abstract class AbstractMetaDataToValidationStrategyNameMapper implements NameMapper<String>
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public AbstractMetaDataToValidationStrategyNameMapper()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 }
