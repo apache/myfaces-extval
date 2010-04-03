@@ -28,8 +28,6 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.el.ValueExpression;
 import javax.el.ELContext;
@@ -39,6 +37,7 @@ import javax.faces.el.ValueBinding;
 import java.io.Externalizable;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * in order to centralize the jsf version dependency within the core
@@ -58,14 +57,11 @@ public class DefaultELHelper implements ELHelper
 {
     private static final String DEACTIVATE_EL_RESOLVER = WebXmlParameter.DEACTIVATE_EL_RESOLVER;
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public DefaultELHelper()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public Class getTypeOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression)
@@ -94,7 +90,7 @@ public class DefaultELHelper implements ELHelper
         {
             facesContext.getApplication().evaluateExpressionGet(facesContext, valueBindingExpression, Object.class);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             return false;
         }
@@ -109,11 +105,8 @@ public class DefaultELHelper implements ELHelper
         //(e.g. for special component libs -> issue with ExtValRendererWrapper#encodeBegin)
         if(valueBindingExpression == null)
         {
-            if(this.logger.isTraceEnabled())
-            {
-                this.logger.trace(
-                        uiComponent.getClass() + " has no value binding - component id: " + uiComponent.getId());
-            }
+            this.logger.finest(
+                    uiComponent.getClass() + " has no value binding - component id: " + uiComponent.getId());
             return null;
         }
 
@@ -130,10 +123,7 @@ public class DefaultELHelper implements ELHelper
 
             if(result == null)
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("couldn't resolve expression: " + valueBindingExpression);
-                }
+                logger.fine("couldn't resolve expression: " + valueBindingExpression);
                 return null;
             }
 
@@ -142,10 +132,7 @@ public class DefaultELHelper implements ELHelper
 
             if(entityClass == null)
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("couldn't resolve expression: " + result.getExpressionString());
-                }
+                logger.fine("couldn't resolve expression: " + result.getExpressionString());
 
                 return null;
             }
@@ -177,14 +164,14 @@ public class DefaultELHelper implements ELHelper
         {
             valueExpression.setValue(elContext, null);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             throw new IllegalStateException(
                 "error at binding: " + valueExpression.getExpressionString() +
                 " -- an el-resolver error occurred! maybe you used an invalid binding. otherwise: " +
                 "please report the issue, deactivate the el-resovler of extval via web.xml context-param: " +
                 ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER" +
-                " and test again.", t);
+                " and test again.", e);
         }
 
         if(elResolver.getPath() == null || elResolver.getBaseObject() == null || elResolver.getProperty() == null)
@@ -277,11 +264,8 @@ public class DefaultELHelper implements ELHelper
         }
         else
         {
-            if(this.logger.isErrorEnabled())
-            {
-                this.logger.error("unexpected value within map syntax: " + propertyChain +
-                        " last property name: " + currentPropertyValue);
-            }
+            this.logger.severe("unexpected value within map syntax: " + propertyChain +
+                    " last property name: " + currentPropertyValue);
             return null;
         }
     }

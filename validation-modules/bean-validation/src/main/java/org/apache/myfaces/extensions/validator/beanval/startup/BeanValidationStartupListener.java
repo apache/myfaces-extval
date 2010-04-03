@@ -104,12 +104,9 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         }
         else
         {
-            if (this.logger.isWarnEnabled())
-            {
-                this.logger.warn(storageManager.getClass().getName() +
-                        " has to implement AbstractNameMapperAwareFactory " + getClass().getName() +
-                        " couldn't register " + BeanValidationGroupStorageNameMapper.class.getName());
-            }
+            this.logger.warning(storageManager.getClass().getName() +
+                    " has to implement AbstractNameMapperAwareFactory " + getClass().getName() +
+                    " couldn't register " + BeanValidationGroupStorageNameMapper.class.getName());
         }
     }
 

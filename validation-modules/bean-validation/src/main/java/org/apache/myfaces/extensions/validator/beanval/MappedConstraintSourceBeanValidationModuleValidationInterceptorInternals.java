@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.beanval;
 
-import org.apache.commons.logging.Log;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.storage.MappedConstraintSourceStorage;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -49,6 +48,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.Collections;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -57,11 +58,11 @@ import java.util.Collections;
 @UsageInformation(UsageCategory.INTERNAL)
 class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
 {
-    private Log logger;
+    private Logger logger;
     private BeanValidationModuleValidationInterceptorInternals bviUtils;
 
     MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals(
-            Log logger, BeanValidationModuleValidationInterceptorInternals bviUtils)
+            Logger logger, BeanValidationModuleValidationInterceptorInternals bviUtils)
     {
         this.logger = logger;
         this.bviUtils = bviUtils;
@@ -281,11 +282,8 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
             }
             catch (NoSuchMethodException e1)
             {
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("method not found - class: " + entity.getName()
-                            + " - methods: " + "get" + property + " " + "is" + property);
-                }
+                logger.finest("method not found - class: " + entity.getName()
+                        + " - methods: " + "get" + property + " " + "is" + property);
 
                 return null;
             }
@@ -327,10 +325,7 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
             }
             catch (NoSuchFieldException e1)
             {
-                if (logger.isTraceEnabled())
-                {
-                    logger.trace("field " + property + " or _" + property + " not found", e1);
-                }
+                logger.log(Level.FINEST, "field " + property + " or _" + property + " not found", e1);
 
                 return null;
             }
@@ -545,7 +540,7 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
                 {
                     return (T) annotationMethod.invoke(annotation);
                 }
-                catch (Throwable t)
+                catch (Exception e)
                 {
                     //do nothing
                 }

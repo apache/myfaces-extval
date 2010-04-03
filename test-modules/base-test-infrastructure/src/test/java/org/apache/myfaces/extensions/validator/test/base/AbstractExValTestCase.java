@@ -221,9 +221,9 @@ public abstract class AbstractExValTestCase extends TestCase
             factoryMap.setAccessible(true);
             factoryMap.set(ExtValContext.getContext().getFactoryFinder(), new HashMap<FactoryNames, Object>());
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
-            throw new IllegalStateException("cannot reset the factory finder", t);
+            throw new IllegalStateException("cannot reset the factory finder", e);
         }
     }
 
@@ -235,9 +235,9 @@ public abstract class AbstractExValTestCase extends TestCase
             context.setAccessible(true);
             context.set(ExtValContext.getContext(), null);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
-            throw new IllegalStateException("cannot reset the extval-context", t);
+            throw new IllegalStateException("cannot reset the extval-context", e);
         }
     }
 

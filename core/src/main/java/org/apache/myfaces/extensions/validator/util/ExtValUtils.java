@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
@@ -69,6 +67,7 @@ import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
 
 /**
@@ -79,7 +78,7 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValUtils
 {
-    private static final Log LOGGER = LogFactory.getLog(ExtValUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(ExtValUtils.class.getName());
 
     private static final String JAVAX_FACES_REQUIRED = "javax.faces.component.UIInput.REQUIRED";
     private static final String JAVAX_FACES_REQUIRED_DETAIL = "javax.faces.component.UIInput.REQUIRED_detail";
@@ -461,11 +460,8 @@ public class ExtValUtils
                 }
                 else
                 {
-                    if (LOGGER.isWarnEnabled())
-                    {
-                        LOGGER.warn("configuration entry provides an invalid entry: "
-                                + currentConfigurationEntry.getTarget());
-                    }
+                    LOGGER.warning("configuration entry provides an invalid entry: "
+                            + currentConfigurationEntry.getTarget());
                 }
             }
         }
@@ -726,10 +722,7 @@ public class ExtValUtils
 
             if (metaDataTransformer != null)
             {
-                if (LOGGER.isDebugEnabled())
-                {
-                    LOGGER.debug(metaDataTransformer.getClass().getName() + " instantiated");
-                }
+                LOGGER.fine(metaDataTransformer.getClass().getName() + " instantiated");
 
                 metaData = metaDataTransformer.convertMetaData(entry);
             }

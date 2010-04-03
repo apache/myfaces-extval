@@ -38,10 +38,7 @@ public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
 
     protected RenderKit createWrapper(RenderKit renderKit)
     {
-        if(logger.isTraceEnabled())
-        {
-            logger.trace("extval renderkit wrapper created for " + renderKit.getClass().getName());
-        }
+        logger.finest("extval renderkit wrapper created for " + renderKit.getClass().getName());
 
         //workaround for mojarra (EXTVAL-38)
         if(useGenericRenderKitWrapperFactory == null)

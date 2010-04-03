@@ -23,12 +23,11 @@ import org.apache.myfaces.extensions.validator.core.storage.FacesMessageStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -38,7 +37,7 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class FacesMessagePropertyValidationInterceptor implements PropertyValidationInterceptor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public boolean beforeValidation(
             FacesContext facesContext, UIComponent uiComponent, Object convertedObject, Map<String, Object> properties)

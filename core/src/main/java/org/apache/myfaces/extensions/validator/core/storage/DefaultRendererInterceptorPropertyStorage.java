@@ -20,11 +20,10 @@ package org.apache.myfaces.extensions.validator.core.storage;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -33,7 +32,7 @@ import java.util.HashMap;
 @UsageInformation(INTERNAL)
 public class DefaultRendererInterceptorPropertyStorage implements RendererInterceptorPropertyStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Object> properties = new HashMap<String, Object>();
 

@@ -24,11 +24,10 @@ import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -37,16 +36,13 @@ import java.util.List;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultValidationParameterExtractorFactory implements ValidationParameterExtractorFactory
 {
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private static ValidationParameterExtractor validationParameterExtractor = null;
 
     public DefaultValidationParameterExtractorFactory()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public ValidationParameterExtractor create()
@@ -73,10 +69,7 @@ public class DefaultValidationParameterExtractorFactory implements ValidationPar
             }
         }
 
-        if(logger.isTraceEnabled())
-        {
-            logger.trace(validationParameterExtractor.getClass().getName() + " created");
-        }
+        logger.finest(validationParameterExtractor.getClass().getName() + " created");
 
         return validationParameterExtractor;
     }

@@ -42,6 +42,7 @@ import javax.el.PropertyNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -95,11 +96,8 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
         catch (PropertyNotFoundException r)
         {
-            if(this.logger.isFatalEnabled())
-            {
-                this.logger.fatal("it seems you are using an invalid binding. " + wrapped.getClass().getName()
-                        + ": conversion failed. normally this is >not< a myfaces extval issue!", r);
-            }
+            this.logger.log(Level.SEVERE, "it seems you are using an invalid binding. " + wrapped.getClass().getName()
+                    + ": conversion failed. normally this is >not< a myfaces extval issue!", r);
 
             throw r;
         }
@@ -113,10 +111,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
             {
                 recorder.recordUserInput(uiComponent, convertedObject);
 
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace(recorder.getClass().getName() + " called");
-                }
+                logger.finest(recorder.getClass().getName() + " called");
             }
         }
 
@@ -201,11 +196,8 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     {
         if(isValueToValidateEmpty(convertedObject) && !validateEmptyFields())
         {
-            if(this.logger.isDebugEnabled())
-            {
-                this.logger.debug("empty field validation is deactivated in the web.xml - see: " +
-                        "javax.faces.VALIDATE_EMPTY_FIELDS");
-            }
+            this.logger.fine("empty field validation is deactivated in the web.xml - see: " +
+                    "javax.faces.VALIDATE_EMPTY_FIELDS");
 
             return false;
         }
@@ -242,7 +234,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         {
             return ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent) != null;
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             return false;
         }

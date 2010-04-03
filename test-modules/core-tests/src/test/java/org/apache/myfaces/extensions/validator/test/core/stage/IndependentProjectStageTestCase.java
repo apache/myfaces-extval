@@ -103,7 +103,7 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
             return FacesContext.getCurrentInstance()
                     .getExternalContext().getInitParameter(parameterName);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             return null;
         }

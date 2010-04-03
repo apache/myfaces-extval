@@ -20,11 +20,11 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.jar.Manifest;
 import java.util.jar.Attributes;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.net.URL;
 
 /**
@@ -34,7 +34,7 @@ import java.net.URL;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ClassUtils
 {
-    private static final Log LOG = LogFactory.getLog(ClassUtils.class);
+    private static final Logger LOG = Logger.getLogger(ClassUtils.class.getName());
 
     public static Class tryToLoadClassForName(String name)
     {
@@ -71,7 +71,7 @@ public class ClassUtils
         {
             return targetClass.newInstance();
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing - it was just a try
         }
@@ -84,7 +84,7 @@ public class ClassUtils
         {
             return instantiateClassForName(className);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing - it was just a try
         }
@@ -111,12 +111,9 @@ public class ClassUtils
             return new Manifest(new URL(manifestFileLocation).openStream())
                     .getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
-            if (LOG.isTraceEnabled())
-            {
-                LOG.trace("couldn't load version of jar file which contains " + targetClass.getName(), t);
-            }
+            LOG.log(Level.FINEST, "couldn't load version of jar file which contains " + targetClass.getName(), e);
             return null;
         }
     }
