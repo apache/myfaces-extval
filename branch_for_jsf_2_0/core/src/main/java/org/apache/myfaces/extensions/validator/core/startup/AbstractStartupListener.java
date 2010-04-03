@@ -26,14 +26,14 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
 import org.apache.myfaces.extensions.validator.core.DefaultProjectStageResolver;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * In order to execute logic just once.
@@ -45,7 +45,7 @@ import java.util.List;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractStartupListener implements PhaseListener
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     //don't remove - it's a fallback if there is a problem with deregistration
     //target: don't process init logic more than once
@@ -55,10 +55,7 @@ public abstract class AbstractStartupListener implements PhaseListener
 
     protected AbstractStartupListener()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public void afterPhase(PhaseEvent event)
@@ -73,10 +70,7 @@ public abstract class AbstractStartupListener implements PhaseListener
             {
                 try
                 {
-                    if(logger.isInfoEnabled())
-                    {
-                        logger.info("start init of " + getClass().getName());
-                    }
+                    logger.info("start init of " + getClass().getName());
 
                     try
                     {
@@ -88,32 +82,24 @@ public abstract class AbstractStartupListener implements PhaseListener
                         }
                         else
                         {
-                            if(logger.isInfoEnabled())
-                            {
-                                logger.info("init of " + getClass().getName() + " deactivated");
-                            }
+                            logger.info("init of " + getClass().getName() + " deactivated");
                         }
 
-                        if(logger.isInfoEnabled())
-                        {
-                            logger.info("init of " + getClass().getName() + " finished");
-                        }
+                        logger.info("init of " + getClass().getName() + " finished");
                     }
                     finally
                     {
                         JsfUtils.deregisterPhaseListener(this);
                     }
                 }
-                catch (Throwable t)
+                catch (Exception e)
                 {
-                    if(logger.isWarnEnabled())
-                    {
-                        logger.warn("an exception occurred while deregistering the phase-listener"
+                        logger.log(Level.WARNING,
+                                "an exception occurred while deregistering the phase-listener"
                                 + getClass().getName()
                                 + " -> there is just a little overhead,"
                                 + " but everything else works correctly."
-                                + " however, please inform the community about your configuration", t);
-                    }
+                                + " however, please inform the community about your configuration", e);
                 }
                 finally
                 {

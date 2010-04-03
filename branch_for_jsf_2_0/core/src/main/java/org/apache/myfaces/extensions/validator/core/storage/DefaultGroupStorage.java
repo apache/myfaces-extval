@@ -21,13 +21,12 @@ package org.apache.myfaces.extensions.validator.core.storage;
 import org.apache.myfaces.extensions.validator.util.GroupUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * default storage implementation for groups
@@ -38,7 +37,7 @@ import java.util.ArrayList;
 @UsageInformation(INTERNAL)
 public class DefaultGroupStorage implements GroupStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, List<Class>> addedGroups = new HashMap<String, List<Class>>();
 
@@ -78,12 +77,9 @@ public class DefaultGroupStorage implements GroupStorage
         {
             if(resultsForComponent.length == 0)
             {
-                if(this.logger.isDebugEnabled())
-                {
-                    this.logger.debug("no groups for group-validation available." +
-                            "maybe you restricted all groups or you aren't using groups." +
-                            "bean validation will use the default group for validation");
-                }
+                this.logger.fine("no groups for group-validation available." +
+                        "maybe you restricted all groups or you aren't using groups." +
+                        "bean validation will use the default group for validation");
             }
             return resultsForComponent;
         }

@@ -24,12 +24,12 @@ import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * MessageResolver which uses property files.
@@ -44,7 +44,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 {
     public static final String MISSING_RESOURCE_MARKER = "???";
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private static String deactivateDefaultConvention = WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION;
     private static ResourceBundle defaultBundle = null;
@@ -54,10 +54,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
     protected AbstractValidationErrorMessageResolver()
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug(getClass().getName() + " instantiated");
-        }
+        logger.fine(getClass().getName() + " instantiated");
     }
 
     public String getMessage(String key, Locale locale)
@@ -82,7 +79,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         {
             customMessage = tryToFindCustomMessage(key, locale);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing
         }
@@ -99,7 +96,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         {
             customMessage = tryToUseMessageBundleConvention(key, locale);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing
         }
@@ -118,7 +115,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         {
             customMessage = tryToFindCustomMessageInCustomResourceBundle(key, locale);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             //do nothing - it was just a try
         }
@@ -141,10 +138,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             }
             else
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("message bundle " + this.messageBundleBaseName + " not found");
-                }
+                logger.warning("message bundle " + this.messageBundleBaseName + " not found");
             }
         }
 
@@ -159,10 +153,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             }
             else
             {
-                if(logger.isWarnEnabled())
-                {
-                    logger.warn("message bundle var name " + this.messageBundleVarName + " not found");
-                }
+                logger.warning("message bundle var name " + this.messageBundleVarName + " not found");
             }
         }
 
@@ -181,7 +172,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
                     defaultBundle = ResourceBundle.getBundle(ExtValContext.getContext().getInformationProviderBean()
                         .get(CustomInformation.MESSAGE_BUNDLE_NAME), locale);
                 }
-                catch (Throwable t)
+                catch (Exception e)
                 {
                     //do nothing
                     deactivateDefaultConvention = "true";
@@ -209,10 +200,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
             }
             catch (MissingResourceException e)
             {
-                if(logger.isTraceEnabled())
-                {
-                    logger.trace("no custom message for " + key + " within " + getCustomBaseName(), e);
-                }
+                logger.log(Level.FINEST, "no custom message for " + key + " within " + getCustomBaseName(), e);
             }
         }
         return null;

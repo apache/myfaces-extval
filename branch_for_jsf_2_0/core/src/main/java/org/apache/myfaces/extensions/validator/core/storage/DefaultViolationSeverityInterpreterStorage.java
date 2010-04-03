@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation(INTERNAL)
 public class DefaultViolationSeverityInterpreterStorage implements ViolationSeverityInterpreterStorage
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private ViolationSeverityInterpreter violationSeverityInterpreter;
 

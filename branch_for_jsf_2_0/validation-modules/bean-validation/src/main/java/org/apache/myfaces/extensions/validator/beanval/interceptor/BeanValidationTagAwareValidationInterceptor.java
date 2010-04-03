@@ -26,8 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -38,6 +36,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -46,7 +45,7 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class BeanValidationTagAwareValidationInterceptor implements PropertyValidationInterceptor
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public boolean beforeValidation(FacesContext facesContext,
                              UIComponent uiComponent,
@@ -109,10 +108,7 @@ public class BeanValidationTagAwareValidationInterceptor implements PropertyVali
             }
             else
             {
-                if(this.logger.isErrorEnabled())
-                {
-                    this.logger.error(groupClassName + " is no valid group - only existing interfaces are allowed");
-                }
+                this.logger.severe(groupClassName + " is no valid group - only existing interfaces are allowed");
             }
         }
     }

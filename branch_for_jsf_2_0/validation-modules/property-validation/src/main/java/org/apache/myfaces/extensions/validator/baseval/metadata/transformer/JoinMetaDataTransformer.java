@@ -30,13 +30,12 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.PropertyValidationUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.faces.context.FacesContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collections;
+import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
 
 /**
@@ -47,7 +46,7 @@ import java.lang.annotation.Annotation;
 @Deprecated
 public class JoinMetaDataTransformer implements MetaDataTransformer
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
@@ -55,14 +54,11 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
         {
             return convert(metaDataEntry);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
-            if(this.logger.isWarnEnabled())
-            {
-                this.logger.warn("this class is replaced by a meta-data storage filter. " +
-                        "if it gets invoked and an exception occurs, a custom syntax is used." +
-                        "this class might be used by an old add-on. please check for a newer version.");
-            }
+            this.logger.warning("this class is replaced by a meta-data storage filter. " +
+                    "if it gets invoked and an exception occurs, a custom syntax is used." +
+                    "this class might be used by an old add-on. please check for a newer version.");
             return Collections.emptyMap();
         }
     }

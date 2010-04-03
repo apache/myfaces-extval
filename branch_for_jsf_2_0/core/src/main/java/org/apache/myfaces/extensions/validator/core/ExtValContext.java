@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
@@ -44,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -52,7 +51,7 @@ import java.util.Map;
 @UsageInformation(UsageCategory.API)
 public class ExtValContext
 {
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private static ExtValContext extValContext;
 
@@ -114,7 +113,7 @@ public class ExtValContext
     {
         if (this.violationSeverityInterpreter == null || forceOverride)
         {
-            if (this.logger.isInfoEnabled() && violationSeverityInterpreter != null)
+            if (violationSeverityInterpreter != null)
             {
                 this.logger.info(violationSeverityInterpreter.getClass() + " is used");
             }
@@ -163,7 +162,7 @@ public class ExtValContext
     {
         if (this.skipValidationEvaluator == null || forceOverride)
         {
-            if (this.logger.isInfoEnabled() && skipValidationEvaluator != null)
+            if (skipValidationEvaluator != null)
             {
                 this.logger.info(skipValidationEvaluator.getClass() + " is used");
             }
@@ -390,13 +389,10 @@ public class ExtValContext
                 return false;
             }
 
-            if (this.logger.isInfoEnabled())
-            {
-                this.logger.info("override global property '" + name + "'");
-            }
+            this.logger.info("override global property '" + name + "'");
         }
 
-        if(JsfProjectStage.is(JsfProjectStage.Development) && this.logger.isInfoEnabled())
+        if(JsfProjectStage.is(JsfProjectStage.Development))
         {
             this.logger.info("global property [" + name + "] added");
         }

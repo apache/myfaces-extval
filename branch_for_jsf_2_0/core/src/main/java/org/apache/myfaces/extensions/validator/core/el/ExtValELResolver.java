@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.el;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
@@ -33,6 +31,7 @@ import javax.faces.el.CompositeComponentExpressionHolder;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.beans.FeatureDescriptor;
 
 /**
@@ -42,7 +41,7 @@ import java.beans.FeatureDescriptor;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ExtValELResolver extends ELResolver
 {
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private ELResolver wrapped;
     private Object baseObject;
@@ -70,10 +69,7 @@ public class ExtValELResolver extends ELResolver
 
     public String getPath()
     {
-        if(this.logger.isTraceEnabled())
-        {
-            this.logger.trace("extracted path: " + this.expression);
-        }
+        this.logger.finest("extracted path: " + this.expression);
         return this.expression;
     }
 
@@ -155,9 +151,9 @@ public class ExtValELResolver extends ELResolver
                 }
                 catch (NoSuchMethodException e1)
                 {
-                    if(this.logger.isTraceEnabled() && !"attrs".equals(property))
+                    if(!"attrs".equals(property))
                     {
-                        this.logger.trace("property: " + property +
+                        this.logger.finest("property: " + property +
                                 " isn't used for path - it isn't a property of " + base.getClass());
                     }
                 }
