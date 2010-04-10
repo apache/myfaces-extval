@@ -60,7 +60,7 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
     private ModelValidationStorage modelValidationStorage;
 
-    private ExtValBeanValidationContext()
+    protected ExtValBeanValidationContext()
     {
         initGroupStorage();
         initModelValidationStorage();
