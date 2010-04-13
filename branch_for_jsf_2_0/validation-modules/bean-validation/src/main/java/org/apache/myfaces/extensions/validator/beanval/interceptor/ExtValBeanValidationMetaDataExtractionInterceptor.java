@@ -56,7 +56,10 @@ public class ExtValBeanValidationMetaDataExtractionInterceptor
                 UIComponent uiComponent = (UIComponent)properties.get(UIComponent.class.getName());
                 PropertyDetails propertyDetails = ExtValUtils.getPropertyDetails(propertyInformation);
 
-                processExtValBeanValidationMetaData(uiComponent, propertyDetails);
+                if(propertyDetails != null)
+                {
+                    processExtValBeanValidationMetaData(uiComponent, propertyDetails);
+                }
             }
         }
     }
@@ -69,6 +72,11 @@ public class ExtValBeanValidationMetaDataExtractionInterceptor
      */
     private void processExtValBeanValidationMetaData(UIComponent uiComponent, PropertyDetails propertyDetails)
     {
+        if(propertyDetails.getKey() == null)
+        {
+            return;
+        }
+        
         if(JsfUtils.isRenderResponsePhase())
         {
             BeanValidationUtils.addMetaDataToContext(uiComponent, propertyDetails, false);
