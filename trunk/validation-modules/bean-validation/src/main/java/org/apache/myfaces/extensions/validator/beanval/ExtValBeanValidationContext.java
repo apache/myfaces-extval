@@ -52,13 +52,13 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
     private static final String KEY = ExtValBeanValidationContext.class.getName() + ":KEY";
 
-    private MessageInterpolator defaultMessageInterpolator;
+    protected MessageInterpolator defaultMessageInterpolator;
 
-    private MessageResolver messageResolver;
+    protected MessageResolver messageResolver;
 
-    private GroupStorage groupStorage;
+    protected GroupStorage groupStorage;
 
-    private ModelValidationStorage modelValidationStorage;
+    protected ModelValidationStorage modelValidationStorage;
 
     protected ExtValBeanValidationContext()
     {
@@ -135,19 +135,19 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         return this.modelValidationStorage.getModelValidationEntriesToValidate();
     }
 
-    private void initGroupStorage()
+    protected void initGroupStorage()
     {
         this.groupStorage = ExtValUtils
                 .getStorage(GroupStorage.class, BeanValidation.class.getName());
     }
 
-    private void initModelValidationStorage()
+    protected void initModelValidationStorage()
     {
         this.modelValidationStorage = ExtValUtils.
                 getStorage(ModelValidationStorage.class, ModelValidation.class.getName());
     }
 
-    private void initMessageInterpolator()
+    protected void initMessageInterpolator()
     {
         Object foundBean = ExtValUtils.getELHelper().getBean(MessageInterpolator.class.getName().replace(".", "_"));
 
@@ -162,7 +162,7 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
         }
     }
 
-    private void initMessageResolver()
+    protected void initMessageResolver()
     {
         this.messageResolver = ExtValUtils.getMessageResolverForValidationStrategy(getBeanValidationStrategy());
     }
