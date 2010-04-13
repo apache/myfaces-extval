@@ -142,7 +142,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         return getPropertyStorage().containsField(entity, property);
     }
 
-    private void tryToCachedField(Class entity, String property, Field field)
+    private void tryToCacheField(Class entity, String property, Field field)
     {
         PropertyStorage propertyStorage = getPropertyStorage();
         if (!propertyStorage.containsField(entity, property))
@@ -161,7 +161,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         return getPropertyStorage().containsMethod(entity, property);
     }
 
-    private void tryToCachedMethod(Class entity, String property, Method method)
+    private void tryToCacheMethod(Class entity, String property, Method method)
     {
         PropertyStorage propertyStorage = getPropertyStorage();
         if (!propertyStorage.containsMethod(entity, property))
@@ -217,8 +217,12 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         if (method != null)
         {
-            tryToCachedMethod(entity, property, method);
+            tryToCacheMethod(entity, property, method);
             addAnnotationToAnnotationEntries(Arrays.asList(method.getAnnotations()), propertyInformation);
+        }
+        else
+        {
+            tryToCacheMethod(entity, property, null);
         }
     }
 
@@ -322,8 +326,12 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         if (field != null)
         {
-            tryToCachedField(entity, property, field);
+            tryToCacheField(entity, property, field);
             addAnnotationToAnnotationEntries(Arrays.asList(field.getAnnotations()), propertyInformation);
+        }
+        else
+        {
+            tryToCacheField(entity, property, null);
         }
     }
 
