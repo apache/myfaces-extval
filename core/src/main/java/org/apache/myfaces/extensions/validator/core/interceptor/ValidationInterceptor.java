@@ -102,7 +102,7 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
             validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
             if (validationStrategy != null &&
-                    isValidationStrategyCompatibleWithValue(validationStrategy,  convertedObject))
+                    isValidationStrategyCompatibleWithValue(validationStrategy, convertedObject, entry))
             {
                 if(skipValidationEvaluator.skipValidation(facesContext, uiComponent, validationStrategy, entry))
                 {
@@ -150,7 +150,8 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
         }
     }
 
-    protected boolean isValidationStrategyCompatibleWithValue(ValidationStrategy validationStrategy, Object value)
+    protected boolean isValidationStrategyCompatibleWithValue(
+            ValidationStrategy validationStrategy, Object value, MetaDataEntry entry /*for add-ons*/)
     {
         if(value == null)
         {
