@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-class ExtValLazyRendererProxy extends Renderer
+class ExtValLazyRendererProxy extends Renderer implements RendererProxy
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -90,6 +90,16 @@ class ExtValLazyRendererProxy extends Renderer
         return getLazyRenderer().getRendersChildren();
     }
 
+    public Object getCachedConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
+        throws ConverterException
+    {
+        if(getLazyRenderer() instanceof RendererProxy)
+        {
+            return ((RendererProxy)getLazyRenderer()).getCachedConvertedValue(facesContext, uiComponent, o);
+        }
+        return getLazyRenderer().getConvertedValue(facesContext, uiComponent, o);
+    }
+
     @Override
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
@@ -131,4 +141,8 @@ class ExtValLazyRendererProxy extends Renderer
         }
     }
 
+    public Renderer getWrappedRenderer()
+    {
+        return this.wrapped;
+    }
 }
