@@ -41,7 +41,7 @@ import java.util.logging.Logger;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ExtValRendererProxy extends Renderer
+public class ExtValRendererProxy extends Renderer implements RendererProxy
 {
     public static final String KEY = ExtValRendererProxy.class.getName() + ":KEY";
     protected final Logger logger = Logger.getLogger(getClass().getName());
@@ -200,6 +200,26 @@ public class ExtValRendererProxy extends Renderer
         }
     }
 
+    public Object getCachedConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
+    {
+        RendererProxyStorageEntry entry = getRendererEntry(facesContext, uiComponent);
+
+        if (entry.getConvertedValue() == null)
+        {
+            try
+            {
+                entry.setConvertedValue(wrapped.getConvertedValue(facesContext, uiComponent, o));
+            }
+            catch (RuntimeException r)
+            {
+                resetComponentProxyMapping();
+                throw r;
+            }
+        }
+
+        return entry.getConvertedValue();
+    }
+
     @Override
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
@@ -276,5 +296,10 @@ public class ExtValRendererProxy extends Renderer
         }
 
         logger.fine("turn on the development mode for further information, if something is displayed wrong.");
+    }
+
+    public Renderer getWrappedRenderer()
+    {
+        return this.wrapped;
     }
 }
