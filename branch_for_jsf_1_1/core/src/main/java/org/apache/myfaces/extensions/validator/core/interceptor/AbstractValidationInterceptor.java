@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.validator.core.storage.RendererInterceptorP
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
+import org.apache.myfaces.extensions.validator.core.renderkit.RendererProxy;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
@@ -92,7 +93,14 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
         try
         {
-            convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+            if(wrapped instanceof RendererProxy)
+            {
+                convertedObject = ((RendererProxy)wrapped).getCachedConvertedValue(facesContext, uiComponent, o);
+            }
+            else
+            {
+                convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+            }
         }
         catch (PropertyNotFoundException r)
         {
