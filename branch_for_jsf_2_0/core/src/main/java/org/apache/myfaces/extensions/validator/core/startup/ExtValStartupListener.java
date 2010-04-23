@@ -65,7 +65,6 @@ import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
 import org.apache.myfaces.extensions.validator.core.validation.IgnoreConstraintSource;
 import org.apache.myfaces.extensions.validator.core.validation.TargetProperty;
 import org.apache.myfaces.extensions.validator.core.validation.TargetPropertyId;
-import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
@@ -92,9 +91,6 @@ public class ExtValStartupListener extends AbstractStartupListener
         }
 
         ExtValContext.getContext().registerRendererInterceptor(new ValidationInterceptor());
-
-        ExtValContext.getContext()
-                .addGlobalProperty(ExtValRendererProxy.KEY, ExtValRendererProxy.class.getName(), false);
 
         initNameMappers();
         initValidationExceptionInterceptors();
