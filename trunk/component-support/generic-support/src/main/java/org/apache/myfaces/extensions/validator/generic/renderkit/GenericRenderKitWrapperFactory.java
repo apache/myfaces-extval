@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.render.RenderKit;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -31,10 +33,19 @@ import javax.faces.render.RenderKit;
 @UsageInformation(UsageCategory.INTERNAL)
 public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
+    private Map<Class<? extends RenderKit>, RenderKit> renderKitCache =
+            new HashMap<Class<? extends RenderKit>, RenderKit>();
+
     protected RenderKit createWrapper(RenderKit renderKit)
     {
         logger.finest("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib");
 
-        return ExtValGenericRenderKit.newInstance(renderKit);
+        if(!this.renderKitCache.containsKey(renderKit.getClass()))
+        {
+            RenderKit wrappedRenderKit = ExtValGenericRenderKit.newInstance(renderKit);
+            this.renderKitCache.put(renderKit.getClass(), wrappedRenderKit);
+        }
+
+        return this.renderKitCache.get(renderKit.getClass());
     }
 }
