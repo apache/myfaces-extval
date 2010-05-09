@@ -20,14 +20,13 @@ package org.apache.myfaces.extensions.validator.beanval.annotation.extractor;
 
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.extractAnnotations;
 
 import javax.faces.context.FacesContext;
 
@@ -51,11 +50,6 @@ public class DefaultGroupControllerScanningExtractor extends DefaultComponentMet
 
         Class entityClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
-        PropertyInformation propertyInformation = new DefaultPropertyInformation();
-        propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
-
-        extractAnnotations(propertyInformation, propertyDetails, entityClass);
-
-        return propertyInformation;
+        return extractAnnotations(entityClass, propertyDetails);
     }
 }
