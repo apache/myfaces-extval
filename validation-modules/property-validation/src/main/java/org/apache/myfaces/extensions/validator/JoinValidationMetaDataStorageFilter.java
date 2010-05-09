@@ -29,6 +29,8 @@ import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorageFilte
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addPropertyAccessAnnotations;
+import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addFieldAccessAnnotations;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 

@@ -62,6 +62,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
         initStaticStrategyMappings();
         initDefaultComponentInitializer();
         addSkipValidationSupport();
+        addMappedConstraintSourceValidationSupport();
         initStorageManagerAndNameMappers();
         initSkipValidationEvaluator();
         initMetaDataStorageFilters();
@@ -108,6 +109,12 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
                 .addStaticConfiguration(StaticConfigurationNames.SKIP_VALIDATION_SUPPORT_CONFIG, config);
 
         //config.addMapping(CommonMetaDataKeys.SKIP_VALIDATION, RequiredStrategy.class.getName());
+    }
+
+    private void addMappedConstraintSourceValidationSupport()
+    {
+        ExtValContext.getContext().registerRendererInterceptor(
+                new MappedConstraintSourceValidationModuleValidationInterceptor());
     }
 
     @SuppressWarnings({"unchecked"})
