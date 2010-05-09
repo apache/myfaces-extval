@@ -18,12 +18,21 @@
  */
 package org.apache.myfaces.extensions.validator.util;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * @author Gerhard Petracek
@@ -32,6 +41,8 @@ import java.util.StringTokenizer;
 @UsageInformation(UsageCategory.INTERNAL)
 public class ReflectionUtils
 {
+    private static final Logger LOGGER = Logger.getLogger(ReflectionUtils.class.getName());
+
     public static Method tryToGetMethod(Class targetClass, String targetMethodName)
     {
         return tryToGetMethod(targetClass, targetMethodName, null);
@@ -61,7 +72,7 @@ public class ReflectionUtils
     {
         Class currentClass = targetClass;
         Method targetMethod = null;
-        
+
         while (!Object.class.getName().equals(currentClass.getName()))
         {
             try
@@ -192,5 +203,175 @@ public class ReflectionUtils
         }
 
         return currentBase;
+    }
+
+    public static PropertyStorage getPropertyStorage()
+    {
+        return ExtValUtils.getStorage(PropertyStorage.class, PropertyStorage.class.getName());
+    }
+
+    public static Method tryToGetMethodOfProperty(Class entity, String property)
+    {
+        if (isCachedMethod(entity, property))
+        {
+            return getCachedMethod(entity, property);
+        }
+
+        Method method = tryToGetReadMethod(entity, property);
+
+        tryToCacheMethod(entity, property, method);
+
+        return method;
+    }
+
+    public static Field tryToGetFieldOfProperty(Class entity, String property)
+    {
+        if (isCachedField(entity, property))
+        {
+            return getCachedField(entity, property);
+        }
+
+        Field field = null;
+
+        try
+        {
+            field = entity.getDeclaredField(property);
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                try
+                {
+                    field = entity.getDeclaredField("_" + property);
+                }
+                catch (Exception e1)
+                {
+                    if (property.length() > 1
+                            && Character.isUpperCase(property.charAt(0))
+                            && Character.isUpperCase(property.charAt(1)))
+                    {
+                        //don't use Introspector#decapitalize here
+                        field = entity.getDeclaredField(property.substring(0, 1).toLowerCase() + property.substring(1));
+                    }
+                    else
+                    {
+                        field = entity.getDeclaredField(Introspector.decapitalize(property));
+                    }
+                }
+            }
+            catch (NoSuchFieldException e1)
+            {
+                LOGGER.log(Level.FINEST, "field " + property + " or _" + property + " not found", e1);
+            }
+        }
+
+        tryToCacheField(entity, property, field);
+
+        return field;
+    }
+
+    private static void tryToCacheField(Class entity, String property, Field field)
+    {
+        PropertyStorage propertyStorage = getPropertyStorage();
+        if (!propertyStorage.containsField(entity, property))
+        {
+            propertyStorage.storeField(entity, property, field);
+        }
+    }
+
+    private static boolean isCachedField(Class entity, String property)
+    {
+        return getPropertyStorage().containsField(entity, property);
+    }
+
+    private static Method tryToGetReadMethod(Class baseBeanClass, String property)
+    {
+        Method method = ReflectionUtils.tryToGetReadMethodViaBeanInfo(baseBeanClass, property);
+
+        if (method == null)
+        {
+            method = ReflectionUtils.tryToGetReadMethodManually(baseBeanClass, property);
+        }
+        return method;
+    }
+
+    private static Method tryToGetReadMethodViaBeanInfo(Class entity, String property)
+    {
+        if (useBeanInfo())
+        {
+            try
+            {
+                BeanInfo beanInfo = Introspector.getBeanInfo(entity);
+                for (PropertyDescriptor propertyDescriptor : beanInfo
+                        .getPropertyDescriptors())
+                {
+                    if (property.equals(propertyDescriptor.getName())
+                            && propertyDescriptor.getReadMethod() != null)
+                    {
+                        return propertyDescriptor.getReadMethod();
+                    }
+                }
+            }
+            catch (IntrospectionException e)
+            {
+                //do nothing
+            }
+        }
+        return null;
+    }
+
+    private static boolean useBeanInfo()
+    {
+        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty(BeanInfo.class.getName()));
+    }
+
+    private static Method tryToGetReadMethodManually(Class entity, String property)
+    {
+        property = property.substring(0, 1).toUpperCase() + property.substring(1);
+
+        try
+        {
+            //changed to official bean spec. due to caching there is no performance issue any more
+            return entity.getDeclaredMethod("is" + property);
+        }
+        catch (NoSuchMethodException e)
+        {
+            try
+            {
+                return entity.getDeclaredMethod("get" + property);
+            }
+            catch (NoSuchMethodException e1)
+            {
+                LOGGER.finest("method not found - class: " + entity.getName()
+                        + " - methods: " + "get" + property + " " + "is" + property);
+
+                return null;
+            }
+        }
+    }
+
+    private static Field getCachedField(Class entity, String property)
+    {
+        return getPropertyStorage().getField(entity, property);
+    }
+
+    private static boolean isCachedMethod(Class entity, String property)
+    {
+        return getPropertyStorage().containsMethod(entity, property);
+    }
+
+    private static void tryToCacheMethod(Class entity, String property, Method method)
+    {
+        PropertyStorage propertyStorage = getPropertyStorage();
+        if (!propertyStorage.containsMethod(entity, property))
+        {
+            propertyStorage.storeMethod(entity, property, method);
+        }
+    }
+
+    private static Method getCachedMethod(Class entity, String property)
+    {
+        return getPropertyStorage().getMethod(entity, property);
     }
 }

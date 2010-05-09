@@ -53,8 +53,7 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
     {
         logger.finest("start to init component " + uiComponent.getClass().getName());
 
-        Map<String, Object> metaDataResult = ExtValUtils
-                .getTransformedMetaDataFor(facesContext, uiComponent, getModuleKey());
+        Map<String, Object> metaDataResult = getTransformedMetaDataFor(facesContext, uiComponent);
 
         //get component initializer for the current component and configure it
         //also in case of skipped validation to reset e.g. the required attribute
@@ -64,6 +63,11 @@ public class ValidationInterceptor extends AbstractValidationInterceptor
         }
 
         logger.finest("init component of " + uiComponent.getClass().getName() + " finished");
+    }
+
+    protected Map<String, Object> getTransformedMetaDataFor(FacesContext facesContext, UIComponent uiComponent)
+    {
+        return ExtValUtils.getTransformedMetaDataFor(facesContext, uiComponent, getModuleKey());
     }
 
     protected void processValidation(FacesContext facesContext, UIComponent uiComponent, Object convertedObject)
