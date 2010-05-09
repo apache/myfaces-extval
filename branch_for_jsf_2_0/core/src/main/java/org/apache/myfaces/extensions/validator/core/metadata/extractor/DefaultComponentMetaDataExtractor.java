@@ -18,34 +18,24 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import java.util.logging.Logger;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorage;
-import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Default implementation which extracts meta-data (e.g. the annotations) of the value binding of a component.
@@ -96,11 +86,11 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
          */
         Class entityClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
-        //create
-        propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
-
         if (isCached(entityClass, propertyDetails.getProperty()))
         {
+            //create
+            propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
+
             for (MetaDataEntry metaDataEntry : getCachedMetaData(entityClass, propertyDetails.getProperty()))
             {
                 propertyInformation.addMetaDataEntry(metaDataEntry);
@@ -108,7 +98,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         }
         else
         {
-            extractAnnotations(propertyInformation, propertyDetails, entityClass);
+            propertyInformation = ExtValAnnotationUtils.extractAnnotations(entityClass, propertyDetails);
             cacheMetaData(propertyInformation);
         }
 
@@ -135,234 +125,5 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
     private MetaDataStorage getMetaDataStorage()
     {
         return ExtValUtils.getStorage(MetaDataStorage.class, MetaDataStorage.class.getName());
-    }
-
-    private boolean isCachedField(Class entity, String property)
-    {
-        return getPropertyStorage().containsField(entity, property);
-    }
-
-    private void tryToCacheField(Class entity, String property, Field field)
-    {
-        PropertyStorage propertyStorage = getPropertyStorage();
-        if (!propertyStorage.containsField(entity, property))
-        {
-            propertyStorage.storeField(entity, property, field);
-        }
-    }
-
-    private Field getCachedField(Class entity, String property)
-    {
-        return getPropertyStorage().getField(entity, property);
-    }
-
-    private boolean isCachedMethod(Class entity, String property)
-    {
-        return getPropertyStorage().containsMethod(entity, property);
-    }
-
-    private void tryToCacheMethod(Class entity, String property, Method method)
-    {
-        PropertyStorage propertyStorage = getPropertyStorage();
-        if (!propertyStorage.containsMethod(entity, property))
-        {
-            propertyStorage.storeMethod(entity, property, method);
-        }
-    }
-
-    private Method getCachedMethod(Class entity, String property)
-    {
-        return getPropertyStorage().getMethod(entity, property);
-    }
-
-    private PropertyStorage getPropertyStorage()
-    {
-        return ExtValUtils.getStorage(PropertyStorage.class, PropertyStorage.class.getName());
-    }
-
-    protected void extractAnnotations(
-            PropertyInformation propertyInformation, PropertyDetails propertyDetails, Class entityClass)
-    {
-        while (!Object.class.getName().equals(entityClass.getName()))
-        {
-            addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
-            addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
-
-            processInterfaces(entityClass, propertyDetails, propertyInformation);
-
-            entityClass = entityClass.getSuperclass();
-        }
-    }
-
-    private void processInterfaces(
-            Class currentClass, PropertyDetails propertyDetails, PropertyInformation propertyInformation)
-    {
-        for (Class currentInterface : currentClass.getInterfaces())
-        {
-            addPropertyAccessAnnotations(currentInterface, propertyDetails.getProperty(), propertyInformation);
-
-            processInterfaces(currentInterface, propertyDetails, propertyInformation);
-        }
-    }
-
-    protected void addPropertyAccessAnnotations(Class entity, String property,
-                                                PropertyInformation propertyInformation)
-    {
-        Method method = tryToGetReadMethod(entity, property);
-
-        if (method == null)
-        {
-            method = tryToGetReadMethodManually(entity, property);
-        }
-
-        if (method != null)
-        {
-            tryToCacheMethod(entity, property, method);
-            addAnnotationToAnnotationEntries(Arrays.asList(method.getAnnotations()), propertyInformation);
-        }
-        else
-        {
-            tryToCacheMethod(entity, property, null);
-        }
-    }
-
-    private Method tryToGetReadMethod(Class entity, String property)
-    {
-        if (isCachedMethod(entity, property))
-        {
-            return getCachedMethod(entity, property);
-        }
-
-        if (useBeanInfo())
-        {
-            try
-            {
-                BeanInfo beanInfo = Introspector.getBeanInfo(entity);
-                for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors())
-                {
-                    if (property.equals(propertyDescriptor.getName()) && propertyDescriptor.getReadMethod() != null)
-                    {
-                        return propertyDescriptor.getReadMethod();
-                    }
-                }
-            }
-            catch (IntrospectionException e)
-            {
-                //do nothing
-            }
-        }
-        return null;
-    }
-
-    private boolean useBeanInfo()
-    {
-        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty(BeanInfo.class.getName()));
-    }
-
-    private Method tryToGetReadMethodManually(Class entity, String property)
-    {
-        property = property.substring(0, 1).toUpperCase() + property.substring(1);
-
-        try
-        {
-            //changed to official bean spec. due to caching there is no performance issue any more
-            return entity.getDeclaredMethod("is" + property);
-        }
-        catch (NoSuchMethodException e)
-        {
-            try
-            {
-                return entity.getDeclaredMethod("get" + property);
-            }
-            catch (NoSuchMethodException e1)
-            {
-                logger.finest("method not found - class: " + entity.getName()
-                        + " - methods: " + "get" + property + " " + "is" + property);
-
-                return null;
-            }
-        }
-    }
-
-    protected void addFieldAccessAnnotations(Class entity, String property,
-                                             PropertyInformation propertyInformation)
-    {
-        Field field;
-
-        try
-        {
-            field = getDeclaredField(entity, property);
-        }
-        catch (Exception e)
-        {
-            try
-            {
-                try
-                {
-                    field = entity.getDeclaredField("_" + property);
-                }
-                catch (Exception e1)
-                {
-                    if (property.length() > 1 &&
-                            Character.isUpperCase(property.charAt(0)) &&
-                            Character.isUpperCase(property.charAt(1)))
-                    {
-                        //don't use Introspector#decapitalize here
-                        field = entity.getDeclaredField(property.substring(0, 1).toLowerCase() + property.substring(1));
-                    }
-                    else
-                    {
-                        field = entity.getDeclaredField(Introspector.decapitalize(property));
-                    }
-                }
-            }
-            catch (NoSuchFieldException e1)
-            {
-                logger.log(Level.FINEST, "field " + property + " or _" + property + " not found", e1);
-
-                return;
-            }
-        }
-
-        if (field != null)
-        {
-            tryToCacheField(entity, property, field);
-            addAnnotationToAnnotationEntries(Arrays.asList(field.getAnnotations()), propertyInformation);
-        }
-        else
-        {
-            tryToCacheField(entity, property, null);
-        }
-    }
-
-    private Field getDeclaredField(Class entity, String property) throws NoSuchFieldException
-    {
-        if (isCachedField(entity, property))
-        {
-            return getCachedField(entity, property);
-        }
-
-        return entity.getDeclaredField(property);
-    }
-
-    protected void addAnnotationToAnnotationEntries(
-            List<Annotation> annotations, PropertyInformation propertyInformation)
-    {
-        for (Annotation annotation : annotations)
-        {
-            propertyInformation.addMetaDataEntry(createMetaDataEntryForAnnotation(annotation));
-
-            logger.finest(annotation.getClass().getName() + " found");
-        }
-    }
-
-    protected MetaDataEntry createMetaDataEntryForAnnotation(Annotation foundAnnotation)
-    {
-        MetaDataEntry entry = new MetaDataEntry();
-
-        entry.setKey(foundAnnotation.annotationType().getName());
-        entry.setValue(foundAnnotation);
-
-        return entry;
     }
 }
