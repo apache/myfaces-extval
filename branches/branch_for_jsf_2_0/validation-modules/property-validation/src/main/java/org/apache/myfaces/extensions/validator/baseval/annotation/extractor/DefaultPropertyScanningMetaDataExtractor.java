@@ -30,6 +30,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addFieldAccessAnnotations;
+import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addPropertyAccessAnnotations;
 import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
 
 import javax.faces.context.FacesContext;
