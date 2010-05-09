@@ -678,6 +678,19 @@ public class ExtValUtils
         return getTransformedMetaDataWith(facesContext, uiComponent, properties);
     }
 
+    public static Map<String, Object> getTransformedMetaDataFor(
+            FacesContext facesContext, PropertyInformation propertyInformation, Class moduleKey)
+    {
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        if (moduleKey != null)
+        {
+            properties.put(ValidationModuleKey.class.getName(), moduleKey);
+        }
+
+        return getTransformedMetaDataWith(facesContext, propertyInformation, properties);
+    }
+
     public static Map<String, Object> getTransformedMetaDataWith(
             FacesContext facesContext, UIComponent uiComponent, Map<String, Object> properties)
     {
@@ -710,8 +723,47 @@ public class ExtValUtils
         return metaDataResult;
     }
 
-    private static Map<String, Object> transformMetaData(FacesContext facesContext,
-                                                         UIComponent uiComponent,
+    public static Map<String, Object> getTransformedMetaDataWith(FacesContext facesContext,
+                                                                 PropertyInformation propertyInformation,
+                                                                 Map<String, Object> properties)
+    {
+        ValidationStrategy validationStrategy;
+
+        // This is called as part of the MetaData extraction in the default process. 
+        // So we need to do it here also before the transformations are run.
+        for (MetaDataExtractionInterceptor metaDataExtractionInterceptor :
+                ExtValContext.getContext().getMetaDataExtractionInterceptorsWith(properties))
+        {
+            metaDataExtractionInterceptor.afterExtracting(propertyInformation);
+        }
+
+        SkipValidationEvaluator skipValidationEvaluator = ExtValContext.getContext().getSkipValidationEvaluator();
+
+        Map<String, Object> metaData;
+        Map<String, Object> metaDataResult = new HashMap<String, Object>();
+
+        for (MetaDataEntry entry : propertyInformation.getMetaDataEntries())
+        {
+            metaData = new HashMap<String, Object>();
+            validationStrategy = getValidationStrategyForMetaData(entry.getKey());
+
+            if (validationStrategy != null)
+            {
+                metaData = transformMetaData(
+                        facesContext, null, validationStrategy, skipValidationEvaluator, metaData, entry);
+
+                if (!isComponentInitializationSkipped(metaData, entry, validationStrategy))
+                {
+                    //don't break maybe there are constraints which don't support the skip-mechanism
+                    metaDataResult.putAll(metaData);
+                }
+            }
+        }
+
+        return metaDataResult;
+    }
+
+    private static Map<String, Object> transformMetaData(FacesContext facesContext, UIComponent uiComponent,
                                                          ValidationStrategy validationStrategy,
                                                          SkipValidationEvaluator skipValidationEvaluator,
                                                          Map<String, Object> metaData, MetaDataEntry entry)
@@ -930,7 +982,7 @@ public class ExtValUtils
      * needed for some component libs - if required initialization is used e.g. for visual indicators
      * but features like severity aware validation aren't used.
      * in such a case it's possible to use the required attribute.
-     * 
+     *
      * @return false to deactivate the final reset of the value of the required attribute
      */
     public static boolean isRequiredResetActivated()
