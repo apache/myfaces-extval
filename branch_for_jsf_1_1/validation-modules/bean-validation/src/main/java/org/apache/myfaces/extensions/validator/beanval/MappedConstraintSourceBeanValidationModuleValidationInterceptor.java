@@ -66,8 +66,8 @@ public class MappedConstraintSourceBeanValidationModuleValidationInterceptor
                                           Object convertedObject,
                                           PropertyInformation propertyInformation)
     {
-        Set<ConstraintViolation> violations = this.csaBviUtils
-                .validateMappedConstraintSource(facesContext, uiComponent, convertedObject, propertyInformation);
+        Set<ConstraintViolation<Object>> violations = this.csaBviUtils
+                .validateMappedConstraintSource(facesContext, uiComponent, convertedObject, propertyInformation, true);
 
         processConstraintViolations(facesContext, uiComponent, convertedObject, violations);
     }
