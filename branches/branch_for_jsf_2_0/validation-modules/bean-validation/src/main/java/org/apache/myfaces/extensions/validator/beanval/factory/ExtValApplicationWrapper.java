@@ -18,41 +18,33 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.factory;
 
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-
-import javax.faces.application.ApplicationFactory;
+import javax.faces.application.ApplicationWrapper;
 import javax.faces.application.Application;
 
 /**
  * @author Gerhard Petracek
- * @since 2.x.3
+ * @since r4
  */
-@UsageInformation(UsageCategory.INTERNAL)
-public class ExtValApplicationFactory extends ApplicationFactory
+class ExtValApplicationWrapper extends ApplicationWrapper
 {
-    private ApplicationFactory wrapped;
+    private Application wrapped;
 
-    public ExtValApplicationFactory(ApplicationFactory wrapped)
+    public ExtValApplicationWrapper(Application wrapped)
     {
         this.wrapped = wrapped;
     }
 
-    public ApplicationFactory getWrapped()
+    public Application getWrapped()
     {
-        return this.wrapped.getWrapped();
+        return this.wrapped;
     }
 
-    @ToDo(value = Priority.HIGH, description = "context param. to deactivate this wrapper")
-    public Application getApplication()
+    @Override
+    public void addDefaultValidatorId(String s)
     {
-        return new ExtValApplicationWrapper(this.wrapped.getApplication());
-    }
-
-    public void setApplication(Application application)
-    {
-        this.wrapped.setApplication(application);
+        if(!"javax.faces.Bean".equals(s))
+        {
+            super.addDefaultValidatorId(s);
+        }
     }
 }
