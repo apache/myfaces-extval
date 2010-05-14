@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.beanval;
 
 import org.apache.myfaces.extensions.validator.beanval.validation.strategy.BeanValidationVirtualValidationStrategy;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
@@ -35,9 +36,7 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.validation.ConstraintViolation;
-import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
-import javax.validation.metadata.BeanDescriptor;
 import javax.validation.metadata.ConstraintDescriptor;
 import javax.validation.metadata.ElementDescriptor;
 import java.util.HashMap;
@@ -102,7 +101,8 @@ class BeanValidationModuleValidationInterceptorInternals
 
         targetClass = ProxyUtils.getUnproxiedClass(targetClass);
 
-        ElementDescriptor elementDescriptor = getDescriptorFor(targetClass, propertyDetails.getProperty());
+        ElementDescriptor elementDescriptor = BeanValidationUtils.getElementDescriptor(
+                targetClass, propertyDetails.getProperty());
 
         if (elementDescriptor == null)
         {
@@ -193,14 +193,15 @@ class BeanValidationModuleValidationInterceptorInternals
 
         Class targetClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
-        return getDescriptorFor(targetClass, propertyDetails.getProperty()) != null;
+        return BeanValidationUtils.getElementDescriptor(targetClass, propertyDetails.getProperty()) != null;
     }
 
     @SuppressWarnings({"unchecked"})
-    Set<ConstraintViolation> validate(FacesContext facesContext,
-                                      UIComponent uiComponent,
-                                      Object convertedObject,
-                                      PropertyInformation propertyInformation)
+    Set<ConstraintViolation<Object>> validate(FacesContext facesContext,
+                                              UIComponent uiComponent,
+                                              Object convertedObject,
+                                              PropertyInformation propertyInformation,
+                                              boolean cascadedValidation)
     {
         Class baseBeanClass = getBaseClassType(propertyInformation);
         String propertyName = getPropertyToValidate(propertyInformation);
@@ -212,14 +213,7 @@ class BeanValidationModuleValidationInterceptorInternals
             return null;
         }
 
-        ValidatorFactory validatorFactory = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory();
-        return validatorFactory
-                .usingContext()
-                .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
-                .constraintValidatorFactory(validatorFactory.getConstraintValidatorFactory())
-                .traversableResolver(validatorFactory.getTraversableResolver())
-                .getValidator()
-                .validateValue(baseBeanClass, propertyName, convertedObject, groups);
+        return BeanValidationUtils.validate(baseBeanClass, propertyName, convertedObject, groups, cascadedValidation);
     }
 
     Class getBaseClassType(PropertyInformation propertyInformation)
@@ -239,13 +233,5 @@ class BeanValidationModuleValidationInterceptorInternals
         return ExtValBeanValidationContext.getCurrentInstance().getGroups(
                 facesContext.getViewRoot().getViewId(),
                 uiComponent.getClientId(facesContext));
-    }
-
-    ElementDescriptor getDescriptorFor(Class targetClass, String property)
-    {
-        BeanDescriptor beanDescriptor = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory()
-                .getValidator().getConstraintsForClass(targetClass);
-
-        return beanDescriptor.getConstraintsForProperty(property);
     }
 }
