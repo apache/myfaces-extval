@@ -81,15 +81,18 @@ public class BeanValidationTagAwareValidationInterceptor implements PropertyVali
                                    String clientId,
                                    Validator[] validators)
     {
-        List<String> validatorsOfTagList = new ArrayList<String>();
+        List<String> groupsClassNamesOfTagList = new ArrayList<String>();
 
         for (Validator validator : validators)
         {
             //don't check with instanceof
             if (validator.getClass().getName().equals(BeanValidator.class.getName()))
             {
-                validatorsOfTagList.addAll(
-                        Arrays.asList(((BeanValidator) validator).getValidationGroups().split(",")));
+                if(((BeanValidator) validator).getValidationGroups() != null)
+                {
+                    groupsClassNamesOfTagList.addAll(
+                            Arrays.asList(((BeanValidator) validator).getValidationGroups().split(",")));
+                }
 
                 //prevent double-validation
                 editableValueHolder.removeValidator(validator);
@@ -98,7 +101,7 @@ public class BeanValidationTagAwareValidationInterceptor implements PropertyVali
         }
 
         Class currentClass;
-        for(String groupClassName : validatorsOfTagList)
+        for(String groupClassName : groupsClassNamesOfTagList)
         {
             currentClass = ClassUtils.tryToLoadClassForName(groupClassName);
 
