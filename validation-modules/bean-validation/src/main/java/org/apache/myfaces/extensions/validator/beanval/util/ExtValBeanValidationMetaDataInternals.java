@@ -564,7 +564,7 @@ class ExtValBeanValidationMetaDataInternals
         return this.labeledMessageInternals.createLabeledMessage(violationMessage, isDetailMessage);
     }
 
-    FacesMessage.Severity calcSeverity(ConstraintViolation<?> violation)
+    FacesMessage.Severity calcSeverity(ConstraintViolation<Object> violation)
     {
         for (Class<? extends Payload> payload : violation.getConstraintDescriptor().getPayload())
         {

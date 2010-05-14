@@ -24,11 +24,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils;
+import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.validation.ConstraintViolation;
-import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 import javax.validation.metadata.ElementDescriptor;
 import java.util.Collections;
@@ -76,7 +76,7 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
         }
 
         ElementDescriptor elementDescriptor =
-                this.bviUtils.getDescriptorFor((Class) constraintSourcePropertyDetails.getBaseObject(),
+                BeanValidationUtils.getElementDescriptor((Class) constraintSourcePropertyDetails.getBaseObject(),
                         constraintSourcePropertyDetails.getProperty());
 
         if (elementDescriptor == null)
@@ -87,10 +87,11 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
         this.bviUtils.processElementDescriptor(facesContext, uiComponent, foundGroups, elementDescriptor);
     }
 
-    Set<ConstraintViolation> validateMappedConstraintSource(FacesContext facesContext,
+    Set<ConstraintViolation<Object>> validateMappedConstraintSource(FacesContext facesContext,
                                                             UIComponent uiComponent,
                                                             Object convertedObject,
-                                                            PropertyInformation propertyInformation)
+                                                            PropertyInformation propertyInformation,
+                                                            boolean cascadedValidation)
     {
         Class baseBeanClass = this.bviUtils.getBaseClassType(propertyInformation);
         String propertyName = this.bviUtils.getPropertyToValidate(propertyInformation);
@@ -114,14 +115,7 @@ class MappedConstraintSourceBeanValidationModuleValidationInterceptorInternals
             return null;
         }
 
-        ValidatorFactory validatorFactory = ExtValBeanValidationContext.getCurrentInstance().getValidatorFactory();
-        return validatorFactory
-                .usingContext()
-                .messageInterpolator(ExtValBeanValidationContext.getCurrentInstance().getMessageInterpolator())
-                .constraintValidatorFactory(validatorFactory.getConstraintValidatorFactory())
-                .traversableResolver(validatorFactory.getTraversableResolver())
-                .getValidator()
-                .validateValue(baseBeanClass, propertyName, convertedObject, groups);
+        return BeanValidationUtils.validate(baseBeanClass, propertyName, convertedObject, groups, cascadedValidation);
     }
 
     private String getKey(PropertyInformation propertyInformation)
