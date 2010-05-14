@@ -109,8 +109,8 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
                                           PropertyInformation propertyInformation)
     {
         /*not used yet supportMultipleViolationsPerField()*/
-        Set<ConstraintViolation> violations = this.bviUtils
-                .validate(facesContext, uiComponent, convertedObject, propertyInformation);
+        Set<ConstraintViolation<Object>> violations = this.bviUtils
+                .validate(facesContext, uiComponent, convertedObject, propertyInformation, true);
 
         processConstraintViolations(facesContext, uiComponent, convertedObject, violations);
     }
@@ -118,7 +118,7 @@ public class BeanValidationModuleValidationInterceptor extends AbstractValidatio
     protected void processConstraintViolations(FacesContext facesContext,
                                              UIComponent uiComponent,
                                              Object convertedObject,
-                                             Set<ConstraintViolation> violations)
+                                             Set<ConstraintViolation<Object>> violations)
     {
         if(violations != null && !violations.isEmpty())
         {
