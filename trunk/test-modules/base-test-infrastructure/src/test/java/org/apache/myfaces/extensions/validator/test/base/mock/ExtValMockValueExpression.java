@@ -20,12 +20,17 @@ package org.apache.myfaces.extensions.validator.test.base.mock;
 
 import org.apache.myfaces.extensions.validator.core.el.ExtValELResolver;
 import org.apache.shale.test.el.MockValueExpression;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -103,6 +108,11 @@ public class ExtValMockValueExpression extends MockValueExpression
         }
         else
         {
+            if (base instanceof Map)
+            {
+                return determineMapValueType(context, base);
+            }
+
             String getter = "get" + createPropertyString();
 
             Method getterMethod;
@@ -126,6 +136,59 @@ public class ExtValMockValueExpression extends MockValueExpression
                 }
             }
         }
+    }
+
+    private Class determineMapValueType(ELContext context, Object base)
+    {
+        Object parent = getParentOfBase(context, context.getELResolver());
+        if (parent == null)
+        {
+            return fallbackMapValueTypeDetermination(base);
+        }
+        else
+        {
+            try
+            {
+                Field field = parent.getClass().getDeclaredField(elements[elements.length - 2]);
+                Type type = field.getGenericType();
+                if (type instanceof ParameterizedTypeImpl)
+                {
+                    Type[] types = ((ParameterizedTypeImpl) type).getActualTypeArguments();
+                    return types[0].getClass();
+                }
+                return fallbackMapValueTypeDetermination(base);
+            }
+            catch (SecurityException e)
+            {
+                return fallbackMapValueTypeDetermination(base);
+            }
+            catch (NoSuchFieldException e)
+            {
+                return fallbackMapValueTypeDetermination(base);
+            }
+
+        }
+    }
+
+    private Class fallbackMapValueTypeDetermination(Object base)
+    {
+        // We can only determine the type by looking at the first value. 
+        Iterator iter = ((Map) base).values().iterator();
+        if (!iter.hasNext())
+        {
+            throw new IllegalStateException();
+        }
+        return iter.next().getClass();
+    }
+
+    public Object getParentOfBase(ELContext context, ELResolver resolver)
+    {
+        Object base = null;
+        for (int i = 0; i < elements.length - 2; i++)
+        {
+            base = resolver.getValue(context, base, elements[i]);
+        }
+        return base;
     }
 
     private void parse()
