@@ -90,6 +90,20 @@ public class CascadedValidationTestCase extends BaseBeanValPropertyValidationTes
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    public void testCascadedValidationNullValue()
+    {
+        createValueBindingForComponent(this.inputComponent1, "#{testBean.nullProperty}");
+        setValueToValidate(this.inputComponent1, "");
+        this.inputComponent1.setConverter(createCustomTypeConverter());
+
+        validateComponents();
+
+        assertComponentValid(this.inputComponent1);
+        assertNavigationBlocked(false);
+
+        checkMessageCount(0);
+    }
+
     private Converter createCustomTypeConverter()
     {
         return new Converter()

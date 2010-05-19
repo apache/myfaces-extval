@@ -27,6 +27,9 @@ public class CascadedValidationTestCase1Bean
     @Valid
     private CustomTypeForCascadedValidationTestCase1Bean property;
 
+    @Valid
+    private CustomTypeForCascadedValidationTestCase1Bean nullProperty;
+
     public CustomTypeForCascadedValidationTestCase1Bean getProperty()
     {
         return property;
@@ -35,5 +38,15 @@ public class CascadedValidationTestCase1Bean
     public void setProperty(CustomTypeForCascadedValidationTestCase1Bean property)
     {
         this.property = property;
+    }
+
+    public CustomTypeForCascadedValidationTestCase1Bean getNullProperty()
+    {
+        return nullProperty;
+    }
+
+    public void setNullProperty(CustomTypeForCascadedValidationTestCase1Bean nullProperty)
+    {
+        this.nullProperty = nullProperty;
     }
 }

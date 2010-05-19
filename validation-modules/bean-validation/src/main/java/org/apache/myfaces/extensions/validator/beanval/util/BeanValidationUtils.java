@@ -70,7 +70,7 @@ public class BeanValidationUtils
                 .getValidator()
                 .validateValue(baseClass, propertyName, objectToValidate, groups);
 
-        if(result.isEmpty() && cascadedValidation)
+        if(result.isEmpty() && cascadedValidation && objectToValidate != null)
         {
             result = processCascadedValidation(validatorFactory, baseClass, propertyName, objectToValidate, groups);
         }
