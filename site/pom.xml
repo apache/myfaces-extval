@@ -31,6 +31,11 @@
     <name>Apache MyFaces Extensions-Validator</name>
     <url>http://myfaces.apache.org/extensions/validator</url>
 
+    <issueManagement>
+        <system>jira</system>
+        <url>http://issues.apache.org/jira/browse/EXTVAL</url>
+    </issueManagement>
+
     <build>
         <defaultGoal>site</defaultGoal>
         <extensions>
