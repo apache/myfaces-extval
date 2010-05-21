@@ -140,7 +140,7 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
             }
         }
 
-        return null;
+        return tryToCreateAndCacheMetaDataTransformer(validationStrategy, validationStrategyName, null);
     }
 
     private MetaDataTransformer tryToResolveCachedMetaDataTransformer(
@@ -170,24 +170,23 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
     private MetaDataTransformer tryToCreateAndCacheMetaDataTransformer(
             ValidationStrategy validationStrategy, String validationStrategyName, String transformerName)
     {
-        MetaDataTransformer metaDataTransformer = (MetaDataTransformer)
-                ClassUtils.tryToInstantiateClassForName(transformerName);
+        MetaDataTransformer metaDataTransformer = null;
 
-        if (metaDataTransformer != null)
+        if(transformerName != null)
         {
-            if(validationStrategyName != null)
-            {
-                if(validationStrategy instanceof IdentifiableValidationStrategy)
-                {
-                    validationStrategyName += IdentifiableValidationStrategy.ID_PREFIX +
-                            ((IdentifiableValidationStrategy)validationStrategy).getId();
-                }
-                addMapping(validationStrategyName, transformerName);
-            }
-            return metaDataTransformer;
+            metaDataTransformer = (MetaDataTransformer)ClassUtils.tryToInstantiateClassForName(transformerName);
         }
 
-        return null;
+        if(validationStrategyName != null)
+        {
+            if(validationStrategy instanceof IdentifiableValidationStrategy)
+            {
+                validationStrategyName += IdentifiableValidationStrategy.ID_PREFIX +
+                        ((IdentifiableValidationStrategy)validationStrategy).getId();
+            }
+            addMapping(validationStrategyName, transformerName);
+        }
+        return metaDataTransformer;
     }
 
     private synchronized void initStaticMappings()
