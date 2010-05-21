@@ -97,11 +97,18 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
                 return validationStrategy;
             }
         }
+
+        addMapping(metaDataKey, null);
         return null;
     }
 
     private ValidationStrategy getValidationStrategyInstance(String validationStrategyName)
     {
+        if(validationStrategyName == null)
+        {
+            return null;
+        }
+
         if (validationStrategyName
             .startsWith(AnnotationToValidationStrategyBeanNameMapper.PREFIX_FOR_BEAN_MAPPING))
         {
