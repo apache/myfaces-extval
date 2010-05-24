@@ -107,22 +107,22 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         return propertyInformation;
     }
 
-    private boolean isCached(Class entityClass, String property)
+    protected boolean isCached(Class entityClass, String property)
     {
         return getMetaDataStorage().containsMetaDataFor(entityClass, property);
     }
 
-    private void cacheMetaData(PropertyInformation propertyInformation)
+    protected void cacheMetaData(PropertyInformation propertyInformation)
     {
         getMetaDataStorage().storeMetaDataOf(propertyInformation);
     }
 
-    private MetaDataEntry[] getCachedMetaData(Class entityClass, String property)
+    protected MetaDataEntry[] getCachedMetaData(Class entityClass, String property)
     {
         return getMetaDataStorage().getMetaData(entityClass, property);
     }
 
-    private MetaDataStorage getMetaDataStorage()
+    protected MetaDataStorage getMetaDataStorage()
     {
         return ExtValUtils.getStorage(MetaDataStorage.class, MetaDataStorage.class.getName());
     }
