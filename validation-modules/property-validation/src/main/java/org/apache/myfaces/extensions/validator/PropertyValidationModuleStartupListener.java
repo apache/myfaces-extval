@@ -114,7 +114,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
     private void addMappedConstraintSourceValidationSupport()
     {
         ExtValContext.getContext().registerRendererInterceptor(
-                new MappedConstraintSourceValidationModuleValidationInterceptor());
+                new MappedConstraintSourcePropertyValidationModuleValidationInterceptor());
     }
 
     @SuppressWarnings({"unchecked"})
