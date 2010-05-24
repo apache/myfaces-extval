@@ -37,7 +37,7 @@ import static org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class MappedConstraintSourceValidationModuleValidationInterceptor
+public class MappedConstraintSourcePropertyValidationModuleValidationInterceptor
         extends PropertyValidationModuleValidationInterceptor
 {
     @Override
