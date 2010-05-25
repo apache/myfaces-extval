@@ -45,7 +45,7 @@ public @interface EmptyIf
       * optional section
       */
 
-    RequiredIfType is() default RequiredIfType.not_empty;
+    EmptyIfType is() default EmptyIfType.not_empty;
 
     String validationErrorMsgKey() default "field_not_empty";
 

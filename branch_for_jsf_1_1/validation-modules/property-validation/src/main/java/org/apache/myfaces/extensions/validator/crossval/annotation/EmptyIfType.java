@@ -23,12 +23,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
  * empty means an empty text-field (= empty string) or checkbox (Boolean.FALSE)
- * 
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
-public enum RequiredIfType
+public enum EmptyIfType
 {
     empty, not_empty
 }

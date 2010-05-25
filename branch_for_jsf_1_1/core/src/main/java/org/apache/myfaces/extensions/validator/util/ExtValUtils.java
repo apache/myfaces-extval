@@ -932,7 +932,7 @@ public class ExtValUtils
 
         if (interpreter.severityBlocksNavigation(facesContext, uiComponent, facesMessage.getSeverity()))
         {
-            FacesContext.getCurrentInstance().renderResponse();
+            facesContext.renderResponse();
         }
     }
 
