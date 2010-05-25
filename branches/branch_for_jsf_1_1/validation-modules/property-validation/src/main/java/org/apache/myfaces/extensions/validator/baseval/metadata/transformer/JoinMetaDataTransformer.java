@@ -75,18 +75,18 @@ public class JoinMetaDataTransformer implements MetaDataTransformer
         Map<String, Object> results = new HashMap<String, Object>();
 
         PropertyDetails propertyDetails;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         for (String targetExpression : targetExpressions)
         {
             propertyDetails = ExtValUtils
                 .createPropertyDetailsForNewTarget(metaDataEntry, targetExpression);
 
-            for (MetaDataEntry entry : extractor.extract(FacesContext.getCurrentInstance(),
-                                                            propertyDetails).getMetaDataEntries())
+            for (MetaDataEntry entry : extractor.extract(facesContext, propertyDetails).getMetaDataEntries())
             {
                 validationStrategy = ExtValUtils.getValidationStrategyForMetaData(entry.getKey());
 
                 if(validationStrategy == null ||
-                        PropertyValidationUtils.isValidationSkipped(FacesContext.getCurrentInstance(),
+                        PropertyValidationUtils.isValidationSkipped(facesContext,
                                 validationStrategy, entry))
                 {
                     continue;

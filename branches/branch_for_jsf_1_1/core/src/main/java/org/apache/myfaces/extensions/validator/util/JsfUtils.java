@@ -126,10 +126,11 @@ public class JsfUtils
      */
     public static boolean isApplicationInitialized()
     {
-        return FacesContext.getCurrentInstance() != null &&
-                (FacesContext.getCurrentInstance().getClass().getName().startsWith("org.apache.myfaces") ||
-                        FacesContext.getCurrentInstance().getExternalContext().getRequestMap() != null &&
-                                !FacesContext.getCurrentInstance().getExternalContext().getRequestMap().isEmpty());
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        return facesContext != null &&
+                (facesContext.getClass().getName().startsWith("org.apache.myfaces") ||
+                        facesContext.getExternalContext().getRequestMap() != null &&
+                                !facesContext.getExternalContext().getRequestMap().isEmpty());
     }
 
     private static FacesInformationStorage getFacesInformationStorage()

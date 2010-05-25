@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIf;
-import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType;
+import org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIfType;
 
 /**
  * @author Rudy De Busscher
@@ -43,11 +43,11 @@ public class EmptyIfStrategy extends AbstractCompareStrategy<EmptyIf>
     {
         boolean violationFound = false;
 
-        if (annotation.is().equals(RequiredIfType.empty))
+        if (annotation.is().equals(EmptyIfType.empty))
         {
             violationFound = (isTargetEmpty(target) || Boolean.FALSE.equals(target)) && !isSourceEmpty(source);
         }
-        else if (annotation.is().equals(RequiredIfType.not_empty))
+        else if (annotation.is().equals(EmptyIfType.not_empty))
         {
             violationFound = (!isSourceEmpty(source) && !isTargetEmpty(target) && !(target instanceof Boolean)) ||
                     (Boolean.TRUE.equals(target) && !isSourceEmpty(source));
