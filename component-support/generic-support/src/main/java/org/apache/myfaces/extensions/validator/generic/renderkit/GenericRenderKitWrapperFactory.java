@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.render.RenderKit;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Gerhard Petracek
@@ -34,7 +34,7 @@ import java.util.HashMap;
 public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
     private Map<Class<? extends RenderKit>, RenderKit> renderKitCache =
-            new HashMap<Class<? extends RenderKit>, RenderKit>();
+            new ConcurrentHashMap<Class<? extends RenderKit>, RenderKit>();
 
     protected RenderKit createWrapper(RenderKit renderKit)
     {
