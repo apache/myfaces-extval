@@ -476,13 +476,14 @@ class ExtValBeanValidationMetaDataInternals
     {
         ELHelper elHelper = ExtValUtils.getELHelper();
 
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         for (String condition : beanValidation.conditions())
         {
             if (elHelper.isELTermWellFormed(condition) &&
-                    elHelper.isELTermValid(FacesContext.getCurrentInstance(), condition))
+                    elHelper.isELTermValid(facesContext, condition))
             {
                 if (Boolean.TRUE.equals(elHelper.getValueOfExpression(
-                        FacesContext.getCurrentInstance(), new ValueBindingExpression(condition))))
+                        facesContext, new ValueBindingExpression(condition))))
                 {
                     return true;
                 }
