@@ -59,12 +59,13 @@ public class CrossValidationPhaseListener implements PhaseListener
         try
         {
             CrossValidationStorage crossValidationStorage = CrossValidationUtils.getOrInitCrossValidationStorage();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
             for (CrossValidationStorageEntry entry : crossValidationStorage.getCrossValidationStorageEntries())
             {
                 try
                 {
                     if(!ExtValUtils.executeGlobalBeforeValidationInterceptors(
-                            FacesContext.getCurrentInstance(),
+                            facesContext,
                             entry.getComponent(),
                             entry.getConvertedObject(),
                             CrossValidationStorageEntry.class.getName(),
@@ -131,7 +132,7 @@ public class CrossValidationPhaseListener implements PhaseListener
                 finally
                 {
                     ExtValUtils.executeGlobalAfterValidationInterceptors(
-                            FacesContext.getCurrentInstance(),
+                            facesContext,
                             entry.getComponent(),
                             entry.getConvertedObject(),
                             CrossValidationStorageEntry.class.getName(),

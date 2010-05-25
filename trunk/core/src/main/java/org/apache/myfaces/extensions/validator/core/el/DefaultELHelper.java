@@ -115,7 +115,9 @@ public class DefaultELHelper implements ELHelper
             valueBindingExpression = valueBindingExpression.replace(" ", "");
         }
 
-        if (getTypeOfExpression(FacesContext.getCurrentInstance(),
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if (getTypeOfExpression(facesContext,
             new ValueBindingExpression(valueBindingExpression).getBaseExpression()) == null)
         {
             ValueBindingExpression result = FaceletsTaglibExpressionHelper.
@@ -128,7 +130,7 @@ public class DefaultELHelper implements ELHelper
             }
 
             Class entityClass = ExtValUtils.getELHelper()
-                .getTypeOfExpression(FacesContext.getCurrentInstance(), result.getBaseExpression());
+                .getTypeOfExpression(facesContext, result.getBaseExpression());
 
             if(entityClass == null)
             {
