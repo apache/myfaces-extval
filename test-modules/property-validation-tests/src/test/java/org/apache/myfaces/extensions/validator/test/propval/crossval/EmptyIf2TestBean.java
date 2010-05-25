@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
 import org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIf;
-import static org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIfType.*;
+import static org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIfType.*;
 
 public class EmptyIf2TestBean
 {
