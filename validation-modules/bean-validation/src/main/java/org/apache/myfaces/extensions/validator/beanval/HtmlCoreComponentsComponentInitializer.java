@@ -48,14 +48,17 @@ public class HtmlCoreComponentsComponentInitializer extends AbstractHtmlCoreComp
             return;
         }
 
-        if(Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)) ||
-                Boolean.TRUE.equals(isComponentRequired(uiComponent)))
+        if(!((EditableValueHolder)uiComponent).isRequired() &&
+                isRequiredInitializationRequested(metaData) &&
+                isRequiredInitializationSupported(uiComponent))
         {
             ((EditableValueHolder)uiComponent).setRequired(true);
         }
-        else
-        {
-            ((EditableValueHolder)uiComponent).setRequired(false);
-        }
+    }
+
+    private boolean isRequiredInitializationRequested(Map<String, Object> metaData)
+    {
+        return Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.REQUIRED)) ||
+                Boolean.TRUE.equals(metaData.get(CommonMetaDataKeys.WEAK_REQUIRED));
     }
 }
