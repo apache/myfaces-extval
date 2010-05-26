@@ -91,7 +91,7 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
      * @return false to overrule the annotated property e.g. if component is readonly
      */
     @ToDo(value = Priority.MEDIUM, description = "refactor")
-    protected Boolean isComponentRequired(UIComponent uiComponent)
+    protected boolean isRequiredInitializationSupported(UIComponent uiComponent)
     {
         boolean isReadOnly = !Boolean.FALSE.equals(ReflectionUtils.tryToInvokeMethod(
                 uiComponent, ReflectionUtils.tryToGetMethod(uiComponent.getClass(), "isReadonly")));
