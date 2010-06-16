@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
@@ -114,8 +113,7 @@ public class DefaultELHelper implements ELHelper
                 return null;
             }
 
-            Class entityClass = ExtValUtils.getELHelper()
-                .getTypeOfExpression(facesContext, result.getBaseExpression());
+            Class entityClass = getTypeOfExpression(facesContext, result.getBaseExpression());
 
             if(entityClass == null)
             {
@@ -184,7 +182,7 @@ public class DefaultELHelper implements ELHelper
     {
         String[] properties = propertyChain.split("\\.");
 
-        Object currentPropertyValue = ExtValUtils.getELHelper().getBean(properties[0]);
+        Object currentPropertyValue = getBean(properties[0]);
 
         Method currentMethod;
         String currentPropertyName;
