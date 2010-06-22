@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
-import org.apache.myfaces.extensions.validator.core.DefaultProjectStageResolver;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -76,6 +76,8 @@ public abstract class AbstractStartupListener implements PhaseListener
                     {
                         if(!isStartupListenerDeactivated())
                         {
+                            initModuleConfig();
+
                             initProjectStageResolver();
 
                             init();
@@ -109,6 +111,11 @@ public abstract class AbstractStartupListener implements PhaseListener
         }
     }
 
+    protected void initModuleConfig()
+    {
+        //override if needed
+    }
+
     public PhaseId getPhaseId()
     {
         return PhaseId.RESTORE_VIEW;
@@ -132,7 +139,7 @@ public abstract class AbstractStartupListener implements PhaseListener
 
     protected ProjectStageResolver getProjectStageResolver()
     {
-        return new DefaultProjectStageResolver();
+        return ExtValCoreConfiguration.get().projectStageResolver();
     }
 
     protected abstract void init();

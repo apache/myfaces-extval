@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public interface WebXmlParameter
+interface WebXmlParameter
 {
     static final String DEACTIVATE_CROSSVALIDATION = WebXmlUtils
             .getInitParameter("DEACTIVATE_CROSSVALIDATION");

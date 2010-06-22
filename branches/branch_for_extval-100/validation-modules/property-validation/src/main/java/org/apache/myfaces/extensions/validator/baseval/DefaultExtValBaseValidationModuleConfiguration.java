@@ -16,33 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
+package org.apache.myfaces.extensions.validator.baseval;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default MessageResolver which uses the default convention for the message bundle.
- * It's possible to provide a custom message bundle via web.xml
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
+@UsageInformation(UsageCategory.INTERNAL)
+public class DefaultExtValBaseValidationModuleConfiguration extends ExtValBaseValidationModuleConfiguration
 {
-    private static final String CUSTOM_BUNDLE = ExtValCoreConfiguration.get().customMessageBundleBaseName();
-
-    //not used at the moment - just for a convention
-    protected String getBaseName()
+    public String jpaValidationErrorMessages()
     {
-        return InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
+        return WebXmlParameter.VALIDATION_MESSAGES_JPA;
     }
 
-    protected String getCustomBaseName()
+    public boolean deactivateJpaBasedValidation()
     {
-        return CUSTOM_BUNDLE;
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_JPA_BASED_VALIDATION);
     }
 }

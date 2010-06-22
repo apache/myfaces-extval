@@ -32,7 +32,7 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +49,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
 
     private boolean lazyStaticMappingApplied = false;
     private List<NameMapper<Class>> nameMapperList = new ArrayList<NameMapper<Class>>();
-    private Map<Class, StorageManager> storageTypeToStorageManagerMap = new HashMap<Class, StorageManager>();
+    private Map<Class, StorageManager> storageTypeToStorageManagerMap = new ConcurrentHashMap<Class, StorageManager>();
 
     public DefaultStorageManagerFactory()
     {
@@ -156,7 +156,7 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
         return this.nameMapperList;
     }
 
-    public void setStorageManager(Class storageType, StorageManager storageManager, boolean override)
+    public synchronized void setStorageManager(Class storageType, StorageManager storageManager, boolean override)
     {
         if(!this.storageTypeToStorageManagerMap.containsKey(storageType) ||
                 (this.storageTypeToStorageManagerMap.containsKey(storageType) && override))

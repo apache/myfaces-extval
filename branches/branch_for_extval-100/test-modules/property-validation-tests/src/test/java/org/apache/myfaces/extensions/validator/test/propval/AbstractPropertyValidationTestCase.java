@@ -40,6 +40,7 @@ public abstract class AbstractPropertyValidationTestCase extends AbstractExValTe
             @Override
             protected void init()
             {
+                super.initModuleConfig();
                 super.init();
             }
         }.init();

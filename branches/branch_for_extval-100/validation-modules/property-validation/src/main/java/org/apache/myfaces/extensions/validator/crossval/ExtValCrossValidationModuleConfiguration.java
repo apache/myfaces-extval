@@ -16,33 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
+package org.apache.myfaces.extensions.validator.crossval;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default MessageResolver which uses the default convention for the message bundle.
- * It's possible to provide a custom message bundle via web.xml
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
+@UsageInformation(UsageCategory.INTERNAL)
+public abstract class ExtValCrossValidationModuleConfiguration implements ExtValModuleConfiguration
 {
-    private static final String CUSTOM_BUNDLE = ExtValCoreConfiguration.get().customMessageBundleBaseName();
+    private static ExtValContext extValContext = ExtValContext.getContext();
 
-    //not used at the moment - just for a convention
-    protected String getBaseName()
+    protected ExtValCrossValidationModuleConfiguration()
     {
-        return InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
     }
 
-    protected String getCustomBaseName()
+    public static ExtValCrossValidationModuleConfiguration get()
     {
-        return CUSTOM_BUNDLE;
+        return extValContext.getModuleConfiguration(ExtValCrossValidationModuleConfiguration.class);
     }
+
+    public static boolean use(ExtValCrossValidationModuleConfiguration config, boolean forceOverride)
+    {
+        return extValContext.addModuleConfiguration(
+                ExtValCrossValidationModuleConfiguration.class, config, forceOverride);
+    }
+
+    /*
+     * web.xml config
+     */
+
+    abstract boolean deactivateCrossvalidation();
 }

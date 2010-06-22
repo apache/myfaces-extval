@@ -27,10 +27,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -136,7 +136,7 @@ class ExtValContextInvocationOrderAwareInternals
         }
     }
 
-    private void addPropertyValidationInterceptorForModule(
+    private synchronized void addPropertyValidationInterceptorForModule(
             Class moduleKey, PropertyValidationInterceptor propertyValidationInterceptor)
     {
         if (moduleKey == null)
@@ -196,7 +196,7 @@ class ExtValContextInvocationOrderAwareInternals
         }
     }
 
-    private void addMetaDataExtractionInterceptorForModule(
+    private synchronized void addMetaDataExtractionInterceptorForModule(
             Class moduleKey, MetaDataExtractionInterceptor metaDataExtractionInterceptor)
     {
         if (moduleKey == null)
@@ -272,7 +272,7 @@ class ExtValContextInvocationOrderAwareInternals
         List<String> validationExceptionInterceptorClassNames = new ArrayList<String>();
 
         validationExceptionInterceptorClassNames
-                .add(WebXmlParameter.CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR);
+                .add(ExtValCoreConfiguration.get().customValidationExceptionInterceptorClassName());
         validationExceptionInterceptorClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(
                         CustomInformation.VALIDATION_EXCEPTION_INTERCEPTOR));
@@ -301,12 +301,13 @@ class ExtValContextInvocationOrderAwareInternals
         }
 
         metaDataExtractionInterceptors = new ArrayList<MetaDataExtractionInterceptor>();
-        moduleSpecificMetaDataExtractionInterceptors = new HashMap<Class, List<MetaDataExtractionInterceptor>>();
+        moduleSpecificMetaDataExtractionInterceptors =
+                new ConcurrentHashMap<Class, List<MetaDataExtractionInterceptor>>();
 
         List<String> metaDataExtractionInterceptorClassNames = new ArrayList<String>();
 
         metaDataExtractionInterceptorClassNames
-                .add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTION_INTERCEPTOR);
+                .add(ExtValCoreConfiguration.get().customMetaDataExtractionInterceptorClassName());
         metaDataExtractionInterceptorClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(
                         CustomInformation.META_DATA_EXTRACTION_INTERCEPTOR));
@@ -335,7 +336,7 @@ class ExtValContextInvocationOrderAwareInternals
         componentInitializers = new ArrayList<ComponentInitializer>();
         List<String> componentInitializerClassNames = new ArrayList<String>();
         componentInitializerClassNames
-                .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER);
+                .add(ExtValCoreConfiguration.get().customComponentInitializerClassName());
         componentInitializerClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(CustomInformation.COMPONENT_INITIALIZER));
 
@@ -362,12 +363,13 @@ class ExtValContextInvocationOrderAwareInternals
         }
 
         propertyValidationInterceptors = new ArrayList<PropertyValidationInterceptor>();
-        moduleSpecificPropertyValidationInterceptors = new HashMap<Class, List<PropertyValidationInterceptor>>();
+        moduleSpecificPropertyValidationInterceptors =
+                new ConcurrentHashMap<Class, List<PropertyValidationInterceptor>>();
 
         List<String> validationInterceptorClassNames = new ArrayList<String>();
 
         validationInterceptorClassNames
-                .add(WebXmlParameter.CUSTOM_PROPERTY_VALIDATION_INTERCEPTOR);
+                .add(ExtValCoreConfiguration.get().customPropertyValidationInterceptorClassName());
         validationInterceptorClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(
                         CustomInformation.PROPERTY_VALIDATION_INTERCEPTOR));

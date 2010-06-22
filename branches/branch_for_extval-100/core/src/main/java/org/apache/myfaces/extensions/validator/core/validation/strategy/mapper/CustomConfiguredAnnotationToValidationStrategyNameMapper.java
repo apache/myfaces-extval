@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy.mapper;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -38,6 +38,6 @@ public class CustomConfiguredAnnotationToValidationStrategyNameMapper extends
 {
     protected String getCustomNameMapperClassName()
     {
-        return WebXmlParameter.CUSTOM_META_DATA_TO_VALIDATION_STRATEGY_NAME_MAPPER;
+        return ExtValCoreConfiguration.get().customMetaDataToValidationStrategyNameMapperClassName();
     }
 }

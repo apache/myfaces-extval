@@ -23,7 +23,7 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.REU
 
 import javax.faces.context.FacesContext;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * generic storage manager implementation which stores the storage implementations in the application scope
@@ -41,8 +41,12 @@ public abstract class AbstractApplicationScopeAwareStorageManager<T> extends Abs
 
         if(!applicationMap.containsKey(getStorageManagerKey()))
         {
-            storageMap = new HashMap<String, T>();
-            applicationMap.put(getStorageManagerKey(), storageMap);
+            storageMap = new ConcurrentHashMap<String, T>();
+
+            synchronized (applicationMap)
+            {
+                applicationMap.put(getStorageManagerKey(), storageMap);
+            }
         }
 
         return (Map<String, T>)applicationMap.get(getStorageManagerKey());

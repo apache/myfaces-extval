@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.core.proxy.ProxyHelper;
 import org.apache.myfaces.extensions.validator.core.proxy.DefaultProxyHelper;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -73,26 +73,8 @@ public class ProxyUtils
                 return new DefaultProxyHelper();
             }
 
-            proxyHelper = createProxyHelper();
+            proxyHelper = ExtValCoreConfiguration.get().proxyHelper();
         }
         return proxyHelper;
-    }
-
-    //don't use the default approach (factory finder) - ProxyHelper is called too often...
-    private static ProxyHelper createProxyHelper()
-    {
-        String customProxyHelperClassName = WebXmlParameter.CUSTOM_PROXY_HELPER;
-
-        ProxyHelper result = null;
-        if(customProxyHelperClassName != null && !"".equals(customProxyHelperClassName))
-        {
-            result = (ProxyHelper)ClassUtils.tryToInstantiateClassForName(customProxyHelperClassName);
-        }
-        if(result == null)
-        {
-            result = new DefaultProxyHelper();
-        }
-
-        return result;
     }
 }
