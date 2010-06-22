@@ -30,7 +30,8 @@ import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListene
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
@@ -174,10 +175,15 @@ public abstract class AbstractExValTestCase extends TestCase
             private static final long serialVersionUID = -3861810605160281884L;
 
             @Override
+            protected void initModuleConfig()
+            {
+                ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration(), true);
+            }
+
+            @Override
             protected void init()
             {
-                ExtValContext.getContext()
-                        .addGlobalProperty(ProjectStageResolver.class.getName(), getProjectStageResolver(), false);
+                initModuleConfig();
                 super.init();
             }
         }.init();

@@ -27,16 +27,17 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +50,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Map<String, PropertyInformation>> cachedPropertyInformation =
-            new HashMap<String, Map<String, PropertyInformation>>();
+            new ConcurrentHashMap<String, Map<String, PropertyInformation>>();
 
     private List<MetaDataStorageFilter> metaDataStorageFilters = new ArrayList<MetaDataStorageFilter>();
     private List<Class<? extends MetaDataStorageFilter>> deniedMetaDataFilters =
@@ -65,7 +66,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         List<String> metaDataStorageFilterClassNames = new ArrayList<String>();
 
         metaDataStorageFilterClassNames
-            .add(WebXmlParameter.CUSTOM_META_DATA_STORAGE_FILTER);
+            .add(ExtValCoreConfiguration.get().customMetaDataStorageFilterClassName());
         metaDataStorageFilterClassNames
             .add(ExtValContext.getContext().getInformationProviderBean().get(
                     CustomInformation.META_DATA_STORAGE_FILTER));
@@ -112,6 +113,11 @@ public class DefaultMetaDataStorage implements MetaDataStorage
     {
         PropertyInformation propertyInformation = getMapForClass(targetClass).get(targetProperty);
 
+        if(propertyInformation == null)
+        {
+            return new MetaDataEntry[]{};
+        }
+        
         PropertyInformation clonedPropertyInformation = new DefaultPropertyInformation();
         copyMetaData(propertyInformation, clonedPropertyInformation);
 
@@ -210,9 +216,15 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         String key = ProxyUtils.getClassName(target);
         if(!this.cachedPropertyInformation.containsKey(key))
         {
-            this.cachedPropertyInformation.put(key, new HashMap<String, PropertyInformation>());
+            this.cachedPropertyInformation
+                    .put(key, new NullValueAwareConcurrentHashMap<String, PropertyInformation>(createDefaultValue()));
         }
         return this.cachedPropertyInformation.get(key);
+    }
+
+    private PropertyInformation createDefaultValue()
+    {
+        return new DefaultPropertyInformation();
     }
 
     private Class<? extends MetaDataStorageFilter> getStorageFilterClass(MetaDataStorageFilter storageFilter)

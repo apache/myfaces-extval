@@ -56,12 +56,11 @@ public class ProjectStage
     private static ProjectStageName getCurrentProjectStage()
     {
         //set ProjectStageResolver to null to tweak the performance
-        Object projectStageResolver = ExtValContext.getContext()
-                .getGlobalProperty(ProjectStageResolver.class.getName());
+        ProjectStageResolver projectStageResolver = ExtValCoreConfiguration.get().projectStageResolver();
 
-        if(projectStageResolver instanceof ProjectStageResolver)
+        if(projectStageResolver != null)
         {
-            return ((ProjectStageResolver)projectStageResolver).getCurrentProjectStage().getValue();
+            return (projectStageResolver).getCurrentProjectStage().getValue();
         }
         return ExtValUtils.getDefaultStageName();
     }

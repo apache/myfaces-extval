@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultValidationParameterFactory implements ClassMappingFactory<Class, Class>
 {
-    private Map<Class, Class> parameterMapping = new HashMap<Class, Class>();
+    private Map<Class, Class> parameterMapping = new ConcurrentHashMap<Class, Class>();
 
     public Class create(Class source)
     {

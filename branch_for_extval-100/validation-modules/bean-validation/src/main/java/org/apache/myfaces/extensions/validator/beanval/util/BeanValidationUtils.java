@@ -221,7 +221,11 @@ public class BeanValidationUtils
         if (validatorFactory == null)
         {
             validatorFactory = Validation.buildDefaultValidatorFactory();
-            applicationMap.put(VALIDATOR_FACTORY_KEY, validatorFactory);
+
+            synchronized (applicationMap)
+            {
+                applicationMap.put(VALIDATOR_FACTORY_KEY, validatorFactory);
+            }
         }
         return validatorFactory;
     }

@@ -20,9 +20,9 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationEntry;
@@ -32,13 +32,13 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -132,7 +132,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
     @ToDo(value = Priority.MEDIUM, description = "logging")
     private synchronized void initStaticMappings()
     {
-        metaDataKeyToValidationStrategyMapping = new HashMap<String, String>();
+        metaDataKeyToValidationStrategyMapping = new NullValueAwareConcurrentHashMap<String, String>(String.class);
 
         //setup internal static mappings
         for (StaticConfiguration<String, String> staticConfig :
@@ -158,7 +158,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
         }
 
         //setup custom mapping - overrides all other mappings
-        String customMappingBaseName = WebXmlParameter.CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING;
+        String customMappingBaseName = ExtValCoreConfiguration.get().customStaticValidationStrategyMappingSource();
         if (customMappingBaseName != null)
         {
             try

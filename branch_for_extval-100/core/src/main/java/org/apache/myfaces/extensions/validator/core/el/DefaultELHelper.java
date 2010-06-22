@@ -24,8 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 import javax.el.ValueExpression;
@@ -54,7 +54,7 @@ import java.util.logging.Logger;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultELHelper implements ELHelper
 {
-    private static final String DEACTIVATE_EL_RESOLVER = WebXmlParameter.DEACTIVATE_EL_RESOLVER;
+    private static final boolean DEACTIVATE_EL_RESOLVER = ExtValCoreConfiguration.get().deactivateElResolver();
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -143,7 +143,7 @@ public class DefaultELHelper implements ELHelper
 
     public PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent)
     {
-        if("true".equalsIgnoreCase(DEACTIVATE_EL_RESOLVER))
+        if(DEACTIVATE_EL_RESOLVER)
         {
             return getPropertyDetailsViaReflectionFallback(uiComponent);
         }

@@ -23,9 +23,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractorFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultStorageManagerFactory;
 import org.apache.myfaces.extensions.validator.core.el.DefaultELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
@@ -38,9 +38,9 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Default
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -52,9 +52,11 @@ import java.util.logging.Logger;
 public class DefaultFactoryFinder implements FactoryFinder
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
-    protected Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
+    protected Map<FactoryNames, Object> factoryMap = new ConcurrentHashMap<FactoryNames, Object>();
 
     private static FactoryFinder factoryFinder = new DefaultFactoryFinder();
+
+    private ExtValCoreConfiguration extValCoreConfig;
 
     protected DefaultFactoryFinder()
     {
@@ -140,7 +142,7 @@ public class DefaultFactoryFinder implements FactoryFinder
 
         List<String> metaDataExtractorFactoryClassNames = new ArrayList<String>();
 
-        metaDataExtractorFactoryClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_META_DATA_EXTRACTOR_FACTORY);
+        metaDataExtractorFactoryClassNames.add(getCoreConfig().customComponentMetaDataExtractorFactoryClassName());
         metaDataExtractorFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                 .get(CustomInformation.COMPONENT_META_DATA_EXTRACTOR_FACTORY));
@@ -165,7 +167,7 @@ public class DefaultFactoryFinder implements FactoryFinder
 
         List<String> validationStrategyFactoryClassNames = new ArrayList<String>();
 
-        validationStrategyFactoryClassNames.add(WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_FACTORY);
+        validationStrategyFactoryClassNames.add(getCoreConfig().customValidationStrategyFactoryClassName());
         validationStrategyFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInformation.VALIDATION_STRATEGY_FACTORY));
@@ -190,7 +192,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         Object factory = null;
         List<String> messageResolverFactoryClassNames = new ArrayList<String>();
 
-        messageResolverFactoryClassNames.add(WebXmlParameter.CUSTOM_MESSAGE_RESOLVER_FACTORY);
+        messageResolverFactoryClassNames.add(getCoreConfig().customMessageResolverFactoryClassName());
         messageResolverFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInformation.MESSAGE_RESOLVER_FACTORY));
@@ -216,7 +218,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         Object factory = null;
         List<String> metaDataTransformerFactoryClassNames = new ArrayList<String>();
 
-        metaDataTransformerFactoryClassNames.add(WebXmlParameter.CUSTOM_META_DATA_TRANSFORMER_FACTORY );
+        metaDataTransformerFactoryClassNames.add(getCoreConfig().customMetaDataTransformerFactoryClassName());
         metaDataTransformerFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInformation.META_DATA_TRANSFORMER_FACTORY));
@@ -247,7 +249,7 @@ public class DefaultFactoryFinder implements FactoryFinder
 
         List<String> facesMessageFactoryClassNames = new ArrayList<String>();
 
-        facesMessageFactoryClassNames.add(WebXmlParameter.CUSTOM_FACES_MESSAGE_FACTORY);
+        facesMessageFactoryClassNames.add(getCoreConfig().customFacesMessageFactoryClassName());
         facesMessageFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInformation.FACES_MESSAGE_FACTORY));
@@ -285,7 +287,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         List<String> validationParameterExtractorFactoryClassNames = new ArrayList<String>();
 
         validationParameterExtractorFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_VALIDATION_PARAMETER_EXTRACTOR_FACTORY);
+                .add(getCoreConfig().customValidationParameterExtractorFactoryClassName());
         validationParameterExtractorFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                 .get(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR_FACTORY));
@@ -310,7 +312,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         List<String> storageManagerFactoryClassNames = new ArrayList<String>();
 
         storageManagerFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_STORAGE_MANAGER_FACTORY);
+                .add(getCoreConfig().customStorageManagerFactoryClassName());
         storageManagerFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                 .get(CustomInformation.STORAGE_MANAGER_FACTORY));
@@ -335,7 +337,7 @@ public class DefaultFactoryFinder implements FactoryFinder
         List<String> validationParameterFactoryClassNames = new ArrayList<String>();
 
         validationParameterFactoryClassNames
-                .add(WebXmlParameter.CUSTOM_VALIDATION_PARAMETER_FACTORY);
+                .add(getCoreConfig().customValidationParameterFactoryClassName());
         validationParameterFactoryClassNames
             .add(ExtValContext.getContext().getInformationProviderBean()
                 .get(CustomInformation.VALIDATION_PARAMETER_FACTORY));
@@ -353,4 +355,12 @@ public class DefaultFactoryFinder implements FactoryFinder
         return factory;
     }
 
+    private ExtValCoreConfiguration getCoreConfig()
+    {
+        if(this.extValCoreConfig == null)
+        {
+            this.extValCoreConfig = ExtValCoreConfiguration.get();
+        }
+        return this.extValCoreConfig;
+    }
 }
