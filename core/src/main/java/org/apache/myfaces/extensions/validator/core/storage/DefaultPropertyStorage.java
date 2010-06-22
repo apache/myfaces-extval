@@ -24,8 +24,9 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -37,15 +38,15 @@ public class DefaultPropertyStorage implements PropertyStorage
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Map<String, Map<String, Field>> fieldMap = new HashMap<String, Map<String, Field>>();
-    private Map<String, Map<String, Method>> methodMap = new HashMap<String, Map<String, Method>>();
+    private Map<String, Map<String, Field>> fieldMap = new ConcurrentHashMap<String, Map<String, Field>>();
+    private Map<String, Map<String, Method>> methodMap = new ConcurrentHashMap<String, Map<String, Method>>();
 
-    public void storeField(Class targetClass, String property, Field field)
+    public synchronized void storeField(Class targetClass, String property, Field field)
     {
         getFieldMapForClass(targetClass).put(property, field);
     }
 
-    public void storeMethod(Class targetClass, String property, Method method)
+    public synchronized void storeMethod(Class targetClass, String property, Method method)
     {
         getMethodMapForClass(targetClass).put(property,  method);
     }

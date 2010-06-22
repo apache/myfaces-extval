@@ -35,6 +35,7 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.Validati
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -61,17 +63,21 @@ public class ExtValContext
 
     private ViolationSeverityInterpreter violationSeverityInterpreter;
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
-    private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
+    private Map<String, RendererInterceptor> rendererInterceptors =
+            new ConcurrentHashMap<String, RendererInterceptor>();
     private List<String> deniedInterceptors = new ArrayList<String>();
     private List<ProcessedInformationRecorder> processedInformationRecorders =
             new ArrayList<ProcessedInformationRecorder>();
 
     private SkipValidationEvaluator skipValidationEvaluator;
 
-    private Map<String, Object> globalProperties = new HashMap<String, Object>();
+    private Map<String, Object> globalProperties = new NullValueAwareConcurrentHashMap<String, Object>(Object.class);
+
+    private Map<Class<? extends ExtValModuleConfiguration>, ExtValModuleConfiguration> extValConfig =
+            new ConcurrentHashMap<Class<? extends ExtValModuleConfiguration>, ExtValModuleConfiguration>();
 
     private Map<StaticConfigurationNames, List<StaticConfiguration<String, String>>> staticConfigMap
-            = new HashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
+            = new ConcurrentHashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
 
     private ExtValContextInternals contextHelper;
     private ExtValContextInvocationOrderAwareInternals invocationOrderAwareContextHelper;
@@ -404,5 +410,42 @@ public class ExtValContext
     public Object getGlobalProperty(String name)
     {
         return this.globalProperties.get(name);
+    }
+
+    public <T extends ExtValModuleConfiguration> T getModuleConfiguration(Class<T> targetType)
+    {
+        ExtValModuleConfiguration result = this.extValConfig.get(targetType);
+
+        //noinspection unchecked
+        return (T)result;
+    }
+
+    public boolean addModuleConfiguration(Class<? extends ExtValModuleConfiguration> key,
+                                          ExtValModuleConfiguration extValConfig)
+    {
+        return addModuleConfiguration(key, extValConfig, true);
+    }
+
+    public boolean addModuleConfiguration(Class<? extends ExtValModuleConfiguration> key,
+                                          ExtValModuleConfiguration config,
+                                          boolean forceOverride)
+    {
+        if (this.extValConfig.containsKey(key))
+        {
+            if (!forceOverride)
+            {
+                return false;
+            }
+
+            this.logger.info("override config for key '" + config.getClass() + "'");
+        }
+        this.extValConfig.put(key, config);
+
+        if(JsfProjectStage.is(JsfProjectStage.Development))
+        {
+            this.logger.info("config for key [" + config.getClass() + "] added");
+        }
+
+        return true;
     }
 }

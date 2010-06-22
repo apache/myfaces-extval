@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
 import org.apache.myfaces.extensions.validator.core.ProjectStageName;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
@@ -532,7 +532,7 @@ public class ExtValUtils
 
     private static boolean isValidationParameterExtractionDeactivated()
     {
-        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_VALIDATION_PARAMETERS);
+        return ExtValCoreConfiguration.get().deactivateValidationParameters();
     }
 
     public static boolean executeLocalBeforeValidationInterceptors(FacesContext facesContext,
@@ -803,12 +803,12 @@ public class ExtValUtils
     public static boolean interpretEmptyStringValuesAsNull()
     {
         //to deactivate: the parameter has to be explicitly false
-        return !"false".equalsIgnoreCase(WebXmlParameter.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL);
+        return ExtValCoreConfiguration.get().interpretEmptyStringSubmittedValuesAsNull();
     }
 
     public static boolean validateEmptyFields()
     {
-        return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
+        return ExtValCoreConfiguration.get().validateEmptyFields();
     }
 
     public static PropertyDetails getPropertyDetails(PropertyInformation propertyInformation)
@@ -975,7 +975,7 @@ public class ExtValUtils
      */
     public static boolean isRequiredInitializationActive()
     {
-        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("mode:init:required"));
+        return ExtValCoreConfiguration.get().activateRequiredInitialization();
     }
 
     /**
@@ -987,7 +987,7 @@ public class ExtValUtils
      */
     public static boolean isRequiredResetActivated()
     {
-        return Boolean.TRUE.equals(ExtValContext.getContext().getGlobalProperty("mode:reset:required"));
+        return ExtValCoreConfiguration.get().deactivateRequiredAttributeSupport();
     }
 
     public static ProjectStageName getDefaultStageName()

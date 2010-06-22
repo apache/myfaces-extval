@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.baseval.message.resolver;
 
-import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.baseval.ExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.AbstractValidationErrorMessageResolver;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -37,7 +37,9 @@ public class JpaValidationErrorMessageResolver extends AbstractValidationErrorMe
 {
     public static final String JPA_VALIDATION_ERROR_MESSAGES = "JPA_VALIDATION_ERROR_MESSAGES";
 
-    private static final String CUSTOM_BASE_NAME = WebXmlParameter.VALIDATION_MESSAGES_JPA;
+    private static final String CUSTOM_BASE_NAME =
+            ExtValBaseValidationModuleConfiguration.get().jpaValidationErrorMessages();
+    
     private static final String BASE_NAME = JpaValidationErrorMessageResolver.class
             .getPackage().getName().replace(".message.resolver", ".message.bundle")+ ".jpa_messages";
 

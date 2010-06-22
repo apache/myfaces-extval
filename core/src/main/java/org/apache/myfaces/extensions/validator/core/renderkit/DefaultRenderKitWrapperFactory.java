@@ -36,7 +36,7 @@ public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
             "org.apache.myfaces.extensions.validator.generic.renderkit.GenericRenderKitWrapperFactory";
     private static Boolean useGenericRenderKitWrapperFactory = null;
 
-    protected RenderKit createWrapper(RenderKit renderKit)
+    protected synchronized RenderKit createWrapper(RenderKit renderKit)
     {
         logger.finest("extval renderkit wrapper created for " + renderKit.getClass().getName());
 

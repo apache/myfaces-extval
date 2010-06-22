@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.extractor;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -71,7 +71,7 @@ public class DefaultComponentMetaDataExtractorFactory implements ComponentMetaDa
         {
             List<String> metaDataExtractorClassNames = new ArrayList<String>();
 
-            metaDataExtractorClassNames.add(WebXmlParameter.CUSTOM_COMPONENT_META_DATA_EXTRACTOR);
+            metaDataExtractorClassNames.add(ExtValCoreConfiguration.get().customComponentMetaDataExtractorClassName());
             metaDataExtractorClassNames
                 .add(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInformation.COMPONENT_META_DATA_EXTRACTOR));

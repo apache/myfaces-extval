@@ -36,7 +36,7 @@ public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
     private Map<Class<? extends RenderKit>, RenderKit> renderKitCache =
             new ConcurrentHashMap<Class<? extends RenderKit>, RenderKit>();
 
-    protected RenderKit createWrapper(RenderKit renderKit)
+    protected synchronized RenderKit createWrapper(RenderKit renderKit)
     {
         logger.finest("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib");
 

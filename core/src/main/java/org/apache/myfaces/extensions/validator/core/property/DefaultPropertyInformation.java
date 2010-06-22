@@ -79,4 +79,38 @@ public class DefaultPropertyInformation implements PropertyInformation
 
         this.metaDataList.clear();
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof DefaultPropertyInformation))
+        {
+            return false;
+        }
+
+        DefaultPropertyInformation that = (DefaultPropertyInformation) o;
+
+        if (!informationMap.equals(that.informationMap))
+        {
+            return false;
+        }
+        if (!metaDataList.equals(that.metaDataList))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = informationMap.hashCode();
+        result = 31 * result + metaDataList.hashCode();
+        return result;
+    }
 }

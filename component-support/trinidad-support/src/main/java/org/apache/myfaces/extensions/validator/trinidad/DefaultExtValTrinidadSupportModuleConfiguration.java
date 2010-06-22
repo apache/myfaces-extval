@@ -16,33 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
+package org.apache.myfaces.extensions.validator.trinidad;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
-import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Default MessageResolver which uses the default convention for the message bundle.
- * It's possible to provide a custom message bundle via web.xml
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class DefaultValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
+@UsageInformation(UsageCategory.INTERNAL)
+public class DefaultExtValTrinidadSupportModuleConfiguration extends ExtValTrinidadSupportModuleConfiguration
 {
-    private static final String CUSTOM_BUNDLE = ExtValCoreConfiguration.get().customMessageBundleBaseName();
+    /*
+     * web.xml config
+     */
 
-    //not used at the moment - just for a convention
-    protected String getBaseName()
+    public boolean deactivateClientSideValidation()
     {
-        return InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION);
     }
 
-    protected String getCustomBaseName()
+    public boolean deactivateCoreOutputLabelInitialization()
     {
-        return CUSTOM_BUNDLE;
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION);
+    }
+
+    public boolean deactivateValidationExceptionInterceptor()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR);
     }
 }
