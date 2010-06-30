@@ -32,6 +32,7 @@ import javax.el.ELContext;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.CompositeComponentExpressionHolder;
 import java.io.Externalizable;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -140,7 +141,6 @@ public class DefaultELHelper implements ELHelper
         return new ValueBindingExpression(valueBindingExpression);
     }
 
-    @ToDo(value = Priority.HIGH, description = "check if it works with nested composite components")
     public PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent)
     {
         if("true".equalsIgnoreCase(DEACTIVATE_EL_RESOLVER))
@@ -162,6 +162,21 @@ public class DefaultELHelper implements ELHelper
                 ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver), false);
 
         ExtValELResolver compositeComponentELResolver = null;
+
+        //see EXTVAL-102
+        if (elResolver.getBaseObject() instanceof CompositeComponentExpressionHolder)
+        {
+            ValueExpression newValueExpression = ((CompositeComponentExpressionHolder) elResolver.getBaseObject())
+                    .getExpression(elResolver.getProperty());
+
+            if (newValueExpression != null)
+            {
+                elResolver = createWrappedELContext(facesContext);
+                inspectTarget(newValueExpression,
+                        ExtValELResolver.createContextWrapper(
+                                facesContext.getELContext(), elResolver), false);
+            }
+        }
 
         //re-check to get full key for cross-validation
         if (elResolver.getCompositeComponentExpression() != null)
