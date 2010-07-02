@@ -27,10 +27,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -68,7 +69,7 @@ class ExtValContextInvocationOrderAwareInternals
     List<ComponentInitializer> getComponentInitializers()
     {
         return this.contextHelper.isComponentInitializationActivated() ?
-                this.componentInitializers : new ArrayList<ComponentInitializer>();
+                this.componentInitializers : new CopyOnWriteArrayList<ComponentInitializer>();
     }
 
     /*
@@ -154,7 +155,7 @@ class ExtValContextInvocationOrderAwareInternals
             }
             else
             {
-                propertyValidationInterceptorList = new ArrayList<PropertyValidationInterceptor>();
+                propertyValidationInterceptorList = new CopyOnWriteArrayList<PropertyValidationInterceptor>();
                 this.moduleSpecificPropertyValidationInterceptors.put(moduleKey, propertyValidationInterceptorList);
             }
             propertyValidationInterceptorList.add(propertyValidationInterceptor);
@@ -214,7 +215,7 @@ class ExtValContextInvocationOrderAwareInternals
             }
             else
             {
-                metaDataExtractionInterceptorList = new ArrayList<MetaDataExtractionInterceptor>();
+                metaDataExtractionInterceptorList = new CopyOnWriteArrayList<MetaDataExtractionInterceptor>();
                 this.moduleSpecificMetaDataExtractionInterceptors.put(moduleKey, metaDataExtractionInterceptorList);
             }
             metaDataExtractionInterceptorList.add(metaDataExtractionInterceptor);
@@ -268,7 +269,7 @@ class ExtValContextInvocationOrderAwareInternals
             return;
         }
 
-        validationExceptionInterceptors = new ArrayList<ValidationExceptionInterceptor>();
+        validationExceptionInterceptors = new CopyOnWriteArrayList<ValidationExceptionInterceptor>();
         List<String> validationExceptionInterceptorClassNames = new ArrayList<String>();
 
         validationExceptionInterceptorClassNames
@@ -300,8 +301,10 @@ class ExtValContextInvocationOrderAwareInternals
             return;
         }
 
-        metaDataExtractionInterceptors = new ArrayList<MetaDataExtractionInterceptor>();
-        moduleSpecificMetaDataExtractionInterceptors = new HashMap<Class, List<MetaDataExtractionInterceptor>>();
+        metaDataExtractionInterceptors =
+                new CopyOnWriteArrayList<MetaDataExtractionInterceptor>();
+        moduleSpecificMetaDataExtractionInterceptors =
+                new ConcurrentHashMap<Class, List<MetaDataExtractionInterceptor>>();
 
         List<String> metaDataExtractionInterceptorClassNames = new ArrayList<String>();
 
@@ -332,7 +335,7 @@ class ExtValContextInvocationOrderAwareInternals
             return;
         }
 
-        componentInitializers = new ArrayList<ComponentInitializer>();
+        componentInitializers = new CopyOnWriteArrayList<ComponentInitializer>();
         List<String> componentInitializerClassNames = new ArrayList<String>();
         componentInitializerClassNames
                 .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER);
@@ -361,8 +364,10 @@ class ExtValContextInvocationOrderAwareInternals
             return;
         }
 
-        propertyValidationInterceptors = new ArrayList<PropertyValidationInterceptor>();
-        moduleSpecificPropertyValidationInterceptors = new HashMap<Class, List<PropertyValidationInterceptor>>();
+        propertyValidationInterceptors =
+                new CopyOnWriteArrayList<PropertyValidationInterceptor>();
+        moduleSpecificPropertyValidationInterceptors =
+                new ConcurrentHashMap<Class, List<PropertyValidationInterceptor>>();
 
         List<String> validationInterceptorClassNames = new ArrayList<String>();
 
@@ -398,13 +403,24 @@ class ExtValContextInvocationOrderAwareInternals
      */
     private void sortComponentInitializers()
     {
-        Collections.sort(this.componentInitializers, new InvocationOrderComparator<ComponentInitializer>());
+        List<ComponentInitializer> componentInitializersToSort =
+                new ArrayList<ComponentInitializer>(this.componentInitializers);
+
+        Collections.sort(componentInitializersToSort, new InvocationOrderComparator<ComponentInitializer>());
+
+        this.componentInitializers.clear();
+        this.componentInitializers.addAll(componentInitializersToSort);
     }
 
     private void sortPropertyValidationInterceptors()
     {
-        Collections.sort(this.propertyValidationInterceptors,
+        List<PropertyValidationInterceptor> propertyValidationInterceptorsToSort =
+                new ArrayList<PropertyValidationInterceptor>(this.propertyValidationInterceptors);
+        Collections.sort(propertyValidationInterceptorsToSort,
                 new InvocationOrderComparator<PropertyValidationInterceptor>());
+
+        this.propertyValidationInterceptors.clear();
+        this.propertyValidationInterceptors.addAll(propertyValidationInterceptorsToSort);
     }
 
     //sort all - it isn't a huge overhead since it's just done during the init-phase
@@ -420,22 +436,39 @@ class ExtValContextInvocationOrderAwareInternals
     private List<PropertyValidationInterceptor> sortPropertyValidationInterceptorList(
             List<PropertyValidationInterceptor> propertyValidationInterceptorList)
     {
-        Collections.sort(propertyValidationInterceptorList,
+        List<PropertyValidationInterceptor> propertyValidationInterceptorListToSort =
+                new ArrayList<PropertyValidationInterceptor>(propertyValidationInterceptorList);
+
+        Collections.sort(propertyValidationInterceptorListToSort,
                     new InvocationOrderComparator<PropertyValidationInterceptor>());
 
+        propertyValidationInterceptorList.clear();
+        propertyValidationInterceptorList.addAll(propertyValidationInterceptorListToSort);
         return propertyValidationInterceptorList;
     }
 
     private void sortValidationExceptionInterceptors()
     {
-        Collections.sort(this.validationExceptionInterceptors,
+        List<ValidationExceptionInterceptor> validationExceptionInterceptorsToSort =
+                new ArrayList<ValidationExceptionInterceptor>(this.validationExceptionInterceptors);
+
+        Collections.sort(validationExceptionInterceptorsToSort,
                 new InvocationOrderComparator<ValidationExceptionInterceptor>());
+
+        this.validationExceptionInterceptors.clear();
+        this.validationExceptionInterceptors.addAll(validationExceptionInterceptorsToSort);
     }
 
     private void sortMetaDataExtractionInterceptors()
     {
-        Collections.sort(this.metaDataExtractionInterceptors,
+        List<MetaDataExtractionInterceptor> metaDataExtractionInterceptorsToSort =
+                new ArrayList<MetaDataExtractionInterceptor>(this.metaDataExtractionInterceptors);
+
+        Collections.sort(metaDataExtractionInterceptorsToSort,
                 new InvocationOrderComparator<MetaDataExtractionInterceptor>());
+
+        this.metaDataExtractionInterceptors.clear();
+        this.metaDataExtractionInterceptors.addAll(metaDataExtractionInterceptorsToSort);
     }
 
     //sort all - it isn't a huge overhead since it's just done during the init-phase
@@ -451,9 +484,14 @@ class ExtValContextInvocationOrderAwareInternals
     private List<MetaDataExtractionInterceptor> sortMetaDataExtractionInterceptorList(
             List<MetaDataExtractionInterceptor> metaDataExtractionInterceptorList)
     {
-        Collections.sort(metaDataExtractionInterceptorList,
+        List<MetaDataExtractionInterceptor> metaDataExtractionInterceptorListToSort =
+                new ArrayList<MetaDataExtractionInterceptor>(metaDataExtractionInterceptorList);
+
+        Collections.sort(metaDataExtractionInterceptorListToSort,
                     new InvocationOrderComparator<MetaDataExtractionInterceptor>());
 
+        metaDataExtractionInterceptorList.clear();
+        metaDataExtractionInterceptorList.addAll(metaDataExtractionInterceptorListToSort);
         return metaDataExtractionInterceptorList;
     }
 }

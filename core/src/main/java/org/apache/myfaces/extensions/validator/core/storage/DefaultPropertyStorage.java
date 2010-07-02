@@ -24,8 +24,10 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -37,37 +39,77 @@ public class DefaultPropertyStorage implements PropertyStorage
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Map<String, Map<String, Field>> fieldMap = new HashMap<String, Map<String, Field>>();
-    private Map<String, Map<String, Method>> methodMap = new HashMap<String, Map<String, Method>>();
+    private Map<String, Map<String, Field>> fieldMap = new ConcurrentHashMap<String, Map<String, Field>>();
+    private Map<String, Map<String, Method>> methodMap = new ConcurrentHashMap<String, Map<String, Method>>();
+    private Map<String, List<String>> fieldNotAvailableMap = new ConcurrentHashMap<String, List<String>>();
+    private Map<String, List<String>> methodNotAvailableMap = new ConcurrentHashMap<String, List<String>>();
 
     public void storeField(Class targetClass, String property, Field field)
     {
-        getFieldMapForClass(targetClass).put(property, field);
+        if(field != null)
+        {
+            getFieldMapForClass(targetClass).put(property, field);
+        }
+        else
+        {
+            getNotAvailableFieldListForClass(targetClass).add(property);
+        }
     }
 
     public void storeMethod(Class targetClass, String property, Method method)
     {
-        getMethodMapForClass(targetClass).put(property,  method);
+        if(method != null)
+        {
+            getMethodMapForClass(targetClass).put(property,  method);
+        }
+        else
+        {
+            getNotAvailableMethodListForClass(targetClass).add(property);
+        }
     }
 
     public Field getField(Class targetClass, String property)
     {
-        return getFieldMapForClass(targetClass).get(property);
+        Map<String, Field> fieldMap = getFieldMapForClass(targetClass);
+
+        if(fieldMap == null)
+        {
+            return null;
+        }
+        return fieldMap.get(property);
     }
 
     public Method getMethod(Class targetClass, String property)
     {
-        return getMethodMapForClass(targetClass).get(property);
+        Map<String, Method> methodMap = getMethodMapForClass(targetClass);
+
+        if(methodMap == null)
+        {
+            return null;
+        }
+        return methodMap.get(property);
     }
 
     public boolean containsField(Class targetClass, String property)
     {
-        return getFieldMapForClass(targetClass).containsKey(property);
+        boolean result = getFieldMapForClass(targetClass).containsKey(property);
+
+        if(!result)
+        {
+            result = getNotAvailableFieldListForClass(targetClass).contains(property);
+        }
+        return result;
     }
 
     public boolean containsMethod(Class targetClass, String property)
     {
-        return getMethodMapForClass(targetClass).containsKey(property);
+        boolean result = getMethodMapForClass(targetClass).containsKey(property);
+
+        if(!result)
+        {
+            result = getNotAvailableMethodListForClass(targetClass).contains(property);
+        }
+        return result;
     }
 
     private Map<String, Field> getFieldMapForClass(Class target)
@@ -75,9 +117,19 @@ public class DefaultPropertyStorage implements PropertyStorage
         String key = ProxyUtils.getClassName(target);
         if (!this.fieldMap.containsKey(key))
         {
-            this.fieldMap.put(key, new HashMap<String, Field>());
+            this.fieldMap.put(key, new ConcurrentHashMap<String, Field>());
         }
         return this.fieldMap.get(key);
+    }
+
+    private List<String> getNotAvailableFieldListForClass(Class target)
+    {
+        String key = ProxyUtils.getClassName(target);
+        if (!this.fieldNotAvailableMap.containsKey(key))
+        {
+            this.fieldNotAvailableMap.put(key, new CopyOnWriteArrayList<String>());
+        }
+        return this.fieldNotAvailableMap.get(key);
     }
 
     private Map<String, Method> getMethodMapForClass(Class target)
@@ -85,8 +137,18 @@ public class DefaultPropertyStorage implements PropertyStorage
         String key = ProxyUtils.getClassName(target);
         if (!this.methodMap.containsKey(key))
         {
-            this.methodMap.put(key, new HashMap<String, Method>());
+            this.methodMap.put(key, new ConcurrentHashMap<String, Method>());
         }
         return this.methodMap.get(key);
+    }
+
+    private List<String> getNotAvailableMethodListForClass(Class target)
+    {
+        String key = ProxyUtils.getClassName(target);
+        if (!this.methodNotAvailableMap.containsKey(key))
+        {
+            this.methodNotAvailableMap.put(key, new CopyOnWriteArrayList<String>());
+        }
+        return this.methodNotAvailableMap.get(key);
     }
 }
