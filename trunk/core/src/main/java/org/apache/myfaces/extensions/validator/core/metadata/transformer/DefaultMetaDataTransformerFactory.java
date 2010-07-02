@@ -34,13 +34,13 @@ import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper.
         ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 
@@ -61,9 +61,10 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, String> validationStrategyToMetaDataTransformerMapping;
-    private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
+    private List<NameMapper<ValidationStrategy>> nameMapperList =
+            new CopyOnWriteArrayList<NameMapper<ValidationStrategy>>();
     private List<NameMapper<ValidationStrategy>> subNameMapperList =
-            new ArrayList<NameMapper<ValidationStrategy>>();
+            new CopyOnWriteArrayList<NameMapper<ValidationStrategy>>();
 
     public DefaultMetaDataTransformerFactory()
     {
@@ -191,7 +192,8 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
 
     private synchronized void initStaticMappings()
     {
-        validationStrategyToMetaDataTransformerMapping = new HashMap<String, String>();
+        validationStrategyToMetaDataTransformerMapping =
+                new NullValueAwareConcurrentHashMap<String, String>(String.class);
 
         //setup internal static mappings
         for (StaticConfiguration<String, String> staticConfig :

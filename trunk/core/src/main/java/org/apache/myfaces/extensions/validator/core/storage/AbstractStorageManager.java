@@ -26,8 +26,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.REUSE;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -42,7 +42,7 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private List<NameMapper<String>> nameMapperList = new ArrayList<NameMapper<String>>();
+    private List<NameMapper<String>> nameMapperList = new CopyOnWriteArrayList<NameMapper<String>>();
 
     public AbstractStorageManager()
     {

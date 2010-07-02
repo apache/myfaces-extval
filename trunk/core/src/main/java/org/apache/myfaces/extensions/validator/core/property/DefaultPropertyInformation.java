@@ -79,4 +79,50 @@ public class DefaultPropertyInformation implements PropertyInformation
 
         this.metaDataList.clear();
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof DefaultPropertyInformation))
+        {
+            return false;
+        }
+
+        DefaultPropertyInformation that = (DefaultPropertyInformation) o;
+
+        if (!informationMap.equals(that.informationMap))
+        {
+            return false;
+        }
+        if (!metaDataList.equals(that.metaDataList))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = createNullAwareHashCode(informationMap);
+        result = 31 * result + createNullAwareHashCode(metaDataList);
+        return result;
+    }
+
+    private int createNullAwareHashCode(Object o)
+    {
+        try
+        {
+            return o.hashCode();
+        }
+        catch (NullPointerException e)
+        {
+            return 0;
+        }
+    }
 }
