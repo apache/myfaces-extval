@@ -71,22 +71,12 @@ public class DefaultPropertyStorage implements PropertyStorage
     public Field getField(Class targetClass, String property)
     {
         Map<String, Field> fieldMap = getFieldMapForClass(targetClass);
-
-        if(fieldMap == null)
-        {
-            return null;
-        }
         return fieldMap.get(property);
     }
 
     public Method getMethod(Class targetClass, String property)
     {
         Map<String, Method> methodMap = getMethodMapForClass(targetClass);
-
-        if(methodMap == null)
-        {
-            return null;
-        }
         return methodMap.get(property);
     }
 
