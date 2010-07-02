@@ -28,15 +28,15 @@ import org.apache.myfaces.extensions.validator.core.initializer.configuration.St
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -53,7 +53,8 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, String> strategyMessageResolverMapping;
-    private List<NameMapper<ValidationStrategy>> nameMapperList = new ArrayList<NameMapper<ValidationStrategy>>();
+    private List<NameMapper<ValidationStrategy>> nameMapperList =
+            new CopyOnWriteArrayList<NameMapper<ValidationStrategy>>();
 
     public DefaultMessageResolverFactory()
     {
@@ -106,7 +107,7 @@ public class DefaultMessageResolverFactory extends AbstractNameMapperAwareFactor
 
     private synchronized void initStaticMappings()
     {
-        strategyMessageResolverMapping = new HashMap<String, String>();
+        strategyMessageResolverMapping = new NullValueAwareConcurrentHashMap<String, String>(String.class);
 
         //setup internal static mappings
         for (StaticConfiguration<String, String> staticConfig :

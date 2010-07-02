@@ -32,11 +32,13 @@ import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -49,11 +51,11 @@ public class DefaultMetaDataStorage implements MetaDataStorage
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Map<String, PropertyInformation>> cachedPropertyInformation =
-            new HashMap<String, Map<String, PropertyInformation>>();
+            new ConcurrentHashMap<String, Map<String, PropertyInformation>>();
 
-    private List<MetaDataStorageFilter> metaDataStorageFilters = new ArrayList<MetaDataStorageFilter>();
+    private List<MetaDataStorageFilter> metaDataStorageFilters = new CopyOnWriteArrayList<MetaDataStorageFilter>();
     private List<Class<? extends MetaDataStorageFilter>> deniedMetaDataFilters =
-            new ArrayList<Class<? extends MetaDataStorageFilter>>();
+            new CopyOnWriteArrayList<Class<? extends MetaDataStorageFilter>>();
 
     public DefaultMetaDataStorage()
     {
@@ -210,9 +212,60 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         String key = ProxyUtils.getClassName(target);
         if(!this.cachedPropertyInformation.containsKey(key))
         {
-            this.cachedPropertyInformation.put(key, new HashMap<String, PropertyInformation>());
+            this.cachedPropertyInformation.put(key,
+                new NullValueAwareConcurrentHashMap<String, PropertyInformation>(new NullMarkerPropertyInformation()));
         }
         return this.cachedPropertyInformation.get(key);
+    }
+
+    private static class NullMarkerPropertyInformation implements PropertyInformation
+    {
+        public boolean containsInformation(String key)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Object getInformation(String key)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public <T> T getInformation(String key, Class<T> targetClass)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public void setInformation(String key, Object value)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public MetaDataEntry[] getMetaDataEntries()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public void addMetaDataEntry(MetaDataEntry metaDataEntry)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public void resetMetaDataEntries()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return getClass().hashCode();
+        }
+
+        @Override
+        public boolean equals(Object target)
+        {
+            return getClass().equals(target.getClass());
+        }
     }
 
     private Class<? extends MetaDataStorageFilter> getStorageFilterClass(MetaDataStorageFilter storageFilter)

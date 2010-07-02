@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -41,7 +42,8 @@ public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
     extends AbstractValidationStrategyToMetaDataTransformerNameMapper
     implements SubMapperAwareNameMapper<ValidationStrategy>
 {
-    private List<NameMapper<ValidationStrategy>> subNameMappers = new ArrayList<NameMapper<ValidationStrategy>>();
+    private List<NameMapper<ValidationStrategy>> subNameMappers =
+            new CopyOnWriteArrayList<NameMapper<ValidationStrategy>>();
 
     public void addNameMapper(NameMapper<ValidationStrategy> nameMapper)
     {
@@ -54,7 +56,13 @@ public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
 
     private void sortSubNameMappers()
     {
-        Collections.sort(this.subNameMappers, new InvocationOrderComparator<NameMapper<ValidationStrategy>>());
+        List<NameMapper<ValidationStrategy>> sortableList =
+                new ArrayList<NameMapper<ValidationStrategy>>(this.subNameMappers);
+
+        Collections.sort(sortableList, new InvocationOrderComparator<NameMapper<ValidationStrategy>>());
+
+        subNameMappers.clear();
+        subNameMappers.addAll(sortableList);
     }
 
     public String createName(ValidationStrategy source)
