@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderComparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -36,14 +37,26 @@ import java.util.Comparator;
 @UsageInformation(UsageCategory.API)
 public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwareFactory<NameMapper<T>>
 {
-    private List<Class> deniedNameMapperList = new ArrayList<Class>();
+    private List<Class> deniedNameMapperList = new CopyOnWriteArrayList<Class>();
 
     public synchronized void register(NameMapper<T> nameMapper)
     {
         if(!deniedNameMapperList.contains(nameMapper.getClass()))
         {
             getNameMapperList().add(nameMapper);
-            Collections.sort(getNameMapperList(), getComparator());
+            List<NameMapper<T>> nameMapperList = getNameMapperList();
+
+            if(nameMapperList instanceof CopyOnWriteArrayList)
+            {
+                List<NameMapper<T>> sortableList = new ArrayList<NameMapper<T>>(nameMapperList);
+                Collections.sort(sortableList, getComparator());
+                nameMapperList.clear();
+                nameMapperList.addAll(sortableList);
+            }
+            else
+            {
+                Collections.sort(nameMapperList, getComparator());
+            }
         }
     }
 

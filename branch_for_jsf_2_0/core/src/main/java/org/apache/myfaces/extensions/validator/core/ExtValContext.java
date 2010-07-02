@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -61,10 +63,11 @@ public class ExtValContext
 
     private ViolationSeverityInterpreter violationSeverityInterpreter;
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
-    private Map<String, RendererInterceptor> rendererInterceptors = new HashMap<String, RendererInterceptor>();
-    private List<String> deniedInterceptors = new ArrayList<String>();
+    private Map<String, RendererInterceptor> rendererInterceptors =
+            new ConcurrentHashMap<String, RendererInterceptor>();
+    private List<String> deniedInterceptors = new CopyOnWriteArrayList<String>();
     private List<ProcessedInformationRecorder> processedInformationRecorders =
-            new ArrayList<ProcessedInformationRecorder>();
+            new CopyOnWriteArrayList<ProcessedInformationRecorder>();
 
     private SkipValidationEvaluator skipValidationEvaluator;
 

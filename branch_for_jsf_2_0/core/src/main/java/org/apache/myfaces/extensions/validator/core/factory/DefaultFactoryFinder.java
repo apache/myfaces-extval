@@ -38,9 +38,9 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Default
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -52,7 +52,7 @@ import java.util.logging.Logger;
 public class DefaultFactoryFinder implements FactoryFinder
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
-    protected Map<FactoryNames, Object> factoryMap = new HashMap<FactoryNames, Object>();
+    protected Map<FactoryNames, Object> factoryMap = new ConcurrentHashMap<FactoryNames, Object>();
 
     private static FactoryFinder factoryFinder = new DefaultFactoryFinder();
 

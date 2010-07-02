@@ -32,16 +32,16 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper
     .AnnotationToValidationStrategyBeanNameMapper;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 
@@ -58,7 +58,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, String> metaDataKeyToValidationStrategyMapping = null;
-    private List<NameMapper<String>> nameMapperList = new ArrayList<NameMapper<String>>();
+    private List<NameMapper<String>> nameMapperList = new CopyOnWriteArrayList<NameMapper<String>>();
 
     public DefaultValidationStrategyFactory()
     {
@@ -132,7 +132,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
     @ToDo(value = Priority.MEDIUM, description = "logging")
     private synchronized void initStaticMappings()
     {
-        metaDataKeyToValidationStrategyMapping = new HashMap<String, String>();
+        metaDataKeyToValidationStrategyMapping = new NullValueAwareConcurrentHashMap<String, String>(String.class);
 
         //setup internal static mappings
         for (StaticConfiguration<String, String> staticConfig :
