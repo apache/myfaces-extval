@@ -30,9 +30,9 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -48,8 +48,8 @@ public class DefaultStorageManagerFactory extends AbstractNameMapperAwareFactory
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private boolean lazyStaticMappingApplied = false;
-    private List<NameMapper<Class>> nameMapperList = new ArrayList<NameMapper<Class>>();
-    private Map<Class, StorageManager> storageTypeToStorageManagerMap = new HashMap<Class, StorageManager>();
+    private List<NameMapper<Class>> nameMapperList = new CopyOnWriteArrayList<NameMapper<Class>>();
+    private Map<Class, StorageManager> storageTypeToStorageManagerMap = new ConcurrentHashMap<Class, StorageManager>();
 
     public DefaultStorageManagerFactory()
     {
