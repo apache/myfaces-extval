@@ -22,10 +22,11 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -38,7 +39,7 @@ public class DefaultMappedConstraintSourceStorage implements MappedConstraintSou
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Map<String, Map<String, PropertyDetails>> propertyDetailsMap =
-            new HashMap<String, Map<String, PropertyDetails>>();
+            new ConcurrentHashMap<String, Map<String, PropertyDetails>>();
 
     public void storeMapping(Class originalClass, String originalProperty, PropertyDetails targetPropertyDetails)
     {
@@ -97,8 +98,14 @@ public class DefaultMappedConstraintSourceStorage implements MappedConstraintSou
         String key = ProxyUtils.getClassName(target);
         if(!this.propertyDetailsMap.containsKey(key))
         {
-            this.propertyDetailsMap.put(key, new HashMap<String, PropertyDetails>());
+            this.propertyDetailsMap.put(
+                    key, new NullValueAwareConcurrentHashMap<String, PropertyDetails>(createDefaultValue()));
         }
         return this.propertyDetailsMap.get(key);
+    }
+
+    private PropertyDetails createDefaultValue()
+    {
+        return new PropertyDetails(null, null, null);
     }
 }
