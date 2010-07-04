@@ -32,6 +32,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 class DefaultViolationSeverityInterpreterStorageManager extends
         AbstractRequestScopeAwareStorageManager<ViolationSeverityInterpreterStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_VIOLATIONSEVERITY_INTERPRETER:KEY";
+
     DefaultViolationSeverityInterpreterStorageManager()
     {
         register(new DefaultViolationSeverityInterpreterStorageNameMapper());
@@ -39,6 +41,6 @@ class DefaultViolationSeverityInterpreterStorageManager extends
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_VIOLATIONSEVERITY_INTERPRETER:KEY";
+        return key;
     }
 }
