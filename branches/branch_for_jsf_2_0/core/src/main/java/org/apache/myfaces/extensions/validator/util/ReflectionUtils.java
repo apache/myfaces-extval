@@ -209,25 +209,37 @@ public class ReflectionUtils
         return ExtValUtils.getStorage(PropertyStorage.class, PropertyStorage.class.getName());
     }
 
+    @Deprecated
     public static Method tryToGetMethodOfProperty(Class entity, String property)
     {
-        if (isCachedMethod(entity, property))
+        return tryToGetMethodOfProperty(getPropertyStorage(), entity, property);
+    }
+
+    public static Method tryToGetMethodOfProperty(PropertyStorage storage, Class entity, String property)
+    {
+        if (isCachedMethod(storage, entity, property))
         {
-            return getCachedMethod(entity, property);
+            return getCachedMethod(storage, entity, property);
         }
 
         Method method = tryToGetReadMethod(entity, property);
 
-        tryToCacheMethod(entity, property, method);
+        tryToCacheMethod(storage, entity, property, method);
 
         return method;
     }
 
+    @Deprecated
     public static Field tryToGetFieldOfProperty(Class entity, String property)
     {
-        if (isCachedField(entity, property))
+        return tryToGetFieldOfProperty(getPropertyStorage(), entity, property);
+    }
+
+    public static Field tryToGetFieldOfProperty(PropertyStorage storage, Class entity, String property)
+    {
+        if (isCachedField(storage, entity, property))
         {
-            return getCachedField(entity, property);
+            return getCachedField(storage, entity, property);
         }
 
         Field field = null;
@@ -265,23 +277,22 @@ public class ReflectionUtils
             }
         }
 
-        tryToCacheField(entity, property, field);
+        tryToCacheField(storage, entity, property, field);
 
         return field;
     }
 
-    private static void tryToCacheField(Class entity, String property, Field field)
+    private static void tryToCacheField(PropertyStorage storage, Class entity, String property, Field field)
     {
-        PropertyStorage propertyStorage = getPropertyStorage();
-        if (!propertyStorage.containsField(entity, property))
+        if (!storage.containsField(entity, property))
         {
-            propertyStorage.storeField(entity, property, field);
+            storage.storeField(entity, property, field);
         }
     }
 
-    private static boolean isCachedField(Class entity, String property)
+    private static boolean isCachedField(PropertyStorage storage, Class entity, String property)
     {
-        return getPropertyStorage().containsField(entity, property);
+        return storage.containsField(entity, property);
     }
 
     private static Method tryToGetReadMethod(Class baseBeanClass, String property)
@@ -350,27 +361,26 @@ public class ReflectionUtils
         }
     }
 
-    private static Field getCachedField(Class entity, String property)
+    private static Field getCachedField(PropertyStorage storage, Class entity, String property)
     {
-        return getPropertyStorage().getField(entity, property);
+        return storage.getField(entity, property);
     }
 
-    private static boolean isCachedMethod(Class entity, String property)
+    private static boolean isCachedMethod(PropertyStorage storage, Class entity, String property)
     {
-        return getPropertyStorage().containsMethod(entity, property);
+        return storage.containsMethod(entity, property);
     }
 
-    private static void tryToCacheMethod(Class entity, String property, Method method)
+    private static void tryToCacheMethod(PropertyStorage storage, Class entity, String property, Method method)
     {
-        PropertyStorage propertyStorage = getPropertyStorage();
-        if (!propertyStorage.containsMethod(entity, property))
+        if (!storage.containsMethod(entity, property))
         {
-            propertyStorage.storeMethod(entity, property, method);
+            storage.storeMethod(entity, property, method);
         }
     }
 
-    private static Method getCachedMethod(Class entity, String property)
+    private static Method getCachedMethod(PropertyStorage storage, Class entity, String property)
     {
-        return getPropertyStorage().getMethod(entity, property);
+        return storage.getMethod(entity, property);
     }
 }

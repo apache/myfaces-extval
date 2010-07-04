@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation(INTERNAL)
 class DefaultMappedConstraintSourceStorageManager extends AbstractApplicationScopeAwareStorageManager<PropertyStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_MAPPED_CONSTRAINT_SOURCE:KEY";
+
     DefaultMappedConstraintSourceStorageManager()
     {
         register(new DefaultMappedConstraintSourceStorageNameMapper());
@@ -38,6 +40,6 @@ class DefaultMappedConstraintSourceStorageManager extends AbstractApplicationSco
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_MAPPED_CONSTRAINT_SOURCE:KEY";
+        return key;
     }
 }
