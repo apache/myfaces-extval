@@ -645,12 +645,57 @@ public class ExtValUtils
 
     public static <T> T getStorage(Class<T> storageType, String storageName)
     {
-        return (T) getStorageManagerFactory().create(storageType).create(storageName);
+        T storage = getCachedStorage(storageType, storageName);
+
+        if(storage != null)
+        {
+            return storage;
+        }
+        storage = (T) getStorageManagerFactory().create(storageType).create(storageName);
+
+        cacheStorageForRequest(storageType, storageName, storage);
+
+        return storage;
+    }
+
+    private static <T> T getCachedStorage(Class<T> storageType, String storageName)
+    {
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+
+        String key = createStorageKey(storageType.getName(), storageName);
+        return (T)requestMap.get(key);
+    }
+
+    private static <T> void cacheStorageForRequest(Class<T> storageType, String storageName, T storage)
+    {
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+
+        String key = createStorageKey(storageType.getName(), storageName);
+        requestMap.put(key, storage);
+    }
+
+    private static String createStorageKey(String storageType, String storageName)
+    {
+        StringBuilder key = new StringBuilder("cachedStorage:");
+        key.append(storageType);
+        key.append(":");
+        key.append(storageName);
+        return key.toString();
     }
 
     public static void resetStorage(Class storageType, String storageName)
     {
+        resetCachedStorage(storageType.getName(), storageName);
+
         getStorageManagerFactory().create(storageType).reset(storageName);
+    }
+
+    private static void resetCachedStorage(String storageType, String storageName)
+    {
+        String key = createStorageKey(storageType, storageName);
+
+        Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        requestMap.put(key, null);
     }
 
     private static ClassMappingFactory<Class, StorageManager> getStorageManagerFactory()
