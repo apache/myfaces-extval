@@ -33,8 +33,10 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 public class DefaultModelValidationStorageManager
         extends AbstractRequestScopeAwareStorageManager<ModelValidationStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_MODEL_VALIDATION:KEY";
+
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_MODEL_VALIDATION:KEY";
+        return key;
     }
 }
