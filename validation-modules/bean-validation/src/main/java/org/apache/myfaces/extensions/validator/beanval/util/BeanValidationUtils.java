@@ -118,6 +118,8 @@ public class BeanValidationUtils
         List<ModelValidationEntry> modelValidationEntryList = new ArrayList<ModelValidationEntry>();
         List<Class> restrictedGroupsForModelValidation = new ArrayList<Class>();
 
+        String activeViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+
         bvmi.extractExtValBeanValidationMetaData(propertyDetails,
                 processModelValidation,
                 key,
@@ -125,14 +127,16 @@ public class BeanValidationUtils
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
-                restrictedGroupsForModelValidation);
+                restrictedGroupsForModelValidation,
+                activeViewId);
 
         bvmi.processExtValBeanValidationMetaData(component,
                 propertyDetails,
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
-                restrictedGroupsForModelValidation);
+                restrictedGroupsForModelValidation,
+                activeViewId);
     }
 
     public static void processConstraintViolations(FacesContext facesContext,
