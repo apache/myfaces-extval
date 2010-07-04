@@ -24,12 +24,14 @@ import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInfo
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
+import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addFieldAccessAnnotations;
 import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addPropertyAccessAnnotations;
 import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
@@ -76,8 +78,10 @@ public class DefaultPropertyScanningMetaDataExtractor extends DefaultComponentMe
         /*
          * find and add annotations
          */
-        addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
-        addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+        PropertyStorage storage = ReflectionUtils.getPropertyStorage();
+
+        addPropertyAccessAnnotations(storage, entityClass, propertyDetails.getProperty(), propertyInformation);
+        addFieldAccessAnnotations(storage, entityClass, propertyDetails.getProperty(), propertyInformation);
 
         return propertyInformation;
     }

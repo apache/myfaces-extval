@@ -30,8 +30,10 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 @UsageInformation(INTERNAL)
 class DefaultGroupStorageManager extends AbstractRequestScopeAwareStorageManager<GroupStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_GROUPS:KEY";
+
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_GROUPS:KEY";
+        return key;
     }
 }

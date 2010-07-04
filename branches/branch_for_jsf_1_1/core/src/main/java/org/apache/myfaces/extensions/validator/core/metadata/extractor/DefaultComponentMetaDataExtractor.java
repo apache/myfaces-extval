@@ -86,12 +86,14 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
          */
         Class entityClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
-        if (isCached(entityClass, propertyDetails.getProperty()))
+        MetaDataStorage storage = getMetaDataStorage();
+
+        if (isCached(storage, entityClass, propertyDetails.getProperty()))
         {
             //create
             propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
-            for (MetaDataEntry metaDataEntry : getCachedMetaData(entityClass, propertyDetails.getProperty()))
+            for (MetaDataEntry metaDataEntry : getCachedMetaData(storage, entityClass, propertyDetails.getProperty()))
             {
                 propertyInformation.addMetaDataEntry(metaDataEntry);
             }
@@ -99,7 +101,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         else
         {
             propertyInformation = ExtValAnnotationUtils.extractAnnotations(entityClass, propertyDetails);
-            cacheMetaData(propertyInformation);
+            cacheMetaData(storage, propertyInformation);
         }
 
         logger.finest("extract finished");
@@ -107,19 +109,19 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
         return propertyInformation;
     }
 
-    protected boolean isCached(Class entityClass, String property)
+    protected boolean isCached(MetaDataStorage storage, Class entityClass, String property)
     {
-        return getMetaDataStorage().containsMetaDataFor(entityClass, property);
+        return storage.containsMetaDataFor(entityClass, property);
     }
 
-    protected void cacheMetaData(PropertyInformation propertyInformation)
+    protected void cacheMetaData(MetaDataStorage storage, PropertyInformation propertyInformation)
     {
-        getMetaDataStorage().storeMetaDataOf(propertyInformation);
+        storage.storeMetaDataOf(propertyInformation);
     }
 
-    protected MetaDataEntry[] getCachedMetaData(Class entityClass, String property)
+    protected MetaDataEntry[] getCachedMetaData(MetaDataStorage storage, Class entityClass, String property)
     {
-        return getMetaDataStorage().getMetaData(entityClass, property);
+        return storage.getMetaData(entityClass, property);
     }
 
     protected MetaDataStorage getMetaDataStorage()

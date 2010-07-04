@@ -32,6 +32,8 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultRender
 class DefaultRendererInterceptorPropertyStorageManager
         extends AbstractRequestScopeAwareStorageManager<RendererInterceptorPropertyStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_RENDERER_INTERCEPTOR_PROPERTY:KEY";
+
     DefaultRendererInterceptorPropertyStorageManager()
     {
         register(new DefaultRendererInterceptorPropertyStorageNameMapper());
@@ -39,6 +41,6 @@ class DefaultRendererInterceptorPropertyStorageManager
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_RENDERER_INTERCEPTOR_PROPERTY:KEY";
+        return key;
     }
 }

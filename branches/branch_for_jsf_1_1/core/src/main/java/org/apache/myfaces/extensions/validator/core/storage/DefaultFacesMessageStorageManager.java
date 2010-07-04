@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultFacesM
 @UsageInformation(INTERNAL)
 class DefaultFacesMessageStorageManager extends AbstractRequestScopeAwareStorageManager<FacesMessageStorage>
 {
+    private static final String KEY = StorageManager.class.getName() + "_FOR_FACES_MESSAGES:KEY";
+
     DefaultFacesMessageStorageManager()
     {
         register(new DefaultFacesMessageStorageNameMapper());
@@ -38,6 +40,6 @@ class DefaultFacesMessageStorageManager extends AbstractRequestScopeAwareStorage
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_FACES_MESSAGES:KEY";
+        return KEY;
     }
 }

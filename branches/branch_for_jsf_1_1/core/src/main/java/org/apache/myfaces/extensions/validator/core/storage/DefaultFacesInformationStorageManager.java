@@ -32,6 +32,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 class DefaultFacesInformationStorageManager extends
         AbstractRequestScopeAwareStorageManager<FacesInformationStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_FACES_INFORMATION_STORAGE:KEY";
+
     DefaultFacesInformationStorageManager()
     {
         register(new DefaultFacesInformationStorageNameMapper());
@@ -39,6 +41,6 @@ class DefaultFacesInformationStorageManager extends
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_FACES_INFORMATION_STORAGE:KEY";
+        return key;
     }
 }
