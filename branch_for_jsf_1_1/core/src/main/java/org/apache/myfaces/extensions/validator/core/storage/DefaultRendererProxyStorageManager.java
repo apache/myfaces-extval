@@ -33,6 +33,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 class DefaultRendererProxyStorageManager
     extends AbstractRequestScopeAwareStorageManager<RendererProxyStorage>
 {
+    private final String key = ExtValRendererProxy.class.getName() + ":STORAGE";
+
     DefaultRendererProxyStorageManager()
     {
         register(new DefaultRendererProxyStorageNameMapper());
@@ -41,6 +43,6 @@ class DefaultRendererProxyStorageManager
     public String getStorageManagerKey()
     {
         //for better backward compatibility
-        return ExtValRendererProxy.class.getName() + ":STORAGE";
+        return key;
     }
 }
