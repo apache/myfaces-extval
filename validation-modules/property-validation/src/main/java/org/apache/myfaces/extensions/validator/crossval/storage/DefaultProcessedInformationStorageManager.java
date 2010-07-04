@@ -33,9 +33,11 @@ import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 public class DefaultProcessedInformationStorageManager
     extends AbstractRequestScopeAwareStorageManager<CrossValidationStorage>
 {
+    private final String key = CrossValidationUtils.class.getName();
+
     public String getStorageManagerKey()
     {
         //for better backward compatibility
-        return CrossValidationUtils.class.getName();
+        return key;
     }
 }

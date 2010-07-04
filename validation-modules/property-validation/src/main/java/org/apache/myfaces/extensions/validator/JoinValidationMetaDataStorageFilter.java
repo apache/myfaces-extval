@@ -26,9 +26,11 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.storage.MetaDataStorageFilter;
+import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addPropertyAccessAnnotations;
 import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils.addFieldAccessAnnotations;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -191,8 +193,9 @@ public class JoinValidationMetaDataStorageFilter implements MetaDataStorageFilte
         {
             PropertyInformation propertyInformation = new DefaultPropertyInformation();
 
-            addPropertyAccessAnnotations(targetClass, targetProperty, propertyInformation);
-            addFieldAccessAnnotations(targetClass, targetProperty, propertyInformation);
+            PropertyStorage storage = ReflectionUtils.getPropertyStorage();
+            addPropertyAccessAnnotations(storage, targetClass, targetProperty, propertyInformation);
+            addFieldAccessAnnotations(storage, targetClass, targetProperty, propertyInformation);
 
             return propertyInformation;
         }
