@@ -64,20 +64,17 @@ public class TrinidadComponentInitializer implements ComponentInitializer
     public final void configureComponent(FacesContext facesContext, UIComponent uiComponent,
                                          Map<String, Object> metaData)
     {
+        TrinidadClientValidatorStorage storage = ExtValUtils
+                .getStorage(TrinidadClientValidatorStorage.class, TrinidadClientValidatorStorage.class.getName());
+
         for(TrinidadComponentInitializer componentInitializer : componentInitializers)
         {
             if(componentInitializer.configureTrinidadComponent(facesContext, uiComponent, metaData))
             {
-                addComponentToStorage(uiComponent);
+                storage.addComponent(uiComponent);
                 updateComponent(facesContext, uiComponent);
             }
         }
-    }
-
-    private void addComponentToStorage(UIComponent uiComponent)
-    {
-        ExtValUtils.getStorage(TrinidadClientValidatorStorage.class, TrinidadClientValidatorStorage.class.getName())
-                .addComponent(uiComponent);
     }
 
     protected boolean configureTrinidadComponent(FacesContext facesContext, UIComponent uiComponent,

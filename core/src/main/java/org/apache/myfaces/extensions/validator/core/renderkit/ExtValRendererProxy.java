@@ -251,11 +251,13 @@ public class ExtValRendererProxy extends Renderer implements RendererProxy
 
         key += getOptionalKey(facesContext, uiComponent);
 
-        if (!getRendererStorage().containsEntry(getRendererKey(), key))
+        RendererProxyStorage rendererProxyStorage = getRendererStorage();
+
+        if (!rendererProxyStorage.containsEntry(getRendererKey(), key))
         {
-            getRendererStorage().setEntry(getRendererKey(), key, new RendererProxyStorageEntry());
+            rendererProxyStorage.setEntry(getRendererKey(), key, new RendererProxyStorageEntry());
         }
-        return getRendererStorage().getEntry(getRendererKey(), key);
+        return rendererProxyStorage.getEntry(getRendererKey(), key);
     }
 
     protected String getOptionalKey(FacesContext facesContext, UIComponent uiComponent)
