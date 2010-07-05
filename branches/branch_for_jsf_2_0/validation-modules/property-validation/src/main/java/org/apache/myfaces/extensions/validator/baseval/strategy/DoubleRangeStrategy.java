@@ -47,8 +47,15 @@ public class DoubleRangeStrategy extends AbstractValidationStrategy
         DoubleRangeValidator doubleRangeValidator = (DoubleRangeValidator)facesContext.getApplication()
                                                         .createValidator("javax.faces.DoubleRange");
 
-        doubleRangeValidator.setMinimum(annotation.minimum());
-        doubleRangeValidator.setMaximum(annotation.maximum());
+        if(annotation.minimum() != Double.MIN_VALUE)
+        {
+            doubleRangeValidator.setMinimum(annotation.minimum());
+        }
+
+        if(annotation.maximum() != Double.MAX_VALUE)
+        {
+            doubleRangeValidator.setMaximum(annotation.maximum());
+        }
 
         doubleRangeValidator.validate(facesContext, uiComponent, convertedObject);
     }
