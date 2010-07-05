@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -51,12 +52,14 @@ public class ExtValAnnotationUtils
         PropertyInformation propertyInformation = new DefaultPropertyInformation();
         propertyInformation.setInformation(PropertyInformationKeys.PROPERTY_DETAILS, propertyDetails);
 
+        PropertyStorage storage = ReflectionUtils.getPropertyStorage();
+
         while (!Object.class.getName().equals(entityClass.getName()))
         {
-            addPropertyAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
-            addFieldAccessAnnotations(entityClass, propertyDetails.getProperty(), propertyInformation);
+            addPropertyAccessAnnotations(storage, entityClass, propertyDetails.getProperty(), propertyInformation);
+            addFieldAccessAnnotations(storage, entityClass, propertyDetails.getProperty(), propertyInformation);
 
-            processInterfaces(entityClass, propertyDetails, propertyInformation);
+            processInterfaces(storage, entityClass, propertyDetails, propertyInformation);
 
             entityClass = entityClass.getSuperclass();
         }
@@ -65,11 +68,11 @@ public class ExtValAnnotationUtils
     }
 
     @ToDo(value = Priority.HIGH, description = "add cache")
-    public static void addPropertyAccessAnnotations(Class entity,
+    public static void addPropertyAccessAnnotations(PropertyStorage storage, Class entity,
                                                     String property,
                                                     PropertyInformation propertyInformation)
     {
-        Method method = ReflectionUtils.tryToGetMethodOfProperty(entity, property);
+        Method method = ReflectionUtils.tryToGetMethodOfProperty(storage, entity, property);
 
         if(method != null)
         {
@@ -78,11 +81,11 @@ public class ExtValAnnotationUtils
     }
 
     @ToDo(value = Priority.HIGH, description = "add cache")
-    public static void addFieldAccessAnnotations(Class entity,
+    public static void addFieldAccessAnnotations(PropertyStorage storage, Class entity,
                                                  String property,
                                                  PropertyInformation propertyInformation)
     {
-        Field field = ReflectionUtils.tryToGetFieldOfProperty(entity, property);
+        Field field = ReflectionUtils.tryToGetFieldOfProperty(storage, entity, property);
 
         if(field != null)
         {
@@ -90,15 +93,15 @@ public class ExtValAnnotationUtils
         }
     }
 
-    private static void processInterfaces(Class currentClass,
+    private static void processInterfaces(PropertyStorage storage, Class currentClass,
                                           PropertyDetails propertyDetails,
                                           PropertyInformation propertyInformation)
     {
         for (Class currentInterface : currentClass.getInterfaces())
         {
-            addPropertyAccessAnnotations(currentInterface, propertyDetails.getProperty(), propertyInformation);
+            addPropertyAccessAnnotations(storage, currentInterface, propertyDetails.getProperty(), propertyInformation);
 
-            processInterfaces(currentInterface, propertyDetails, propertyInformation);
+            processInterfaces(storage, currentInterface, propertyDetails, propertyInformation);
         }
     }
 

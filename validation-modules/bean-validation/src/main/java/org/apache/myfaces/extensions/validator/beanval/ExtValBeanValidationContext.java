@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -60,6 +61,8 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
     protected ModelValidationStorage modelValidationStorage;
 
+    protected boolean developmentMode = false;
+
     protected ExtValBeanValidationContext()
     {
         initGroupStorage();
@@ -67,6 +70,11 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
         initMessageResolver();
         initMessageInterpolator();
+
+        if (JsfProjectStage.is(JsfProjectStage.Development))
+        {
+            this.developmentMode = true;
+        }
     }
 
     @SuppressWarnings({"unchecked"})
@@ -96,7 +104,10 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
             return (ValidatorFactory)validatorFactory;
         }
 
-        this.logger.warning("fallback to the default bv validator factory");
+        if(this.developmentMode)
+        {
+            this.logger.warning("fallback to the default bv validator factory");
+        }
         return BeanValidationUtils.getDefaultValidatorFactory();
     }
 
