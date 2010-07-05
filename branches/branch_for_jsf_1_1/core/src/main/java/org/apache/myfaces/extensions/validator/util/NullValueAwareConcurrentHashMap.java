@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.util;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
 
 /**
  * in some cases we have to store null values to avoid re-evaluation
@@ -31,26 +30,6 @@ public class NullValueAwareConcurrentHashMap<K, V> extends ConcurrentHashMap<K, 
     private static final long serialVersionUID = -7294527213622879543L;
 
     private V nullMarkerValue;
-
-    protected NullValueAwareConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel)
-    {
-        super(initialCapacity, loadFactor, concurrencyLevel);
-    }
-
-    protected NullValueAwareConcurrentHashMap(int initialCapacity, float loadFactor)
-    {
-        super(initialCapacity, loadFactor);
-    }
-
-    protected NullValueAwareConcurrentHashMap(int initialCapacity)
-    {
-        super(initialCapacity);
-    }
-
-    protected NullValueAwareConcurrentHashMap(Map<? extends K, ? extends V> m)
-    {
-        super(m);
-    }
 
     public NullValueAwareConcurrentHashMap(V nullMarkerValue)
     {
