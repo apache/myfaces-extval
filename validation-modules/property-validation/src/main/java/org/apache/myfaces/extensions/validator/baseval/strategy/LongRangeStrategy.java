@@ -47,8 +47,15 @@ public class LongRangeStrategy extends AbstractValidationStrategy
         LongRangeValidator longRangeValidator = (LongRangeValidator)facesContext.getApplication()
                                                     .createValidator("javax.faces.LongRange");
 
-        longRangeValidator.setMinimum(annotation.minimum());
-        longRangeValidator.setMaximum(annotation.maximum());
+        if(annotation.minimum() != Long.MIN_VALUE)
+        {
+            longRangeValidator.setMinimum(annotation.minimum());
+        }
+
+        if(annotation.maximum() != Long.MAX_VALUE)
+        {
+            longRangeValidator.setMaximum(annotation.maximum());
+        }
 
         longRangeValidator.validate(facesContext, uiComponent, convertedObject);
     }
