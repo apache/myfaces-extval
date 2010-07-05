@@ -34,6 +34,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public class DefaultClientValidatorStorageManager
         extends AbstractRequestScopeAwareStorageManager<TrinidadClientValidatorStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_TRINIDAD_CLIENT_VALIDATOR:KEY";
+
     public DefaultClientValidatorStorageManager()
     {
         register(new DefaultClientValidatorStorageNameMapper());
@@ -41,6 +43,6 @@ public class DefaultClientValidatorStorageManager
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_TRINIDAD_CLIENT_VALIDATOR:KEY";
+        return key;
     }
 }

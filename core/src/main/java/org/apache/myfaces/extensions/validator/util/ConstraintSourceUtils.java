@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.storage.MappedConstraintSourceStorage;
+import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
 import org.apache.myfaces.extensions.validator.core.validation.IgnoreConstraintSource;
 import org.apache.myfaces.extensions.validator.core.validation.TargetProperty;
@@ -50,44 +51,53 @@ public final class ConstraintSourceUtils
                                                                    Class originalClass,
                                                                    String originalProperty)
     {
-        if (isMappedConstraintSourceCached(originalClass, originalProperty))
+        MappedConstraintSourceStorage mappedConstraintSourceStorage = getConstraintSourceStorage();
+
+        if (isMappedConstraintSourceCached(mappedConstraintSourceStorage, originalClass, originalProperty))
         {
-            return getMappedConstraintSource(originalClass, originalProperty);
+            return getMappedConstraintSource(mappedConstraintSourceStorage, originalClass, originalProperty);
         }
 
         originalClass = ProxyUtils.getUnproxiedClass(originalClass);
 
-        Class newClass = findMappedClass(originalClass, originalProperty);
+        PropertyStorage propertyStorage = ReflectionUtils.getPropertyStorage();
+        Class newClass = findMappedClass(propertyStorage, originalClass, originalProperty);
 
         //mapped source is ignored via @IgnoreConstraintSource or there is just no mapping annotation at the target
         if (newClass == null)
         {
-            tryToCacheMappedConstraintSourceMetaData(originalClass, originalProperty, null);
+            tryToCacheMappedConstraintSourceMetaData(
+                    mappedConstraintSourceStorage, originalClass, originalProperty, null);
+
             return null;
         }
 
-        String newProperty = findMappedProperty(originalClass, newClass, originalProperty);
+        String newProperty = findMappedProperty(propertyStorage, originalClass, newClass, originalProperty);
 
         PropertyDetails result = new PropertyDetails(originalKey, newClass, newProperty);
 
-        tryToCacheMappedConstraintSourceMetaData(originalClass, originalProperty, result);
+        tryToCacheMappedConstraintSourceMetaData(
+                mappedConstraintSourceStorage, originalClass, originalProperty, result);
+
         return result;
     }
 
-    private static boolean isMappedConstraintSourceCached(Class baseBeanClass, String property)
+    private static boolean isMappedConstraintSourceCached(
+            MappedConstraintSourceStorage storage, Class baseBeanClass, String property)
     {
-        return getConstraintSourceStorage().containsMapping(baseBeanClass, property);
+        return storage.containsMapping(baseBeanClass, property);
     }
 
-    private static PropertyDetails getMappedConstraintSource(Class baseBeanClass, String property)
+    private static PropertyDetails getMappedConstraintSource(
+            MappedConstraintSourceStorage storage, Class baseBeanClass, String property)
     {
-        return getConstraintSourceStorage().getMappedConstraintSource(baseBeanClass, property);
+        return storage.getMappedConstraintSource(baseBeanClass, property);
     }
 
     private static void tryToCacheMappedConstraintSourceMetaData(
-            Class originalClass, String originalProperty, PropertyDetails result)
+            MappedConstraintSourceStorage storage, Class originalClass, String originalProperty, PropertyDetails result)
     {
-        getConstraintSourceStorage().storeMapping(originalClass, originalProperty, result);
+        storage.storeMapping(originalClass, originalProperty, result);
     }
 
     private static MappedConstraintSourceStorage getConstraintSourceStorage()
@@ -96,18 +106,18 @@ public final class ConstraintSourceUtils
                 .getStorage(MappedConstraintSourceStorage.class, MappedConstraintSourceStorage.class.getName());
     }
 
-    private static Class findMappedClass(Class baseBeanClass, String property)
+    private static Class findMappedClass(PropertyStorage storage, Class baseBeanClass, String property)
     {
         Class<? extends Annotation> constraintSourceAnnotationImplementation = (Class) ExtValContext.getContext()
                 .getGlobalProperty(ConstraintSource.class.getName());
 
         Annotation foundConstraintSourceAnnotation = tryToGetAnnotationFromProperty(
-                baseBeanClass, property, constraintSourceAnnotationImplementation);
+                storage, baseBeanClass, property, constraintSourceAnnotationImplementation);
 
         if (foundConstraintSourceAnnotation == null)
         {
             foundConstraintSourceAnnotation = tryToGetAnnotationFromField(
-                    baseBeanClass, property, constraintSourceAnnotationImplementation);
+                    storage, baseBeanClass, property, constraintSourceAnnotationImplementation);
         }
 
         if (foundConstraintSourceAnnotation == null && !isMappedConstraintSourceIgnored(baseBeanClass, property))
@@ -124,9 +134,10 @@ public final class ConstraintSourceUtils
         return null;
     }
 
-    private static String findMappedProperty(Class baseBeanClass, Class newBaseBeanClass, String originalProperty)
+    private static String findMappedProperty(
+            PropertyStorage storage, Class baseBeanClass, Class newBaseBeanClass, String originalProperty)
     {
-        Annotation targetPropertyAnnotation = getTargetPropertyMetaData(baseBeanClass, originalProperty);
+        Annotation targetPropertyAnnotation = getTargetPropertyMetaData(storage, baseBeanClass, originalProperty);
         if (targetPropertyAnnotation != null)
         {
             return extractNewPropertyName(newBaseBeanClass, targetPropertyAnnotation);
@@ -135,16 +146,19 @@ public final class ConstraintSourceUtils
         return originalProperty;
     }
 
-    private static Annotation getTargetPropertyMetaData(Class baseBeanClass, String originalProperty)
+    private static Annotation getTargetPropertyMetaData(
+            PropertyStorage storage, Class baseBeanClass, String originalProperty)
     {
         Class<? extends Annotation> targetPropertyAnnotation = getTargetPropertyAnnotationImplementation();
         Class<? extends Annotation> targetPropertyIdAnnotation = getTargetPropertyIdAnnotationImplementation();
 
-        Annotation result = findTargetPropertyIdAnnotation(baseBeanClass, originalProperty, targetPropertyIdAnnotation);
+        Annotation result = findTargetPropertyIdAnnotation(
+                storage, baseBeanClass, originalProperty, targetPropertyIdAnnotation);
 
         if (result == null)
         {
-            result = findTargetPropertyAnnotation(baseBeanClass, originalProperty, targetPropertyAnnotation);
+            result = findTargetPropertyAnnotation(
+                    storage, baseBeanClass, originalProperty, targetPropertyAnnotation);
         }
 
         return result;
@@ -225,29 +239,32 @@ public final class ConstraintSourceUtils
         return name;
     }
 
-    private static Annotation findTargetPropertyIdAnnotation(Class baseBeanClass,
+    private static Annotation findTargetPropertyIdAnnotation(PropertyStorage storage,
+                                                             Class baseBeanClass,
                                                              String property,
                                                              Class<? extends Annotation> targetPropertyIdAnnotation)
     {
-        Annotation result = tryToGetAnnotationFromProperty(baseBeanClass, property, targetPropertyIdAnnotation);
+        Annotation result = tryToGetAnnotationFromProperty(
+                storage, baseBeanClass, property, targetPropertyIdAnnotation);
 
         if (result == null)
         {
-            result = tryToGetAnnotationFromField(baseBeanClass, property, targetPropertyIdAnnotation);
+            result = tryToGetAnnotationFromField(storage, baseBeanClass, property, targetPropertyIdAnnotation);
         }
 
         return result;
     }
 
-    private static Annotation findTargetPropertyAnnotation(Class baseBeanClass,
+    private static Annotation findTargetPropertyAnnotation(PropertyStorage storage,
+                                                           Class baseBeanClass,
                                                            String property,
                                                            Class<? extends Annotation> targetPropertyAnnotation)
     {
-        Annotation result = tryToGetAnnotationFromProperty(baseBeanClass, property, targetPropertyAnnotation);
+        Annotation result = tryToGetAnnotationFromProperty(storage, baseBeanClass, property, targetPropertyAnnotation);
 
         if (result == null)
         {
-            result = tryToGetAnnotationFromField(baseBeanClass, property, targetPropertyAnnotation);
+            result = tryToGetAnnotationFromField(storage, baseBeanClass, property, targetPropertyAnnotation);
         }
 
         return result;
@@ -255,14 +272,15 @@ public final class ConstraintSourceUtils
 
     private static boolean isMappedConstraintSourceIgnored(Class baseBeanClass, String property)
     {
-        Method method = ReflectionUtils.tryToGetMethodOfProperty(baseBeanClass, property);
+        PropertyStorage storage = ReflectionUtils.getPropertyStorage();
+        Method method = ReflectionUtils.tryToGetMethodOfProperty(storage, baseBeanClass, property);
 
         if (method != null && method.isAnnotationPresent(getIgnoreConstraintSourceAnnotationImplementation()))
         {
             return true;
         }
 
-        Field field = ReflectionUtils.tryToGetFieldOfProperty(baseBeanClass, property);
+        Field field = ReflectionUtils.tryToGetFieldOfProperty(storage, baseBeanClass, property);
 
         if (field != null && field.isAnnotationPresent(getIgnoreConstraintSourceAnnotationImplementation()))
         {
@@ -288,9 +306,9 @@ public final class ConstraintSourceUtils
     }
 
     private static Annotation tryToGetAnnotationFromField(
-            Class baseBeanClass, String property, Class<? extends Annotation> annotationClass)
+            PropertyStorage storage, Class baseBeanClass, String property, Class<? extends Annotation> annotationClass)
     {
-        Field field = ReflectionUtils.tryToGetFieldOfProperty(baseBeanClass, property);
+        Field field = ReflectionUtils.tryToGetFieldOfProperty(storage, baseBeanClass, property);
 
         if (field != null && field.isAnnotationPresent(annotationClass))
         {
@@ -299,11 +317,12 @@ public final class ConstraintSourceUtils
         return null;
     }
 
-    private static Annotation tryToGetAnnotationFromProperty(Class baseBeanClass,
+    private static Annotation tryToGetAnnotationFromProperty(PropertyStorage storage,
+                                                             Class baseBeanClass,
                                                              String property,
                                                              Class<? extends Annotation> annotationClass)
     {
-        Method method = ReflectionUtils.tryToGetMethodOfProperty(baseBeanClass, property);
+        Method method = ReflectionUtils.tryToGetMethodOfProperty(storage, baseBeanClass, property);
 
         if (method != null && method.isAnnotationPresent(annotationClass))
         {

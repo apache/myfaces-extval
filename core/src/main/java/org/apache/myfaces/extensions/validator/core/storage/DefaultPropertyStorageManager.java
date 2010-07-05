@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultProper
 @UsageInformation(INTERNAL)
 class DefaultPropertyStorageManager extends AbstractApplicationScopeAwareStorageManager<PropertyStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_PROPERTY:KEY";
+
     DefaultPropertyStorageManager()
     {
         register(new DefaultPropertyStorageNameMapper());
@@ -38,6 +40,6 @@ class DefaultPropertyStorageManager extends AbstractApplicationScopeAwareStorage
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_PROPERTY:KEY";
+        return key;
     }
 }

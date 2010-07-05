@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 class DefaultMetaDataStorageManager extends AbstractApplicationScopeAwareStorageManager<MetaDataStorage>
 {
+    private final String key = StorageManager.class.getName() + "_FOR_META_DATA_CACHE:KEY";
+
     DefaultMetaDataStorageManager()
     {
         register(new DefaultMetaDataStorageNameMapper());
@@ -38,6 +40,6 @@ class DefaultMetaDataStorageManager extends AbstractApplicationScopeAwareStorage
 
     public String getStorageManagerKey()
     {
-        return StorageManager.class.getName() + "_FOR_META_DATA_CACHE:KEY";
+        return key;
     }
 }
