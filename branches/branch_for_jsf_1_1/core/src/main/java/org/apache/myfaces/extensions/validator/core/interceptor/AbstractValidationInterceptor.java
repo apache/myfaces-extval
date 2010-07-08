@@ -123,14 +123,15 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
             }
         }
 
+        boolean validateValue = false;
         try
         {
             if(processComponent(uiComponent))
             {
                 convertedObject = transformValueForValidation(convertedObject);
 
-                if(validateValue(convertedObject) &&
-                        processBeforeValidation(facesContext, uiComponent, convertedObject))
+                validateValue = validateValue(convertedObject);
+                if(validateValue && processBeforeValidation(facesContext, uiComponent, convertedObject))
                 {
                     processValidation(facesContext, uiComponent, convertedObject);
                 }
@@ -150,7 +151,10 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
         finally
         {
-            processAfterValidation(facesContext, uiComponent, convertedObject);
+            if(validateValue)
+            {
+                processAfterValidation(facesContext, uiComponent, convertedObject);
+            }
             resetRendererInterceptorProperties(uiComponent);
         }
     }
