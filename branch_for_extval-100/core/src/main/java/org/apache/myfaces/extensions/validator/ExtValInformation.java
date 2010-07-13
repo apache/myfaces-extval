@@ -31,7 +31,8 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
 @UsageInformation(UsageCategory.INTERNAL)
 public interface ExtValInformation
 {
-    static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ExtValInformation.class.getPackage().getName();
-    static final String WEBXML_PARAM_PREFIX = ExtValInformation.class.getPackage().getName();
+    // getPackage isn't working with a custom class loader
+    static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ClassUtils.getPackageName(ExtValInformation.class);
+    static final String WEBXML_PARAM_PREFIX = ClassUtils.getPackageName(ExtValInformation.class);
     static final String VERSION = ClassUtils.getJarVersion(ExtValInformation.class);
 }

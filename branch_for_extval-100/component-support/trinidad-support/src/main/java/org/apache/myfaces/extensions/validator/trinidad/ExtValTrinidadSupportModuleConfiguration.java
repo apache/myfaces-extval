@@ -41,6 +41,7 @@ public abstract class ExtValTrinidadSupportModuleConfiguration implements ExtVal
         return extValContext.getModuleConfiguration(ExtValTrinidadSupportModuleConfiguration.class);
     }
 
+    @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValTrinidadSupportModuleConfiguration config, boolean forceOverride)
     {
         return extValContext.addModuleConfiguration(

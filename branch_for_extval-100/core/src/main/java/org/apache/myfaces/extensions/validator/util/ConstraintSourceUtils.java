@@ -37,7 +37,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @SuppressWarnings("unchecked")
 public final class ConstraintSourceUtils
 {
-    private ConstraintSourceUtils()
+    protected ConstraintSourceUtils()
     {
         // Utility class, don't allow instantiation.
     }
