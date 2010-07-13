@@ -108,7 +108,7 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
         return new DefaultProjectStageResolver();
     }
 
-    public final Class<? extends ExtValRendererProxy> rendererProxy()
+    public Class<? extends ExtValRendererProxy> rendererProxy()
     {
         String proxyClassName = (String) ExtValContext.getContext().getGlobalProperty(ExtValRendererProxy.KEY);
 
@@ -249,7 +249,7 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
         return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_VALIDATION_PARAMETERS);
     }
 
-    public final boolean deactivateRenderKitFactory()
+    public boolean deactivateRenderKitFactory()
     {
         return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_RENDER_KIT_FACTORY);
     }

@@ -41,6 +41,7 @@ public abstract class ExtValBaseValidationModuleConfiguration implements ExtValM
         return extValContext.getModuleConfiguration(ExtValBaseValidationModuleConfiguration.class);
     }
 
+    @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValBaseValidationModuleConfiguration config, boolean forceOverride)
     {
         return extValContext.addModuleConfiguration(
