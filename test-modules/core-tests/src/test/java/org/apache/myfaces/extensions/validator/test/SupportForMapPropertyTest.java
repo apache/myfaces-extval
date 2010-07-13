@@ -18,17 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.test;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.base.AbstractExValTestCase;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import java.util.HashMap;
+import java.util.Map;
 
 //just a test for the mock impl.
 public class SupportForMapPropertyTest extends AbstractExValTestCase

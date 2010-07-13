@@ -18,17 +18,17 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.interceptor;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
-import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 
-import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class RegistrationPropertyValidationInterceptorTestCase extends AbstractE
         int resultLength = 6;
         Assert.assertEquals(resultLength, result.size());
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {

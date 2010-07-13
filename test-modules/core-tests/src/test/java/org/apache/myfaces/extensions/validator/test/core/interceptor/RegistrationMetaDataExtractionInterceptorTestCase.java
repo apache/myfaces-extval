@@ -18,14 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.interceptor;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class RegistrationMetaDataExtractionInterceptorTestCase extends AbstractE
         int resultLength = 5;
         Assert.assertEquals(resultLength, result.size());
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {

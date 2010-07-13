@@ -18,18 +18,18 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.mapper;
 
+import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.*;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockValidationStrategyFactory;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public class RegistrationMetaDataToValidationStrategyNameMapperTestCase extends 
         int resultLength = 16;
         Assert.assertEquals(resultLength, result.size());
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {
@@ -135,7 +135,7 @@ public class RegistrationMetaDataToValidationStrategyNameMapperTestCase extends 
                 .getFactoryFinder()
                 .getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, NameMapperAwareFactory.class);
 
-        return ((MockValidationStrategyFactory)result).getRegisteredNameMapperList();
+        return ((MockValidationStrategyFactory) result).getRegisteredNameMapperList();
     }
 
     class TestValidationStrategyNameMapper extends AbstractMetaDataToValidationStrategyNameMapper

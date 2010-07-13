@@ -18,14 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.stage;
 
-import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 
 public class JsfProjectStageTestCase extends AbstractExValCoreTestCase
 {
     private static final String PROJECT_STAGE = "javax.faces.PROJECT_STAGE";
+
     public JsfProjectStageTestCase(String name)
     {
         super(name);

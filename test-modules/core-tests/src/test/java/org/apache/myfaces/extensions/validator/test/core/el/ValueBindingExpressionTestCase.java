@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.el;
 
-import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 
 /**
  * @author Gerhard Petracek

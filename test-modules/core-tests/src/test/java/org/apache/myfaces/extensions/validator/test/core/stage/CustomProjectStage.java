@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.stage;
 
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.core.ProjectStageName;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * custom project stage
