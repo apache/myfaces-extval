@@ -18,19 +18,19 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.mapper;
 
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper.*;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.validation.message.resolver.mapper.*;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class RegistrationValidationStrategyToMessageResolverNameMapperTestCase e
         int resultLength = 13;
         Assert.assertEquals(resultLength, result.size());
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {
@@ -127,7 +127,7 @@ public class RegistrationValidationStrategyToMessageResolverNameMapperTestCase e
                 .getFactoryFinder()
                 .getFactory(FactoryNames.MESSAGE_RESOLVER_FACTORY, NameMapperAwareFactory.class);
 
-        return ((MockMessageResolverFactory)result).getRegisteredNameMapperList();
+        return ((MockMessageResolverFactory) result).getRegisteredNameMapperList();
     }
 
     class TestMessageResolverNameMapper extends AbstractValidationStrategyToMsgResolverNameMapper

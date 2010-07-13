@@ -18,17 +18,17 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.interceptor;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
-import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
-import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
@@ -64,7 +64,7 @@ public class RegistrationValidationExceptionInterceptorTestCase extends Abstract
         int resultLength = 7;
         Assert.assertEquals(resultLength, result.size());
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {

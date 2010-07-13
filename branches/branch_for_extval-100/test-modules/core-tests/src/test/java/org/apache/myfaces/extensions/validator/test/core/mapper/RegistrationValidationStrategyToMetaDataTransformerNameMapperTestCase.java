@@ -18,19 +18,19 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.mapper;
 
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
-import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
-import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper.*;
-import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
+import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory;
+import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
+import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper.*;
+import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
+import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
+import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 import java.util.List;
 
@@ -50,6 +50,7 @@ public class RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCa
     {
         return new TestSuite(RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCase.class);
     }
+
     public void testValidationStrategyToMetaDataTransformerMapperInitialization()
     {
         ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(
@@ -71,7 +72,7 @@ public class RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCa
         int resultLength = 13;
         Assert.assertEquals(resultLength, result.size());
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {
@@ -124,7 +125,7 @@ public class RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCa
                 .getFactoryFinder()
                 .getFactory(FactoryNames.META_DATA_TRANSFORMER_FACTORY, NameMapperAwareFactory.class);
 
-        return ((MockMetaDataTransformerFactory)result).getRegisteredNameMapperList();
+        return ((MockMetaDataTransformerFactory) result).getRegisteredNameMapperList();
     }
 
     class TestMetaDataTransformerNameMapper extends AbstractValidationStrategyToMetaDataTransformerNameMapper

@@ -18,18 +18,18 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.initializer;
 
+import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
 
-import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import java.util.Map;
+import javax.faces.context.FacesContext;
 import java.util.List;
+import java.util.Map;
 
 public class RegistrationComponentInitializerTestCase extends AbstractExValCoreTestCase
 {
@@ -61,7 +61,7 @@ public class RegistrationComponentInitializerTestCase extends AbstractExValCoreT
         int resultLength = 5;
         Assert.assertTrue(result.size() == resultLength);
 
-        for(int i = 0; i < resultLength; i++)
+        for (int i = 0; i < resultLength; i++)
         {
             switch (i)
             {
