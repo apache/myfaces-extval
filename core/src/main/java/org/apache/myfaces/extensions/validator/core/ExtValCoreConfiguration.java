@@ -62,6 +62,7 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
         return moduleConfig != null ? moduleConfig : new DefaultExtValCoreConfiguration();
     }
 
+    @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValCoreConfiguration config, boolean forceOverride)
     {
         return extValContext.addModuleConfiguration(ExtValCoreConfiguration.class, config, forceOverride);

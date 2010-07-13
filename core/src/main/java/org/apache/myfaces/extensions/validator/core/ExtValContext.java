@@ -36,6 +36,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
+import static org.apache.myfaces.extensions.validator.util.ClassUtils.getPackageName;
+import static org.apache.myfaces.extensions.validator.util.WebXmlUtils.getInitParameter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -439,6 +441,14 @@ public class ExtValContext
 
             this.logger.info("override config for key '" + config.getClass() + "'");
         }
+
+        //anonymous class are only supported for test-cases and
+        //there we don't need a custom config defined in the web.xml
+        if(!config.getClass().isAnonymousClass())
+        {
+            config = tryToLoadCustomConfigImplementation(config);
+        }
+
         this.extValConfig.put(key, config);
 
         if(JsfProjectStage.is(JsfProjectStage.Development))
@@ -447,5 +457,24 @@ public class ExtValContext
         }
 
         return true;
+    }
+
+    private ExtValModuleConfiguration tryToLoadCustomConfigImplementation(ExtValModuleConfiguration config)
+    {
+        Class configDefinitionClass = config.getClass().getSuperclass();
+        String customConfigClassName = getInitParameter(
+                getPackageName(configDefinitionClass), configDefinitionClass.getSimpleName());
+
+        if(customConfigClassName != null)
+        {
+            ExtValModuleConfiguration customConfig =
+                    (ExtValModuleConfiguration) ClassUtils.tryToInstantiateClassForName(customConfigClassName);
+
+            if(customConfig != null)
+            {
+                return customConfig;
+            }
+        }
+        return config;
     }
 }

@@ -41,6 +41,7 @@ public abstract class ExtValCrossValidationModuleConfiguration implements ExtVal
         return extValContext.getModuleConfiguration(ExtValCrossValidationModuleConfiguration.class);
     }
 
+    @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValCrossValidationModuleConfiguration config, boolean forceOverride)
     {
         return extValContext.addModuleConfiguration(

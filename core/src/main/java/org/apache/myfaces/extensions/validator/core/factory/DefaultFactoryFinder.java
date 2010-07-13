@@ -56,8 +56,6 @@ public class DefaultFactoryFinder implements FactoryFinder
 
     private static FactoryFinder factoryFinder = new DefaultFactoryFinder();
 
-    private ExtValCoreConfiguration extValCoreConfig;
-
     protected DefaultFactoryFinder()
     {
         logger.fine(getClass().getName() + " instantiated");
@@ -357,10 +355,6 @@ public class DefaultFactoryFinder implements FactoryFinder
 
     private ExtValCoreConfiguration getCoreConfig()
     {
-        if(this.extValCoreConfig == null)
-        {
-            this.extValCoreConfig = ExtValCoreConfiguration.get();
-        }
-        return this.extValCoreConfig;
+        return ExtValCoreConfiguration.get();
     }
 }
