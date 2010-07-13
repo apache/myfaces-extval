@@ -36,7 +36,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
-import static org.apache.myfaces.extensions.validator.util.ClassUtils.getPackageName;
 import static org.apache.myfaces.extensions.validator.util.WebXmlUtils.getInitParameter;
 
 import javax.faces.component.UIComponent;
@@ -63,6 +62,9 @@ public class ExtValContext
     private static final String CUSTOM_EXTVAL_CONTEXT_CLASS_NAME =
             ExtValContext.class.getName().replace(".core.", ".custom.");
 
+    private static final String CUSTOM_EXTVAL_MODULE_CONFIGURATION_RESOLVER_CLASS_NAME =
+            ExtValModuleConfigurationResolver.class.getName().replace(".core.", ".custom.");
+
     private ViolationSeverityInterpreter violationSeverityInterpreter;
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
     private Map<String, RendererInterceptor> rendererInterceptors =
@@ -84,10 +86,36 @@ public class ExtValContext
     private ExtValContextInternals contextHelper;
     private ExtValContextInvocationOrderAwareInternals invocationOrderAwareContextHelper;
 
+    private ExtValModuleConfigurationResolver moduleConfigurationResolver;
+
     protected ExtValContext()
     {
         this.contextHelper = new ExtValContextInternals();
         this.invocationOrderAwareContextHelper = new ExtValContextInvocationOrderAwareInternals(this.contextHelper);
+
+        Object customExtValModuleConfigurationResolver =
+                ClassUtils.tryToInstantiateClassForName(CUSTOM_EXTVAL_MODULE_CONFIGURATION_RESOLVER_CLASS_NAME);
+
+        if(customExtValModuleConfigurationResolver instanceof ExtValModuleConfigurationResolver)
+        {
+            this.moduleConfigurationResolver =
+                    (ExtValModuleConfigurationResolver)customExtValModuleConfigurationResolver;
+        }
+
+        String customExtValModuleConfigurationResolverClassName =
+                getInitParameter(null, ExtValModuleConfigurationResolver.class.getName());
+
+        if(customExtValModuleConfigurationResolverClassName != null)
+        {
+            customExtValModuleConfigurationResolver =
+                    ClassUtils.tryToInstantiateClassForName(customExtValModuleConfigurationResolverClassName);
+
+            if(customExtValModuleConfigurationResolver instanceof ExtValModuleConfigurationResolver)
+            {
+                this.moduleConfigurationResolver =
+                        (ExtValModuleConfigurationResolver)customExtValModuleConfigurationResolver;
+            }
+        }
     }
 
     public static ExtValContext getContext()
@@ -461,18 +489,32 @@ public class ExtValContext
 
     private ExtValModuleConfiguration tryToLoadCustomConfigImplementation(ExtValModuleConfiguration config)
     {
-        Class configDefinitionClass = config.getClass().getSuperclass();
-        String customConfigClassName = getInitParameter(
-                getPackageName(configDefinitionClass), configDefinitionClass.getSimpleName());
+
+        Class configClass = config.getClass().getSuperclass();
+
+        if(!ExtValModuleConfiguration.class.isAssignableFrom(configClass))
+        {
+            return config;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        Class<? extends ExtValModuleConfiguration> configDefinitionClass =
+                (Class<? extends  ExtValModuleConfiguration>)configClass;
+
+        if(this.moduleConfigurationResolver != null)
+        {
+            config = this.moduleConfigurationResolver.getCustomConfiguration(configDefinitionClass);
+        }
+
+        String customConfigClassName = getInitParameter(null, configDefinitionClass.getName());
 
         if(customConfigClassName != null)
         {
-            ExtValModuleConfiguration customConfig =
-                    (ExtValModuleConfiguration) ClassUtils.tryToInstantiateClassForName(customConfigClassName);
+            Object customConfig = ClassUtils.tryToInstantiateClassForName(customConfigClassName);
 
-            if(customConfig != null)
+            if(customConfig instanceof ExtValModuleConfiguration)
             {
-                return customConfig;
+                return (ExtValModuleConfiguration)customConfig;
             }
         }
         return config;
