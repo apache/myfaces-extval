@@ -120,6 +120,9 @@ public abstract class AbstractExValTestCase extends TestCase
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_VALIDATION_STRATEGY_FACTORY", MockValidationStrategyFactory.class.getName());
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_MESSAGE_RESOLVER_FACTORY", MockMessageResolverFactory.class.getName());
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_META_DATA_TRANSFORMER_FACTORY", MockMetaDataTransformerFactory.class.getName());
+
+        addInitializationParameters();
+
         config = new MockServletConfig(servletContext);
         session = new MockHttpSession();
         session.setServletContext(servletContext);
@@ -191,7 +194,16 @@ public abstract class AbstractExValTestCase extends TestCase
         invokeStartupListeners();
     }
 
-    protected abstract void invokeStartupListeners();
+    protected void addInitializationParameters() {
+		
+		
+	}
+    
+    protected void addInitParameter(String key, String value) {
+    	servletContext.addInitParameter(key, value);
+    }
+
+	protected abstract void invokeStartupListeners();
 
     /**
      * Tear down the test environment.

@@ -173,6 +173,7 @@
                         <exclude>**/TestUtils.java</exclude>
                         <exclude>**/*Bean.java</exclude>
                     </excludes>
+					<useSystemClassLoader>true</useSystemClassLoader>
                 </configuration>
             </plugin>
         </plugins>
