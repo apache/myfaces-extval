@@ -41,6 +41,7 @@ public class AbstractBeanValidationTestCase extends AbstractExValTestCase
             @Override
             protected void init()
             {
+                super.initModuleConfig();
                 super.init();
             }
         }.init();

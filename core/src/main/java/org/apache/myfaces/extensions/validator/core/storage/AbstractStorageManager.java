@@ -79,14 +79,17 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
 
         if(!storageMap.containsKey(storageKey))
         {
-            storageMap.put(storageKey, (T)ClassUtils.tryToInstantiateClassForName(storageClassName));
+            synchronized (storageMap)
+            {
+                storageMap.put(storageKey, (T)ClassUtils.tryToInstantiateClassForName(storageClassName));
+            }
         }
         return storageMap.get(storageKey);
     }
 
     protected abstract Map<String, T> resolveStorageMap();
 
-    public void reset(String storageKey)
+    public synchronized void reset(String storageKey)
     {
         Map<String, T> storageMap = resolveStorageMap();
 

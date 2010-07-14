@@ -26,7 +26,8 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverit
 import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.PhaseIdRecordingPhaseListener;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper
         .BeanValidationStrategyToMetaDataTransformerNameMapper;
@@ -61,10 +62,6 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultViolationSeverityInterpreter;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
-import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
-import org.apache.myfaces.extensions.validator.core.validation.IgnoreConstraintSource;
-import org.apache.myfaces.extensions.validator.core.validation.TargetProperty;
-import org.apache.myfaces.extensions.validator.core.validation.TargetPropertyId;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
@@ -78,6 +75,11 @@ import org.apache.myfaces.extensions.validator.ExtValInformation;
 public class ExtValStartupListener extends AbstractStartupListener
 {
     private static final long serialVersionUID = -2504826421086572012L;
+
+    protected void initModuleConfig()
+    {
+        ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration(), false);
+    }
 
     protected void init()
     {
@@ -100,15 +102,13 @@ public class ExtValStartupListener extends AbstractStartupListener
         initViolationSeverityKey();
         initDisableClientSideValidationKey();
         initRequiredInitialization();
-        initDefaultConstraintSourceAnnotations();
 
         executeCustomStartupListener();
     }
 
     private void initNameMappers()
     {
-        String deactivateDefaultNameMappers = WebXmlParameter.DEACTIVATE_DEFAULT_NAME_MAPPERS;
-        if ((deactivateDefaultNameMappers != null && deactivateDefaultNameMappers.equalsIgnoreCase("true")))
+        if (ExtValCoreConfiguration.get().deactivateDefaultNameMappers())
         {
             return;
         }
@@ -201,50 +201,45 @@ public class ExtValStartupListener extends AbstractStartupListener
         JsfUtils.registerPhaseListener(new PhaseIdRecordingPhaseListener());
     }
 
+    @Deprecated
     private void initViolationSeverityKey()
     {
-        ExtValContext.getContext().addGlobalProperty(ViolationSeverity.class.getName(), ViolationSeverity.class, false);
+        ExtValContext.getContext().addGlobalProperty(ViolationSeverity.class.getName(),
+                ExtValCoreConfiguration.get().violationSeverity(), false);
     }
 
+    @Deprecated
     private void initDisableClientSideValidationKey()
     {
-        ExtValContext.getContext().addGlobalProperty(
-                DisableClientSideValidation.class.getName(), DisableClientSideValidation.class, false);
+        ExtValContext.getContext().addGlobalProperty(DisableClientSideValidation.class.getName(),
+                ExtValCoreConfiguration.get().disableClientSideValidationValidationParameter(), false);
     }
 
     private void initRequiredInitialization()
     {
-        if(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION != null)
-        {
-            boolean requiredInitialization = "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
+        boolean requiredInitialization = ExtValCoreConfiguration.get().activateRequiredInitialization();
 
-            ExtValContext.getContext().addGlobalProperty("mode:init:required", requiredInitialization, false);
+        //noinspection deprecation
+        addRequiredInitializationAsGlobalProperty(requiredInitialization);
 
-            if(requiredInitialization)
-            {
-                deactivateRequiredAttributeSupport();
-            }
-        }
+        initRequiredAttributeSupport();
     }
 
-    private void initDefaultConstraintSourceAnnotations()
+    @Deprecated
+    private void addRequiredInitializationAsGlobalProperty(boolean requiredInitialization)
     {
-        ExtValContext.getContext()
-                .addGlobalProperty(ConstraintSource.class.getName(), ConstraintSource.class, false);
-        ExtValContext.getContext()
-                .addGlobalProperty(IgnoreConstraintSource.class.getName(), IgnoreConstraintSource.class, false);
-        ExtValContext.getContext()
-                .addGlobalProperty(TargetProperty.class.getName(), TargetProperty.class, false);
-        ExtValContext.getContext()
-                .addGlobalProperty(TargetPropertyId.class.getName(), TargetPropertyId.class, false);
+        ExtValContext.getContext().addGlobalProperty("mode:init:required", requiredInitialization, false);
     }
 
     /**
      * if it's configured that required init should happen,
      * it's required to deactivate the support for the required attribute
      */
-    private void deactivateRequiredAttributeSupport()
+    @Deprecated
+    private void initRequiredAttributeSupport()
     {
-        ExtValContext.getContext().addGlobalProperty("mode:reset:required", Boolean.TRUE, false);
+        ExtValContext.getContext().addGlobalProperty("mode:reset:required",
+                ExtValCoreConfiguration.get().deactivateRequiredAttributeSupport(),
+                false);
     }
 }
