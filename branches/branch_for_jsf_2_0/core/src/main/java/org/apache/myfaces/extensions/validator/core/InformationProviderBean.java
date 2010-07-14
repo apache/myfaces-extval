@@ -19,11 +19,11 @@
 package org.apache.myfaces.extensions.validator.core;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
+import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHashMap;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
@@ -55,11 +55,12 @@ public class InformationProviderBean
         applyCustomValues(this.customizableInfos);
     }
 
-    private Map<CustomInformation, String> customizableInfos = new HashMap<CustomInformation, String>();
+    private Map<CustomInformation, String> customizableInfos =
+            new NullValueAwareConcurrentHashMap<CustomInformation, String>(String.class);
 
     private void setupCustomizableInformation()
     {
-        String basePackage = WebXmlParameter.CUSTOM_BASE_PACKAGE;
+        String basePackage = ExtValCoreConfiguration.get().customBasePackage();
 
         if (basePackage == null)
         {

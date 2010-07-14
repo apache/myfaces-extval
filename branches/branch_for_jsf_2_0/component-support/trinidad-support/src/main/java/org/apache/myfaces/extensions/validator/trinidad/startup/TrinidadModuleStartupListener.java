@@ -20,12 +20,14 @@ package org.apache.myfaces.extensions.validator.trinidad.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.trinidad.initializer.component.TrinidadComponentInitializer;
-import org.apache.myfaces.extensions.validator.trinidad.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportModuleConfiguration;
+import org.apache.myfaces.extensions.validator.trinidad.DefaultExtValTrinidadSupportModuleConfiguration;
 import org.apache.myfaces.extensions.validator.trinidad.storage.TrinidadClientValidatorStorage;
 import org.apache.myfaces.extensions.validator.trinidad.storage.DefaultClientValidatorStorageManager;
 import org.apache.myfaces.extensions.validator.trinidad.validation.message.TrinidadFacesMessageFactory;
@@ -47,8 +49,15 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 {
     private static final long serialVersionUID = -8034089244903966999L;
 
+    protected void initModuleConfig()
+    {
+        ExtValTrinidadSupportModuleConfiguration.use(new DefaultExtValTrinidadSupportModuleConfiguration(), false);
+    }
+    
     protected void init()
     {
+        initModuleConfig();
+
         deactivateDefaultExtValRenderKitWrapperFactory();
 
         initClientSideValidationSupport();
@@ -82,7 +91,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     private void initClientSideValidationSupport()
     {
-        if(isClientSideValidationSupportEnabled(WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION))
+        if(!ExtValTrinidadSupportModuleConfiguration.get().deactivateClientSideValidation())
         {
             ExtValContext.getContext().addComponentInitializer(new TrinidadComponentInitializer());
         }
@@ -90,7 +99,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     private void initLabelInitializationSupport()
     {
-        if(isLabelInitializationEnabled(WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION))
+        if(!ExtValTrinidadSupportModuleConfiguration.get().deactivateCoreOutputLabelInitialization())
         {
             ExtValContext.getContext().registerRendererInterceptor(new TrinidadRendererInterceptor());
         }
@@ -98,7 +107,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     private void initValidationExceptionInterception()
     {
-        if(useValidationExceptionInterception(WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR))
+        if(!ExtValTrinidadSupportModuleConfiguration.get().deactivateValidationExceptionInterceptor())
         {
             ExtValContext.getContext().addValidationExceptionInterceptor(new TrinidadValidationExceptionInterceptor());
         }
@@ -131,22 +140,6 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
                         new DefaultClientValidatorStorageManager(), false);
     }
 
-    private boolean isLabelInitializationEnabled(String deactivateInitCoreOutputLabel)
-    {
-        return deactivateInitCoreOutputLabel == null || !deactivateInitCoreOutputLabel.equalsIgnoreCase("true");
-    }
-
-    private boolean isClientSideValidationSupportEnabled(String deactivateClientSideValidation)
-    {
-        return deactivateClientSideValidation == null || !deactivateClientSideValidation.equalsIgnoreCase("true");
-    }
-
-    private boolean useValidationExceptionInterception(String deactivateTrinidadValidationExceptionInterceptor)
-    {
-        return deactivateTrinidadValidationExceptionInterceptor == null ||
-                !deactivateTrinidadValidationExceptionInterceptor.equalsIgnoreCase("true");
-    }
-
     protected void initRequiredInitialization()
     {
         if(!isRequiredInitializationDeactivated())
@@ -160,7 +153,6 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     private boolean isRequiredInitializationDeactivated()
     {
-        return "false".equalsIgnoreCase(
-                org.apache.myfaces.extensions.validator.core.WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
+        return !ExtValCoreConfiguration.get().activateRequiredInitialization();
     }
 }

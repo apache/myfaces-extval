@@ -46,6 +46,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import static org.apache.myfaces.extensions.validator.util.WebXmlUtils.getInitParameter;
+
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -61,6 +63,9 @@ public class ExtValContext
     private static final String CUSTOM_EXTVAL_CONTEXT_CLASS_NAME =
             ExtValContext.class.getName().replace(".core.", ".custom.");
 
+    private static final String CUSTOM_EXTVAL_MODULE_CONFIGURATION_RESOLVER_CLASS_NAME =
+            ExtValModuleConfigurationResolver.class.getName().replace(".core.", ".custom.");
+
     private ViolationSeverityInterpreter violationSeverityInterpreter;
     private FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
     private Map<String, RendererInterceptor> rendererInterceptors =
@@ -73,6 +78,11 @@ public class ExtValContext
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
+    private Map<Class<? extends ExtValModuleConfiguration>, ExtValModuleConfiguration> extValConfig =
+            new ConcurrentHashMap<Class<? extends ExtValModuleConfiguration>, ExtValModuleConfiguration>();
+
+    private ExtValModuleConfigurationResolver defaultModuleConfigurationResolver;
+
     private Map<StaticConfigurationNames, List<StaticConfiguration<String, String>>> staticConfigMap
             = new HashMap<StaticConfigurationNames, List<StaticConfiguration<String, String>>>();
 
@@ -83,6 +93,30 @@ public class ExtValContext
     {
         this.contextHelper = new ExtValContextInternals();
         this.invocationOrderAwareContextHelper = new ExtValContextInvocationOrderAwareInternals(this.contextHelper);
+
+        Object customExtValModuleConfigurationResolver =
+                ClassUtils.tryToInstantiateClassForName(CUSTOM_EXTVAL_MODULE_CONFIGURATION_RESOLVER_CLASS_NAME);
+
+        if(customExtValModuleConfigurationResolver instanceof ExtValModuleConfigurationResolver)
+        {
+            this.defaultModuleConfigurationResolver =
+                    (ExtValModuleConfigurationResolver)customExtValModuleConfigurationResolver;
+        }
+
+        String customExtValModuleConfigurationResolverClassName =
+                getInitParameter(null, ExtValModuleConfigurationResolver.class.getName());
+
+        if(customExtValModuleConfigurationResolverClassName != null)
+        {
+            customExtValModuleConfigurationResolver =
+                    ClassUtils.tryToInstantiateClassForName(customExtValModuleConfigurationResolverClassName);
+
+            if(customExtValModuleConfigurationResolver instanceof ExtValModuleConfigurationResolver)
+            {
+                this.defaultModuleConfigurationResolver =
+                        (ExtValModuleConfigurationResolver)customExtValModuleConfigurationResolver;
+            }
+        }
     }
 
     public static ExtValContext getContext()
@@ -407,5 +441,83 @@ public class ExtValContext
     public Object getGlobalProperty(String name)
     {
         return this.globalProperties.get(name);
+    }
+    
+    public <T extends ExtValModuleConfiguration> T getModuleConfiguration(Class<T> targetType)
+    {
+        ExtValModuleConfiguration result = this.extValConfig.get(targetType);
+
+        //noinspection unchecked
+        return (T)result;
+    }
+
+    public boolean addModuleConfiguration(Class<? extends ExtValModuleConfiguration> key,
+                                          ExtValModuleConfiguration extValConfig)
+    {
+        return addModuleConfiguration(key, extValConfig, true);
+    }
+
+    public boolean addModuleConfiguration(Class<? extends ExtValModuleConfiguration> key,
+                                          ExtValModuleConfiguration config,
+                                          boolean forceOverride)
+    {
+        if (this.extValConfig.containsKey(key))
+        {
+            if (!forceOverride)
+            {
+                return false;
+            }
+
+            this.logger.info("override config for key '" + config.getClass() + "'");
+        }
+
+        //anonymous class are only supported for test-cases and
+        //there we don't need a custom config defined in the web.xml
+        if(!config.getClass().isAnonymousClass())
+        {
+            config = tryToLoadCustomConfigImplementation(config);
+        }
+
+        this.extValConfig.put(key, config);
+
+        if(JsfProjectStage.is(JsfProjectStage.Development))
+        {
+            this.logger.info("config for key [" + config.getClass() + "] added");
+        }
+
+        return true;
+    }
+
+    private ExtValModuleConfiguration tryToLoadCustomConfigImplementation(ExtValModuleConfiguration config)
+    {
+
+        Class configClass = config.getClass().getSuperclass();
+
+        if(!ExtValModuleConfiguration.class.isAssignableFrom(configClass))
+        {
+            return config;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        Class<? extends ExtValModuleConfiguration> configDefinitionClass =
+                (Class<? extends  ExtValModuleConfiguration>)configClass;
+
+        if(this.defaultModuleConfigurationResolver != null)
+        {
+            config = this.defaultModuleConfigurationResolver.getCustomConfiguration(configDefinitionClass);
+        }
+
+        String customConfigClassName = getInitParameter(null, configDefinitionClass.getName());
+
+        if(customConfigClassName != null)
+        {
+            Object customConfig = ClassUtils.tryToInstantiateClassForName(customConfigClassName);
+
+            if(customConfig instanceof ExtValModuleConfiguration)
+            {
+                return (ExtValModuleConfiguration)customConfig;
+            }
+        }
+        return config;
     }
 }
