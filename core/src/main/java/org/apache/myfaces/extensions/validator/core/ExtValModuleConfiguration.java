@@ -16,30 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.trinidad;
+package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * centralized in order that these information aren't spread over the complete code base
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)
-interface WebXmlParameter
+public interface ExtValModuleConfiguration
 {
-    /*
-     * deactivate
-     */
-    static final String DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION = WebXmlUtils
-        .getInitParameter("DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION");
-
-    static final String DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION = WebXmlUtils
-        .getInitParameter("DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION");
-
-    static final String DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR = WebXmlUtils
-        .getInitParameter("DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR");
 }

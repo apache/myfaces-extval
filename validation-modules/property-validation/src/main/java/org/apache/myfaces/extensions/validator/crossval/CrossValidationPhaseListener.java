@@ -151,8 +151,7 @@ public class CrossValidationPhaseListener implements PhaseListener
     {
         if (!isInitialized)
         {
-            if (WebXmlParameter.DEACTIVATE_CROSSVALIDATION != null
-                    && WebXmlParameter.DEACTIVATE_CROSSVALIDATION.equalsIgnoreCase("true"))
+            if (ExtValCrossValidationModuleConfiguration.get().deactivateCrossvalidation())
             {
                 JsfUtils.deregisterPhaseListener(this);
             }

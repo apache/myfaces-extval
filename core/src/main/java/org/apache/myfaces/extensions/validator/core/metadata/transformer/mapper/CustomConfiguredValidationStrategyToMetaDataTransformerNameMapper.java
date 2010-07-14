@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -39,6 +39,6 @@ public class CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper e
 {
     protected String getCustomNameMapperClassName()
     {
-        return WebXmlParameter.CUSTOM_VALIDATION_STRATEGY_TO_META_DATA_TRANSFORMER_NAME_MAPPER;
+        return ExtValCoreConfiguration.get().customValidationStrategyToMetaDataTransformerNameMapperClassName();
     }
 }

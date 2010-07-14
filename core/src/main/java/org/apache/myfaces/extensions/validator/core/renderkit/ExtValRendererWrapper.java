@@ -22,10 +22,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipBeforeInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipAfterInterceptorsException;
 import org.apache.myfaces.extensions.validator.core.renderkit.exception.SkipRendererDelegationException;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -59,19 +59,9 @@ public class ExtValRendererWrapper extends Renderer
 
     public ExtValRendererWrapper(Renderer renderer)
     {
-        String proxyClassName = (String)ExtValContext.getContext().getGlobalProperty(ExtValRendererProxy.KEY);
+        Class<? extends ExtValRendererProxy> proxyClass = ExtValCoreConfiguration.get().rendererProxy();
 
-        if(proxyClassName == null)
-        {
-            logger.finest("no extval renderer proxy configured");
-
-            this.wrapped = new ExtValLazyRendererProxy(renderer);
-            return;
-        }
-
-        Class targetClass = ClassUtils.tryToLoadClassForName(proxyClassName);
-
-        if(targetClass == null)
+        if(proxyClass == null)
         {
             logger.finest("no extval renderer proxy configured");
 
@@ -84,10 +74,10 @@ public class ExtValRendererWrapper extends Renderer
 
         try
         {
-            Constructor constructor = targetClass.getConstructor(argClasses);
+            Constructor constructor = proxyClass.getConstructor(argClasses);
             this.wrapped = (Renderer)constructor.newInstance(renderer);
         }
-        catch (Throwable e)
+        catch (Throwable t)
         {
             logger.warning("no extval renderer proxy created for " + renderer.getClass().getName());
         }
