@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator;
 
-import org.apache.myfaces.extensions.validator.baseval.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.baseval.ExtValBaseValidationModuleConfiguration;
+import org.apache.myfaces.extensions.validator.baseval.DefaultExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -44,6 +45,8 @@ import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInforma
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.CrossValidationStorageNameMapper;
 import org.apache.myfaces.extensions.validator.crossval.storage.mapper.ProcessedInformationStorageNameMapper;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
+import org.apache.myfaces.extensions.validator.crossval.ExtValCrossValidationModuleConfiguration;
+import org.apache.myfaces.extensions.validator.crossval.DefaultExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
@@ -56,6 +59,12 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 {
     private static final long serialVersionUID = -2474361612857222283L;
 
+    protected void initModuleConfig()
+    {
+        ExtValBaseValidationModuleConfiguration.use(new DefaultExtValBaseValidationModuleConfiguration(), false);
+        ExtValCrossValidationModuleConfiguration.use(new DefaultExtValCrossValidationModuleConfiguration(), false);
+    }
+    
     protected void init()
     {
         initProcessedInformationRecorders();
@@ -76,9 +85,7 @@ public class PropertyValidationModuleStartupListener extends AbstractStartupList
 
     private void initStaticStrategyMappings()
     {
-        String jpaBasedValidation = WebXmlParameter.DEACTIVATE_JPA_BASED_VALIDATION;
-        if (jpaBasedValidation == null
-                || !jpaBasedValidation.equalsIgnoreCase("true"))
+        if (!ExtValBaseValidationModuleConfiguration.get().deactivateJpaBasedValidation())
         {
             StaticConfiguration<String, String> staticConfig = new StaticResourceBundleConfiguration();
             staticConfig.setSourceOfMapping(

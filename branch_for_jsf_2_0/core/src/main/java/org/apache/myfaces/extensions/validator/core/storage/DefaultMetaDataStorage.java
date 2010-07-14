@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.storage;
 
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -27,7 +28,6 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -67,7 +67,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         List<String> metaDataStorageFilterClassNames = new ArrayList<String>();
 
         metaDataStorageFilterClassNames
-            .add(WebXmlParameter.CUSTOM_META_DATA_STORAGE_FILTER);
+            .add(ExtValCoreConfiguration.get().customMetaDataStorageFilterClassName());
         metaDataStorageFilterClassNames
             .add(ExtValContext.getContext().getInformationProviderBean().get(
                     CustomInformation.META_DATA_STORAGE_FILTER));
