@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public interface WebXmlParameter
+interface WebXmlParameter
 {
     /*
      * deactivate

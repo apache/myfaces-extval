@@ -273,7 +273,7 @@ class ExtValContextInvocationOrderAwareInternals
         List<String> validationExceptionInterceptorClassNames = new ArrayList<String>();
 
         validationExceptionInterceptorClassNames
-                .add(WebXmlParameter.CUSTOM_VALIDATION_EXCEPTION_INTERCEPTOR);
+                .add(ExtValCoreConfiguration.get().customValidationExceptionInterceptorClassName());
         validationExceptionInterceptorClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(
                         CustomInformation.VALIDATION_EXCEPTION_INTERCEPTOR));
@@ -309,7 +309,7 @@ class ExtValContextInvocationOrderAwareInternals
         List<String> metaDataExtractionInterceptorClassNames = new ArrayList<String>();
 
         metaDataExtractionInterceptorClassNames
-                .add(WebXmlParameter.CUSTOM_META_DATA_EXTRACTION_INTERCEPTOR);
+                .add(ExtValCoreConfiguration.get().customMetaDataExtractionInterceptorClassName());
         metaDataExtractionInterceptorClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(
                         CustomInformation.META_DATA_EXTRACTION_INTERCEPTOR));
@@ -338,7 +338,7 @@ class ExtValContextInvocationOrderAwareInternals
         componentInitializers = new CopyOnWriteArrayList<ComponentInitializer>();
         List<String> componentInitializerClassNames = new ArrayList<String>();
         componentInitializerClassNames
-                .add(WebXmlParameter.CUSTOM_COMPONENT_INITIALIZER);
+                .add(ExtValCoreConfiguration.get().customComponentInitializerClassName());
         componentInitializerClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(CustomInformation.COMPONENT_INITIALIZER));
 
@@ -372,7 +372,7 @@ class ExtValContextInvocationOrderAwareInternals
         List<String> validationInterceptorClassNames = new ArrayList<String>();
 
         validationInterceptorClassNames
-                .add(WebXmlParameter.CUSTOM_PROPERTY_VALIDATION_INTERCEPTOR);
+                .add(ExtValCoreConfiguration.get().customPropertyValidationInterceptorClassName());
         validationInterceptorClassNames
                 .add(this.contextHelper.getInformationProviderBean().get(
                         CustomInformation.PROPERTY_VALIDATION_INTERCEPTOR));

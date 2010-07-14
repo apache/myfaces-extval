@@ -117,4 +117,23 @@ public class ClassUtils
             return null;
         }
     }
+
+    /**
+     * Gets the package name.
+     * Needed for ClassLoaderTestSuite
+     *
+     * @param targetClass the the class
+     * @return the package name
+     */
+    public static String getPackageName(Class targetClass)
+    {
+        Package currentPackage = targetClass.getPackage();
+
+        if(currentPackage != null)
+        {
+            return currentPackage.getName();
+        }
+
+        return targetClass.getName().substring(0, targetClass.getName().lastIndexOf("."));
+    }
 }

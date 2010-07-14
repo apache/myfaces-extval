@@ -30,7 +30,8 @@ import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListene
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
@@ -119,6 +120,9 @@ public abstract class AbstractExValTestCase extends TestCase
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_VALIDATION_STRATEGY_FACTORY", MockValidationStrategyFactory.class.getName());
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_MESSAGE_RESOLVER_FACTORY", MockMessageResolverFactory.class.getName());
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_META_DATA_TRANSFORMER_FACTORY", MockMetaDataTransformerFactory.class.getName());
+
+        addInitializationParameters();
+
         config = new MockServletConfig(servletContext);
         session = new MockHttpSession();
         session.setServletContext(servletContext);
@@ -169,15 +173,29 @@ public abstract class AbstractExValTestCase extends TestCase
                     }
                 });
 
+        final ExtValCoreConfiguration customExtValCoreConfiguration = getCustomExtValCoreConfiguration();
+
         //execute startup listener
         new ExtValStartupListener() {
             private static final long serialVersionUID = -3861810605160281884L;
 
             @Override
+            protected void initModuleConfig()
+            {
+                if(customExtValCoreConfiguration != null)
+                {
+                    ExtValCoreConfiguration.use(customExtValCoreConfiguration, true);
+                }
+                else
+                {
+                    ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration(), true);
+                }
+            }
+
+            @Override
             protected void init()
             {
-                ExtValContext.getContext()
-                        .addGlobalProperty(ProjectStageResolver.class.getName(), getProjectStageResolver(), false);
+                initModuleConfig();
                 super.init();
             }
         }.init();
@@ -185,7 +203,23 @@ public abstract class AbstractExValTestCase extends TestCase
         invokeStartupListeners();
     }
 
-    protected abstract void invokeStartupListeners();
+    protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
+    {
+	    //override it - if needed
+        return null;
+    }
+
+    protected void addInitializationParameters()
+	{
+	    //override it - if needed		
+	}
+    
+    protected void addInitParameter(String key, String value)
+	{
+    	servletContext.addInitParameter(key, value);
+    }
+
+	protected abstract void invokeStartupListeners();
 
     /**
      * Tear down the test environment.

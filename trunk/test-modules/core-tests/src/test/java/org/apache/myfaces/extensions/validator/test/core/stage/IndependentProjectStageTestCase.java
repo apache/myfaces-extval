@@ -49,51 +49,58 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
     {
         super.setUp();
 
-        ExtValContext.getContext().addGlobalProperty(ProjectStageResolver.class.getName(), new DefaultProjectStageResolver()
+        ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration()
         {
             @Override
-            public ProjectStage getCurrentProjectStage()
+            public ProjectStageResolver projectStageResolver()
             {
-                String jsfProjectStageName = resolveProjectStageName("javax.faces.PROJECT_STAGE");
-                String independentProjectStageName = resolveProjectStageName(INDEPENDENT_PROJECT_STAGE);
-
-                if (!(jsfProjectStageName == null || "".equals(jsfProjectStageName)))
+                return new DefaultProjectStageResolver()
                 {
-                    ProjectStageName result = ProjectStage.createStageName(jsfProjectStageName.trim());
-                    for(JsfProjectStage jsfProjectStage : JsfProjectStage.values())
+                    @Override
+                    public ProjectStage getCurrentProjectStage()
                     {
-                        if(jsfProjectStage.getValue().equals(result))
+                        String jsfProjectStageName = resolveProjectStageName("javax.faces.PROJECT_STAGE");
+                        String independentProjectStageName = resolveProjectStageName(INDEPENDENT_PROJECT_STAGE);
+
+                        if (!(jsfProjectStageName == null || "".equals(jsfProjectStageName)))
                         {
-                            return ProjectStage.createStage(result);
+                            ProjectStageName result = ProjectStage.createStageName(jsfProjectStageName.trim());
+                            for (JsfProjectStage jsfProjectStage : JsfProjectStage.values())
+                            {
+                                if (jsfProjectStage.getValue().equals(result))
+                                {
+                                    return ProjectStage.createStage(result);
+                                }
+                            }
                         }
-                    }
-                }
 
-                if(!(independentProjectStageName == null || "".equals(independentProjectStageName)))
-                {
-                    ProjectStageName independentResult = ProjectStage.createStageName(independentProjectStageName.trim());
-
-                    //check jsf stage values first
-                    ProjectStageName result = ProjectStage.createStageName(independentProjectStageName.trim());
-                    for(JsfProjectStage jsfProjectStage : JsfProjectStage.values())
-                    {
-                        if(jsfProjectStage.getValue().equals(result))
+                        if (!(independentProjectStageName == null || "".equals(independentProjectStageName)))
                         {
-                            return ProjectStage.createStage(result);
+                            ProjectStageName independentResult = ProjectStage.createStageName(independentProjectStageName.trim());
+
+                            //check jsf stage values first
+                            ProjectStageName result = ProjectStage.createStageName(independentProjectStageName.trim());
+                            for (JsfProjectStage jsfProjectStage : JsfProjectStage.values())
+                            {
+                                if (jsfProjectStage.getValue().equals(result))
+                                {
+                                    return ProjectStage.createStage(result);
+                                }
+                            }
+
+                            //check custom stage values
+                            if (ProjectStage.createStageName(CUSTOM_DEV).equals(independentResult) ||
+                                    ProjectStage.createStageName(CUSTOM_TEST).equals(independentResult))
+                            {
+                                return ProjectStage.createStage(independentResult);
+                            }
                         }
-                    }
 
-                    //check custom stage values
-                    if(ProjectStage.createStageName(CUSTOM_DEV).equals(independentResult) ||
-                            ProjectStage.createStageName(CUSTOM_TEST).equals(independentResult))
-                    {
-                        return ProjectStage.createStage(independentResult);
+                        return createProjectStage(ProjectStage.createStageName(CUSTOM_PROD));
                     }
-                }
-
-                return createProjectStage(ProjectStage.createStageName(CUSTOM_PROD));
+                };
             }
-        });
+        }, true);
     }
 
     private String resolveProjectStageName(String parameterName)
@@ -107,13 +114,6 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
         {
             return null;
         }
-    }
-
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-        ExtValContext.getContext().addGlobalProperty(ProjectStageResolver.class.getName(), new DefaultProjectStageResolver());
     }
 
     public void testDevelopmentStage()
