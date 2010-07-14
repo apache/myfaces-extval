@@ -68,8 +68,6 @@ public class ExtValRenderKit extends RenderKit
             return renderer instanceof ExtValRendererWrapper ? renderer : createWrapper(renderer);
         }
 
-        this.logger.finest("no renderer found for family " + family + " and type " + rendererType);
-
         return renderer;
     }
 

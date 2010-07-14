@@ -16,29 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
+package org.apache.myfaces.extensions.validator.trinidad;
 
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * To provide a custom NameMapper to map ValidationStrategies to MetaDataTransformers.
- * (configured via web.xml)
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@InvocationOrder(100)
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper extends
-    AbstractCustomNameMapper<ValidationStrategy>
+@UsageInformation(UsageCategory.INTERNAL)
+public class DefaultExtValTrinidadSupportModuleConfiguration extends ExtValTrinidadSupportModuleConfiguration
 {
-    protected String getCustomNameMapperClassName()
+    /*
+     * web.xml config
+     */
+
+    public boolean deactivateClientSideValidation()
     {
-        return ExtValCoreConfiguration.get().customValidationStrategyToMetaDataTransformerNameMapperClassName();
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION);
+    }
+
+    public boolean deactivateCoreOutputLabelInitialization()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION);
+    }
+
+    public boolean deactivateValidationExceptionInterceptor()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR);
     }
 }

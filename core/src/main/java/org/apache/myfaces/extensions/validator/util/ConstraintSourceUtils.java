@@ -23,14 +23,10 @@ import java.lang.reflect.Field;
 import java.beans.Introspector;
 import java.lang.reflect.Method;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.storage.MappedConstraintSourceStorage;
 import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
-import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
-import org.apache.myfaces.extensions.validator.core.validation.IgnoreConstraintSource;
-import org.apache.myfaces.extensions.validator.core.validation.TargetProperty;
-import org.apache.myfaces.extensions.validator.core.validation.TargetPropertyId;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -42,7 +38,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @SuppressWarnings("unchecked")
 public final class ConstraintSourceUtils
 {
-    private ConstraintSourceUtils()
+    protected ConstraintSourceUtils()
     {
         // Utility class, don't allow instantiation.
     }
@@ -108,8 +104,8 @@ public final class ConstraintSourceUtils
 
     private static Class findMappedClass(PropertyStorage storage, Class baseBeanClass, String property)
     {
-        Class<? extends Annotation> constraintSourceAnnotationImplementation = (Class) ExtValContext.getContext()
-                .getGlobalProperty(ConstraintSource.class.getName());
+        Class<? extends Annotation> constraintSourceAnnotationImplementation = ExtValCoreConfiguration.get()
+                .constraintSourceAnnotation();
 
         Annotation foundConstraintSourceAnnotation = tryToGetAnnotationFromProperty(
                 storage, baseBeanClass, property, constraintSourceAnnotationImplementation);
@@ -166,12 +162,12 @@ public final class ConstraintSourceUtils
 
     private static Class<? extends Annotation> getTargetPropertyAnnotationImplementation()
     {
-        return (Class) ExtValContext.getContext().getGlobalProperty(TargetProperty.class.getName());
+        return ExtValCoreConfiguration.get().targetPropertyAnnotation();
     }
 
     private static Class<? extends Annotation> getTargetPropertyIdAnnotationImplementation()
     {
-        return (Class) ExtValContext.getContext().getGlobalProperty(TargetPropertyId.class.getName());
+        return ExtValCoreConfiguration.get().targetPropertyIdAnnotation();
     }
 
     private static String extractNewPropertyName(Class targetClass, Annotation annotation)
@@ -302,7 +298,7 @@ public final class ConstraintSourceUtils
 
     private static Class<? extends Annotation> getIgnoreConstraintSourceAnnotationImplementation()
     {
-        return (Class) ExtValContext.getContext().getGlobalProperty(IgnoreConstraintSource.class.getName());
+        return ExtValCoreConfiguration.get().ignoreConstraintSourceAnnotation();
     }
 
     private static Annotation tryToGetAnnotationFromField(

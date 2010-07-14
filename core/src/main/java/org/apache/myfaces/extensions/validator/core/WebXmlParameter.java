@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public interface WebXmlParameter
+interface WebXmlParameter
 {
     /*
      * misc
@@ -121,10 +121,6 @@ public interface WebXmlParameter
     /*
      * deactivate
      */
-    @Deprecated
-    static final String DEACTIVATE_RENDERKIT = WebXmlUtils
-        .getInitParameter("DEACTIVATE_RENDERKIT");
-
     //currently just used by AbstractValidationErrorMessageResolver
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");

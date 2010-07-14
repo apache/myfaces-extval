@@ -39,15 +39,15 @@ class ExtValContextInternals
 {
     boolean isComponentInitializationActivated()
     {
-        return !"true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_COMPONENT_INITIALIZATION);
+        return !ExtValCoreConfiguration.get().deactivateComponentInitialization();
     }
 
     @SuppressWarnings({"unchecked"})
-    InformationProviderBean initInformationProviderBean(Map applicationMap)
+    synchronized InformationProviderBean initInformationProviderBean(Map applicationMap)
     {
         List<String> informationProviderBeanClassNames = new ArrayList<String>();
 
-        informationProviderBeanClassNames.add(WebXmlParameter.CUSTOM_INFORMATION_PROVIDER_BEAN);
+        informationProviderBeanClassNames.add(ExtValCoreConfiguration.get().customInformationProviderBeanClassName());
         informationProviderBeanClassNames.add(InformationProviderBean.CUSTOM_BEAN);
 
         InformationProviderBean informationProviderBean;
@@ -72,7 +72,7 @@ class ExtValContextInternals
     }
 
     @SuppressWarnings({"unchecked"})
-    void tryToInitCustomConfiguredInformationProviderBeanClassName(Map applicationMap)
+    synchronized void tryToInitCustomConfiguredInformationProviderBeanClassName(Map applicationMap)
     {
         InformationProviderBean bean = (InformationProviderBean) ExtValUtils.getELHelper()
                 .getBean(InformationProviderBean.CUSTOM_BEAN.replace(".", "_"));

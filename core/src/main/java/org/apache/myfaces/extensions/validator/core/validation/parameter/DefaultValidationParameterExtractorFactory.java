@@ -20,9 +20,9 @@ package org.apache.myfaces.extensions.validator.core.validation.parameter;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 import java.util.ArrayList;
@@ -51,7 +51,8 @@ public class DefaultValidationParameterExtractorFactory implements ValidationPar
         {
             List<String> validationParameterExtractorClassNames = new ArrayList<String>();
 
-            validationParameterExtractorClassNames.add(WebXmlParameter.CUSTOM_VALIDATION_PARAMETER_EXTRACTOR);
+            validationParameterExtractorClassNames
+                    .add(ExtValCoreConfiguration.get().customValidationParameterExtractorClassName());
             validationParameterExtractorClassNames
                 .add(ExtValContext.getContext().getInformationProviderBean()
                     .get(CustomInformation.VALIDATION_PARAMETER_EXTRACTOR));

@@ -16,23 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator;
+package org.apache.myfaces.extensions.validator.crossval;
 
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
- * dont't move to an other package!!!
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public interface ExtValInformation
+public abstract class ExtValCrossValidationModuleConfiguration implements ExtValModuleConfiguration
 {
-    // getPackage isn't working with a custom class loader
-    static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ClassUtils.getPackageName(ExtValInformation.class);
-    static final String WEBXML_PARAM_PREFIX = ClassUtils.getPackageName(ExtValInformation.class);
-    static final String VERSION = ClassUtils.getJarVersion(ExtValInformation.class);
+    private static ExtValContext extValContext = ExtValContext.getContext();
+
+    protected ExtValCrossValidationModuleConfiguration()
+    {
+    }
+
+    public static ExtValCrossValidationModuleConfiguration get()
+    {
+        return extValContext.getModuleConfiguration(ExtValCrossValidationModuleConfiguration.class);
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static boolean use(ExtValCrossValidationModuleConfiguration config, boolean forceOverride)
+    {
+        return extValContext.addModuleConfiguration(
+                ExtValCrossValidationModuleConfiguration.class, config, forceOverride);
+    }
+
+    /*
+     * web.xml config
+     */
+
+    abstract boolean deactivateCrossvalidation();
 }

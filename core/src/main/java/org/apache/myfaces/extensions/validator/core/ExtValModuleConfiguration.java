@@ -16,29 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper;
+package org.apache.myfaces.extensions.validator.core;
 
-import org.apache.myfaces.extensions.validator.core.InvocationOrder;
-import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.core.mapper.AbstractCustomNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * To provide a custom NameMapper to map ValidationStrategies to MetaDataTransformers.
- * (configured via web.xml)
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@InvocationOrder(100)
-@UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
-public class CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper extends
-    AbstractCustomNameMapper<ValidationStrategy>
+@UsageInformation(UsageCategory.INTERNAL)
+public interface ExtValModuleConfiguration
 {
-    protected String getCustomNameMapperClassName()
-    {
-        return ExtValCoreConfiguration.get().customValidationStrategyToMetaDataTransformerNameMapperClassName();
-    }
 }

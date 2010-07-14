@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.storage.RendererInterceptorPropertyStorage;
@@ -254,7 +254,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     private boolean isComponentInitializationDeactivated()
     {
-        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_COMPONENT_INITIALIZATION);
+        return ExtValCoreConfiguration.get().deactivateComponentInitialization();
     }
 
     protected boolean recordProcessedInformation()

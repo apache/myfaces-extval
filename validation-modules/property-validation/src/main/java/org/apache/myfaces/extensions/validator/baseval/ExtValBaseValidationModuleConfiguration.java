@@ -18,24 +18,41 @@
  */
 package org.apache.myfaces.extensions.validator.baseval;
 
-import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * centralized in order that these information arn't spread over the complete code base
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@ToDo(value = Priority.MEDIUM, description = "documentation")
 @UsageInformation(UsageCategory.INTERNAL)
-interface WebXmlParameter
+public abstract class ExtValBaseValidationModuleConfiguration implements ExtValModuleConfiguration
 {
-    static final String VALIDATION_MESSAGES_JPA = WebXmlUtils
-            .getInitParameter("JPA_VALIDATION_ERROR_MESSAGES");
-    static final String DEACTIVATE_JPA_BASED_VALIDATION = WebXmlUtils
-            .getInitParameter("DEACTIVATE_JPA_BASED_VALIDATION");
+    private static ExtValContext extValContext = ExtValContext.getContext();
+
+    protected ExtValBaseValidationModuleConfiguration()
+    {
+    }
+
+    public static ExtValBaseValidationModuleConfiguration get()
+    {
+        return extValContext.getModuleConfiguration(ExtValBaseValidationModuleConfiguration.class);
+    }
+
+    @UsageInformation(UsageCategory.INTERNAL)
+    public static boolean use(ExtValBaseValidationModuleConfiguration config, boolean forceOverride)
+    {
+        return extValContext.addModuleConfiguration(
+                ExtValBaseValidationModuleConfiguration.class, config, forceOverride);
+    }
+
+    /*
+     * web.xml config
+     */
+
+    public abstract String jpaValidationErrorMessages();
+
+    public abstract boolean deactivateJpaBasedValidation();
 }
