@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -46,7 +46,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private static String deactivateDefaultConvention = WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION;
+    private static boolean deactivateDefaultConvention = ExtValCoreConfiguration.get().deactivateDefaultConvention();
     private static ResourceBundle defaultBundle = null;
     private String messageBundleBaseName;
     //with jsf 1.1 only available if there is a custom bean
@@ -162,8 +162,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
     private String tryToUseMessageBundleConvention(String key, Locale locale)
     {
-        if ((deactivateDefaultConvention == null || !deactivateDefaultConvention.equalsIgnoreCase("true"))
-            && isDefaultMessageBundleConventionActive())
+        if ((deactivateDefaultConvention) && isDefaultMessageBundleConventionActive())
         {
             if (defaultBundle == null)
             {
@@ -175,7 +174,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
                 catch (Exception e)
                 {
                     //do nothing
-                    deactivateDefaultConvention = "true";
+                    deactivateDefaultConvention = true;
                 }
             }
 

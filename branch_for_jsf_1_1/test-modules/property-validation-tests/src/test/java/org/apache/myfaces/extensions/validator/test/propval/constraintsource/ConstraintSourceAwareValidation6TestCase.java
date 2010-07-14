@@ -1,20 +1,17 @@
 package org.apache.myfaces.extensions.validator.test.propval.constraintsource;
 
-import javax.faces.application.FacesMessage;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
-import org.apache.myfaces.extensions.validator.core.validation.IgnoreConstraintSource;
-import org.apache.myfaces.extensions.validator.core.validation.TargetProperty;
-import org.apache.myfaces.extensions.validator.core.validation.TargetPropertyId;
+import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomConstraintSource;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomIgnoreConstraintSource;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomTargetProperty;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomTargetPropertyId;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.model.ConstraintSourceAware6Bean;
+
+import javax.faces.application.FacesMessage;
+import java.lang.annotation.Annotation;
 
 public class ConstraintSourceAwareValidation6TestCase extends
         AbstractConstraintSourceTestCase<ConstraintSourceAware6Bean>
@@ -38,16 +35,31 @@ public class ConstraintSourceAwareValidation6TestCase extends
     protected void setUp() throws Exception
     {
         super.setUp();
-        ExtValContext extValContext = ExtValContext.getContext();
+        ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration() {
+            @Override
+            public Class<? extends Annotation> constraintSourceAnnotation()
+            {
+                return CustomConstraintSource.class;
+            }
 
-        extValContext.addGlobalProperty(ConstraintSource.class.getName(),
-                CustomConstraintSource.class);
-        extValContext.addGlobalProperty(IgnoreConstraintSource.class.getName(),
-                CustomIgnoreConstraintSource.class);
-        extValContext.addGlobalProperty(TargetProperty.class.getName(),
-                CustomTargetProperty.class);
-        extValContext.addGlobalProperty(TargetPropertyId.class.getName(),
-                CustomTargetPropertyId.class);
+            @Override
+            public Class<? extends Annotation> ignoreConstraintSourceAnnotation()
+            {
+                return CustomIgnoreConstraintSource.class;
+            }
+
+            @Override
+            public Class<? extends Annotation> targetPropertyAnnotation()
+            {
+                return CustomTargetProperty.class;
+            }
+
+            @Override
+            public Class<? extends Annotation> targetPropertyIdAnnotation()
+            {
+                return CustomTargetPropertyId.class;
+            }
+        }, true);
     }
 
     public void testCustomAnnotations1()

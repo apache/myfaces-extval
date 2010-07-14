@@ -18,28 +18,32 @@
  */
 package org.apache.myfaces.extensions.validator.trinidad;
 
-import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * centralized in order that these information aren't spread over the complete code base
- *
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)
-interface WebXmlParameter
+public class DefaultExtValTrinidadSupportModuleConfiguration extends ExtValTrinidadSupportModuleConfiguration
 {
     /*
-     * deactivate
+     * web.xml config
      */
-    static final String DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION = WebXmlUtils
-        .getInitParameter("DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION");
 
-    static final String DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION = WebXmlUtils
-        .getInitParameter("DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION");
+    public boolean deactivateClientSideValidation()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_CLIENT_SIDE_TRINIDAD_VALIDATION);
+    }
 
-    static final String DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR = WebXmlUtils
-        .getInitParameter("DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR");
+    public boolean deactivateCoreOutputLabelInitialization()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_TRINIDAD_CORE_OUTPUT_LABEL_INITIALIZATION);
+    }
+
+    public boolean deactivateValidationExceptionInterceptor()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_TRINIDAD_VALIDATION_EXCEPTION_INTERCEPTOR);
+    }
 }

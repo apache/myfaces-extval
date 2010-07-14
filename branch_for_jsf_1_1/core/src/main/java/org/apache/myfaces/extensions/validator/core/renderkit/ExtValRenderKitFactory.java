@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -99,7 +99,7 @@ public class ExtValRenderKitFactory extends RenderKitFactory
 
             if(this.defaultRenderKitWrapperFactory.isApplicationInitialized())
             {
-                this.isDeactivated = isRenderKitFactoryDeactivatedViaWebXml();
+                this.isDeactivated = isRenderKitFactoryDeactivated();
             }
             else
             {
@@ -149,9 +149,9 @@ public class ExtValRenderKitFactory extends RenderKitFactory
         return this.wrapped.getRenderKitIds();
     }
 
-    private boolean isRenderKitFactoryDeactivatedViaWebXml()
+    private boolean isRenderKitFactoryDeactivated()
     {
-        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_RENDER_KIT_FACTORY);
+        return ExtValCoreConfiguration.get().deactivateRenderKitFactory();
     }
 
     private boolean isRenderKitFactoryDeactivatedViaVMParameter()

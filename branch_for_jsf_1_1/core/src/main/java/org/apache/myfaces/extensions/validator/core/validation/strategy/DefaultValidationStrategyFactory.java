@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.strategy;
 
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
@@ -158,7 +158,7 @@ public class DefaultValidationStrategyFactory extends AbstractNameMapperAwareFac
         }
 
         //setup custom mapping - overrides all other mappings
-        String customMappingBaseName = WebXmlParameter.CUSTOM_STATIC_VALIDATION_STRATEGY_MAPPING;
+        String customMappingBaseName = ExtValCoreConfiguration.get().customStaticValidationStrategyMappingSource();
         if (customMappingBaseName != null)
         {
             try

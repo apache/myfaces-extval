@@ -20,8 +20,7 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.util.ClassUtils;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -109,17 +108,10 @@ class ExtValLazyRendererProxy extends Renderer implements RendererProxy
 
     private Renderer getLazyRenderer()
     {
-        String proxyClassName = (String) ExtValContext.getContext().getGlobalProperty(ExtValRendererProxy.KEY);
+        Class<? extends Renderer> targetClass = ExtValCoreConfiguration.get().rendererProxy();
 
-        if(proxyClassName != null && !proxyClassName.endsWith(getClass().getName()))
+        if(targetClass != null)
         {
-            Class targetClass = ClassUtils.tryToLoadClassForName(proxyClassName);
-
-            if(targetClass == null)
-            {
-                throw new IllegalStateException("a custom invalid renderer proxy is configured: " + proxyClassName);
-            }
-
             Class[] argClasses = new Class[1];
             argClasses[0] = Renderer.class;
 

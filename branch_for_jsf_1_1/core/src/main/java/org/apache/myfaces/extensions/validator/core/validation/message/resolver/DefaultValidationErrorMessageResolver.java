@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
-import org.apache.myfaces.extensions.validator.core.WebXmlParameter;
 import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -33,12 +33,19 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})
 public class DefaultValidationErrorMessageResolver extends AbstractValidationErrorMessageResolver
 {
-    private static final String CUSTOM_BUNDLE = WebXmlParameter.CUSTOM_MESSAGE_BUNDLE;
+    private static final String CUSTOM_BUNDLE = ExtValCoreConfiguration.get().customMessageBundleBaseName();
+
+    private final String baseName;
+
+    public DefaultValidationErrorMessageResolver()
+    {
+        this.baseName = InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
+    }
 
     //not used at the moment - just for a convention
     protected String getBaseName()
     {
-        return InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
+        return this.baseName;
     }
 
     protected String getCustomBaseName()
