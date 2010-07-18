@@ -162,7 +162,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
 
     private String tryToUseMessageBundleConvention(String key, Locale locale)
     {
-        if ((deactivateDefaultConvention) && isDefaultMessageBundleConventionActive())
+        if (!deactivateDefaultConvention && isDefaultMessageBundleConventionActive())
         {
             if (defaultBundle == null)
             {
