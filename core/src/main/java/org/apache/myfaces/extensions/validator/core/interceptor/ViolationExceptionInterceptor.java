@@ -16,11 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.interceptor;
+package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
@@ -32,14 +31,12 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.context.FacesContext;
 
 /**
- * extracts and adds the extval bv meta-data (e.g. validation groups) to the ExtValBeanValidationContext
- *
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)
 @UsageInformation(UsageCategory.INTERNAL)
-public class BeanValidationExceptionInterceptor implements ValidationExceptionInterceptor
+public class ViolationExceptionInterceptor implements ValidationExceptionInterceptor
 {
 
     public boolean afterThrowing(UIComponent uiComponent,

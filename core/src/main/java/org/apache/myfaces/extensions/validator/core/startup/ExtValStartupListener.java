@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterc
 import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ViolationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -184,6 +185,9 @@ public class ExtValStartupListener extends AbstractStartupListener
                 new HtmlCoreComponentsValidationExceptionInterceptor());
         ExtValContext.getContext().addValidationExceptionInterceptor(
                 new ViolationSeverityValidationExceptionInterceptor());
+
+        ExtValContext.getContext().addValidationExceptionInterceptor(
+                new ViolationExceptionInterceptor());
     }
 
     private void initViolationSeverityInterpreter()
