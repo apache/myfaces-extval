@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.beanval.interceptor.ResetBeanValidationRendererInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationTagAwareValidationInterceptor;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
@@ -39,7 +38,6 @@ public class JSF2AwareBeanValidationStartupListener extends AbstractStartupListe
 
     protected void init()
     {
-        ExtValContext.getContext().registerRendererInterceptor(new ResetBeanValidationRendererInterceptor());
         ExtValContext.getContext().addPropertyValidationInterceptor(new BeanValidationTagAwareValidationInterceptor());
     }
 }
