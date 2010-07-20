@@ -117,10 +117,13 @@ interface WebXmlParameter
      */
     static final String ACTIVATE_REQUIRED_INITIALIZATION = WebXmlUtils
         .getInitParameter("ACTIVATE_REQUIRED_INITIALIZATION");
-    
+
     /*
      * deactivate
      */
+    static final String DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT = WebXmlUtils
+            .getInitParameter("DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT");
+
     //currently just used by AbstractValidationErrorMessageResolver
     static final String DEACTIVATE_DEFAULT_CONVENTION = WebXmlUtils
         .getInitParameter("DEACTIVATE_DEFAULT_CONVENTION");

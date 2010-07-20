@@ -219,8 +219,15 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
 
     public boolean activateRequiredInitialization()
     {
+        Boolean globalProperty = (Boolean)ExtValContext.getContext().getGlobalProperty("mode:init:required");
+
+        if(globalProperty != null)
+        {
+            return globalProperty;
+        }
+
         return WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION != null &&
-                "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION.trim());
+                "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
     }
 
     public boolean deactivateDefaultConvention()
@@ -231,7 +238,7 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
     public boolean deactivateDefaultNameMappers()
     {
         String deactivateDefaultNameMappers = WebXmlParameter.DEACTIVATE_DEFAULT_NAME_MAPPERS;
-        return deactivateDefaultNameMappers != null && deactivateDefaultNameMappers.trim().equalsIgnoreCase("true");
+        return deactivateDefaultNameMappers != null && deactivateDefaultNameMappers.equalsIgnoreCase("true");
     }
 
     public boolean deactivateElResolver()
@@ -256,7 +263,15 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
 
     public boolean deactivateRequiredAttributeSupport()
     {
-        return activateRequiredInitialization();
+        Boolean globalProperty = (Boolean)ExtValContext.getContext().getGlobalProperty("mode:reset:required");
+
+        if(globalProperty != null)
+        {
+            return globalProperty;
+        }
+
+        return WebXmlParameter.DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT != null &&
+                "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT);
     }
 
     public boolean interpretEmptyStringSubmittedValuesAsNull()
