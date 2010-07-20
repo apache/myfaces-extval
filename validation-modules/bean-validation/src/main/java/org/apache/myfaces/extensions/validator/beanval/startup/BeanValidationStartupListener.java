@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
-import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.SizeNameMapper;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.NotNullNameMapper;
@@ -67,7 +66,6 @@ public class BeanValidationStartupListener extends AbstractStartupListener
         registerComponentInitializers();
         registerMetaDataExtractionInterceptors();
         registerPhaseListeners();
-        registerExceptionInterceptor();
         registerViolationSeverityPayload();
         registerDisableClientSideValidationPayload();
     }
@@ -139,11 +137,6 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     {
         JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
         JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
-    }
-
-    protected void registerExceptionInterceptor()
-    {
-        ExtValContext.getContext().addValidationExceptionInterceptor(new BeanValidationExceptionInterceptor());
     }
 
     protected void registerViolationSeverityPayload()
