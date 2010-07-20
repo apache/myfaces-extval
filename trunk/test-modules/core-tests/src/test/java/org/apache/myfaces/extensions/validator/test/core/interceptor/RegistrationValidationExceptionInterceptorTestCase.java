@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponentsValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ViolationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -61,7 +62,7 @@ public class RegistrationValidationExceptionInterceptorTestCase extends Abstract
 
         List<ValidationExceptionInterceptor> result = ExtValContext.getContext().getValidationExceptionInterceptors();
 
-        int resultLength = 7;
+        int resultLength = 8;
         Assert.assertEquals(resultLength, result.size());
 
         for(int i = 0; i < resultLength; i++)
@@ -84,9 +85,12 @@ public class RegistrationValidationExceptionInterceptorTestCase extends Abstract
                     Assert.assertEquals(HtmlCoreComponentsValidationExceptionInterceptor.class, result.get(i).getClass());
                     break;
                 case 5:
-                    Assert.assertEquals(TestValidationExceptionInterceptor1000.class, result.get(i).getClass());
+                    Assert.assertEquals(ViolationExceptionInterceptor.class, result.get(i).getClass());
                     break;
                 case 6:
+                    Assert.assertEquals(TestValidationExceptionInterceptor1000.class, result.get(i).getClass());
+                    break;
+                case 7:
                     Assert.assertEquals(TestValidationExceptionInterceptor.class, result.get(i).getClass());
                     break;
             }
