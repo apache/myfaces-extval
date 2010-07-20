@@ -32,82 +32,19 @@ import javax.faces.component.UIComponent;
  * @since 2.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)
-class BeanValidatorWrapper extends BeanValidator
+public class ExtValBeanValidator extends BeanValidator
 {
-    private BeanValidator wrapped;
-
-    BeanValidatorWrapper(BeanValidator wrapped)
+    public ExtValBeanValidator()
     {
-        this.wrapped = wrapped;
     }
 
-    public BeanValidator getWrappedBeanValidator()
+    ExtValBeanValidator(String validationGroups)
     {
-        return this.wrapped;
-    }
-
-    public void setWrapped(BeanValidator wrapped)
-    {
-        this.wrapped = wrapped;
-    }
-
-    public void setValidationGroups(String s)
-    {
-        wrapped.setValidationGroups(s);
-    }
-
-    public String getValidationGroups()
-    {
-        return wrapped.getValidationGroups();
+        setValidationGroups(validationGroups);
     }
 
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object o)
     {
         //don't validate - the extval bean-validation adapter will do that
-    }
-
-    /*
-    public Object saveState(FacesContext facesContext)
-    {
-        Object result[] = new Object[1];
-        result[0] = wrapped.getValidationGroups();
-        return result;
-    }
-
-    public void restoreState(FacesContext facesContext, Object state)
-    {
-        this.wrapped = new BeanValidator();
-
-        if (state != null)
-        {
-            Object values[] = (Object[]) state;
-            this.wrapped.setValidationGroups((String) values[0]);
-        }
-    }
-    */
-
-    public void markInitialState()
-    {
-        wrapped.markInitialState();
-    }
-
-    public boolean initialStateMarked()
-    {
-        return wrapped.initialStateMarked();
-    }
-
-    public void clearInitialState()
-    {
-        wrapped.clearInitialState();
-    }
-
-    public boolean isTransient()
-    {
-        return wrapped.isTransient();
-    }
-
-    public void setTransient(boolean b)
-    {
-        wrapped.setTransient(b);
     }
 }

@@ -85,8 +85,7 @@ public class BeanValidationTagAwareValidationInterceptor implements PropertyVali
 
         for (Validator validator : validators)
         {
-            //don't check with instanceof
-            if (validator.getClass().getName().equals(BeanValidator.class.getName()))
+            if(validator instanceof BeanValidator)
             {
                 if(((BeanValidator) validator).getValidationGroups() != null)
                 {
@@ -94,20 +93,25 @@ public class BeanValidationTagAwareValidationInterceptor implements PropertyVali
                             Arrays.asList(((BeanValidator) validator).getValidationGroups().split(",")));
                 }
 
-                //prevent double-validation
-                editableValueHolder.removeValidator(validator);
-                editableValueHolder.addValidator(new BeanValidatorWrapper((BeanValidator)validator));
+                if (validator.getClass().getName().equals(BeanValidator.class.getName()))
+                {
+                    //prevent double-validation
+                    editableValueHolder.removeValidator(validator);
+                    editableValueHolder.addValidator(
+                            new ExtValBeanValidator(((BeanValidator)validator).getValidationGroups()));
+                }
             }
         }
 
+        ExtValBeanValidationContext beanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
         Class currentClass;
         for(String groupClassName : groupsClassNamesOfTagList)
         {
-            currentClass = ClassUtils.tryToLoadClassForName(groupClassName);
+            currentClass = ClassUtils.tryToLoadClassForName(groupClassName.trim());
 
             if(currentClass != null && currentClass.isInterface())
             {
-                ExtValBeanValidationContext.getCurrentInstance().addGroup(currentClass, viewId, clientId);
+                beanValidationContext.addGroup(currentClass, viewId, clientId);
             }
             else
             {
