@@ -78,9 +78,21 @@ public class ExtValCoreConfigurationActivateRequiredInitializationTestCase exten
         assertFalse(ExtValUtils.isRequiredInitializationActive());
     }
 
+    public void testActivateRequiredInitializationDefaultWithOverrule()
+    {
+        DefaultExtValCoreConfiguration.overruleActivateRequiredInitialization(Boolean.TRUE, true);
+        assertTrue(ExtValUtils.isRequiredInitializationActive());
+    }
+
     public void testActivateRequiredInitializationWebXml()
     {
         assertTrue(ExtValUtils.isRequiredInitializationActive());
+    }
+
+    public void testActivateRequiredInitializationWebXmlWithOverrule()
+    {
+        DefaultExtValCoreConfiguration.overruleActivateRequiredInitialization(Boolean.FALSE, true);
+        assertFalse(ExtValUtils.isRequiredInitializationActive());
     }
 
     public void testActivateRequiredInitializationCustomConfig()
