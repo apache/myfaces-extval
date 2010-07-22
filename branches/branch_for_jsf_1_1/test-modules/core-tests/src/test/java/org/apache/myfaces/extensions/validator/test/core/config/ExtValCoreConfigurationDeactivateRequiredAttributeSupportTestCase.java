@@ -74,9 +74,21 @@ public class ExtValCoreConfigurationDeactivateRequiredAttributeSupportTestCase e
         assertFalse(ExtValUtils.isRequiredResetActivated());
     }
 
+    public void testDeactivateRequiredAttributeSupportDefaultWithOverrule()
+    {
+        DefaultExtValCoreConfiguration.overruleDeactivateRequiredAttributeSupport(Boolean.TRUE, true);
+        assertTrue(ExtValUtils.isRequiredResetActivated());
+    }
+
     public void testDeactivateRequiredAttributeSupportWebXml()
     {
         assertTrue(ExtValUtils.isRequiredResetActivated());
+    }
+
+    public void testDeactivateRequiredAttributeSupportWebXmlWithOverrule()
+    {
+        DefaultExtValCoreConfiguration.overruleDeactivateRequiredAttributeSupport(Boolean.FALSE, true);
+        assertFalse(ExtValUtils.isRequiredResetActivated());
     }
 
     public void testDeactivateRequiredAttributeSupportCustomConfig()
