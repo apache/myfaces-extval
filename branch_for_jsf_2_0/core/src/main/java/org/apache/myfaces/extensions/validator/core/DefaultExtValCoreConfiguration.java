@@ -41,6 +41,9 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
 {
+    private static final String GLOBAL_PROPERTY_MODE_INIT_REQUIRED = "mode:init:required";
+    private static final String GLOBAL_PROPERTY_MODE_RESET_REQUIRED = "mode:reset:required";
+    
     public String customMessageBundleBaseName()
     {
         return WebXmlParameter.CUSTOM_MESSAGE_BUNDLE;
@@ -219,7 +222,8 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
 
     public boolean activateRequiredInitialization()
     {
-        Boolean globalProperty = (Boolean)ExtValContext.getContext().getGlobalProperty("mode:init:required");
+        Boolean globalProperty = (Boolean)ExtValContext.getContext().getGlobalProperty(
+                GLOBAL_PROPERTY_MODE_INIT_REQUIRED);
 
         if(globalProperty != null)
         {
@@ -230,6 +234,19 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
                 "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_REQUIRED_INITIALIZATION);
     }
 
+    /**
+     * Module and add-on writers can use this method to overrule the value of the parameter
+     * activateRequiredInitialization. it is also useful for them to specify a certain parameter value without the need
+     * for a web.xml initialization parameter.
+     * 
+     * @param value The value we want to give the parameter
+     * @param forceOverride do we force overriding of another value set by a call to this overrule method.
+     */
+    public static void overruleActivateRequiredInitialization(Boolean value, boolean forceOverride)
+    {
+        ExtValContext.getContext().addGlobalProperty(GLOBAL_PROPERTY_MODE_INIT_REQUIRED, value, forceOverride);
+    }
+    
     public boolean deactivateDefaultConvention()
     {
         return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_DEFAULT_CONVENTION);
@@ -263,7 +280,8 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
 
     public boolean deactivateRequiredAttributeSupport()
     {
-        Boolean globalProperty = (Boolean)ExtValContext.getContext().getGlobalProperty("mode:reset:required");
+        Boolean globalProperty = (Boolean)ExtValContext.getContext().getGlobalProperty(
+                GLOBAL_PROPERTY_MODE_RESET_REQUIRED);
 
         if(globalProperty != null)
         {
@@ -273,7 +291,20 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
         return WebXmlParameter.DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT != null &&
                 "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT);
     }
-
+    
+    /**
+     * Module and add-on writers can use this method to overrule the value of the parameter
+     * deactivateRequiredAttributeSupport. It is also useful for them to specify a certain parameter value without the
+     * need for a web.xml initialization parameter.
+     * 
+     * @param value The value we want to give the parameter
+     * @param forceOverride do we force overriding of another value set by a call to this overrule method.
+     */
+    public static void overruleDeactivateRequiredAttributeSupport(Boolean value, boolean forceOverride)
+    {
+        ExtValContext.getContext().addGlobalProperty(GLOBAL_PROPERTY_MODE_RESET_REQUIRED, value, forceOverride);
+    }
+    
     public boolean interpretEmptyStringSubmittedValuesAsNull()
     {
         return !"false".equalsIgnoreCase(WebXmlParameter.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL);
