@@ -166,6 +166,10 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
 
     public abstract boolean deactivateDefaultNameMappers();
 
+    /**
+     * Not used in 1.x.x version.
+     * @return Should the Extval EL resolver be deactivated.
+     */
     public abstract boolean deactivateElResolver();
 
     public abstract boolean deactivateComponentInitialization();

@@ -102,7 +102,6 @@ public class ExtValStartupListener extends AbstractStartupListener
         initPhaseListeners();
         initViolationSeverityKey();
         initDisableClientSideValidationKey();
-        initRequiredInitialization();
 
         executeCustomStartupListener();
     }
@@ -219,31 +218,4 @@ public class ExtValStartupListener extends AbstractStartupListener
                 ExtValCoreConfiguration.get().disableClientSideValidationValidationParameter(), false);
     }
 
-    private void initRequiredInitialization()
-    {
-        boolean requiredInitialization = ExtValCoreConfiguration.get().activateRequiredInitialization();
-
-        //noinspection deprecation
-        addRequiredInitializationAsGlobalProperty(requiredInitialization);
-
-        initRequiredAttributeSupport();
-    }
-
-    @Deprecated
-    private void addRequiredInitializationAsGlobalProperty(boolean requiredInitialization)
-    {
-        ExtValContext.getContext().addGlobalProperty("mode:init:required", requiredInitialization, false);
-    }
-
-    /**
-     * if it's configured that required init should happen,
-     * it's required to deactivate the support for the required attribute
-     */
-    @Deprecated
-    private void initRequiredAttributeSupport()
-    {
-        ExtValContext.getContext().addGlobalProperty("mode:reset:required",
-                ExtValCoreConfiguration.get().deactivateRequiredAttributeSupport(),
-                false);
-    }
 }
