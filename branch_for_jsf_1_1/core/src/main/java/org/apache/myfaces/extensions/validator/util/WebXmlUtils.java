@@ -67,8 +67,7 @@ public class WebXmlUtils
      */
     public static String getInitParameter(String key, boolean preserveBlanks)
     {
-        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key,
-                preserveBlanks);
+        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key, preserveBlanks);
     }
     
     /**
@@ -76,7 +75,7 @@ public class WebXmlUtils
      * 
      * @param prefix the prefix of the parameter
      * @param key the key name of the parameter
-     * @param preserveBlanks should blanks be kept?
+     * @param preserveBlanks indicates if blanks should be kept
      * 
      * @return the value of the initialization parameter, if specified.
      */
@@ -96,7 +95,5 @@ public class WebXmlUtils
         {
             return (value != null) ? value.replace(" ", "").trim() : null;
         }
-        
     }
-    
 }
