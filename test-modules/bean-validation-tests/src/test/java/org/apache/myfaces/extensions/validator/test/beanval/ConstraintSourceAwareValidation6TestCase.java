@@ -18,25 +18,29 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
+import java.lang.annotation.Annotation;
+
+import javax.faces.application.FacesMessage;
+
 import junit.framework.Test;
-import junit.framework.TestSuite;
+
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
+import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomConstraintSource;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomIgnoreConstraintSource;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomTargetProperty;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomTargetPropertyId;
 import org.apache.myfaces.extensions.validator.test.beanval.model.ConstraintSourceAware6Bean;
 
-import javax.faces.application.FacesMessage;
-import java.lang.annotation.Annotation;
-
 /**
  * EXTVAL-83
  *
  * @author Gerhard Petracek
  */
-public class ConstraintSourceAwareValidation6TestCase extends BaseBeanValPropertyValidationTestCase<ConstraintSourceAware6Bean>
+public class ConstraintSourceAwareValidation6TestCase extends
+        BaseBeanValPropertyValidationTestCase<ConstraintSourceAware6Bean>
 {
     public ConstraintSourceAwareValidation6TestCase(String name)
     {
@@ -45,7 +49,7 @@ public class ConstraintSourceAwareValidation6TestCase extends BaseBeanValPropert
 
     public static Test suite()
     {
-        return new TestSuite(ConstraintSourceAwareValidation6TestCase.class);
+        return new ClassLoaderTestSuite(ConstraintSourceAwareValidation6TestCase.class);
     }
 
     protected ConstraintSourceAware6Bean getBeanToTest()
@@ -54,11 +58,10 @@ public class ConstraintSourceAwareValidation6TestCase extends BaseBeanValPropert
     }
 
     @Override
-    protected void setUp() throws Exception
+    protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
-        super.setUp();
-
-        ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration() {
+        return new DefaultExtValCoreConfiguration()
+        {
             @Override
             public Class<? extends Annotation> constraintSourceAnnotation()
             {
@@ -82,7 +85,8 @@ public class ConstraintSourceAwareValidation6TestCase extends BaseBeanValPropert
             {
                 return CustomTargetPropertyId.class;
             }
-        }, true);
+
+        };
     }
 
     public void testCustomAnnotations1()
