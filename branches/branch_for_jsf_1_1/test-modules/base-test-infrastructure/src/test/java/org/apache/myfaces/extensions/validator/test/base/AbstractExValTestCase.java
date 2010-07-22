@@ -19,40 +19,41 @@
 package org.apache.myfaces.extensions.validator.test.base;
 
 import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Iterator;
 import java.util.HashMap;
-import java.lang.reflect.Field;
+import java.util.Iterator;
 
 import javax.faces.FactoryFinder;
-import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
+import javax.faces.el.ValueBinding;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 import junit.framework.TestCase;
 
-import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
+import org.apache.myfaces.extensions.validator.ExtValInformation;
+import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
+import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
-import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
-import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.core.el.ELHelper;
-import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
-import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.ExtValInformation;
-import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
-import org.apache.myfaces.extensions.validator.test.base.mock.MockValidationStrategyFactory;
-import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
+import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
+import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockELHelper;
+import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
+import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
+import org.apache.myfaces.extensions.validator.test.base.mock.MockValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.test.base.util.TestUtils;
+import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
 import org.apache.shale.test.mock.MockApplication;
 import org.apache.shale.test.mock.MockExternalContext;
@@ -173,6 +174,10 @@ public abstract class AbstractExValTestCase extends TestCase
         TestUtils.addDefaultRenderers(facesContext);
         TestUtils.addDefaultValidators(facesContext);
 
+        applyCustomConfigurations();
+
+		// This triggers already the config object. So it is possible that you
+		// need to set your custom config also in the getCustomConfigObjects method.
         final ELHelper defaultElHelper = ExtValUtils.getELHelper();
         ExtValContext.getContext().getFactoryFinder()
                 .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class)
@@ -230,6 +235,36 @@ public abstract class AbstractExValTestCase extends TestCase
     	servletContext.addInitParameter(key, value);
     }
 
+        private void applyCustomConfigurations()
+    {
+        ExtValModuleConfiguration[] customConfigs = getCustomConfigObjects();
+        if (customConfigs != null)
+        {
+            for (ExtValModuleConfiguration moduleConfiguration : customConfigs)
+            {
+                ExtValContext.getContext().addModuleConfiguration(getAbstractModuleConfiguration(moduleConfiguration),
+                        moduleConfiguration, false);
+            }
+        }
+    }
+
+    protected ExtValModuleConfiguration[] getCustomConfigObjects()
+    {
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends ExtValModuleConfiguration> getAbstractModuleConfiguration(Object moduleConfiguration)
+    {
+        Class<? extends ExtValModuleConfiguration> result = (Class<? extends ExtValModuleConfiguration>) moduleConfiguration
+                .getClass();
+        while (!Modifier.isAbstract(result.getModifiers()) && !Object.class.getName().equals(result.getName()))
+        {
+            result = (Class<? extends ExtValModuleConfiguration>) result.getSuperclass();
+        }
+        return result;
+    } 
+    
 	protected abstract void invokeStartupListeners();
 
     /**
