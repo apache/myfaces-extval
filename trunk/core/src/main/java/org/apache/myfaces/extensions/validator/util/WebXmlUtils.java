@@ -31,19 +31,72 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.INTERNAL)
 public class WebXmlUtils
 {
+    
+    /**
+     * Gets the initialization parameter from WEB.XML using the default prefix and removal of the spaces.
+     * 
+     * @param key the key name of the parameter
+     * 
+     * @return the value of the initialization parameter, if specified.
+     */
     public static String getInitParameter(String key)
     {
-        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key);
+        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key, false);
     }
 
+    /**
+     * Gets the initialization parameter from WEB.XML using the specified prefix and removal of the spaces.
+     * 
+     * @param prefix the prefix of the parameter
+     * @param name the name
+     * 
+     * @return the value of the initialization parameter, if specified.
+     */
     public static String getInitParameter(String prefix, String name)
     {
-        String parameterName = name;
+        return getInitParameter(prefix, name, false);
+    }
+    
+    /**
+     * Gets the initialization parameter from WEB.XML using the default prefix and removal of spaces can be specified.
+     * 
+     * @param key the key name of the parameter
+     * @param preserveBlanks should blanks be kept?
+     * 
+     * @return the value of the initialization parameter, if specified.
+     */
+    public static String getInitParameter(String key, boolean preserveBlanks)
+    {
+        return getInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX, key,
+                preserveBlanks);
+    }
+    
+    /**
+     * Gets the initialization parameter from WEB.XML using the specified prefix and removal of spaces can be specified.
+     * 
+     * @param prefix the prefix of the parameter
+     * @param key the key name of the parameter
+     * @param preserveBlanks should blanks be kept?
+     * 
+     * @return the value of the initialization parameter, if specified.
+     */
+    public static String getInitParameter(String prefix, String key, boolean preserveBlanks)
+    {
+        String parameterName = key;
         if(prefix != null)
         {
-            parameterName = prefix + "." + name;
+            parameterName = prefix + "." + key;
         }
         String value = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(parameterName);
-        return (value != null) ? value.replace(" ", "").trim() : null;
+        if (preserveBlanks)
+        {
+            return value;
+        }
+        else
+        {
+            return (value != null) ? value.replace(" ", "").trim() : null;
+        }
+        
     }
+    
 }
