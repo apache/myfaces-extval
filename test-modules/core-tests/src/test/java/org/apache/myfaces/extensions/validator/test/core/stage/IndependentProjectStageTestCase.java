@@ -44,12 +44,11 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
         return new TestSuite(IndependentProjectStageTestCase.class);
     }
 
+    
     @Override
-    protected void setUp() throws Exception
+    protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
-        super.setUp();
-
-        ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration()
+        return new DefaultExtValCoreConfiguration()
         {
             @Override
             public ProjectStageResolver projectStageResolver()
@@ -76,7 +75,8 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
 
                         if (!(independentProjectStageName == null || "".equals(independentProjectStageName)))
                         {
-                            ProjectStageName independentResult = ProjectStage.createStageName(independentProjectStageName.trim());
+                            ProjectStageName independentResult = ProjectStage
+                                    .createStageName(independentProjectStageName.trim());
 
                             //check jsf stage values first
                             ProjectStageName result = ProjectStage.createStageName(independentProjectStageName.trim());
@@ -89,8 +89,8 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
                             }
 
                             //check custom stage values
-                            if (ProjectStage.createStageName(CUSTOM_DEV).equals(independentResult) ||
-                                    ProjectStage.createStageName(CUSTOM_TEST).equals(independentResult))
+                            if (ProjectStage.createStageName(CUSTOM_DEV).equals(independentResult)
+                                    || ProjectStage.createStageName(CUSTOM_TEST).equals(independentResult))
                             {
                                 return ProjectStage.createStage(independentResult);
                             }
@@ -100,7 +100,7 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
                     }
                 };
             }
-        }, true);
+        };
     }
 
     private String resolveProjectStageName(String parameterName)

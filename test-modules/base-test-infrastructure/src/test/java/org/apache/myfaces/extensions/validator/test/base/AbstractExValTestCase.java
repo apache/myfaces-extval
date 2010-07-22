@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.shared_impl.config.MyfacesConfig;
@@ -49,6 +50,7 @@ import java.net.URLClassLoader;
 import java.net.URL;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -162,6 +164,10 @@ public abstract class AbstractExValTestCase extends TestCase
 
         expressionFactory = (MockExpressionFactory)application.getExpressionFactory();
 
+        applyCustomConfigurations();
+
+        // This triggers already the config object.  So it is possible that you
+        // need to set your custom config also in the getCustomConfigObjects method.
         final ELHelper defaultElHelper = ExtValUtils.getELHelper();
         ExtValContext.getContext().getFactoryFinder()
                 .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class)
@@ -219,6 +225,39 @@ public abstract class AbstractExValTestCase extends TestCase
     	servletContext.addInitParameter(key, value);
     }
 
+    private void applyCustomConfigurations()
+    {
+        ExtValModuleConfiguration[] customConfigs = getCustomConfigObjects();
+        if (customConfigs != null)
+        {
+            for (ExtValModuleConfiguration moduleConfiguration : customConfigs)
+            {
+                ExtValContext.getContext().addModuleConfiguration(getAbstractModuleConfiguration(moduleConfiguration),
+                        moduleConfiguration, false);
+            }
+        }
+    }
+        
+    protected ExtValModuleConfiguration[] getCustomConfigObjects()
+    {
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends ExtValModuleConfiguration> getAbstractModuleConfiguration(
+            Object moduleConfiguration)
+    {
+        Class<? extends ExtValModuleConfiguration> result = (Class<? extends ExtValModuleConfiguration>) moduleConfiguration
+                .getClass();
+        while (!Modifier.isAbstract(result.getModifiers())
+                && !Object.class.getName().equals(result.getName()))
+        {
+            result = (Class<? extends ExtValModuleConfiguration>) result
+                    .getSuperclass();
+        }
+        return result;
+    }        
+        
 	protected abstract void invokeStartupListeners();
 
     /**
