@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.trinidad.startup;
 
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
+import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.storage.StorageManagerHolder;
@@ -142,10 +143,10 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
     protected void initRequiredInitialization()
     {
-        ExtValContext.getContext().addGlobalProperty("mode:init:required", Boolean.TRUE, true);
+        DefaultExtValCoreConfiguration.overruleActivateRequiredInitialization(Boolean.TRUE, true);
 
         //there is no support for client-side severity aware validation -> don't reset the value
-        ExtValContext.getContext().addGlobalProperty("mode:reset:required", Boolean.FALSE, false);
+        DefaultExtValCoreConfiguration.overruleDeactivateRequiredAttributeSupport(Boolean.FALSE, false);
     }
 
     private boolean isRequiredInitializationDeactivated()
