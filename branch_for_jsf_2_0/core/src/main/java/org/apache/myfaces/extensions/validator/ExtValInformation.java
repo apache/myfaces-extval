@@ -34,5 +34,5 @@ public interface ExtValInformation
     // getPackage isn't working with a custom class loader
     static final String EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME = ClassUtils.getPackageName(ExtValInformation.class);
     static final String WEBXML_PARAM_PREFIX = ClassUtils.getPackageName(ExtValInformation.class);
-    static final String VERSION = ClassUtils.getJarVersion(ExtValInformation.class) + "_r04m03.1";
+    static final String VERSION = ClassUtils.getJarVersion(ExtValInformation.class) + "_r04m04";
 }
