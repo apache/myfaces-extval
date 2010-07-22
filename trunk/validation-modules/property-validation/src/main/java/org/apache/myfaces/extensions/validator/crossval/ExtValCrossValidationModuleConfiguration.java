@@ -52,5 +52,5 @@ public abstract class ExtValCrossValidationModuleConfiguration implements ExtVal
      * web.xml config
      */
 
-    abstract boolean deactivateCrossvalidation();
+    public abstract boolean deactivateCrossvalidation();
 }

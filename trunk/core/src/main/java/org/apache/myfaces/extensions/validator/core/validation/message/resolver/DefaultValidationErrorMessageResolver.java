@@ -18,10 +18,11 @@
  */
 package org.apache.myfaces.extensions.validator.core.validation.message.resolver;
 
-import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.core.InternalConventionProvider;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
  * Default MessageResolver which uses the default convention for the message bundle.
@@ -39,7 +40,7 @@ public class DefaultValidationErrorMessageResolver extends AbstractValidationErr
 
     public DefaultValidationErrorMessageResolver()
     {
-        this.baseName = InternalConventionProvider.getModuleMessageBundleName(getClass().getPackage().getName());
+        this.baseName = InternalConventionProvider.getModuleMessageBundleName(ClassUtils.getPackageName(getClass()));
     }
 
     //not used at the moment - just for a convention

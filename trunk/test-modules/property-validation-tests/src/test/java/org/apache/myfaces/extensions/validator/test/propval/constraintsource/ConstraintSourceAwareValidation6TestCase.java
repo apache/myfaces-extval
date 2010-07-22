@@ -31,11 +31,11 @@ public class ConstraintSourceAwareValidation6TestCase extends
         return new ConstraintSourceAware6Bean();
     }
 
+    
     @Override
-    protected void setUp() throws Exception
+    protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
-        super.setUp();
-        ExtValCoreConfiguration.use(new DefaultExtValCoreConfiguration() {
+        return new DefaultExtValCoreConfiguration() {
             @Override
             public Class<? extends Annotation> constraintSourceAnnotation()
             {
@@ -59,7 +59,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
             {
                 return CustomTargetPropertyId.class;
             }
-        }, true);
+        };
     }
 
     public void testCustomAnnotations1()

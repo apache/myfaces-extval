@@ -51,6 +51,7 @@
         <module>core-tests</module>
         <module>property-validation-tests</module>
         <module>bean-validation-tests</module>
+		<module>trinidad-component-support-tests</module>
     </modules>
 
     <dependencies>
@@ -173,6 +174,7 @@
                         <exclude>**/TestUtils.java</exclude>
                         <exclude>**/*Bean.java</exclude>
                     </excludes>
+					<useSystemClassLoader>true</useSystemClassLoader>
                 </configuration>
             </plugin>
         </plugins>
