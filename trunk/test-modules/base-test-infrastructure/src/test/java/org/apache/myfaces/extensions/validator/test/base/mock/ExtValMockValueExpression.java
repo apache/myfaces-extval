@@ -20,12 +20,12 @@ package org.apache.myfaces.extensions.validator.test.base.mock;
 
 import org.apache.myfaces.extensions.validator.core.el.ExtValELResolver;
 import org.apache.shale.test.el.MockValueExpression;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -151,9 +151,9 @@ public class ExtValMockValueExpression extends MockValueExpression
             {
                 Field field = parent.getClass().getDeclaredField(elements[elements.length - 2]);
                 Type type = field.getGenericType();
-                if (type instanceof ParameterizedTypeImpl)
+                if (type instanceof ParameterizedType)
                 {
-                    Type[] types = ((ParameterizedTypeImpl) type).getActualTypeArguments();
+                    Type[] types = ((ParameterizedType) type).getActualTypeArguments();
                     return types[0].getClass();
                 }
                 return fallbackMapValueTypeDetermination(base);
