@@ -30,22 +30,37 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public abstract class ExtValTrinidadSupportModuleConfiguration implements ExtValModuleConfiguration
 {
-    private static ExtValContext extValContext = ExtValContext.getContext();
+    private static ExtValContext extValContext = null;
 
     protected ExtValTrinidadSupportModuleConfiguration()
     {
     }
 
+    /**
+     * Don't access ExtValContext during initialization of the class.  OpenWebBeans initializes all classes during
+     * startup of the WebContainer.  extValContext constructor tries to access Web.xml parameters through FacesContext
+     * which isn't available yet.
+     * @return The ExtValContext
+     */
+    private static ExtValContext getExtValContext()
+    {
+        if (extValContext == null)
+        {
+            extValContext = ExtValContext.getContext();
+        }
+        return extValContext;
+    }
+    
     public static ExtValTrinidadSupportModuleConfiguration get()
     {
-        return extValContext.getModuleConfiguration(ExtValTrinidadSupportModuleConfiguration.class);
+        return getExtValContext().getModuleConfiguration(ExtValTrinidadSupportModuleConfiguration.class);
     }
 
     @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValTrinidadSupportModuleConfiguration config, boolean forceOverride)
     {
-        return extValContext.addModuleConfiguration(
-                ExtValTrinidadSupportModuleConfiguration.class, config, forceOverride);
+        return getExtValContext().addModuleConfiguration(ExtValTrinidadSupportModuleConfiguration.class, config,
+                forceOverride);
     }
 
     /*
