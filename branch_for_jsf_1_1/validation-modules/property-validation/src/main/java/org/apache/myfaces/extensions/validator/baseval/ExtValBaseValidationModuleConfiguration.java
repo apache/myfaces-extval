@@ -30,22 +30,37 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.INTERNAL)
 public abstract class ExtValBaseValidationModuleConfiguration implements ExtValModuleConfiguration
 {
-    private static ExtValContext extValContext = ExtValContext.getContext();
+    private static ExtValContext extValContext = null;
 
     protected ExtValBaseValidationModuleConfiguration()
     {
     }
 
+    /**
+     * Don't access ExtValContext during initialization of the class.  OpenWebBeans initializes all classes during
+     * startup of the WebContainer.  extValContext constructor tries to access Web.xml parameters through FacesContext
+     * which isn't available yet.
+     * @return The ExtValContext
+     */
+    private static ExtValContext getExtValContext()
+    {
+        if (extValContext == null)
+        {
+            extValContext = ExtValContext.getContext();
+        }
+        return extValContext;
+    }
+    
     public static ExtValBaseValidationModuleConfiguration get()
     {
-        return extValContext.getModuleConfiguration(ExtValBaseValidationModuleConfiguration.class);
+        return getExtValContext().getModuleConfiguration(ExtValBaseValidationModuleConfiguration.class);
     }
 
     @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValBaseValidationModuleConfiguration config, boolean forceOverride)
     {
-        return extValContext.addModuleConfiguration(
-                ExtValBaseValidationModuleConfiguration.class, config, forceOverride);
+        return getExtValContext().addModuleConfiguration(ExtValBaseValidationModuleConfiguration.class, config,
+                forceOverride);
     }
 
     /*

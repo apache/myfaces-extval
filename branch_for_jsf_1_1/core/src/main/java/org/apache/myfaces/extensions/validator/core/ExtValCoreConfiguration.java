@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 @UsageInformation(UsageCategory.INTERNAL)
 public abstract class ExtValCoreConfiguration implements ExtValModuleConfiguration
 {
-    private static ExtValContext extValContext = ExtValContext.getContext();
+    private static ExtValContext extValContext = null;
 
     private static final Logger LOGGER = Logger.getLogger(ExtValCoreConfiguration.class.getName());
 
@@ -51,9 +51,24 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
     {
     }
 
+    /**
+     * Don't access ExtValContext during initialization of the class.  OpenWebBeans initializes all classes during
+     * startup of the WebContainer.  extValContext constructor tries to access Web.xml parameters through FacesContext
+     * which isn't available yet.
+     * @return The ExtValContext
+     */
+    private static ExtValContext getExtValContext()
+    {
+        if (extValContext == null)
+        {
+            extValContext = ExtValContext.getContext();
+        }
+        return extValContext;
+    }
+    
     public static ExtValCoreConfiguration get()
     {
-        ExtValCoreConfiguration moduleConfig = extValContext.getModuleConfiguration(ExtValCoreConfiguration.class);
+        ExtValCoreConfiguration moduleConfig = getExtValContext().getModuleConfiguration(ExtValCoreConfiguration.class);
 
         if(moduleConfig == null)
         {
@@ -65,7 +80,7 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
     @UsageInformation(UsageCategory.INTERNAL)
     public static boolean use(ExtValCoreConfiguration config, boolean forceOverride)
     {
-        return extValContext.addModuleConfiguration(ExtValCoreConfiguration.class, config, forceOverride);
+        return getExtValContext().addModuleConfiguration(ExtValCoreConfiguration.class, config, forceOverride);
     }
 
     /*
