@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.startup;
 
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
@@ -205,6 +207,8 @@ public class ExtValStartupListener extends AbstractStartupListener
     }
 
     @Deprecated
+    @ToDo(value=Priority.MEDIUM, description="DefaultValidationParameterFactory#tryToFindGlobalParameter still uses" +
+            "the global parameter")
     private void initViolationSeverityKey()
     {
         ExtValContext.getContext().addGlobalProperty(ViolationSeverity.class.getName(),
