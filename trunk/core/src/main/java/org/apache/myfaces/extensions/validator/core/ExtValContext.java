@@ -78,9 +78,17 @@ public class ExtValContext
 
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
+    /**
+     * Storage for all configuration objects.
+     * @since r4
+     */
     private Map<Class<? extends ExtValModuleConfiguration>, ExtValModuleConfiguration> extValConfig =
             new ConcurrentHashMap<Class<? extends ExtValModuleConfiguration>, ExtValModuleConfiguration>();
 
+    /**
+     * Configured Module Configuration resolver.
+     * @since r4
+     */
     private ExtValModuleConfigurationResolver defaultModuleConfigurationResolver;
 
     private Map<StaticConfigurationNames, List<StaticConfiguration<String, String>>> staticConfigMap
@@ -94,6 +102,18 @@ public class ExtValContext
         this.contextHelper = new ExtValContextInternals();
         this.invocationOrderAwareContextHelper = new ExtValContextInvocationOrderAwareInternals(this.contextHelper);
 
+        retrieveModuleConfigurationResolver();
+    }
+
+    /**
+     * Retrieves the Module Configuration Resolver.  Code looks first for a resolver located under the ExtVal Custom
+     * package (org.apache.myfaces.extensions.validator.custom.ExtValModuleConfigurationResolver) and then for a
+     * web.xml defined initialization parameter org.apache.myfaces.extensions.validator.core.
+     * ExtValModuleConfigurationResolver
+     * for a fully qualified class name.  The resolver configured by the web.xml overrides the custom defined one.
+     */
+    private void retrieveModuleConfigurationResolver()
+    {
         Object customExtValModuleConfigurationResolver =
                 ClassUtils.tryToInstantiateClassForName(CUSTOM_EXTVAL_MODULE_CONFIGURATION_RESOLVER_CLASS_NAME);
 
@@ -442,7 +462,18 @@ public class ExtValContext
     {
         return this.globalProperties.get(name);
     }
-    
+
+    /**
+     * Retrieves the configuration object of the type specified by the parameter 'targetType'.  The type should be
+     * direct descendants of ExtValModuleConfiguration and the same as the type you used to register the configuration
+     * (see addModuleConfiguration).
+     *
+     * @param targetType Key that specifies the type of configuration, should be direct descendants of
+     * ExtValModuleConfiguration
+     * @param <T>
+     * @return  configuration object
+     * @since r4
+     */
     public <T extends ExtValModuleConfiguration> T getModuleConfiguration(Class<T> targetType)
     {
         ExtValModuleConfiguration result = this.extValConfig.get(targetType);
@@ -451,20 +482,44 @@ public class ExtValContext
         return (T)result;
     }
 
+    /**
+     * Registers the configuration object specified in the parameter 'config' for the type 'key' within ExtVal
+     * overriding
+     * possible another registration.
+     *
+     * @param key Key that specifies the type of configuration, should be direct descendants of
+     * ExtValModuleConfiguration
+     * @param extValConfig Configuration object to register
+     * @return true
+     * @since r4
+     */
     public boolean addModuleConfiguration(Class<? extends ExtValModuleConfiguration> key,
                                           ExtValModuleConfiguration extValConfig)
     {
         return addModuleConfiguration(key, extValConfig, true);
     }
 
+    /**
+     * Registers the configuration object specified in the parameter 'config' for the type 'key' within ExtVal.  When a
+     * configuration object already exist for the key and we don't specify to override it (parameter forceOverride) the
+     * configuration isn't registered.
+     * @param key Key that specifies the type of configuration, should be direct descendants of
+     * ExtValModuleConfiguration
+     * @param config Configuration object to register
+     * @param forceOverride Do we override another custom configuration that is already registered.
+     * @return true is the configuration is registered or false if already existed and no ofrce override specified.
+     * @since r4
+     */
     public boolean addModuleConfiguration(Class<? extends ExtValModuleConfiguration> key,
                                           ExtValModuleConfiguration config,
                                           boolean forceOverride)
     {
+        // Check if it already exists.
         if (this.extValConfig.containsKey(key))
         {
             if (!forceOverride)
             {
+                // Don't forced, so not registered
                 return false;
             }
 
@@ -473,13 +528,16 @@ public class ExtValContext
 
         //anonymous class are only supported for test-cases and
         //there we don't need a custom config defined in the web.xml
+        // or from a resolver
         if(!config.getClass().isAnonymousClass())
         {
             config = tryToLoadCustomConfigImplementation(config);
         }
 
+        // Store the configuration
         this.extValConfig.put(key, config);
 
+        // Logging when in Development Stage.
         if(JsfProjectStage.is(JsfProjectStage.Development))
         {
             this.logger.info("config for key [" + config.getClass() + "] added");
@@ -488,11 +546,22 @@ public class ExtValContext
         return true;
     }
 
+    /**
+     * Tries to load a custom configuration implementation by looking for a web.xml initialization parameter. The method
+     * returns the configuration object that should be used. That is, the custom defined version or the specified
+     * as parameter of the method.
+     *
+     * @param config The configuration object for which we try to load another version
+     * @return The custom configuration object or parameter specified if no alternative found.
+     * @since r4
+     */
     private ExtValModuleConfiguration tryToLoadCustomConfigImplementation(ExtValModuleConfiguration config)
     {
-
+        // Get the parent if the parameter.  For the default version, like DefaultExtValCoreConfiguration, it is
+        // the abstract base class.
         Class configClass = config.getClass().getSuperclass();
 
+        // To be on the safe side that the parent still belongs to the configuration part of ExtVal.
         if(!ExtValModuleConfiguration.class.isAssignableFrom(configClass))
         {
             return config;
@@ -502,15 +571,18 @@ public class ExtValContext
         Class<? extends ExtValModuleConfiguration> configDefinitionClass =
                 (Class<? extends  ExtValModuleConfiguration>)configClass;
 
+        // If we have a resolver, use it to retrieve the configuration
         if(this.defaultModuleConfigurationResolver != null)
         {
             config = this.defaultModuleConfigurationResolver.getCustomConfiguration(configDefinitionClass);
         }
 
+        // Lookup the web.xml initialization parameter
         String customConfigClassName = getInitParameter(null, configDefinitionClass.getName());
 
         if(customConfigClassName != null)
         {
+            // If specified, see if it exists and can be used.
             Object customConfig = ClassUtils.tryToInstantiateClassForName(customConfigClassName);
 
             if(customConfig instanceof ExtValModuleConfiguration)
@@ -518,6 +590,7 @@ public class ExtValContext
                 return (ExtValModuleConfiguration)customConfig;
             }
         }
+        // return the parameter or resolver one.
         return config;
     }
 }
