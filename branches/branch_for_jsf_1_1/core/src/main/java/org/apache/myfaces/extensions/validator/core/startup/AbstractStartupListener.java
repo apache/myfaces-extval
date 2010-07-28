@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.startup;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -127,6 +129,8 @@ public abstract class AbstractStartupListener implements PhaseListener
                 "true".equalsIgnoreCase(WebXmlUtils.getInitParameter(null, getClass().getName() + ":DEACTIVATED"));
     }
 
+    @ToDo(value=Priority.LOW, description="ProjectStage#getCurrentProjectStage is using the config and not the global" +
+            "property. align.")
     protected void initProjectStageResolver()
     {
         if(!defaultProjectStageResolverInitialized)
