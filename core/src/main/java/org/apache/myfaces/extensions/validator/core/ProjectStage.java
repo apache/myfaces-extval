@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core;
 
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -53,6 +55,8 @@ public class ProjectStage
         return getCurrentProjectStage().equals(projectStage);
     }
 
+    @ToDo(value=Priority.LOW, description="AbstractStartupListener#initProjectStageResolver Sets the resolver in a" +
+            "global property. align.")
     private static ProjectStageName getCurrentProjectStage()
     {
         //set ProjectStageResolver to null to tweak the performance
