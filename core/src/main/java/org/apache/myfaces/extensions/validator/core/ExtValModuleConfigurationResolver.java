@@ -22,11 +22,24 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * Allows the retrieval of a custom configuration object.
+ *
  * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})
 public interface ExtValModuleConfigurationResolver
 {
+    /**
+     * Retrieves the custom configuration object which is of the type specified by the parameter. The type of the
+     * parameter is one of the abstract classes which directly implement the ExtValModuleConfiguration interface, like
+     * ExtValCoreConfiguration. The return object should not only implement the ExtValModuleConfiguration, but
+     * should also extend from the class specified in the configType. The method isn't allowed to return null except
+     * for the case that a custom configuration object for that type is defined as web.xml initialization parameter.
+     *
+     * @param configType Class type indicating the type of module for which we need to retrieve the configuration
+     * @param <T>
+     * @return Configuration object which ExtVal will use.
+     */
     <T extends ExtValModuleConfiguration> ExtValModuleConfiguration getCustomConfiguration(Class<T> configType);
 }

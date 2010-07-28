@@ -121,6 +121,9 @@ interface WebXmlParameter
     /*
      * deactivate
      */
+    /**
+     * @since r4
+     */
     static final String DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT = WebXmlUtils
             .getInitParameter("DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT");
 
