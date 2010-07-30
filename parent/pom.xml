@@ -275,6 +275,6 @@
     </profiles>
 
     <properties>
-        <jsf.version>2.0.0-beta-2</jsf.version>
+        <jsf.version>2.0.1</jsf.version>
     </properties>
 </project>

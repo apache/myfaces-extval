@@ -21,17 +21,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
-    <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
-    <artifactId>myfaces-extval-property-validation</artifactId>
+    <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
+    <artifactId>examples-hello_world</artifactId>
 
-    <name>MyFaces Extensions-Validator Property-Validation-Module</name>
+    <name>MyFaces Extensions-Validator examples hello world</name>
     <version>2.0.4-SNAPSHOT</version>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
-        <artifactId>validation-modules-project</artifactId>
+        <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
+        <artifactId>examples-project</artifactId>
         <version>2.0.4-SNAPSHOT</version>
     </parent>
 
@@ -42,64 +42,38 @@
             <version>2.0.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
+            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+            <artifactId>myfaces-extval-property-validation</artifactId>
+            <version>2.0.4-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
             <version>${jsf.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
             <scope>compile</scope>
         </dependency>
+        
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.1</version>
-            <scope>test</scope>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>${jsf.version}</version>
+            <scope>compile</scope>
         </dependency>
         
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>runtime</scope>
+        </dependency>        
+
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/config</directory>
-                <includes>
-                    <include>**/*xml</include>
-                </includes>
-                <targetPath>/META-INF</targetPath>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>LICENSE.txt</include>
-                    <include>NOTICE.txt</include>
-                </includes>
-                <targetPath>/META-INF</targetPath>
-            </resource>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*properties</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <inherited>true</inherited>
@@ -115,17 +89,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.4.2</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/Abstract*.java</exclude>
-                        <exclude>**/TestUtils.java</exclude>
-                        <exclude>**/*Bean.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>            
         </plugins>
     </build>
 
