@@ -92,17 +92,35 @@ class ExtValLazyRendererProxy extends Renderer implements RendererProxy
     public Object getCachedConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
-        if(getLazyRenderer() instanceof RendererProxy)
+        Renderer renderer = getLazyRenderer();
+        if(renderer instanceof RendererProxy)
         {
             return ((RendererProxy)getLazyRenderer()).getCachedConvertedValue(facesContext, uiComponent, o);
         }
-        return getLazyRenderer().getConvertedValue(facesContext, uiComponent, o);
+
+        //by default there is no proxy - so we use a local cache
+        if(ConvertedValueCache.isCachedValueAvailable())
+        {
+            return ConvertedValueCache.getCachedValue();
+        }
+
+        Object result = renderer.getConvertedValue(facesContext, uiComponent, o);
+        ConvertedValueCache.setCachedValue(result);
+        return result;
     }
 
     @Override
     public Object getConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o)
         throws ConverterException
     {
+        if(getLazyRenderer() == this.wrapped)
+        {
+            if(ConvertedValueCache.isCachedValueAvailable())
+            {
+                return ConvertedValueCache.getCachedValue();
+            }
+        }
+
         return getLazyRenderer().getConvertedValue(facesContext, uiComponent, o);
     }
 
@@ -136,5 +154,10 @@ class ExtValLazyRendererProxy extends Renderer implements RendererProxy
     public Renderer getWrappedRenderer()
     {
         return this.wrapped;
+    }
+
+    void resetConvertedValueCache()
+    {
+        ConvertedValueCache.reset();
     }
 }
