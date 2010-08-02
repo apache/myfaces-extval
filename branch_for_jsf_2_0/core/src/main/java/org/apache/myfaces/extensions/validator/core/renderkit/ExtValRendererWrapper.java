@@ -350,59 +350,71 @@ public class ExtValRendererWrapper extends Renderer
 
         try
         {
-            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            try
             {
-                logger.finest("start beforeGetConvertedValue of " + rendererInterceptor.getClass().getName());
-
-                try
+                for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
                 {
-                    rendererInterceptor.beforeGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
-                }
-                catch (SkipRendererDelegationException e)
-                {
-                    convertedObject = e.getReturnValueOnException(convertedObject);
+                    logger.finest("start beforeGetConvertedValue of " + rendererInterceptor.getClass().getName());
 
-                    logger.log(Level.FINEST, "getConvertedValue delegation canceled", e);
-
-                    delegateToWrappedRenderer = false;
-
-                    if(e.isSkipOtherInterceptors())
+                    try
                     {
-                        break;
+                        rendererInterceptor.beforeGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
                     }
+                    catch (SkipRendererDelegationException e)
+                    {
+                        convertedObject = e.getReturnValueOnException(convertedObject);
+
+                        logger.log(Level.FINEST, "getConvertedValue delegation canceled", e);
+
+                        delegateToWrappedRenderer = false;
+
+                        if(e.isSkipOtherInterceptors())
+                        {
+                            break;
+                        }
+                    }
+
+                    logger.finest("beforeGetConvertedValue of " +
+                        rendererInterceptor.getClass().getName() + " finished");
                 }
-
-                logger.finest("beforeGetConvertedValue of " +
-                    rendererInterceptor.getClass().getName() + " finished");
             }
-        }
-        catch (SkipBeforeInterceptorsException e)
-        {
-            logger.log(Level.FINEST, "beforeGetConvertedValue interceptors canceled", e);
-        }
-
-        /*
-         * delegate
-         */
-        if(delegateToWrappedRenderer)
-        {
-            convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
-        }
-
-        try
-        {
-            for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+            catch (SkipBeforeInterceptorsException e)
             {
-                logger.finest("start afterGetConvertedValue of " + rendererInterceptor.getClass().getName());
+                logger.log(Level.FINEST, "beforeGetConvertedValue interceptors canceled", e);
+            }
 
-                rendererInterceptor.afterGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
+            /*
+             * delegate
+             */
+            if(delegateToWrappedRenderer)
+            {
+                convertedObject = wrapped.getConvertedValue(facesContext, uiComponent, o);
+            }
 
-                logger.finest("afterGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+            try
+            {
+                for(RendererInterceptor rendererInterceptor : extValContext.getRendererInterceptors())
+                {
+                    logger.finest(
+                            "start afterGetConvertedValue of " + rendererInterceptor.getClass().getName());
+
+                    rendererInterceptor.afterGetConvertedValue(facesContext, uiComponent, o, this.wrapped);
+
+                    logger.finest(
+                            "afterGetConvertedValue of " + rendererInterceptor.getClass().getName() + " finished");
+                }
+            }
+            catch (SkipAfterInterceptorsException e)
+            {
+                logger.log(Level.FINEST, "afterGetConvertedValue interceptors canceled", e);
             }
         }
-        catch (SkipAfterInterceptorsException e)
+        finally
         {
-            logger.log(Level.FINEST, "afterGetConvertedValue interceptors canceled", e);
+            if(this.wrapped instanceof ExtValLazyRendererProxy)
+            {
+                ((ExtValLazyRendererProxy)this.wrapped).resetConvertedValueCache();
+            }
         }
 
         return convertedObject;
