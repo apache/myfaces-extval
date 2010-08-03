@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
-import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIs;
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
+import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -46,18 +46,9 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
     protected static final String COMPARED_VALUE_KEY = "target value";
     protected static final String REVERSE_COMPARED_VALUE_KEY = "reverse target value";
 
-    @Override
-    public boolean useTargetComponentToDisplayErrorMsg(
-            CrossValidationStorageEntry crossValidationStorageEntry)
+    protected MessageTarget getMessageTarget(DateIs annotation)
     {
-        return true;
-    }
-
-    //TODO test & remove
-    @Override
-    protected boolean handleSourceViolation(CrossValidationStorageEntry entryOfSource)
-    {
-        return false;
+        return annotation.validationErrorMsgTarget();
     }
 
     public boolean isViolation(Object object1, Object object2, DateIs annotation)

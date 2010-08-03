@@ -44,5 +44,7 @@ public @interface Equals
 
     String validationErrorMsgKey() default "duplicated_content_required";
 
+    MessageTarget validationErrorMsgTarget() default MessageTarget.both;
+
     Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }
