@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidation
 import org.apache.myfaces.extensions.validator.core.validation.EmptyValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.NullValueAwareValidationStrategy;
 import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
+import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
 import org.apache.myfaces.extensions.validator.crossval.parameter.CaseInsensitive;
-import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -40,10 +40,9 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class EqualsStrategy extends AbstractCompareStrategy
 {
-    @Override
-    public boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
+    protected MessageTarget getMessageTarget(Annotation annotation)
     {
-        return true;
+        return ((Equals) annotation).validationErrorMsgTarget();
     }
 
     protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)

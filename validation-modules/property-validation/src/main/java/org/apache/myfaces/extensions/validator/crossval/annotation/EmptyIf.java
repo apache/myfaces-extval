@@ -49,5 +49,7 @@ public @interface EmptyIf
 
     String validationErrorMsgKey() default "field_not_empty";
 
+    MessageTarget validationErrorMsgTarget() default MessageTarget.source;
+
     Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }
