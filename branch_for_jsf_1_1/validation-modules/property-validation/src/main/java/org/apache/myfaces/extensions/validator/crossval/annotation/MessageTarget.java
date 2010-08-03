@@ -20,37 +20,13 @@ package org.apache.myfaces.extensions.validator.crossval.annotation;
 
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
-import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import java.lang.annotation.Documented;
 
 /**
  * @author Gerhard Petracek
- * @since 1.x.1
+ * @since r4
  */
-@Target({METHOD, FIELD})
-@Retention(RUNTIME)
-@Documented
 @UsageInformation(UsageCategory.API)
-public @interface RequiredIf
+public enum MessageTarget
 {
-    String[] valueOf();
-
-    /*
-     * optional section
-     */
-
-    RequiredIfType is() default RequiredIfType.not_empty;
-
-    String validationErrorMsgKey() default "empty_field";
-
-    MessageTarget validationErrorMsgTarget() default MessageTarget.source;
-
-    Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
+    source, target, both
 }

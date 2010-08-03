@@ -51,6 +51,8 @@ public @interface DateIs
 
     String validationErrorMsgKey() default "";
 
+    MessageTarget validationErrorMsgTarget() default MessageTarget.target;
+
     String notBeforeErrorMsgKey() default "wrong_date_not_before";
 
     String notAfterErrorMsgKey() default "wrong_date_not_after";
