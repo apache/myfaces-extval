@@ -31,6 +31,10 @@ import javax.faces.validator.ValidatorException;
 
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
+import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
+import static org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget.source;
+import static org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget.both;
+import static org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget.target;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -286,15 +290,25 @@ public abstract class AbstractCompareStrategy<A extends Annotation> extends Abst
         return entryOfTarget != null && entryOfTarget.getComponent() != null;
     }
 
+    @Deprecated
     protected boolean handleSourceViolation(CrossValidationStorageEntry entryOfSource)
     {
-        return true;
+        return useSourceComponentToDisplayErrorMsg(entryOfSource);
     }
 
-    protected boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry crossValidationStorageEntry)
+    protected boolean useSourceComponentToDisplayErrorMsg(CrossValidationStorageEntry entryOfSource)
     {
-        return handleTargetViolation(crossValidationStorageEntry, null);
+        MessageTarget messageTarget = getMessageTarget((A)entryOfSource.getMetaDataEntry().getValue());
+        return messageTarget.equals(source) || messageTarget.equals(both);
     }
+
+    protected boolean useTargetComponentToDisplayErrorMsg(CrossValidationStorageEntry entryOfSource)
+    {
+        MessageTarget messageTarget = getMessageTarget((A)entryOfSource.getMetaDataEntry().getValue());
+        return messageTarget.equals(target) || messageTarget.equals(both);
+    }
+
+    protected abstract MessageTarget getMessageTarget(A annotation);
 
     /*
      * no target component (validation against the model) -> get reverse message for source component
