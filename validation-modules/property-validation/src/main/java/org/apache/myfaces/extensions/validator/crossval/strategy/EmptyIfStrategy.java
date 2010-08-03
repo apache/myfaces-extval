@@ -20,12 +20,18 @@ package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIf;
 import org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIfType;
+import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
 
 /**
  * @author Rudy De Busscher
  */
 public class EmptyIfStrategy extends AbstractCompareStrategy<EmptyIf>
 {
+    protected MessageTarget getMessageTarget(EmptyIf annotation)
+    {
+        return annotation.validationErrorMsgTarget();
+    }
+
     @Override
     protected String getValidationErrorMsgKey(EmptyIf annotation, boolean isTargetComponent)
     {
