@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.annotation.NotEquals;
+import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -37,6 +38,12 @@ import java.lang.annotation.Annotation;
 @UsageInformation(UsageCategory.INTERNAL)
 public class NotEqualsStrategy extends EqualsStrategy
 {
+    @Override
+    protected MessageTarget getMessageTarget(Annotation annotation)
+    {
+        return ((NotEquals) annotation).validationErrorMsgTarget();
+    }
+
     @Override
     protected String getValidationErrorMsgKey(Annotation annotation, boolean isTargetComponent)
     {
