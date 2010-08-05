@@ -86,7 +86,7 @@ public class ExtValStartupListener extends AbstractStartupListener
 
     protected void init()
     {
-        if(ExtValInformation.VERSION != null)
+        if(ExtValInformation.VERSION != null && !ExtValInformation.VERSION.startsWith("null"))
         {
             logger.info("starting up MyFaces Extensions Validator v" + ExtValInformation.VERSION);
         }
