@@ -67,7 +67,7 @@ public class TrinidadModuleStartupListener extends AbstractStartupListener
 
         initValidationExceptionInterception();
 
-        replaceDefaultProxyWithTrinidadRendererProxy();
+        //replaceDefaultProxyWithTrinidadRendererProxy();
 
         initTrinidadFacesMessageFactory();
         /*
