@@ -31,6 +31,7 @@ import javax.faces.context.FacesContext;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@Deprecated
 public class ExtValTrinidadRendererProxy extends ExtValRendererProxy
 {
     public ExtValTrinidadRendererProxy(Renderer renderer)
