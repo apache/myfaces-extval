@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.el;
 
+import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -57,6 +58,8 @@ public class DefaultELHelper implements ELHelper
     private static final boolean DEACTIVATE_EL_RESOLVER = ExtValCoreConfiguration.get().deactivateElResolver();
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
+
+    protected final boolean projectStageDevelopment = JsfProjectStage.is(JsfProjectStage.Development);
 
     public DefaultELHelper()
     {
@@ -157,21 +160,21 @@ public class DefaultELHelper implements ELHelper
             return null;
         }
 
-        ExtValELResolver elResolver = createWrappedELContext(facesContext);
+        ExtValELResolver elResolver = createExtValELResolver(facesContext);
         inspectTarget(valueExpression,
                 ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver), false);
 
         ExtValELResolver compositeComponentELResolver = null;
 
         //see EXTVAL-102
-        if (elResolver.getBaseObject() instanceof CompositeComponentExpressionHolder)
+        while(elResolver.getBaseObject() instanceof CompositeComponentExpressionHolder)
         {
             ValueExpression newValueExpression = ((CompositeComponentExpressionHolder) elResolver.getBaseObject())
                     .getExpression(elResolver.getProperty());
 
             if (newValueExpression != null)
             {
-                elResolver = createWrappedELContext(facesContext);
+                elResolver = createExtValELResolver(facesContext);
                 inspectTarget(newValueExpression,
                         ExtValELResolver.createContextWrapper(
                                 facesContext.getELContext(), elResolver), false);
@@ -183,7 +186,7 @@ public class DefaultELHelper implements ELHelper
         {
             ValueExpression compositeExpression = elResolver.getCompositeComponentExpression();
             
-            compositeComponentELResolver = createWrappedELContext(facesContext);
+            compositeComponentELResolver = createExtValELResolver(facesContext);
             inspectTarget(compositeExpression,
                     ExtValELResolver.createContextWrapper(
                             facesContext.getELContext(), compositeComponentELResolver), true);
@@ -225,9 +228,9 @@ public class DefaultELHelper implements ELHelper
         }
     }
 
-    private ExtValELResolver createWrappedELContext(FacesContext facesContext)
+    private ExtValELResolver createExtValELResolver(FacesContext facesContext)
     {
-        return new ExtValELResolver(facesContext.getApplication().getELResolver());
+        return new ExtValELResolver(facesContext.getApplication().getELResolver(), this.projectStageDevelopment);
     }
 
     //keep in sync with DefaultELHelper#getPropertyDetailsOfValueBinding of branch!!!
