@@ -44,6 +44,9 @@ public class ExtValELResolver extends ELResolver
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private ELResolver wrapped;
+
+    private boolean projectStageDevelopment;
+
     private Object baseObject;
     private String property;
     //forms the id for cross-validation within complex components
@@ -52,9 +55,10 @@ public class ExtValELResolver extends ELResolver
     private CompositeComponentExpressionHolder compositeComponentExpressionHolder;
     private String compositeComponentExpressionBase;
 
-    public ExtValELResolver(ELResolver elResolver)
+    public ExtValELResolver(ELResolver elResolver, boolean projectStageDevelopment)
     {
         this.wrapped = elResolver;
+        this.projectStageDevelopment = projectStageDevelopment;
     }
 
     public Object getBaseObject()
@@ -192,7 +196,16 @@ public class ExtValELResolver extends ELResolver
     public void setValue(ELContext elContext, Object o, Object o1, Object o2)
     {
         expression += "." + o1;
-        property = (String)o1;
+
+        if(o1 instanceof String)
+        {
+            property = (String)o1;
+        }
+        else
+        {
+            logWarningForUnsupportedExpression(o1);
+        }
+
         baseObject = o;
         elContext.setPropertyResolved(true);
     }
@@ -277,5 +290,20 @@ public class ExtValELResolver extends ELResolver
             return this.compositeComponentExpressionHolder.getExpression(this.compositeComponentExpressionBase);
         }
         return null;
+    }
+
+    private void logWarningForUnsupportedExpression(Object o1)
+    {
+        if(this.projectStageDevelopment)
+        {
+            try
+            {
+                this.logger.warning(o1 + " is not a valid property for constraint based validation.");
+            }
+            catch (NullPointerException e)
+            {
+                this.logger.warning("A property which doesn't support constraint based validation has been detected.");
+            }
+        }
     }
 }
