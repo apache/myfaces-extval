@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.interceptor;
 
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -52,6 +53,8 @@ import java.util.logging.Level;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractValidationInterceptor extends AbstractRendererInterceptor
 {
+    private ELHelper elHelper;
+
     protected boolean isRequiredInitializationSupported()
     {
         return false;
@@ -240,11 +243,20 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         return uiComponent instanceof EditableValueHolder && isValueBindingOfComponentValid(uiComponent);
     }
 
+    protected ELHelper getELHelper()
+    {
+        if(this.elHelper == null)
+        {
+            this.elHelper = ExtValUtils.getELHelper();
+        }
+        return this.elHelper;
+    }
+
     private boolean isValueBindingOfComponentValid(UIComponent uiComponent)
     {
         try
         {
-            return ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent) != null;
+            return getELHelper().getPropertyDetailsOfValueBinding(uiComponent) != null;
         }
         catch (Exception e)
         {

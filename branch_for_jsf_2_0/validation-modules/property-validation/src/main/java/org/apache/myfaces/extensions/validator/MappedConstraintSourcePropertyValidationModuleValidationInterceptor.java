@@ -43,8 +43,7 @@ public class MappedConstraintSourcePropertyValidationModuleValidationInterceptor
     @Override
     protected Map<String, Object> getTransformedMetaDataFor(FacesContext facesContext, UIComponent uiComponent)
     {
-        PropertyDetails originalPropertyDetail = ExtValUtils.getELHelper()
-                .getPropertyDetailsOfValueBinding(uiComponent);
+        PropertyDetails originalPropertyDetail = getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
 
         PropertyInformation propertyInformation = extractFromMappedConstraintSource(originalPropertyDetail);
 
