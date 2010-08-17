@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorageEntry;
 import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationStorage;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorage;
@@ -43,15 +44,16 @@ import java.util.logging.Logger;
 @UsageInformation(UsageCategory.INTERNAL)
 class ELCompareStrategy implements ReferencingStrategy
 {
-    protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     public boolean evaluateReferenceAndValidate(
             CrossValidationStorageEntry crossValidationStorageEntry,
             CrossValidationStorage crossValidationStorage,
             String validationTarget, AbstractCompareStrategy compareStrategy)
     {
-        if (ExtValUtils.getELHelper().isELTermWellFormed(validationTarget) &&
-            ExtValUtils.getELHelper().isELTermValid(FacesContext.getCurrentInstance(), validationTarget))
+        ELHelper elHelper = ExtValUtils.getELHelper();
+        if (elHelper.isELTermWellFormed(validationTarget) &&
+            elHelper.isELTermValid(FacesContext.getCurrentInstance(), validationTarget))
         {
             tryToValidateValueBinding(
                     crossValidationStorageEntry,

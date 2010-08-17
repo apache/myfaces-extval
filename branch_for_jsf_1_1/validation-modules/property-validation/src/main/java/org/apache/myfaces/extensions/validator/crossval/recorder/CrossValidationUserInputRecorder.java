@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.recorder;
 
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInformationStorageEntry;
@@ -40,6 +41,8 @@ import java.util.ArrayList;
 @UsageInformation(UsageCategory.INTERNAL)
 public class CrossValidationUserInputRecorder implements ProcessedInformationRecorder
 {
+    private ELHelper elHelper;
+
     public void recordUserInput(UIComponent uiComponent, Object value)
     {
         if (!(uiComponent instanceof EditableValueHolder))
@@ -53,8 +56,7 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
 
         ProcessedInformationStorageEntry entry;
 
-        PropertyDetails propertyDetails =
-            ExtValUtils.getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
+        PropertyDetails propertyDetails = getELHelper().getPropertyDetailsOfValueBinding(uiComponent);
 
         if(propertyDetails == null)
         {
@@ -94,5 +96,14 @@ public class CrossValidationUserInputRecorder implements ProcessedInformationRec
             //for normal validation
             processedInformationStorage.setEntry(key, entry);
         }
+    }
+
+    protected ELHelper getELHelper()
+    {
+        if(this.elHelper == null)
+        {
+            this.elHelper = ExtValUtils.getELHelper();
+        }
+        return this.elHelper;
     }
 }

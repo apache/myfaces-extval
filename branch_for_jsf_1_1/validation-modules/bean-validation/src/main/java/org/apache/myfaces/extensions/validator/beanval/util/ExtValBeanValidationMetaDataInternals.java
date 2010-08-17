@@ -59,10 +59,12 @@ class ExtValBeanValidationMetaDataInternals
 {
     private Logger logger;
     private LabeledMessageInternals labeledMessageInternals = new LabeledMessageInternals();
+    private ELHelper elHelper;
 
-    ExtValBeanValidationMetaDataInternals(Logger logger)
+    ExtValBeanValidationMetaDataInternals(Logger logger, ELHelper elHelper)
     {
         this.logger = logger;
+        this.elHelper = elHelper;
     }
 
     void extractExtValBeanValidationMetaData(PropertyDetails propertyDetails,
@@ -500,8 +502,6 @@ class ExtValBeanValidationMetaDataInternals
 
     private boolean isValidationPermitted(BeanValidation beanValidation)
     {
-        ELHelper elHelper = ExtValUtils.getELHelper();
-
         FacesContext facesContext = FacesContext.getCurrentInstance();
         for (String condition : beanValidation.conditions())
         {
@@ -570,8 +570,7 @@ class ExtValBeanValidationMetaDataInternals
     private Object tryToResolveValidationTargetExpression(String validationTargetExpression)
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression(validationTargetExpression);
-        return ExtValUtils.getELHelper()
-                .getValueOfExpression(FacesContext.getCurrentInstance(), valueBindingExpression);
+        return this.elHelper.getValueOfExpression(FacesContext.getCurrentInstance(), valueBindingExpression);
     }
 
     private void processGroups(BeanValidation beanValidation,
