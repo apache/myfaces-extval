@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.validator.core.validation.message.resolver
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -51,6 +52,8 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
     private String messageBundleBaseName;
     //with jsf 1.1 only available if there is a custom bean
     private String messageBundleVarName;
+
+    private ELHelper elHelper = ExtValUtils.getELHelper();
 
     protected AbstractValidationErrorMessageResolver()
     {
@@ -145,7 +148,7 @@ public abstract class AbstractValidationErrorMessageResolver implements MessageR
         //only in case of a ValidationErrorMessageResolver which is configured as bean
         if (this.messageBundleVarName != null && customMessage == null)
         {
-            resourceBundle = (ResourceBundle) ExtValUtils.getELHelper().getBean(messageBundleVarName);
+            resourceBundle = (ResourceBundle) this.elHelper.getBean(messageBundleVarName);
 
             if (resourceBundle != null)
             {
