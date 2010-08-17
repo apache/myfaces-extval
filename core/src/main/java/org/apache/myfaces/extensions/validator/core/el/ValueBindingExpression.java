@@ -37,6 +37,8 @@ public class ValueBindingExpression
     private String prefix;
     private String token;
 
+    private static final ELHelper EL_HELPER = ExtValUtils.getELHelper();
+
     public static ValueBindingExpression replaceOrAddProperty(ValueBindingExpression valueBindingExpression,
                                                               String newProperty)
     {
@@ -87,7 +89,7 @@ public class ValueBindingExpression
 
     public ValueBindingExpression(String expression)
     {
-        if(!ExtValUtils.getELHelper().isELTermWellFormed(expression))
+        if(!EL_HELPER.isELTermWellFormed(expression))
         {
             throw new IllegalStateException(expression + " is no valid el-expression");
         }
