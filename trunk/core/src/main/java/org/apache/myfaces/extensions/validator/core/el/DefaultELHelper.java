@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.el;
 
+import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -57,6 +58,8 @@ public class DefaultELHelper implements ELHelper
     private static final boolean DEACTIVATE_EL_RESOLVER = ExtValCoreConfiguration.get().deactivateElResolver();
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
+
+    protected final boolean projectStageDevelopment = JsfProjectStage.is(JsfProjectStage.Development);
 
     public DefaultELHelper()
     {
@@ -150,7 +153,9 @@ public class DefaultELHelper implements ELHelper
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        ExtValELResolver elResolver = new ExtValELResolver(facesContext.getApplication().getELResolver());
+        ExtValELResolver elResolver =
+                new ExtValELResolver(facesContext.getApplication().getELResolver(), this.projectStageDevelopment);
+        
         ELContext elContext = ExtValELResolver.createContextWrapper(facesContext.getELContext(), elResolver);
 
         ValueExpression valueExpression = uiComponent.getValueExpression("value");
