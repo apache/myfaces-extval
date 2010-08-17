@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationConte
 import org.apache.myfaces.extensions.validator.beanval.annotation.ModelValidation;
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
@@ -98,9 +99,11 @@ public class ModelValidationPhaseListener implements PhaseListener
         Set<ConstraintViolation<Object>> violations;
         Class[] groupsToValidate;
 
+        ELHelper elHelper = ExtValUtils.getELHelper();
+
         for (Object validationTarget : modelValidationEntry.getValidationTargets())
         {
-            propertyInformation = createPropertyInformation(modelValidationEntry, validationTarget);
+            propertyInformation = createPropertyInformation(modelValidationEntry, validationTarget, elHelper);
 
             if (!executeGlobalBeforeValidationInterceptors(
                     facesContext, modelValidationEntry.getComponent(), validationTarget, propertyInformation))
@@ -184,15 +187,14 @@ public class ModelValidationPhaseListener implements PhaseListener
     }
 
     private PropertyInformation createPropertyInformation(
-            ModelValidationEntry modelValidationEntry, Object validationTarget)
+            ModelValidationEntry modelValidationEntry, Object validationTarget, ELHelper elHelper)
     {
         PropertyInformation propertyInformation;
         PropertyDetails propertyDetails;
         propertyInformation = new DefaultPropertyInformation();
         if (modelValidationEntry.getComponent() != null)
         {
-            propertyDetails = ExtValUtils.getELHelper()
-                    .getPropertyDetailsOfValueBinding(modelValidationEntry.getComponent());
+            propertyDetails = elHelper.getPropertyDetailsOfValueBinding(modelValidationEntry.getComponent());
         }
         else
         {
