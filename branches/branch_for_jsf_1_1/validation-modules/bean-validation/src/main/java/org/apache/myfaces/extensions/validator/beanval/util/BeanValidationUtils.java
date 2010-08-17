@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.beanval.util;
 
 import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationEntry;
 import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
+import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
 import org.apache.myfaces.extensions.validator.core.validation.message.FacesMessageHolder;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -51,7 +52,11 @@ import java.util.logging.Logger;
 public class BeanValidationUtils
 {
     private static final Logger LOGGER = Logger.getLogger(BeanValidationUtils.class.getName());
-    private static ExtValBeanValidationMetaDataInternals bvmi = new ExtValBeanValidationMetaDataInternals(LOGGER);
+    private static ELHelper elHelper = ExtValUtils.getELHelper();
+
+    private static ExtValBeanValidationMetaDataInternals bvmi =
+            new ExtValBeanValidationMetaDataInternals(LOGGER, elHelper);
+
     private static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 
     @SuppressWarnings({"unchecked"})
@@ -111,7 +116,7 @@ public class BeanValidationUtils
     {
         String[] key = propertyDetails.getKey().split("\\.");
 
-        Object firstBean = ExtValUtils.getELHelper().getBean(key[0]);
+        Object firstBean = elHelper.getBean(key[0]);
 
         List<Class> foundGroupsForPropertyValidation = new ArrayList<Class>();
         List<Class> restrictedGroupsForPropertyValidation = new ArrayList<Class>();
