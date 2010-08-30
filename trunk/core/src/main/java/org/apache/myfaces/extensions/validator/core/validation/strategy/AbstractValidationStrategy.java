@@ -48,6 +48,14 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
         logger.fine(getClass().getName() + " instantiated");
     }
 
+    /**
+     * {@inheritDoc}
+     * Before actually executing the validation (done by the method processValidation) any initialization can be
+     * performed by the overriding the initValidation method. When a Validation exception occurs, the method
+     * processAfterValidatorException executes the registered
+     * {@link org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor}'s.
+     *
+     */
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          MetaDataEntry metaDataEntry, Object convertedObject)
     {
@@ -97,6 +105,16 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
         }
     }
 
+    /**
+     * Allows some initialization before the actual validation is performed. This initialization is executed before
+     * each validation and not only once when th class is constructed.
+     *
+     * @param facesContext The JSF Context
+     * @param uiComponent The JSF component that contained the value entered by the user.
+     * @param metaDataEntry The data holder which stores the meta-data and some information where the meta-data was
+     * around.
+     * @param convertedObject Converted object of the user entered value.
+     */
     protected void initValidation(FacesContext facesContext,
                                   UIComponent uiComponent,
                                   MetaDataEntry metaDataEntry,
@@ -106,6 +124,19 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
     }
 
     //override if needed
+    /**
+     * Executes the registered ValidationExceptionInterceptor to process the validation exception.
+     * 
+     * @param facesContext The JSF Context
+     * @param uiComponent The JSF component that contained the value entered by the user.
+     * @param metaDataEntry The data holder which stores the meta-data and some information where the meta-data was
+     * around.
+     * @param convertedObject Converted object of the user entered value.
+     * @param validatorException The validation exception that occurred.
+     * @return should return true when you like to have the ValidatorException thrown by the
+     * ExtValUtils#tryToThrowValidatorExceptionForComponent method.
+     * {@see org.apache.myfaces.extensions.validator.util.ExtValUtils#tryToThrowValidatorExceptionForComponent(javax.faces.component.UIComponent, javax.faces.application.FacesMessage, java.lang.Throwable)}
+     */
     protected boolean processAfterValidatorException(FacesContext facesContext,
                                                      UIComponent uiComponent,
                                                      MetaDataEntry metaDataEntry,
@@ -116,6 +147,19 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
                 uiComponent, metaDataEntry, convertedObject, validatorException, this);
     }
 
+    /**
+    /**
+     * Validates the value in the convertedObject parameter which the user entered as value of the uiComponent.
+     * Additional validation information can be found in the metaDataEntry parameter. The method throws a
+     * ValidatorException when violation of the validation rules occurs.
+     *
+     * @param facesContext The JSF Context
+     * @param uiComponent The JSF component that contained the value entered by the user.
+     * @param metaDataEntry The data holder which stores the meta-data and some information where the meta-data was
+     * around.
+     * @param convertedObject Converted object of the user entered value.
+     * @throws ValidatorException When violation of the validation rules occurs.
+     */
     protected abstract void processValidation(FacesContext facesContext,
                                               UIComponent uiComponent, MetaDataEntry metaDataEntry,
                                               Object convertedObject) throws ValidatorException;

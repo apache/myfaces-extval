@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import java.util.Map;
 
 /**
- * The interface for all factories which create meta-data extractors
+ * The interface for all factories which create meta-data extractors.
  * 
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -32,7 +32,18 @@ import java.util.Map;
 @UsageInformation(UsageCategory.API)
 public interface ComponentMetaDataExtractorFactory
 {
+    /**
+     * Returns a MetaDataExtractor. The factory should cache the result instance for performance reasons.
+     * @return MetaDataExtractor.
+     */
     MetaDataExtractor create();
 
+    /**
+     * Returns a MetaDataExtractor that add the supplied properties to the PropertyInformation object during extraction
+     * of the information.
+     *
+     * @param properties Properties to add to the information.
+     * @return MetaDataExtractor.
+     */
     MetaDataExtractor createWith(Map<String, Object> properties);
 }

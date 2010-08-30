@@ -37,6 +37,8 @@ import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 
 /**
+ * Contains helper methods that are dealing with annotation usage in the context of ExtVal.
+ *
  * @author Gerhard Petracek
  * @since r4
  */
@@ -47,6 +49,15 @@ public class ExtValAnnotationUtils
     private static final Logger LOGGER = Logger.getLogger(ExtValAnnotationUtils.class.getName());
 
     @ToDo(value = Priority.HIGH, description = "add cache")
+    /**
+     * Extract all annotations found on a property.  It looks for them on getter method, the field and all getters
+     * that are defined in interfaces. The name of the property for which the annotations are searched, is passed
+     * as value of the field property of the parameter propertyDetails.
+     *
+     * @param entityClass Class object where the annotations are searched.
+     * @param propertyDetails Information on the property where are interested in.
+     * @return Object with information and metaDataEntries for the annotations.
+     */
     public static PropertyInformation extractAnnotations(Class entityClass, PropertyDetails propertyDetails)
     {
         PropertyInformation propertyInformation = new DefaultPropertyInformation();
@@ -68,6 +79,15 @@ public class ExtValAnnotationUtils
     }
 
     @ToDo(value = Priority.HIGH, description = "add cache")
+    /**
+     * Extract all annotations found on the getter method of a property. The annotations are added to the
+     * propertyInformation MetaDataEntries.
+     *
+     * @param storage PropertyStorage where the getter method could be cached.
+     * @param entity Class object where the annotations are searched.
+     * @param property Name of the property we are interested.
+     * @param propertyInformation Where the MetaDataEntries for the annotations are added.
+     */
     public static void addPropertyAccessAnnotations(PropertyStorage storage, Class entity,
                                                     String property,
                                                     PropertyInformation propertyInformation)
@@ -81,6 +101,14 @@ public class ExtValAnnotationUtils
     }
 
     @ToDo(value = Priority.HIGH, description = "add cache")
+    /**
+     * Extract all annotations found the field of the property. A field name with an additional _ (underscore) is also
+     * searched. The annotations are added to the propertyInformation MetaDataEntries.
+     * @param storage PropertyStorage where the field could be cached.
+     * @param entity Class object where the annotations are searched.
+     * @param property Name of the property we are interested.
+     * @param propertyInformation Where the MetaDataEntries for the annotations are added.
+     */
     public static void addFieldAccessAnnotations(PropertyStorage storage, Class entity,
                                                  String property,
                                                  PropertyInformation propertyInformation)
@@ -126,8 +154,19 @@ public class ExtValAnnotationUtils
         return entry;
     }
 
+    /**
+     * Extract the value of the annotation property named value. The value is cast as a value of the parameter
+     * targetClass.
+     *
+     * @param annotation The annotations that is used to extract the property value from.
+     * @param targetClass Type of the property named value.
+     * @param <T> Result class
+     * @return value of the annotation property named value
+     */
     public static <T> T extractValueOf(Annotation annotation, Class<T> targetClass)
     {
+        // Since we can't be sure of the type, we can't use the
+        // annotation.annotationType().getDeclaredMethod(String, Class...) method.
         for (Method annotationMethod : annotation.annotationType().getDeclaredMethods())
         {
             if ("value".equals(annotationMethod.getName()))

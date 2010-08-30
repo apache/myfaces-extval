@@ -22,7 +22,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API;
 
 /**
- * manager to create and reset specific storage implementations
+ * Manager to create and reset specific storage implementations. The storageManager is responsible for creating and
+ * resetting a certain storage. A manager can be responsible for multiple storages an d they are identified by a key
+ * which is a string value.
+ *
+ * @param <T> Type of Storage that is maintained by the storageManager.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -30,6 +34,19 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API
 @UsageInformation(API)
 public interface StorageManager<T>
 {
+    /**
+     * Create, or retrieve a previously created instance, of the storage for the specified key.
+     *
+     * @param key  The type of storage that needs to be created
+     * @return The storage associated with the key or null when key is unknown to the storageManager.
+     */
     T create(String key);
+
+    /**
+     * Resets the storage identified with the specified key.  When the storage isn't created yet or the key is unknown
+     * for the storageManager, nothing is performed and no exception is thrown.
+     * 
+     * @param key  The type of storage that needs to be reset.
+     */
     void reset(String key);
 }

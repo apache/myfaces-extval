@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Allows to initialize components beforeEncodeBegin.<br/>
  * e.g.: you can add information for client-side validation mechanisms,...
- *
+ * The MetaDataTransformers are used to convert MetaDataEntry to the map based information supplied here.
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -37,5 +37,11 @@ import java.util.Map;
 @UsageInformation(UsageCategory.API)
 public interface ComponentInitializer
 {
+    /**
+     * Initialize components with information from the meta-data.
+     * @param facesContext The JSF Context
+     * @param uiComponent The component that should be initialised
+     * @param metaData Information from the MetaDataEntry in the abstract form.
+     */
     void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData);
 }

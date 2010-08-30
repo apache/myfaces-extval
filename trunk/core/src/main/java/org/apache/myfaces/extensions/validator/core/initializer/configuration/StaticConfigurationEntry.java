@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
+ * POJO data class to store the mapping between source and target by using generics.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */

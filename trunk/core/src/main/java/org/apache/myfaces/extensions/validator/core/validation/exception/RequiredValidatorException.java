@@ -25,7 +25,8 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 
 /**
- * to handle special cases in ValidationExceptionInterceptors
+ * To handle special cases in ValidationExceptionInterceptors. It acts just like a regular ValidatorException except
+ * that code can detect that the validation problem occurred related to a required field.
  *
  * @author Gerhard Petracek
  * @since x.x.3

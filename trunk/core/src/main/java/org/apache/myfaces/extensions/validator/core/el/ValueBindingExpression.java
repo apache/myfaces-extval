@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
+ * Object that stores the different parts of an expression string.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -39,6 +41,14 @@ public class ValueBindingExpression
 
     private static final ELHelper EL_HELPER = ExtValUtils.getELHelper();
 
+    /**
+     * Replace the property of the expression by the new property specified as parameter or add the property when
+     * expression has no property yet.  When the expression doesn't have a property (like {#bean}), the property is
+     * added to the base expression.
+     * @param valueBindingExpression The valueBindingExpression where we want to replace or add the property.
+     * @param newProperty The property to use.
+     * @return The resulting valueBindingExpression where property is replaced or added.
+     */
     public static ValueBindingExpression replaceOrAddProperty(ValueBindingExpression valueBindingExpression,
                                                               String newProperty)
     {
@@ -52,6 +62,13 @@ public class ValueBindingExpression
         }
     }
 
+    /**
+     * Replace the property in the expression string by the property specified as parameter.
+     *
+     * @param valueBindingExpression The valueBindingExpression where we want to replace the property
+     * @param newProperty The property to use.
+     * @return The resulting valueBindingExpression where property is replaced.
+     */
     public static ValueBindingExpression replaceProperty(ValueBindingExpression valueBindingExpression,
                                                          String newProperty)
     {
@@ -71,6 +88,13 @@ public class ValueBindingExpression
         }
     }
 
+    /**
+     * Add the property to the expression string.
+     *
+     * @param valueBindingExpression The valueBindingExpression where we want to add the property
+     * @param newProperty The property to add.
+     * @return The resulting valueBindingExpression where property is added.
+     */
     public static ValueBindingExpression addProperty(ValueBindingExpression valueBindingExpression, String newProperty)
     {
         String sourceExpression = valueBindingExpression.getExpressionString();
@@ -87,6 +111,12 @@ public class ValueBindingExpression
         }
     }
 
+    /**
+     * Creates an instance of a ValueBindingExpression based on a well formed EL expression. The creation is a recursive
+     * process that extracts the last property, the token the property is separated from the rest (. or [/[') and the
+     * text before the token as a new (ValueBinding)Expression.  see the tests for some
+     * @param expression The EL expression
+     */
     public ValueBindingExpression(String expression)
     {
         if(!EL_HELPER.isELTermWellFormed(expression))
@@ -129,6 +159,10 @@ public class ValueBindingExpression
         }
     }
 
+    /**
+     * The (last) property of the expression.
+     * @return The (last) property of the expression.
+     */
     public String getProperty()
     {
         this.value = this.value.trim();
@@ -149,6 +183,12 @@ public class ValueBindingExpression
         return base;
     }
 
+    /**
+     * Recreates the expression string from which this valueBindingExpression was build. There is no guarantee that the
+     * same format is kep, for example {#bean['property']} could become {#bean.property}
+     *
+     * @return  The expression string equivalent of the valueBindingExpression.
+     */
     public String getExpressionString()
     {
         if(this.base != null)

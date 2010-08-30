@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * generic storage manager implementation which stores the storage implementations in the request scope
+ * Generic storage manager implementation which stores the storage implementations in the JSF request scope.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -34,6 +34,11 @@ import java.util.HashMap;
 @UsageInformation(REUSE)
 public abstract class AbstractRequestScopeAwareStorageManager<T> extends AbstractStorageManager<T>
 {
+    /**
+     * Returns a Map of all cached instances keyed on the type of storage available in the JSF Request scope.
+     *
+     * @return  Map of all cached storage Manager implementations keyed on the type of storage.
+     */
     protected Map<String, T> resolveStorageMap()
     {
         Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
