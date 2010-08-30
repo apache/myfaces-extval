@@ -23,11 +23,24 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 
 /**
+ * Allows a filtering of the MetaDataEntry's which are stored in the MetaDataStorage by the default implementation
+ * (DefaultMetaDataStorage).  <br/>
+ * The storage of the metaData is done as part of the extraction of them from the component (see method extract of
+ * DefaultComponentMetaDataExtract).  So this extraction can return less information then which is available on the
+ * property due to this filtering.
+ *
+ * @see org.apache.myfaces.extensions.validator.core.storage.DefaultMetaDataStorage
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
 public interface MetaDataStorageFilter
 {
+    /**
+     * Method should filter the metaDataEntry's of the propertyInformation which are not needed by the validation
+     * process.
+     * @param propertyInformation information about constraints on the property and contains the list of
+     * MetaDataEntry's.
+     */
     void filter(PropertyInformation propertyInformation);
 }

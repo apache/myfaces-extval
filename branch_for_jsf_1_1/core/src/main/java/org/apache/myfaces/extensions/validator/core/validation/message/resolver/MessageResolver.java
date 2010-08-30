@@ -32,5 +32,13 @@ import java.util.Locale;
 @UsageInformation(UsageCategory.API)
 public interface MessageResolver
 {
+    /**
+     * Retrieve the message with a certain key for a certain Locale. When key is null, the return value of the method is
+     * also null.
+     *
+     * @param key Message key, can be null or empty
+     * @param locale locale for the message
+     * @return message corresponding to the key. 
+     */
     String getMessage(String key, Locale locale);
 }
