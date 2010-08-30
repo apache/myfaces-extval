@@ -27,6 +27,8 @@ import java.util.Enumeration;
 import java.util.ArrayList;
 
 /**
+ * Implementation of the StaticConfiguration interface that uses resource bundles to load the information.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */

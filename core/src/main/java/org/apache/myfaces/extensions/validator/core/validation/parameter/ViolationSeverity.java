@@ -24,12 +24,18 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.application.FacesMessage;
 
 /**
+ * ValidationParameter to indicate the severity of the FacesMessage in case of a validation failure. By default, the
+ * severity is Error.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
 public interface ViolationSeverity
 {
+    /**
+     * ViolationSeverity Info.
+     */
     interface Info extends ValidationParameter
     {
         @ParameterKey
@@ -42,6 +48,9 @@ public interface ViolationSeverity
         //MessageType postfix = MessageType.INFO;
     }
 
+    /**
+     * ViolationSeverity Warn.
+     */
     interface Warn extends ValidationParameter
     {
         @ParameterKey
@@ -54,6 +63,9 @@ public interface ViolationSeverity
         //MessageType postfix = MessageType.WARN;
     }
 
+    /**
+     * ViolationSeverity Error.
+     */
     interface Error extends ValidationParameter
     {
         @ParameterKey
@@ -66,6 +78,9 @@ public interface ViolationSeverity
         //MessageType postfix = MessageType.ERROR;
     }
 
+    /**
+     * ViolationSeverity Fatal.
+     */
     interface Fatal extends ValidationParameter
     {
         @ParameterKey

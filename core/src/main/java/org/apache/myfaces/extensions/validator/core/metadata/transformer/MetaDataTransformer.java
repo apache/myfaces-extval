@@ -26,8 +26,8 @@ import java.util.Map;
 
 /**
  * Allows to transform concrete meta-data to a more abstract form.<br/>
- * e.g.: @Required, @Column(nullable = false,...), @Length(minimum = 1), ... -> required = true
- * 
+ * e.g.: @Required, @Column(nullable = false,...), @Length(minimum = 1), ... -> required = true  <br/>
+ * For the keys of the map the constants in the CommonMetaDataKeys can be used.
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -35,5 +35,10 @@ import java.util.Map;
 //*Transformer instead of *Converter to avoid naming confusion 
 public interface MetaDataTransformer
 {
+    /**
+     * Convert the information from MetaDataEntry into the abstract format.
+     * @param metaData The MetaDataEntry to process.
+     * @return Map with the information abstract format. 
+     */
     Map<String, Object> convertMetaData(MetaDataEntry metaData);
 }

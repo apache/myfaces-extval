@@ -29,6 +29,10 @@ import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Marker annotation to indicate that for the annotated property, no source for ExtVal constraints need to be searched
+ * in the class indicated by the {@link org.apache.myfaces.extensions.validator.core.validation.ConstraintSource}
+ * annotation.
+ *
  * @author Gerhard Petracek
  * @since r4
  */

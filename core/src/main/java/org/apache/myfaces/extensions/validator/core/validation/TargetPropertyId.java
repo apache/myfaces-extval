@@ -30,6 +30,11 @@ import java.lang.annotation.Annotation;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Indication of what annotation has to be searched in the class that is the source of the ExtVal constraints. <br/>
+ * If needed, this annotation can be replaced by a customer defined one if one likes to have independence of ExtVal in
+ * model classes, see targetPropertyIdAnnotation in ExtValCoreConfiguration. 
+ * @see org.apache.myfaces.extensions.validator.core.validation.ConstraintSource
+ *  
  * @author Gerhard Petracek
  * @since r4
  */
@@ -39,5 +44,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @UsageInformation(UsageCategory.API)
 public @interface TargetPropertyId
 {
+    /**
+     * Annotation to be searched.
+     * @return annotation to search in target class of ExtVal Constraints.
+     */
     Class<? extends Annotation> value();
 }

@@ -30,6 +30,10 @@ import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Annotation that specifies the class that needs to be used as source for the ExtVal constraints.  <br/>
+ * If needed, this annotation can be replaced by a customer defined one if one likes to have independence of ExtVal in
+ * model classes, see constraintSourceAnnotation in ExtValCoreConfiguration.
+ *
  * @author Gerhard Petracek
  * @since r4
  */
@@ -39,5 +43,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @UsageInformation(UsageCategory.API)
 public @interface ConstraintSource
 {
+    /**
+     * Class that needs to be used as source for constraints.
+     * @return Class that needs to be used as source for constraints.
+     */
     Class value();
 }

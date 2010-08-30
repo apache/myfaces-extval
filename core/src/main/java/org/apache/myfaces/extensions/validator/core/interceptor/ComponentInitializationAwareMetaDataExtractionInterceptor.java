@@ -25,6 +25,9 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 /**
+ * This is an abstract base class that can be used to define a MetaDataExtractionInterceptor that should only be
+ * invoked when the MetaDataExtraction happens in the Render Response Phase.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
@@ -40,5 +43,10 @@ public abstract class ComponentInitializationAwareMetaDataExtractionInterceptor 
         }
     }
 
+    /**
+     * Perform any additional actions on the PropertyInformation data after the extraction is performed and before it is
+     * used to determine UIComponents adjustments.
+     * @param propertyInformation he information entry which contains information about the property
+     */
     protected abstract void afterExtractingForComponentInitialization(PropertyInformation propertyInformation);
 }

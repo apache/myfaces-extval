@@ -22,13 +22,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * it isn't linked to jsr 303
+ * Adapter to connect validation strategies with meta-data transformers,
+ * if the validation strategy is defined as bean and e.g. spring creates a proxy.
+ *
+ * it isn't linked to jsr 303.
  *
  * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
  * e.g. spring creates a proxy for it.
-
- * adapter to connect validation strategies with meta-data transformers,
- * if the validation strategy is defined as bean and e.g. spring creates a proxy
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -36,8 +36,18 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation({UsageCategory.REUSE})
 public interface BeanValidationStrategyAdapter extends ValidationStrategy
 {
-    //to get back the internal cashing
+    //to get back the internal caching
+    /**
+     * Must return the class name of ValidationStrategy wrapped by this adapter.
+     *
+     * @return class name of the wrapped ValidationStrategy
+     */
     String getValidationStrategyClassName();
 
+    /**
+     * Must return the class name of the MetaDataTransformer for the wrapped ValidationStrategy of the adapter.
+     *
+     * @return class name of the MetaDataTransformer for the wrapped ValidationStrategy.
+     */
     String getMetaDataTransformerClassName();
 }
