@@ -18,10 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.core.property;
 
+import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
+
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@UsageInformation(UsageCategory.INTERNAL)
 public class PropertyDetails
 {
     //forms the id for cross-validation within complex components

@@ -28,6 +28,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
 /**
+ * Key part of the ValidationParameter. There can be only one key defined for each different parameter.
+ * 
  * @author Gerhard Petracek
  * @since x.x.3
  */

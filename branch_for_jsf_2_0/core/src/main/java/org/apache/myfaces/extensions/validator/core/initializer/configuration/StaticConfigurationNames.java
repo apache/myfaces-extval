@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * List of all concepts where a StaticConfiguration is/can be defined for.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */

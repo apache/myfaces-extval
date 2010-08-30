@@ -28,7 +28,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
 
 /**
- * Allows to intercept validatior exceptions.
+ * Allows to intercept validator exceptions.
  *
  * @author Gerhard Petracek
  * @since 1.x.1

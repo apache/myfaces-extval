@@ -22,15 +22,27 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * if an adapter is used for several constraints, this interface allows to identify instances
- *
+ * if an adapter (ValidationStrategy only used for component initialization) is used for several constraints, this
+ * interface allows to identify instances.
+ * For the moment only used for JSR-303 validation strategies.
+ * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
 public interface IdentifiableValidationStrategy extends ValidationStrategy
 {
+    /**
+     * Separator used in the unique key that identifies validationStrategyName when multiple constraints are processed
+     * by a MetaDataTransformer.
+     * @see org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory
+     */
     String ID_PREFIX = ":";
 
+    /**
+     * Returns the unique part of the key of the  validationStrategyName when multiple constraints are processed
+     * by a MetaDataTransformer.
+     * @return Unique String to identify the Validation.
+     */
     String getId();
 }

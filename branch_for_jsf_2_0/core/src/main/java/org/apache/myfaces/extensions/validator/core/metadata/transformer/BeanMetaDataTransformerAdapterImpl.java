@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 /**
  * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
- * e.g. spring creates a proxy for it.
+ * e.g. spring creates a proxy for it. It is not linked to jsr303.
  *
  * if there is also a proxy for the transformer you can use the className property to manually repeat the
  * full qualified class name.
@@ -45,6 +45,10 @@ public class BeanMetaDataTransformerAdapterImpl implements MetaDataTransformer, 
     private MetaDataTransformer metaDataTransformer;
     private String metaDataTransformerClassName;
 
+    /**
+     * {@inheritDoc}
+     * Delegates the conversion of the MetaData to the metaDataTransformer encapsulated by the adapter.
+     */
     public Map<String, Object> convertMetaData(MetaDataEntry metaDataEntry)
     {
         return this.metaDataTransformer.convertMetaData(metaDataEntry);

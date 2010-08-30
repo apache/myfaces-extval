@@ -22,6 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * Marker interface for the validation parameters. Normally, each parameter has a {@link ParameterKey} and has one or
+ * more {@link ParameterValue}. It is also possible to create a validation parameter by just extending this interface. 
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */

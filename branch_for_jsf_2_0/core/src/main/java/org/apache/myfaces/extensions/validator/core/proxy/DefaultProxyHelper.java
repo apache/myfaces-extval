@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import java.util.logging.Logger;
 
 /**
+ * Supports CGLIB and javassist.
+ * 
  * @author Gerhard Petracek
  * @since x.x.3
  */
