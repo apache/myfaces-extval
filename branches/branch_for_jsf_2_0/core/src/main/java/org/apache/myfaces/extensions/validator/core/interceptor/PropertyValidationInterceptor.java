@@ -28,6 +28,8 @@ import javax.faces.component.UIComponent;
 import java.util.Map;
 
 /**
+ * Interface to define interceptors that can perform logic before and after the validations are executed.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
@@ -36,6 +38,12 @@ import java.util.Map;
 public interface PropertyValidationInterceptor extends ValidationParameter
 {
     /**
+     * Executed before the RendererInterceptor calls the validation Strategies to validate the converted value.
+     *
+     * @param facesContext The JSF Context
+     * @param uiComponent The component which is processed
+     * @param convertedObject  The converted object
+     * @param properties Additional information of interest. Contains the PropertyInformation object.
      * @return false if the validation process should be bypassed
      */
     boolean beforeValidation(FacesContext facesContext,
@@ -44,8 +52,12 @@ public interface PropertyValidationInterceptor extends ValidationParameter
                              Map<String, Object> properties);
 
     /**
-     * processed if validation was executed
-     * in contrast to ValidationExceptionInterceptor it gets executed in any case
+     * Processed if validation was executed
+     * in contrast to ValidationExceptionInterceptor it gets executed in any case.
+     * @param facesContext The JSF Context
+     * @param uiComponent The component which is processed
+     * @param convertedObject The converted object
+     * @param properties Additional information of interest. Contains the PropertyInformation object.
      */
     void afterValidation(FacesContext facesContext,
                          UIComponent uiComponent,

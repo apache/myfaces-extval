@@ -23,8 +23,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 
 /**
- * suggested interface for a violation-severity-interpreter storage
- * used by add-ons to change the interpreter for the current request
+ * Suggested interface for a violation-severity-interpreter storage.
+ * Used by add-ons to change the interpreter for the current request.
+ * Behaves like a singleton/Application scoped object and the default for this interface is
+ * DefaultViolationSeverityInterpreterStorage.
  * 
  * @author Gerhard Petracek
  * @since x.x.3
@@ -32,7 +34,15 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Violati
 @UsageInformation(UsageCategory.API)
 public interface ViolationSeverityInterpreterStorage
 {
+    /**
+     * Puts the violationSeverityInterpreter into the storage.
+     * @param violationSeverityInterpreter ViolationSeverityInterpreter to se tin the storage.
+     */
     void setViolationSeverityInterpreter(ViolationSeverityInterpreter violationSeverityInterpreter);
 
+    /**
+     * Retrieves the violationSeverityInterpreter from the storage.
+     * @return  the violationSeverityInterpreter from the storage.
+     */
     ViolationSeverityInterpreter getViolationSeverityInterpreter();
 }

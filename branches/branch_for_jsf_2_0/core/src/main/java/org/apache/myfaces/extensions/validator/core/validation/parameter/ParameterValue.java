@@ -28,6 +28,9 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
 /**
+ * Value part of the ValidationParameter. Multiple values can be defined for one {@link ParameterKey} and they can be
+ * distinguished by the id member.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
@@ -36,5 +39,10 @@ import static java.lang.annotation.ElementType.METHOD;
 @UsageInformation(UsageCategory.API)
 public @interface ParameterValue
 {
+    /**
+     * Identification when multiple values are defined for one key.
+     *
+     * @return By default, the ParameterValue.class value.
+     */
     Class id() default ParameterValue.class;
 }
