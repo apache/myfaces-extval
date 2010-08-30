@@ -22,11 +22,22 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * Structure for the object that is able to locate the different factories within the ExtVal Framework.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface FactoryFinder
 {
+    /**
+     * Retrieves the default or configured factory. It is instantiated the first time and retrieved from a cache in the
+     * subsequent requests.
+     *
+     * @param factoryName The name of the factory we want to retrieve.
+     * @param targetClass The class type the factory needs to be casted to.
+     * @param <T> generic type parameter
+     * @return Factory instance, can never be null.
+     */
     <T> T getFactory(FactoryNames factoryName, Class<T> targetClass);
 }

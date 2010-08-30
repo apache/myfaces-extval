@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * interface for name-mappers which have to delegate to other (sub-)name-mappers
+ * Interface for name-mappers which have to delegate to other (sub-)name-mappers.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -30,5 +30,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation(UsageCategory.API)
 public interface SubMapperAwareNameMapper<T> extends NameMapper<T>
 {
+    /**
+     * Add a (sub-)name mapper to list to delegate to.
+     * @param nameMapper nameMapper to add
+     */
     void addNameMapper(NameMapper<T> nameMapper);
 }

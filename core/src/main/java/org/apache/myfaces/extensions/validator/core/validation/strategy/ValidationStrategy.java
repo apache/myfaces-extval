@@ -26,15 +26,27 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * Base interface for ValidationStrategies
+ * Base interface for ValidationStrategies. A validation strategy is responsible for validating a certain rule, like
+ * required or a custom validation rule.  A convenient abstract base class is AbstractValidationStrategy.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
+ * @see org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy
  */
 @UsageInformation(UsageCategory.API)
 //*ValidationStrategy instead of *Validator to avoid naming confusion 
 public interface ValidationStrategy
 {
+    /**
+     * Validates the value in the convertedObject parameter which the user entered as value of the uiComponent.
+     * Additional validation information can be found in the metaDataEntry parameter.
+     *
+     * @param facesContext The JSF Context
+     * @param uiComponent The JSF component that contained the value entered by the user.
+     * @param metaDataEntry The data holder which stores the meta-data and some information where the meta-data was
+     * around.
+     * @param convertedObject Converted object of the user entered value.
+     */
     void validate(FacesContext facesContext, UIComponent uiComponent,
                   MetaDataEntry metaDataEntry, Object convertedObject);
 }

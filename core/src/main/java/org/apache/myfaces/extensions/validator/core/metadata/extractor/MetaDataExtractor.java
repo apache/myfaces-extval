@@ -25,8 +25,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import javax.faces.context.FacesContext;
 
 /**
- * An meta-data extractor is responsible to analyze an object
- * and returns all available meta-data information
+ * A meta-data extractor is responsible to analyze an object (UIComponent)
+ * and returns all available meta-data information.
  * 
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -34,5 +34,13 @@ import javax.faces.context.FacesContext;
 @UsageInformation(UsageCategory.API)
 public interface MetaDataExtractor
 {
+    /**
+     * Returns all information about the object. Important remark: The default implementation,
+     * DefaultComponentMetaDataExtractor, uses a MetaDataStorageFilter that can decide to not include some meta data.
+     *
+     * @param facesContext The JSF Faces Context
+     * @param object The UIComponent from which we need all available information.
+     * @return  All information related to the UIComponent.
+     */
     PropertyInformation extract(FacesContext facesContext, Object object);
 }

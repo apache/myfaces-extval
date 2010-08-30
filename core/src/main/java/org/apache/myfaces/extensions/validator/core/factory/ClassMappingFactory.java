@@ -22,11 +22,24 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * A structure of a factory that creates classes of the target type R for a certain source class of type P. Most
+ * factories uses the NameMapper facility to configure the type of objects that should be returned.
+ *
+ * @param <P> generic type for the source type
+ * @param <R> generic type for the target type.
+
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface ClassMappingFactory<P, R>
 {
+    /**
+     * Create an instance of the target type based on the source type.  An example is the
+     * DefaultMetaDataTransformerFactory that creates a metaDataTransformer for a certain ValidationStrategy.
+     *
+     * @param source source type to be used.
+     * @return target object.
+     */
     R create(P source);
 }
