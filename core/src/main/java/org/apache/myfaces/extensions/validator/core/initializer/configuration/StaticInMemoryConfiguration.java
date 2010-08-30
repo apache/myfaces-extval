@@ -25,6 +25,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
+ * Implementation of the StaticConfiguration interface that can be used to programmatically add some implementation
+ * entries.
+ * See for an example org.apache.myfaces.extensions.validator.PropertyValidationModuleStartupListener
+ * #addSkipValidationSupport().
  * @author Gerhard Petracek
  * @since 1.x.1
  */

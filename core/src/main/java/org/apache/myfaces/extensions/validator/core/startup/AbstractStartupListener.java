@@ -39,7 +39,8 @@ import java.util.logging.Level;
 
 /**
  * In order to execute logic just once.
- * e.g. register artifacts via api
+ * e.g. register artifacts via api. It is done before the first Restore view of the application. PhaseListeners are
+ * deregistered so that they don't have any additional impact on the application.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -64,6 +65,14 @@ public abstract class AbstractStartupListener implements PhaseListener
     {
     }
 
+    /**
+     * Is responsible for executing the one time only logic.  Before the logic is performed (init method), the start-up
+     * listener has the chance of putting a configuration object in place in the initModuleConfig method.
+     * Startup listeners can be deactivated by an initialization parameter in the web.xml file and are deregistered from
+     * the JSF system.  If this fails, a fallback system is in place so that the logic can't be executed more then once.
+     *
+     * @param event Jsf Phase Event info.
+     */
     public void beforePhase(PhaseEvent event)
     {
         synchronized (AbstractStartupListener.class)
@@ -113,16 +122,31 @@ public abstract class AbstractStartupListener implements PhaseListener
         }
     }
 
+    /**
+     * Allows subclasses to put some configuration in place, before the actual initialization code is performed.
+     * @see org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration#use(org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration, boolean)
+     */
     protected void initModuleConfig()
     {
         //override if needed
     }
 
+    /**
+     * Logic should be executed before the RESTORE_VIEW phase.
+     *
+     * @return Restore View JSF Phase.
+     */
     public PhaseId getPhaseId()
     {
         return PhaseId.RESTORE_VIEW;
     }
 
+    /**
+     * Individual startup listeners can be deactivated by specifying an initialization parameter in the web.xml file
+     * with the name of the startup listener followed by ':DEACTIVATED' that have a value of 'true'.
+     *
+     * @return Is this startup listener deactivated.
+     */
     protected boolean isStartupListenerDeactivated()
     {
         return ExtValUtils.isExtValDeactivated() ||
@@ -146,5 +170,9 @@ public abstract class AbstractStartupListener implements PhaseListener
         return ExtValCoreConfiguration.get().projectStageResolver();
     }
 
+    /**
+     * Subclasses can here put their logic that they want to be executed once, like initialization code of a module
+     * or add-on.
+     */
     protected abstract void init();
 }

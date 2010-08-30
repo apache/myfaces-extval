@@ -22,14 +22,30 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API;
 
 /**
- * interface to manage storage-manager instances
- * 
+ * Interface to manage storage-manager instances.
+ *
+ * @see org.apache.myfaces.extensions.validator.core.storage.StorageManager
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(API)
 public interface StorageManagerHolder
 {
+    /**
+     * Define the storage manager for the specified type.
+     * @param type The identification for the storage manager, by convention it is the object type managed by the
+     * storageManager.
+     * @param storageManager The storageManager to use.
+     * @param override if true, the previous defined storageManager is no longer used.  If false, the specified
+     * storage manager is only used when no manager was defined.
+     */
     void setStorageManager(Class type, StorageManager storageManager, boolean override);
+
+    /**
+     * Retrieves the storageManager for the specified type.
+     * @param type The identification for the storage manager, by convention it is the object type managed by the
+     * storageManager.
+     * @return the storageManager specified for the type or null if no manager specified for the type.
+     */
     StorageManager getStorageManager(Class type);
 }

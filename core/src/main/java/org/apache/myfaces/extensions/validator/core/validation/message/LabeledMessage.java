@@ -22,7 +22,11 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * don't remove *Text - it would lead to an overlap with trinidad
+ * Allows the setting and the retrieval of the label text that goes with an input component. This label text is used
+ * for the violation message to indicate where the problem occurred.
+ *
+ * don't remove *Text - it would lead to an overlap with trinidad.
+ * Used to create a special FacesMessage {@link ViolationMessage} that can hold the label text.
  * 
  * @author Gerhard Petracek
  * @since 1.x.2
@@ -30,6 +34,15 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 @UsageInformation(UsageCategory.API)
 public interface LabeledMessage
 {
+    /**
+     * Get the text for of the label of the input component.
+     * @return label text
+     */
     String getLabelText();
+
+    /**
+     * Set the text for the label of the input component.
+     * @param label label text.
+     */
     void setLabelText(String label);
 }

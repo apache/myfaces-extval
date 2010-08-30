@@ -26,7 +26,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
 /**
- * to map constraints directly to a meta-data transformer if there is no validation strategy (required by jsr 303)
+ * To map constraints directly to a meta-data transformer if there is no validation strategy (required by jsr 303).
+ * So the ValidationStrategy is only used to have the component initialization and is not used to do the actual
+ * validation.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -34,6 +36,11 @@ import javax.faces.component.UIComponent;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractVirtualValidationStrategy implements IdentifiableValidationStrategy
 {
+    /**
+     * {@inheritDoc}
+     * Throws an unsupportedOperationException when the method gets executed. This ValidationStrategy should never
+     * be used to perform actual validations.  
+     */
     public final void validate(
             FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry, Object convertedObject)
     {

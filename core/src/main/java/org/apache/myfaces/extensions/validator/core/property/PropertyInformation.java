@@ -23,18 +23,60 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 /**
+ * Contains all the information on a property, like annotations, object and any custom information we want to keep.
+ * MetaDataEntry's are considered as a special kind of information and separate methods are created for them.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)
 public interface PropertyInformation
 {
+    /**
+     * Verifies if we have information for a certain key.  There are some predefined keys in PropertyInformationKeys.
+     * @param key key of the information.
+     * @return Is there information for that key maintained.
+     */
     boolean containsInformation(String key);
+
+    /**
+     * Get the information for the specified key.  When there isn't any information available, it returns null.
+     * @param key key of the information.
+     * @return  Information linked to the key or null when no information is found for the key.
+     */
     Object getInformation(String key);
+
+    /**
+     * Get the information for the specified key casted to a certain targetClass type.
+     * @see PropertyInformation#getInformation(java.lang.String)
+     * @param key key of the information.
+     * @param targetClass target class type
+     * @param <T> Type declaration for generics.
+     * @return Information linked to the key or null when no information is found for the key.
+     */
     <T> T getInformation(String key, Class<T> targetClass);
+
+    /**
+     * Assign the value as information to the key.
+     * @param key key of the information.
+     * @param value value as information for the key.
+     */
     void setInformation(String key, Object value);
 
+    /**
+     * Get all the MetaDataEntry's stored.
+     * @return MetaDataEntry's
+     */
     MetaDataEntry[] getMetaDataEntries();
+
+    /**
+     * Add the MetaDataEntry to the internal structure.
+     * @param metaDataEntry MetaDataEntry to store.
+     */
     void addMetaDataEntry(MetaDataEntry metaDataEntry);
+
+    /**
+     * remove all MetaDataEntry's from the internal structure.
+     */
     void resetMetaDataEntries();
 }

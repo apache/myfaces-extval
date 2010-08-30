@@ -29,13 +29,13 @@ import javax.faces.context.FacesContext;
 import java.util.logging.Logger;
 
 /**
- * it isn't linked to jsr 303
+ * Adapter to connect validation strategies with meta-data transformers,
+ * if the validation strategy is defined as bean and e.g. spring creates a proxy.
+ *
+ * it isn't linked to jsr 303.
  *
  * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
  * e.g. spring creates a proxy for it.
-
- * adapter to connect validation strategies with meta-data transformers,
- * if the validation strategy is defined as bean and e.g. spring creates a proxy
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -47,7 +47,7 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
 
     private MetaDataTransformer metaDataTransformer;
     private ValidationStrategy validationStrategy;
-    //optional fallback for internal cashing
+    //optional fallback for internal caching
     private String validationStrategyClassName;
 
     public BeanValidationStrategyAdapterImpl()
@@ -55,6 +55,10 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
         logger.fine(getClass().getName() + " instantiated");
     }
 
+    /**
+     * {@inheritDoc}
+     * Delegates to the validation to the wrapped ValidationStrategy.
+     */
     public void validate(FacesContext facesContext,
                          UIComponent uiComponent,
                          MetaDataEntry metaDataEntry,
@@ -72,6 +76,11 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
         return validationStrategyClassName;
     }
 
+    /**
+     * {@inheritDoc}
+     * When a metaDataTransformer is set, the class name is returned.  When the metaDataTransformer is an adapter
+     * (BeanMetaDataTransformerAdapter) we ask the adapter for the name.
+     */
     public String getMetaDataTransformerClassName()
     {
         if(metaDataTransformer != null)
@@ -109,11 +118,19 @@ public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategy
         return validationStrategy;
     }
 
+    /**
+     * Sets the wrapped ValidationStrategy of this adapter.
+     * @param validationStrategy The ValidationStrategy to wrap by this adapter.
+     */
     public void setValidationStrategy(ValidationStrategy validationStrategy)
     {
         this.validationStrategy = validationStrategy;
     }
 
+    /**
+     * The class name returned by the  {link getValidationStrategyClassName()} method when no ValidationStrategy is set.
+     * @param validationStrategyClassName  The class name to return.
+     */
     public void setValidationStrategyClassName(String validationStrategyClassName)
     {
         this.validationStrategyClassName = validationStrategyClassName;

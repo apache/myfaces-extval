@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * it's just a helper for proxies - you just need it, if you define the equivalent validation strategy as bean and
- * e.g. spring creates a proxy for it.
+ * e.g. spring creates a proxy for it. It is not linked to jsr303.
  *
  * if there is also a proxy for the extractor you can use the className property to manually repeat the
  * full qualified class name.
@@ -36,5 +36,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 @UsageInformation({UsageCategory.REUSE})
 public interface BeanMetaDataTransformerAdapter extends MetaDataTransformer
 {
+    /**
+     * Returns the MetaDataTransformer class name.
+     * @return Class name of the MetaDataTransformer
+     */
     String getMetaDataTransformerClassName();
 }
