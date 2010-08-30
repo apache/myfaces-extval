@@ -24,7 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.logging.Logger;
 /**
- * A generic implementation. Subclasses just have to now the fully qualified name of the name mapper.
+ * A generic implementation of a custom name mapper that can be configured using configuration. Subclasses just have
+ * to specify the fully qualified name of the configured name mapper.
  *
  * NameMappers are stateless.
  *
@@ -42,6 +43,10 @@ public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
         logger.fine(getClass().getName() + " instantiated");
     }
 
+    /**
+     * {@inheritDoc}
+     * When no name mapper is configured, the method returns null.
+     */
     public String createName(T source)
     {
         if (customNameMapper == null)
@@ -57,5 +62,10 @@ public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
         return (customNameMapper != null) ? customNameMapper.createName(source) : null;
     }
 
+    /**
+     * Returns the fully qualified class name of the configured name mapper that must be used.
+     *
+     * @return fully qualified class name of a custom name mapper.
+     */
     protected abstract String getCustomNameMapperClassName();
 }

@@ -22,21 +22,62 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
+ * Allows to have a helper object that deals with proxies, like CGLIB proxies, created for some objects.  There are
+ * various locations where we need to know the base class or name of a prpoxy instance.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
 public interface ProxyHelper
 {
+    /**
+     * Returns the Class metadata of the proxy class.  When the parameter isn't a proxy, it returns the parameter value.
+     *
+     * @param currentClass class of proxy instance or any regular class.
+     * @return base class for which the proxy was created.
+     */
     Class getUnproxiedClass(Class currentClass);
 
+    /**
+     * Returns the Class metadata of the proxy class casted to a certain targetType. There is no check to see if the
+     * base class is actually assignable to the targetType.
+     * @see ProxyHelper#getUnproxiedClass(java.lang.Class)
+     *
+     * @param currentClass class of proxy instance or any regular class.
+     * @param targetType target class type
+     * @param <T> Type declaration for generics.
+     * @return base class for which the proxy was created.
+     */
     <T> Class<T> getUnproxiedClass(Class currentClass, Class<T> targetType);
 
+    /**
+     * Returns the class name of the base class of the proxy.
+     * @param proxiedClass class of proxy instance or any regular class.
+     * @return class name of base class for which the proxy was created.
+     */
     String getNameOfClass(Class proxiedClass);
 
+    /**
+     * Returns the class name of the base class of the proxy instance.
+     * @param proxiedObject proxy instance or any regular object.
+     * @return  class name of base class for which the proxy was created.
+     */
     String getClassNameOfObject(Object proxiedObject);
 
+    /**
+     * Checks if the class is a proxy class.
+     *
+     * @param currentClass proxy class to check.
+     * @return is it a proxy class or regular class.
+     */
     boolean isProxiedClass(Class currentClass);
 
+    /**
+     * Checks if this object is a proxy.
+     *
+     * @param proxiedObject object to check.
+     * @return is it a proxy or regular object.
+     */
     boolean isProxiedObject(Object proxiedObject);
 }
