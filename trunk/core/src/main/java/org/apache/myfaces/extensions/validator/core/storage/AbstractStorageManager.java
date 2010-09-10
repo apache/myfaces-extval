@@ -31,9 +31,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
- * Generic storage manager implementation based on name mappers. There exists 2 subclasses,
- * AbstractApplicationScopeAwareStorageManager and AbstractRequestScopeAwareStorageManager, that use JSF scopes to store
- * the information.
+ * An implementation of {@link AbstractStorageManager} is responsible to
+ * manage storages ({@see AbstractStorageManager#create} and {@see AbstractStorageManager#reset})
+ * in the context of a specific scope (e.g. the application scope of JSF).
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -53,7 +53,7 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
 
     /**
      * {@inheritDoc}
-     * Implementation classes for the key (also named storageName), are supplied by registered nameMappers.
+     * A storage is resolved via the registered name mappers.
      */
     public T create(String storageName)
     {
@@ -80,12 +80,12 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
     }
 
     /**
-     * Retrieves the storage Manager from the cached instances, if already created previously.  In the other case,
-     * a new instance is created and stored to the cache.
+     * Retrieves the storage Manager from the cached instances, if already created previously. Otherwise
+     * a new instance is created and stored in the cache.
      *
      * @param storageKey  The type of storage that needs to be created
      * @param storageClassName  The class name of the implementation of the storage manager.
-     * @return Implementation of the storage manager. Could be null if name mapper supplied non existent class name.
+     * @return storage instance for the given parameters or null in case of invalid parameters.
      */
     protected T resolveStorage(String storageKey, String storageClassName)
     {
@@ -102,9 +102,9 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
     }
 
     /**
-     * Subclasses need to supply the list of all cached instances.
+     * Returns a Map of all scoped storages stored by the current manager instance.
      *
-     * @return Map of all cached storage Manager implementations keyed on the type of storage.
+     * @return Map of all cached storages managed by the current storage manager.
      */
     protected abstract Map<String, T> resolveStorageMap();
 
@@ -125,9 +125,9 @@ public abstract class AbstractStorageManager<T> extends AbstractNameMapperAwareF
     }
 
     /**
-     * Returns the key where the cached instances can be found in the JSF Scope.
+     * Returns the key which will be used to find the storages scoped by the storage-manager instance.
      *
-     * @return key for finding the cached instances in thre JSF Scope. 
+     * @return key for finding the storage scoped by the storage-manager instance
      */
     public abstract String getStorageManagerKey();
 }

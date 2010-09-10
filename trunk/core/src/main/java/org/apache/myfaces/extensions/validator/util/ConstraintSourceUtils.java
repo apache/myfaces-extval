@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * Contains helper methods that deal with annotation usage in the context of ExtVal.
+ * Contains helper methods that deal with the mapped constraint source mechanism.
  *
  * @author Gerhard Petracek
  * @since r4

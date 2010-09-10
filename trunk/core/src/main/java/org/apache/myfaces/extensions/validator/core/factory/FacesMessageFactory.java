@@ -24,8 +24,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.application.FacesMessage;
 
 /**
- * Structure for a factory that creates FacesMessages that also implement the LabeledMessage interface. The LabelMessage
- * interface adds label capabilities to the FacesMessage.
+ * A factory which is able to create FacesMessages that also implement the
+ * {@link org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage} interface
+ * (or to convert a simple {@link javax.faces.application.FacesMessage} to a
+ * {@link javax.faces.application.FacesMessage} which is aware of a label.
  *
  * @author Gerhard Petracek
  * @since 1.x.2
@@ -34,21 +36,25 @@ import javax.faces.application.FacesMessage;
 public interface FacesMessageFactory
 {
     /**
-     * Converts the facesMessage so that is implements the LabelMessage interface. If the parameter implements already
-     * the correct interface, it is returned without change.
+     * Converts a given {@link javax.faces.application.FacesMessage} to a message which also
+     * implements the {@link org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage} interface.
+     * If the provided instance implements already the correct interface, it is returned without change.
      *
      * @param facesMessage The facesMessage to convert
-     * @return A FacesMessage instance that also implements LabelMessage.
+     * @return A {@link javax.faces.application.FacesMessage} which also implements
+     * {@link org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage}.
      */
     FacesMessage convert(FacesMessage facesMessage);
 
     /**
-     * Create a LabelMessage implementing FacesMessage using the parameters as content.
+     * Creates a {@link javax.faces.application.FacesMessage} which also implements
+     * {@link org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage}
      *
-     * @param severity Severity for the FacesMessage.
+     * @param severity Severity for the message.
      * @param summary summary text for the message.
-     * @param detail detail test for the message.
-     * @return A FacesMessage instance that also implements LabelMessage.
+     * @param detail detail text for the message.
+     * @return {@link javax.faces.application.FacesMessage} which also implements
+     * {@link org.apache.myfaces.extensions.validator.core.validation.message.LabeledMessage}
      */
     FacesMessage create(FacesMessage.Severity severity, String summary, String detail);
 }
