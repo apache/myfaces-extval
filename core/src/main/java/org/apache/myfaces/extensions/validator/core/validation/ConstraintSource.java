@@ -30,9 +30,11 @@ import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Annotation that specifies the class that needs to be used as source for the ExtVal constraints.  <br/>
+ * Allows to annotate e.g. DTOs and point to a class which provides the meta-data which should be used for validation.
+ * It allows to follow the DRY principle in case of multiple classes which represent the same parts of a data-structure.
  * If needed, this annotation can be replaced by a customer defined one if one likes to have independence of ExtVal in
- * model classes, see constraintSourceAnnotation in ExtValCoreConfiguration.
+ * model classes - see
+ * {@link org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration#constraintSourceAnnotation()}.
  *
  * @author Gerhard Petracek
  * @since r4

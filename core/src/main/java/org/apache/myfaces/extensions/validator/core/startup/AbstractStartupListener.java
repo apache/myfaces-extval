@@ -38,9 +38,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * In order to execute logic just once.
- * e.g. register artifacts via api. It is done before the first Restore view of the application. PhaseListeners are
- * deregistered so that they don't have any additional impact on the application.
+ * Startup listeners can be used to execute e.g. setup-logic just once before the first request gets processed.
+ * After a listener was executed it gets deactivated.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -66,12 +65,11 @@ public abstract class AbstractStartupListener implements PhaseListener
     }
 
     /**
-     * Is responsible for executing the one time only logic.  Before the logic is performed (init method), the start-up
-     * listener has the chance of putting a configuration object in place in the initModuleConfig method.
-     * Startup listeners can be deactivated by an initialization parameter in the web.xml file and are deregistered from
-     * the JSF system.  If this fails, a fallback system is in place so that the logic can't be executed more then once.
-     *
-     * @param event Jsf Phase Event info.
+     * {@inheritDoc}
+     * 
+     * Is responsible for executing {@link #init()}. Before the method is executed, the start-up
+     * listener has the chance of putting a configuration object in place (@see #initModuleConfig).
+     * Startup listeners can be deactivated via a web.xml context-param.
      */
     public void beforePhase(PhaseEvent event)
     {
@@ -132,9 +130,7 @@ public abstract class AbstractStartupListener implements PhaseListener
     }
 
     /**
-     * Logic should be executed before the RESTORE_VIEW phase.
-     *
-     * @return Restore View JSF Phase.
+     * {@inheritDoc}
      */
     public PhaseId getPhaseId()
     {
@@ -142,10 +138,14 @@ public abstract class AbstractStartupListener implements PhaseListener
     }
 
     /**
-     * Individual startup listeners can be deactivated by specifying an initialization parameter in the web.xml file
-     * with the name of the startup listener followed by ':DEACTIVATED' that have a value of 'true'.
+     * Startup listeners can be deactivated via context-params in the web.xml.<br/>
+     * Example:
+     * <context-param>
+     *   <param-name>fully.qualified.StartupListener:DEACTIVATED</param-name>
+     *   <param-value>true</param-value>
+     * </context-param>
      *
-     * @return Is this startup listener deactivated.
+     * @return true if the current instance is deactivated - false otherwise
      */
     protected boolean isStartupListenerDeactivated()
     {
@@ -171,8 +171,8 @@ public abstract class AbstractStartupListener implements PhaseListener
     }
 
     /**
-     * Subclasses can here put their logic that they want to be executed once, like initialization code of a module
-     * or add-on.
+     * Contains logic which should get executed before the application gets invoked
+     * (e.g. initialization code of a module or add-on).
      */
     protected abstract void init();
 }

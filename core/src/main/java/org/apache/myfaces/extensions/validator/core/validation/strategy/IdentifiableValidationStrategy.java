@@ -23,8 +23,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
  * if an adapter (ValidationStrategy only used for component initialization) is used for several constraints, this
- * interface allows to identify instances.
- * For the moment only used for JSR-303 validation strategies.
+ * interface allows to detect the type of current constraint.
+ * It's needed for constraint mappings which don't follow the original approach of ExtVal (e.g. bv)
  * 
  * @author Gerhard Petracek
  * @since x.x.3
@@ -33,16 +33,22 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 public interface IdentifiableValidationStrategy extends ValidationStrategy
 {
     /**
-     * Separator used in the unique key that identifies validationStrategyName when multiple constraints are processed
-     * by a MetaDataTransformer.
-     * @see org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory
+     * Separator which should be used by a meta-data transformer factory to create an unambiguous key that consists of
+     * the name of the {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}
+     * and the id provided by {@link #getId()} which allows to select the correct
+     * {@link org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer} implementation
+     * if an adapter {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy} is
+     * responsible for multiple constraints.
      */
     String ID_PREFIX = ":";
 
     /**
-     * Returns the unique part of the key of the  validationStrategyName when multiple constraints are processed
-     * by a MetaDataTransformer.
-     * @return Unique String to identify the Validation.
+     * Returns the unique part for the key which is used to select the correct
+     * {@link org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer} if the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy} is
+     * responsible for multiple constraints.
+     * @return Unique String to map the current instance of an adapter
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy} .
      */
     String getId();
 }

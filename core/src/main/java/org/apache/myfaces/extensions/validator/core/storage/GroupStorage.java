@@ -22,10 +22,10 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Suggested interface for a group storage
- * used by the bvi module and add-ons
+ * Interface for group storages e.g. used by the bv module (or add-ons which use validation groups).
  * <p/>
- * it allows to manage groups for the current request
+ * It allows to manage validation-groups for the current request.
+ * Since JSF allows very dynamic pages, we can use the groups just for one request.
  * 
  * @author Gerhard Petracek
  * @since x.x.3
@@ -34,8 +34,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public interface GroupStorage
 {
     /**
-     * Add the group, identified by the groupClass parameter, for the component identified by the clientId for the view
-     * viewId.
+     * Links the given group with the given component (id) for the a given view-id
      *
      * @param groupClass The group to add.
      * @param viewId The view where the uiComponent is located where we want to add the group.
@@ -44,8 +43,7 @@ public interface GroupStorage
     void addGroup(Class groupClass, String viewId, String clientId);
 
     /**
-     * Add the group in the restricted group list ,identified by the groupClass parameter, for the component identified
-     * by the clientId for the view viewId.
+     * Restricts the given group for the given component (id) for the a given view-id
      *
      * @param groupClass The group to add in the restricted group list.
      * @param viewId The view where the uiComponent is located where we want to add the group.
@@ -54,8 +52,8 @@ public interface GroupStorage
     void restrictGroup(Class groupClass, String viewId, String clientId);
 
     /**
-     * Gets the list of groups defined for the component with the clientId specified as parameter in the view.  The
-     * array is the values of the groups added minus the groups from the restricted group list.
+     * Returns all groups which are registered for the given component (id) in the given view.
+     *
      * @param viewId The view where the uiComponent is located.
      * @param clientId The clientId value of the component within the view.
      * @return Array of groups defined for the component.

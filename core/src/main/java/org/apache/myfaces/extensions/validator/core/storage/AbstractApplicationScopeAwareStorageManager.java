@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Generic storage manager implementation which stores the storage implementations in the JSF application scope.
+ * {@inheritDoc}
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -35,9 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractApplicationScopeAwareStorageManager<T> extends AbstractStorageManager<T>
 {
     /**
-     * Returns a Map of all cached instances keyed on the type of storage available in the JSF Application scope.
-     *
-     * @return  Map of all cached storage Manager implementations keyed on the type of storage.
+     * {@inheritDoc}
      */
     protected Map<String, T> resolveStorageMap()
     {

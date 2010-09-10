@@ -31,8 +31,13 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * Default implementation of a NameMapperAwareFactory where the concrete implementation is responsible for the storage
- * of the list of nameMappers.
+ * Generic implementation of a
+ * {@link org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFactory}.
+ * A concrete implementation has to provide a list of
+ * {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper name-mappers} which is used to de-/register new
+ * {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper name-mappers} (via
+ * {@link #register(org.apache.myfaces.extensions.validator.core.mapper.NameMapper)},
+ * {@link #deregister(Class)} and {@link #deny(Class)}).
  *
  * @author Gerhard Petracek
  * @since 1.x.2

@@ -23,9 +23,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import java.util.logging.Logger;
+
 /**
- * A generic implementation of a custom name mapper that can be configured using configuration. Subclasses just have
- * to specify the fully qualified name of the configured name mapper.
+ * A generic implementation which delegates to a custom
+ * {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper}.
+ * Subclasses just have to specify the fully qualified name of the configured
+ * {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper}.
  *
  * NameMappers are stateless.
  *
@@ -63,9 +66,11 @@ public abstract class AbstractCustomNameMapper<T> implements NameMapper<T>
     }
 
     /**
-     * Returns the fully qualified class name of the configured name mapper that must be used.
+     * Returns the fully qualified class name of the configured
+     * {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper} that should be used.
      *
-     * @return fully qualified class name of a custom name mapper.
+     * @return fully qualified class name of a custom
+     * {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper}.
      */
     protected abstract String getCustomNameMapperClassName();
 }

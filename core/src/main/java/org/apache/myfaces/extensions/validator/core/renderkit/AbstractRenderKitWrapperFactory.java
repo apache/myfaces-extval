@@ -47,8 +47,10 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     }
 
     /**
-     * Adds the renderKitWrapperFactory to this instance.  If it has already a RenderKitWrapperFactory, it is added to
-     * that instance, so that we have a chain of RenderKitWrapperFactory's.
+     * Adds a {@link AbstractRenderKitWrapperFactory} which should be used before the
+     * default behavior gets executed (as fallback). If there's already a wrapped instance,
+     * the new instance gets added as wrapped instance to the existing wrapped instance,
+     * so that we have a chain of RenderKitWrapperFactory's.
      *
      * @param renderKitWrapperFactory The renderKitWrapperFactory to add.
      */
@@ -66,7 +68,7 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     }
 
     /**
-     * Set this instance an not active.
+     * Deactivates the current instance (and it's wrapped instance/s)
      */
     public void deactivate()
     {
@@ -76,9 +78,9 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     }
 
     /**
-     * Checks if this instance is not active.
+     * Checks if this instance is active or not.
      *
-     * @return is it deactivated?
+     * @return true if the instance is deactivated - false otherwise
      */
     public boolean isDeactivated()
     {
@@ -86,9 +88,11 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     }
 
     /**
-     * Creates a RenderKit wrapper when it is not deactivated.  When we have a chain of RenderKitWrapperFactory, the
-     * next instance in the chain is asked to create the RenderKit instance.  The actual creation is performed by the
-     * abstract createWrapper method.
+     * Wraps the given {@link javax.faces.render.RenderKit} to allow
+     * {@link org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor RendererInterceptors}.
+     * When we have a chain of RenderKitWrapperFactories, the
+     * next instance in the chain is asked to wrap the {@link javax.faces.render.RenderKit} instance.
+     * The actual creation is performed by the abstract method {@link #createWrapper(javax.faces.render.RenderKit)}.
      *
      * @param renderKit The renderKit to use.
      * @return The new RenderKit
@@ -116,8 +120,7 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
     }
 
     /**
-     * Create the wrapper for the renderKit.  The main purpose of the wrapper is that we can wrap the renderers so
-     * that additional functionality can be performed (like Validation during the decode value)
+     * Create the wrapper for the given {@link javax.faces.render.RenderKit}.
      *
      * @param renderKit  The renderKit to use.
      * @return  Wrapped version of the RenderKit

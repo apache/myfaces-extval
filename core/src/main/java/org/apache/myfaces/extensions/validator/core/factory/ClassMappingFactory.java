@@ -22,11 +22,12 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * A structure of a factory that creates classes of the target type R for a certain source class of type P. Most
- * factories uses the NameMapper facility to configure the type of objects that should be returned.
+ * Class mapping factories create a result based on a given instance.
+ * Most factories use the {@link org.apache.myfaces.extensions.validator.core.mapper.NameMapper} facility
+ * to determine the type of the result.
  *
- * @param <P> generic type for the source type
- * @param <R> generic type for the target type.
+ * @param <P> source type
+ * @param <R> target type
 
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -35,10 +36,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public interface ClassMappingFactory<P, R>
 {
     /**
-     * Create an instance of the target type based on the source type.  An example is the
-     * DefaultMetaDataTransformerFactory that creates a metaDataTransformer for a certain ValidationStrategy.
+     * Creates an instance of the target type based on the source type.
+     * Example:
+     * {@link org.apache.myfaces.extensions.validator.core.metadata.transformer.DefaultMetaDataTransformerFactory}
+     * creates a {@link org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer}
+     * for a given {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
      *
-     * @param source source type to be used.
+     * @param source source object
      * @return target object.
      */
     R create(P source);

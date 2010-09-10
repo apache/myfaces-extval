@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * A special validationParameter to indicate that no information what so ever of the validation information (like length
- * or required) should be placed on the UIComponent so that client side could do any validation.
+ * A special {@link ValidationParameter} to indicate that the found meta-data shouldn't be used for
+ * component initialization.
  * 
  * @author Gerhard Petracek
  * @since x.x.3
