@@ -72,8 +72,19 @@ public class BeanValidationStartupListener extends AbstractStartupListener
 
     protected void registerValidatorFactory()
     {
-        ExtValContext.getContext().addGlobalProperty(ValidatorFactory.class.getName(),
-                new BeanAwareValidatorFactory(BeanValidationUtils.getDefaultValidatorFactory()), false);
+        ValidatorFactory validatorFactory;
+        Object contextAwareValidatorFactory = ExtValUtils.getELHelper().getBean("contextAwareValidatorFactory");
+
+        if(contextAwareValidatorFactory instanceof ValidatorFactory)
+        {
+            validatorFactory = (ValidatorFactory)contextAwareValidatorFactory;
+        }
+        else
+        {
+            validatorFactory = new BeanAwareValidatorFactory(BeanValidationUtils.getDefaultValidatorFactory());
+        }
+
+        ExtValContext.getContext().addGlobalProperty(ValidatorFactory.class.getName(), validatorFactory, false);
     }
 
     protected void registerBeanValidationInterceptors()
