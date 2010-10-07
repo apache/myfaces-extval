@@ -18,9 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.core.renderkit;
 
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
+import javax.faces.event.ListenerFor;
+import javax.faces.event.ListenersFor;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitWrapper;
 import javax.faces.render.Renderer;
@@ -68,8 +72,21 @@ public class ExtValRenderKit extends RenderKitWrapper
     }
 
     @UsageInformation(UsageCategory.REUSE)
+    @ToDo(value = Priority.HIGH, description = "log warning + hint that a (generic) component support module is needed")
     protected Renderer createWrapper(Renderer renderer)
     {
+        if(renderer == null)
+        {
+            return null;
+        }
+
+        if(renderer.getClass().isAnnotationPresent(ListenerFor.class) ||
+                renderer.getClass().isAnnotationPresent(ListenersFor.class))
+        {
+            //we aren't allowed to create a wrapper without knowing details about the renderer or
+            //without generating a proxy due to the annotation scanning process
+            return renderer;
+        }
         return new ExtValRendererWrapper(renderer);
     }
 
