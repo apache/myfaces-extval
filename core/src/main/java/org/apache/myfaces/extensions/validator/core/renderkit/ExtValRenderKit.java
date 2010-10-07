@@ -21,15 +21,9 @@ package org.apache.myfaces.extensions.validator.core.renderkit;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
-import javax.faces.context.ResponseStream;
-import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitWrapper;
 import javax.faces.render.Renderer;
-import javax.faces.render.ResponseStateManager;
-import javax.faces.render.ClientBehaviorRenderer;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
@@ -37,7 +31,7 @@ import java.util.logging.Logger;
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public class ExtValRenderKit extends RenderKit
+public class ExtValRenderKit extends RenderKitWrapper
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
     protected RenderKit wrapped;
@@ -73,50 +67,15 @@ public class ExtValRenderKit extends RenderKit
         return renderer;
     }
 
-    public ResponseStateManager getResponseStateManager()
-    {
-        return wrapped.getResponseStateManager();
-    }
-
-    public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
-    {
-        return wrapped.createResponseWriter(writer, s, s1);
-    }
-
-    public ResponseStream createResponseStream(OutputStream outputStream)
-    {
-        return wrapped.createResponseStream(outputStream);
-    }
-
-    public Iterator<String> getComponentFamilies()
-    {
-        return wrapped.getComponentFamilies();
-    }
-
-    public Iterator<String> getRendererTypes(String s)
-    {
-        return wrapped.getRendererTypes(s);
-    }
-
-    public void addClientBehaviorRenderer(String s, ClientBehaviorRenderer clientBehaviorRenderer)
-    {
-        wrapped.addClientBehaviorRenderer(s, clientBehaviorRenderer);
-    }
-
-    public ClientBehaviorRenderer getClientBehaviorRenderer(String s)
-    {
-        return wrapped.getClientBehaviorRenderer(s);
-    }
-
-    public Iterator<String> getClientBehaviorRendererTypes()
-    {
-        return wrapped.getClientBehaviorRendererTypes();
-    }
-
     @UsageInformation(UsageCategory.REUSE)
     protected Renderer createWrapper(Renderer renderer)
     {
         return new ExtValRendererWrapper(renderer);
     }
 
+    @Override
+    public RenderKit getWrapped()
+    {
+        return this.wrapped;
+    }
 }
