@@ -228,9 +228,9 @@
     </reporting>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/2_0_4_rc/parent</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/2_0_4_rc/parent</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/2_0_4_rc/parent</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0/parent</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0/parent</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_2_0/parent</url>
     </scm>
 
     <distributionManagement>

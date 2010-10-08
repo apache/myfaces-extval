@@ -36,9 +36,9 @@
     <url>http://myfaces.apache.org/extensions/validator20</url>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0/</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_2_0/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_2_0</url>
     </scm>
 
     <distributionManagement>

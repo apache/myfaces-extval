@@ -37,9 +37,9 @@
     </parent>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/2_0_4_rc/examples</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/2_0_4_rc/examples</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/2_0_4_rc/examples</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0/examples</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_2_0/examples</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_2_0/examples</url>
     </scm>
 
     <repositories>
