@@ -174,10 +174,16 @@ public class ExtValELResolver extends ELResolver
 
     public void setValue(ELContext elContext, Object o, Object o1, Object o2)
     {
-        expression += "." + o1;
-
         if(o1 instanceof String)
         {
+            if(expression == null)
+            {
+                expression = (String)o1;
+            }
+            else
+            {
+                expression += "." + o1;
+            }
             property = (String)o1;
         }
         else
