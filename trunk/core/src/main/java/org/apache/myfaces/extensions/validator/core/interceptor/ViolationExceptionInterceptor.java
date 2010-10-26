@@ -31,7 +31,8 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.context.FacesContext;
 
 /**
- * A validation interceptor that sets the valid property of the uiComponent to false.
+ * This validation-exception interceptor sets the valid property of the uiComponent to false,
+ * if it is a blocking severity.
  * 
  * @author Gerhard Petracek
  * @since x.x.3

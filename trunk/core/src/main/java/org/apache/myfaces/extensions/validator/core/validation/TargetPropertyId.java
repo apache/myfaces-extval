@@ -30,11 +30,15 @@ import java.lang.annotation.Annotation;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Indication of what annotation has to be searched in the class that is the source of the ExtVal constraints. <br/>
- * If needed, this annotation can be replaced by a customer defined one if one likes to have independence of ExtVal in
- * model classes, see targetPropertyIdAnnotation in ExtValCoreConfiguration. 
+ * To specify which property should be used as constraint source (instead of the default naming convention).
+ * Compared to {@link TargetProperty} this annotation allows to use custom annotations to mark the target
+ * (instead of the name of the property).
+ *
+ * If needed, this annotation can be replaced by a custom annotation to keep the implementation independent of ExtVal.
+ * (see targetPropertyIdAnnotation in ExtValCoreConfiguration)
+ *
  * @see org.apache.myfaces.extensions.validator.core.validation.ConstraintSource
- *  
+ *
  * @author Gerhard Petracek
  * @since r4
  */
@@ -45,8 +49,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface TargetPropertyId
 {
     /**
-     * Annotation to be searched.
-     * @return annotation to search in target class of ExtVal Constraints.
+     * class of an annotation which has to be available at a property of the target as a type-safe marker.
+     * the annotation marks the property which should be used as constraint-source.
+     *
+     * @return class of an annotation which has to exist at a property of the target-cass
      */
     Class<? extends Annotation> value();
 }

@@ -28,7 +28,11 @@ import javax.faces.component.UIComponent;
 import java.util.Map;
 
 /**
- * Interface to define interceptors that can perform logic before and after the validations are executed.
+ * Property-validation interceptors allow to intercept the validation of a property. It's possible to register a
+ * global interceptor which intercepts the validation process of all properties or a local interceptor
+ * (= a {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter} which allows
+ * to intercept the validation of the constraint which hosts the interceptor as
+ * {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter}.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -38,12 +42,14 @@ import java.util.Map;
 public interface PropertyValidationInterceptor extends ValidationParameter
 {
     /**
-     * Executed before the RendererInterceptor calls the validation Strategies to validate the converted value.
+     * Executed before the {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy
+     * validation strategies} are invoked to validate the converted value.
      *
      * @param facesContext The JSF Context
      * @param uiComponent The component which is processed
      * @param convertedObject  The converted object
-     * @param properties Additional information of interest. Contains the PropertyInformation object.
+     * @param properties Additional information of interest. Contains e.g. the
+     * {@link org.apache.myfaces.extensions.validator.core.property.PropertyInformation} extracted from the component.
      * @return false if the validation process should be bypassed
      */
     boolean beforeValidation(FacesContext facesContext,
@@ -52,12 +58,14 @@ public interface PropertyValidationInterceptor extends ValidationParameter
                              Map<String, Object> properties);
 
     /**
-     * Processed if validation was executed
-     * in contrast to ValidationExceptionInterceptor it gets executed in any case.
+     * Processed if validation was executed.
+     * In contrast to a {@link org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor
+     * ValidationExceptionInterceptor} it gets executed in any case.
      * @param facesContext The JSF Context
      * @param uiComponent The component which is processed
      * @param convertedObject The converted object
-     * @param properties Additional information of interest. Contains the PropertyInformation object.
+     * @param properties Additional information of interest. Contains e.g. the
+     * {@link org.apache.myfaces.extensions.validator.core.property.PropertyInformation} extracted from the component.
      */
     void afterValidation(FacesContext facesContext,
                          UIComponent uiComponent,

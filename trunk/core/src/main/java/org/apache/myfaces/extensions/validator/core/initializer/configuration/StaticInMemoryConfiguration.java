@@ -25,10 +25,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Implementation of the StaticConfiguration interface that can be used to programmatically add some implementation
- * entries.
- * See for an example org.apache.myfaces.extensions.validator.PropertyValidationModuleStartupListener
- * #addSkipValidationSupport().
+ * Implementation of the {@link StaticConfiguration} interface for in-memory configs.
+ * It's an implementation which helps to create custom config approaches easily.
+ * 
  * @author Gerhard Petracek
  * @since 1.x.1
  */

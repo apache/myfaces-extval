@@ -31,8 +31,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 public interface SubMapperAwareNameMapper<T> extends NameMapper<T>
 {
     /**
-     * Add a (sub-)name mapper to list to delegate to.
-     * @param nameMapper nameMapper to add
+     * Add a (sub-)name mapper
+     * @param nameMapper sub-nameMapper to add
      */
     void addNameMapper(NameMapper<T> nameMapper);
 }

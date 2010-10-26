@@ -28,9 +28,9 @@ import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Marker annotation to indicate that the strategy can handle null values as values to validate.  This was introduced
- * to have the correct behaviour in relation to the parameter
- * javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL.
+ * Marker annotation to indicate that the strategy can handle null values as values to validate.
+ * If a {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy} is NOT annotated
+ * with this marker, it doesn't have to care about null values.
  *  
  * @author Gerhard Petracek
  * @since x.x.3
