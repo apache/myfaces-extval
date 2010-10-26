@@ -31,15 +31,17 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public interface ExtValModuleConfigurationResolver
 {
     /**
-     * Retrieves the custom configuration object which is of the type specified by the parameter. The type of the
-     * parameter is one of the abstract classes which directly implement the ExtValModuleConfiguration interface, like
-     * ExtValCoreConfiguration. The return object should not only implement the ExtValModuleConfiguration, but
-     * should also extend from the class specified in the configType. The method isn't allowed to return null except
-     * for the case that a custom configuration object for that type is defined as web.xml initialization parameter.
+     * Retrieves the custom configuration which matches the given config-type.
+     * The type of the parameter is one of the abstract classes which directly implements the
+     * {@link ExtValModuleConfiguration} interface, like {@link ExtValCoreConfiguration}.
+     * The returned config has to extend one of the abstract config classes.
      *
-     * @param configType Class type indicating the type of module for which we need to retrieve the configuration
+     * (The method isn't allowed to return null except
+     * for the case that a custom configuration for that type is defined via a web.xml context-param.)
+     *
+     * @param configType Class that specifies the type of the target config.
      * @param <T>
-     * @return Configuration object which ExtVal will use.
+     * @return Configuration object which will be used by ExtVal.
      */
     <T extends ExtValModuleConfiguration> ExtValModuleConfiguration getCustomConfiguration(Class<T> configType);
 }
