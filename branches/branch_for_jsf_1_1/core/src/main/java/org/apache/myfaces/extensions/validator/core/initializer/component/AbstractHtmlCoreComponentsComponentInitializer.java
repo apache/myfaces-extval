@@ -41,8 +41,8 @@ import javax.faces.component.html.HtmlInputTextarea;
 import java.util.Map;
 
 /**
- * Basic implementation of a ComponentInitializer that could be used for concrete versions in the validation modules or
- * custom made ComponentInitializer.
+ * Basic implementation of a {@link ComponentInitializer} which allows an easier handling of required validations and
+ * provides a default implementation for standard components.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -51,19 +51,18 @@ import java.util.Map;
 public abstract class AbstractHtmlCoreComponentsComponentInitializer implements ComponentInitializer
 {
     /**
-     * When the component is one of the standard input components, the max length attribute is configured and the
-     * required attribute is configured when empty fields need to be validated and required initialization is active
-     * by the configuration.
+     * If the component is one of the standard input components, the max length attribute is configured and the
+     * required attribute is configured (if empty field validation and required initialization is activated)
      *
      * @param facesContext The JSF Context
-     * @param uiComponent The component that should be initialised
-     * @param metaData Information from the MetaDataEntry in the abstract form.
+     * @param uiComponent The component which should be initialised
+     * @param metaData map which contains the transformed meta-data
      */
     public void configureComponent(FacesContext facesContext, UIComponent uiComponent, Map<String, Object> metaData)
     {
         if(processComponent(uiComponent))
         {
-            if(validateEmptyFields() && ExtValUtils.isRequiredInitializationActive())
+            if(validateEmptyFields() && isRequiredInitializationActive())
             {
                 configureRequiredAttribute(facesContext, uiComponent, metaData);
             }
@@ -73,9 +72,10 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     }
 
     /**
-     * Checks if in the configuration is set that empty fields should be validated.
+     * Uses the config introduced by JSF 2 for specifying if
+     * fields without content should be available for required validation.
      *
-     * @return  Do we need to validate empty fields.
+     * @return true if fields with empty values should be validated, false otherwise.
      */
     protected boolean validateEmptyFields()
     {
@@ -83,20 +83,31 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     }
 
     /**
-     * Concrete implementation need to determine if they set the required attribute based on the supplied information.
-     * Be aware that this method is only called when certain conditions are met, see configureComponent method.
+     * Uses the config introduced by prev. ExtVal versions for specifying if
+     * required initialization should be used
+     * (it's useful e.g. for client-side validations provided by libs like trinidad).
+     *
+     * @return true if ExtVal should transfer meta-data for required fields to the component
+     */
+    protected boolean isRequiredInitializationActive()
+    {
+        return ExtValUtils.isRequiredInitializationActive();
+    }
+
+    /**
+     * The concrete implementation has to initialize the component based on the given meta-data map.
+     * This method is only called if all pre-conditions are fulfilled.
      *
      * @param facesContext The JSF Context
      * @param uiComponent The UIComponent which should be configured.
-     * @param metaData Information from the MetaDataEntry in the abstract form.
+     * @param metaData map which contains the transformed meta-data
      */
     protected abstract void configureRequiredAttribute(FacesContext facesContext,
-                                              UIComponent uiComponent,
-                                              Map<String, Object> metaData);
+                                                       UIComponent uiComponent,
+                                                       Map<String, Object> metaData);
 
     /**
-     * When the component is an editableValueHolder which is supported, the method returns true so that component
-     * initialization can take place.
+     * Activates the implementation for special components (-> other components will be ignored).
      *
      * @param uiComponent The UIComponent which should be configured.
      * @return Should the component be initialized.
@@ -104,15 +115,15 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     protected boolean processComponent(UIComponent uiComponent)
     {
         return uiComponent instanceof HtmlInputText ||
-                uiComponent instanceof HtmlInputSecret ||
-                uiComponent instanceof HtmlSelectBooleanCheckbox ||
-                uiComponent instanceof HtmlSelectOneListbox ||
-                uiComponent instanceof HtmlSelectOneMenu ||
-                uiComponent instanceof HtmlSelectOneRadio ||
-                uiComponent instanceof HtmlSelectManyCheckbox ||
-                uiComponent instanceof HtmlSelectManyListbox ||
-                uiComponent instanceof HtmlSelectManyMenu ||
-                uiComponent instanceof HtmlInputTextarea;
+               uiComponent instanceof HtmlInputSecret ||
+               uiComponent instanceof HtmlSelectBooleanCheckbox ||
+               uiComponent instanceof HtmlSelectOneListbox ||
+               uiComponent instanceof HtmlSelectOneMenu ||
+               uiComponent instanceof HtmlSelectOneRadio ||
+               uiComponent instanceof HtmlSelectManyCheckbox ||
+               uiComponent instanceof HtmlSelectManyListbox ||
+               uiComponent instanceof HtmlSelectManyMenu ||
+               uiComponent instanceof HtmlInputTextarea;
     }
 
     /**
@@ -134,17 +145,17 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     }
 
     /**
-     * Set the max length specified in the validation constraints, if any, as value of the maxLength attribute of the
-     * component. The length is searched with the value CommonMetaDataKeys.MAX_LENGTH as key and is only set when the
-     * component is a HtmlInputText or a HtmlInputSecret.
+     * This default implementation uses the transformed meta-data stored via the ({@link CommonMetaDataKeys#MAX_LENGTH}
+     * key for initializing e.g. the maxLength attribute of the current component
+     * (of type {@link HtmlInputText} or {@link HtmlInputSecret}.
      *
      * @param facesContext The JSF Context
      * @param uiComponent  The component to configure.
-     * @param metaData Information from the MetaDataEntry in the abstract form.
+     * @param metaData map which contains the transformed meta-data
      */
     protected void configureMaxLengthAttribute(FacesContext facesContext,
-                                             UIComponent uiComponent,
-                                             Map<String, Object> metaData)
+                                               UIComponent uiComponent,
+                                               Map<String, Object> metaData)
     {
         if(metaData.containsKey(CommonMetaDataKeys.MAX_LENGTH))
         {

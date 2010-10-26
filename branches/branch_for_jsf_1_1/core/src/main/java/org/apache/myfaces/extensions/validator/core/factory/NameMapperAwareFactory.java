@@ -23,9 +23,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 
 /**
- * Factory that works with NameMappers to define what should be created. The factory ask each name mapper for a possible
- * candidate for creation (name mappers can be ordered) and return the result of the first that answers with a non null
- * value.
+ * Interface for factories which are using {@link NameMapper}s for creating instances.
  *
  * @author Gerhard Petracek
  * @since 1.x.2
@@ -34,22 +32,23 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 public interface NameMapperAwareFactory<T extends NameMapper>
 {
     /**
-     * Register the NameMapper for usage. When nameMapper is used in a call to the deny method, it isn't registered
-     * and there is no further trace of this deny action.
-     * 
-     * @param classToAdd nameMapper to add.
+     * Registers a new {@link NameMapper} which should be used for the mapping process.
+     * It will be used if it isn't denied.
+     *
+     * @param classToAdd {@link NameMapper} to add
      */
     void register(T classToAdd);
 
     /**
-     * Removes the nameMapper from the list.
+     * Removes all {@link NameMapper}s of the given type.
      * @param classToDeregister nameMapper to remove.
      */
     void deregister(Class<? extends NameMapper> classToDeregister);
 
     /**
-     * Deregister the nameMapper and makes sure that the nameMapper can't be registered in the future..
-     * @param classToDeny nameMapper to deny, this is, deregister and doesn't allow registration in the future.
+     * Deregisters existing {@link NameMapper}s of the given type and deny the type for {@link NameMapper} which
+     * might be added later on.
+     * @param classToDeny {@link NameMapper} to deny
      */
     void deny(Class<? extends NameMapper> classToDeny);
 }

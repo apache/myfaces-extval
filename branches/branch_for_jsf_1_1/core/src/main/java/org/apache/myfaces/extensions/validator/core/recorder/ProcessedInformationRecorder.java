@@ -33,9 +33,9 @@ import javax.faces.component.UIComponent;
 public interface ProcessedInformationRecorder
 {
     /**
-     * Allows to store the converted value for the uiComponent.
+     * Allows to store the converted value of the given uiComponent.
      *
-     * @param uiComponent JSF UI Component
+     * @param uiComponent current component
      * @param value Converted user value.
      */
     void recordUserInput(UIComponent uiComponent, Object value);

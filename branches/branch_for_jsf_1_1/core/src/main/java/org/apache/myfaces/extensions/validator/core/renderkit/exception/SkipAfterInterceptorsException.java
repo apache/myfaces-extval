@@ -22,8 +22,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * Marker exception that can be thrown by the rendererInterceptor methods to stop the execution of all after defined
- * methods of the interceptor.
+ * Marker exception that can be thrown by an after-method
+ * ({@link org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor})
+ * to stop the execution of the subsequent interceptors.
  *
  * @author Gerhard Petracek
  * @since 1.x.1

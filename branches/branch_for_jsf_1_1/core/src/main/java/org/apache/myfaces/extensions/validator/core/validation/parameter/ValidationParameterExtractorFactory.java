@@ -22,8 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Definition of the factory class which is capable of creating classes that can extract ValidationParameter's from
- * the annotations.
+ * Interface for a factory which is responsible for creating a {@link ValidationParameterExtractor}
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -33,7 +32,7 @@ public interface ValidationParameterExtractorFactory
 {
     /**
      * Creates an instance of a class capable of extracting ValidationParameter's from annotations.
-     * @return Extractor for ValidationParameter's from annotations.
+     * @return an instance of type {@link ValidationParameterExtractor}s for extracting generic params from annotations.
      */
     ValidationParameterExtractor create();
 }
