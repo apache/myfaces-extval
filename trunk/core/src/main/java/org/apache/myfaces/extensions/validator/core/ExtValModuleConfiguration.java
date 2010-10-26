@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Marker interface to indicate Customizable ExtVal Module configuration.
- * 
+ * Marker interface for type-safe ExtVal configurations.
+ *
  * @author Gerhard Petracek
  * @since r4
  */
