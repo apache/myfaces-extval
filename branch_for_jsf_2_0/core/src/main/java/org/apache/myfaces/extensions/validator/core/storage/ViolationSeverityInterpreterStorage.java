@@ -23,11 +23,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverityInterpreter;
 
 /**
- * Suggested interface for a violation-severity-interpreter storage.
+ * Interface for a {@link ViolationSeverityInterpreter} storage.
  * Used by add-ons to change the interpreter for the current request.
- * Behaves like a singleton/Application scoped object and the default for this interface is
- * DefaultViolationSeverityInterpreterStorage.
- * 
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */

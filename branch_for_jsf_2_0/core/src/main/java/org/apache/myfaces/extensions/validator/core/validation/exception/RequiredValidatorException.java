@@ -25,8 +25,8 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.application.FacesMessage;
 
 /**
- * To handle special cases in ValidationExceptionInterceptors. It acts just like a regular ValidatorException except
- * that code can detect that the validation problem occurred related to a required field.
+ * JSF components allow different inline-messages for required violations and all other types of validation failures.
+ * This exception is used to determine if the special required error message should be used. 
  *
  * @author Gerhard Petracek
  * @since x.x.3

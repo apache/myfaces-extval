@@ -28,7 +28,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
 
 /**
- * Allows to intercept validator exceptions.
+ * Allows to intercept {@link javax.faces.validator.ValidatorException}.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -38,7 +38,6 @@ import javax.faces.validator.ValidatorException;
 public interface ValidationExceptionInterceptor
 {
     /**
-     *
      * @param uiComponent the current component
      * @param metaDataEntry the meta data entry which contains the meta data of the property
      * @param convertedObject the converted user input
