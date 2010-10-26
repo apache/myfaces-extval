@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * Allows to have a helper object that deals with proxies, like CGLIB proxies, created for some objects.  There are
- * various locations where we need to know the base class or name of a prpoxy instance.
+ * Pluggable helper which handles proxied instances correctly.
+ * (The default implementation supports cglib and javassist
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -32,52 +32,55 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 public interface ProxyHelper
 {
     /**
-     * Returns the Class metadata of the proxy class.  When the parameter isn't a proxy, it returns the parameter value.
+     * Returns the original class for the given class which might be the class of a proxied instance.
      *
      * @param currentClass class of proxy instance or any regular class.
-     * @return base class for which the proxy was created.
+     * @return the class of the original (unproxied) instance or the parameter itself
      */
     Class getUnproxiedClass(Class currentClass);
 
     /**
-     * Returns the Class metadata of the proxy class casted to a certain targetType. There is no check to see if the
-     * base class is actually assignable to the targetType.
+     * In addition to ProxyHelper#getUnproxiedClass(java.lang.Class) it casts to the given type.
      * @see ProxyHelper#getUnproxiedClass(java.lang.Class)
      *
      * @param currentClass class of proxy instance or any regular class.
      * @param targetType target class type
      * @param <T> Type declaration for generics.
-     * @return base class for which the proxy was created.
+     * @return the class of the original (unproxied) instance or the parameter itself
      */
     <T> Class<T> getUnproxiedClass(Class currentClass, Class<T> targetType);
 
     /**
-     * Returns the class name of the base class of the proxy.
+     * Returns the original fully qualified class-name for
+     * the given class which might be the class of a proxied instance.
+     *
      * @param proxiedClass class of proxy instance or any regular class.
-     * @return class name of base class for which the proxy was created.
+     * @return the class-name of the original (unproxied) instance or the name of the parameter itself
      */
     String getNameOfClass(Class proxiedClass);
 
     /**
-     * Returns the class name of the base class of the proxy instance.
+     * Returns the original fully qualified class-name for
+     * the given object which might be a proxied instance.
+     *
      * @param proxiedObject proxy instance or any regular object.
-     * @return  class name of base class for which the proxy was created.
+     * @return the class-name of the original (unproxied) instance or the name of the parameter itself
      */
     String getClassNameOfObject(Object proxiedObject);
 
     /**
-     * Checks if the class is a proxy class.
+     * Checks if the given class is a class of a proxied instance.
      *
      * @param currentClass proxy class to check.
-     * @return is it a proxy class or regular class.
+     * @return true if the given class is a class of a proxied instance
      */
     boolean isProxiedClass(Class currentClass);
 
     /**
-     * Checks if this object is a proxy.
+     * Checks if the given instance is proxied.
      *
      * @param proxiedObject object to check.
-     * @return is it a proxy or regular object.
+     * @return true if the given object is a proxied instance
      */
     boolean isProxiedObject(Object proxiedObject);
 }

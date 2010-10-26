@@ -47,12 +47,13 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 /**
- * A basic implementation of a RendererInterceptor for validating fields.  It adds some extension point for subclasses
- * and performs tasks like : <br/>
- * - storing field values (recordProcessedInformation) <br/>
+ * A basic implementation of {@link RendererInterceptor} for validating fields.
+ * It adds some extension point for subclasses and performs tasks like : <br/>
+ * - storing field values ({@link #recordProcessedInformation}) <br/>
  * - resetting required information property UIComponent <br/>
  * - calling before and after Validation interceptors <br/>
  * - etc ...
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
@@ -62,27 +63,25 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     private ELHelper elHelper;
 
     /**
-     * Defines if the required option of UIComponents need to be set to false after a decode.  It is one of the
-     * conditions that determine if the false is set.  see afterDecode method in this class.
+     * In case of required initialization
+     * it's needed for some use-cases to reset the (required-)state of the components.
+     * Such a reset is just needed if required initialization is activated.
      *
-     * @return false when required property should not be reset to false.
+     * @return true if required initialization is supported by the current implementation, false otherwise
      */
     protected boolean isRequiredInitializationSupported()
     {
         return false;
     }
 
-    @Override
     /**
-     * Sets required property of UIComponent to false after decoding when the isRequiredResetActivated and
-     * isRequiredInitializationActive methods of ExtValUtils indicate that required property should be set and reset.
+     * Sets required property of UIComponent to false after decoding.
+     * It's needed for special use-cases if required initialization is supported.
+     * The final required validation will be done by the corresponding constraint validator.
      *
-     * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param renderer The renderer that will be called for the apply request values JSF phase.
-     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the afterDecode
-     * methods of the registered interceptors.
+     * {@inheritDoc}
      */
+    @Override
     public void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws SkipAfterInterceptorsException
     {
@@ -98,20 +97,13 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
     }
 
-    @Override
     /**
-     * When the component should be processed and component initialization is not deactivated, the initialization of
-     * the UIComponent is performed.  The initialization can be that the required and length properties are set based
-     * on the annotations found on the property of the target property.
+     * Before the component gets rendered the interceptor initializes the component based on the meta-data
+     * which is provided by the referenced property (if component initialization is activated).
      *
-     * @param facesContext The JSF Context
-     * @param uiComponent The component which is processed
-     * @param renderer The renderer that will be called for the render response JSF phase.
-     * @throws IOException  In case the response writer is accessed and there was an IO problem.
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeEncodeBegin methods of
-     * the registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeEncodeBegin method.
+     * {@inheritDoc}
      */
+    @Override
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
             throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
@@ -122,20 +114,19 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Initialize the component based on the annotations found on the property of the target property. The properties
-     * that can be set are for instance the length and required attribute of the Component.
+     * Initialize the component based on the meta-data which is provided by the referenced property.
      *
      * @param facesContext The JSF Context
      * @param uiComponent The component which is processed
      */
     protected abstract void initComponent(FacesContext facesContext, UIComponent uiComponent);
 
-    @Override
     /**
      * The method performs the validation of the field and calls the registered interceptors regarding the validation.
+     *
      * The main steps are :<br/>
      * - Get the converted value from the renderer (possibly cached by the RendererProxy)<br/>
-     * - Store the value for use in the cross validation options <br/>
+     * - Record the value (e.g. for cross validation)<br/>
      * - Adjust the converted value for interpret empty values as null.<br/>
      * - Execute the beforeValidation method of the registered PropertyValidationInterceptor's. <br/>
      * - Perform the validation when the PropertyValidationInterceptor have indicate it that it should be performed.
@@ -144,17 +135,10 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
      *  exception <br/>
      * - Execute the afterValidation method of the registered PropertyValidationInterceptor's. (when validation actually
      *  tooks place)
-     * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param submittedValue The submitted value
-     * @param renderer The renderer that will be called for the apply request values JSF phase.
-     * @throws ConverterException ExtVal validation strategies can throw ValidationExceptions which are converted by
-     * AbstractValidationInterceptor
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeGetConvertedValue
-     * methods of the registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeGetConvertedValue
-     * method.
+     *
+     * {@inheritDoc}
      */
+    @Override
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
             throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
@@ -256,11 +240,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Get the property information of the UIComponent from the MetaDataExtractor.
+     * Extrancts the {@link PropertyInformation} for the given component.
      *
      * @param facesContext The JSF Context
      * @param uiComponent The UIComponent which is processed.
-     * @return All the information about the UIComponent (like annotations, custom info from Extractor, etc)
+     * @return the information of the referenced property (e.g. base object, property name, meta-data, ...)
      */
     protected PropertyInformation getPropertyInformation(FacesContext facesContext, UIComponent uiComponent)
     {
@@ -272,28 +256,9 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Create the properties which will be used by the selection of the MetaDataExtractor.  By default it adds the
-     * ModuleKey (if available) and the UIComponent.
-     *
-     * @param uiComponent  The UIComponent which is processed.
-     * @return properties used by the selection of the MetaDataExtractor
-     */
-    protected Map<String, Object> getPropertiesForComponentMetaDataExtractor(UIComponent uiComponent)
-    {
-        Map<String, Object> properties = new HashMap<String, Object>();
-
-        if(getModuleKey() != null)
-        {
-            properties.put(ValidationModuleKey.class.getName(), getModuleKey());
-        }
-        properties.put(UIComponent.class.getName(), uiComponent);
-        return properties;
-    }
-
-    /**
      * Implementations must return the MetaDataExtractor that will perform the extraction of the meta data from the
-     * component.  The component itself is present in the properties map when it would influence the type of Extractor
-     * which is returned.
+     * component. The component itself is present in the properties map (it might influence the type of the returned
+     * {@link MetaDataExtractor}.
      *
      * @param properties Properties that can be used to determine the extractor which is returned.
      * @return The MetaDataExtractor used for performing the xtraction of the meta data from the component.
@@ -317,12 +282,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Determines if the value should be validated in case it is empty (null or no characters in string). If it happens
-     * to be empty and the configuration indicates that we don't need to validate such values, the method return false
-     * and no ExtVal validations will be performed.
+     * Evaluates if the value should be validated in case it is empty (null or no characters).
+     * ExtVal also uses a config parameter introduced by JSF 2 which allows to skip the validation of empty fields.
      *
      * @param convertedObject The converted value.
-     * @return Should the value be converted?
+     * @return true if the given value should be validated, false otherwise
      */
     protected boolean validateValue(Object convertedObject)
     {
@@ -339,8 +303,9 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
 
     /**
      * Defines if a value is empty. The definition of empty is that it is null or has no characters in the String value.
+     *
      * @param convertedObject The converted value.
-     * @return is the value empty?
+     * @return true if the given value is the representation of an empty value
      */
     protected boolean isValueToValidateEmpty(Object convertedObject)
     {
@@ -348,8 +313,10 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Check if empty fields should be validated based on the configuration parameter javax.faces.VALIDATE_EMPTY_FIELDS.
-     * @return  Do we need to validate empty fields.
+     * Uses a config parameter (javax.faces.VALIDATE_EMPTY_FIELDS) which was introduced by JSF 2 for deactivating
+     * the validation of empty fields.
+     * 
+     * @return true if the validation of empty fields is enabled, false otherwise
      */
     protected boolean validateEmptyFields()
     {
@@ -357,10 +324,10 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Check if empty string values should be interpret as null based on the configuration parameter
-     * javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL.
+     * Uses a config parameter (javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL)
+     * which was introduced by JSF 2 for converting empty strings to null.
      *
-     * @return Do we need to interpret empty String values as null.
+     * @return true if an empty string should be replaced with null (for the validation process), false otherwise
      */
     protected boolean interpretEmptyStringValuesAsNull()
     {
@@ -368,21 +335,20 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Perform the actual validation of the value.
+     * A concrete implementation has to perform the actual validation of the value.
      *
      * @param facesContext The JSF Context
      * @param uiComponent The UIComponent which is processed.
-     * @param convertedObject The adjusted converted value.
+     * @param convertedObject The (adjusted) converted value.
      */
     protected abstract void processValidation(
             FacesContext facesContext, UIComponent uiComponent, Object convertedObject);
 
     /**
-     * Determines if the value of the UIComponent needs to be processed.  By default it is so when the component is a
-     * EditableValueHolder and the value binding can be interpreted.
+     * Based on basic rules the method checks if the current component should be processed.
      *
      * @param uiComponent The UIComponent which is processed.
-     * @return Do we need to process the UIComponent
+     * @return true if the given component should be processed by the current interceptor, false otherwise
      */
     protected boolean processComponent(UIComponent uiComponent)
     {
@@ -402,12 +368,6 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         return this.elHelper;
     }
 
-    /**
-     * Determines if the value binding of the component is valid. That is, it can be processed by the ELHelper.
-     * {@see org.apache.myfaces.extensions.validator.core.el.ELHelper#getPropertyDetailsOfValueBinding(javax.faces.component.UIComponent)}
-     * @param uiComponent The UIComponent which is processed.
-     * @return Is the value binding correct, interpretable by ExtVal.
-     */
     private boolean isValueBindingOfComponentValid(UIComponent uiComponent)
     {
         try
@@ -420,18 +380,14 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
     }
 
-    /**
-     * Checks from the configuration if the component initialization is deactivated.
-     * @return Is the component initialization deactivated.
-     */
     private boolean isComponentInitializationDeactivated()
     {
         return ExtValCoreConfiguration.get().deactivateComponentInitialization();
     }
 
     /**
-     * Will the converted value be stored for the cross validation feature. By default it is not stored.
-     * @return will the the converted value be stored.
+     * Signals if the converted value should be stored e.g. for the cross-validation process.
+     * @return true if the converted value should be recorded, false otherwise
      */
     protected boolean recordProcessedInformation()
     {
@@ -440,7 +396,9 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Identification of the validation module.  By default it returns null so no module is assigned.
+     * Identification of the validation module.
+     * A key is just needed if other implementations should be restricted to 1-n special validation modules.
+     * 
      * @return Identification of the validation module.
      */
     protected Class getModuleKey()
@@ -450,6 +408,20 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
+     * Create the properties which can be used by a {@link MetaDataExtractor}.
+     * By default it adds a key which identifies the current validation-module
+     * and the current component (to avoid changes of the api for quite special use-cases).
+     *
+     * @param uiComponent  The UIComponent which is processed.
+     * @return properties used by the selection of the MetaDataExtractor
+     */
+    protected Map<String, Object> getPropertiesForComponentMetaDataExtractor(UIComponent uiComponent)
+    {
+        return createProperties(uiComponent);
+    }
+
+    /**
+     * Create the properties which can be used by a {@link MetaDataExtractor}.
      * Returns the properties which will be made available to interceptors. By default the moduleKey and the UIComponent
      * itself is added.
      *
@@ -457,6 +429,11 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
      * @return  properties for the interceptors.
      */
     protected Map<String, Object> getInterceptorProperties(UIComponent uiComponent)
+    {
+        return createProperties(uiComponent);
+    }
+
+    private Map<String, Object> createProperties(UIComponent uiComponent)
     {
         Map<String, Object> result = new HashMap<String, Object>();
 
@@ -470,7 +447,7 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     }
 
     /**
-     * Store the interceptor properties in the RendererInterceptorPropertyStorage.
+     * Stores additional properties for the current process (to avoid api changes).
      *
      * @param uiComponent The UIComponent which is processed.
      */
@@ -485,10 +462,6 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
     }
 
-    /**
-     * remove the interceptor properties from the RendererInterceptorPropertyStorage.
-     * @param uiComponent The UIComponent which is processed.
-     */
     private void resetRendererInterceptorProperties(UIComponent uiComponent)
     {
         RendererInterceptorPropertyStorage interceptorPropertyStorage = getRendererInterceptorPropertyStorage();
@@ -499,11 +472,6 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
         }
     }
 
-    /**
-     * Retrieves the RendererInterceptorPropertyStorage defined in the ExtVal system.
-     *
-     * @return The RendererInterceptorPropertyStorage
-     */
     private RendererInterceptorPropertyStorage getRendererInterceptorPropertyStorage()
     {
         return ExtValUtils.getStorage(RendererInterceptorPropertyStorage.class,

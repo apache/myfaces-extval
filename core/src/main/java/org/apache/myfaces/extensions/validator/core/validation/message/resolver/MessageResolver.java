@@ -24,7 +24,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import java.util.Locale;
 
 /**
- * Interface for MessageResolvers independent of the message source.
+ * A {@link MessageResolver} is responsible for loading the message for a given key and locale.
+ * The message-source and format depends on the implementation of the resolver.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -33,12 +34,11 @@ import java.util.Locale;
 public interface MessageResolver
 {
     /**
-     * Retrieve the message with a certain key for a certain Locale. When key is null, the return value of the method is
-     * also null.
+     * Loads a message-text for the given message-key and locale.
      *
-     * @param key Message key, can be null or empty
-     * @param locale locale for the message
-     * @return message corresponding to the key. 
+     * @param key key which identifies a message-text
+     * @param locale the target locale of the message
+     * @return message-text
      */
     String getMessage(String key, Locale locale);
 }

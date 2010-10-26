@@ -25,9 +25,19 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import java.util.Map;
 
 /**
- * Allows to transform concrete meta-data to a more abstract form.<br/>
- * e.g.: @Required, @Column(nullable = false,...), @Length(minimum = 1), ... -> required = true  <br/>
- * For the keys of the map the constants in the CommonMetaDataKeys can be used.
+ * {@link org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer MetaDataTransformers}
+ * are used to convert specific information of constraints to a generic representation.
+ * So it's possible to transform different meta-data implementations to an independent representation.
+ * E.g. @Length and @Size specifies the same information.
+ * {@link org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer MetaDataTransformers}
+ * are aware of the concrete meta-data implementation but they aren't aware of JSF components.
+ *
+ * The result of the transformation is used by
+ * {@link org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer ComponentInitializers}
+ * to initialize JSF components based on the found meta-data.
+ *
+ * {@link org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys} provides the keys used by ExtVal.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -36,9 +46,10 @@ import java.util.Map;
 public interface MetaDataTransformer
 {
     /**
-     * Convert the information from MetaDataEntry into the abstract format.
-     * @param metaData The MetaDataEntry to process.
-     * @return Map with the information abstract format. 
+     * Converts the information of a {@link MetaDataEntry} into an independent format.
+     *
+     * @param metaData The meta-data which should be converted.
+     * @return Map with the converted information.
      */
     Map<String, Object> convertMetaData(MetaDataEntry metaData);
 }

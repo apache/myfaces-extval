@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
- * Data holder which stores the meta-data and some information where the meta-data was around.
+ * Data holder which stores the meta-data and some information where the meta-data was found.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -41,7 +41,7 @@ public class MetaDataEntry
     private Map<String, Object> properties = new HashMap<String, Object>();
 
     /**
-     * Returns the key of the meta-data.
+     * Returns the key which identifies the meta-data.
      *
      * @return key of the meta-data.
      */
@@ -51,9 +51,10 @@ public class MetaDataEntry
     }
 
     /**
-     * Sets the key of the meta-data.  The standard modules of ExtVal uses the name of the annotation as key.
+     * Sets the key of the meta-data.
+     * It's suggested to use the fully qualified name of a constraint.
      *
-     * @param key value to set as key of the meta-data.
+     * @param key value identifies the the meta-data stored in the instance.
      */
     public void setKey(String key)
     {
@@ -63,9 +64,9 @@ public class MetaDataEntry
     }
 
     /**
-     * Returns the object that lead to the creation of this instance.
+     * Returns the meta-data or a data-structure which represents the meta-data.
      *
-     * @return main object for the meta-data instance.
+     * @return the meta-data or a data-structure which represents the meta-data.
      */
     public Object getValue()
     {
@@ -73,12 +74,11 @@ public class MetaDataEntry
     }
 
     /**
-     * Returns the object that lead to the creation of this instance casted to the specified type.  Is useful for
-     * meta-data created for Bean Validation annotations, since the main object there is a ConstraintDescriptor.
+     * Returns the meta-data or a data-structure which represents the meta-data.
      *
      * @param targetClass Type to which the return value must be casted.
      * @param <T> generic type
-     * @return main object for the meta-data instance.
+     * @return the meta-data or a data-structure which represents the meta-data.
      */
     public <T> T getValue(Class<T> targetClass)
     {
@@ -86,10 +86,9 @@ public class MetaDataEntry
     }
 
     /**
-     * Sets the object that lead to the creation of this meta-data instance. The standard modules stores the annotation
-     * or the ConstraintDescriptor that lead to the creation of this instance.
+     * Sets the object which represents the meta-data hold by this instance.
      *
-     * @param value main object for the meta-data instance.
+     * @param value the object which represents the meta-data hold by this instance.
      */
     public void setValue(Object value)
     {
@@ -99,9 +98,9 @@ public class MetaDataEntry
     }
 
     /**
-     * Sets the map instance where the additional properties are stored of the meta-data.
+     * Sets the map which contains further properties which are linked to the meta-data.
      *
-     * @param properties Map with properties of the meta-data.
+     * @param properties properties which are linked to the meta-data.
      */
     public void setProperties(Map<String, Object> properties)
     {
@@ -109,8 +108,7 @@ public class MetaDataEntry
     }
 
     /**
-     * Returns the value defined in the additional properties identified by the key value.  When there is no value
-     * defined for the key, returns null.
+     * Returns the property-value for the given property-key.
      *
      * @param key key value used to identify the property value.
      * @return property value for the specified key.
@@ -121,9 +119,9 @@ public class MetaDataEntry
     }
 
     /**
-     * Returns the value defined in the additional properties identified by the key value casted to the specified type.
+     * Returns the property-value for the given property-key.
      *
-     * @param key key value used to identify the property value.
+     * @param key key which identifies a property
      * @param targetClass Type to which the return value must be casted.
      * @param <T> Generic type
      * @return property value for the specified key.
@@ -134,8 +132,9 @@ public class MetaDataEntry
     }
 
     /**
-     * Adds the property value with the key to the list of properties.  The constants defined in PropertyInformationKeys
-     *  can be used as key for the storage.
+     * Sets the property-value for the given property-key.
+     * {@link org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys}
+     * contains the keys used by ExtVal.
      *
      * @param key key value used to identify the property value.
      * @param value property value to set.
