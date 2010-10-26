@@ -25,7 +25,8 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
- * Object that stores the different parts of an expression string.
+ * An instance of this class stores the different parts of an expression string and
+ * allows an easier usage of value-bindings.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -42,12 +43,15 @@ public class ValueBindingExpression
     private static final ELHelper EL_HELPER = ExtValUtils.getELHelper();
 
     /**
-     * Replace the property of the expression by the new property specified as parameter or add the property when
-     * expression has no property yet.  When the expression doesn't have a property (like {#bean}), the property is
-     * added to the base expression.
-     * @param valueBindingExpression The valueBindingExpression where we want to replace or add the property.
+     * The given property is used as new property of the expression.
+     * Examples for 'newProperty':<br/>
+     * #{bean} -> #{bean.newProperty}
+     * <p/>
+     * #{bean.property} -> #{bean.newProperty}
+     *
+     * @param valueBindingExpression The target instance of {@link ValueBindingExpression}
      * @param newProperty The property to use.
-     * @return The resulting valueBindingExpression where property is replaced or added.
+     * @return The resulting {@link ValueBindingExpression} (with the new property)
      */
     public static ValueBindingExpression replaceOrAddProperty(ValueBindingExpression valueBindingExpression,
                                                               String newProperty)
@@ -63,11 +67,11 @@ public class ValueBindingExpression
     }
 
     /**
-     * Replace the property in the expression string by the property specified as parameter.
+     * Replace the property in the expression string with the given property.
      *
      * @param valueBindingExpression The valueBindingExpression where we want to replace the property
-     * @param newProperty The property to use.
-     * @return The resulting valueBindingExpression where property is replaced.
+     * @param newProperty The new property which should replace the existing one.
+     * @return The resulting {@link ValueBindingExpression} (with the new property)
      */
     public static ValueBindingExpression replaceProperty(ValueBindingExpression valueBindingExpression,
                                                          String newProperty)
@@ -89,11 +93,11 @@ public class ValueBindingExpression
     }
 
     /**
-     * Add the property to the expression string.
+     * Adds the property to the given {@link ValueBindingExpression}.
      *
      * @param valueBindingExpression The valueBindingExpression where we want to add the property
      * @param newProperty The property to add.
-     * @return The resulting valueBindingExpression where property is added.
+     * @return The resulting {@link ValueBindingExpression} (with the new property)
      */
     public static ValueBindingExpression addProperty(ValueBindingExpression valueBindingExpression, String newProperty)
     {
@@ -112,9 +116,8 @@ public class ValueBindingExpression
     }
 
     /**
-     * Creates an instance of a ValueBindingExpression based on a well formed EL expression. The creation is a recursive
-     * process that extracts the last property, the token the property is separated from the rest (. or [/[') and the
-     * text before the token as a new (ValueBinding)Expression.  see the tests for some
+     * Creates an instance of a ValueBindingExpression based on a well formed EL expression.
+     *
      * @param expression The EL expression
      */
     public ValueBindingExpression(String expression)

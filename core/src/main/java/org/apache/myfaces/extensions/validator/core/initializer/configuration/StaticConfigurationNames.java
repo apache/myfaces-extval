@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * List of all concepts where a StaticConfiguration is/can be defined for.
+ * List of all artifacts which can be configured via static mappings ({@link StaticConfiguration}).
  *
  * @author Gerhard Petracek
  * @since 1.x.1

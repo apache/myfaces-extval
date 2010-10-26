@@ -30,10 +30,9 @@ import javax.faces.validator.ValidatorException;
 import java.util.logging.Logger;
 
 /**
- * Provides the ability to use ValidatorException (as expected by the user) instead of ConverterException.
- * Furthermore it provides:<br/>
- * initValidation<br/>
- * processAfterValidatorException
+ * Provides the ability to use {@link ValidatorException} (as expected by the user) instead of the internally needed
+ * {@link javax.faces.convert.ConverterException}. Furthermore, this base implementation introduces a hook for the
+ * initialization of validators and the interception of {@link ValidatorException}s.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -50,11 +49,11 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
 
     /**
      * {@inheritDoc}
-     * Before actually executing the validation (done by the method processValidation) any initialization can be
-     * performed by the overriding the initValidation method. When a Validation exception occurs, the method
-     * processAfterValidatorException executes the registered
-     * {@link org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor}'s.
      *
+     * Before actually executing the validation ({@link #processValidation}) any initialization can be
+     * performed by overriding {@link #initValidation}. If a Validation exception occurs, the method
+     * {@link #processAfterValidatorException} executes the registered
+     * {@link org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor}'s.
      */
     public void validate(FacesContext facesContext, UIComponent uiComponent,
                          MetaDataEntry metaDataEntry, Object convertedObject)
@@ -123,9 +122,10 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
         //override if needed
     }
 
-    //override if needed
     /**
-     * Executes the registered ValidationExceptionInterceptor to process the validation exception.
+     * Executes the registered
+     * {@link org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor}
+     * to process the validation exception.
      * 
      * @param facesContext The JSF Context
      * @param uiComponent The JSF component that contained the value entered by the user.
@@ -148,10 +148,8 @@ public abstract class AbstractValidationStrategy implements ValidationStrategy
     }
 
     /**
-    /**
-     * Validates the value in the convertedObject parameter which the user entered as value of the uiComponent.
-     * Additional validation information can be found in the metaDataEntry parameter. The method throws a
-     * ValidatorException when violation of the validation rules occurs.
+     * Validates the given value based on the given meta-data entry.
+     * The method throws a {@link ValidatorException} if a violation is detected
      *
      * @param facesContext The JSF Context
      * @param uiComponent The JSF component that contained the value entered by the user.

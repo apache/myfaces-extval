@@ -24,8 +24,8 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 
 /**
- * Allows to intercept into the work of the
- * {@link org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor}
+ * Allows to post-process the result of the meta-data extraction process (see
+ * {@link org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor})
  *
  * @author Gerhard Petracek
  * @since 1.x.2
@@ -35,7 +35,9 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 public interface MetaDataExtractionInterceptor
 {
     /**
-     * Perform any additional actions on the PropertyInformation data after the extraction is performed and before it is
+     * Allows to execute additional actions on the
+     * {@link org.apache.myfaces.extensions.validator.core.property.PropertyInformation}
+     * data after the extraction is performed and before it is
      * used to determine validation strategies or UIComponent adjustments.
      *  
      * @param propertyInformation the information entry which contains information about the property

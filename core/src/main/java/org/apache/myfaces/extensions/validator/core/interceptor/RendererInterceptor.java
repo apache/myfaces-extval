@@ -32,7 +32,8 @@ import java.io.IOException;
 
 /**
  * Allows to intercept renderer methods.<br/>
- * Base mechanism of extval. It allows to add custom infrastructures.
+ * It's the base mechanism of ExtVal which enables most of the concepts provided by the framework.
+ * Furthermore, it allows to add custom concepts.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -43,11 +44,11 @@ public interface RendererInterceptor
     String getInterceptorId();
 
     /**
-     * Defines the value for the converted value that should be returned by the getConvertedValue method of the
-     * Renderer in case the there was a SkipRendererDelegationException thrown.
-     * @param skipRendererDelegationException The exception thrown to abort RendererInterceptor execution.
-     * @param currentReturnValue The converted value that is defined at this time.  This can be null also when the
-     * user has inputted some text in case of an Exception during the beforeConvertedValue 'phase'
+     * In case of the converted value it defines the value that should be returned by the getConvertedValue method
+     * in case there was a {@link SkipRendererDelegationException}.
+     *
+     * @param skipRendererDelegationException The exception thrown to abort further {@link RendererInterceptor}s.
+     * @param currentReturnValue The converted value that is defined at this time.
      * @return value that should be used as converted value.
      */
     Object getReturnValueOnSkipRendererDelegationException(
@@ -58,75 +59,74 @@ public interface RendererInterceptor
      */
 
     /**
-     * The "before decode phase" of ExtVal.  The code is executed before the decode method is executed of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('before').
+     *  
      * @param facesContext The JSF Context
-     * @param uiComponent The component which is processed
-     * @param renderer The renderer that will be called for the apply request values JSF phase.
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeDecode methods of the
-     * registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeDecode method and allows
-     *  additional interceptors to run and change the converted value.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
+     * @throws SkipBeforeInterceptorsException can be thrown to stop the execution of the subsequent interceptors
+     * @throws SkipRendererDelegationException can be thorwn to skip the invocation of the intercepted renderer method.
      */
     void beforeDecode(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     /**
-     * The "before encode phase" of ExtVal.  The code is executed before the encodeBegin method is executed of the
-     * Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('before').
+     *
      * @param facesContext The JSF Context
-     * @param uiComponent The component which is processed
-     * @param renderer The renderer that will be called for the render response JSF phase.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
      * @throws IOException  In case the response writer is accessed and there was an IO problem.
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeEncodeBegin methods of
-     * the registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeEncodeBegin method.
+     * @throws SkipBeforeInterceptorsException can be thrown to stop the execution of the subsequent interceptors
+     * @throws SkipRendererDelegationException can be thorwn to skip the invocation of the intercepted renderer method.
      */
     void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     /**
-     * The "before encode children phase" of ExtVal.  The code is executed before the encodeChildren method is executed
-     * of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('before').
+     *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param renderer The renderer that will be called for the render response JSF phase.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
      * @throws IOException In case the response writer is accessed and there was an IO problem.
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeEncodeChildren methods
-     * of the registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeEncodeChildren method.
+     * @throws SkipBeforeInterceptorsException can be thrown to stop the execution of the subsequent interceptors
+     * @throws SkipRendererDelegationException can be thorwn to skip the invocation of the intercepted renderer method.
      */
     void beforeEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     /**
-     * The "before encode end phase" of ExtVal.  The code is executed before the encodeEnd method is executed
-     * of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('before').
      *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param renderer The renderer that will be called for the render response JSF phase.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
      * @throws IOException In case the response writer is accessed and there was an IO problem.
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeEncodeEnd methods of the
-     * registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeEncodeEnd method.
+     * @throws SkipBeforeInterceptorsException can be thrown to stop the execution of the subsequent interceptors
+     * @throws SkipRendererDelegationException can be thorwn to skip the invocation of the intercepted renderer method.
      */
     void beforeEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException;
 
     /**
-     * The "before get converted value phase" of ExtVal.  The code is executed before the getConvertedValue method is
-     * executed of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('before').
      *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
+     * @param uiComponent The current component
      * @param submittedValue The submitted value
-     * @param renderer The renderer that will be called for the apply request values JSF phase.
-     * @throws ConverterException ExtVal validation strategies can throw ValidationExceptions which are converted by
-     * AbstractValidationInterceptor
-     * @throws SkipBeforeInterceptorsException Can be thrown to stop the execution of the beforeGetConvertedValue
-     * methods of the registered interceptors.
-     * @throws SkipRendererDelegationException Can be thrown to stop the execution of the beforeGetConvertedValue
-     * method.
+     * @param renderer The intercepted renderer
+     * @throws ConverterException ExtVal validation strategies can throw
+     * {@link javax.faces.validator.ValidatorException}s.
+     * Due to the trick used by ExtVal it has to be converted to a {@link ConverterException}
+     * (see {@link AbstractValidationInterceptor}).
+     * @throws SkipBeforeInterceptorsException can be thrown to stop the execution of the subsequent interceptors
+     * @throws SkipRendererDelegationException can be thorwn to skip the invocation of the intercepted renderer method.
      */
     void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object submittedValue,
                                  Renderer renderer)
@@ -137,72 +137,69 @@ public interface RendererInterceptor
      */
 
     /**
-     * The "after decode phase" of ExtVal.  The code is executed after the decode method is executed
-     * of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('after').
      *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param renderer The renderer that will be called for the apply request values JSF phase.
-     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the afterDecode
-     * methods of the registered interceptors.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
+     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the subsequent interceptors.
      */
     void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws SkipAfterInterceptorsException;
 
     /**
-     * The "after encode begin phase" of ExtVal.  The code is executed after the encodeBegin method is executed
-     * of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('after').
      *
      * @param facesContext The JSF context
-     * @param uiComponent In case the response writer is accessed and there was an IO problem.
-     * @param renderer The renderer that will be called for the render response JSF phase.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
      * @throws IOException In case the response writer is accessed and there was an IO problem.
-     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the afterEncodeBegin
-     * methods of the registered interceptors.
+     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the subsequent interceptors.
      */
     void afterEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException, SkipAfterInterceptorsException;
 
     /**
-     * The "after encode children phase" of ExtVal.  The code is executed after the encodeChildren method is executed
-     * of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('after').
      *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param renderer The renderer that will be called for the render response JSF phase.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
      * @throws IOException In case the response writer is accessed and there was an IO problem.
-     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the afterEncodeChildren
-     * methods of the registered interceptors.
+     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the subsequent interceptors.
      */
     void afterEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException, SkipAfterInterceptorsException;
 
     /**
-     * The "after encode end phase" of ExtVal.  The code is executed after the encodeEnd method is executed
-     * of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('after').
      *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
-     * @param renderer The renderer that will be called for the render response JSF phase.
+     * @param uiComponent The current component
+     * @param renderer The intercepted renderer
      * @throws IOException In case the response writer is accessed and there was an IO problem.
-     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the afterEncodeEnd
-     * methods of the registered interceptors.
+     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the subsequent interceptors.
      */
     void afterEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer renderer)
         throws IOException, SkipAfterInterceptorsException;
 
     /**
-     * The "after get converted value phase" of ExtVal.  The code is executed after the getConvertedValue method is
-     * executed of the Renderer.
+     * Intercepts a method of the renderer. The name of the intercepted method is the name of this method without the
+     * prefix ('after').
      *
      * @param facesContext The JSF Context
-     * @param uiComponent  The component which is processed
+     * @param uiComponent The current component
      * @param submittedValue The submitted value
-     * @param renderer The renderer that will be called for the render response JSF phase.
-     * @throws ConverterException ExtVal validation strategies can throw ValidationExceptions which are converted by
-     * AbstractValidationInterceptor
-     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the afterGetConvertedValue
-     * methods of the registered interceptors.
+     * @param renderer The intercepted renderer
+     * @throws ConverterException ExtVal validation strategies can throw
+     * {@link javax.faces.validator.ValidatorException}s.
+     * Due to the trick used by ExtVal it has to be converted to a {@link ConverterException}
+     * (see {@link AbstractValidationInterceptor}).
+     * @throws SkipAfterInterceptorsException Can be thrown to stop the execution of the subsequent interceptors.
      */
     void afterGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object submittedValue, Renderer
             renderer)

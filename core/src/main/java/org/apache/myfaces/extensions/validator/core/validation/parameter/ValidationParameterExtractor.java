@@ -26,7 +26,7 @@ import java.util.List;
 import java.lang.annotation.Annotation;
 
 /**
- * Allows the extraction of ValidationParameters.
+ * Allows the extraction of {@link ValidationParameter}s.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -35,51 +35,48 @@ import java.lang.annotation.Annotation;
 public interface ValidationParameterExtractor
 {
     /**
-     * Extract all the {@link ValidationParameter}s defined on the annotation. The resulting Map contains as key all
-     * the {@link ParameterKey}s found.  The value for each key, is the value defined as the {@link ParameterValue}
-     * (or the list of) of the ParameterValue part.<br/>
-     * When no ValidationParameters found, the method need to return an empty Map.
+     * Extracts all {@link ValidationParameter}s hosted by the given annotation.
+     * The wiki shows all supported styles.
      *
-     * @param annotation The annotation for which we want to extract the information.
-     * @return Map with all ParameterKeys and ParameterValues found.
+     * @param annotation The annotation which might contain validation-parameters
+     * @return key/value map of the found parameters
      */
     Map<Object, List<Object>> extract(Annotation annotation);
 
     /**
-     * Extract all the values defined as the {@link ParameterValue} found in the annotation for the key which is a
-     * {@link ParameterKey}. When no values found, the method returns an empty list.
+     * Extracts all {@link ValidationParameter}s for the given key which are hosted by the given annotation.
+     * The wiki shows all supported styles.
      *
      * @param annotation The annotation for which we want to extract the information.
-     * @param key Value for the ParameterKey that is used for filtering the ValidationParameters found.
-     * @return List with all the ParameterValues found.
+     * @param key Value for the ParameterKey that is used for filtering the ValidationParameters.
+     * @return list of the found parameters
      */
     List<Object> extract(Annotation annotation, Object key);
 
     /**
-     * Extract all the values defined as the {@link ParameterValue} found in the annotation for the key which is a
-     * {@link ParameterKey} where only those results are included which are assignable to the type specified in the
-     * parameter valueType. When no values found, the method returns an empty list.
+     * Extracts all {@link ValidationParameter}s for the given key which are hosted by the given annotation.
+     * The result is filtered by the given type for the value.
+     * The wiki shows all supported styles.
      *
-     * @param annotation The annotation for which we want to extract the information.
-     * @param key Value for the ParameterKey that is used for filtering the ValidationParameters found.
+     * @param annotation The annotation which might contain validation-parameters
+     * @param key Value for the ParameterKey that is used for filtering the ValidationParameters.
      * @param valueType ParameterValue must be assignable to this type to be added to the result.
      * @param <T> Class type of the result which is the same as the class type of the parameter valueType.
-     * @return List with all the ParameterValues found.
+     * @return list of the found parameters
      */
     <T> List<T> extract(Annotation annotation, Object key, Class<T> valueType);
 
     /**
-     * Extract the value defined as the {@link ParameterValue} found in the annotation for the key which is a
-     * {@link ParameterKey} where only those results are included which are assignable to the type specified in the
-     * parameter valueType and the ParameterValue id defined is the same as the parameter valueId. <br/>
-     * Multiple ParameterValues can be defined and each of them could be assigned an id to distinguish the different
-     * values. <br/>
-     * When no value matches the parameters of the method, the result of the method invocation is null.
+     * Extracts all {@link ValidationParameter}s for the given key which are hosted by the given annotation.
+     * The result is filtered by the given type for the value and
+     * the given id to receive a specific value if there are multiple parameters of the same type.
+     * The wiki shows all supported styles.
      *
-     * @param annotation The annotation for which we want to extract the information.
-     * @param key Value for the ParameterKey that is used for filtering the ValidationParameters found.
+     * @param annotation The annotation which might contain validation-parameters
+     * @param key Value for the ParameterKey that is used for filtering the ValidationParameters.
      * @param valueType ParameterValue must be assignable to this type to be added to the result.
-     * @param valueId value of the id member of the ParameterValue we are looking for.
+     * @param valueId marker which identifies a specific value
+     * (needed if there are multiple parameters of the same type)
      * @param <T> Class type of the result which is the same as the class type of the parameter valueType.
      * @return Value of the found ParameterValue.
      */
