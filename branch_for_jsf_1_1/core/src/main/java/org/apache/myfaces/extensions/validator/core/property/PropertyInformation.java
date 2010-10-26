@@ -23,7 +23,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 
 /**
- * Contains all the information on a property, like annotations, object and any custom information we want to keep.
+ * Contains all the information of a property
+ * (e.g. {@link org.apache.myfaces.extensions.validator.core.property.PropertyDetails})
  * MetaDataEntry's are considered as a special kind of information and separate methods are created for them.
  *
  * @author Gerhard Petracek
@@ -33,50 +34,53 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 public interface PropertyInformation
 {
     /**
-     * Verifies if we have information for a certain key.  There are some predefined keys in PropertyInformationKeys.
+     * Verifies if we have information for the given key.
+     * Some predefined keys are defined in {@link PropertyInformationKeys}.
      * @param key key of the information.
-     * @return Is there information for that key maintained.
+     * @return true if the instance is aware of an information which is linked to the given key
      */
     boolean containsInformation(String key);
 
     /**
-     * Get the information for the specified key.  When there isn't any information available, it returns null.
-     * @param key key of the information.
-     * @return  Information linked to the key or null when no information is found for the key.
+     * Returns the information for the given key.
+     * @param key key for the requested information
+     * @return the object (or null) which is linked to the given key
      */
     Object getInformation(String key);
 
     /**
-     * Get the information for the specified key casted to a certain targetClass type.
+     * In addition to PropertyInformation#getInformation(java.lang.String) it casts to the given type.
+     *
      * @see PropertyInformation#getInformation(java.lang.String)
-     * @param key key of the information.
+     * @param key key for the requested information
      * @param targetClass target class type
      * @param <T> Type declaration for generics.
-     * @return Information linked to the key or null when no information is found for the key.
+     * @return the object (or null) which is linked to the given key
      */
     <T> T getInformation(String key, Class<T> targetClass);
 
     /**
-     * Assign the value as information to the key.
+     * Stores the given value and links it to the given key.
      * @param key key of the information.
      * @param value value as information for the key.
      */
     void setInformation(String key, Object value);
 
     /**
-     * Get all the MetaDataEntry's stored.
-     * @return MetaDataEntry's
+     * Returns an immutable array which contains the
+     * {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry}s which were created for the property.
+     * @return all {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry}s
      */
     MetaDataEntry[] getMetaDataEntries();
 
     /**
-     * Add the MetaDataEntry to the internal structure.
-     * @param metaDataEntry MetaDataEntry to store.
+     * Adds the given {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry}
+     * @param metaDataEntry {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry} to store.
      */
     void addMetaDataEntry(MetaDataEntry metaDataEntry);
 
     /**
-     * remove all MetaDataEntry's from the internal structure.
+     * removes all {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry}s.
      */
     void resetMetaDataEntries();
 }

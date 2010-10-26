@@ -24,9 +24,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import java.util.List;
 
 /**
- * Mechanism to define some implementation classes of ExtVal concept.  The configuration resembles the services
- * approach.
- *
+ * Allows to provide static configurations (mappings).
+ * The config format depends on the implementation.
+ * 
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -34,15 +34,15 @@ import java.util.List;
 public interface StaticConfiguration<T, R>
 {
     /**
-     * Specify the file location where configuration can be found.
+     * Specify the location where the configuration can be found.
      *
      * @param path file location of the configuration.
      */
     void setSourceOfMapping(String path);
 
     /**
-     * Retrieves the information.  The return result can be cached for performance reasons. The method should always
-     * return an object and never null.
+     * Returns all config entries found in the specified config.
+     *
      * @return List of configuration entries.
      */
     List<StaticConfigurationEntry<T, R>> getMapping();

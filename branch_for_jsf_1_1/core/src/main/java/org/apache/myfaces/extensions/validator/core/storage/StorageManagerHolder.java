@@ -25,6 +25,7 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API
  * Interface to manage storage-manager instances.
  *
  * @see org.apache.myfaces.extensions.validator.core.storage.StorageManager
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
@@ -32,20 +33,20 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API
 public interface StorageManagerHolder
 {
     /**
-     * Define the storage manager for the specified type.
-     * @param type The identification for the storage manager, by convention it is the object type managed by the
-     * storageManager.
+     * Define the storage manager for the given type.
+     *
+     * @param type The identification for the storage manager, usually it is the storage-class
      * @param storageManager The storageManager to use.
-     * @param override if true, the previous defined storageManager is no longer used.  If false, the specified
-     * storage manager is only used when no manager was defined.
+     * @param override use true to replace an existing storageManager and
+     * false to use the manager only if there isn't an existing manager for the given type
      */
     void setStorageManager(Class type, StorageManager storageManager, boolean override);
 
     /**
-     * Retrieves the storageManager for the specified type.
-     * @param type The identification for the storage manager, by convention it is the object type managed by the
-     * storageManager.
-     * @return the storageManager specified for the type or null if no manager specified for the type.
+     * Returns the storageManager for the given type.
+     *
+     * @param type The identification for the storage manager, usually it is the storage-class
+     * @return the storageManager for the given type or null
      */
     StorageManager getStorageManager(Class type);
 }

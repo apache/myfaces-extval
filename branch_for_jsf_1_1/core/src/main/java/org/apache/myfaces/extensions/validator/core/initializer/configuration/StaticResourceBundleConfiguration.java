@@ -27,7 +27,7 @@ import java.util.Enumeration;
 import java.util.ArrayList;
 
 /**
- * Implementation of the StaticConfiguration interface that uses resource bundles to load the information.
+ * Default implementation of the {@link StaticConfiguration} interface for property-file based configs.
  *
  * @author Gerhard Petracek
  * @since 1.x.1

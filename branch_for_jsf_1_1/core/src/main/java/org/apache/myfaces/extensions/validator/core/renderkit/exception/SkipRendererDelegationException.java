@@ -23,8 +23,9 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * Exception that can be thrown by RendererInterceptor implementations to indicate that the execution of the intercepted
- * renderer method is aborted.
+ * Exception that can be thrown by a
+ * ({@link org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor})
+ * to skip the invocation of the intercepted renderer method.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -38,18 +39,16 @@ public class SkipRendererDelegationException extends Exception
     private static final long serialVersionUID = 2343074077532915722L;
 
     /**
-     * Initialization of empty Exception object with the skipOtherInterceptors property set to false. When exception is
-     * thrown in the getConvertedValue method, the converted value can't be altered.
+     * Constructor for creating an exception which doesn't skip the invocation of the other interceptors.
      */
     public SkipRendererDelegationException()
     {
     }
 
     /**
-     * Initialization of an empty Exception object where we can specify it other interceptors should be skipped or not.
-     * When exception is thrown in the getConvertedValue method, the converted value can't be altered.
+     * Constructor for creating an exception which might skip the invocation of the other interceptors.
      *
-     * @param skipOtherInterceptors should other interceptors be skipped.
+     * @param skipOtherInterceptors signals if the other interceptors should be skipped.
      */
     public SkipRendererDelegationException(boolean skipOtherInterceptors)
     {
@@ -57,11 +56,11 @@ public class SkipRendererDelegationException extends Exception
     }
 
     /**
-     * Initialization of an Exception where we supply the interceptor where it went wrong.  This interceptor is then
-     * consulted for the final value of the converted value.
+     * Constructor for creating an exception which doesn't skip the invocation of the other interceptors.
+     * Furthermore, it allows to get information about the {@link RendererInterceptor} which threw the exception.
      *
-     * @param skipOtherInterceptors should other interceptors be skipped.
-     * @param rendererInterceptor interceptor that is the cause of this exception.
+     * @param skipOtherInterceptors signals if the other interceptors should be skipped.
+     * @param rendererInterceptor interceptor which threw this exception.
      */
     public SkipRendererDelegationException(boolean skipOtherInterceptors, RendererInterceptor rendererInterceptor)
     {
@@ -80,7 +79,7 @@ public class SkipRendererDelegationException extends Exception
     }
 
     /**
-     * Gets the additional information.
+     * Returns the additional information.
      *
      * @return the additional information.
      */
@@ -90,9 +89,9 @@ public class SkipRendererDelegationException extends Exception
     }
 
     /**
-     * Should other interceptors be skipped according to the info supplied at the time of creation of the exception.
+     * Signals if the subsequent interceptors should be skipped.
      *
-     * @return should other interceptors be skipped.
+     * @return true if the subsequent interceptors should be skipped, false otherwise
      */
     public boolean isSkipOtherInterceptors()
     {
@@ -100,11 +99,10 @@ public class SkipRendererDelegationException extends Exception
     }
 
     /**
-     * When a rendererInterceptor is supplied at the time of the creation, it is consulted about the value the ExtVal
-     * system should return as converted value.  Otherwise, it is the value of the parameter.
+     * Returns the value which should be used as result (if the intercepted method has to provide a return value).
      *
-     * @param currentReturnValue Converted value defined by the JSF system.
-     * @return Converted value that we should return.
+     * @param currentReturnValue the original converted value
+     * @return value that should be returned as converted value.
      */
     public Object getReturnValueOnException(Object currentReturnValue)
     {
