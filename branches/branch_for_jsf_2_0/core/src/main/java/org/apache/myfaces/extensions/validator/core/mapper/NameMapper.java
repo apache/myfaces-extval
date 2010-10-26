@@ -24,9 +24,10 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 
 /**
  * Interface for name mappers.
- * A name mapper calculates a name for a given source object.
- * e.g. Meta-Data Key (e.g.: annotation class name) -> ValidationStrategy
- * NameMappers are stateless.
+ * A name mapper calculates a name of the resource which is linked to the given source.
+ * e.g. constraints are mapped to the corresponding
+ * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
+ * NameMappers have to be stateless.
  * 
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -36,9 +37,11 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
 public interface NameMapper<T>
 {
     /**
-     * Returns the name for the source or null when this name mapper doesn't support the type of source.
+     * Returns the name of the target resource for the given source or null if the implementations isn't responsible
+     * to map the given instance.
+     *
      * @param source Object for which the name must be created.
-     * @return name or null when source isn't supported.
+     * @return name of the target resource or null if the source isn't supported.
      */
     String createName(T source);
 }
