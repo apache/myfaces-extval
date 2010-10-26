@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
+ * Empty base implementation which allows concrete implementations to override just the needed methods.
+ *
  * @author Gerhard Petracek
  * @since 1.x.1
  */
@@ -50,6 +52,9 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
         return getClass().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getReturnValueOnSkipRendererDelegationException(
         SkipRendererDelegationException skipRendererDelegationException, Object currentReturnValue)
     {
@@ -59,26 +64,41 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
     /*
     * before
     */
+    /**
+     * {@inheritDoc}
+     */
     public void beforeDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforeEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforeEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforeEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
         throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
@@ -87,26 +107,41 @@ public abstract class AbstractRendererInterceptor implements RendererInterceptor
     /*
      * after
      */
+    /**
+     * {@inheritDoc}
+     */
     public void afterDecode(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws SkipAfterInterceptorsException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void afterEncodeBegin(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException, SkipAfterInterceptorsException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void afterEncodeChildren(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException, SkipAfterInterceptorsException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void afterEncodeEnd(FacesContext facesContext, UIComponent uiComponent, Renderer wrapped)
         throws IOException, SkipAfterInterceptorsException
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void afterGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
         throws ConverterException, SkipAfterInterceptorsException
     {
