@@ -28,8 +28,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
 /**
- * Value part of the ValidationParameter. Multiple values can be defined for one {@link ParameterKey} and they can be
- * distinguished by the id member.
+ * Marker for values within a
+ * {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter} implementation.
  *
  * @author Gerhard Petracek
  * @since x.x.3
@@ -40,9 +40,11 @@ import static java.lang.annotation.ElementType.METHOD;
 public @interface ParameterValue
 {
     /**
-     * Identification when multiple values are defined for one key.
+     * It's possible to define multiple values within the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter} implementation with
+     * the same type. The optional id allows to identify the value of interest.
      *
-     * @return By default, the ParameterValue.class value.
+     * @return the type-safe id
      */
     Class id() default ParameterValue.class;
 }

@@ -27,10 +27,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
 /**
- * Evaluator that defines if a certain validation needs to be skipped for the field component.  When the property
- * module is added to the project, the default evaluator is
- * {@code org.apache.myfaces.extensions.validator.PropertyValidationSkipValidationEvaluator}
- *  
+ * Evaluator which checks if the validation process should be skipped for the given component.
+ *
  * @author Gerhard Petracek
  * @since x.x.3
  */
@@ -38,14 +36,16 @@ import javax.faces.component.UIComponent;
 public interface SkipValidationEvaluator
 {
     /**
-     * Is the specific validation, specified by the parameter validationStrategy, skipped for the uiComponent.
-     * Additional information about the validation can be found in the entry parameter.
+     * Checks if the validation process should be skipped for the given component.
+     *
      * @param facesContext The JSF Context
      * @param uiComponent The component for which the validation should happen.
-     * @param validationStrategy The validation that needs to be performed
-     * @param entry Additional information about the validation
-     * @return true when validation doesn't need to be performed.
+     * @param validationStrategy The validation-strategy which is responsible for validating the given entry
+     * @param entry the {@link MetaDataEntry} in question
+     * @return true if the validation process should be skipped, false otherwise
      */
-    boolean skipValidation(FacesContext facesContext, UIComponent uiComponent,
-                           ValidationStrategy validationStrategy, MetaDataEntry entry);
+    boolean skipValidation(FacesContext facesContext,
+                           UIComponent uiComponent,
+                           ValidationStrategy validationStrategy,
+                           MetaDataEntry entry);
 }
