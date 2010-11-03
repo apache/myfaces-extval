@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>6</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
@@ -228,18 +228,12 @@
     </reporting>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_4_rc/parent</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_2_4_rc/parent</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/1_2_4_rc/parent</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/parent</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/parent</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/trunk/parent</url>
     </scm>
 
     <distributionManagement>
-        <snapshotRepository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>apache.snapshots</id>
-            <name>Apache Maven Snapshot Repository</name>
-            <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
-        </snapshotRepository>
         <site>
             <id>apache-site</id>
             <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator12</url>
