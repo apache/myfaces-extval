@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>6</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
@@ -228,9 +228,9 @@
     </reporting>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_1_4_rc/parent</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/1_1_4_rc/parent</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/1_1_4_rc/parent</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_1/parent</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_1/parent</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/validator/branches/branch_for_jsf_1_1/parent</url>
     </scm>
 
     <distributionManagement>
