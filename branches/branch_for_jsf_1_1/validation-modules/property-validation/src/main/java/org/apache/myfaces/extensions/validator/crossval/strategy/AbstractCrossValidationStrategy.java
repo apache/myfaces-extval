@@ -29,14 +29,15 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)
-public abstract class AbstractCrossValidationStrategy extends
-    AbstractAnnotationValidationStrategy implements CrossValidationStrategy
+public abstract class AbstractCrossValidationStrategy<A extends Annotation> extends
+    AbstractAnnotationValidationStrategy<A> implements CrossValidationStrategy
 {
     //init cross-validation
     public void processValidation(FacesContext facesContext,
