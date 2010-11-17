@@ -58,8 +58,6 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
     @ToDo(Priority.MEDIUM)
     public PropertyInformation extract(FacesContext facesContext, Object object)
     {
-        PropertyInformation propertyInformation = new DefaultPropertyInformation();
-
         //should never occur
         if (!(object instanceof UIComponent))
         {
@@ -67,7 +65,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             {
                 this.logger.warning(object.getClass() + " is no valid component");
             }
-            return propertyInformation;
+            return new DefaultPropertyInformation();
         }
 
         UIComponent uiComponent = (UIComponent) object;
@@ -78,7 +76,7 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
 
         if (propertyDetails == null)
         {
-            return propertyInformation;
+            return new DefaultPropertyInformation();
         }
 
         /*
@@ -86,7 +84,18 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
          */
         Class entityClass = ProxyUtils.getUnproxiedClass(propertyDetails.getBaseObject().getClass());
 
+        PropertyInformation propertyInformation = getPropertyInformation(entityClass, propertyDetails);
+
+        logger.finest("extract finished");
+
+        return propertyInformation;
+    }
+
+    protected PropertyInformation getPropertyInformation(Class entityClass, PropertyDetails propertyDetails)
+    {
         MetaDataStorage storage = getMetaDataStorage();
+
+        PropertyInformation propertyInformation = new DefaultPropertyInformation();
 
         if (isCached(storage, entityClass, propertyDetails.getProperty()))
         {
@@ -103,9 +112,6 @@ public class DefaultComponentMetaDataExtractor implements MetaDataExtractor
             propertyInformation = ExtValAnnotationUtils.extractAnnotations(entityClass, propertyDetails);
             cacheMetaData(storage, propertyInformation);
         }
-
-        logger.finest("extract finished");
-
         return propertyInformation;
     }
 
