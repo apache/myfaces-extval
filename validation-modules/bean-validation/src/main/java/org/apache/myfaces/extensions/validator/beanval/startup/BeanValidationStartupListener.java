@@ -147,7 +147,6 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void registerPhaseListeners()
     {
         JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
-        JsfUtils.registerPhaseListener(new ModelValidationPhaseListener());
     }
 
     protected void registerViolationSeverityPayload()

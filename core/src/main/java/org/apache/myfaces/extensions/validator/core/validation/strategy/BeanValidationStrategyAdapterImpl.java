@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.MetaDataTransformer;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.BeanMetaDataTransformerAdapter;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
@@ -40,6 +42,7 @@ import java.util.logging.Logger;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@ToDo(value = Priority.HIGH, description = "see EXTVAL-116")
 @UsageInformation({UsageCategory.REUSE})
 public class BeanValidationStrategyAdapterImpl implements BeanValidationStrategyAdapter
 {

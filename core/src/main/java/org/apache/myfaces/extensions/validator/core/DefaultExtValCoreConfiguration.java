@@ -145,7 +145,7 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
      * value is specified, the {@link DefaultProxyHelper} is returned.
      */
     @ToDo(value = Priority.MEDIUM, description = "The tryToInstantiateClassForName can return a null value which isn't "
-            + "handled correctly afyterwards.  We should throw an exception like in rendererProxy method.")
+            + "handled correctly afterwards.  We should throw an exception like in rendererProxy method.")
     public ProxyHelper proxyHelper()
     {
         String customProxyHelperClassName = WebXmlParameter.CUSTOM_PROXY_HELPER;

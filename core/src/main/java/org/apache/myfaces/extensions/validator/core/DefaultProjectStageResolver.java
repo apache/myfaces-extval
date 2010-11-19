@@ -39,7 +39,7 @@ public class DefaultProjectStageResolver implements ProjectStageResolver
         {
             result = FacesContext.getCurrentInstance().getApplication().getProjectStage().toString();
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             return createProjectStage(getDefaultProjectStage());
         }

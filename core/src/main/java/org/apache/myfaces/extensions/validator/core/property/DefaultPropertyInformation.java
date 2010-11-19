@@ -109,8 +109,20 @@ public class DefaultPropertyInformation implements PropertyInformation
     @Override
     public int hashCode()
     {
-        int result = informationMap.hashCode();
-        result = 31 * result + metaDataList.hashCode();
+        int result = createNullAwareHashCode(informationMap);
+        result = 31 * result + createNullAwareHashCode(metaDataList);
         return result;
+    }
+
+    private int createNullAwareHashCode(Object o)
+    {
+        try
+        {
+            return o.hashCode();
+        }
+        catch (NullPointerException e)
+        {
+            return 0;
+        }
     }
 }

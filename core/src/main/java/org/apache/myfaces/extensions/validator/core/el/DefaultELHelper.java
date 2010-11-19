@@ -92,7 +92,7 @@ public class DefaultELHelper implements ELHelper
         {
             facesContext.getApplication().evaluateExpressionGet(facesContext, valueBindingExpression, Object.class);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             return false;
         }
@@ -127,7 +127,7 @@ public class DefaultELHelper implements ELHelper
 
             if(result == null)
             {
-                logger.warning("couldn't resolve expression: " + valueBindingExpression);
+                logger.fine("couldn't resolve expression: " + valueBindingExpression);
                 return null;
             }
 
@@ -135,7 +135,7 @@ public class DefaultELHelper implements ELHelper
 
             if(entityClass == null)
             {
-                logger.warning("couldn't resolve expression: " + result.getExpressionString());
+                logger.fine("couldn't resolve expression: " + result.getExpressionString());
 
                 return null;
             }
@@ -217,13 +217,13 @@ public class DefaultELHelper implements ELHelper
         {
             valueExpression.setValue(elContext, null);
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
             if(inspectCompositeComponent)
             {
                 throw new IllegalStateException(
                         "error at binding: " + valueExpression.getExpressionString() +
-                                " -- an el-resolver error occurred! maybe you used an invalid binding.", t);
+                                " -- an el-resolver error occurred! maybe you used an invalid binding.", e);
             }
         }
     }
@@ -234,7 +234,7 @@ public class DefaultELHelper implements ELHelper
     }
 
     //keep in sync with DefaultELHelper#getPropertyDetailsOfValueBinding of branch!!!
-    private PropertyDetails getPropertyDetailsViaReflectionFallback(UIComponent uiComponent)
+    protected PropertyDetails getPropertyDetailsViaReflectionFallback(UIComponent uiComponent)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ValueBindingExpression valueBindingExpression = getValueBindingExpression(uiComponent, false);
