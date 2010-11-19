@@ -68,7 +68,15 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
         }
         else
         {
-            return proxy.invokeSuper(obj, args);
+            try
+            {
+                method.setAccessible(true);
+                return method.invoke(obj, args);
+            }
+            catch (Throwable t)
+            {
+                return proxy.invokeSuper(obj, args);
+            }
         }
 
         return null;
