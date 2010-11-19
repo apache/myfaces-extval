@@ -104,8 +104,20 @@ public class PropertyDetails
     public int hashCode()
     {
         int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (baseObject != null ? baseObject.hashCode() : 0);
+        result = 31 * result + (baseObject != null ? createNullAwareHashCode(baseObject) : 0);
         result = 31 * result + (property != null ? property.hashCode() : 0);
         return result;
+    }
+
+    private int createNullAwareHashCode(Object o)
+    {
+        try
+        {
+            return o.hashCode();
+        }
+        catch (NullPointerException e)
+        {
+            return 0;
+        }
     }
 }

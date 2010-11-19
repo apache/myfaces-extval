@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.validator.core.validation.strategy;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -35,8 +37,8 @@ import java.util.MissingResourceException;
 import java.util.logging.Level;
 
 /**
- * Provides the ability of message resolving to ValidationStrategies. This abstract class is a good candidate as parent
- * class of your custom validation strategies.
+ * This class provides an easier handling of violation messages.
+ * This abstract class is a good candidate as super-class for custom validation strategies.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -49,10 +51,14 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
     private MessageResolver messageResolver;
 
     /**
-     * Resolves the key from the error message to get the actual message in the correct language. The language is taken
-     * from the viewRoot.  When a messageResolver is injected into this object, it is used to resolve the message.
-     * Otherwise the default rules are taken to define the messageResolver.
-     * {@see org.apache.myfaces.extensions.validator.util.ExtValUtils#getMessageResolverForValidationStrategy(org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy)}
+     * Uses the given message key to resolve the actual message in the correct language.
+     * The current {@link javax.faces.component.UIViewRoot} provides the target locale.
+     * When a {@link org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver}
+     * is available, it is used to resolve the message.
+     * Otherwise the default rules are taken to define the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver}.
+     * {@link org.apache.myfaces.extensions.validator.util.ExtValUtils#getMessageResolverForValidationStrategy(
+     * org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy)}
      *
      * @param key key of the error message that needs to be resolved.
      * @return Resolved message.
@@ -66,12 +72,14 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
     }
 
     /**
-     * Returns the error message for the validation failure associated with the annotation.  The message is determined
-     * by using the {@see getValidationErrorMsgKey} method for obtaining the key of the message which then is
-     * resolved by the method {@see resolveMessage}.
+     * Returns the error message (the summary) provided by the given constraint. The message is determined
+     * by using the {@link #getValidationErrorMsgKey} method for obtaining the message-/key which then is
+     * resolved by the method {@link #resolveMessage(String) resolveMessage}.
      *
-     * @param annotation The annotation associated with the validation Strategy.
-     * @return The error message used in the summary part of the FacesMessage.
+     * @param annotation The annotation associated with the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
+     * @return The error message used in the summary part of the
+     * {@link javax.faces.application.FacesMessage FacesMessage}.
      */
     protected String getErrorMessageSummary(A annotation)
     {
@@ -79,15 +87,18 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
     }
 
     /**
-     * Returns the error message for the validation failure associated with the annotation the is used in the detail
-     * part of the FacesMessage. The message is determined by using the {@see getValidationErrorMsgKey} method for
-     * obtaining the key where the suffix '_detail' is added to. Then it is resolved by the method
-     * {@see resolveMessage}. When the key isn't found, the resulting exception is just logged but not propagated.
+     * Returns the error message (the detailed message) provided by the given constraint. The message is determined
+     * by using the {@link #getValidationErrorMsgKey} method for obtaining the message-/key which then is
+     * resolved by the method {@link #resolveMessage(String) resolveMessage}.
+     * When the key isn't found, the resulting exception is just logged but not propagated.
      * So the detail message isn't required and null is returned instead.
      *
-     * @param annotation The annotation associated with the validation Strategy.
-     * @return The error message used in the detail part of the FacesMessage or null.
+     * @param annotation The annotation associated with the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
+     * @return The error message used in the detail part of the
+     * {@link javax.faces.application.FacesMessage FacesMessage} or null.
      */
+    @ToDo(value = Priority.MEDIUM, description = "just log it in case of project stage development")
     protected String getErrorMessageDetail(A annotation)
     {
         try
@@ -104,11 +115,13 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
     }
 
     /**
-     * Creates the FacesMessage that can be used to inform the user of a validation error. This method can be called by
-     * subclasses in the {@see processValidation} method when a ValidationException is created in response of a
-     * violation.
+     * Creates the {@link javax.faces.application.FacesMessage FacesMessage} that
+     * will be used to inform the user of a validation error. This method can be called by
+     * subclasses in the {@link #processValidation(FacesContext, UIComponent, MetaDataEntry, Object) processValidation}
+     * method when a {@link ValidatorException} is thrown.
      *
-     * @param annotation The annotation associated with the validation Strategy
+     * @param annotation The annotation associated with the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
      * @return FacesMessage for informing user of the problem.
      */
     protected FacesMessage getValidationErrorFacesMessage(A annotation)
@@ -117,18 +130,23 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
     }
 
     /**
-     * Determines the key of the message that needs to be resolved in case this ValidationStrategy.
+     * Returns the key for the message that needs to be resolved for the violation-message.
      *
-     * @param annotation The annotation associated with the validation Strategy.
+     * @param annotation The annotation associated with the
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
      * @return The key of the error message.
      */
     protected abstract String getValidationErrorMsgKey(A annotation);
 
     /**
-     * Injection point for a messageResolver that needs to be used by this validationStrategy.
+     * Injection point for a
+     * {@link org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver}
+     * that needs to be used by this
+     * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
      *
      * @param messageResolver messageResolver that needs to be used by this validationStrategy.
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public void setMessageResolver(MessageResolver messageResolver)
     {
         this.messageResolver = messageResolver;
@@ -136,7 +154,8 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
 
     /**
      * {@inheritDoc}
-     * Adds the label of the component to the metaDataEntry dataHolder parameter.
+     * Adds the label of the component to the
+     * {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry}.
      */
     @Override
     protected boolean processAfterValidatorException(FacesContext facesContext,
@@ -158,7 +177,7 @@ public abstract class AbstractAnnotationValidationStrategy<A extends Annotation>
      * @param uiComponent The JSF component that contained the value entered by the user.
      * @param metaDataEntry The data holder which stores the meta-data and some information where the meta-data was
      * around.
-     * @return The label of the uiComponent field to use in error messages.
+     * @return The label-text of the {@link javax.faces.component.UIComponent} which can be used in the violation msg.
      */
     //e.g. for custom annotations - override if needed
     protected String getLabel(FacesContext facesContext, UIComponent uiComponent, MetaDataEntry metaDataEntry)
