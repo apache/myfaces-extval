@@ -26,7 +26,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * Structure of the object that handles EL here centralized to isolate the jsf version dependency within the core.
+ * Encapulates EL handling to isolate the dependency to the specific jsf version.
  *
  * @author Gerhard Petracek
  * @since 1.x.1
@@ -35,58 +35,66 @@ import javax.faces.context.FacesContext;
 public interface ELHelper
 {
     /**
-     * Return the bean instance from the JSF contexts with the specified name.
+     * Resolves the bean instance for the specified name.
+     *
      * @param beanName The bean name we are interested in, no EL expression.
      * @return instance for the bean name or null.
      */
     Object getBean(String beanName);
 
     /**
-     * Evaluates the expression equivalent of the ValueBindingExpression parameter and returns the result.
-     * @param facesContext The JSF Context
-     * @param valueBindingExpression information about expression to evaluate.
-     * @return result of the expression equivalent of the ValueBindingExpression parameter
+     * Evaluates the given expression within the current {@link javax.faces.context.FacesContext}
+     *
+     * @param facesContext <code>FacesContext</code> for the current request
+     * @param valueBindingExpression value-binding to evaluate
+     * @return result for the given expression
      */
     Object getValueOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
 
     /**
-     * Returns the type of the expression equivalent of the ValueBindingExpression parameter.
-     * @param facesContext The JSF Context
-     * @param valueBindingExpression information about expression to evaluate.
-     * @return type of the expression equivalent of the ValueBindingExpression parameter
+     * Evaluates the type returned by {@link #getValueOfExpression}
+     *
+     * @param facesContext <code>FacesContext</code> for the current request
+     * @param valueBindingExpression value-binding to evaluate
+     * @return type of the result of the expression
      */
     Class getTypeOfExpression(FacesContext facesContext, ValueBindingExpression valueBindingExpression);
 
     /**
-     * Extracts the property details (expression, base object and property name) information from the UIComponent's
+     * Extracts the property details (expression, base object and property name) information of the value attribute of
+     * the given {@link javax.faces.component.UIComponent}
      * value attribute.
-     * @param uiComponent The UIComponent of interest.
-     * @return property details information
+     *
+     * @param uiComponent The {@link javax.faces.component.UIComponent} in question
+     * @return property details for the value of the given {@link javax.faces.component.UIComponent}
      */
     PropertyDetails getPropertyDetailsOfValueBinding(UIComponent uiComponent);
 
     /**
      * Determines if the expression is a valid expression, meaning that the expression can be evaluated without
-     * exception.
+     * an exception.
+     *
      * @param facesContext The JSF Context
      * @param valueBindingExpression The EL expression we want to evaluate.
-     * @return valid EL expression ?
+     * @return true if the expression is valid - false otherwise
      */
     boolean isELTermValid(FacesContext facesContext, String valueBindingExpression);
 
     /**
-     * A very basic check of the EL expression is well formed.
-     * @param o Object
-     * @return
+     * A very basic check of the EL expression
+     *
+     * @param o Object in question
+     * @return true if the given object is a well formed string - false otherwise
      */
     boolean isELTermWellFormed(Object o);
 
     /**
      * Gets the value of the attribute specified  by the parameter name for the UIComponent.
      *
-     * @param uiComponent The UIComponent
+     * @param uiComponent The {@link javax.faces.component.UIComponent} in question
      * @param name The name of the attribute.
      * @return The ValueExpression assigned to the attribute.
      */
+    @Deprecated
     Object getBindingOfComponent(UIComponent uiComponent, String name);
 }

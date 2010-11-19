@@ -180,8 +180,20 @@ public class MetaDataEntry
     public int hashCode()
     {
         int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        result = 31 * result + (value != null ? createNullAwareHashCode(value) : 0);
+        result = 31 * result + (properties != null ? createNullAwareHashCode(properties) : 0);
         return result;
+    }
+
+    private int createNullAwareHashCode(Object o)
+    {
+        try
+        {
+            return o.hashCode();
+        }
+        catch (NullPointerException e)
+        {
+            return 0;
+        }
     }
 }

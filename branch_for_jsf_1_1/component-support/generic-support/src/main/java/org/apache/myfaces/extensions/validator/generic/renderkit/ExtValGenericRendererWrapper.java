@@ -91,7 +91,15 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         {
             logger.finest("method " + method.getName() + " called without rendering-interceptors");
 
-            return proxy.invokeSuper(obj, args);
+            try
+            {
+                method.setAccessible(true);
+                return method.invoke(this.wrapped, args);
+            }
+            catch (Throwable t)
+            {
+                return proxy.invokeSuper(obj, args);
+            }
         }
         return null;
     }

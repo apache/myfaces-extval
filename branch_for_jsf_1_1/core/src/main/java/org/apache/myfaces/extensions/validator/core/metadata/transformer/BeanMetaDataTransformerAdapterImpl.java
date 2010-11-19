@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.metadata.transformer;
 
+import org.apache.myfaces.extensions.validator.internal.Priority;
+import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
@@ -37,6 +39,7 @@ import java.util.logging.Logger;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
+@ToDo(value = Priority.HIGH, description = "see EXTVAL-116")
 @UsageInformation({UsageCategory.REUSE})
 public class BeanMetaDataTransformerAdapterImpl implements MetaDataTransformer, BeanMetaDataTransformerAdapter
 {

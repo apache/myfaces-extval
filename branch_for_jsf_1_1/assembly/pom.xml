@@ -170,7 +170,7 @@
                     <groupId>javax.persistence</groupId>
                     <artifactId>persistence-api</artifactId>
                 </exclusion>
-            </exclusions> 
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -183,9 +183,9 @@
                     <groupId>javax.validation</groupId>
                     <artifactId>validation-api</artifactId>
                 </exclusion>
-            </exclusions> 
+            </exclusions>
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
             <artifactId>myfaces-extval-trinidad-support</artifactId>
@@ -203,7 +203,7 @@
                     <groupId>cglib</groupId>
                     <artifactId>cglib</artifactId>
                 </exclusion>
-            </exclusions> 
+            </exclusions>
         </dependency>
     </dependencies>
 
