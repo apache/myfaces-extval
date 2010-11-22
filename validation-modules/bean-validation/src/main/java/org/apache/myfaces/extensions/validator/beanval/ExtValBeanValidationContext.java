@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.MessageResolver;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.storage.GroupStorage;
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -52,6 +51,8 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private static final String KEY = ExtValBeanValidationContext.class.getName() + ":KEY";
+
+    protected ValidatorFactory validatorFactory;
 
     protected MessageInterpolator defaultMessageInterpolator;
 
@@ -88,7 +89,12 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
         if(currentContext == null)
         {
-            currentContext = new ExtValBeanValidationContext();
+            currentContext = ExtValBeanValidationModuleConfiguration.get().customExtValBeanValidationContext();
+
+            if(currentContext == null)
+            {
+                currentContext = new ExtValBeanValidationContext();
+            }
             requestMap.put(KEY, currentContext);
         }
 
@@ -97,18 +103,23 @@ public class ExtValBeanValidationContext implements GroupStorage, ModelValidatio
 
     public ValidatorFactory getValidatorFactory()
     {
-        Object validatorFactory = ExtValContext.getContext().getGlobalProperty(ValidatorFactory.class.getName());
-
-        if(validatorFactory instanceof ValidatorFactory)
+        if(this.validatorFactory != null)
         {
-            return (ValidatorFactory)validatorFactory;
+            return this.validatorFactory;
         }
 
-        if(this.developmentMode)
+        this.validatorFactory = ExtValBeanValidationModuleConfiguration.get().customValidatorFactory();
+
+        if(this.validatorFactory == null)
         {
-            this.logger.warning("fallback to the default bv validator factory");
+            if(this.developmentMode)
+            {
+                this.logger.warning("fallback to the default bv validator factory");
+            }
+            this.validatorFactory = BeanValidationUtils.getDefaultValidatorFactory();
         }
-        return BeanValidationUtils.getDefaultValidatorFactory();
+
+        return this.validatorFactory;
     }
 
     public MessageInterpolator getMessageInterpolator()
