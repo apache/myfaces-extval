@@ -21,7 +21,9 @@
   - Parent pom of all the myfaces extensions validator subprojects 
     that help to build other myfaces projects.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -32,7 +34,7 @@
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-parent</artifactId>
-    <version>1.1.5-SNAPSHOT</version>
+    <version>1.1.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Project Parent</name>
     <url>http://myfaces.apache.org/extensions/validator11</url>
@@ -125,7 +127,7 @@
                             <tasks>
                                 <!-- Copy javadoc to another directory, to keep javadoc of previous versions on site -->
                                 <copy todir="${project.build.directory}/site/apidocs-${project.version}" failonerror="false">
-                                  <fileset dir="${project.build.directory}/site/apidocs" />
+                                  <fileset dir="${project.build.directory}/site/apidocs"/>
                                 </copy>
                             </tasks>
                         </configuration>
