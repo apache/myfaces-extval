@@ -62,6 +62,7 @@
         <module>core</module>
         <module>validation-modules</module>
         <module>component-support</module>
+        <module>assembly</module>
         <!--module>test-modules</module>
         <module>examples</module-->
     </modules>
