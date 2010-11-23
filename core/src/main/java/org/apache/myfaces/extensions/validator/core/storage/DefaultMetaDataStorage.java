@@ -264,7 +264,7 @@ public class DefaultMetaDataStorage implements MetaDataStorage
         @Override
         public boolean equals(Object target)
         {
-            return getClass().equals(target.getClass());
+            return target != null && getClass().equals(target.getClass());
         }
     }
 
