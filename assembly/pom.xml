@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>myfaces-extval-assembly20</artifactId>
+    <artifactId>myfaces-extval20</artifactId>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions Validator Assembly</name>
     <description>MyFaces Extensions Validator Assembly is used to generate 
@@ -79,12 +79,12 @@
                     </exclusions>
                 </dependency>
 
-                <dependency>
+                <!--dependency>
                     <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
                     <artifactId>myfaces-extval-trinidad-support</artifactId>
                     <version>${trinidad-support.version}</version>
                     <scope>compile</scope>
-                </dependency>
+                </dependency-->
 
                 <dependency>
                     <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
