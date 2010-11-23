@@ -62,7 +62,7 @@
         <module>core</module>
         <module>validation-modules</module>
         <module>component-support</module>
-        <module>examples</module>
+        <!--module>examples</module-->
     </modules>
 
     <profiles>
