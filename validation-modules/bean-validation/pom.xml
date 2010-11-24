@@ -25,12 +25,12 @@
     <artifactId>myfaces-extval-bean-validation</artifactId>
 
     <name>MyFaces Extensions-Validator Bean-Validation-Integration-Module (JSR 303)</name>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.4</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
         <artifactId>validation-modules-project</artifactId>
-        <version>1.2.4-SNAPSHOT</version>
+        <version>1.2.4</version>
     </parent>
 
     <repositories>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator</groupId>
             <artifactId>myfaces-extval-core</artifactId>
-            <version>1.2.4-SNAPSHOT</version>
+            <version>1.2.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
