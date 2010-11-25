@@ -177,17 +177,6 @@
                 </configuration>
             </plugin>
 
-
-            <plugin>
-                <!-- Set compile source at 1.5, since the target JSF impl is 1.2 -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <optimize>false</optimize>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -200,6 +189,56 @@
                 <module>assembly</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>java15</id>
+            <activation>
+                <property>
+                    <name>!jdk</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Set compile source at 1.5, since the target JSF impl is 1.2 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.5</source>
+                            <target>1.5</target>
+                            <optimize>false</optimize>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>java16</id>
+            <activation>
+                <property>
+                    <name>jdk</name>
+                    <value>16</value>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- Set compile source at 1.6 -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.5</source>
+                            <target>1.6</target>
+                            <optimize>false</optimize>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
     <reporting>
