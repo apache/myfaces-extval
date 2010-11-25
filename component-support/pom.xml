@@ -35,7 +35,7 @@
     </parent>
 
     <modules>
-        <module>trinidad-support</module>
+        <!--module>trinidad-support</module-->
         <module>generic-support</module>
     </modules>
 
