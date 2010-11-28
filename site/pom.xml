@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>6</version>
+        <version>9</version>
     </parent>
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-site</artifactId>
@@ -46,6 +46,7 @@
           </extension>
         </extensions>
     </build>
+    
     <reporting>
         <plugins>
             <plugin>
@@ -53,14 +54,16 @@
             </plugin>
         </plugins>
     </reporting>
+
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/site</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/validator/trunk/site</developerConnection>
         <url>http://svn.apache.org/viewcvs.cgi/myfaces/extensions/validator/trunk/site</url>
     </scm>
+
     <distributionManagement>
       <site>
-        <id>apache-site</id>
+        <id>apache.website</id>
         <name>Apache Website</name>
         <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator</url>
       </site>
