@@ -42,7 +42,7 @@
     <distributionManagement>
         <site>
             <id>apache.website</id>
-            <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator12</url>
+            <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/validator11</url>
         </site>
     </distributionManagement>
 
