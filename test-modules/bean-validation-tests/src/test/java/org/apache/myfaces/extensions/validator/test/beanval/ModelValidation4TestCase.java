@@ -19,8 +19,7 @@
 package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.view.ModelValidationTestCase4PageBean;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -28,21 +27,13 @@ import javax.faces.context.FacesContext;
 public class ModelValidation4TestCase extends
         BaseBeanValPropertyValidationTestCase<ModelValidationTestCase4PageBean>
 {
-    public ModelValidation4TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ModelValidation4TestCase.class);
-    }
 
     protected ModelValidationTestCase4PageBean getBeanToTest()
     {
         return new ModelValidationTestCase4PageBean();
     }
 
+    @Test
     public void testModelValidationNoViewIdMatch()
     {
         validate();
@@ -52,6 +43,7 @@ public class ModelValidation4TestCase extends
         checkMessageCount(0);
     }
 
+    @Test
     public void testModelValidationViewIdMatch()
     {
         FacesContext.getCurrentInstance().getViewRoot().setViewId("/pages/modelValidationAwarePage.xhtml");

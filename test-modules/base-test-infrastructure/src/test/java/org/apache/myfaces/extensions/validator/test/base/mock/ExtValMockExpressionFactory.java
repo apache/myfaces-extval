@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.test.base.mock;
 
-import org.apache.shale.test.el.MockExpressionFactory;
+
+
+import org.apache.myfaces.test.el.MockExpressionFactory;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;

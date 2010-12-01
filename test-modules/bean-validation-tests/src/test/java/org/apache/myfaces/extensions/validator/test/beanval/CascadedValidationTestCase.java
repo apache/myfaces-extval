@@ -18,10 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.model.CascadedValidationTestCase1Bean;
 import org.apache.myfaces.extensions.validator.test.beanval.model.CustomTypeForCascadedValidationTestCase1Bean;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -31,21 +30,13 @@ import javax.faces.component.UIComponent;
 
 public class CascadedValidationTestCase extends BaseBeanValPropertyValidationTestCase<CascadedValidationTestCase1Bean>
 {
-    public CascadedValidationTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(CascadedValidationTestCase.class);
-    }
 
     protected CascadedValidationTestCase1Bean getBeanToTest()
     {
         return new CascadedValidationTestCase1Bean();
     }
 
+    @Test
     public void testCascadedValidationCorrectValue()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property}");
@@ -60,6 +51,7 @@ public class CascadedValidationTestCase extends BaseBeanValPropertyValidationTes
         checkMessageCount(0);
     }
 
+    @Test
     public void testCascadedValidationValueTooShort()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property}");
@@ -75,6 +67,7 @@ public class CascadedValidationTestCase extends BaseBeanValPropertyValidationTes
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testCascadedValidationInvalidValue()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property}");
@@ -90,6 +83,7 @@ public class CascadedValidationTestCase extends BaseBeanValPropertyValidationTes
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testCascadedValidationNullValue()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.nullProperty}");

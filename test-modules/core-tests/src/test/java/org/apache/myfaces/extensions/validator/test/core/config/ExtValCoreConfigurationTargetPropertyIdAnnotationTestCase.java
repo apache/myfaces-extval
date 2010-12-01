@@ -21,19 +21,18 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
 import org.apache.myfaces.extensions.validator.core.validation.ConstraintSource;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAwareBean;
 import org.apache.myfaces.extensions.validator.test.core.config.support.CustomConstraintSource;
 import org.apache.myfaces.extensions.validator.test.core.config.support.CustomTargetPropertyId;
 import org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -43,10 +42,7 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
  */
 public class ExtValCoreConfigurationTargetPropertyIdAnnotationTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationTargetPropertyIdAnnotationTestCase(String name)
-    {
-        super(name);
-    }
+
 
     @Override
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
@@ -69,42 +65,39 @@ public class ExtValCoreConfigurationTargetPropertyIdAnnotationTestCase extends E
         }
     }
 
+    @Test
     public void testTargetPropertyIdAnnotationDefault() throws Exception
     {
         Method method = ReflectionUtils.getMethod(ConstraintSourceUtils.class, "getTargetPropertyMetaData",
                 PropertyStorage.class, Class.class, String.class);
-        assertNotNull(method);
+        Assert.assertNotNull(method);
         PropertyStorage propertyStorage = ReflectionUtils.getPropertyStorage();
         Annotation target = (Annotation) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 propertyStorage, ConstraintSourceAwareBean.class, "property5");
 
-        assertEquals(ConstraintSource.class.getName(), ((Class) ExtValAnnotationUtils.extractValueOf(target,
+        Assert.assertEquals(ConstraintSource.class.getName(), ((Class) ExtValAnnotationUtils.extractValueOf(target,
                 Object.class)).getName());
 
-        assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
+        Assert.assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 propertyStorage, ConstraintSourceAwareBean.class, "property6"));
     }
 
+    @Test
     public void testTargetPropertyIdAnnotationCustomConfig() throws Exception
     {
         Method method = ReflectionUtils.getMethod(ConstraintSourceUtils.class, "getTargetPropertyMetaData",
                 PropertyStorage.class, Class.class, String.class);
-        assertNotNull(method);
+        Assert.assertNotNull(method);
         PropertyStorage propertyStorage = ReflectionUtils.getPropertyStorage();
         Annotation target = (Annotation) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 propertyStorage, ConstraintSourceAwareBean.class, "property6");
 
-        assertEquals(CustomConstraintSource.class.getName(), ((Class) ExtValAnnotationUtils.extractValueOf(target,
+        Assert.assertEquals(CustomConstraintSource.class.getName(), ((Class) ExtValAnnotationUtils.extractValueOf(target,
                 Object.class)).getName());
 
-        assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
+        Assert.assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 propertyStorage, ConstraintSourceAwareBean.class, "property5"));
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationTargetPropertyIdAnnotationTestCase.class);
-    }
 
 }

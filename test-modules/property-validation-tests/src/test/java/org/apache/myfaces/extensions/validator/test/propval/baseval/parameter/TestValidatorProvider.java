@@ -21,7 +21,9 @@ package org.apache.myfaces.extensions.validator.test.propval.baseval.parameter;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterKey;
+import org.junit.Ignore;
 
+@Ignore
 public class TestValidatorProvider implements ValidationParameter, TestValidationStrategyProvider
 {
     @ParameterKey

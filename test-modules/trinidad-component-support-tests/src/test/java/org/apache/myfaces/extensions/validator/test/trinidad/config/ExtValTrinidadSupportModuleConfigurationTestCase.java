@@ -21,6 +21,9 @@ package org.apache.myfaces.extensions.validator.test.trinidad.config;
 import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.test.trinidad.AbstractTrinidadSupportTestCase;
 import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportModuleConfiguration;
+import org.apache.myfaces.test.runners.NamedRunner;
+import org.apache.myfaces.test.runners.TestPerClassLoaderRunner;
+import org.junit.runner.RunWith;
 
 /**
  * 
@@ -28,12 +31,13 @@ import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportMod
  * since v4
  *
  */
+@RunWith(value = TestPerClassLoaderRunner.class)
 public abstract class ExtValTrinidadSupportModuleConfigurationTestCase extends AbstractTrinidadSupportTestCase
 {
 
-    public ExtValTrinidadSupportModuleConfigurationTestCase(String name)
+    protected String getName()
     {
-        super(name);
+        return NamedRunner.getTestMethodName();
     }
 
     protected boolean needXmlParameters()

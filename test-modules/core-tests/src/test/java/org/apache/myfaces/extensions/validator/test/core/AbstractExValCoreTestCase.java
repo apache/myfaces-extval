@@ -22,10 +22,6 @@ import org.apache.myfaces.extensions.validator.test.base.AbstractExValTestCase;
 
 public abstract class AbstractExValCoreTestCase extends AbstractExValTestCase
 {
-    public AbstractExValCoreTestCase(String name)
-    {
-        super(name);
-    }
 
     protected void invokeStartupListeners()
     {

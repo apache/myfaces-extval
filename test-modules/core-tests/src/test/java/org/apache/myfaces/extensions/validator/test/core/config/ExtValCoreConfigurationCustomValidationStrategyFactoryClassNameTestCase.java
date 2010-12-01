@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -28,7 +26,8 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockValidationStrategyFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -39,10 +38,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomValidationStrategyFactoryClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationCustomValidationStrategyFactoryClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomValidationStrategyFactory extends DefaultValidationStrategyFactory
     {
@@ -87,6 +82,7 @@ public class ExtValCoreConfigurationCustomValidationStrategyFactoryClassNameTest
         }
     }
 
+    @Test
     public void testCustomValidationStrategyFactoryClassNameDefault()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
@@ -96,28 +92,24 @@ public class ExtValCoreConfigurationCustomValidationStrategyFactoryClassNameTest
         // assertEquals(DefaultValidationStrategyFactory.class.getName(),
         // factory
         // .getClass().getName());
-        assertEquals(MockValidationStrategyFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(MockValidationStrategyFactory.class.getName(), factory.getClass().getName());
 
     }
 
+    @Test
     public void testCustomValidationStrategyFactoryClassNameWebXml()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, Object.class);
-        assertEquals(CustomValidationStrategyFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(CustomValidationStrategyFactory.class.getName(), factory.getClass().getName());
     }
 
+    @Test
     public void testCustomValidationStrategyFactoryClassNameCustomConfig()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.VALIDATION_STRATEGY_FACTORY, Object.class);
-        assertEquals(Custom2ValidationStrategyFactory.class.getName(), factory.getClass().getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomValidationStrategyFactoryClassNameTestCase.class);
+        Assert.assertEquals(Custom2ValidationStrategyFactory.class.getName(), factory.getClass().getName());
     }
 
 }

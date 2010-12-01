@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -31,7 +29,8 @@ import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFacto
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -41,10 +40,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCoreConfigurationDeactivateDefaultNameMappersTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDeactivateDefaultNameMappersTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected void addInitializationParameters()
@@ -78,23 +73,26 @@ public class ExtValCoreConfigurationDeactivateDefaultNameMappersTestCase extends
         }
     }
 
+    @Test
     public void testDeactivateDefaultNameMappersDefault()
     {
         List<NameMapper<ValidationStrategy>> nameMappers = getNameMappers();
-        assertFalse(nameMappers.isEmpty());
+        Assert.assertFalse(nameMappers.isEmpty());
     }
 
+    @Test
     public void testDeactivateDefaultNameMappersWebXml()
     {
         List<NameMapper<ValidationStrategy>> nameMappers = getNameMappers();
-        assertTrue(nameMappers.isEmpty());
+        Assert.assertTrue(nameMappers.isEmpty());
     }
 
     // Name shouldn't contain default
+    @Test
     public void testDeactivateDefNameMappersCustomConfig()
     {
         List<NameMapper<ValidationStrategy>> nameMappers = getNameMappers();
-        assertTrue(nameMappers.isEmpty());
+        Assert.assertTrue(nameMappers.isEmpty());
     }
 
     private List<NameMapper<ValidationStrategy>> getNameMappers()
@@ -105,10 +103,5 @@ public class ExtValCoreConfigurationDeactivateDefaultNameMappersTestCase extends
         return ((MockMessageResolverFactory) result).getRegisteredNameMapperList();
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateDefaultNameMappersTestCase.class);
-    }
 
 }

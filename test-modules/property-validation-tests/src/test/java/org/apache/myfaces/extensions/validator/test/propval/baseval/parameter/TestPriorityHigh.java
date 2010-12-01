@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.baseval.parameter;
 
+import org.junit.Ignore;
+
+@Ignore
 public class TestPriorityHigh implements TestPriority
 {
     public Integer getValue()

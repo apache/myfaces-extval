@@ -21,15 +21,14 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAwareBean;
 import org.apache.myfaces.extensions.validator.test.core.config.support.CustomIgnoreConstraintSource;
 import org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -39,10 +38,6 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
  */
 public class ExtValCoreConfigurationIgnoreConstraintSourceAnnotationTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationIgnoreConstraintSourceAnnotationTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
@@ -65,32 +60,29 @@ public class ExtValCoreConfigurationIgnoreConstraintSourceAnnotationTestCase ext
         }
     }
 
+    @Test
     public void testIgnoreConstraintSourceAnnotationDefault() throws Exception
     {
         Method method = ReflectionUtils.getMethod(ConstraintSourceUtils.class, "isMappedConstraintSourceIgnored",
                 Class.class, String.class);
-        assertNotNull(method);
-        assertTrue((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
+        Assert.assertNotNull(method);
+        Assert.assertTrue((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 ConstraintSourceAwareBean.class, "property1"));
-        assertFalse((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
+        Assert.assertFalse((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 ConstraintSourceAwareBean.class, "property2"));
     }
 
+    @Test
     public void testIgnoreConstraintSourceAnnotationCustomConfig() throws Exception
     {
         Method method = ReflectionUtils.getMethod(ConstraintSourceUtils.class, "isMappedConstraintSourceIgnored",
                 Class.class, String.class);
-        assertNotNull(method);
-        assertFalse((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
+        Assert.assertNotNull(method);
+        Assert.assertFalse((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 ConstraintSourceAwareBean.class, "property1"));
-        assertTrue((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
+        Assert.assertTrue((Boolean) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 ConstraintSourceAwareBean.class, "property2"));
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationIgnoreConstraintSourceAnnotationTestCase.class);
-    }
 
 }

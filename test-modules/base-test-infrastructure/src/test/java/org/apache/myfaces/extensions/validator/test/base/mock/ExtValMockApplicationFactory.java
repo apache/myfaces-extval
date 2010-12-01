@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.test.base.mock;
 
-import org.apache.shale.test.mock.MockApplicationFactory;
+
+import org.apache.myfaces.test.mock.MockApplicationFactory;
 
 import javax.faces.application.Application;
 
@@ -27,9 +28,19 @@ import javax.faces.application.Application;
  */
 public class ExtValMockApplicationFactory extends MockApplicationFactory
 {
+
+    /**
+     * <p>The <code>Application</code> instance to be returned by
+     * this factory.</p>
+     */
+    private Application application = null;
+
     @Override
     public Application getApplication()
     {
-        return new ExtValMockApplication(super.getApplication());
+        if (application == null) {
+            application = new ExtValMockApplication(super.getApplication());
+        }
+        return application;
     }
 }

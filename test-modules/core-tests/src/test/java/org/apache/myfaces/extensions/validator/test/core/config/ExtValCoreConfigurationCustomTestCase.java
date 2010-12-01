@@ -18,12 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 /**
  * 
@@ -37,10 +37,6 @@ public class ExtValCoreConfigurationCustomTestCase extends ExtValCoreConfigurati
     // Testcase to see if the configuration object from web.xml is taken.
     // Basicly a test for ExtValContext.addModuleConfiguration
 
-    public ExtValCoreConfigurationCustomTestCase(String name)
-    {
-        super(name);
-    }
     
     public static class CustomExtValCoreConfiguration extends DefaultExtValCoreConfiguration {
 
@@ -69,19 +65,15 @@ public class ExtValCoreConfigurationCustomTestCase extends ExtValCoreConfigurati
     }
     
 
+    @Test
     public void testExtValCoreConfigurationCustomDefault()
     {
-        assertEquals(ViolationSeverity.class.getName(), ((Class)ExtValCoreConfiguration.get().violationSeverity()).getName());
+        Assert.assertEquals(ViolationSeverity.class.getName(), ((Class)ExtValCoreConfiguration.get().violationSeverity()).getName());
     }
 
+    @Test
     public void testExtValCoreConfigurationCustomCustomConfig()
     {
-        assertEquals(Object.class.getName(), ((Class)ExtValCoreConfiguration.get().violationSeverity()).getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomTestCase.class);
+        Assert.assertEquals(Object.class.getName(), ((Class)ExtValCoreConfiguration.get().violationSeverity()).getName());
     }
 }

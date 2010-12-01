@@ -19,6 +19,9 @@
 package org.apache.myfaces.extensions.validator.test.core.config;
 
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.apache.myfaces.test.runners.NamedRunner;
+import org.apache.myfaces.test.runners.TestPerClassLoaderRunner;
+import org.junit.runner.RunWith;
 
 /**
  * 
@@ -26,13 +29,12 @@ import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCa
  * since v4
  *
  */
+@RunWith(value = TestPerClassLoaderRunner.class)
 public abstract class ExtValCoreConfigurationTestCase extends
         AbstractExValCoreTestCase
 {
-
-    public ExtValCoreConfigurationTestCase(String name)
-    {
-        super(name);
+    protected String getName() {
+        return NamedRunner.getTestMethodName();
     }
 
     protected boolean needXmlParameters()

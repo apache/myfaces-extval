@@ -9,6 +9,7 @@ import javax.faces.el.ValueBinding;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Assert;
 
 @ToDo(value=Priority.MEDIUM,description="This is more or less the same as BaseBeanValPropertyValidationTestCase but can it be unified ??")
 public abstract class AbstractConstraintSourceTestCase<T> extends AbstractPropertyValidationTestCase
@@ -22,16 +23,12 @@ public abstract class AbstractConstraintSourceTestCase<T> extends AbstractProper
 
     protected T bean;
 
-    public AbstractConstraintSourceTestCase(String name)
-    {
-        super(name);
-    }
-    
+
     @SuppressWarnings({"UnusedDeclaration"})
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         bean = getBeanToTest();
         bindBeanToExpression();
 
@@ -66,9 +63,9 @@ public abstract class AbstractConstraintSourceTestCase<T> extends AbstractProper
     protected abstract T getBeanToTest();
 
     @Override
-    protected void tearDown() throws Exception
+    protected void resetTestCase()
     {
-        super.tearDown();
+        super.resetTestCase();
         inputComponent1 = null;
         inputComponent2 = null;
         inputComponent3 = null;
@@ -102,12 +99,12 @@ public abstract class AbstractConstraintSourceTestCase<T> extends AbstractProper
 
     protected void assertComponentValid(UIInput uiInput)
     {
-        assertTrue(isComponentValid(uiInput));
+        Assert.assertTrue(isComponentValid(uiInput));
     }
 
     protected void assertComponentInvalid(UIInput uiInput)
     {
-        assertFalse(isComponentValid(uiInput));
+        Assert.assertFalse(isComponentValid(uiInput));
     }
 
     private boolean isComponentValid(UIInput uiComponent)

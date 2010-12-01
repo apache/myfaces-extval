@@ -18,34 +18,25 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.view.CustomSeverityTestCase1PageBean;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticInMemoryConfiguration;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
 public class CustomSeverity1TestCase extends BaseBeanValPropertyValidationTestCase<CustomSeverityTestCase1PageBean>
 {
-    public CustomSeverity1TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(CustomSeverity1TestCase.class);
-    }
 
     protected CustomSeverityTestCase1PageBean getBeanToTest()
     {
         return new CustomSeverityTestCase1PageBean();
     }
 
+    @Test
     public void testCustomPayloadViaGlobalProperty()
     {
         ExtValContext.getContext()
@@ -63,6 +54,7 @@ public class CustomSeverity1TestCase extends BaseBeanValPropertyValidationTestCa
         checkMessageSeverities(FacesMessage.SEVERITY_WARN);
     }
 
+    @Test
     public void testCustomPayloadViaStaticConfig()
     {
         StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
@@ -83,6 +75,7 @@ public class CustomSeverity1TestCase extends BaseBeanValPropertyValidationTestCa
         checkMessageSeverities(FacesMessage.SEVERITY_WARN);
     }
 
+    @Test
     public void testUnknownPayload()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");

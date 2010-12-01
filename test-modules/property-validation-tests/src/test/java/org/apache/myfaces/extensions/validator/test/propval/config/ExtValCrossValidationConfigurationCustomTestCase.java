@@ -18,11 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.crossval.DefaultExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.crossval.ExtValCrossValidationModuleConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -32,11 +31,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCrossValidationConfigurationCustomTestCase extends ExtValCrossValidationConfigurationTestCase
 {
-
-    public ExtValCrossValidationConfigurationCustomTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValCrossValidationModuleConfiguration extends
             DefaultExtValCrossValidationModuleConfiguration
@@ -70,19 +64,16 @@ public class ExtValCrossValidationConfigurationCustomTestCase extends ExtValCros
         return null;
     }
 
+    @Test
     public void testExtValCrossValidationModuleConfigurationCustomDefault()
     {
-        assertFalse(ExtValCrossValidationModuleConfiguration.get().deactivateCrossvalidation());
+        Assert.assertFalse(ExtValCrossValidationModuleConfiguration.get().deactivateCrossvalidation());
     }
 
+    @Test
     public void testExtValCrossValidationModuleConfigurationCustomCustomConfig()
     {
-        assertTrue(ExtValCrossValidationModuleConfiguration.get().deactivateCrossvalidation());
+        Assert.assertTrue(ExtValCrossValidationModuleConfiguration.get().deactivateCrossvalidation());
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCrossValidationConfigurationCustomTestCase.class);
-    }
 }

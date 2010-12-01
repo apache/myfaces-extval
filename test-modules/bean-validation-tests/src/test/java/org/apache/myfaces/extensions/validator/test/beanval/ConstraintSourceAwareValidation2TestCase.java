@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.model.ConstraintSourceAware2Bean;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
@@ -31,21 +30,13 @@ import javax.faces.application.FacesMessage;
  */
 public class ConstraintSourceAwareValidation2TestCase extends BaseBeanValPropertyValidationTestCase<ConstraintSourceAware2Bean>
 {
-    public ConstraintSourceAwareValidation2TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation2TestCase.class);
-    }
 
     protected ConstraintSourceAware2Bean getBeanToTest()
     {
         return new ConstraintSourceAware2Bean();
     }
 
+    @Test
     public void testIgnoreConstraintSource()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -59,6 +50,7 @@ public class ConstraintSourceAwareValidation2TestCase extends BaseBeanValPropert
         checkMessageCount(0);
     }
 
+    @Test
     public void testStringBasedTargetProperty()
     {
         createValueBindingForComponent(this.inputComponent2, "#{testBean.property2}");

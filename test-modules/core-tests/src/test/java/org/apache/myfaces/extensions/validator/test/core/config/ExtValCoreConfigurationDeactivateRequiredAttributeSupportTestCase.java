@@ -18,13 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -34,10 +33,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
  */
 public class ExtValCoreConfigurationDeactivateRequiredAttributeSupportTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDeactivateRequiredAttributeSupportTestCase(String name)
-    {
-        super(name);
-    }
 
     protected void addInitializationParameters()
     {
@@ -69,37 +64,36 @@ public class ExtValCoreConfigurationDeactivateRequiredAttributeSupportTestCase e
         }
     }
 
+    @Test
     public void testDeactivateRequiredAttributeSupportDefault()
     {
-        assertFalse(ExtValUtils.isRequiredResetActivated());
+        Assert.assertFalse(ExtValUtils.isRequiredResetActivated());
     }
 
+    @Test
     public void testDeactivateRequiredAttributeSupportDefaultWithOverrule()
     {
         DefaultExtValCoreConfiguration.overruleDeactivateRequiredAttributeSupport(Boolean.TRUE, true);
-        assertTrue(ExtValUtils.isRequiredResetActivated());
+        Assert.assertTrue(ExtValUtils.isRequiredResetActivated());
     }
 
+    @Test
     public void testDeactivateRequiredAttributeSupportWebXml()
     {
-        assertTrue(ExtValUtils.isRequiredResetActivated());
+        Assert.assertTrue(ExtValUtils.isRequiredResetActivated());
     }
 
+    @Test
     public void testDeactivateRequiredAttributeSupportWebXmlWithOverrule()
     {
         DefaultExtValCoreConfiguration.overruleDeactivateRequiredAttributeSupport(Boolean.FALSE, true);
-        assertFalse(ExtValUtils.isRequiredResetActivated());
+        Assert.assertFalse(ExtValUtils.isRequiredResetActivated());
     }
 
+    @Test
     public void testDeactivateRequiredAttributeSupportCustomConfig()
     {
-        assertTrue(ExtValUtils.isRequiredResetActivated());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateRequiredAttributeSupportTestCase.class);
+        Assert.assertTrue(ExtValUtils.isRequiredResetActivated());
     }
 
 }

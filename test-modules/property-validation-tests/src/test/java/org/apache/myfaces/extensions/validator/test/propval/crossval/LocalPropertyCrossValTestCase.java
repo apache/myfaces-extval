@@ -18,23 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 /**
  * @author Gerhard Petracek
  */
 public class LocalPropertyCrossValTestCase extends ELCrossValTestCase
 {
-    public static Test suite()
-    {
-        return new TestSuite(LocalPropertyCrossValTestCase.class);
-    }
 
-    public LocalPropertyCrossValTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected ELCrossValTestDateBean getEntityInstance()

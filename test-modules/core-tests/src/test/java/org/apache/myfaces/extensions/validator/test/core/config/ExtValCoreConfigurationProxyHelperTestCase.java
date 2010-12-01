@@ -18,14 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.proxy.ProxyHelper;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * 
@@ -35,11 +35,6 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
  */
 public class ExtValCoreConfigurationProxyHelperTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationProxyHelperTestCase(String name)
-    {
-        super(name);
-    }
-
     public static class CustomProxyHelper implements ProxyHelper
     {
 
@@ -79,11 +74,9 @@ public class ExtValCoreConfigurationProxyHelperTestCase extends ExtValCoreConfig
 
     }
 
-    @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
 
-        super.setUp();
         // Trick the method jsfUtils#isApplicationInitialized to believe the
         // application is initialized
         facesContext.getExternalContext().getRequestMap().put("Key", "Value");
@@ -121,25 +114,23 @@ public class ExtValCoreConfigurationProxyHelperTestCase extends ExtValCoreConfig
         }
     }
 
+    @Test
     public void testProxyHelperDefault()
     {
-        assertFalse(ProxyUtils.isProxiedClass(Object.class));
+        Assert.assertFalse(ProxyUtils.isProxiedClass(Object.class));
     }
 
+    @Test
     public void testProxyHelperWebXml()
     {
-        assertTrue(ProxyUtils.isProxiedClass(Object.class));
+        Assert.assertTrue(ProxyUtils.isProxiedClass(Object.class));
     }
 
+    @Test
     public void testProxyHelperCustomConfig()
     {
-        assertTrue(ProxyUtils.isProxiedClass(Object.class));
+        Assert.assertTrue(ProxyUtils.isProxiedClass(Object.class));
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationProxyHelperTestCase.class);
-    }
 
 }

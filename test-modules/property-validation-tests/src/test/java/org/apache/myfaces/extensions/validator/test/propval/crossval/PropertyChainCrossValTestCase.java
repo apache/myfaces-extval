@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Test;
 
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlForm;
@@ -38,23 +37,17 @@ public class PropertyChainCrossValTestCase extends AbstractPropertyValidationTes
 
     UIViewRoot rootComponent = null;
 
-    public static Test suite()
-    {
-        return new TestSuite(PropertyChainCrossValTestCase.class);
-    }
 
-    public PropertyChainCrossValTestCase(String name)
+    public PropertyChainCrossValTestCase()
     {
-        super(name);
         inputComponent1 = null;
         inputComponent2 = null;
         rootComponent = null;
     }
 
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
         createRequestScopedBean("bean1", getEntityInstance());
 
         rootComponent = new UIViewRoot();
@@ -77,12 +70,7 @@ public class PropertyChainCrossValTestCase extends AbstractPropertyValidationTes
         form.getChildren().add(inputComponent2);
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testCrossComponentEqualsValidationCorrect() throws Exception
     {
         validatePropertyChainCrossComponentValidationUseCase("14.05.1983", "14.05.1983");
@@ -90,6 +78,7 @@ public class PropertyChainCrossValTestCase extends AbstractPropertyValidationTes
         checkMessageCount(0);
     }
 
+    @Test
     public void testCrossComponentEqualsValidationFailedValidation() throws Exception
     {
         validatePropertyChainCrossComponentValidationUseCase("14.05.1983", "12.12.2008");

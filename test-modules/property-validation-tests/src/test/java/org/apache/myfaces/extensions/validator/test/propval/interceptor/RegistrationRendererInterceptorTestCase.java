@@ -24,30 +24,17 @@ import org.apache.myfaces.extensions.validator.core.interceptor.AbstractRenderer
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.PropertyValidationModuleValidationInterceptor;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 public class RegistrationRendererInterceptorTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationRendererInterceptorTestCase(String name)
-    {
-        super(name);
-    }
 
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationRendererInterceptorTestCase.class);
-    }
 
     @SuppressWarnings({"ConstantConditions"})
+    @Test
     public void testRendererInterceptorInitialization()
     {
         ExtValContext.getContext().registerRendererInterceptor(new TestComponentInitializer());
@@ -63,7 +50,7 @@ public class RegistrationRendererInterceptorTestCase extends AbstractExValCoreTe
         for(int i = 0; i < resultLength; i++)
         {
             tmp = result.get(i);
-            assertTrue(tmp instanceof TestComponentInitializer ||
+            Assert.assertTrue(tmp instanceof TestComponentInitializer ||
                     tmp instanceof ValidationInterceptor ||  /*due to a junit issue*/
                     tmp instanceof PropertyValidationModuleValidationInterceptor);
         }

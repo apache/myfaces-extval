@@ -18,13 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -34,11 +33,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
  */
 public class ExtValCoreConfigurationActivateRequiredInitializationTestCase extends ExtValCoreConfigurationTestCase
 {
-
-    public ExtValCoreConfigurationActivateRequiredInitializationTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected void addInitializationParameters()
@@ -73,36 +67,37 @@ public class ExtValCoreConfigurationActivateRequiredInitializationTestCase exten
         }
     }
 
+    @Test
     public void testActivateRequiredInitializationDefault()
     {
-        assertFalse(ExtValUtils.isRequiredInitializationActive());
+        Assert.assertFalse(ExtValUtils.isRequiredInitializationActive());
     }
 
+    @Test
     public void testActivateRequiredInitializationDefaultWithOverrule()
     {
         DefaultExtValCoreConfiguration.overruleActivateRequiredInitialization(Boolean.TRUE, true);
-        assertTrue(ExtValUtils.isRequiredInitializationActive());
+        Assert.assertTrue(ExtValUtils.isRequiredInitializationActive());
     }
 
+    @Test
     public void testActivateRequiredInitializationWebXml()
     {
-        assertTrue(ExtValUtils.isRequiredInitializationActive());
+        Assert.assertTrue(ExtValUtils.isRequiredInitializationActive());
     }
 
+    @Test
     public void testActivateRequiredInitializationWebXmlWithOverrule()
     {
         DefaultExtValCoreConfiguration.overruleActivateRequiredInitialization(Boolean.FALSE, true);
-        assertFalse(ExtValUtils.isRequiredInitializationActive());
+        Assert.assertFalse(ExtValUtils.isRequiredInitializationActive());
     }
 
+    @Test
     public void testActivateRequiredInitializationCustomConfig()
     {
-        assertTrue(ExtValUtils.isRequiredInitializationActive());
+        Assert.assertTrue(ExtValUtils.isRequiredInitializationActive());
     }
 
-    public static Test suite()
-    {
 
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationActivateRequiredInitializationTestCase.class);
-    }
 }

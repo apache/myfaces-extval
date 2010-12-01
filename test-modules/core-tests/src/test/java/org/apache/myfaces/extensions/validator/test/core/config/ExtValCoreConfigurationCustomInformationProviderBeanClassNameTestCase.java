@@ -20,15 +20,14 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 
 import java.util.Map;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.InformationProviderBean;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -39,12 +38,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomInformationProviderBeanClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-
-    public ExtValCoreConfigurationCustomInformationProviderBeanClassNameTestCase(String name)
-    {
-        super(name);
-
-    }
 
     public static class CustomInformationProviderBean extends InformationProviderBean
     {
@@ -100,35 +93,33 @@ public class ExtValCoreConfigurationCustomInformationProviderBeanClassNameTestCa
 
     }
 
+    @Test
     public void testCustomInformationProviderBeanClassNameDefault()
     {
         InformationProviderBean bean = ExtValContext.getContext().getInformationProviderBean();
-        assertEquals(InformationProviderBean.class.getName(), bean.getClass().getName());
+        Assert.assertEquals(InformationProviderBean.class.getName(), bean.getClass().getName());
     }
 
+    @Test
     public void testCustomInformationProviderBeanClassNameWebXml()
     {
         InformationProviderBean bean = ExtValContext.getContext().getInformationProviderBean();
-        assertEquals(CustomInformationProviderBean.class.getName(), bean.getClass().getName());
+        Assert.assertEquals(CustomInformationProviderBean.class.getName(), bean.getClass().getName());
         // An additional test to make sure we have the custom
         // informationProviderBean.
-        assertEquals(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.X", bean
+        Assert.assertEquals(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.X", bean
                 .get(CustomInformation.MESSAGE_BUNDLE_NAME));
     }
 
+    @Test
     public void testCustomInformationProviderBeanClassNameCustomConfig()
     {
         InformationProviderBean bean = ExtValContext.getContext().getInformationProviderBean();
-        assertEquals(CustomInformationProviderBean2.class.getName(), bean.getClass().getName());
+        Assert.assertEquals(CustomInformationProviderBean2.class.getName(), bean.getClass().getName());
         // An additional test to make sure we have the custom
         // informationProviderBean.
-        assertEquals(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.Y", bean
+        Assert.assertEquals(ExtValInformation.EXTENSIONS_VALIDATOR_BASE_PACKAGE_NAME + ".custom.Y", bean
                 .get(CustomInformation.MESSAGE_BUNDLE_NAME));
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomInformationProviderBeanClassNameTestCase.class);
     }
 
 }

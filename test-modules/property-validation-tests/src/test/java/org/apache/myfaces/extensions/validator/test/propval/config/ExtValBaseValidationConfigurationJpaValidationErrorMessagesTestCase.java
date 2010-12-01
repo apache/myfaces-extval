@@ -18,13 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.baseval.DefaultExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.baseval.ExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.baseval.message.resolver.JpaValidationErrorMessageResolver;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,11 +37,6 @@ public class ExtValBaseValidationConfigurationJpaValidationErrorMessagesTestCase
 
     private static final String WEB_XML = "Web.XML";
     private static final String CUSTOM_CONFIG = "Custom config";
-
-    public ExtValBaseValidationConfigurationJpaValidationErrorMessagesTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class VisibleJpaValidationErrorMessageResolver extends JpaValidationErrorMessageResolver
     {
@@ -81,28 +75,25 @@ public class ExtValBaseValidationConfigurationJpaValidationErrorMessagesTestCase
         };
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationJpaValidationErrorMessagesDefault()
     {
         VisibleJpaValidationErrorMessageResolver messageResolver = new VisibleJpaValidationErrorMessageResolver();
-        assertNull(messageResolver.getCustomBaseName());
+        Assert.assertNull(messageResolver.getCustomBaseName());
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationJpaValidationErrorMessagesWebXml()
     {
         VisibleJpaValidationErrorMessageResolver messageResolver = new VisibleJpaValidationErrorMessageResolver();
-        assertEquals(WEB_XML, messageResolver.getCustomBaseName());
+        Assert.assertEquals(WEB_XML, messageResolver.getCustomBaseName());
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationJpaValidationErrorMessagesCustomConfig()
     {
         VisibleJpaValidationErrorMessageResolver messageResolver = new VisibleJpaValidationErrorMessageResolver();
-        assertEquals(CUSTOM_CONFIG, messageResolver.getCustomBaseName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValBaseValidationConfigurationJpaValidationErrorMessagesTestCase.class);
+        Assert.assertEquals(CUSTOM_CONFIG, messageResolver.getCustomBaseName());
     }
 
 }

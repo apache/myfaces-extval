@@ -23,10 +23,8 @@ import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.convert.DateTimeConverter;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Test;
 
 import java.util.Date;
 
@@ -40,23 +38,17 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
 
     UIViewRoot rootComponent = null;
 
-    public ELCrossValTestCase(String name)
+    public ELCrossValTestCase()
     {
-        super(name);
-        inputComponent1 = null;
+         inputComponent1 = null;
         inputComponent2 = null;
         rootComponent = null;
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(ELCrossValTestCase.class);
-    }
-
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         createRequestScopedBean("bean1", getEntityInstance());
         createRequestScopedBean("bean2", getEntityInstance());
 
@@ -81,12 +73,8 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
         form.getChildren().add(inputComponent2);
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
 
+    @Test
     public void testCrossComponentEqualsValidationCorrect() throws Exception
     {
         validateELCrossComponentValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "14.05.1983");
@@ -94,6 +82,7 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
         checkMessageCount(0);
     }
 
+    @Test
     public void testCrossComponentEqualsValidationFailedValidation() throws Exception
     {
         validateELCrossComponentValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "12.12.2008");
@@ -124,6 +113,7 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
         //no update model needed
     }
 
+    @Test
     public void testModelAwareCrossEqualsValidationCorrect() throws Exception
     {
         validateELModelAwareCrossValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "14.05.1983");
@@ -131,12 +121,14 @@ public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
         checkMessageCount(0);
     }
 
+    @Test
     public void testModelAwareCrossEqualsValidationFailedValidation() throws Exception
     {
         validateELModelAwareCrossValidationUseCase("14.05.1983", "14.05.1983", "14.05.1983", "12.12.2008");
 
         checkMessageCount(1);
     }
+
 
     private void validateELModelAwareCrossValidationUseCase(String valueBean1Property1, String valueBean1Property2, String valueBean2Property1, String valueBean2Property2)
     {

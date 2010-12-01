@@ -18,39 +18,30 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticInMemoryConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
 import org.apache.myfaces.extensions.validator.test.propval.crossval.mock.MockEqualsValidationStrategy;
 import org.apache.myfaces.extensions.validator.test.base.util.MethodUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Gerhard Petracek
  */
 public class LocalPropertyCrossValReverseMessageTestCase extends LocalPropertyCrossValTestCase
 {
-    public static Test suite()
-    {
-        return new TestSuite(LocalPropertyCrossValReverseMessageTestCase.class);
-    }
 
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
 
         StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
 
         config.addMapping(Equals.class.getName(), MockEqualsValidationStrategy.class.getName());
         ExtValContext.getContext().addStaticConfiguration(StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG, config);
-    }
-
-    public LocalPropertyCrossValReverseMessageTestCase(String name)
-    {
-        super(name);
     }
 
     @Override
@@ -66,18 +57,20 @@ public class LocalPropertyCrossValReverseMessageTestCase extends LocalPropertyCr
     }
 
     @Override
+    @Test
     public void testModelAwareCrossEqualsValidationCorrect() throws Exception
     {
         super.testModelAwareCrossEqualsValidationCorrect();
-        assertFalse(MethodUtils.isMethodCalled(MockEqualsValidationStrategy.class, "reverseMessage"));
+        Assert.assertFalse(MethodUtils.isMethodCalled(MockEqualsValidationStrategy.class, "reverseMessage"));
     }
 
     @Override
+    @Test
     public void testModelAwareCrossEqualsValidationFailedValidation() throws Exception
     {
         super.testModelAwareCrossEqualsValidationFailedValidation();
-        assertTrue(MethodUtils.isMethodCalled(MockEqualsValidationStrategy.class, "reverseMessage"));
+        Assert.assertTrue(MethodUtils.isMethodCalled(MockEqualsValidationStrategy.class, "reverseMessage"));
         //1x getReverseErrorMessageSummary and 1x getReverseErrorMessageDetail
-        assertTrue(MethodUtils.checkMethodCalled(MockEqualsValidationStrategy.class, "reverseMessage", 2));
+        Assert.assertTrue(MethodUtils.checkMethodCalled(MockEqualsValidationStrategy.class, "reverseMessage", 2));
     }
 }

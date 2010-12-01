@@ -22,17 +22,15 @@ import java.lang.annotation.Annotation;
 
 import javax.faces.application.FacesMessage;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomConstraintSource;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomIgnoreConstraintSource;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomTargetProperty;
 import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomTargetPropertyId;
 import org.apache.myfaces.extensions.validator.test.beanval.model.ConstraintSourceAware6Bean;
+import org.junit.Test;
 
 /**
  * EXTVAL-83
@@ -42,16 +40,6 @@ import org.apache.myfaces.extensions.validator.test.beanval.model.ConstraintSour
 public class ConstraintSourceAwareValidation6TestCase extends
         BaseBeanValPropertyValidationTestCase<ConstraintSourceAware6Bean>
 {
-    public ConstraintSourceAwareValidation6TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(ConstraintSourceAwareValidation6TestCase.class);
-    }
-
     protected ConstraintSourceAware6Bean getBeanToTest()
     {
         return new ConstraintSourceAware6Bean();
@@ -89,6 +77,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
         };
     }
 
+    @Test
     public void testCustomAnnotations1()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -103,6 +92,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testCustomAnnotations2()
     {
         createValueBindingForComponent(this.inputComponent2, "#{testBean.property2}");
@@ -117,6 +107,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testCustomAnnotations3()
     {
         createValueBindingForComponent(this.inputComponent3, "#{testBean.property3}");

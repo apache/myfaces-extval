@@ -25,19 +25,21 @@ import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.crossval.DefaultExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.crossval.ExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.apache.myfaces.test.runners.NamedRunner;
+import org.apache.myfaces.test.runners.TestPerClassLoaderRunner;
+import org.junit.runner.RunWith;
 
 /**
- * 
  * @author Rudy De Busscher
- * since v4
- *
+ *         since v4
  */
+@RunWith(value = TestPerClassLoaderRunner.class)
 public abstract class ExtValBaseValidationConfigurationTestCase extends AbstractExValCoreTestCase
 {
 
-    public ExtValBaseValidationConfigurationTestCase(String name)
+    protected String getName()
     {
-        super(name);
+        return NamedRunner.getTestMethodName();
     }
 
     protected boolean needXmlParameters()
@@ -85,16 +87,18 @@ public abstract class ExtValBaseValidationConfigurationTestCase extends Abstract
         if (needCustomConfig())
         {
             ExtValModuleConfiguration[] result = new ExtValModuleConfiguration[]
-            { getCustomBaseValidationModuleConfiguration() };
+                    {getCustomBaseValidationModuleConfiguration()};
             if (result.length == 1 && result[0] == null)
             {
                 // test don't want to specify a custom configuration.
                 return null;
-            } else
+            }
+            else
             {
                 return result;
             }
-        } else
+        }
+        else
         {
             return null;
         }

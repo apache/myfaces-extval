@@ -24,14 +24,13 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -42,10 +41,7 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomPropertyValidationInterceptorClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationCustomPropertyValidationInterceptorClassNameTestCase(String name)
-    {
-        super(name);
-    }
+
 
     public static class CustomPropertyValidationInterceptor implements PropertyValidationInterceptor
     {
@@ -114,30 +110,27 @@ public class ExtValCoreConfigurationCustomPropertyValidationInterceptorClassName
         }
     }
 
+    @Test
     public void testCustomPropertyValidationInterceptorClassNameDefault()
     {
-        assertEquals(1, ExtValContext.getContext().getPropertyValidationInterceptors().size());
+        Assert.assertEquals(1, ExtValContext.getContext().getPropertyValidationInterceptors().size());
     }
 
+    @Test
     public void testCustomPropertyValidationInterceptorClassNameWebXml()
     {
         List<PropertyValidationInterceptor> data = ExtValContext.getContext().getPropertyValidationInterceptors();
-        assertEquals(2, data.size());
-        assertEquals(CustomPropertyValidationInterceptor.class.getName(), data.get(1).getClass().getName());
+        Assert.assertEquals(2, data.size());
+        Assert.assertEquals(CustomPropertyValidationInterceptor.class.getName(), data.get(1).getClass().getName());
     }
 
+    @Test
     public void testCustomPropertyValidationInterceptorClassNameCustomConfig()
     {
         List<PropertyValidationInterceptor> data = ExtValContext.getContext().getPropertyValidationInterceptors();
-        assertEquals(2, data.size());
-        assertEquals(Custom2PropertyValidationInterceptor.class.getName(), data.get(1).getClass().getName());
+        Assert.assertEquals(2, data.size());
+        Assert.assertEquals(Custom2PropertyValidationInterceptor.class.getName(), data.get(1).getClass().getName());
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomPropertyValidationInterceptorClassNameTestCase.class);
-    }
 
 }

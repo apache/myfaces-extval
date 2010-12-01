@@ -22,9 +22,8 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -33,21 +32,7 @@ import java.util.List;
 
 public class RegistrationComponentInitializerTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationComponentInitializerTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationComponentInitializerTestCase.class);
-    }
-
+    @Test
     public void testComponentInitializerInitialization()
     {
         ExtValContext.getContext().addComponentInitializer(new TestComponentInitializer1000());

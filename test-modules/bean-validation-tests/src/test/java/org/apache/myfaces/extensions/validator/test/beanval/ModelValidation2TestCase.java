@@ -19,29 +19,20 @@
 package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.view.ModelValidationTestCase2PageBean;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
 public class ModelValidation2TestCase extends
         BaseBeanValPropertyValidationTestCase<ModelValidationTestCase2PageBean>
 {
-    public ModelValidation2TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ModelValidation2TestCase.class);
-    }
 
     protected ModelValidationTestCase2PageBean getBeanToTest()
     {
         return new ModelValidationTestCase2PageBean();
     }
 
+    @Test
     public void testModelValidation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model.property1}");
@@ -59,6 +50,7 @@ public class ModelValidation2TestCase extends
         checkMessageCount(0);
     }
 
+    @Test
     public void testModelViolationWithGlobalViolationMessageClassLevel()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model.property1}");

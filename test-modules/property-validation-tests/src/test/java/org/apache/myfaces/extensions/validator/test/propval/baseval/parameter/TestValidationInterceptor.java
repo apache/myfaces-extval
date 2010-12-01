@@ -21,11 +21,13 @@ package org.apache.myfaces.extensions.validator.test.propval.baseval.parameter;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ParameterValue;
 import org.apache.myfaces.extensions.validator.core.InvocationOrder;
+import org.junit.Ignore;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import java.util.Map;
 
+@Ignore
 @InvocationOrder(210)
 public class TestValidationInterceptor implements PropertyValidationInterceptor
 {

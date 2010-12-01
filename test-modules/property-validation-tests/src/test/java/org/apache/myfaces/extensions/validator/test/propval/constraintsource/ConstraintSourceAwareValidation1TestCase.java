@@ -21,9 +21,7 @@ package org.apache.myfaces.extensions.validator.test.propval.constraintsource;
 import javax.faces.application.FacesMessage;
 
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.model.ConstraintSourceAware1Bean;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 /**
  * EXTVAL-83
@@ -34,21 +32,13 @@ import junit.framework.TestSuite;
 public class ConstraintSourceAwareValidation1TestCase extends
         AbstractConstraintSourceTestCase<ConstraintSourceAware1Bean>
 {
-    public ConstraintSourceAwareValidation1TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation1TestCase.class);
-    }
 
     protected ConstraintSourceAware1Bean getBeanToTest()
     {
         return new ConstraintSourceAware1Bean();
     }
 
+    @Test
     public void testImplicitFieldMapping()
     {
         createValueBindingForComponent(this.inputComponent1,
@@ -64,6 +54,7 @@ public class ConstraintSourceAwareValidation1TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testImplicitMethodMapping()
     {
         createValueBindingForComponent(this.inputComponent2,

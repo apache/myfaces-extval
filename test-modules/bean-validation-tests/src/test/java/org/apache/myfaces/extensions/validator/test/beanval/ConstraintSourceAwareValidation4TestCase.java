@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.model.ConstraintSourceAware4Bean;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
@@ -31,21 +30,13 @@ import javax.faces.application.FacesMessage;
  */
 public class ConstraintSourceAwareValidation4TestCase extends BaseBeanValPropertyValidationTestCase<ConstraintSourceAware4Bean>
 {
-    public ConstraintSourceAwareValidation4TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation4TestCase.class);
-    }
 
     protected ConstraintSourceAware4Bean getBeanToTest()
     {
         return new ConstraintSourceAware4Bean();
     }
 
+    @Test
     public void testMethodBasedConstraintSourceAndTargetPropertyAnnotation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -60,6 +51,7 @@ public class ConstraintSourceAwareValidation4TestCase extends BaseBeanValPropert
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testMissingBasedConstraintSource()
     {
         createValueBindingForComponent(this.inputComponent2, "#{testBean.property2}");

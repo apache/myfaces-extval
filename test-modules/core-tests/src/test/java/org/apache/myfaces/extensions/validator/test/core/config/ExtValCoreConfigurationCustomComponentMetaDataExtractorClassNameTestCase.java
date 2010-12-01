@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
@@ -30,7 +29,8 @@ import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataE
 import org.apache.myfaces.extensions.validator.core.property.DefaultPropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -44,10 +44,6 @@ public class ExtValCoreConfigurationCustomComponentMetaDataExtractorClassNameTes
     private static final String WEB_XML = "Web.XML";
     private static final String CUSTOM_CONFIG = "Custom config";
 
-    public ExtValCoreConfigurationCustomComponentMetaDataExtractorClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomMetaDataExtractor implements MetaDataExtractor
     {
@@ -104,6 +100,7 @@ public class ExtValCoreConfigurationCustomComponentMetaDataExtractorClassNameTes
         }
     }
 
+    @Test
     public void testCustomComponentMetaDataExtractorClassNameDefault()
     {
         DefaultComponentMetaDataExtractorFactory factory = new DefaultComponentMetaDataExtractorFactory();
@@ -113,29 +110,27 @@ public class ExtValCoreConfigurationCustomComponentMetaDataExtractorClassNameTes
         // back.
         // The web.xml and custom config sets an extractor that enters something
         // here.
-        assertNull(propInformation.getInformation(PropertyInformationKeys.CUSTOM_PROPERTIES));
+        Assert.assertNull(propInformation.getInformation(PropertyInformationKeys.CUSTOM_PROPERTIES));
     }
 
+    @Test
     public void testCustomComponentMetaDataExtractorClassNameWebXml()
     {
         DefaultComponentMetaDataExtractorFactory factory = new DefaultComponentMetaDataExtractorFactory();
         MetaDataExtractor extractor = factory.create();
         PropertyInformation propInformation = extractor.extract(facesContext, new Object());
-        assertEquals(WEB_XML, propInformation.getInformation(PropertyInformationKeys.CUSTOM_PROPERTIES));
+        Assert.assertEquals(WEB_XML, propInformation.getInformation(PropertyInformationKeys.CUSTOM_PROPERTIES));
     }
 
+    @Test
     public void testCustomComponentMetaDataExtractorClassNameCustomConfig()
     {
         DefaultComponentMetaDataExtractorFactory factory = new DefaultComponentMetaDataExtractorFactory();
         MetaDataExtractor extractor = factory.create();
         PropertyInformation propInformation = extractor.extract(facesContext, new Object());
-        assertEquals(CUSTOM_CONFIG, propInformation.getInformation(PropertyInformationKeys.CUSTOM_PROPERTIES));
+        Assert.assertEquals(CUSTOM_CONFIG, propInformation.getInformation(PropertyInformationKeys.CUSTOM_PROPERTIES));
     }
 
-    public static Test suite()
-    {
 
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomComponentMetaDataExtractorClassNameTestCase.class);
-    }
 
 }

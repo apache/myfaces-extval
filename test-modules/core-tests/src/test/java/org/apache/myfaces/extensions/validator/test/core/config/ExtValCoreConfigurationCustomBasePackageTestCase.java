@@ -18,14 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,12 +38,6 @@ public class ExtValCoreConfigurationCustomBasePackageTestCase extends ExtValCore
 
     private static final String ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_TEST = "org.apache.myfaces.extensions.validator.test.";
     private static final String ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_CONFIG = "org.apache.myfaces.extensions.validator.config.";
-
-    public ExtValCoreConfigurationCustomBasePackageTestCase(String name)
-    {
-        super(name);
-
-    }
 
     protected void addInitializationParameters()
     {
@@ -75,29 +69,27 @@ public class ExtValCoreConfigurationCustomBasePackageTestCase extends ExtValCore
         }
     }
 
+    @Test
     public void testCustomBasePackageDefault() throws Exception
     {
         String value = ExtValContext.getContext().getInformationProviderBean().get(CustomInformation.BASE_PACKAGE);
-        assertEquals("org.apache.myfaces.extensions.validator.custom.", value);
+        Assert.assertEquals("org.apache.myfaces.extensions.validator.custom.", value);
     }
 
+    @Test
     public void testCustomBasePackageWebXml()
     {
 
         String value = ExtValContext.getContext().getInformationProviderBean().get(CustomInformation.BASE_PACKAGE);
-        assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_TEST, value);
+        Assert.assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_TEST, value);
     }
 
+    @Test
     public void testCustomBasePackageCustomConfig()
     {
 
         String value = ExtValContext.getContext().getInformationProviderBean().get(CustomInformation.BASE_PACKAGE);
-        assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_CONFIG, value);
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomBasePackageTestCase.class);
+        Assert.assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_CONFIG, value);
     }
 
 }

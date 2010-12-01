@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.validator.test.base.mock;
 
 import org.apache.myfaces.extensions.validator.core.el.ExtValELResolver;
-import org.apache.shale.test.el.MockValueExpression;
+import org.apache.myfaces.test.el.MockValueExpression;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;

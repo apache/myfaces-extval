@@ -20,15 +20,15 @@ package org.apache.myfaces.extensions.validator.test.propval.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.baseval.DefaultExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.baseval.ExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 /**
  * 
@@ -40,10 +40,6 @@ public class ExtValBaseValidationConfigurationDeactivateJpaBasedValidationTestCa
         ExtValBaseValidationConfigurationTestCase
 {
 
-    public ExtValBaseValidationConfigurationDeactivateJpaBasedValidationTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected void addInitializationParameters()
@@ -71,31 +67,28 @@ public class ExtValBaseValidationConfigurationDeactivateJpaBasedValidationTestCa
         };
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationDeactivateJpaBasedValidationDefault()
     {
         List<StaticConfiguration<String, String>> configs = ExtValContext.getContext().getStaticConfiguration(
                 StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG);
-        assertEquals(1, configs.size());
+        Assert.assertEquals(1, configs.size());
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationDeactivateJpaBasedValidationWebXml()
     {
         List<StaticConfiguration<String, String>> configs = ExtValContext.getContext().getStaticConfiguration(
                 StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG);
-        assertEquals(0, configs.size());
+        Assert.assertEquals(0, configs.size());
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationDeactivateJpaBasedValidationCustomConfig()
     {
         List<StaticConfiguration<String, String>> configs = ExtValContext.getContext().getStaticConfiguration(
                 StaticConfigurationNames.META_DATA_TO_VALIDATION_STRATEGY_CONFIG);
-        assertEquals(0, configs.size());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValBaseValidationConfigurationDeactivateJpaBasedValidationTestCase.class);
+        Assert.assertEquals(0, configs.size());
     }
 
 }

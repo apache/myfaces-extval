@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -27,7 +25,9 @@ import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.storage.DefaultStorageManagerFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 /**
  * 
@@ -38,10 +38,7 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomStorageManagerFactoryClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationCustomStorageManagerFactoryClassNameTestCase(String name)
-    {
-        super(name);
-    }
+
 
     public static class CustomDefaultStorageManagerFactory extends DefaultStorageManagerFactory
     {
@@ -87,31 +84,28 @@ public class ExtValCoreConfigurationCustomStorageManagerFactoryClassNameTestCase
         }
     }
 
+    @Test
     public void testCustomStorageManagerFactoryClassNameDefault()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, Object.class);
-        assertEquals(DefaultStorageManagerFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(DefaultStorageManagerFactory.class.getName(), factory.getClass().getName());
     }
 
+    @Test
     public void testCustomStorageManagerFactoryClassNameWebXml()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, Object.class);
-        assertEquals(CustomDefaultStorageManagerFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(CustomDefaultStorageManagerFactory.class.getName(), factory.getClass().getName());
     }
 
+    @Test
     public void testCustomStorageManagerFactoryClassNameCustomConfig()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.STORAGE_MANAGER_FACTORY, Object.class);
-        assertEquals(Custom2DefaultStorageManagerFactory.class.getName(), factory.getClass().getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomStorageManagerFactoryClassNameTestCase.class);
+        Assert.assertEquals(Custom2DefaultStorageManagerFactory.class.getName(), factory.getClass().getName());
     }
 
 }

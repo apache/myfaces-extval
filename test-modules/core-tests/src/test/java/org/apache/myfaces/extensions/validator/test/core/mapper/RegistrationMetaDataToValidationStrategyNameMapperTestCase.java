@@ -27,29 +27,15 @@ import org.apache.myfaces.extensions.validator.core.validation.strategy.mapper.*
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockValidationStrategyFactory;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 public class RegistrationMetaDataToValidationStrategyNameMapperTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationMetaDataToValidationStrategyNameMapperTestCase(String name)
-    {
-        super(name);
-    }
 
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationMetaDataToValidationStrategyNameMapperTestCase.class);
-    }
-
+    @Test
     public void testMetaDataToValidationStrategyNameMapperInitialization()
     {
         ExtValUtils.registerMetaDataToValidationStrategyNameMapper(

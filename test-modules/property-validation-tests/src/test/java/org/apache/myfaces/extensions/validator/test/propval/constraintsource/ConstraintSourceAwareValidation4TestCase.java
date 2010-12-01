@@ -2,29 +2,19 @@ package org.apache.myfaces.extensions.validator.test.propval.constraintsource;
 
 import javax.faces.application.FacesMessage;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.model.ConstraintSourceAware4Bean;
+import org.junit.Test;
 
 public class ConstraintSourceAwareValidation4TestCase extends
 AbstractConstraintSourceTestCase<ConstraintSourceAware4Bean>
 {
-    public ConstraintSourceAwareValidation4TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation4TestCase.class);
-    }
 
     protected ConstraintSourceAware4Bean getBeanToTest()
     {
         return new ConstraintSourceAware4Bean();
     }
 
+    @Test
     public void testMethodBasedConstraintSourceAndTargetPropertyAnnotation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -39,6 +29,7 @@ AbstractConstraintSourceTestCase<ConstraintSourceAware4Bean>
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testMissingBasedConstraintSource()
     {
         createValueBindingForComponent(this.inputComponent2, "#{testBean.property2}");

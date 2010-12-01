@@ -23,13 +23,13 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
 
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.AbstractValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -40,10 +40,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationInterpretEmptyStringSubmittedValuesAsNullTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationInterpretEmptyStringSubmittedValuesAsNullTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class TestValidationInterceptor extends AbstractValidationInterceptor
     {
@@ -105,28 +101,25 @@ public class ExtValCoreConfigurationInterpretEmptyStringSubmittedValuesAsNullTes
         }
     }
 
+    @Test
     public void testInterpretEmptyStringSubmittedValuesAsNullDefault()
     {
         TestValidationInterceptor interceptor = new TestValidationInterceptor();
-        assertTrue(interceptor.interpretEmptyStringValuesAsNull());
+        Assert.assertTrue(interceptor.interpretEmptyStringValuesAsNull());
     }
 
+    @Test
     public void testInterpretEmptyStringSubmittedValuesAsNullWebXml()
     {
         TestValidationInterceptor interceptor = new TestValidationInterceptor();
-        assertFalse(interceptor.interpretEmptyStringValuesAsNull());
+        Assert.assertFalse(interceptor.interpretEmptyStringValuesAsNull());
     }
 
+    @Test
     public void testInterpretEmptyStringSubmittedValuesAsNullCustomConfig()
     {
         TestValidationInterceptor interceptor = new TestValidationInterceptor();
-        assertFalse(interceptor.interpretEmptyStringValuesAsNull());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationInterpretEmptyStringSubmittedValuesAsNullTestCase.class);
+        Assert.assertFalse(interceptor.interpretEmptyStringValuesAsNull());
     }
 
 }

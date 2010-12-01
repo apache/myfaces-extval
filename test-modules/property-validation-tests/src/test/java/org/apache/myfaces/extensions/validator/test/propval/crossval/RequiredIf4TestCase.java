@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Test;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
@@ -38,23 +37,17 @@ public class RequiredIf4TestCase extends AbstractPropertyValidationTestCase
 
     UIViewRoot rootComponent = null;
 
-    public RequiredIf4TestCase(String name)
+    public RequiredIf4TestCase()
     {
-        super(name);
         inputComponent1 = null;
         inputComponent2 = null;
         rootComponent = null;
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(RequiredIf4TestCase.class);
-    }
-
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         RequiredIf4TestBean bean = new RequiredIf4TestBean();
         createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean", bean);
@@ -71,12 +64,7 @@ public class RequiredIf4TestCase extends AbstractPropertyValidationTestCase
         inputComponent2.setId("input2");
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testRequiredIfBooleanTargetEmptyFailed() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -99,6 +87,7 @@ public class RequiredIf4TestCase extends AbstractPropertyValidationTestCase
         //no update model needed
     }
 
+    @Test
     public void testRequiredIfBooleanTargetEmptyCorrect1() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -120,6 +109,7 @@ public class RequiredIf4TestCase extends AbstractPropertyValidationTestCase
         //no update model needed
     }
 
+    @Test
     public void testRequiredIfBooleanTargetEmptyCorrect2() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -141,6 +131,7 @@ public class RequiredIf4TestCase extends AbstractPropertyValidationTestCase
         //no update model needed
     }
 
+    @Test
     public void testRequiredIfBooleanTargetEmptyCorrect3() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");

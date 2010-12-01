@@ -19,28 +19,19 @@
 package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.model.TestCase1Bean;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
 public class DefaultGroupTestCase extends BaseBeanValPropertyValidationTestCase<TestCase1Bean>
 {
-    public DefaultGroupTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(DefaultGroupTestCase.class);
-    }
 
     protected TestCase1Bean getBeanToTest()
     {
         return new TestCase1Bean();
     }
 
+    @Test
     public void testNotNullSeverityError()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -55,6 +46,7 @@ public class DefaultGroupTestCase extends BaseBeanValPropertyValidationTestCase<
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testNotNullSeverityWarn()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property2}");
@@ -69,6 +61,7 @@ public class DefaultGroupTestCase extends BaseBeanValPropertyValidationTestCase<
         checkMessageSeverities(FacesMessage.SEVERITY_WARN);
     }
 
+    @Test
     public void testSeverityOrder()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property3}");

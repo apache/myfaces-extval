@@ -18,27 +18,86 @@
  */
 package org.apache.myfaces.extensions.validator.test.trinidad;
 
+import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKit;
 import org.apache.myfaces.extensions.validator.test.base.AbstractExValTestCase;
 import org.apache.myfaces.extensions.validator.trinidad.startup.TrinidadModuleStartupListener;
+import org.apache.myfaces.test.config.ConfigParser;
+import org.apache.myfaces.test.mock.MockRenderKit;
+import org.apache.myfaces.trinidad.component.UIXInput;
+import org.apache.myfaces.trinidad.context.RenderingContext;
+import org.apache.myfaces.trinidad.context.RequestContext;
+import org.apache.myfaces.trinidad.skin.SkinFactory;
+import org.apache.myfaces.trinidadinternal.context.RequestContextBean;
+import org.apache.myfaces.trinidadinternal.context.RequestContextImpl;
+import org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderKit;
+import org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext;
+import org.apache.myfaces.trinidadinternal.skin.SkinFactoryImpl;
+
+import javax.el.ValueExpression;
+import javax.faces.FactoryFinder;
+import javax.faces.el.ValueBinding;
+import javax.faces.render.RenderKitFactory;
+import java.net.URL;
+import java.util.Enumeration;
 
 /**
- * 
  * @author Rudy De Busscher
- * since v4
- *
+ *         since v4
  */
 public abstract class AbstractTrinidadSupportTestCase extends AbstractExValTestCase
 {
 
-    public AbstractTrinidadSupportTestCase(String name)
+    private RequestContext requestContext;
+
+    private RenderingContext renderingContext;
+
+    @Override
+    protected void setFactories() throws Exception
     {
-        super(name);
+        super.setFactories();
+                FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                "org.apache.myfaces.trinidadinternal.renderkit.CoreRenderKitFactory");
+
+    }
+
+    @Override
+    protected void setUpRenderKit() throws Exception
+    {
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder
+                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        renderKit = new ExtValRenderKit(new CoreRenderKit());
+        renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                renderKit);
+
+        renderKitFactory.addRenderKit("org.apache.myfaces.trinidad.core",
+                renderKit);
+        renderKitFactory.addRenderKit("org.apache.myfaces.trinidadinternal.core",
+                renderKit);
+        renderKitFactory.addRenderKit("org.apache.myfaces.trinidad.core.desktop",
+                renderKit);
+        renderKitFactory.addRenderKit("org.apache.myfaces.trinidad.core.pda",
+                renderKit);
+
+        ConfigParser parser = new ConfigParser();
+
+        Enumeration<URL> facesConfigEnum =getClass().getClassLoader().getResources("META-INF/faces-config.xml");
+
+        while (facesConfigEnum.hasMoreElements() ) {
+            URL url = facesConfigEnum.nextElement();
+            if (url.toExternalForm().contains("trinidad")) {
+                parser.parse(url);
+            }
+        }
+
+
     }
 
     @Override
     protected void invokeStartupListeners()
     {
-        new TrinidadModuleStartupListener(){
+        new TrinidadModuleStartupListener()
+        {
             private static final long serialVersionUID = 423076920926752646L;
 
             @Override
@@ -47,7 +106,39 @@ public abstract class AbstractTrinidadSupportTestCase extends AbstractExValTestC
                 super.init();
             }
         }.init();
-        
+
     }
 
+    @Override
+    protected void resetTestCase()
+    {
+        renderingContext.release();
+        requestContext.release();
+        super.resetTestCase();
+    }
+
+    @Override
+    protected void setUpTestCase()
+    {
+        super.setUpTestCase();
+        SkinFactory.setFactory(new SkinFactoryImpl());
+        requestContext = new RequestContextImpl(new RequestContextBean());
+        ((RequestContextImpl)requestContext).init(externalContext);
+        renderingContext = new CoreRenderingContext();
+
+
+    }
+
+    protected void createValueBinding(UIXInput uiInput, String name, String expression)
+    {
+        ValueBinding valueBinding = application.createValueBinding(expression);
+        ValueExpression valueExpression = application.getExpressionFactory().createValueExpression(
+                facesContext.getELContext(), expression, Object.class);
+
+        if (uiInput != null)
+        {
+            uiInput.setValueBinding(name, valueBinding);
+            uiInput.setValueExpression(name, valueExpression);
+        }
+    }
 }

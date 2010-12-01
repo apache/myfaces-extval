@@ -18,14 +18,14 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
 
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterExtractor;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -35,10 +35,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
  */
 public class ExtValCoreConfigurationDeactivateValidationParametersTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDeactivateValidationParametersTestCase(String name)
-    {
-        super(name);
-    }
 
     protected void addInitializationParameters()
     {
@@ -70,29 +66,27 @@ public class ExtValCoreConfigurationDeactivateValidationParametersTestCase exten
         }
     }
 
+    @Test
     public void testDeactivateValidationParametersDefault()
     {
-        assertEquals(DefaultValidationParameterExtractor.class.getName(), ExtValUtils.getValidationParameterExtractor()
+        Assert.assertEquals(DefaultValidationParameterExtractor.class.getName(), ExtValUtils.getValidationParameterExtractor()
                 .getClass().getName());
 
     }
 
+    @Test
     public void testDeactivateValidationParametersWebXml()
     {
-        assertTrue(ExtValUtils.getValidationParameterExtractor().getClass().getName().startsWith(
+        Assert.assertTrue(ExtValUtils.getValidationParameterExtractor().getClass().getName().startsWith(
                 ExtValUtils.class.getName()));
     }
 
+    @Test
     public void testDeactivateValidationParametersCustomConfig()
     {
-        assertTrue(ExtValUtils.getValidationParameterExtractor().getClass().getName().startsWith(
+        Assert.assertTrue(ExtValUtils.getValidationParameterExtractor().getClass().getName().startsWith(
                 ExtValUtils.class.getName()));
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateValidationParametersTestCase.class);
-    }
 
 }

@@ -23,8 +23,6 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -32,7 +30,8 @@ import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -43,11 +42,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomValidationExceptionInterceptorClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-
-    public ExtValCoreConfigurationCustomValidationExceptionInterceptorClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomValidationExceptionInterceptor implements ValidationExceptionInterceptor
     {
@@ -70,6 +64,7 @@ public class ExtValCoreConfigurationCustomValidationExceptionInterceptorClassNam
         }
 
     }
+
 
     protected void addInitializationParameters()
     {
@@ -104,30 +99,26 @@ public class ExtValCoreConfigurationCustomValidationExceptionInterceptorClassNam
         }
     }
 
+    @Test
     public void testCustomValidationExceptionInterceptorClassNameDefault()
     {
-        assertEquals(3, ExtValContext.getContext().getValidationExceptionInterceptors().size());
+        Assert.assertEquals(3, ExtValContext.getContext().getValidationExceptionInterceptors().size());
     }
 
+    @Test
     public void testCustomValidationExceptionInterceptorClassNameWebXml()
     {
         List<ValidationExceptionInterceptor> data = ExtValContext.getContext().getValidationExceptionInterceptors();
-        assertEquals(4, data.size());
-        assertEquals(CustomValidationExceptionInterceptor.class.getName(), data.get(3).getClass().getName());
+        Assert.assertEquals(4, data.size());
+        Assert.assertEquals(CustomValidationExceptionInterceptor.class.getName(), data.get(3).getClass().getName());
     }
 
+    @Test
     public void testCustomValidationExceptionInterceptorClassNameCustomConfig()
     {
         List<ValidationExceptionInterceptor> data = ExtValContext.getContext().getValidationExceptionInterceptors();
-        assertEquals(4, data.size());
-        assertEquals(Custom2ValidationExceptionInterceptor.class.getName(), data.get(3).getClass().getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomValidationExceptionInterceptorClassNameTestCase.class);
+        Assert.assertEquals(4, data.size());
+        Assert.assertEquals(Custom2ValidationExceptionInterceptor.class.getName(), data.get(3).getClass().getName());
     }
 
 }

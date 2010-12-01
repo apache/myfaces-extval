@@ -23,12 +23,11 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.component.AbstractHtmlCoreComponentsComponentInitializer;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,10 +37,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCoreConfigurationValidateEmptyFieldsTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationValidateEmptyFieldsTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomComponentInitializer extends AbstractHtmlCoreComponentsComponentInitializer
     {
@@ -91,28 +86,25 @@ public class ExtValCoreConfigurationValidateEmptyFieldsTestCase extends ExtValCo
         }
     }
 
+    @Test
     public void testValidateEmptyFieldsDefault()
     {
         CustomComponentInitializer initializer = new CustomComponentInitializer();
-        assertTrue(initializer.validateEmptyFields());
+        Assert.assertTrue(initializer.validateEmptyFields());
     }
 
+    @Test
     public void testValidateEmptyFieldsWebXml()
     {
         CustomComponentInitializer initializer = new CustomComponentInitializer();
-        assertFalse(initializer.validateEmptyFields());
+        Assert.assertFalse(initializer.validateEmptyFields());
     }
 
+    @Test
     public void testValidateEmptyFieldsCustomConfig()
     {
         CustomComponentInitializer initializer = new CustomComponentInitializer();
-        assertFalse(initializer.validateEmptyFields());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationValidateEmptyFieldsTestCase.class);
+        Assert.assertFalse(initializer.validateEmptyFields());
     }
 
 }

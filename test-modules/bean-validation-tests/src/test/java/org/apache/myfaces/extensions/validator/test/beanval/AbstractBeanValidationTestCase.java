@@ -27,10 +27,6 @@ import javax.faces.event.PhaseId;
 
 public class AbstractBeanValidationTestCase extends AbstractExValTestCase
 {
-    public AbstractBeanValidationTestCase(String name)
-    {
-        super(name);
-    }
 
     protected void invokeStartupListeners()
     {

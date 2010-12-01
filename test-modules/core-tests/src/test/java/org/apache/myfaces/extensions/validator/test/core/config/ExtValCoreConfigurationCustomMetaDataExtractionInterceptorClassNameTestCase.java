@@ -20,15 +20,14 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -39,11 +38,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomMetaDataExtractionInterceptorClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-
-    public ExtValCoreConfigurationCustomMetaDataExtractionInterceptorClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomMetaDataExtractionInterceptor implements MetaDataExtractionInterceptor
     {
@@ -94,30 +88,28 @@ public class ExtValCoreConfigurationCustomMetaDataExtractionInterceptorClassName
         }
     }
 
+
+    @Test
     public void testCustomMetaDataExtractionInterceptorClassNameDefault()
     {
-        assertEquals(0, ExtValContext.getContext().getMetaDataExtractionInterceptors().size());
+        Assert.assertEquals(0, ExtValContext.getContext().getMetaDataExtractionInterceptors().size());
     }
 
+    @Test
     public void testCustomMetaDataExtractionInterceptorClassNameWebXml()
     {
         List<MetaDataExtractionInterceptor> result = ExtValContext.getContext().getMetaDataExtractionInterceptors();
-        assertEquals(1, result.size());
-        assertEquals(CustomMetaDataExtractionInterceptor.class.getName(), result.get(0).getClass().getName());
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(CustomMetaDataExtractionInterceptor.class.getName(), result.get(0).getClass().getName());
     }
 
+    @Test
     public void testCustomMetaDataExtractionInterceptorClassNameCustomConfig()
     {
         List<MetaDataExtractionInterceptor> result = ExtValContext.getContext().getMetaDataExtractionInterceptors();
-        assertEquals(1, result.size());
-        assertEquals(Custom2MetaDataExtractionInterceptor.class.getName(), result.get(0).getClass().getName());
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(Custom2MetaDataExtractionInterceptor.class.getName(), result.get(0).getClass().getName());
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomMetaDataExtractionInterceptorClassNameTestCase.class);
-    }
 
 }

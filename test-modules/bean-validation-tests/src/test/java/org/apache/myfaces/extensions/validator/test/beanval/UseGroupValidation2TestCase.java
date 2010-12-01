@@ -18,29 +18,20 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.view.UseGroupValidationTestCase2PageBean;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
 public class UseGroupValidation2TestCase extends BaseBeanValPropertyValidationTestCase<UseGroupValidationTestCase2PageBean>
 {
-    public UseGroupValidation2TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(UseGroupValidation2TestCase.class);
-    }
 
     protected UseGroupValidationTestCase2PageBean getBeanToTest()
     {
         return new UseGroupValidationTestCase2PageBean();
     }
 
+    @Test
     public void testGroup1AwareValidation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model.property1}");

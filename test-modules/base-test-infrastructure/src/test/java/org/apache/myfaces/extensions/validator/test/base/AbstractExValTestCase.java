@@ -18,14 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.test.base;
 
-import junit.framework.TestCase;
-import org.apache.shale.test.mock.*;
-import org.apache.shale.test.el.MockExpressionFactory;
+import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKit;
+import org.apache.myfaces.test.base.junit4.AbstractJsfConfigurableMockTestCase;
+import org.apache.myfaces.test.config.ConfigParser;
+import org.apache.myfaces.test.el.MockExpressionFactory;
+import org.apache.myfaces.test.mock.MockRenderKit;
+import org.apache.myfaces.test.mock.MockResponseWriter;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.test.base.mock.*;
-import org.apache.myfaces.extensions.validator.test.base.util.TestUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
-import org.apache.myfaces.extensions.validator.core.renderkit.DefaultRenderKitWrapperFactory;
 import org.apache.myfaces.extensions.validator.core.startup.ExtValStartupListener;
 import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
@@ -35,19 +36,16 @@ import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfigurati
 import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.core.el.AbstractELHelperFactory;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
-import org.apache.myfaces.shared_impl.config.MyfacesConfig;
 
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
+import org.junit.After;
+import org.junit.Assert;
+
 import javax.faces.FactoryFinder;
 import javax.faces.el.ValueBinding;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.el.ValueExpression;
-import java.net.URLClassLoader;
-import java.net.URL;
+import javax.faces.render.RenderKitFactory;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -55,69 +53,27 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Abstract Shale Test base class, which sets up the JSF environment.  If the test
- * overrides <code>setUp()</code> and/or <code>tearDown()</code>, then those
- * methods but call the overwitten method to insure a valid test environment.
+ * Abstract ExtVal Test base class, which sets up the JSF environment.  If the test
+ * overrides any of the <code>setUp()</code> and/or <code>tearDown()</code>, related methods,  then those
+ * methods need to call the overwitten method to insure a valid test environment.
  */
 @SuppressWarnings("deprecation")
-public abstract class AbstractExValTestCase extends TestCase
+public abstract class AbstractExValTestCase extends AbstractJsfConfigurableMockTestCase
 {
-    protected MockApplication application;
-    protected MockServletConfig config;
-    protected MockExternalContext externalContext;
-    protected MockFacesContext facesContext;
-    protected MockFacesContextFactory facesContextFactory;
-    protected MockLifecycle lifecycle;
-    protected MockLifecycleFactory lifecycleFactory;
-    protected RenderKit renderKit;
-    protected MockHttpServletRequest request;
-    protected MockHttpServletResponse response;
-    protected MockServletContext servletContext;
-    protected MockHttpSession session;
-    protected MockExpressionFactory expressionFactory;
-    private ClassLoader threadContextClassLoader;
 
-    /** Response Writer */
     private MockResponseWriter writer;
 
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public AbstractExValTestCase(String name)
-    {
-        super(name);
-        application = null;
-        config = null;
-        externalContext = null;
-        facesContext = null;
-        facesContextFactory = null;
-        lifecycle = null;
-        lifecycleFactory = null;
-        renderKit = null;
-        request = null;
-        response = null;
-        servletContext = null;
-        session = null;
-        expressionFactory = null;
-        threadContextClassLoader = null;
-    }
+    private StringWriter page;
 
-    /**
-     *  Setup the test environment, including the following:
-     *  <ul>
-     *  <li>Set the Application Map.</li>
-     *  <li>Set a response writer</li>
-     *  <li>Add Tomahawk's renderers to the faces context.</li>
-     *  </ul>
-     */
-    protected void setUp() throws Exception
+    private MockExpressionFactory expressionFactory;
+
+    // Setting up the JSF System
+
+    @Override
+    protected void setUpServletObjects() throws Exception
     {
-        threadContextClassLoader = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(new URLClassLoader(new URL[0], getClass().getClassLoader()));
-        servletContext = new MockServletContext();
-        //for testing the fallback
+        super.setUpServletObjects();
+
         //servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".DEACTIVATE_EL_RESOLVER", "true");
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_VALIDATION_STRATEGY_FACTORY", MockValidationStrategyFactory.class.getName());
         servletContext.addInitParameter(ExtValInformation.WEBXML_PARAM_PREFIX + ".CUSTOM_MESSAGE_RESOLVER_FACTORY", MockMessageResolverFactory.class.getName());
@@ -125,44 +81,65 @@ public abstract class AbstractExValTestCase extends TestCase
 
         addInitializationParameters();
 
-        config = new MockServletConfig(servletContext);
-        session = new MockHttpSession();
-        session.setServletContext(servletContext);
-        request = new MockHttpServletRequest(session);
-        request.setServletContext(servletContext);
-        response = new MockHttpServletResponse();
-        FactoryFinder.releaseFactories();
-        FactoryFinder.setFactory("javax.faces.application.ApplicationFactory", ExtValMockApplicationFactory.class.getName());
-        FactoryFinder.setFactory("javax.faces.context.FacesContextFactory", "org.apache.shale.test.mock.MockFacesContextFactory");
-        FactoryFinder.setFactory("javax.faces.lifecycle.LifecycleFactory", "org.apache.shale.test.mock.MockLifecycleFactory");
-        FactoryFinder.setFactory("javax.faces.render.RenderKitFactory", "org.apache.shale.test.mock.MockRenderKitFactory");
-        externalContext = new MockExternalContext(servletContext, request, response);
-        lifecycleFactory = (MockLifecycleFactory)FactoryFinder.getFactory("javax.faces.lifecycle.LifecycleFactory");
-        lifecycle = (MockLifecycle)lifecycleFactory.getLifecycle("DEFAULT");
-        facesContextFactory = (MockFacesContextFactory)FactoryFinder.getFactory("javax.faces.context.FacesContextFactory");
-        facesContext = (MockFacesContext)facesContextFactory.getFacesContext(servletContext, request, response, lifecycle);
-        externalContext = (MockExternalContext)facesContext.getExternalContext();
-        UIViewRoot root = new UIViewRoot();
-        root.setViewId("/viewId");
-        root.setRenderKitId("HTML_BASIC");
-        facesContext.setViewRoot(root);
-        ApplicationFactory applicationFactory = (ApplicationFactory)FactoryFinder.getFactory("javax.faces.application.ApplicationFactory");
-        application = (MockApplication)applicationFactory.getApplication();
-        facesContext.setApplication(application);
-        RenderKitFactory renderKitFactory = (RenderKitFactory)FactoryFinder.getFactory("javax.faces.render.RenderKitFactory");
-        //Wrap renderers with proper exval wrapper
-        renderKit = new DefaultRenderKitWrapperFactory().create(new MockRenderKit());
-        renderKitFactory.addRenderKit("HTML_BASIC", renderKit);
+    }
 
-        // additional setup not provided automatically by the shale mock stuff
-        facesContext.getExternalContext().getApplicationMap().put(MyfacesConfig.class.getName(), new MyfacesConfig());
-        writer = new MockResponseWriter(new StringWriter(), null, null);
+    @Override
+    protected void setFactories() throws Exception
+    {
+        super.setFactories();
+        FactoryFinder.setFactory("javax.faces.application.ApplicationFactory", ExtValMockApplicationFactory.class.getName());
+
+    }
+
+    @Override
+    protected void setUpRenderKit() throws Exception
+    {
+        // Don't call super since we need the ExtValRenderKit and not the Mock one.
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder
+                .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        renderKit = new ExtValRenderKit(new MockRenderKit());
+        renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                renderKit);
+
+        // Initialize complete JSF system
+        ConfigParser parser = new ConfigParser();
+        parser.parse(parser.getPlatformURLs());
+
+    }
+
+    @Override
+    protected void setUpFacesContext() throws Exception
+    {
+        super.setUpFacesContext();
+
+        page = new StringWriter();
+        writer = new MockResponseWriter(page, null, null);
         facesContext.setResponseWriter(writer);
 
-        TestUtils.addDefaultRenderers(facesContext);
-        TestUtils.addDefaultValidators(facesContext);
+    }
 
-        expressionFactory = (MockExpressionFactory)application.getExpressionFactory();
+    @Override
+    protected void setUpApplication() throws Exception
+    {
+        super.setUpApplication();
+
+        externalContext.getApplicationMap().put("org.apache.myfaces.application.ApplicationImpl", application);
+
+        expressionFactory = (MockExpressionFactory) application.getExpressionFactory();
+    }
+
+    /**
+     * Setup the test environment, including the following:
+     * <ul>
+     * <li>Set the Application Map.</li>
+     * <li>Set a response writer</li>
+     * <li>Add Tomahawk's renderers to the faces context.</li>
+     * </ul>
+     */
+    public void setUp() throws Exception
+    {
+        super.setUp();
 
         applyCustomConfigurations();
 
@@ -171,7 +148,8 @@ public abstract class AbstractExValTestCase extends TestCase
         final ELHelper defaultElHelper = ExtValUtils.getELHelper();
         ExtValContext.getContext().getFactoryFinder()
                 .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class)
-                .setCustomELHelperFactory(new AbstractELHelperFactory() {
+                .setCustomELHelperFactory(new AbstractELHelperFactory()
+                {
 
                     protected ELHelper createELHelper()
                     {
@@ -182,13 +160,14 @@ public abstract class AbstractExValTestCase extends TestCase
         final ExtValCoreConfiguration customExtValCoreConfiguration = getCustomExtValCoreConfiguration();
 
         //execute startup listener
-        new ExtValStartupListener() {
+        new ExtValStartupListener()
+        {
             private static final long serialVersionUID = -3861810605160281884L;
 
             @Override
             protected void initModuleConfig()
             {
-                if(customExtValCoreConfiguration != null)
+                if (customExtValCoreConfiguration != null)
                 {
                     ExtValCoreConfiguration.use(customExtValCoreConfiguration, true);
                 }
@@ -207,83 +186,54 @@ public abstract class AbstractExValTestCase extends TestCase
         }.init();
 
         invokeStartupListeners();
+
+        setUpTestCase();
+    }
+
+    // Customizations of the setup.
+
+
+    protected void setUpTestCase()
+    {
+        //override it - if needed
     }
 
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
-	    //override it - if needed
+        //override it - if needed
         return null;
     }
 
     protected void addInitializationParameters()
-	{
-	    //override it - if needed		
-	}
-    
-    protected void addInitParameter(String key, String value)
-	{
-    	servletContext.addInitParameter(key, value);
+    {
+        //override it - if needed
     }
 
-    private void applyCustomConfigurations()
-    {
-        ExtValModuleConfiguration[] customConfigs = getCustomConfigObjects();
-        if (customConfigs != null)
-        {
-            for (ExtValModuleConfiguration moduleConfiguration : customConfigs)
-            {
-                ExtValContext.getContext().addModuleConfiguration(getAbstractModuleConfiguration(moduleConfiguration),
-                        moduleConfiguration, false);
-            }
-        }
-    }
-        
+    protected abstract void invokeStartupListeners();
+
     protected ExtValModuleConfiguration[] getCustomConfigObjects()
     {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    private static Class<? extends ExtValModuleConfiguration> getAbstractModuleConfiguration(
-            Object moduleConfiguration)
+    protected void addInitParameter(String key, String value)
     {
-        Class<? extends ExtValModuleConfiguration> result = (Class<? extends ExtValModuleConfiguration>) moduleConfiguration
-                .getClass();
-        while (!Modifier.isAbstract(result.getModifiers())
-                && !Object.class.getName().equals(result.getName()))
-        {
-            result = (Class<? extends ExtValModuleConfiguration>) result
-                    .getSuperclass();
-        }
-        return result;
-    }        
-        
-	protected abstract void invokeStartupListeners();
+        servletContext.addInitParameter(key, value);
+    }
 
-    /**
-     * Tear down the test environment.
-     */
-    protected void tearDown() throws Exception
+    // Cleaning up after a test
+
+    @After
+    public void reset()
     {
         resetFactoryFinder();
         resetExtValContext();
+        resetTestCase();
+    }
 
-        application = null;
-        config = null;
-        externalContext = null;
-        facesContext.release();
-        facesContext = null;
-        lifecycle = null;
-        lifecycleFactory = null;
-        renderKit = null;
-        request = null;
-        response = null;
-        servletContext = null;
-        session = null;
-        FactoryFinder.releaseFactories();
-        Thread.currentThread().setContextClassLoader(threadContextClassLoader);
-        expressionFactory = null;
-        threadContextClassLoader = null;
+    protected void resetTestCase()
+    {
+        // Override if needed
     }
 
     private void resetFactoryFinder()
@@ -314,43 +264,45 @@ public abstract class AbstractExValTestCase extends TestCase
         }
     }
 
+    // General utility methods for tests
+
     protected void checkMessageCount(int expected)
     {
         int i = 0;
-        for(Iterator messages = facesContext.getMessages(); messages.hasNext();)
+        for (Iterator messages = facesContext.getMessages(); messages.hasNext();)
         {
             messages.next();
             i++;
         }
 
-        assertEquals("Complete message count", expected, i);
+        Assert.assertEquals("Complete message count", expected, i);
     }
 
     protected void checkMessageCount(String clientId, int expected)
     {
         int i = 0;
-        for(Iterator messages = facesContext.getMessages(clientId); messages.hasNext();)
+        for (Iterator messages = facesContext.getMessages(clientId); messages.hasNext();)
         {
             messages.next();
             i++;
         }
 
-        assertEquals("Complete message count", expected, i);
+        Assert.assertEquals("Complete message count", expected, i);
     }
 
     protected void checkMessageSeverities(FacesMessage.Severity... severities)
     {
         int i = 0;
-        for(Iterator messages = facesContext.getMessages(); messages.hasNext();)
+        for (Iterator messages = facesContext.getMessages(); messages.hasNext();)
         {
-            assertEquals(severities[i], ((FacesMessage)messages.next()).getSeverity());
+            Assert.assertEquals(severities[i], ((FacesMessage) messages.next()).getSeverity());
             i++;
         }
     }
 
     protected void assertNavigationBlocked(boolean isBlocked)
     {
-        assertEquals(isBlocked, this.facesContext.getRenderResponse());
+        Assert.assertEquals(isBlocked, this.facesContext.getRenderResponse());
     }
 
     /**
@@ -365,20 +317,22 @@ public abstract class AbstractExValTestCase extends TestCase
      */
     protected void assertIdExists(String id)
     {
-        assertNotNull("ID is not null", id);
-        assertTrue("Response Complete", facesContext.getResponseComplete());
+        Assert.assertNotNull("ID is not null", id);
+        Assert.assertTrue("Response Complete", facesContext.getResponseComplete());
         String output = writer.getWriter().toString();
-        assertNotNull("Has output", output);
-        assertTrue("Contains id '" + id + "'", output.indexOf(id) != -1);
+        Assert.assertNotNull("Has output", output);
+        Assert.assertTrue("Contains id '" + id + "'", output.indexOf(id) != -1);
     }
+
+    // Handy methods for within tests
 
     protected void createValueBinding(UIInput uiInput, String name, String expression)
     {
         ValueBinding valueBinding = application.createValueBinding(expression);
         ValueExpression valueExpression = expressionFactory.createValueExpression(
-            facesContext.getELContext(), expression, Object.class);
+                facesContext.getELContext(), expression, Object.class);
 
-        if(uiInput != null)
+        if (uiInput != null)
         {
             uiInput.setValueBinding(name, valueBinding);
             uiInput.setValueExpression(name, valueExpression);
@@ -395,6 +349,34 @@ public abstract class AbstractExValTestCase extends TestCase
     protected <T> T resolveBean(String name, Class<T> targetClass)
     {
         return (T) ExtValUtils.getELHelper().getBean(name);
+    }
+
+    private void applyCustomConfigurations()
+    {
+        ExtValModuleConfiguration[] customConfigs = getCustomConfigObjects();
+        if (customConfigs != null)
+        {
+            for (ExtValModuleConfiguration moduleConfiguration : customConfigs)
+            {
+                ExtValContext.getContext().addModuleConfiguration(getAbstractModuleConfiguration(moduleConfiguration),
+                        moduleConfiguration, false);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends ExtValModuleConfiguration> getAbstractModuleConfiguration(
+            Object moduleConfiguration)
+    {
+        Class<? extends ExtValModuleConfiguration> result = (Class<? extends ExtValModuleConfiguration>) moduleConfiguration
+                .getClass();
+        while (!Modifier.isAbstract(result.getModifiers())
+                && !Object.class.getName().equals(result.getName()))
+        {
+            result = (Class<? extends ExtValModuleConfiguration>) result
+                    .getSuperclass();
+        }
+        return result;
     }
 }
 

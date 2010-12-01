@@ -18,16 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
+
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Test;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 
 public class EqualsStringTestCase extends AbstractPropertyValidationTestCase
 {
@@ -37,24 +34,18 @@ public class EqualsStringTestCase extends AbstractPropertyValidationTestCase
 
     UIViewRoot rootComponent = null;
 
-    public EqualsStringTestCase(String name)
+    public EqualsStringTestCase()
     {
-        super(name);
         inputComponent1 = null;
         inputComponent2 = null;
         rootComponent = null;
     }
 
 
-    public static Test suite()
-    {
-        return new TestSuite(EqualsStringTestCase.class);
-    }
-
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         EqualsStringTestBean bean = new EqualsStringTestBean();
         createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean", bean);
@@ -71,12 +62,7 @@ public class EqualsStringTestCase extends AbstractPropertyValidationTestCase
         inputComponent2.setId("input2");
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testEqualsCaseSensitiveSame() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -94,6 +80,7 @@ public class EqualsStringTestCase extends AbstractPropertyValidationTestCase
         checkMessageCount(0);
     }
 
+    @Test
     public void testEqualsCaseSensitiveDifferent() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -111,6 +98,7 @@ public class EqualsStringTestCase extends AbstractPropertyValidationTestCase
         checkMessageCount(2); // For each field a message
     }
 
+    @Test
     public void testEqualsCaseInsensitiveSame() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -128,6 +116,7 @@ public class EqualsStringTestCase extends AbstractPropertyValidationTestCase
         checkMessageCount(0);
     }
 
+    @Test
     public void testEqualsCaseInsensitiveDifferent() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");

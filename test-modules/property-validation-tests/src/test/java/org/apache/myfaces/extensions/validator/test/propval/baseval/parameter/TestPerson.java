@@ -21,7 +21,9 @@ package org.apache.myfaces.extensions.validator.test.propval.baseval.parameter;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
+import org.junit.Ignore;
 
+@Ignore
 public class TestPerson
 {
     @Required(parameters = {ViolationSeverity.Warn.class, TestAllowClientSideValidation.class})

@@ -18,14 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -35,10 +34,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCoreConfigurationDeactivateDefaultConventionTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDeactivateDefaultConventionTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected void addInitializationParameters()
@@ -73,30 +68,27 @@ public class ExtValCoreConfigurationDeactivateDefaultConventionTestCase extends 
     }
 
     @ToDo(value = Priority.MEDIUM, description = "some better logic to see if it is really well integrated")
+    @Test
     public void testDeactivateDefConventionDefault() throws Exception
     {
         // Not a very clever testcase but code in
         // AbstractValidationErrorMessageResolver is too complex to have a quick
         // simple test of the parameter
-        assertFalse(ExtValCoreConfiguration.get().deactivateDefaultConvention());
+        Assert.assertFalse(ExtValCoreConfiguration.get().deactivateDefaultConvention());
     }
 
     // Name of method should contain default
+    @Test
     public void testDeactivateDefConventionWebXml()
     {
-        assertTrue(ExtValCoreConfiguration.get().deactivateDefaultConvention());
+        Assert.assertTrue(ExtValCoreConfiguration.get().deactivateDefaultConvention());
     }
 
     // Name of method should contain default
+    @Test
     public void testDeactivateDefConventionCustomConfig()
     {
-        assertTrue(ExtValCoreConfiguration.get().deactivateDefaultConvention());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateDefaultConventionTestCase.class);
+        Assert.assertTrue(ExtValCoreConfiguration.get().deactivateDefaultConvention());
     }
 
 }

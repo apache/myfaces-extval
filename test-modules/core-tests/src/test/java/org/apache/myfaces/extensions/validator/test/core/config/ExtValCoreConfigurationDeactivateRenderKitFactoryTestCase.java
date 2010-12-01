@@ -21,16 +21,15 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKit;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKitFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
-import org.apache.shale.test.mock.MockRenderKit;
-import org.apache.shale.test.mock.MockRenderKitFactory;
+import org.apache.myfaces.test.mock.MockRenderKit;
+import org.apache.myfaces.test.mock.MockRenderKitFactory;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -40,10 +39,7 @@ import org.apache.shale.test.mock.MockRenderKitFactory;
  */
 public class ExtValCoreConfigurationDeactivateRenderKitFactoryTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDeactivateRenderKitFactoryTestCase(String name)
-    {
-        super(name);
-    }
+
 
     protected void addInitializationParameters()
     {
@@ -75,32 +71,30 @@ public class ExtValCoreConfigurationDeactivateRenderKitFactoryTestCase extends E
         }
     }
 
+    @Test
     public void testDeactivateRenderKitFactoryDefault()
     {
         RenderKitFactory factory = new ExtValRenderKitFactory(new MockRenderKitFactory());
         RenderKit renderKit = factory.getRenderKit(facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        assertEquals(ExtValRenderKit.class.getName(), renderKit.getClass().getName());
+        Assert.assertEquals(ExtValRenderKit.class.getName(), renderKit.getClass().getName());
 
     }
 
+    @Test
     public void testDeactivateRenderKitFactoryWebXml()
     {
         RenderKitFactory factory = new ExtValRenderKitFactory(new MockRenderKitFactory());
         RenderKit renderKit = factory.getRenderKit(facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        assertEquals(MockRenderKit.class.getName(), renderKit.getClass().getName());
+        Assert.assertEquals(MockRenderKit.class.getName(), renderKit.getClass().getName());
     }
 
+    @Test
     public void testDeactivateRenderKitFactoryCustomConfig()
     {
         RenderKitFactory factory = new ExtValRenderKitFactory(new MockRenderKitFactory());
         RenderKit renderKit = factory.getRenderKit(facesContext, RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        assertEquals(MockRenderKit.class.getName(), renderKit.getClass().getName());
+        Assert.assertEquals(MockRenderKit.class.getName(), renderKit.getClass().getName());
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateRenderKitFactoryTestCase.class);
-    }
 
 }

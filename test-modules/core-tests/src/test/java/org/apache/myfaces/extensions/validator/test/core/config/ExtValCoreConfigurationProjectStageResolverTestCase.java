@@ -18,14 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.core.ProjectStageResolver;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -35,10 +34,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCoreConfigurationProjectStageResolverTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationProjectStageResolverTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomProjectStageResolver implements ProjectStageResolver
     {
@@ -83,25 +78,22 @@ public class ExtValCoreConfigurationProjectStageResolverTestCase extends ExtValC
         }
     }
 
+    @Test
     public void testProjectStageResolverDefault()
     {
-        assertTrue(JsfProjectStage.is(JsfProjectStage.Production));
+        Assert.assertTrue(JsfProjectStage.is(JsfProjectStage.Production));
     }
 
+    @Test
     public void testProjectStageResolverWebXml()
     {
-        assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
+        Assert.assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
     }
 
+    @Test
     public void testProjectStageResolverCustomConfig()
     {
-        assertTrue(JsfProjectStage.is(JsfProjectStage.UnitTest));
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationProjectStageResolverTestCase.class);
+        Assert.assertTrue(JsfProjectStage.is(JsfProjectStage.UnitTest));
     }
 
 }

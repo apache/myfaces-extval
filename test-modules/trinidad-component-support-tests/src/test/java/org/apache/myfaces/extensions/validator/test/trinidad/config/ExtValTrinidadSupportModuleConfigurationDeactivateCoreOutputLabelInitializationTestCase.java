@@ -20,14 +20,13 @@ package org.apache.myfaces.extensions.validator.test.trinidad.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.trinidad.DefaultExtValTrinidadSupportModuleConfiguration;
 import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportModuleConfiguration;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,11 +37,6 @@ import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportMod
 public class ExtValTrinidadSupportModuleConfigurationDeactivateCoreOutputLabelInitializationTestCase extends
         ExtValTrinidadSupportModuleConfigurationTestCase
 {
-
-    public ExtValTrinidadSupportModuleConfigurationDeactivateCoreOutputLabelInitializationTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValTrinidadSupportModuleConfiguration extends
             DefaultExtValTrinidadSupportModuleConfiguration
@@ -73,32 +67,28 @@ public class ExtValTrinidadSupportModuleConfigurationDeactivateCoreOutputLabelIn
         return new CustomExtValTrinidadSupportModuleConfiguration();
     }
 
+    @Test
     public void testDeactivateCoreOutputLabelInitializationDefault()
     {
         List<RendererInterceptor> interceptors = ExtValContext.getContext().getRendererInterceptors();
         // Default ValidationInterceptor from core and Trinidad one.
-        assertEquals(2, interceptors.size());
+        Assert.assertEquals(2, interceptors.size());
     }
 
+    @Test
     public void testDeactivateCoreOutputLabelInitializationWebXml()
     {
         List<RendererInterceptor> interceptors = ExtValContext.getContext().getRendererInterceptors();
         // only Default ValidationInterceptor from core .
-        assertEquals(1, interceptors.size());
+        Assert.assertEquals(1, interceptors.size());
     }
 
+    @Test
     public void testDeactivateCoreOutputLabelInitializationCustomConfig()
     {
         List<RendererInterceptor> interceptors = ExtValContext.getContext().getRendererInterceptors();
         // only Default ValidationInterceptor from core .
-        assertEquals(1, interceptors.size());
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(
-                ExtValTrinidadSupportModuleConfigurationDeactivateCoreOutputLabelInitializationTestCase.class);
-
+        Assert.assertEquals(1, interceptors.size());
     }
 
 }

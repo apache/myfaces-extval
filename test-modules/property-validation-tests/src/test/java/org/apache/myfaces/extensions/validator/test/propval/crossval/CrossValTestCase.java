@@ -22,10 +22,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Test;
 
 /**
  * @author Leonardo Uribe
@@ -38,22 +36,17 @@ public class CrossValTestCase extends AbstractPropertyValidationTestCase
 
     UIViewRoot rootComponent = null;
 
-    public CrossValTestCase(String name)
+    public CrossValTestCase()
     {
-        super(name);
         inputComponent1 = null;
         inputComponent2 = null;
         rootComponent = null;
     }
 
-    public static Test suite() {
-        return new TestSuite(CrossValTestCase.class);
-    }
-
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         CrossValTestBean bean = new CrossValTestBean();
         createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean",bean);
@@ -70,12 +63,7 @@ public class CrossValTestCase extends AbstractPropertyValidationTestCase
         inputComponent2.setId("input2");
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testEqualsCorrect() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -95,6 +83,7 @@ public class CrossValTestCase extends AbstractPropertyValidationTestCase
         //no update model needed
     }
 
+    @Test
     public void testEqualsFail() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");

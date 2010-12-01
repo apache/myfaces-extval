@@ -72,31 +72,7 @@
             <version>2.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.shale</groupId>
-            <artifactId>shale-test</artifactId>
-            <version>1.0.4</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.myfaces</groupId>
-                    <artifactId>myfaces-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.myfaces</groupId>
-                    <artifactId>myfaces-impl</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>myfaces</groupId>
-                    <artifactId>myfaces-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>myfaces</groupId>
-                    <artifactId>myfaces-impl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
+
     </dependencies>
 
     <build>

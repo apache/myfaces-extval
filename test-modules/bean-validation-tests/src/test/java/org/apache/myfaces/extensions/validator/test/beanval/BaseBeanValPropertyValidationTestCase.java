@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.SingleViolationPropertyValidationInterceptor;
+import org.junit.Assert;
 
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlForm;
@@ -29,15 +30,6 @@ import javax.faces.el.ValueBinding;
 
 public abstract class BaseBeanValPropertyValidationTestCase<T> extends AbstractBeanValidationTestCase
 {
-    public BaseBeanValPropertyValidationTestCase(String name)
-    {
-        super(name);
-        inputComponent1 = null;
-        inputComponent2 = null;
-        inputComponent3 = null;
-        rootComponent = null;
-        bean = null;
-    }
 
     protected HtmlInputText inputComponent1 = null;
     protected HtmlInputText inputComponent2 = null;
@@ -49,9 +41,9 @@ public abstract class BaseBeanValPropertyValidationTestCase<T> extends AbstractB
 
     @SuppressWarnings({"UnusedDeclaration"})
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         bean = getBeanToTest();
         bindBeanToExpression();
 
@@ -87,9 +79,9 @@ public abstract class BaseBeanValPropertyValidationTestCase<T> extends AbstractB
     protected abstract T getBeanToTest();
 
     @Override
-    protected void tearDown() throws Exception
+    protected void resetTestCase()
     {
-        super.tearDown();
+        super.resetTestCase();
         inputComponent1 = null;
         inputComponent2 = null;
         inputComponent3 = null;
@@ -123,12 +115,12 @@ public abstract class BaseBeanValPropertyValidationTestCase<T> extends AbstractB
 
     protected void assertComponentValid(UIInput uiInput)
     {
-        assertTrue(isComponentValid(uiInput));
+        Assert.assertTrue(isComponentValid(uiInput));
     }
 
     protected void assertComponentInvalid(UIInput uiInput)
     {
-        assertFalse(isComponentValid(uiInput));
+        Assert.assertFalse(isComponentValid(uiInput));
     }
 
     private boolean isComponentValid(UIInput uiComponent)

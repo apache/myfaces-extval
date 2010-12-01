@@ -23,9 +23,8 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -34,21 +33,7 @@ import java.util.Map;
 
 public class RegistrationPropertyValidationInterceptorTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationPropertyValidationInterceptorTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationPropertyValidationInterceptorTestCase.class);
-    }
-
+    @Test
     public void testPropertyValidationInterceptorInitialization()
     {
         ExtValContext.getContext().addPropertyValidationInterceptor(new TestComponentInitializer());

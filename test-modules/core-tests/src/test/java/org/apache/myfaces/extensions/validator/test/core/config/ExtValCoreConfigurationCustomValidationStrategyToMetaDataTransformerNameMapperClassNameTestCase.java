@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -31,7 +29,8 @@ import org.apache.myfaces.extensions.validator.core.factory.NameMapperAwareFacto
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -44,11 +43,6 @@ public class ExtValCoreConfigurationCustomValidationStrategyToMetaDataTransforme
 {
     private static final String WEB_XML = "Web.xml";
     private static final String CUSTOM_CONFIG = "Custom Config";
-
-    public ExtValCoreConfigurationCustomValidationStrategyToMetaDataTransformerNameMapperClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomNameMapper implements NameMapper<ValidationStrategy>
     {
@@ -103,38 +97,41 @@ public class ExtValCoreConfigurationCustomValidationStrategyToMetaDataTransforme
         }
     }
 
+    @Test
     public void testCustomValidationStrategyToMetaDataTransformerNameMapperClassNameDefault()
     {
         List<NameMapper<ValidationStrategy>> nameMappers = getNameMappers();
-        assertEquals(6, nameMappers.size());
+        Assert.assertEquals(6, nameMappers.size());
         // The first one (due to @InvocationOrder) is the
         // CustomConfiguredValidationStrategyToMetaDataTransformerNameMapper
         // which we can customize and testing here.
         NameMapper<ValidationStrategy> mapper = nameMappers.get(0);
         // By default nothing is configures so should return null.
-        assertNull(mapper.createName(null));
+        Assert.assertNull(mapper.createName(null));
     }
 
+    @Test
     public void testCustomValidationStrategyToMetaDataTransformerNameMapperClassNameWebXml()
     {
         List<NameMapper<ValidationStrategy>> nameMappers = getNameMappers();
-        assertEquals(6, nameMappers.size());
+        Assert.assertEquals(6, nameMappers.size());
         // No mapper additional, but the first mapper contain now our custom
         // configured mapper.
         NameMapper<ValidationStrategy> mapper = nameMappers.get(0);
         // So now it should return some value
-        assertEquals(WEB_XML, mapper.createName(null));
+        Assert.assertEquals(WEB_XML, mapper.createName(null));
     }
 
+    @Test
     public void testCustomValidationStrategyToMetaDataTransformerNameMapperClassNameCustomConfig()
     {
         List<NameMapper<ValidationStrategy>> nameMappers = getNameMappers();
-        assertEquals(6, nameMappers.size());
+        Assert.assertEquals(6, nameMappers.size());
         // No mapper additional, but the first mapper contain now our custom
         // configured mapper.
         NameMapper<ValidationStrategy> mapper = nameMappers.get(0);
         // So now it should return some value
-        assertEquals(CUSTOM_CONFIG, mapper.createName(null));
+        Assert.assertEquals(CUSTOM_CONFIG, mapper.createName(null));
     }
 
     private List<NameMapper<ValidationStrategy>> getNameMappers()
@@ -143,13 +140,6 @@ public class ExtValCoreConfigurationCustomValidationStrategyToMetaDataTransforme
                 FactoryNames.META_DATA_TRANSFORMER_FACTORY, NameMapperAwareFactory.class);
 
         return ((MockMetaDataTransformerFactory) result).getRegisteredNameMapperList();
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomValidationStrategyToMetaDataTransformerNameMapperClassNameTestCase.class);
     }
 
 }

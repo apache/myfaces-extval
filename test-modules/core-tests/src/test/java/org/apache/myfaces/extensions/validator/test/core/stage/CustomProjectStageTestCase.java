@@ -21,53 +21,49 @@ package org.apache.myfaces.extensions.validator.test.core.stage;
 import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class CustomProjectStageTestCase extends AbstractExValCoreTestCase
 {
     private static final String PROJECT_STAGE = "javax.faces.PROJECT_STAGE";
     
-    public CustomProjectStageTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(CustomProjectStageTestCase.class);
-    }
-
+    @Test
     public void testDevelopmentStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "Dev");
-        assertTrue(CustomProjectStage.is(CustomProjectStage.Dev));
+        Assert.assertTrue(CustomProjectStage.is(CustomProjectStage.Dev));
     }
 
+    @Test
     public void testTestStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "Test");
-        assertTrue(CustomProjectStage.is(CustomProjectStage.Test));
+        Assert.assertTrue(CustomProjectStage.is(CustomProjectStage.Test));
     }
 
+    @Test
     public void testProductionStage()
     {
         servletContext.addInitParameter(PROJECT_STAGE, "Prod");
-        assertTrue(CustomProjectStage.is(CustomProjectStage.Prod));
+        Assert.assertTrue(CustomProjectStage.is(CustomProjectStage.Prod));
     }
 
+    @Test
     public void testDefaultStage()
     {
-        assertTrue(ProjectStage.is(JsfProjectStage.Production.getValue()));
+        Assert.assertTrue(ProjectStage.is(JsfProjectStage.Production.getValue()));
     }
 
+    @Test
     public void testWrongDefaultStage1()
     {
-        assertFalse(CustomProjectStage.is(CustomProjectStage.Dev));
+        Assert.assertFalse(CustomProjectStage.is(CustomProjectStage.Dev));
     }
 
+    @Test
     public void testWrongDefaultStage2()
     {
-        assertFalse(CustomProjectStage.is(CustomProjectStage.Test));
+        Assert.assertFalse(CustomProjectStage.is(CustomProjectStage.Test));
     }
 }

@@ -20,10 +20,8 @@ package org.apache.myfaces.extensions.validator.test.propval.constraintsource;
 
 import javax.faces.application.FacesMessage;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.model.ConstraintSourceAware5Bean;
+import org.junit.Test;
 
 /**
  * EXTVAL-83
@@ -32,23 +30,15 @@ import org.apache.myfaces.extensions.validator.test.propval.constraintsource.mod
  * @author Rudy De busscher
  */
 public class ConstraintSourceAwareValidation5TestCase extends
-AbstractConstraintSourceTestCase<ConstraintSourceAware5Bean>
+        AbstractConstraintSourceTestCase<ConstraintSourceAware5Bean>
 {
-    public ConstraintSourceAwareValidation5TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation5TestCase.class);
-    }
 
     protected ConstraintSourceAware5Bean getBeanToTest()
     {
         return new ConstraintSourceAware5Bean();
     }
 
+    @Test
     public void testMethodBasedTargetPropertyIdAnnotation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -63,6 +53,7 @@ AbstractConstraintSourceTestCase<ConstraintSourceAware5Bean>
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testFieldBasedTargetPropertyIdAnnotation()
     {
         createValueBindingForComponent(this.inputComponent2, "#{testBean.property2}");

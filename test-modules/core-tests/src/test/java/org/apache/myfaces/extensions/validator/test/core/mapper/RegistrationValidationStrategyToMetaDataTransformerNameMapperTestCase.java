@@ -28,28 +28,14 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.metadata.transformer.mapper.*;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockMetaDataTransformerFactory;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 public class RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationValidationStrategyToMetaDataTransformerNameMapperTestCase.class);
-    }
+    @Test
     public void testValidationStrategyToMetaDataTransformerMapperInitialization()
     {
         ExtValUtils.registerValidationStrategyToMetaDataTransformerNameMapper(

@@ -25,6 +25,9 @@ import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.crossval.DefaultExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.crossval.ExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.apache.myfaces.test.runners.NamedRunner;
+import org.apache.myfaces.test.runners.TestPerClassLoaderRunner;
+import org.junit.runner.RunWith;
 
 /**
  * 
@@ -32,13 +35,16 @@ import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCa
  * since v4
  *
  */
+@RunWith(value = TestPerClassLoaderRunner.class)
 public abstract class ExtValCrossValidationConfigurationTestCase extends AbstractExValCoreTestCase
 {
 
-    public ExtValCrossValidationConfigurationTestCase(String name)
+
+    protected String getName()
     {
-        super(name);
+        return NamedRunner.getTestMethodName();
     }
+
 
     protected boolean needXmlParameters()
     {

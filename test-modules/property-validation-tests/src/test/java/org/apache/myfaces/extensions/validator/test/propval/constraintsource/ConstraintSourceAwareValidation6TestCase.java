@@ -1,7 +1,5 @@
 package org.apache.myfaces.extensions.validator.test.propval.constraintsource;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomConstraintSource;
@@ -9,6 +7,7 @@ import org.apache.myfaces.extensions.validator.test.propval.constraintsource.cus
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomTargetProperty;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.custom.CustomTargetPropertyId;
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.model.ConstraintSourceAware6Bean;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 import java.lang.annotation.Annotation;
@@ -16,15 +15,6 @@ import java.lang.annotation.Annotation;
 public class ConstraintSourceAwareValidation6TestCase extends
         AbstractConstraintSourceTestCase<ConstraintSourceAware6Bean>
 {
-    public ConstraintSourceAwareValidation6TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation6TestCase.class);
-    }
 
     protected ConstraintSourceAware6Bean getBeanToTest()
     {
@@ -62,6 +52,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
         };
     }
 
+    @Test
     public void testCustomAnnotations1()
     {
         createValueBindingForComponent(this.inputComponent1,
@@ -77,6 +68,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testCustomAnnotations2()
     {
         createValueBindingForComponent(this.inputComponent2,
@@ -92,6 +84,7 @@ public class ConstraintSourceAwareValidation6TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testCustomAnnotations3()
     {
         createValueBindingForComponent(this.inputComponent3,

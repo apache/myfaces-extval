@@ -21,17 +21,16 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAwareBean;
 import org.apache.myfaces.extensions.validator.test.core.config.support.CustomTargetProperty;
 import org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils;
 import org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -41,11 +40,6 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
  */
 public class ExtValCoreConfigurationTargetPropertyAnnotationTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationTargetPropertyAnnotationTestCase(String name)
-    {
-        super(name);
-    }
-
     @Override
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
@@ -67,40 +61,37 @@ public class ExtValCoreConfigurationTargetPropertyAnnotationTestCase extends Ext
         }
     }
 
+    @Test
     public void testTargetPropertyAnnotationDefault() throws Exception
     {
         Method method = ReflectionUtils.getMethod(ConstraintSourceUtils.class, "getTargetPropertyMetaData",
                 PropertyStorage.class, Class.class, String.class);
-        assertNotNull(method);
+        Assert.assertNotNull(method);
         PropertyStorage storage = ReflectionUtils.getPropertyStorage();
         Annotation target = (Annotation) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 storage, ConstraintSourceAwareBean.class, "property3");
 
-        assertEquals("test1", ExtValAnnotationUtils.extractValueOf(target, Object.class));
+        Assert.assertEquals("test1", ExtValAnnotationUtils.extractValueOf(target, Object.class));
 
-        assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method, storage,
+        Assert.assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method, storage,
                 ConstraintSourceAwareBean.class, "property4"));
     }
 
+    @Test
     public void testTargetPropertyAnnotationCustomConfig() throws Exception
     {
         Method method = ReflectionUtils.getMethod(ConstraintSourceUtils.class, "getTargetPropertyMetaData",
                 PropertyStorage.class, Class.class, String.class);
-        assertNotNull(method);
+        Assert.assertNotNull(method);
         PropertyStorage storage = ReflectionUtils.getPropertyStorage();
         Annotation target = (Annotation) ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method,
                 storage, ConstraintSourceAwareBean.class, "property4");
 
-        assertEquals("test2", ExtValAnnotationUtils.extractValueOf(target, Object.class));
+        Assert.assertEquals("test2", ExtValAnnotationUtils.extractValueOf(target, Object.class));
 
-        assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method, storage,
+        Assert.assertNull(ReflectionUtils.invokeMethodOfClass(ConstraintSourceUtils.class, method, storage,
                 ConstraintSourceAwareBean.class, "property3"));
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationTargetPropertyAnnotationTestCase.class);
-    }
 
 }

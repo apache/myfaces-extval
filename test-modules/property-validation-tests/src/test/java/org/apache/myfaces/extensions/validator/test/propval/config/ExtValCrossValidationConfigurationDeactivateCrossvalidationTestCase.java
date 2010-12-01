@@ -30,12 +30,11 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.webapp.FacesServlet;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.crossval.DefaultExtValCrossValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.crossval.ExtValCrossValidationModuleConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -46,11 +45,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCrossValidationConfigurationDeactivateCrossvalidationTestCase extends
         ExtValCrossValidationConfigurationTestCase
 {
-
-    public ExtValCrossValidationConfigurationDeactivateCrossvalidationTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected void addInitializationParameters()
@@ -78,27 +72,30 @@ public class ExtValCrossValidationConfigurationDeactivateCrossvalidationTestCase
         };
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationDeactivateCrossvalidationDefault()
     {
         executeBeforePhaseOfCrossValidationPhaseListener();
         // PhaseIdPhaseListener from core and CrossValidationPhaseListener
-        assertEquals(2, getPhaseListeners().size());
+        Assert.assertEquals(2, getPhaseListeners().size());
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationDeactivateCrossvalidationWebXml()
     {
         executeBeforePhaseOfCrossValidationPhaseListener();
 
         // PhaseIdPhaseListener from core
-        assertEquals(1, getPhaseListeners().size());
+        Assert.assertEquals(1, getPhaseListeners().size());
     }
 
+    @Test
     public void testExtValBaseValidationConfigurationDeactivateCrossvalidationCustomConfig()
     {
         executeBeforePhaseOfCrossValidationPhaseListener();
 
         // PhaseIdPhaseListener from core
-        assertEquals(1, getPhaseListeners().size());
+        Assert.assertEquals(1, getPhaseListeners().size());
 
     }
 
@@ -134,12 +131,6 @@ public class ExtValCrossValidationConfigurationDeactivateCrossvalidationTestCase
         currentLifecycle = lifecycleFactory.getLifecycle(currentId);
         return Arrays.asList(currentLifecycle.getPhaseListeners());
 
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCrossValidationConfigurationDeactivateCrossvalidationTestCase.class);
     }
 
 }

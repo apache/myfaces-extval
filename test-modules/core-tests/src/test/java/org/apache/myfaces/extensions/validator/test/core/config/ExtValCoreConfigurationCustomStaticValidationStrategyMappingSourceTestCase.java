@@ -21,15 +21,14 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.DefaultValidationStrategyFactory;
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -40,11 +39,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomStaticValidationStrategyMappingSourceTestCase extends
         ExtValCoreConfigurationTestCase
 {
-
-    public ExtValCoreConfigurationCustomStaticValidationStrategyMappingSourceTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomValidationStrategy implements ValidationStrategy
     {
@@ -102,32 +96,28 @@ public class ExtValCoreConfigurationCustomStaticValidationStrategyMappingSourceT
         }
     }
 
+    @Test
     public void testCustomStaticValidationStrategyMappingSourceDefault()
     {
         DefaultValidationStrategyFactory validationStrategyFactory = new DefaultValidationStrategyFactory();
         // Something that isn't available, so should return null.
-        assertNull(validationStrategyFactory.create("UnitTest"));
+        Assert.assertNull(validationStrategyFactory.create("UnitTest"));
     }
 
+    @Test
     public void testCustomStaticValidationStrategyMappingSourceWebXml()
     {
         DefaultValidationStrategyFactory validationStrategyFactory = new DefaultValidationStrategyFactory();
-        assertEquals(CustomValidationStrategy.class.getName(), validationStrategyFactory.create("UnitTest").getClass()
+        Assert.assertEquals(CustomValidationStrategy.class.getName(), validationStrategyFactory.create("UnitTest").getClass()
                 .getName());
     }
 
+    @Test
     public void testCustomStaticValidationStrategyMappingSourceCustomConfig()
     {
         DefaultValidationStrategyFactory validationStrategyFactory = new DefaultValidationStrategyFactory();
-        assertEquals(Custom2ValidationStrategy.class.getName(), validationStrategyFactory.create("UnitTest").getClass()
+        Assert.assertEquals(Custom2ValidationStrategy.class.getName(), validationStrategyFactory.create("UnitTest").getClass()
                 .getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomStaticValidationStrategyMappingSourceTestCase.class);
     }
 
 }

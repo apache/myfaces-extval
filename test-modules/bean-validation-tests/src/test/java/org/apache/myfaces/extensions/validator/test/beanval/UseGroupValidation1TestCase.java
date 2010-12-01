@@ -18,31 +18,22 @@
  */
 package org.apache.myfaces.extensions.validator.test.beanval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.beanval.view.UseGroupValidationTestCase1PageBean;
 import org.apache.myfaces.extensions.validator.test.beanval.model.SimulatedUserInformation;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTestCase<UseGroupValidationTestCase1PageBean>
 {
-    public UseGroupValidation1TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(UseGroupValidation1TestCase.class);
-    }
 
     protected UseGroupValidationTestCase1PageBean getBeanToTest()
     {
         return new UseGroupValidationTestCase1PageBean();
     }
 
+    @Test
     public void testGroup1AwareValidation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
@@ -60,6 +51,7 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testGroup1AndGroup2AwareValidation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model2.property1}");
@@ -77,6 +69,7 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testGroup2AndGroup3AwareValidationWithWrongViewId()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model3.property1}");
@@ -93,6 +86,7 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
         checkMessageCount(0);
     }
 
+    @Test
     public void testGroup2AndGroup3AwareValidationWithCorrectViewId1()
     {
         FacesContext.getCurrentInstance().getViewRoot().setViewId("/pages/page1.xhtml");
@@ -111,6 +105,7 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testGroup2AndGroup3AwareValidationWithCorrectViewId2()
     {
         FacesContext.getCurrentInstance().getViewRoot().setViewId("/pages/page2.xhtml");
@@ -129,6 +124,7 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testGroup2AwareValidationWithRoleAdmin()
     {
         createRequestScopedBean("currentUser", new SimulatedUserInformation("admin"));
@@ -147,6 +143,7 @@ public class UseGroupValidation1TestCase extends BaseBeanValPropertyValidationTe
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testGroup2AndGroup3AwareValidationWithRoleUser()
     {
         createRequestScopedBean("currentUser", new SimulatedUserInformation("user"));

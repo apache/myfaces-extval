@@ -21,18 +21,18 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import junit.framework.Test;
 
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.storage.PropertyStorage;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAware2MetaDataBean;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAwareBean;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAwareMetaDataBean;
 import org.apache.myfaces.extensions.validator.test.core.config.support.CustomConstraintSource;
 import org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -42,10 +42,6 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
  */
 public class ExtValCoreConfigurationConstraintSourceAnnotationTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationConstraintSourceAnnotationTestCase(String name)
-    {
-        super(name);
-    }
 
     @Override
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
@@ -68,6 +64,7 @@ public class ExtValCoreConfigurationConstraintSourceAnnotationTestCase extends E
         }
     }
 
+    @Test
     public void testConstraintSourceAnnotationDefault()
     {
         // Using the ConstraintSourceUtils.resolveMappedConstraintSourceFor
@@ -75,37 +72,34 @@ public class ExtValCoreConfigurationConstraintSourceAnnotationTestCase extends E
 
         Method method = ReflectionUtils.tryToGetMethod(ConstraintSourceUtils.class, "findMappedClass",
                 PropertyStorage.class, Class.class, String.class);
-        assertNotNull(method);
+        Assert.assertNotNull(method);
         method.setAccessible(true);
         Object[] args = new Object[3];
         args[0] = ReflectionUtils.getPropertyStorage();
         args[1] = ConstraintSourceAwareBean.class;
         args[2] = "property2";
         Object result = ReflectionUtils.tryToInvokeMethodOfClass(ConstraintSourceUtils.class, method, args);
-        assertNotNull(result);
-        assertEquals(ConstraintSourceAwareMetaDataBean.class, result);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ConstraintSourceAwareMetaDataBean.class, result);
 
     }
 
+    @Test
     public void testConstraintSourceAnnotationCustomConfig()
     {
         Method method = ReflectionUtils.tryToGetMethod(ConstraintSourceUtils.class, "findMappedClass",
                 PropertyStorage.class, Class.class, String.class);
-        assertNotNull(method);
+        Assert.assertNotNull(method);
         method.setAccessible(true);
         Object[] args = new Object[3];
         args[0] = ReflectionUtils.getPropertyStorage();
         args[1] = ConstraintSourceAwareBean.class;
         args[2] = "property2";
         Object result = ReflectionUtils.tryToInvokeMethodOfClass(ConstraintSourceUtils.class, method, args);
-        assertNotNull(result);
-        assertEquals(ConstraintSourceAware2MetaDataBean.class, result);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(ConstraintSourceAware2MetaDataBean.class, result);
     }
 
-    public static Test suite()
-    {
 
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationConstraintSourceAnnotationTestCase.class);
-    }
 
 }

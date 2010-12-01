@@ -27,9 +27,8 @@ import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponen
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
@@ -37,21 +36,7 @@ import java.util.List;
 
 public class RegistrationValidationExceptionInterceptorTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationValidationExceptionInterceptorTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationValidationExceptionInterceptorTestCase.class);
-    }
-
+    @Test
     public void testValidationExceptionInterceptorInitialization()
     {
         ExtValContext.getContext().addValidationExceptionInterceptor(new TestValidationExceptionInterceptor1());

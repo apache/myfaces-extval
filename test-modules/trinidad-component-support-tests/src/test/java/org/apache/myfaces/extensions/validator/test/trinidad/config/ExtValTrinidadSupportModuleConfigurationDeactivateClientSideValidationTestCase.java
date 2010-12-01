@@ -20,14 +20,13 @@ package org.apache.myfaces.extensions.validator.test.trinidad.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.trinidad.DefaultExtValTrinidadSupportModuleConfiguration;
 import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportModuleConfiguration;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,11 +37,6 @@ import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportMod
 public class ExtValTrinidadSupportModuleConfigurationDeactivateClientSideValidationTestCase extends
         ExtValTrinidadSupportModuleConfigurationTestCase
 {
-
-    public ExtValTrinidadSupportModuleConfigurationDeactivateClientSideValidationTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValTrinidadSupportModuleConfiguration extends
             DefaultExtValTrinidadSupportModuleConfiguration
@@ -73,30 +67,26 @@ public class ExtValTrinidadSupportModuleConfigurationDeactivateClientSideValidat
         return new CustomExtValTrinidadSupportModuleConfiguration();
     }
 
+    @Test
     public void testDeactivateClientSideValidationDefault()
     {
         List<ComponentInitializer> compInitializer = ExtValContext.getContext().getComponentInitializers();
-        assertEquals(1, compInitializer.size());
+        Assert.assertEquals(1, compInitializer.size());
 
     }
 
+    @Test
     public void testDeactivateClientSideValidationWebXml()
     {
         List<ComponentInitializer> compInitializer = ExtValContext.getContext().getComponentInitializers();
-        assertEquals(0, compInitializer.size());
+        Assert.assertEquals(0, compInitializer.size());
     }
 
+    @Test
     public void testDeactivateClientSideValidationCustomConfig()
     {
         List<ComponentInitializer> compInitializer = ExtValContext.getContext().getComponentInitializers();
-        assertEquals(0, compInitializer.size());
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(
-                ExtValTrinidadSupportModuleConfigurationDeactivateClientSideValidationTestCase.class);
-
+        Assert.assertEquals(0, compInitializer.size());
     }
 
 }

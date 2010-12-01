@@ -2,28 +2,19 @@ package org.apache.myfaces.extensions.validator.test.propval.constraintsource;
 
 import javax.faces.application.FacesMessage;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.apache.myfaces.extensions.validator.test.propval.constraintsource.model.ConstraintSourceAware3Bean;
+import org.junit.Test;
 
 public class ConstraintSourceAwareValidation3TestCase extends
 AbstractConstraintSourceTestCase<ConstraintSourceAware3Bean>
 {
-    public ConstraintSourceAwareValidation3TestCase(String name)
-    {
-        super(name);
-    }
-    public static Test suite()
-    {
-        return new TestSuite(ConstraintSourceAwareValidation3TestCase.class);
-    }
 
     protected ConstraintSourceAware3Bean getBeanToTest()
     {
         return new ConstraintSourceAware3Bean();
     }
 
+    @Test
     public void testMissingBasedConstraintSource()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.property1}");
@@ -37,6 +28,7 @@ AbstractConstraintSourceTestCase<ConstraintSourceAware3Bean>
         checkMessageCount(0);
     }
 
+    @Test
     public void testFieldBasedConstraintSource()
     {
         createValueBindingForComponent(this.inputComponent2, "#{testBean.property2}");

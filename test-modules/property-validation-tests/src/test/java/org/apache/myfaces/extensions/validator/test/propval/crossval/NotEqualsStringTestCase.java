@@ -18,10 +18,9 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.crossval.CrossValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
+import org.junit.Test;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
@@ -37,23 +36,17 @@ public class NotEqualsStringTestCase extends AbstractPropertyValidationTestCase
 
     UIViewRoot rootComponent = null;
 
-    public NotEqualsStringTestCase(String name)
+    public NotEqualsStringTestCase()
     {
-        super(name);
         inputComponent1 = null;
         inputComponent2 = null;
         rootComponent = null;
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(NotEqualsStringTestCase.class);
-    }
-
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         NotEqualsStringTestBean bean = new NotEqualsStringTestBean();
         createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean", bean);
@@ -70,12 +63,7 @@ public class NotEqualsStringTestCase extends AbstractPropertyValidationTestCase
         inputComponent2.setId("input2");
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testEqualsCaseSensitiveSame() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -94,6 +82,7 @@ public class NotEqualsStringTestCase extends AbstractPropertyValidationTestCase
 
     }
 
+    @Test
     public void testEqualsCaseSensitiveDifferent() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -112,6 +101,7 @@ public class NotEqualsStringTestCase extends AbstractPropertyValidationTestCase
 
     }
 
+    @Test
     public void testEqualsCaseInsensitiveSame() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");
@@ -130,6 +120,7 @@ public class NotEqualsStringTestCase extends AbstractPropertyValidationTestCase
 
     }
 
+    @Test
     public void testEqualsCaseInsensitiveDifferent() throws Exception
     {
         createValueBinding(inputComponent1, "value", "#{testBean.property1}");

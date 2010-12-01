@@ -18,13 +18,12 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.message.resolver.DefaultValidationErrorMessageResolver;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -46,11 +45,6 @@ public class ExtValCoreConfigurationCustomMessageBundleBaseNameTestCase extends 
 
         }
     };
-
-    public ExtValCoreConfigurationCustomMessageBundleBaseNameTestCase(String name)
-    {
-        super(name);
-    }
 
     protected void addInitializationParameters()
     {
@@ -85,33 +79,30 @@ public class ExtValCoreConfigurationCustomMessageBundleBaseNameTestCase extends 
         }
     }
 
+    @Test
     public void testCustomMessageBundleBaseNameDefault() throws Exception
     {
         VisibleDefaultValidationErrorMessageResolver messageResolver = new VisibleDefaultValidationErrorMessageResolver();
-        assertNull(messageResolver.getCustomBaseName());
+        Assert.assertNull(messageResolver.getCustomBaseName());
 
     }
 
+    @Test
     public void testCustomMessageBundleBaseNameWebXml() throws Exception
     {
 
         VisibleDefaultValidationErrorMessageResolver messageResolver = new VisibleDefaultValidationErrorMessageResolver();
 
-        assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_TEST, messageResolver.getCustomBaseName());
+        Assert.assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_TEST, messageResolver.getCustomBaseName());
     }
 
+    @Test
     public void testCustomMessageBundleBaseNameCustomConfig() throws Exception
     {
         VisibleDefaultValidationErrorMessageResolver messageResolver = new VisibleDefaultValidationErrorMessageResolver();
 
-        assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_CONFIG, messageResolver.getCustomBaseName());
+        Assert.assertEquals(ORG_APACHE_MYFACES_EXTENSIONS_VALIDATOR_CONFIG, messageResolver.getCustomBaseName());
 
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomMessageBundleBaseNameTestCase.class);
     }
 
 }

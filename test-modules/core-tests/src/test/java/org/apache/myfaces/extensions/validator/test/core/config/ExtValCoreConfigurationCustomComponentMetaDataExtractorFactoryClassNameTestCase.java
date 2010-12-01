@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.validator.test.core.config;
 
 import java.util.Map;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -31,7 +29,9 @@ import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.ComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.DefaultComponentMetaDataExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 /**
  * 
@@ -42,10 +42,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomComponentMetaDataExtractorFactoryClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationCustomComponentMetaDataExtractorFactoryClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomComponentMetaDataExtractorFactory implements ComponentMetaDataExtractorFactory
     {
@@ -115,35 +111,31 @@ public class ExtValCoreConfigurationCustomComponentMetaDataExtractorFactoryClass
         }
     }
 
+    @Test
     public void testCustomComponentMetaDataExtractorFactoryClassNameDefault()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY,
                 ComponentMetaDataExtractorFactory.class);
-        assertEquals(DefaultComponentMetaDataExtractorFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(DefaultComponentMetaDataExtractorFactory.class.getName(), factory.getClass().getName());
     }
 
+    @Test
     public void testCustomComponentMetaDataExtractorFactoryClassNameWebXml()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY,
                 ComponentMetaDataExtractorFactory.class);
-        assertEquals(CustomComponentMetaDataExtractorFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(CustomComponentMetaDataExtractorFactory.class.getName(), factory.getClass().getName());
     }
 
+    @Test
     public void testCustomComponentMetaDataExtractorFactoryClassNameCustomConfig()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.COMPONENT_META_DATA_EXTRACTOR_FACTORY,
                 ComponentMetaDataExtractorFactory.class);
-        assertEquals(Custom2ComponentMetaDataExtractorFactory.class.getName(), factory.getClass().getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomComponentMetaDataExtractorFactoryClassNameTestCase.class);
+        Assert.assertEquals(Custom2ComponentMetaDataExtractorFactory.class.getName(), factory.getClass().getName());
     }
 
 }

@@ -23,14 +23,13 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -40,10 +39,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCoreConfigurationDeactivateComponentInitializationTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDeactivateComponentInitializationTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomComponentInitializer implements ComponentInitializer
     {
@@ -56,7 +51,7 @@ public class ExtValCoreConfigurationDeactivateComponentInitializationTestCase ex
     }
 
     @Override
-    protected void setUp() throws Exception
+    public void setUp() throws Exception
     {
 
         super.setUp();
@@ -98,26 +93,23 @@ public class ExtValCoreConfigurationDeactivateComponentInitializationTestCase ex
         }
     }
 
+    @Test
     public void testDeactivateComponentInitializationDefault()
     {
 
-        assertFalse(ExtValContext.getContext().getComponentInitializers().isEmpty());
+        Assert.assertFalse(ExtValContext.getContext().getComponentInitializers().isEmpty());
     }
 
+    @Test
     public void testDeactivateComponentInitializationWebXml()
     {
-        assertTrue(ExtValContext.getContext().getComponentInitializers().isEmpty());
+        Assert.assertTrue(ExtValContext.getContext().getComponentInitializers().isEmpty());
     }
 
+    @Test
     public void testDeactivateComponentInitializationCustomConfig()
     {
-        assertTrue(ExtValContext.getContext().getComponentInitializers().isEmpty());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateComponentInitializationTestCase.class);
+        Assert.assertTrue(ExtValContext.getContext().getComponentInitializers().isEmpty());
     }
 
 }

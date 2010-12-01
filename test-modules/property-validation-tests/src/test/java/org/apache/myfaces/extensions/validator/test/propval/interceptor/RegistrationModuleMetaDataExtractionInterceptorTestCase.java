@@ -25,29 +25,16 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 public class RegistrationModuleMetaDataExtractionInterceptorTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationModuleMetaDataExtractionInterceptorTestCase(String name)
-    {
-        super(name);
-    }
 
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationModuleMetaDataExtractionInterceptorTestCase.class);
-    }
 
+    @Test
     public void testModulePropertyValidationInterceptorInitialization()
     {
         resetExtValContext();
@@ -62,6 +49,7 @@ public class RegistrationModuleMetaDataExtractionInterceptorTestCase extends Abs
         checkModuleAwarePropertyValidationInterceptorsWithTestModule();
         checkModuleAwarePropertyValidationInterceptorsWithPropertyValidationModule();
     }
+
 
     private void checkGlobalOnlyPropertyValidationInterceptors()
     {

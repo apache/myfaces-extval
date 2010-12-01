@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.stage;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.core.*;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.faces.context.FacesContext;
 
@@ -34,18 +34,7 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
     private static final String CUSTOM_PROD = "custom_prod";
     private static final String CUSTOM_TEST = "custom_test";
 
-    public IndependentProjectStageTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(IndependentProjectStageTestCase.class);
-    }
-
-    
-    @Override
+   @Override
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
         return new DefaultExtValCoreConfiguration()
@@ -116,53 +105,61 @@ public class IndependentProjectStageTestCase extends AbstractExValCoreTestCase
         }
     }
 
+    @Test
     public void testDevelopmentStage()
     {
         servletContext.addInitParameter(INDEPENDENT_PROJECT_STAGE, CUSTOM_DEV);
-        assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_DEV)));
+        Assert.assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_DEV)));
     }
 
+    @Test
     public void testTestStage()
     {
         servletContext.addInitParameter(INDEPENDENT_PROJECT_STAGE, CUSTOM_TEST);
-        assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_TEST)));
+        Assert.assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_TEST)));
     }
 
+    @Test
     public void testFallbackStage()
     {
         servletContext.addInitParameter(INDEPENDENT_PROJECT_STAGE, "SystemTest");
-        assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
-        assertTrue(ProjectStage.is(ProjectStage.createStageName("SystemTest")));
-        assertTrue(ProjectStage.is(JsfProjectStage.SystemTest.getValue()));
+        Assert.assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
+        Assert.assertTrue(ProjectStage.is(ProjectStage.createStageName("SystemTest")));
+        Assert.assertTrue(ProjectStage.is(JsfProjectStage.SystemTest.getValue()));
     }
 
+    @Test
     public void testOverrideJsfStage()
     {
         servletContext.addInitParameter(INDEPENDENT_PROJECT_STAGE, CUSTOM_DEV);
         servletContext.addInitParameter(JSF_PROJECT_STAGE, "SystemTest");
 
-        assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
-        assertTrue(ProjectStage.is(JsfProjectStage.SystemTest.getValue()));
+        Assert.assertTrue(JsfProjectStage.is(JsfProjectStage.SystemTest));
+        Assert.assertTrue(ProjectStage.is(JsfProjectStage.SystemTest.getValue()));
     }
 
+    @Test
     public void testProductionStage()
     {
         servletContext.addInitParameter(INDEPENDENT_PROJECT_STAGE, CUSTOM_PROD);
-        assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_PROD)));
+        Assert.assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_PROD)));
     }
 
+    @Test
     public void testDefaultStage()
     {
-        assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_PROD)));
+        Assert.assertTrue(ProjectStage.is(ProjectStage.createStageName(CUSTOM_PROD)));
     }
 
+    @Test
     public void testWrongDefaultStage1()
     {
-        assertFalse(ProjectStage.is(ProjectStage.createStageName(CUSTOM_DEV)));
+        Assert.assertFalse(ProjectStage.is(ProjectStage.createStageName(CUSTOM_DEV)));
     }
 
+    @Test
     public void testWrongDefaultStage2()
     {
-        assertFalse(ProjectStage.is(ProjectStage.createStageName(CUSTOM_TEST)));
+        Assert.assertFalse(ProjectStage.is(ProjectStage.createStageName(CUSTOM_TEST)));
     }
 }

@@ -20,29 +20,21 @@ package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.view.ModelValidationTestCase1PageBean;
 import org.apache.myfaces.extensions.validator.test.beanval.model.SimulatedUserInformation;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
+
 
 import javax.faces.application.FacesMessage;
 
 public class ModelValidation1TestCase extends
         BaseBeanValPropertyValidationTestCase<ModelValidationTestCase1PageBean>
 {
-    public ModelValidation1TestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(ModelValidation1TestCase.class);
-    }
 
     protected ModelValidationTestCase1PageBean getBeanToTest()
     {
         return new ModelValidationTestCase1PageBean();
     }
 
+    @Test
     public void testModelValidation()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
@@ -60,6 +52,7 @@ public class ModelValidation1TestCase extends
         checkMessageCount(0);
     }
 
+    @Test
     public void testModelViolationWithGlobalViolationMessageViaProperty()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
@@ -78,6 +71,7 @@ public class ModelValidation1TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testModelViolationWithInlineViolationMessageViaProperty()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model2.property1}");
@@ -99,6 +93,7 @@ public class ModelValidation1TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testModelViolationWithGlobalViolationMessageViaField()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model3.property1}");
@@ -117,6 +112,7 @@ public class ModelValidation1TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testModelViolationWithInlineViolationMessageViaField()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model4.property1}");
@@ -138,6 +134,7 @@ public class ModelValidation1TestCase extends
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR, FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testModelViolationWithAdminRole()
     {
         createRequestScopedBean("currentUser", new SimulatedUserInformation("admin"));
@@ -157,6 +154,7 @@ public class ModelValidation1TestCase extends
         checkMessageCount(0);
     }
 
+    @Test
     public void testModelViolationWithUserRole()
     {
         createRequestScopedBean("currentUser", new SimulatedUserInformation("user"));

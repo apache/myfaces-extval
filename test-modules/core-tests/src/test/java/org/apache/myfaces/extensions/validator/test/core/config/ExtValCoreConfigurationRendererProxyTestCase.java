@@ -22,13 +22,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
-import junit.framework.Test;
 
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProxy;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -42,10 +42,6 @@ public class ExtValCoreConfigurationRendererProxyTestCase extends ExtValCoreConf
     private static final String WEB_XML = "Web.xml";
     private static final String CUSTOM_CONFIG = "Custom Config";
 
-    public ExtValCoreConfigurationRendererProxyTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValRendererProxy extends ExtValRendererProxy
     {
@@ -121,31 +117,29 @@ public class ExtValCoreConfigurationRendererProxyTestCase extends ExtValCoreConf
 
     }
 
+    @Test
     public void testRendererProxyDefault()
     {
         RenderKit kit = facesContext.getRenderKit();
         Renderer renderer = kit.getRenderer("javax.faces.Input", "javax.faces.Text");
-        assertEquals("test", renderer.convertClientId(facesContext, "test"));
+        Assert.assertEquals("test", renderer.convertClientId(facesContext, "test"));
     }
 
+    @Test
     public void testRendererProxyWebXml()
     {
         RenderKit kit = facesContext.getRenderKit();
         Renderer renderer = kit.getRenderer("javax.faces.Input", "javax.faces.Text");
-        assertEquals(WEB_XML, renderer.convertClientId(facesContext, "test"));
+        Assert.assertEquals(WEB_XML, renderer.convertClientId(facesContext, "test"));
     }
 
+    @Test
     public void testRendererProxyCustomConfig()
     {
         RenderKit kit = facesContext.getRenderKit();
         Renderer renderer = kit.getRenderer("javax.faces.Input", "javax.faces.Text");
-        assertEquals(CUSTOM_CONFIG, renderer.convertClientId(facesContext, "test"));
+        Assert.assertEquals(CUSTOM_CONFIG, renderer.convertClientId(facesContext, "test"));
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationRendererProxyTestCase.class);
-    }
 
 }

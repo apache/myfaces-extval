@@ -22,8 +22,6 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -31,7 +29,8 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Default
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterExtractorFactory;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractor;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameterExtractorFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -42,11 +41,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomValidationParameterExtractorClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-
-    public ExtValCoreConfigurationCustomValidationParameterExtractorClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomValidationParameterExtractor implements ValidationParameterExtractor
     {
@@ -131,30 +125,26 @@ public class ExtValCoreConfigurationCustomValidationParameterExtractorClassNameT
         }
     }
 
+    @Test
     public void testCustomValidationParameterExtractorClassNameDefault()
     {
         ValidationParameterExtractorFactory factory = new DefaultValidationParameterExtractorFactory();
-        assertEquals(DefaultValidationParameterExtractor.class.getName(), factory.create().getClass().getName());
+        Assert.assertEquals(DefaultValidationParameterExtractor.class.getName(), factory.create().getClass().getName());
 
     }
 
+    @Test
     public void testCustomValidationParameterExtractorClassNameWebXml()
     {
         ValidationParameterExtractorFactory factory = new DefaultValidationParameterExtractorFactory();
-        assertEquals(CustomValidationParameterExtractor.class.getName(), factory.create().getClass().getName());
+        Assert.assertEquals(CustomValidationParameterExtractor.class.getName(), factory.create().getClass().getName());
     }
 
+    @Test
     public void testCustomValidationParameterExtractorClassNameCustomConfig()
     {
         ValidationParameterExtractorFactory factory = new DefaultValidationParameterExtractorFactory();
-        assertEquals(Custom2ValidationParameterExtractor.class.getName(), factory.create().getClass().getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationCustomValidationParameterExtractorClassNameTestCase.class);
+        Assert.assertEquals(Custom2ValidationParameterExtractor.class.getName(), factory.create().getClass().getName());
     }
 
 }

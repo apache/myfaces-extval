@@ -276,6 +276,6 @@
     </repositories>
 
     <properties>
-        <jsf.version>1.2.4</jsf.version>
+        <jsf.version>1.2.8</jsf.version>
     </properties>
 </project>

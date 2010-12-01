@@ -23,29 +23,14 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrder;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformation;
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 public class RegistrationMetaDataExtractionInterceptorTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationMetaDataExtractionInterceptorTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationMetaDataExtractionInterceptorTestCase.class);
-    }
-
+    @Test
     public void testMetaDataExtractionInterceptorInitialization()
     {
         ExtValContext.getContext().addMetaDataExtractionInterceptor(new TestMetaDataExtractionInterceptor1000());

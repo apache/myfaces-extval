@@ -24,14 +24,13 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -42,10 +41,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomComponentInitializerClassNameTestCase extends ExtValCoreConfigurationTestCase
 {
 
-    public ExtValCoreConfigurationCustomComponentInitializerClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomComponentInitializer implements ComponentInitializer
     {
@@ -97,29 +92,27 @@ public class ExtValCoreConfigurationCustomComponentInitializerClassNameTestCase 
         }
     }
 
+    @Test
     public void testCustomComponentInitializerClassNameDefault()
     {
-        assertEquals(0, ExtValContext.getContext().getComponentInitializers().size());
+        Assert.assertEquals(0, ExtValContext.getContext().getComponentInitializers().size());
     }
 
+    @Test
     public void testCustomComponentInitializerClassNameWebXml()
     {
         List<ComponentInitializer> initializers = ExtValContext.getContext().getComponentInitializers();
-        assertEquals(1, initializers.size());
-        assertEquals(CustomComponentInitializer.class.getName(), initializers.get(0).getClass().getName());
+        Assert.assertEquals(1, initializers.size());
+        Assert.assertEquals(CustomComponentInitializer.class.getName(), initializers.get(0).getClass().getName());
     }
 
+    @Test
     public void testCustomComponentInitializerClassNameCustomConfig()
     {
         List<ComponentInitializer> initializers = ExtValContext.getContext().getComponentInitializers();
-        assertEquals(1, initializers.size());
-        assertEquals(Custom2ComponentInitializer.class.getName(), initializers.get(0).getClass().getName());
+        Assert.assertEquals(1, initializers.size());
+        Assert.assertEquals(Custom2ComponentInitializer.class.getName(), initializers.get(0).getClass().getName());
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomComponentInitializerClassNameTestCase.class);
-    }
 
 }

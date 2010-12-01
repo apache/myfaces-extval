@@ -18,14 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -36,10 +35,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationDisableClientSideValidationValidationParameterTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationDisableClientSideValidationValidationParameterTestCase(String name)
-    {
-        super(name);
-    }
 
     public static interface CustomDisableClientSideValidation extends DisableClientSideValidation
     {
@@ -69,25 +64,20 @@ public class ExtValCoreConfigurationDisableClientSideValidationValidationParamet
         }
     }
 
+    @Test
     public void testDisableClientSideValidationValidationParameterDefault()
     {
 
-        assertEquals(DisableClientSideValidation.class.getName(), ((Class) ExtValContext.getContext()
+        Assert.assertEquals(DisableClientSideValidation.class.getName(), ((Class) ExtValContext.getContext()
                 .getGlobalProperty(DisableClientSideValidation.class.getName())).getName());
     }
 
+    @Test
     public void testDisableClientSideValidationValidationParameterCustomConfig()
     {
 
-        assertEquals(CustomDisableClientSideValidation.class.getName(), ((Class) ExtValContext.getContext()
+        Assert.assertEquals(CustomDisableClientSideValidation.class.getName(), ((Class) ExtValContext.getContext()
                 .getGlobalProperty(DisableClientSideValidation.class.getName())).getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(
-                ExtValCoreConfigurationDisableClientSideValidationValidationParameterTestCase.class);
     }
 
 }

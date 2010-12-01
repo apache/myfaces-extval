@@ -22,8 +22,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.html.HtmlInputText;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -31,8 +29,9 @@ import org.apache.myfaces.extensions.validator.core.ExtValModuleConfiguration;
 import org.apache.myfaces.extensions.validator.core.el.DefaultELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.property.PropertyDetails;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.test.core.config.support.ConstraintSourceAwareBean;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -43,11 +42,6 @@ import org.apache.myfaces.extensions.validator.test.core.config.support.Constrai
 public class ExtValCoreConfigurationDeactivateElResolverTestCase extends ExtValCoreConfigurationTestCase
 {
     private UIInput uiComponent;
-
-    public ExtValCoreConfigurationDeactivateElResolverTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomDefaultELHelper extends DefaultELHelper
     {
@@ -61,9 +55,8 @@ public class ExtValCoreConfigurationDeactivateElResolverTestCase extends ExtValC
     }
 
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
         uiComponent = new HtmlInputText();
         ConstraintSourceAwareBean bean = new ConstraintSourceAwareBean();
 
@@ -127,33 +120,30 @@ public class ExtValCoreConfigurationDeactivateElResolverTestCase extends ExtValC
         }
     }
 
+    @Test
     public void testDeactivateElResolverDefault()
     {
         ELHelper elHelper = new CustomDefaultELHelper();
-        assertNotNull(elHelper.getPropertyDetailsOfValueBinding(uiComponent));
+        Assert.assertNotNull(elHelper.getPropertyDetailsOfValueBinding(uiComponent));
 
     }
 
+    @Test
     public void testDeactivateElResolverWebXml()
     {
         ELHelper elHelper = new CustomDefaultELHelper();
         // When deactivated, the getPropertyDetailsViaReflectionFallback method
         // is called which returns null in our custom version
-        assertNull(elHelper.getPropertyDetailsOfValueBinding(uiComponent));
+        Assert.assertNull(elHelper.getPropertyDetailsOfValueBinding(uiComponent));
     }
 
+    @Test
     public void testDeactivateElResolverCustomConfig()
     {
         ELHelper elHelper = new CustomDefaultELHelper();
         // When deactivated, the getPropertyDetailsViaReflectionFallback method
         // is called which returns null in our custom version
-        assertNull(elHelper.getPropertyDetailsOfValueBinding(uiComponent));
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationDeactivateElResolverTestCase.class);
+        Assert.assertNull(elHelper.getPropertyDetailsOfValueBinding(uiComponent));
     }
 
 }

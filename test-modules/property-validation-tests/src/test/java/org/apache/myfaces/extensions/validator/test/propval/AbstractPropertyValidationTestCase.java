@@ -27,10 +27,6 @@ import javax.faces.event.PhaseId;
 
 public abstract class AbstractPropertyValidationTestCase extends AbstractExValTestCase
 {
-    public AbstractPropertyValidationTestCase(String name)
-    {
-        super(name);
-    }
 
     protected void invokeStartupListeners()
     {

@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -27,7 +25,8 @@ import org.apache.myfaces.extensions.validator.core.factory.DefaultFactoryFinder
 import org.apache.myfaces.extensions.validator.core.factory.FactoryFinder;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.DefaultValidationParameterFactory;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,10 +37,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValCoreConfigurationCustomValidationParameterFactoryClassNameTestCase extends
         ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationCustomValidationParameterFactoryClassNameTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomValidationParameterFactory extends DefaultValidationParameterFactory
     {
@@ -87,32 +82,29 @@ public class ExtValCoreConfigurationCustomValidationParameterFactoryClassNameTes
         }
     }
 
+    @Test
     public void testCustomValidationParameterFactoryClassNameDefault()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.VALIDATION_PARAMETER_FACTORY, Object.class);
-        assertEquals(DefaultValidationParameterFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(DefaultValidationParameterFactory.class.getName(), factory.getClass().getName());
 
     }
 
+    @Test
     public void testCustomValidationParameterFactoryClassNameWebXml()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.VALIDATION_PARAMETER_FACTORY, Object.class);
-        assertEquals(CustomValidationParameterFactory.class.getName(), factory.getClass().getName());
+        Assert.assertEquals(CustomValidationParameterFactory.class.getName(), factory.getClass().getName());
     }
 
+    @Test
     public void testCustomValidationParameterFactoryClassNameCustomConfig()
     {
         FactoryFinder factoryFinder = DefaultFactoryFinder.getInstance();
         Object factory = factoryFinder.getFactory(FactoryNames.VALIDATION_PARAMETER_FACTORY, Object.class);
-        assertEquals(Custom2ValidationParameterFactory.class.getName(), factory.getClass().getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationCustomValidationParameterFactoryClassNameTestCase.class);
+        Assert.assertEquals(Custom2ValidationParameterFactory.class.getName(), factory.getClass().getName());
     }
 
 }

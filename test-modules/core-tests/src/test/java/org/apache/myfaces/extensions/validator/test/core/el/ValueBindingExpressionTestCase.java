@@ -20,9 +20,8 @@ package org.apache.myfaces.extensions.validator.test.core.el;
 
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Gerhard Petracek
@@ -30,28 +29,8 @@ import junit.framework.Assert;
  */
 public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
 {
-    public ValueBindingExpressionTestCase(String name)
-    {
-        super(name);
-    }
 
-    public static Test suite()
-    {
-        return new TestSuite(ValueBindingExpressionTestCase.class);
-    }
-
-    @Override
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testStandardSyntax() throws Exception
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{bean1.property1}");
@@ -74,6 +53,7 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
         Assert.assertEquals("property1", valueBindingExpression.getProperty());
     }
 
+    @Test
     public void testStandardSyntaxReplaceProperty() throws Exception
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{bean1.property1}");
@@ -103,6 +83,7 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
         Assert.assertEquals("property2", valueBindingExpression.getProperty());
     }
 
+    @Test
     public void testStandardSyntaxAddProperty() throws Exception
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{bean1.bean2}");
@@ -132,6 +113,7 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
         Assert.assertEquals("property1", valueBindingExpression.getProperty());
     }
 
+    @Test
     public void testFaceletsCustomComponentSyntax() throws Exception
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{entity[fieldName]}");
@@ -141,6 +123,7 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
         Assert.assertEquals("fieldName", valueBindingExpression.getProperty());
     }
 
+    @Test
     public void testFaceletsCustomComponentSyntaxReplaceProperty() throws Exception
     {
         ValueBindingExpression valueBindingExpression = new ValueBindingExpression("#{entity[fieldName]}");
@@ -153,6 +136,7 @@ public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase
         Assert.assertEquals("newFieldName", valueBindingExpression.getProperty());
     }
 
+    @Test
     public void testComplexMapSyntax() throws Exception
     {
         ValueBindingExpression valueBindingExpression

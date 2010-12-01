@@ -28,29 +28,15 @@ import org.apache.myfaces.extensions.validator.core.validation.message.resolver.
 import org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import org.apache.myfaces.extensions.validator.test.base.mock.MockMessageResolverFactory;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.Assert;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 public class RegistrationValidationStrategyToMessageResolverNameMapperTestCase extends AbstractExValCoreTestCase
 {
-    /**
-     * Construct a new instance of the test.
-     *
-     * @param name Name of the test.
-     */
-    public RegistrationValidationStrategyToMessageResolverNameMapperTestCase(String name)
-    {
-        super(name);
-    }
 
-    public static Test suite()
-    {
-        return new TestSuite(RegistrationValidationStrategyToMessageResolverNameMapperTestCase.class);
-    }
-
+    @Test
     public void testValidationStrategyToMessageResolverNameMapperInitialization()
     {
         ExtValUtils.registerValidationStrategyToMessageResolverNameMapper(

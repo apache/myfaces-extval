@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.test;
 
 import org.apache.myfaces.extensions.validator.test.base.AbstractExValTestCase;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +28,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 //just a test for the mock impl.
 public class SupportForMapPropertyTest extends AbstractExValTestCase
@@ -37,16 +36,6 @@ public class SupportForMapPropertyTest extends AbstractExValTestCase
 
     UIViewRoot rootComponent = null;
 
-    public SupportForMapPropertyTest(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(SupportForMapPropertyTest.class);
-    }
-
     @Override
     protected void invokeStartupListeners()
     {
@@ -54,9 +43,9 @@ public class SupportForMapPropertyTest extends AbstractExValTestCase
     }
 
     @Override
-    protected void setUp() throws Exception
+    protected void setUpTestCase()
     {
-        super.setUp();
+        super.setUpTestCase();
         TestBean bean = new TestBean();
         createValueBinding(null, "value", "#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean", bean);
@@ -71,12 +60,7 @@ public class SupportForMapPropertyTest extends AbstractExValTestCase
 
     }
 
-    @Override
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-    }
-
+    @Test
     public void testMapPropertyFromScreen()
     {
         createValueBinding(inputComponent1, "value", "#{testBean.mapProperty['Key']}");

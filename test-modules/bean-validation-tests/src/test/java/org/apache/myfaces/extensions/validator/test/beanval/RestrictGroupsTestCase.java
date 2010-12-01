@@ -20,29 +20,20 @@ package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.view.RestrictGroupValidationTestCase1PageBean;
 import org.apache.myfaces.extensions.validator.test.beanval.model.SimulatedUserInformation;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 public class RestrictGroupsTestCase extends BaseBeanValPropertyValidationTestCase<RestrictGroupValidationTestCase1PageBean>
 {
-    public RestrictGroupsTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(RestrictGroupsTestCase.class);
-    }
 
     protected RestrictGroupValidationTestCase1PageBean getBeanToTest()
     {
         return new RestrictGroupValidationTestCase1PageBean();
     }
 
+    @Test
     public void testRestrictedGroup()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model1.property1}");
@@ -56,6 +47,7 @@ public class RestrictGroupsTestCase extends BaseBeanValPropertyValidationTestCas
         checkMessageCount(0);
     }
 
+    @Test
     public void testRestrictedGroupWithAdminRole()
     {
         createRequestScopedBean("currentUser", new SimulatedUserInformation("admin"));
@@ -74,6 +66,7 @@ public class RestrictGroupsTestCase extends BaseBeanValPropertyValidationTestCas
         checkMessageCount(0);
     }
 
+    @Test
     public void testRestrictedGroupWithUserRole()
     {
         createRequestScopedBean("currentUser", new SimulatedUserInformation("user"));
@@ -93,6 +86,7 @@ public class RestrictGroupsTestCase extends BaseBeanValPropertyValidationTestCas
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testRestrictedGroupWithCorrectViewId()
     {
         FacesContext.getCurrentInstance().getViewRoot().setViewId("/pages/groupValidationAwarePage.xhtml");
@@ -111,6 +105,7 @@ public class RestrictGroupsTestCase extends BaseBeanValPropertyValidationTestCas
         checkMessageCount(0);
     }
 
+    @Test
     public void testRestrictedGroupWithWrongViewId()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model3.property1}");
@@ -128,6 +123,7 @@ public class RestrictGroupsTestCase extends BaseBeanValPropertyValidationTestCas
         checkMessageSeverities(FacesMessage.SEVERITY_ERROR);
     }
 
+    @Test
     public void testUsedAndRestrictedGroup()
     {
         createValueBindingForComponent(this.inputComponent1, "#{testBean.model4.property1}");

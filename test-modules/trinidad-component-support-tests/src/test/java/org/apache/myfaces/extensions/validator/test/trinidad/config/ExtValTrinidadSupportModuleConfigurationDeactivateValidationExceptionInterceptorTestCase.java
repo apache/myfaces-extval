@@ -20,14 +20,13 @@ package org.apache.myfaces.extensions.validator.test.trinidad.config;
 
 import java.util.List;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.trinidad.DefaultExtValTrinidadSupportModuleConfiguration;
 import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportModuleConfiguration;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -38,11 +37,6 @@ import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportMod
 public class ExtValTrinidadSupportModuleConfigurationDeactivateValidationExceptionInterceptorTestCase extends
         ExtValTrinidadSupportModuleConfigurationTestCase
 {
-
-    public ExtValTrinidadSupportModuleConfigurationDeactivateValidationExceptionInterceptorTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValTrinidadSupportModuleConfiguration extends
             DefaultExtValTrinidadSupportModuleConfiguration
@@ -73,6 +67,7 @@ public class ExtValTrinidadSupportModuleConfigurationDeactivateValidationExcepti
         return new CustomExtValTrinidadSupportModuleConfiguration();
     }
 
+    @Test
     public void testDeactivateValidationExceptionInterceptorDefault()
     {
         List<ValidationExceptionInterceptor> interceptors = ExtValContext.getContext()
@@ -80,32 +75,27 @@ public class ExtValTrinidadSupportModuleConfigurationDeactivateValidationExcepti
         // ViolationSeverityValidationExceptionInterceptor and
         // HtmlCoreComponentsValidationExceptionInterceptor from core and
         // trinidad one.
-        assertEquals(4, interceptors.size());
+        Assert.assertEquals(4, interceptors.size());
     }
 
+    @Test
     public void testDeactivateValidationExceptionInterceptorWebXml()
     {
         List<ValidationExceptionInterceptor> interceptors = ExtValContext.getContext()
                 .getValidationExceptionInterceptors();
         // ViolationSeverityValidationExceptionInterceptor and
         // HtmlCoreComponentsValidationExceptionInterceptor from core.
-        assertEquals(3, interceptors.size());
+        Assert.assertEquals(3, interceptors.size());
     }
 
+    @Test
     public void testDeactivateValidationExceptionInterceptorCustomConfig()
     {
         List<ValidationExceptionInterceptor> interceptors = ExtValContext.getContext()
                 .getValidationExceptionInterceptors();
         // ViolationSeverityValidationExceptionInterceptor and
         // HtmlCoreComponentsValidationExceptionInterceptor from core.
-        assertEquals(3, interceptors.size());
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(
-                ExtValTrinidadSupportModuleConfigurationDeactivateValidationExceptionInterceptorTestCase.class);
-
+        Assert.assertEquals(3, interceptors.size());
     }
 
 }

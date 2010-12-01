@@ -18,14 +18,13 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.core.DefaultExtValCoreConfiguration;
 
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -35,11 +34,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
  */
 public class ExtValCoreConfigurationViolationSeverityTestCase extends ExtValCoreConfigurationTestCase
 {
-    public ExtValCoreConfigurationViolationSeverityTestCase(String name)
-    {
-        super(name);
-    }
-
     @Override
     protected ExtValCoreConfiguration getCustomExtValCoreConfiguration()
     {
@@ -68,22 +62,18 @@ public class ExtValCoreConfigurationViolationSeverityTestCase extends ExtValCore
 
     }
 
+    @Test
     public void testViolationSeverityDefault()
     {
-        assertEquals(ViolationSeverity.class.getName(), ((Class) ExtValContext.getContext().getGlobalProperty(
+        Assert.assertEquals(ViolationSeverity.class.getName(), ((Class) ExtValContext.getContext().getGlobalProperty(
                 ViolationSeverity.class.getName())).getName());
     }
 
+    @Test
     public void testViolationSeverityCustomConfig()
     {
-        assertEquals(CustomViolationSeverity.class.getName(), ((Class) ExtValContext.getContext().getGlobalProperty(
+        Assert.assertEquals(CustomViolationSeverity.class.getName(), ((Class) ExtValContext.getContext().getGlobalProperty(
                 ViolationSeverity.class.getName())).getName());
-    }
-
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValCoreConfigurationViolationSeverityTestCase.class);
     }
 
 }

@@ -19,28 +19,20 @@
 package org.apache.myfaces.extensions.validator.test.beanval;
 
 import org.apache.myfaces.extensions.validator.test.beanval.model.TestCase1Bean;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 import javax.faces.application.FacesMessage;
 
 public class LabelReplacementTestCase extends BaseBeanValPropertyValidationTestCase<TestCase1Bean>
 {
-    public LabelReplacementTestCase(String name)
-    {
-        super(name);
-    }
-
-    public static Test suite()
-    {
-        return new TestSuite(LabelReplacementTestCase.class);
-    }
 
     protected TestCase1Bean getBeanToTest()
     {
         return new TestCase1Bean();
     }
 
+    @Test
     public void testLabelReplacement()
     {
         String labelText = "property1";
@@ -53,7 +45,7 @@ public class LabelReplacementTestCase extends BaseBeanValPropertyValidationTestC
         checkMessageCount(1);
 
         FacesMessage facesMessage = ((FacesMessage)facesContext.getMessages().next());
-        assertTrue(facesMessage.getSummary().startsWith(labelText));
-        assertTrue(facesMessage.getDetail().startsWith(labelText));
+        Assert.assertTrue(facesMessage.getSummary().startsWith(labelText));
+        Assert.assertTrue(facesMessage.getDetail().startsWith(labelText));
     }
 }

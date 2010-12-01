@@ -18,11 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.test.trinidad.config;
 
-import junit.framework.Test;
-
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
 import org.apache.myfaces.extensions.validator.trinidad.DefaultExtValTrinidadSupportModuleConfiguration;
 import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportModuleConfiguration;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -33,11 +32,6 @@ import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportMod
 public class ExtValTrinidadSupportModuleConfigurationCustomTestCase extends
         ExtValTrinidadSupportModuleConfigurationTestCase
 {
-
-    public ExtValTrinidadSupportModuleConfigurationCustomTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValTrinidadSupportModuleConfiguration extends
             DefaultExtValTrinidadSupportModuleConfiguration
@@ -70,20 +64,17 @@ public class ExtValTrinidadSupportModuleConfigurationCustomTestCase extends
         return null;
     }
 
+    @Test
     public void testExtValTrinidadSupportModuleConfigurationCustomDefault()
     {
-        assertFalse(ExtValTrinidadSupportModuleConfiguration.get().deactivateClientSideValidation());
+        Assert.assertFalse(ExtValTrinidadSupportModuleConfiguration.get().deactivateClientSideValidation());
     }
 
+    @Test
     public void testExtValTrinidadSupportModuleConfigurationCustomCustomConfig()
     {
-        assertTrue(ExtValTrinidadSupportModuleConfiguration.get().deactivateClientSideValidation());
+        Assert.assertTrue(ExtValTrinidadSupportModuleConfiguration.get().deactivateClientSideValidation());
 
-    }
-
-    public static Test suite()
-    {
-        return new ClassLoaderTestSuite(ExtValTrinidadSupportModuleConfigurationCustomTestCase.class);
     }
 
 }

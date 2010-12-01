@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.baseval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
@@ -34,6 +32,8 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticInMemoryConfiguration;
 import org.apache.myfaces.extensions.validator.core.initializer.configuration.StaticConfigurationNames;
 import org.apache.myfaces.extensions.validator.core.validation.parameter.ViolationSeverity;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
 {
@@ -43,25 +43,18 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
 
     private CustomSeverityTestBean bean = null;
 
-    public CustomSeverity1TestCase(String name)
+    public CustomSeverity1TestCase()
     {
-        super(name);
         inputComponent = null;
         rootComponent = null;
         bean = null;
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(CustomSeverity1TestCase.class);
-    }
-
     @SuppressWarnings({"UnusedDeclaration"})
     @Override
-    protected void setUp() throws Exception
+    public void setUpTestCase()
     {
-        super.setUp();
-        bean = new CustomSeverityTestBean();
+            bean = new CustomSeverityTestBean();
         ValueBinding vb = application.createValueBinding("#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean", bean);
 
@@ -75,14 +68,15 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
     }
 
     @Override
-    protected void tearDown() throws Exception
+    protected void resetTestCase()
     {
-        super.tearDown();
+        super.resetTestCase();
         inputComponent = null;
         rootComponent = null;
         bean = null;
     }
 
+    @Test
     public void testCustomValidationParameterViaGlobalProperty() throws Exception
     {
         ExtValContext.getContext()
@@ -94,7 +88,7 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
 
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
 
         assertNavigationBlocked(false);
 
@@ -102,6 +96,7 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
         checkMessageSeverities(FacesMessage.SEVERITY_WARN);
     }
 
+    @Test
     public void testCustomValidationParameterViaStaticConfig() throws Exception
     {
         StaticInMemoryConfiguration config = new StaticInMemoryConfiguration();
@@ -116,7 +111,7 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
 
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
 
         assertNavigationBlocked(false);
 
@@ -124,6 +119,7 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
         checkMessageSeverities(FacesMessage.SEVERITY_WARN);
     }
 
+    @Test
     public void testUnknownValidationParameter() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.name}");
@@ -132,7 +128,7 @@ public class CustomSeverity1TestCase extends AbstractPropertyValidationTestCase
 
         inputComponent.validate(facesContext);
 
-        assertFalse(inputComponent.isValid());
+        Assert.assertFalse(inputComponent.isValid());
 
         assertNavigationBlocked(true);
 

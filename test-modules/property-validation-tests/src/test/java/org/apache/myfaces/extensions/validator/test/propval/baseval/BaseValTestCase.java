@@ -18,9 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.baseval;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputText;
@@ -28,6 +25,8 @@ import javax.faces.el.ValueBinding;
 
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
 import org.apache.myfaces.extensions.validator.test.propval.BaseValTestBean;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Leonardo Uribe
@@ -40,24 +39,17 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
 
     BaseValTestBean bean = null;
 
-    public BaseValTestCase(String name)
+    public BaseValTestCase()
     {
-        super(name);
         inputComponent = null;
         rootComponent = null;
         bean = null;
     }
 
-    public static Test suite()
-    {
-        return new TestSuite(BaseValTestCase.class);
-    }
-
     @SuppressWarnings({"UnusedDeclaration"})
     @Override
-    protected void setUp() throws Exception
+    public void setUpTestCase()
     {
-        super.setUp();
         bean = new BaseValTestBean();
         ValueBinding vb = application.createValueBinding("#{testBean}");
         facesContext.getExternalContext().getRequestMap().put("testBean", bean);
@@ -72,14 +64,15 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
     }
 
     @Override
-    protected void tearDown() throws Exception
+    protected void resetTestCase()
     {
-        super.tearDown();
+        super.resetTestCase();
         inputComponent = null;
         rootComponent = null;
         bean = null;
     }
 
+    @Test
     public void testNameRequiredFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.name}");
@@ -88,10 +81,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
 
         inputComponent.validate(facesContext);
 
-        assertFalse(inputComponent.isValid());
+        Assert.assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
 
+    @Test
     public void testName1LenghtMaxFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.name1}");
@@ -102,10 +96,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertFalse(inputComponent.isValid());
+        Assert.assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
 
+    @Test
     public void testName1LenghtCorrect() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.name1}");
@@ -116,10 +111,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
         checkMessageCount(0);
     }
 
+    @Test
     public void testName1LenghtMinFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.name1}");
@@ -130,10 +126,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertFalse(inputComponent.isValid());
+        Assert.assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
 
+    @Test
     public void testName1NoLenght() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.name1}");
@@ -144,10 +141,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
         checkMessageCount(0);
     }
 
+    @Test
     public void testPatternNameFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.patternName}");
@@ -158,10 +156,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertFalse(inputComponent.isValid());
+        Assert.assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
 
+    @Test
     public void testPatternNoName() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.patternName}");
@@ -172,10 +171,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
         checkMessageCount(0);
     }
 
+    @Test
     public void testPatternNameCorrect() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.patternName}");
@@ -186,10 +186,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
         checkMessageCount(0);
     }
 
+    @Test
     public void testDoubleValueFail() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.doubleValue1}");
@@ -200,10 +201,11 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertFalse(inputComponent.isValid());
+        Assert.assertFalse(inputComponent.isValid());
         checkMessageCount(1);
     }
 
+    @Test
     public void testDoubleValueCorrect() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.doubleValue1}");
@@ -214,14 +216,15 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
         checkMessageCount(0);
-        assertEquals(200d, inputComponent.getValue());
+        Assert.assertEquals(200d, inputComponent.getValue());
 
         inputComponent.updateModel(facesContext);
-        assertEquals(200d, bean.getDoubleValue1());
+        Assert.assertEquals(Double.valueOf(200), bean.getDoubleValue1());
     }
 
+    @Test
     public void testDoubleNoValue() throws Exception
     {
         createValueBinding(inputComponent, "value", "#{testBean.doubleValue1}");
@@ -232,7 +235,7 @@ public class BaseValTestCase extends AbstractPropertyValidationTestCase
         //validate
         inputComponent.validate(facesContext);
 
-        assertTrue(inputComponent.isValid());
+        Assert.assertTrue(inputComponent.isValid());
         checkMessageCount(0);
     }
 }

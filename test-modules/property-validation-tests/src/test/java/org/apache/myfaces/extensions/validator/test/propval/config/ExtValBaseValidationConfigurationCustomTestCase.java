@@ -18,11 +18,10 @@
  */
 package org.apache.myfaces.extensions.validator.test.propval.config;
 
-import junit.framework.Test;
-
 import org.apache.myfaces.extensions.validator.baseval.DefaultExtValBaseValidationModuleConfiguration;
 import org.apache.myfaces.extensions.validator.baseval.ExtValBaseValidationModuleConfiguration;
-import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSuite;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * 
@@ -33,10 +32,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 public class ExtValBaseValidationConfigurationCustomTestCase extends ExtValBaseValidationConfigurationTestCase
 {
 
-    public ExtValBaseValidationConfigurationCustomTestCase(String name)
-    {
-        super(name);
-    }
 
     public static class CustomExtValBaseValidationModuleConfiguration extends
             DefaultExtValBaseValidationModuleConfiguration
@@ -70,19 +65,15 @@ public class ExtValBaseValidationConfigurationCustomTestCase extends ExtValBaseV
         return null;
     }
 
+    @Test
     public void testExtValBaseValidationModuleConfigurationCustomDefault()
     {
-        assertFalse(ExtValBaseValidationModuleConfiguration.get().deactivateJpaBasedValidation());
+        Assert.assertFalse(ExtValBaseValidationModuleConfiguration.get().deactivateJpaBasedValidation());
     }
 
     public void testExtValBaseValidationModuleConfigurationCustomCustomConfig()
     {
-        assertTrue(ExtValBaseValidationModuleConfiguration.get().deactivateJpaBasedValidation());
+        Assert.assertTrue(ExtValBaseValidationModuleConfiguration.get().deactivateJpaBasedValidation());
     }
 
-    public static Test suite()
-    {
-
-        return new ClassLoaderTestSuite(ExtValBaseValidationConfigurationCustomTestCase.class);
-    }
 }
