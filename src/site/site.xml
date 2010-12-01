@@ -51,6 +51,7 @@
 
     <menu name="Contents" inherit="top">
         <item name="Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
+        <item name="Download ExtVal"         href="http://myfaces.apache.org/extensions/validator/download.html"/>
         <item name="ExtVal for JSF 1.1"       href="http://myfaces.apache.org/extensions/validator11/index.html" collapse="true">
             <item name="dummy"        href="dummy"/>
         </item>
@@ -67,7 +68,7 @@
     </menu>
 	
     <menu name="Documentation">
-      <item name="Wiki"         href="http://wiki.apache.org/myfaces/Extensions/Validator/"/>
+      <item name="Wiki"         href="https://cwiki.apache.org/confluence/display/EXTVAL/Index"/>
       <item name="Javadoc"      href="http://myfaces.apache.org/extensions/validator20/javadoc.html"/>
     </menu>
 
