@@ -11,4 +11,4 @@ It has a pluggable architecture, so it is possible to add new validation modules
 
     MyFaces Extensions Validator is compatible with JSF 1.x and JSF 2.x. All versions require Java 1.5+
 
-    Further information are available at the {{{http://wiki.apache.org/myfaces/Extensions/Validator/}Wiki}}.
+    Further information are available at the {{{https://cwiki.apache.org/confluence/display/EXTVAL/Index}Wiki}}.
