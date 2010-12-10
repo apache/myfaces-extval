@@ -21,12 +21,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <packaging>pom</packaging>
-
+    
     <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
     <artifactId>validation-modules-project</artifactId>
-
     <name>MyFaces Extensions-Validator Validation-Modules</name>
     <version>1.2.5-SNAPSHOT</version>
+
+    <!-- important for site paths -->
+    <url>http://myfaces.apache.org/extensions/validator12/validation-modules-project/</url>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
