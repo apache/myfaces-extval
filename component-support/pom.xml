@@ -28,6 +28,9 @@
     <name>MyFaces Extensions-Validator Component-Support Modules</name>
     <version>2.0.5-SNAPSHOT</version>
 
+    <!-- important for site paths -->
+    <url>http://myfaces.apache.org/extensions/validator20/component-support-modules-project/</url>
+
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
         <artifactId>myfaces-extval-module</artifactId>
