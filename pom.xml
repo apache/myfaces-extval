@@ -31,7 +31,7 @@
     <version>1.1.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Module</name>
-    <url>http://myfaces.apache.org/extensions/validator11</url>
+    <url>http://myfaces.apache.org/extensions/validator11/</url>  <!-- must end with / for correct site paths -->
     
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/validator/branches/branch_for_jsf_1_1</connection>
@@ -93,6 +93,7 @@
 
         <pluginManagement>
             <plugins>
+
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.2</version>
@@ -104,6 +105,13 @@
                         </archive>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
