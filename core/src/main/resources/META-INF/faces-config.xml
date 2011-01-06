@@ -22,6 +22,7 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
               version="1.2">
     <factory>
+        <lifecycle-factory>org.apache.myfaces.extensions.validator.core.startup.ExtValLifecycleFactoryWrapper</lifecycle-factory>
         <render-kit-factory>org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKitFactory</render-kit-factory>
     </factory>
 
