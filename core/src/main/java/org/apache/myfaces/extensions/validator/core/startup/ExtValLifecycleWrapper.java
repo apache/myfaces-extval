@@ -29,6 +29,7 @@ import javax.faces.lifecycle.Lifecycle;
 /**
  * Wrapper around a Lifecycle that initialise the ExtVal PhaseListeners before an execution of any
  * phase (except the render view). Solution for the issue EXTVAL-123.
+ *
  * @author Rudy De Busscher
  * @author Gerard Petracek
  * @since x.x.5
@@ -38,10 +39,11 @@ class ExtValLifecycleWrapper extends Lifecycle
 {
     private Lifecycle wrapped;
 
+    private boolean initialized = false;
+
     ExtValLifecycleWrapper(Lifecycle wrapped)
     {
         this.wrapped = wrapped;
-
     }
 
     public void addPhaseListener(PhaseListener phaseListener)
@@ -52,7 +54,10 @@ class ExtValLifecycleWrapper extends Lifecycle
     public void execute(FacesContext facesContext)
             throws FacesException
     {
-        initializeExtVal();
+        if(!this.initialized)
+        {
+            initializeExtVal();
+        }
         wrapped.execute(facesContext);
     }
 
@@ -75,9 +80,9 @@ class ExtValLifecycleWrapper extends Lifecycle
     }
 
 
-    private void initializeExtVal()
+    private synchronized void initializeExtVal()
     {
-
+        //we don't need further checks - startup listeners are deregistered after the invocation.
         for (PhaseListener currentPhaseListener : getPhaseListeners())
         {
             if (currentPhaseListener instanceof AbstractStartupListener)
@@ -85,6 +90,6 @@ class ExtValLifecycleWrapper extends Lifecycle
                 currentPhaseListener.beforePhase(null);
             }
         }
+        this.initialized = true;
     }
-
 }
