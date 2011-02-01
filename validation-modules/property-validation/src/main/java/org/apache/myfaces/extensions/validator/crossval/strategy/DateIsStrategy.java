@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.crossval.strategy;
 
 import org.apache.myfaces.extensions.validator.crossval.annotation.DateIs;
-import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
 import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
 import org.apache.myfaces.extensions.validator.baseval.annotation.SkipValidationSupport;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
@@ -27,6 +26,7 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 import javax.faces.context.FacesContext;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.MissingResourceException;
 import java.util.logging.Level;
@@ -41,6 +41,8 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
 {
     protected static final String TOO_EARLY = "early";
     protected static final String TOO_LATE = "late";
+    protected static final String TOO_EARLY_SAME = "earlyNotSame";
+    protected static final String TOO_LATE_SAME = "lateNotSame";
     protected static final String NOT_EQUAL_DATE_TIME = "not equal";
     protected static final String RESULT_KEY = "result";
     protected static final String COMPARED_VALUE_KEY = "target value";
@@ -53,36 +55,55 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
 
     public boolean isViolation(Object object1, Object object2, DateIs annotation)
     {
-        boolean violationFound;
-
-        if (annotation.type().equals(DateIsType.same))
+        boolean violationFound = false;
+        switch (annotation.type())
         {
-            violationFound = object1 != null && !object1.equals(object2);
+            case before:
+                violationFound = object1 != null && object2 != null &&
+                              (!new Date(((Date) object1).getTime()).before((Date) object2) || object1.equals(object2));
 
-            if (violationFound)
-            {
-                this.violationResultStorage.put(RESULT_KEY, NOT_EQUAL_DATE_TIME);
-            }
-        }
-        else if (annotation.type().equals(DateIsType.before))
-        {
-            violationFound = object1 != null && object2 != null &&
-                            (!new Date(((Date) object1).getTime()).before((Date) object2) || object1.equals(object2));
+                if (violationFound)
+                {
+                    this.violationResultStorage.put(RESULT_KEY, TOO_LATE);
+                }
+                break;
+            case after:
+                violationFound = object1 != null && object2 != null &&
+                               (!new Date(((Date) object1).getTime()).after((Date) object2) || object1.equals(object2));
 
-            if (violationFound)
-            {
-                this.violationResultStorage.put(RESULT_KEY, TOO_LATE);
-            }
-        }
-        else
-        {
-            violationFound = object1 != null && object2 != null &&
-                            (!new Date(((Date) object1).getTime()).after((Date) object2) || object1.equals(object2));
+                if (violationFound)
+                {
+                    this.violationResultStorage.put(RESULT_KEY, TOO_EARLY);
+                }
+                break;
+            case same:
+                violationFound = object1 != null && !object1.equals(object2);
 
-            if (violationFound)
-            {
-                this.violationResultStorage.put(RESULT_KEY, TOO_EARLY);
-            }
+                if (violationFound)
+                {
+                    this.violationResultStorage.put(RESULT_KEY, NOT_EQUAL_DATE_TIME);
+                }
+                break;
+            case beforeOrSame:
+                violationFound = object1 != null && object2 != null &&
+                                new Date(((Date) object1).getTime()).after((Date) object2);
+
+                if (violationFound)
+                {
+                    this.violationResultStorage.put(RESULT_KEY, TOO_LATE_SAME);
+                }
+                break;
+            case afterOrSame:
+                violationFound = object1 != null && object2 != null &&
+                                new Date(((Date) object1).getTime()).before((Date) object2);
+
+                if (violationFound)
+                {
+                    this.violationResultStorage.put(RESULT_KEY, TOO_EARLY_SAME);
+                }
+                break;
+            default:
+                // Nothing to do.
         }
 
         if (violationFound)
@@ -115,9 +136,17 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
         {
             return getNotAfterErrorMsgKey(annotation);
         }
+        else if (TOO_EARLY_SAME.equals(result))
+        {
+            return getNotAfterOrSameErrorMsgKey(annotation);
+        }
         else if (TOO_LATE.equals(result))
         {
             return getNotBeforeErrorMsgKey(annotation);
+        }
+        else if (TOO_LATE_SAME.equals(result))
+        {
+            return getNotBeforeOrSameErrorMsgKey(annotation);
         }
         else
         {
@@ -127,35 +156,47 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
 
     private String reverseResult(String result)
     {
+
         if (TOO_EARLY.equals(result))
         {
             return TOO_LATE;
         }
-        else
+        else if (TOO_EARLY_SAME.equals(result))
+        {
+            return TOO_LATE_SAME;
+        }
+        else if (TOO_LATE_SAME.equals(result))
+        {
+            return TOO_EARLY_SAME;
+        }
+        else if (TOO_LATE.equals(result))
         {
             return TOO_EARLY;
         }
+        return result;
     }
 
     @Override
     protected String getErrorMessageSummary(DateIs annotation, boolean isTargetComponent)
     {
+        /*
         if (!isTargetComponent)
         {
             return super.getErrorMessageSummary(annotation, isTargetComponent);
         }
-
+        */
         return getErrorMessage(getValidationErrorMsgKey(annotation, isTargetComponent), annotation, isTargetComponent);
     }
 
     @Override
     protected String getErrorMessageDetail(DateIs annotation, boolean isTargetComponent)
     {
+        /*
         if (!isTargetComponent)
         {
             return super.getErrorMessageDetail(annotation, isTargetComponent);
         }
-
+        */
         try
         {
             return getErrorMessage(getValidationErrorMsgKey(annotation, isTargetComponent)
@@ -195,8 +236,8 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
     {
         String message = resolveMessage(key);
 
-        DateFormat dateFormat = DateFormat.getDateInstance(annotation.errorMessageDateStyle(),
-            FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        DateFormat dateFormat = getDateFormat(annotation.errorMessageDateStyle(),
+                annotation.errorMessageDatePattern());
 
         String result;
 
@@ -215,6 +256,15 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
         return result;
     }
 
+    private DateFormat getDateFormat(int dateStyle, String datePattern)
+    {
+        if (datePattern == null || datePattern.length() == 0)
+        {
+            return DateFormat.getDateInstance(dateStyle, FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        }
+        return new SimpleDateFormat(datePattern, FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    }
+
     /*
      * private
      */
@@ -227,11 +277,29 @@ public class DateIsStrategy extends AbstractCompareStrategy<DateIs>
         return annotation.validationErrorMsgKey();
     }
 
+    private String getNotAfterOrSameErrorMsgKey(DateIs annotation)
+    {
+        if (annotation.validationErrorMsgKey().equals(""))
+        {
+            return annotation.notAfterOrSameErrorMsgKey();
+        }
+        return annotation.validationErrorMsgKey();
+    }
+
     private String getNotBeforeErrorMsgKey(DateIs annotation)
     {
         if (annotation.validationErrorMsgKey().equals(""))
         {
             return annotation.notBeforeErrorMsgKey();
+        }
+        return annotation.validationErrorMsgKey();
+    }
+
+    private String getNotBeforeOrSameErrorMsgKey(DateIs annotation)
+    {
+        if (annotation.validationErrorMsgKey().equals(""))
+        {
+            return annotation.notBeforeOrSameErrorMsgKey();
         }
         return annotation.validationErrorMsgKey();
     }
