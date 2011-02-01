@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.crossval.annotation;
 
-import org.apache.myfaces.extensions.validator.internal.ToDo;
-import org.apache.myfaces.extensions.validator.internal.Priority;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
@@ -27,9 +25,8 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @author Gerhard Petracek
  * @since 1.x.1
  */
-@ToDo(value = Priority.MEDIUM, description = "beforeOrSame, afterOrSame")
 @UsageInformation(UsageCategory.API)
 public enum DateIsType
 {
-    before, after, same
+    before, after, same, beforeOrSame, afterOrSame
 }

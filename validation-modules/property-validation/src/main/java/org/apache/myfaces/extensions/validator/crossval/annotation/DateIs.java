@@ -57,9 +57,15 @@ public @interface DateIs
 
     String notAfterErrorMsgKey() default "wrong_date_not_after";
 
+    String notBeforeOrSameErrorMsgKey() default "wrong_date_not_before_or_same";
+
+    String notAfterOrSameErrorMsgKey() default "wrong_date_not_after_or_same";
+
     String notEqualErrorMsgKey() default "wrong_date_not_equal";
 
     int errorMessageDateStyle() default DateFormat.MEDIUM;
+
+    String errorMessageDatePattern() default "";
 
     Class<? extends ValidationParameter>[] parameters() default ViolationSeverity.Error.class;
 }
