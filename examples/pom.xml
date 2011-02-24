@@ -28,12 +28,12 @@
     <artifactId>examples-project</artifactId>
 
     <name>MyFaces Extensions-Validator examples project</name>
-    <version>2.0.4-SNAPSHOT</version>
+    <version>2.0.5-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
         <artifactId>myfaces-extval-module</artifactId>
-        <version>2.0.4-SNAPSHOT</version>
+        <version>2.0.5-SNAPSHOT</version>
     </parent>
 
     <repositories>
@@ -66,8 +66,8 @@
     <modules>
         <module>hello_world</module>
         <module>hello_bean-validation</module>
-        <!--module>feature-set_01</module-->
-        <!--module>feature-set_02</module-->
+        <module>feature-set_01</module>
+        <module>feature-set_02</module>
     </modules>
 
     <profiles>
