@@ -54,6 +54,28 @@ public class ValidationStrategyToMetaDataTransformerSubMapperAwareNameMapper
         }
     }
 
+    public void removeNameMapper(Class<? extends NameMapper> nameMapperClass)
+    {
+        List<NameMapper<ValidationStrategy>> nameMappersToRemove =
+                new ArrayList<NameMapper<ValidationStrategy>>(this.subNameMappers.size());
+
+        for(NameMapper<ValidationStrategy> currentSubNameMapper : this.subNameMappers)
+        {
+            if(currentSubNameMapper.getClass().getName().equals(nameMapperClass.getName()))
+            {
+                nameMappersToRemove.add(currentSubNameMapper);
+                //don't break - e.g. to deregister all wrappers...
+                //break;
+            }
+        }
+
+        //do it manually due to the CopyOnWriteArrayList
+        for(NameMapper<ValidationStrategy> currentSubNameMapper : nameMappersToRemove)
+        {
+            this.subNameMappers.remove(currentSubNameMapper);
+        }
+    }
+
     private void sortSubNameMappers()
     {
         List<NameMapper<ValidationStrategy>> sortableList =

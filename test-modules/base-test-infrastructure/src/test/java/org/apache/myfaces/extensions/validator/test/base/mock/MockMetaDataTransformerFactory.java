@@ -33,4 +33,9 @@ public class MockMetaDataTransformerFactory extends DefaultMetaDataTransformerFa
     {
         return super.getNameMapperList();
     }
+
+    public List<NameMapper<ValidationStrategy>> getSubNameMapperList()
+    {
+        return super.getSubNameMapperList();
+    }
 }

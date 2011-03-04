@@ -35,4 +35,10 @@ public interface SubMapperAwareNameMapper<T> extends NameMapper<T>
      * @param nameMapper sub-nameMapper to add
      */
     void addNameMapper(NameMapper<T> nameMapper);
+
+    /**
+     * Deregisters all (sub-)name mappers of the given type
+     * @param nameMapperClass type of the (sub-)name mappers which have to be deregistered
+     */
+    void removeNameMapper(Class<? extends NameMapper> nameMapperClass);
 }
