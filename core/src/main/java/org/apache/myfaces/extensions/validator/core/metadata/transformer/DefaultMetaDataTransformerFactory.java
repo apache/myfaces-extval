@@ -38,6 +38,7 @@ import org.apache.myfaces.extensions.validator.util.NullValueAwareConcurrentHash
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -232,6 +233,22 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
         super.register(validationStrategyNameMapper);
     }
 
+    @Override
+    public void deregister(Class<? extends NameMapper> classToDeregister)
+    {
+        super.deregister(classToDeregister);
+        for (NameMapper<ValidationStrategy> nameMapper
+                : new ArrayList<NameMapper<ValidationStrategy>>(subNameMapperList))
+        {
+
+            if (nameMapper.getClass().equals(classToDeregister))
+            {
+                subNameMapperList.remove(nameMapper);
+            }
+        }
+
+    }
+
     /**
      * it's a very special case due to the missing order in the execution of startup-listeners (phase listeners)
      * packaged in faces-config.xml files of jars
@@ -257,4 +274,11 @@ public class DefaultMetaDataTransformerFactory extends AbstractNameMapperAwareFa
             }
         }
     }
+
+    //just for testing
+    protected List<NameMapper<ValidationStrategy>> getSubNameMapperList()
+    {
+        return this.subNameMapperList;
+    }
 }
+

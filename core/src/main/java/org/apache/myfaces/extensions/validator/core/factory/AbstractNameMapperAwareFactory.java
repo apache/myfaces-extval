@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.factory;
 
+import org.apache.myfaces.extensions.validator.core.Nested;
+import org.apache.myfaces.extensions.validator.core.mapper.SubMapperAwareNameMapper;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
@@ -70,14 +72,32 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
 
     public synchronized void deregister(Class<? extends NameMapper> classToDeregister)
     {
-        Iterator<NameMapper<T>> nameMapperIterator = getNameMapperList().iterator();
-        while(nameMapperIterator.hasNext())
+        boolean subNameMapper = false;
+
+        if (classToDeregister != null && classToDeregister.isAnnotationPresent(Nested.class))
         {
-            if(nameMapperIterator.next().getClass().getName().equals(classToDeregister.getName()))
+            subNameMapper = true;
+        }
+
+        Iterator<NameMapper<T>> nameMapperIterator = getNameMapperList().iterator();
+
+        while (nameMapperIterator.hasNext())
+        {
+            if (subNameMapper)
             {
-                nameMapperIterator.remove();
-                //don't break - e.g. to deregister all wrappers...
-                //break;
+                NameMapper<T> nameMapper = nameMapperIterator.next();
+                if (nameMapper instanceof SubMapperAwareNameMapper)
+                {
+                    ((SubMapperAwareNameMapper) nameMapper).removeNameMapper(classToDeregister);
+                }
+            } else
+            {
+                if (nameMapperIterator.next().getClass().getName().equals(classToDeregister.getName()))
+                {
+                    nameMapperIterator.remove();
+                    //don't break - e.g. to deregister all wrappers...
+                    //break;
+                }
             }
         }
     }
