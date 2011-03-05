@@ -90,7 +90,8 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
                 {
                     ((SubMapperAwareNameMapper) nameMapper).removeNameMapper(classToDeregister);
                 }
-            } else
+            }
+            else
             {
                 if (nameMapperIterator.next().getClass().getName().equals(classToDeregister.getName()))
                 {
