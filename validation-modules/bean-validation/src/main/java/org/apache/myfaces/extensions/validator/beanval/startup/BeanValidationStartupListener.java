@@ -20,11 +20,10 @@ package org.apache.myfaces.extensions.validator.beanval.startup;
 
 import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
-import org.apache.myfaces.extensions.validator.beanval.BeanAwareValidatorFactory;
 import org.apache.myfaces.extensions.validator.beanval.MappedConstraintSourceBeanValidationModuleValidationInterceptor;
+import org.apache.myfaces.extensions.validator.beanval.ValidatorFactoryProxy;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
-import org.apache.myfaces.extensions.validator.beanval.util.BeanValidationUtils;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.mapper.SizeNameMapper;
@@ -72,19 +71,8 @@ public class BeanValidationStartupListener extends AbstractStartupListener
 
     protected void registerValidatorFactory()
     {
-        ValidatorFactory validatorFactory;
-        Object contextAwareValidatorFactory = ExtValUtils.getELHelper().getBean("contextAwareValidatorFactory");
-
-        if(contextAwareValidatorFactory instanceof ValidatorFactory)
-        {
-            validatorFactory = (ValidatorFactory)contextAwareValidatorFactory;
-        }
-        else
-        {
-            validatorFactory = new BeanAwareValidatorFactory(BeanValidationUtils.getDefaultValidatorFactory());
-        }
-
-        ExtValContext.getContext().addGlobalProperty(ValidatorFactory.class.getName(), validatorFactory, false);
+        ExtValContext.getContext()
+                .addGlobalProperty(ValidatorFactory.class.getName(), new ValidatorFactoryProxy(), false);
     }
 
     protected void registerBeanValidationInterceptors()
