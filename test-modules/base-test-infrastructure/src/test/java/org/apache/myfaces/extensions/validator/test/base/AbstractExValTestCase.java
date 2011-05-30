@@ -84,14 +84,6 @@ public abstract class AbstractExValTestCase extends AbstractJsfConfigurableMockT
     }
 
     @Override
-    protected void setFactories() throws Exception
-    {
-        super.setFactories();
-        FactoryFinder.setFactory("javax.faces.application.ApplicationFactory", ExtValMockApplicationFactory.class.getName());
-
-    }
-
-    @Override
     protected void setUpRenderKit() throws Exception
     {
         // Don't call super since we need the ExtValRenderKit and not the Mock one.
@@ -142,20 +134,6 @@ public abstract class AbstractExValTestCase extends AbstractJsfConfigurableMockT
         super.setUp();
 
         applyCustomConfigurations();
-
-        // This triggers already the config object.  So it is possible that you
-        // need to set your custom config also in the getCustomConfigObjects method.
-        final ELHelper defaultElHelper = ExtValUtils.getELHelper();
-        ExtValContext.getContext().getFactoryFinder()
-                .getFactory(FactoryNames.EL_HELPER_FACTORY, AbstractELHelperFactory.class)
-                .setCustomELHelperFactory(new AbstractELHelperFactory()
-                {
-
-                    protected ELHelper createELHelper()
-                    {
-                        return new MockELHelper(defaultElHelper);
-                    }
-                });
 
         final ExtValCoreConfiguration customExtValCoreConfiguration = getCustomExtValCoreConfiguration();
 
