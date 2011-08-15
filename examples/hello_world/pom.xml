@@ -65,9 +65,9 @@
         </dependency>
         
         <dependency>
-            <groupId>jstl</groupId>
+            <groupId>org.apache.geronimo.bundles</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <version>1.2_1</version>
             <scope>runtime</scope>
         </dependency>        
 
