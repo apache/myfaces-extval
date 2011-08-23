@@ -23,8 +23,13 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
+import javax.faces.render.ResponseStateManager;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -66,6 +71,18 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
         {
             addRenderer((String)args[0], (String)args[1], (Renderer)args[2]);
         }
+        else if(method.getName().equals("getResponseStateManager"))
+        {
+            return getResponseStateManager();
+        }
+        else if(method.getName().equals("createResponseStream"))
+        {
+            return createResponseStream((OutputStream)args[0]);
+        }
+        else if(method.getName().equals("createResponseWriter"))
+        {
+            return createResponseWriter((Writer)args[0], (String)args[1], (String)args[2]);
+        }
         else
         {
             try
@@ -91,5 +108,24 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
     protected Renderer createWrapper(Renderer renderer)
     {
         return ExtValGenericRendererWrapper.newInstance(renderer);
+    }
+
+    //see EXTVAL-135 - TODO check if we also need the other api methods for tobago for jsf 2.x
+    @Override
+    public ResponseStream createResponseStream(OutputStream out)
+    {
+        return this.wrapped.createResponseStream(out);
+    }
+
+    @Override
+    public ResponseWriter createResponseWriter(Writer writer, String contentTypeList, String characterEncoding)
+    {
+        return this.wrapped.createResponseWriter(writer, contentTypeList, characterEncoding);
+    }
+
+    @Override
+    public ResponseStateManager getResponseStateManager()
+    {
+        return this.wrapped.getResponseStateManager();
     }
 }
