@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -65,6 +67,18 @@ public class ExtValGenericRenderKit extends ExtValRenderKit implements MethodInt
         else if(method.getName().equals("addRenderer"))
         {
             addRenderer((String)args[0], (String)args[1], (Renderer)args[2]);
+        }
+        else if(method.getName().equals("getResponseStateManager"))
+        {
+            return getResponseStateManager();
+        }
+        else if(method.getName().equals("createResponseStream"))
+        {
+            return createResponseStream((OutputStream)args[0]);
+        }
+        else if(method.getName().equals("createResponseWriter"))
+        {
+            return createResponseWriter((Writer)args[0], (String)args[1], (String)args[2]);
         }
         else
         {
