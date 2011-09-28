@@ -18,52 +18,82 @@
  */
 package org.apache.myfaces.extensions.validator.test.core.stage;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.apache.myfaces.extensions.validator.core.JsfProjectStage;
 import org.apache.myfaces.extensions.validator.core.ProjectStage;
 import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCase;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(Parameterized.class)
 public class CustomProjectStageTestCase extends AbstractExValCoreTestCase
 {
     private static final String PROJECT_STAGE = "javax.faces.PROJECT_STAGE";
-    
-    @Test
-    public void testDevelopmentStage()
+
+    private final String paramValue;
+    private final CustomProjectStage stage;
+
+    public CustomProjectStageTestCase(String paramValue, CustomProjectStage stage)
     {
-        servletContext.addInitParameter(PROJECT_STAGE, "Dev");
-        Assert.assertTrue(CustomProjectStage.is(CustomProjectStage.Dev));
+        this.paramValue = paramValue;
+        this.stage = stage;
+    }
+
+    @Override
+    protected void addInitializationParameters()
+    {
+        super.addInitializationParameters();
+        if(paramValue != null)
+        {
+            addInitParameter(PROJECT_STAGE, paramValue);
+        }
     }
 
     @Test
-    public void testTestStage()
+    public void testStage()
     {
-        servletContext.addInitParameter(PROJECT_STAGE, "Test");
-        Assert.assertTrue(CustomProjectStage.is(CustomProjectStage.Test));
+        Assume.assumeNotNull(paramValue);
+        Assume.assumeNotNull(stage);
+        Assert.assertTrue(CustomProjectStage.is(stage));
     }
 
-    @Test
-    public void testProductionStage()
+    @Parameters
+    public static Collection<Object[]> data()
     {
-        servletContext.addInitParameter(PROJECT_STAGE, "Prod");
-        Assert.assertTrue(CustomProjectStage.is(CustomProjectStage.Prod));
+        // @formatter:off
+        return Arrays.asList(new Object[][] {
+            new Object[] { null, null },
+            new Object[] { "Dev", CustomProjectStage.Dev },
+            new Object[] { "Test", CustomProjectStage.Test },
+            new Object[] { "Prod", CustomProjectStage.Prod }
+        });
+        // @formatter:on
     }
 
     @Test
     public void testDefaultStage()
     {
+        Assume.assumeTrue(stage == null);
         Assert.assertTrue(ProjectStage.is(JsfProjectStage.Production.getValue()));
     }
 
     @Test
     public void testWrongDefaultStage1()
     {
+        Assume.assumeTrue(stage == null);
         Assert.assertFalse(CustomProjectStage.is(CustomProjectStage.Dev));
     }
 
     @Test
     public void testWrongDefaultStage2()
     {
+        Assume.assumeTrue(stage == null);
         Assert.assertFalse(CustomProjectStage.is(CustomProjectStage.Test));
     }
 }
