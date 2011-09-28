@@ -40,7 +40,8 @@ import java.util.Map;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultValidationParameterFactory implements ClassMappingFactory<Class, Class>
 {
-    private Map<Class, Class> parameterMapping = new NullValueAwareConcurrentHashMap<Class, Class>(Class.class);
+    private Map<Class<?>, Class<?>> parameterMapping
+            = new NullValueAwareConcurrentHashMap<Class<?>, Class<?>>((Class<Class>) Class.class);
 
     public Class create(Class source)
     {
