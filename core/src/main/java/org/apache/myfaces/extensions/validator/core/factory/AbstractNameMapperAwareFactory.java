@@ -79,8 +79,18 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
             subNameMapper = true;
         }
 
-        Iterator<NameMapper<T>> nameMapperIterator = getNameMapperList().iterator();
-
+        List<NameMapper<T>> nameMapperList = getNameMapperList();
+        List<NameMapper<T>> changeableList;
+        if (!subNameMapper && (getNameMapperList() instanceof CopyOnWriteArrayList))
+        {
+            // If we have a CopyOnWriteArrayList, we can't remove it so copy it to a temporary list
+            changeableList = new ArrayList<NameMapper<T>>(nameMapperList);
+        }
+        else
+        {
+            changeableList = nameMapperList;
+        }
+        Iterator<NameMapper<T>> nameMapperIterator = changeableList.iterator();
         while (nameMapperIterator.hasNext())
         {
             if (subNameMapper)
@@ -100,6 +110,13 @@ public abstract class AbstractNameMapperAwareFactory<T> implements NameMapperAwa
                     //break;
                 }
             }
+            if (!subNameMapper && (getNameMapperList() instanceof CopyOnWriteArrayList))
+            {
+                // Set the correct content back in the CopyOnWriteArrayList
+                getNameMapperList().clear();
+                getNameMapperList().addAll(changeableList);
+            }
+
         }
     }
 
