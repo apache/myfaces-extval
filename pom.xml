@@ -72,8 +72,8 @@
         <module>validation-modules</module>
         <module>component-support</module>
 
-		<module>test-modules</module>
-        <!--module>examples</module-->
+		<!--module>test-modules</module>
+        <module>examples</module-->
     </modules>
 
     <build>
