@@ -29,7 +29,7 @@
     <version>1.2.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator</name>
-    <url>http://myfaces.apache.org/extensions/validator</url>
+    <url>http://myfaces.apache.org/extensions/validator/</url>
 
     <issueManagement>
         <system>jira</system>
