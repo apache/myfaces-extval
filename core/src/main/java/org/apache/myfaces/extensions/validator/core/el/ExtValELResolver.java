@@ -127,7 +127,7 @@ public class ExtValELResolver extends ELResolver
         else
         {
             boolean propertyExists = false;
-            String propertyName = (String)property;
+            String propertyName = property.toString();
             propertyName = propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
 
             try
@@ -206,10 +206,6 @@ public class ExtValELResolver extends ELResolver
                 expression += "." + o1;
             }
             property = (String)o1;
-        }
-        else
-        {
-            logWarningForUnsupportedExpression(o1);
         }
 
         baseObject = o;
@@ -296,20 +292,5 @@ public class ExtValELResolver extends ELResolver
             return this.compositeComponentExpressionHolder.getExpression(this.compositeComponentExpressionBase);
         }
         return null;
-    }
-
-    private void logWarningForUnsupportedExpression(Object o1)
-    {
-        if(this.projectStageDevelopment)
-        {
-            try
-            {
-                this.logger.warning(o1 + " is not a valid property for constraint based validation.");
-            }
-            catch (NullPointerException e)
-            {
-                this.logger.warning("A property which doesn't support constraint based validation has been detected.");
-            }
-        }
     }
 }
