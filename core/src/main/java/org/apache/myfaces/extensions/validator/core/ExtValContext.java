@@ -76,6 +76,8 @@ public class ExtValContext
 
     private SkipValidationEvaluator skipValidationEvaluator;
 
+    private List<RendererInterceptor> rendererInterceptorCache = null;
+
     private Map<String, Object> globalProperties = new HashMap<String, Object>();
 
     /**
@@ -249,7 +251,12 @@ public class ExtValContext
      */
     public List<RendererInterceptor> getRendererInterceptors()
     {
-        return new ArrayList<RendererInterceptor>(this.rendererInterceptors.values());
+        if (this.rendererInterceptorCache == null)
+        {
+            this.rendererInterceptorCache = new ArrayList<RendererInterceptor>(this.rendererInterceptors.values());
+        }
+
+        return this.rendererInterceptorCache;
     }
 
     public boolean registerRendererInterceptor(RendererInterceptor rendererInterceptor)
@@ -262,6 +269,7 @@ public class ExtValContext
             }
 
             this.rendererInterceptors.put(rendererInterceptor.getInterceptorId(), rendererInterceptor);
+            this.rendererInterceptorCache = new ArrayList<RendererInterceptor>(this.rendererInterceptors.values());
         }
         return true;
     }
@@ -273,6 +281,7 @@ public class ExtValContext
         synchronized (ExtValContext.class)
         {
             this.rendererInterceptors.remove(rendererInterceptor.getInterceptorId());
+            this.rendererInterceptorCache = new ArrayList<RendererInterceptor>(this.rendererInterceptors.values());
         }
     }
 
