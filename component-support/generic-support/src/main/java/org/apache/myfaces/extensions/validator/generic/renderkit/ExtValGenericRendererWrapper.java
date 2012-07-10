@@ -27,6 +27,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.Enhancer;
@@ -89,7 +90,10 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
         }
         else
         {
-            logger.finest("method " + method.getName() + " called without rendering-interceptors");
+            if (logger.isLoggable(Level.FINEST))
+            {
+                logger.finest("method " + method.getName() + " called without rendering-interceptors");
+            }
 
             try
             {
