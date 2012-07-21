@@ -628,4 +628,16 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
      * @return false for using the default behavior of JSF 2.0
      */
     public abstract boolean validateEmptyFields();
+
+    /**
+     * @since r6
+     */
+
+    /**
+     * Per default component initialization overrules properties of the component.
+     * With activating markup meta-data it's possible to overrule the meta-data of the constraints with the meta-data
+     * of the component.
+     * @return true to overrule constraint meta-data with meta-data provided by the component, false otherwise
+     */
+    public abstract boolean activateMarkupMetaData();
 }
