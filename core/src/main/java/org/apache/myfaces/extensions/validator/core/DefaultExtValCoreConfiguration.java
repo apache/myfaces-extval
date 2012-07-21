@@ -495,4 +495,14 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
     {
         return !"false".equalsIgnoreCase(WebXmlParameter.VALIDATE_EMPTY_FIELDS);
     }
+
+    /**
+     * {@inheritDoc}
+     * Value taken from the Web.xml initialization parameter ACTIVATE_MARKUP_META_DATA.
+     */
+    @Override
+    public boolean activateMarkupMetaData()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MARKUP_META_DATA);
+    }
 }

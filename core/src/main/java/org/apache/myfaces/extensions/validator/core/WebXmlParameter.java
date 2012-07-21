@@ -118,10 +118,20 @@ interface WebXmlParameter
     static final String ACTIVATE_REQUIRED_INITIALIZATION = WebXmlUtils
         .getInitParameter("ACTIVATE_REQUIRED_INITIALIZATION");
 
+    /**
+     * Per default component initialization overrules properties of the component.
+     * With activating markup meta-data it's possible to overrule the meta-data of the constraints with the meta-data
+     * of the component.
+     * 
+     * @since r6
+     */
+    static final String ACTIVATE_MARKUP_META_DATA = WebXmlUtils
+        .getInitParameter("ACTIVATE_MARKUP_META_DATA");
+
     /*
      * deactivate
      */
-    /**
+    /*
      * @since r4
      */
     static final String DEACTIVATE_REQUIRED_ATTRIBUTE_SUPPORT = WebXmlUtils

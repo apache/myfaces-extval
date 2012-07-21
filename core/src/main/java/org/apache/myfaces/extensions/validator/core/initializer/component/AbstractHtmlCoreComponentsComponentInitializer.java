@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.core.initializer.component;
 
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.ToDo;
@@ -50,6 +52,11 @@ import java.util.Map;
 @UsageInformation(UsageCategory.REUSE)
 public abstract class AbstractHtmlCoreComponentsComponentInitializer implements ComponentInitializer
 {
+    //short because it influences the state
+    protected static final String INITIAL_MARKUP_META_DATA_KEY = "OAM_EV_MARKUP_METADATA";
+
+    protected Boolean forceComponentInitialization;
+
     /**
      * If the component is one of the standard input components, the max length attribute is configured and the
      * required attribute is configured (if empty field validation and required initialization is activated)
@@ -165,16 +172,70 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
             {
                 return;
             }
+
+            init(); //lazy init
+
             if(uiComponent instanceof HtmlInputText)
             {
                 HtmlInputText htmlInputText = (HtmlInputText)uiComponent;
-                htmlInputText.setMaxlength((Integer)maxLength);
+
+                if (this.forceComponentInitialization)
+                {
+                    htmlInputText.setMaxlength((Integer) maxLength);
+                }
+                else
+                {
+                    Integer initialMaxLength = (Integer)
+                        htmlInputText.getAttributes().get(INITIAL_MARKUP_META_DATA_KEY);
+
+                    if (initialMaxLength == null)
+                    {
+                        initialMaxLength = htmlInputText.getMaxlength(); //value overriden by the component
+                        htmlInputText.getAttributes().put(INITIAL_MARKUP_META_DATA_KEY, initialMaxLength);
+                    }
+
+                    // only override maxlength if not already set by xhtml definition
+                    if (initialMaxLength <= 0)
+                    {
+                        htmlInputText.setMaxlength((Integer) maxLength);
+                    }
+                }
             }
             else if(uiComponent instanceof HtmlInputSecret)
             {
                 HtmlInputSecret htmlInputSecret = (HtmlInputSecret)uiComponent;
-                htmlInputSecret.setMaxlength((Integer)maxLength);
+
+                if (this.forceComponentInitialization)
+                {
+                    htmlInputSecret.setMaxlength((Integer)maxLength);
+                }
+                else
+                {
+                    Integer initialMaxLength = (Integer)
+                        htmlInputSecret.getAttributes().get(INITIAL_MARKUP_META_DATA_KEY);
+
+                    if (initialMaxLength == null)
+                    {
+                        initialMaxLength = htmlInputSecret.getMaxlength(); //value overriden by the component
+                        htmlInputSecret.getAttributes().put(INITIAL_MARKUP_META_DATA_KEY, initialMaxLength);
+                    }
+
+                    // only override maxlength if not already set by xhtml definition
+                    if (initialMaxLength <= 0)
+                    {
+                        htmlInputSecret.setMaxlength((Integer) maxLength);
+                    }
+                }
             }
+        }
+    }
+
+    protected void init()
+    {
+        if (this.forceComponentInitialization == null)
+        {
+            this.forceComponentInitialization = !ExtValContext.getContext()
+                .getModuleConfiguration(ExtValCoreConfiguration.class).activateMarkupMetaData();
         }
     }
 }
