@@ -223,7 +223,9 @@ class ExtValBeanValidationMetaDataInternals
 
         while (!Object.class.getName().equals(classToInspect.getName()))
         {
-            transferGroupValidationInformationToFoundGroups(objectToInspect,
+            transferGroupValidationInformationToFoundGroups(
+                    classToInspect,
+                    objectToInspect,
                     foundGroupsForPropertyValidation,
                     restrictedGroupsForPropertyValidation,
                     modelValidationEntryList,
@@ -231,7 +233,7 @@ class ExtValBeanValidationMetaDataInternals
                     activeViewId,
                     processModelValidation);
 
-            processInterfaces(objectToInspect.getClass(), objectToInspect,
+            processInterfaces(classToInspect, objectToInspect,
                     foundGroupsForPropertyValidation,
                     restrictedGroupsForPropertyValidation,
                     modelValidationEntryList,
@@ -383,6 +385,7 @@ class ExtValBeanValidationMetaDataInternals
 
     @ToDo(value = Priority.MEDIUM, description = "test proxy support")
     private void transferGroupValidationInformationToFoundGroups(
+            Class<?> classToInspect,
             Object objectToInspect,
             List<Class> foundGroupsForPropertyValidation,
             List<Class> restrictedGroupsForPropertyValidation,
@@ -391,9 +394,9 @@ class ExtValBeanValidationMetaDataInternals
             String activeViewId,
             boolean processModelValidation)
     {
-        if (objectToInspect.getClass().isAnnotationPresent(BeanValidation.class))
+        if (classToInspect.isAnnotationPresent(BeanValidation.class))
         {
-            tryToProcessMetaData(objectToInspect.getClass().getAnnotation(BeanValidation.class),
+            tryToProcessMetaData(classToInspect.getAnnotation(BeanValidation.class),
                     objectToInspect,
                     foundGroupsForPropertyValidation,
                     restrictedGroupsForPropertyValidation,
@@ -402,10 +405,10 @@ class ExtValBeanValidationMetaDataInternals
                     activeViewId,
                     processModelValidation);
         }
-        else if (objectToInspect.getClass().isAnnotationPresent(BeanValidation.List.class))
+        else if (classToInspect.isAnnotationPresent(BeanValidation.List.class))
         {
             for (BeanValidation currentBeanValidation :
-                    (objectToInspect.getClass().getAnnotation(BeanValidation.List.class)).value())
+                    (classToInspect.getAnnotation(BeanValidation.List.class)).value())
             {
                 tryToProcessMetaData(currentBeanValidation,
                         objectToInspect,
@@ -430,7 +433,9 @@ class ExtValBeanValidationMetaDataInternals
     {
         for (Class currentInterface : currentClass.getInterfaces())
         {
-            transferGroupValidationInformationToFoundGroups(metaDataSourceObject,
+            transferGroupValidationInformationToFoundGroups(
+                    currentClass,
+                    metaDataSourceObject,
                     foundGroupsForPropertyValidation,
                     restrictedGroupsForPropertyValidation,
                     modelValidationEntryList,
