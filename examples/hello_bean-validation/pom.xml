@@ -17,9 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
 
@@ -27,33 +25,33 @@
     <artifactId>examples-hello_bean-validation</artifactId>
 
     <name>MyFaces Extensions-Validator examples hello bean-validation</name>
-    <version>2.0.6-SNAPSHOT</version>
+    <version>2.0.6</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
         <artifactId>examples-project</artifactId>
-        <version>2.0.6-SNAPSHOT</version>
+        <version>2.0.6</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator</groupId>
             <artifactId>myfaces-extval-core</artifactId>
-            <version>2.0.6-SNAPSHOT</version>
+            <version>2.0.6</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
             <artifactId>myfaces-extval-property-validation</artifactId>
-            <version>2.0.6-SNAPSHOT</version>
+            <version>2.0.6</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
             <artifactId>myfaces-extval-bean-validation</artifactId>
-            <version>2.0.6-SNAPSHOT</version>
+            <version>2.0.6</version>
             <scope>compile</scope>
         </dependency>
 

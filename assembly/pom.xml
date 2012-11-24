@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
         <artifactId>myfaces-extval-module</artifactId>
-        <version>2.0.6-SNAPSHOT</version>
+        <version>2.0.6</version>
     </parent>
 
     <build>
