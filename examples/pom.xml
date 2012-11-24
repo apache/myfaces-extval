@@ -28,13 +28,18 @@
     <artifactId>examples-project</artifactId>
 
     <name>MyFaces Extensions-Validator examples project</name>
-    <version>2.0.5-SNAPSHOT</version>
+    <version>2.0.6-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator</groupId>
         <artifactId>myfaces-extval-module</artifactId>
-        <version>2.0.5-SNAPSHOT</version>
+        <version>2.0.6-SNAPSHOT</version>
     </parent>
+
+    <properties>
+        <deploy.skip>true</deploy.skip>
+        <trinidad.version>2.0.0-alpha-2</trinidad.version>
+    </properties>
 
     <repositories>
         <repository>
@@ -51,6 +56,13 @@
     
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>${deploy.skip}</skip> <!-- we don't deploy our samples upstream -->
+                </configuration>
+            </plugin>
             <plugin>
                 <!--This plugin allows to run the example using mvn jetty:run -->
                 <groupId>org.mortbay.jetty</groupId>
@@ -95,9 +107,4 @@
             </build>
         </profile>
     </profiles>
-
-    <properties>
-        <trinidad.version>2.0.0-alpha-2</trinidad.version>
-    </properties>
-
 </project>
