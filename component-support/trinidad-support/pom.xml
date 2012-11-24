@@ -25,12 +25,12 @@
     <artifactId>myfaces-extval-trinidad-support</artifactId>
 
     <name>MyFaces Extensions-Validator Trinidad Support Module</name>
-    <version>2.0.6</version>
+    <version>2.0.7-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
         <artifactId>component-support-modules-project</artifactId>
-        <version>2.0.6</version>
+        <version>2.0.7-SNAPSHOT</version>
     </parent>
 
     <dependencies>
