@@ -28,7 +28,7 @@
 
     <groupId>org.apache.myfaces.extensions.validator</groupId>
     <artifactId>myfaces-extval-module</artifactId>
-    <version>1.2.7-SNAPSHOT</version>
+    <version>1.2.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions-Validator Module</name>
     <url>http://myfaces.apache.org/extensions/validator12/</url>  <!-- must end with / for correct site paths -->
