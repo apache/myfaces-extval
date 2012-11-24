@@ -27,12 +27,12 @@
     <artifactId>myfaces-extval-bean-validation-tests</artifactId>
 
     <name>MyFaces Extensions-Validator Bean-Validation-Integration-Tests</name>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.2.6-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.test-modules</groupId>
         <artifactId>test-modules-project</artifactId>
-        <version>1.2.5-SNAPSHOT</version>
+        <version>1.2.6-SNAPSHOT</version>
     </parent>
 
     <repositories>
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.test-modules</groupId>
             <artifactId>myfaces-extval-base-test-infrastructure</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.test-modules</groupId>
             <artifactId>myfaces-extval-core-tests</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
             <artifactId>myfaces-extval-bean-validation</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 

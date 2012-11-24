@@ -27,12 +27,12 @@
     <artifactId>myfaces-extval-base-test-infrastructure</artifactId>
 
     <name>MyFaces Extensions-Validator Base-Test-Infrastructure</name>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.2.6-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.test-modules</groupId>
         <artifactId>test-modules-project</artifactId>
-        <version>1.2.5-SNAPSHOT</version>
+        <version>1.2.6-SNAPSHOT</version>
     </parent>
 
 </project>

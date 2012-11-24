@@ -31,28 +31,28 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
         <artifactId>examples-project</artifactId>
-        <version>1.2.5-SNAPSHOT</version>
+        <version>1.2.6-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator</groupId>
             <artifactId>myfaces-extval-core</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
             <artifactId>myfaces-extval-property-validation</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.component-support-modules</groupId>
             <artifactId>myfaces-extval-trinidad-support</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
