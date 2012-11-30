@@ -73,14 +73,22 @@ public class ModelValidationPhaseListener implements PhaseListener
 
         Map<String, ModelValidationResult> results = new HashMap<String, ModelValidationResult>();
 
-        for (ModelValidationEntry modelValidationEntry : getModelValidationEntriesToValidate())
+        try
         {
-            processModelValidation(modelValidationEntry, processedValidationTargets, results);
+            for (ModelValidationEntry modelValidationEntry : getModelValidationEntriesToValidate())
+            {
+                processModelValidation(modelValidationEntry, processedValidationTargets, results);
+            }
+
+            processModelValidationResults(results);
+
+            executeGlobalAfterValidationInterceptorsFor(results);
         }
-
-        processModelValidationResults(results);
-
-        executeGlobalAfterValidationInterceptorsFor(results);
+        finally
+        {
+            ExtValBeanValidationContext.getCurrentInstance()
+                .unlockGroups(phaseEvent.getFacesContext().getViewRoot().getViewId());
+        }
 
         logger.finest("jsr303 validation finished");
     }

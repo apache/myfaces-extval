@@ -61,4 +61,28 @@ public interface GroupStorage
      * @return Array of groups defined for the component.
      */
     Class[] getGroups(String viewId, String clientId);
+
+    /**
+     * Allows to reset all groups which have been added so far.
+     * @param viewId allows to reset groups only for one view-id
+     * that allows to keep the groups e.g. of the current or the target view (depending on the given value).
+     * if it is null, all stored view-ids will be affected.
+     */
+    void resetGroups(String viewId);
+
+    /**
+     * If the storage is locked, it isn't possible to change the state
+     * @param viewId allows to lock groups only for one view-id
+     * that allows to keep the groups e.g. of the current or the target view (depending on the given value)
+     * if it is null, all stored view-ids will be affected.
+     */
+    void lockGroups(String viewId);
+
+    /**
+     * Allows to change the storage again 
+     * @param viewId allows to lock groups only for one view-id
+     * that allows to keep the groups e.g. of the current or the target view (depending on the given value)
+     * if it is null, all stored view-ids will be affected.
+     */
+    void unlockGroups(String viewId);
 }

@@ -22,10 +22,10 @@ import org.apache.myfaces.extensions.validator.util.GroupUtils;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -43,13 +43,23 @@ public class DefaultGroupStorage implements GroupStorage
 
     private Map<String, List<Class>> restrictedGroups = new HashMap<String, List<Class>>();
 
+    private Map<String, Boolean> lockedGroupsPerView = new HashMap<String, Boolean>();
+
     public void addGroup(Class groupClass, String viewId, String clientId)
     {
+        if(Boolean.TRUE.equals(this.lockedGroupsPerView.get(viewId)))
+        {
+            return;
+        }
         addGroupToGroupStorage(groupClass, viewId, clientId, this.addedGroups);
     }
 
     public void restrictGroup(Class groupClass, String viewId, String clientId)
     {
+        if(Boolean.TRUE.equals(this.lockedGroupsPerView.get(viewId)))
+        {
+            return;
+        }
         addGroupToGroupStorage(groupClass, viewId, clientId, this.restrictedGroups);
     }
 
@@ -89,6 +99,39 @@ public class DefaultGroupStorage implements GroupStorage
         }
 
         return mergeResults(resultsForPage, resultsForComponent);
+    }
+
+    public void resetGroups(String viewId)
+    {
+        resetGroupsForList(this.addedGroups, viewId);
+        resetGroupsForList(this.restrictedGroups, viewId);
+    }
+
+    private void resetGroupsForList(Map<String, List<Class>> groupList, String viewId)
+    {
+        if(viewId == null)
+        {
+            groupList.clear();
+            return;
+        }
+
+        for(String currentKey : groupList.keySet())
+        {
+            if(currentKey.equals(viewId) || currentKey.startsWith(viewId + "@"))
+            {
+                groupList.put(currentKey, null);
+            }
+        }
+    }
+
+    public void lockGroups(String viewId)
+    {
+        this.lockedGroupsPerView.put(viewId, Boolean.TRUE);
+    }
+
+    public void unlockGroups(String viewId)
+    {
+        this.lockedGroupsPerView.put(viewId, null);
     }
 
     private void addGroupToGroupStorage(Class groupClass, String viewId, String clientId,

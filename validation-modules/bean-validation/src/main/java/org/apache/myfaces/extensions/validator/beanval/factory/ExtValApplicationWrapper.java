@@ -18,8 +18,15 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.factory;
 
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.application.ApplicationWrapper;
 import javax.faces.application.Application;
+import javax.faces.application.Resource;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 
 /**
  * @author Gerhard Petracek
@@ -46,5 +53,62 @@ class ExtValApplicationWrapper extends ApplicationWrapper
         {
             super.addDefaultValidatorId(s);
         }
+    }
+
+    @Override
+    public UIComponent createComponent(FacesContext context, Resource componentResource)
+    {
+        UIComponent result = super.createComponent(context, componentResource);
+        return customizedComponent(result);
+    }
+
+    @Override
+    public UIComponent createComponent(FacesContext context, String componentType, String rendererType)
+    {
+        UIComponent result = super.createComponent(context, componentType, rendererType);
+        return customizedComponent(result);
+    }
+
+    @Override
+    public UIComponent createComponent(String componentType) throws FacesException
+    {
+        UIComponent result = super.createComponent(componentType);
+        return customizedComponent(result);
+    }
+
+    @Override
+    public UIComponent createComponent(ValueBinding componentBinding, FacesContext context, String componentType)
+            throws FacesException
+    {
+        UIComponent result = super.createComponent(componentBinding, context, componentType);
+        return customizedComponent(result);
+    }
+
+    @Override
+    public UIComponent createComponent(
+            ValueExpression componentExpression, FacesContext context, String componentType, String rendererType)
+    {
+        UIComponent result = super.createComponent(componentExpression, context, componentType, rendererType);
+        return customizedComponent(result);
+    }
+
+    @Override
+    public UIComponent createComponent(ValueExpression componentExpression, FacesContext contexte, String componentType)
+            throws FacesException
+    {
+        UIComponent result = super.createComponent(componentExpression, contexte, componentType);
+        return customizedComponent(result);
+    }
+
+    private UIComponent customizedComponent(UIComponent result)
+    {
+        //don't check with instanceof
+        //if it isn't javax.faces.component.UIViewRoot itself, we need to proxy it
+        //due to the overhead we should wait for users who request such a proxy
+        if(result != null && result.getClass().getName().equals(UIViewRoot.class.getName()))
+        {
+            return new ExtValViewRoot();
+        }
+        return result;
     }
 }
