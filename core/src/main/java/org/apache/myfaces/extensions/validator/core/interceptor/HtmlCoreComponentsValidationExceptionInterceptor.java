@@ -49,7 +49,6 @@ import java.lang.annotation.Annotation;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(100)

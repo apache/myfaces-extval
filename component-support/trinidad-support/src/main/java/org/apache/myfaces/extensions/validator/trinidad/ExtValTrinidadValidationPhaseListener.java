@@ -33,7 +33,6 @@ import javax.faces.render.RenderKitFactory;
 /**
  * use this phase-listener instead of a ExtValTrinidadRenderKitWrapperFactory due to a trinidad issue
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

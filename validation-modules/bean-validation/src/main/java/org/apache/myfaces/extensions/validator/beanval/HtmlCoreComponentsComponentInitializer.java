@@ -32,7 +32,6 @@ import javax.faces.context.FacesContext;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

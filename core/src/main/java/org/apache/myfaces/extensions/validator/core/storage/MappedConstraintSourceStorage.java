@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 /**
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

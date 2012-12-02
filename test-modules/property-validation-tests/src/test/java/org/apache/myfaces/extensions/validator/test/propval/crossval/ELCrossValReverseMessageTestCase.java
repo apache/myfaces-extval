@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.test.propval.crossval.mock.MockEq
 import org.apache.myfaces.extensions.validator.test.base.util.MethodUtils;
 
 /**
- * @author Gerhard Petracek
  */
 public class ELCrossValReverseMessageTestCase extends ELCrossValTestCase
 {

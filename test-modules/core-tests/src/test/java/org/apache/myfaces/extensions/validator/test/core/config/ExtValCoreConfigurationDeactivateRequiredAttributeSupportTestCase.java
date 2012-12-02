@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

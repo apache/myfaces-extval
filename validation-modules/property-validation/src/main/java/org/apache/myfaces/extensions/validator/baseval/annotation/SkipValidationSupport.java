@@ -28,7 +28,6 @@ import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @Target(TYPE)

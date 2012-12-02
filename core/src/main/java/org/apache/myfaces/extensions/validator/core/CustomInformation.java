@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 /**
  * ExtVal artifacts supported by the {@link org.apache.myfaces.extensions.validator.core.InformationProviderBean}
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API})

@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.test.propval.crossval;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
  */
 public class PropertyChainCrossValTestDateSubBean
 {

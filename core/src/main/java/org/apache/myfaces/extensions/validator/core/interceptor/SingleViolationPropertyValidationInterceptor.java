@@ -24,7 +24,6 @@ import javax.faces.component.EditableValueHolder;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since r4
  */
 public class SingleViolationPropertyValidationInterceptor implements PropertyValidationInterceptor

@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * Pluggable helper which handles proxied instances correctly.
  * (The default implementation supports cglib and javassist
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

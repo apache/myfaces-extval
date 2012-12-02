@@ -43,7 +43,6 @@ import javax.persistence.Id;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @NullValueAwareValidationStrategy

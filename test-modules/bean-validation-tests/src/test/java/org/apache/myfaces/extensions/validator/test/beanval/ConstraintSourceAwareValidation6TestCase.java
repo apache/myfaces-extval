@@ -37,7 +37,6 @@ import org.apache.myfaces.extensions.validator.test.beanval.model.ConstraintSour
 /**
  * EXTVAL-83
  *
- * @author Gerhard Petracek
  */
 public class ConstraintSourceAwareValidation6TestCase extends
         BaseBeanValPropertyValidationTestCase<ConstraintSourceAware6Bean>

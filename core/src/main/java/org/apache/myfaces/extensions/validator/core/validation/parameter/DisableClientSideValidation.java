@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * A special validationParameter to indicate that no information what so ever of the validation information (like length
  * or required) should be placed on the UIComponent so that client side could do any validation.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

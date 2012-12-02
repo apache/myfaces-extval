@@ -31,7 +31,6 @@ import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyVali
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
  */
 public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
 {

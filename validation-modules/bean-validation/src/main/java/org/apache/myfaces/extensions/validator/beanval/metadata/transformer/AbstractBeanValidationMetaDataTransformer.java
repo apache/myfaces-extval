@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation({UsageCategory.REUSE})

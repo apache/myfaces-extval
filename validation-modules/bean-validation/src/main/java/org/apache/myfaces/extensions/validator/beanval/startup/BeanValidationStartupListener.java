@@ -48,7 +48,6 @@ import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import javax.validation.ValidatorFactory;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

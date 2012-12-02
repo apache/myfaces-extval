@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * To provide a custom NameMapper to map Annotations to ValidationStrategies.
  * (configured via web.xml)
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(100)

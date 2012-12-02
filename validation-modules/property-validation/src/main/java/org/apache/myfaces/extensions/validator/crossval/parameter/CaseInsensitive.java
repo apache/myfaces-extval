@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Validat
  * Allows to perform a case insensitive comparison of Strings in Equals and
  * NotEquals. Specify it as a parameter.
  *
- * @author Rudy De Busscher
  * @since x.x.4
  */
 public interface CaseInsensitive extends ValidationParameter

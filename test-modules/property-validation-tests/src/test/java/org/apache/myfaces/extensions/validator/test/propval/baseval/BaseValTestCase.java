@@ -30,7 +30,6 @@ import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyVali
 import org.apache.myfaces.extensions.validator.test.propval.BaseValTestBean;
 
 /**
- * @author Leonardo Uribe
  */
 public class BaseValTestCase extends AbstractPropertyValidationTestCase
 {

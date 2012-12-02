@@ -34,7 +34,6 @@ import org.apache.shale.test.mock.MockRenderKitFactory;
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

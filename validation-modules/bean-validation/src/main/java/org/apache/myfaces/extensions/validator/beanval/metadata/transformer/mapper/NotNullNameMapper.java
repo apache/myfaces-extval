@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Nested

@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.trinidad.ExtValTrinidadSupportMod
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

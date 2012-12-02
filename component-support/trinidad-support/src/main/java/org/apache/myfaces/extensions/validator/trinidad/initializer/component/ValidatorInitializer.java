@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(300)

@@ -46,7 +46,6 @@ import java.util.logging.Level;
  * <p/>
  * This wrapper will also implement client-side validation behaviour
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

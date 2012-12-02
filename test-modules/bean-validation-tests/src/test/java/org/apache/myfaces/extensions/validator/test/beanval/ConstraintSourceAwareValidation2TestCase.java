@@ -27,7 +27,6 @@ import javax.faces.application.FacesMessage;
 /**
  * EXTVAL-83
  *
- * @author Gerhard Petracek
  */
 public class ConstraintSourceAwareValidation2TestCase extends BaseBeanValPropertyValidationTestCase<ConstraintSourceAware2Bean>
 {

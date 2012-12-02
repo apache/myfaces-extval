@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * don't remove *Text - it would lead to an overlap with trinidad.
  * Used to create a special FacesMessage {@link ViolationMessage} that can hold the label text.
  * 
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)

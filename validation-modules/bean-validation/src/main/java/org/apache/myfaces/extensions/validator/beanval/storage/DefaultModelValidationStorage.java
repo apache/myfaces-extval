@@ -31,7 +31,6 @@ import java.util.ArrayList;
 /**
  * storage implementation for model-validation entries
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

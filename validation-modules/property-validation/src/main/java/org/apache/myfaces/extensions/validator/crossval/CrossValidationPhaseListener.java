@@ -45,7 +45,6 @@ import javax.faces.context.FacesContext;
  * If you provide a custom extension and you add the same storage type within a different phase,
  * it also gets processed at the end of that phase.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

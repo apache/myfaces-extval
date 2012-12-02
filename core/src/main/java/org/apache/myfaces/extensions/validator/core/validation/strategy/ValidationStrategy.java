@@ -32,7 +32,6 @@ import javax.faces.context.FacesContext;
  * 
  * @see org.apache.myfaces.extensions.validator.core.validation.strategy.AbstractValidationStrategy
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

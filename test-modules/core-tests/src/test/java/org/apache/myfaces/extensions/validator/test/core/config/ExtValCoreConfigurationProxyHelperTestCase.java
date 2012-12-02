@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

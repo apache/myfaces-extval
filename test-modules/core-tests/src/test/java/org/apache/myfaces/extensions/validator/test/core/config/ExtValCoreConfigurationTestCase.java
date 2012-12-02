@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.validator.test.core.AbstractExValCoreTestCa
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

@@ -39,7 +39,6 @@ import org.apache.myfaces.extensions.validator.PropertyValidationModuleKey;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @Deprecated

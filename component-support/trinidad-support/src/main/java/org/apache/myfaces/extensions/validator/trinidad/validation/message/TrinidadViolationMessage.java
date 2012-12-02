@@ -28,7 +28,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.INTERNAL)

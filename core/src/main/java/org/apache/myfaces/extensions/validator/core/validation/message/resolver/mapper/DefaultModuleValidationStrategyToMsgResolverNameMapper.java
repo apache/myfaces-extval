@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * In order to provide a NameMapper per validation module.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(310)

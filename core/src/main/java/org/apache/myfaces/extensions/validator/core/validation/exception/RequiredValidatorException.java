@@ -28,7 +28,6 @@ import javax.faces.application.FacesMessage;
  * JSF components allow different inline-messages for required violations and all other types of validation failures.
  * This exception is used to determine if the special required error message should be used. 
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * interface allows to identify instances.
  * For the moment only used for JSR-303 validation strategies.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

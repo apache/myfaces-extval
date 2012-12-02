@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

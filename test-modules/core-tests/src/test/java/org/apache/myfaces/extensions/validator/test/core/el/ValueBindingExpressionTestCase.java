@@ -25,7 +25,6 @@ import junit.framework.TestSuite;
 import junit.framework.Assert;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase

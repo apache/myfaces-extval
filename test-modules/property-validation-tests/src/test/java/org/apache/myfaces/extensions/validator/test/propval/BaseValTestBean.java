@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.baseval.annotation.Pattern;
 import org.apache.myfaces.extensions.validator.baseval.annotation.Required;
 
 /**
- * @author Leonardo Uribe
  */
 public class BaseValTestBean
 {

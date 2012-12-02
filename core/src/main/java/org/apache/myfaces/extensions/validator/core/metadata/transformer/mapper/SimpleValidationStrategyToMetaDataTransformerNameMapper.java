@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 /**
  * It's an alternative Mapper to place ValidationStrategies and MetaDataTransformers in the same package.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(400)

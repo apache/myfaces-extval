@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * It's an alternative Mapper to place ValidationStrategies and MessageResolvers in the same package.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(400)

@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultRender
 /**
  * default storage-manager for renderer interceptor properties
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

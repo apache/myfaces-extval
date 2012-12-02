@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.crossval.storage.ProcessedInforma
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultProcessedInformationStorage;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

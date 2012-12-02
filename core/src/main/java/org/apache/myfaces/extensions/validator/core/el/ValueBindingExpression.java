@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
  * An instance of this class stores the different parts of an expression string and
  * allows an easier usage of value-bindings.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "difference between [ and [' - test with more constellations")

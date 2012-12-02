@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import javax.validation.ValidatorFactory;
 
 /**
- * @author Gerhard Petracek
  */
 public class DefaultExtValBeanValidationModuleConfiguration extends ExtValBeanValidationModuleConfiguration
 {

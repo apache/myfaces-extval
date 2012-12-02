@@ -28,7 +28,6 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.application.FacesMessage;
 
 /**
- * @author Leonardo Uribe
  */
 public class RequiredIf4TestCase extends AbstractPropertyValidationTestCase
 {

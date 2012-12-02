@@ -30,7 +30,6 @@ import javax.faces.context.FacesContext;
  * An implementation should provide the possibility to filter the found meta-data e.g. via
  * {@link org.apache.myfaces.extensions.validator.core.storage.MetaDataStorageFilter}
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

@@ -27,7 +27,6 @@ import javax.faces.application.FacesMessage;
  * Structure for a factory that creates FacesMessages that also implement the LabeledMessage interface. The LabelMessage
  * interface adds label capabilities to the FacesMessage.
  *
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)

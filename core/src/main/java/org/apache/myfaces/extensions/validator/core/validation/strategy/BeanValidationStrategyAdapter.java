@@ -32,7 +32,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * it's just a helper for proxies - you just need it, if you define the validation strategy as bean and
  * e.g. spring creates a proxy for it.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.HIGH, description = "see EXTVAL-116")

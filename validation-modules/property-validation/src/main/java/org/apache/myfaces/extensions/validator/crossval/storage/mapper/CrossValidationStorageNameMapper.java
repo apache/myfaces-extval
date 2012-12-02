@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.crossval.storage.CrossValidationS
 import org.apache.myfaces.extensions.validator.crossval.storage.DefaultCrossValidationStorage;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

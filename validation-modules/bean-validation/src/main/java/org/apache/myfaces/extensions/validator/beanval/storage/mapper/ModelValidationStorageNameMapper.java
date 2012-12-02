@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INTERNAL;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

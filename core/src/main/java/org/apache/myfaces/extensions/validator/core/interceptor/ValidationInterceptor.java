@@ -37,7 +37,6 @@ import java.util.Map;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

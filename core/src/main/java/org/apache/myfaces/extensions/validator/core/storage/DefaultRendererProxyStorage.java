@@ -27,7 +27,6 @@ import java.util.HashMap;
 /**
  * default storage implementation for groups
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

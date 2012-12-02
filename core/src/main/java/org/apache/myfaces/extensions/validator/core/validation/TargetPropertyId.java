@@ -39,7 +39,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see org.apache.myfaces.extensions.validator.core.validation.ConstraintSource
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @Target({FIELD, METHOD})

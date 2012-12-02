@@ -22,7 +22,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * @author Gerhard Petracek
  */
 public class LocalPropertyCrossValTestCase extends ELCrossValTestCase
 {

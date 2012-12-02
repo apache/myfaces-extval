@@ -26,7 +26,6 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API
  *
  * @see org.apache.myfaces.extensions.validator.core.storage.StorageManager
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(API)

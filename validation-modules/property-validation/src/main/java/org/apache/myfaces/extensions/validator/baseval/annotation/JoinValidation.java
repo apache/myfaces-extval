@@ -29,7 +29,6 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Documented;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @Target({METHOD, FIELD})

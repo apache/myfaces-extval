@@ -49,7 +49,6 @@ import java.util.logging.Logger;
 import static org.apache.myfaces.extensions.validator.util.WebXmlUtils.getInitParameter;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

@@ -27,7 +27,6 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.API
  *
  * @param <T> Type of Storage that is maintained by the storageManager.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(API)

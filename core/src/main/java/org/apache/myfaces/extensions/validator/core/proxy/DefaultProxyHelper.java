@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 /**
  * Supports CGLIB and javassist.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

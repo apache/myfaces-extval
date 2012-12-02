@@ -25,7 +25,6 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 /**
  * default storage implementation for bean-validation groups
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

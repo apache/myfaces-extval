@@ -40,7 +40,6 @@ import java.util.logging.Level;
  * This class provides an easier handling of violation messages.
  * This abstract class is a good candidate as super-class for custom validation strategies.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})

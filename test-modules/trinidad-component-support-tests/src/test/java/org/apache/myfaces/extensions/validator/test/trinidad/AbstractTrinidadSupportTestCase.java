@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.trinidad.startup.TrinidadModuleSt
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

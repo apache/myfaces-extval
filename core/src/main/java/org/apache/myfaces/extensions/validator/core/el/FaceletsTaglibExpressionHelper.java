@@ -42,7 +42,6 @@ import java.util.Iterator;
  * An alternative would be an EL-Resolver - there are still some open issues with such an approach
  * + It isn't available with JSF 1.1.x
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

@@ -33,7 +33,6 @@ import java.io.Writer;
 import java.io.OutputStream;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

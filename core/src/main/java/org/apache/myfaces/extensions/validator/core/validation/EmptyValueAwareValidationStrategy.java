@@ -31,7 +31,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Marker annotation to indicate that the strategy can handle empty values (strings of length 0) as values to validate.
  * This was introduced to have the correct behaviour in relation to the parameter javax.faces.VALIDATE_EMPTY_FIELDS.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Target(TYPE)

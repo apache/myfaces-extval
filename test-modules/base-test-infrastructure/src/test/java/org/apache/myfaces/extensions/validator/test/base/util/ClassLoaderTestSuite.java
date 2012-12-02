@@ -47,8 +47,7 @@ import junit.runner.TestCaseClassLoader;
  * 
  * Most of the code is borrowed from junit.framework.TestSuite.
  * 
- * @author Rudy De Busscher
- * 
+ *
  */
 @SuppressWarnings("unchecked")
 public class ClassLoaderTestSuite extends TestSuite

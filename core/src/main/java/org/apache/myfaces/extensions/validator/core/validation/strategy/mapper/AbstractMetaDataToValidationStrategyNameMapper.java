@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

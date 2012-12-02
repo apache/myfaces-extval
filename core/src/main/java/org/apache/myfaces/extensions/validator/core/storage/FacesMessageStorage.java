@@ -26,7 +26,6 @@ import javax.faces.application.FacesMessage;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

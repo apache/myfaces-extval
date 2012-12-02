@@ -27,7 +27,6 @@ import java.util.Locale;
  * A {@link MessageResolver} is responsible for loading the message for a given key and locale.
  * The message-source and format depends on the implementation of the resolver.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

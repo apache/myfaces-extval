@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import java.util.MissingResourceException;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

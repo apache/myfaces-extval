@@ -29,7 +29,6 @@ import javax.faces.convert.DateTimeConverter;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
  */
 public class PropertyChainCrossValTestCase extends AbstractPropertyValidationTestCase
 {

@@ -37,7 +37,6 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

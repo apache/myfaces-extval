@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.test.beanval.custom.CustomViolati
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Gerhard Petracek
  */
 public class CustomSeverityTestCase1PageBean
 {

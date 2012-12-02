@@ -41,7 +41,6 @@ import java.lang.reflect.Modifier;
 /**
  * Default implementation of the class which is capable of extracting ValidationParameter's from an annotation.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

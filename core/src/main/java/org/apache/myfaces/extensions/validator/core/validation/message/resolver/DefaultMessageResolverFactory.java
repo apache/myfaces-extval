@@ -42,7 +42,6 @@ import java.util.logging.Logger;
 /**
  * Factory which creates a MessageResolver for a given ValidationStrategy
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "add generic java api (de-/register mapping)")

@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation({UsageCategory.REUSE})

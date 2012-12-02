@@ -27,7 +27,6 @@ import java.util.logging.Logger;
  * details
  * @see DefaultELHelper
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})

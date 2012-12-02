@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * <p/>
  * it allows to manage groups for the current request
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

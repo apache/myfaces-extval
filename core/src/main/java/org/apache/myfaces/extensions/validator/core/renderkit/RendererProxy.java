@@ -23,7 +23,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.render.Renderer;
 
 /**
- * @author Gerhard Petracek
  */
 public interface RendererProxy
 {

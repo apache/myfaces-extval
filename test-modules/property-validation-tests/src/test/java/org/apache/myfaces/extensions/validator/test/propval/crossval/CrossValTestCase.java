@@ -28,7 +28,6 @@ import junit.framework.TestSuite;
 import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyValidationTestCase;
 
 /**
- * @author Leonardo Uribe
  */
 public class CrossValTestCase extends AbstractPropertyValidationTestCase
 {

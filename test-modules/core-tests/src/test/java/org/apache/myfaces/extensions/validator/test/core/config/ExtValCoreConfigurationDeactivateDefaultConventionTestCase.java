@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.ClassLoaderTestSui
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

@@ -43,7 +43,6 @@ import java.util.List;
 /**
  * EXTVAL-59
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

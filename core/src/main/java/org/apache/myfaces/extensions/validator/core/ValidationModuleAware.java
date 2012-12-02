@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * if an artifact (which supports this concept) should be used just for a/some specific module(s),
  * the artifact has to implement this interface
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

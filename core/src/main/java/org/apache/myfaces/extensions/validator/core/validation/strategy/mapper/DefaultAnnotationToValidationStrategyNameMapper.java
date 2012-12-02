@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * Default implementation which maps ExtVal Annotations to ExtVal ValidationStrategies.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(300)

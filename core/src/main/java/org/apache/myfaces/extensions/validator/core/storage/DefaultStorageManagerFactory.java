@@ -38,7 +38,6 @@ import java.util.logging.Logger;
 /**
  * default implementation for storage-manager creation and caching
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

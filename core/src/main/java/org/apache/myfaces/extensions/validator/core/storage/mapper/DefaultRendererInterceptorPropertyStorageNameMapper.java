@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * use a public class to allow optional deregistration
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(100)

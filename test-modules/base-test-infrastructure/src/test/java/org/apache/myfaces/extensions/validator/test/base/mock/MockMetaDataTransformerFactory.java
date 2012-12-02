@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
  */
 public class MockMetaDataTransformerFactory extends DefaultMetaDataTransformerFactory
 {

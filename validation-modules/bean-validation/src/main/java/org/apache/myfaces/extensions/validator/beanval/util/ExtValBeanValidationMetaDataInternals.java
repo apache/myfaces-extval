@@ -51,7 +51,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

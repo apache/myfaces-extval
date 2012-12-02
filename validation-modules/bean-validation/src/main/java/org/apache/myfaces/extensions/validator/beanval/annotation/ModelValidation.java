@@ -32,7 +32,6 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.FIELD;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 
