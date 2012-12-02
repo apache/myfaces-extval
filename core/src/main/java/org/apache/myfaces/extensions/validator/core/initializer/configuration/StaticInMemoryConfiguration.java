@@ -28,7 +28,6 @@ import java.util.ArrayList;
  * Implementation of the {@link StaticConfiguration} interface for in-memory configs.
  * It's an implementation which helps to create custom config approaches easily.
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})

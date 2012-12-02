@@ -46,7 +46,6 @@ import java.util.Map;
  * Basic implementation of a {@link ComponentInitializer} which allows an easier handling of required validations and
  * provides a default implementation for standard components.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.REUSE)

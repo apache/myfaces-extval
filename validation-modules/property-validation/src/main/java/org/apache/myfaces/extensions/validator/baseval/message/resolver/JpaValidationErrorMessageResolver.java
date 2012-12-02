@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 /*

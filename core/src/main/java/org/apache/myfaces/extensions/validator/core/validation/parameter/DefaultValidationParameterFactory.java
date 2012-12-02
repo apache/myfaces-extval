@@ -34,7 +34,6 @@ import java.util.Map;
 /**
  * maps internal parameters to optionally available custom parameters
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

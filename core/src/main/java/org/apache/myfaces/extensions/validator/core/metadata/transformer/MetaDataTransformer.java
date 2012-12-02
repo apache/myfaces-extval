@@ -38,7 +38,6 @@ import java.util.Map;
  *
  * {@link org.apache.myfaces.extensions.validator.core.metadata.CommonMetaDataKeys} provides the keys used by ExtVal.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

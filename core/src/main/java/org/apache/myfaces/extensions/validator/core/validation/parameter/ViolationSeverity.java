@@ -27,7 +27,6 @@ import javax.faces.application.FacesMessage;
  * ValidationParameter to indicate the severity of the FacesMessage in case of a validation failure. By default, the
  * severity is Error.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

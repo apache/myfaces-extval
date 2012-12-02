@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * @author Gerhard Petracek
  * @since 2.x.3
  */
 @ToDo(value = Priority.HIGH, description = "add optional web.xml param to deactivate")

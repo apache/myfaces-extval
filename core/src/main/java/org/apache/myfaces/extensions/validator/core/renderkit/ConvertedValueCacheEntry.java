@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.core.renderkit;
 
 /**
- * @author Gerhard Petracek
  */
 class ConvertedValueCacheEntry
 {

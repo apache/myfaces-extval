@@ -27,7 +27,6 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 
 /**
- * @author Gerhard Petracek
  * @since 2.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

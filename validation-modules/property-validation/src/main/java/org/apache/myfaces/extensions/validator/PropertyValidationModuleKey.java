@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.core.ValidationModuleKey;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @ValidationModuleKey

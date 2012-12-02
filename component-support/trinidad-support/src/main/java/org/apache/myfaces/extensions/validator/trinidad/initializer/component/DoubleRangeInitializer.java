@@ -33,7 +33,6 @@ import javax.faces.context.FacesContext;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")

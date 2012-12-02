@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @param <P> generic type for the source type
  * @param <R> generic type for the target type.
 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

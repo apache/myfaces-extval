@@ -41,7 +41,6 @@ import java.net.URL;
 import java.util.Enumeration;
 
 /**
- * @author Rudy De Busscher
  *         since v4
  */
 public abstract class AbstractTrinidadSupportTestCase extends AbstractExValTestCase

@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 /**
  * Interface for name-mappers which have to delegate to other (sub-)name-mappers.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -35,7 +35,6 @@ import java.util.logging.Logger;
  * AbstractApplicationScopeAwareStorageManager and AbstractRequestScopeAwareStorageManager, that use JSF scopes to store
  * the information.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(REUSE)

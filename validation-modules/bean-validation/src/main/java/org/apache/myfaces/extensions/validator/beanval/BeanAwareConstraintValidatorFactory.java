@@ -29,7 +29,6 @@ import javax.validation.ConstraintValidator;
 import java.beans.Introspector;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

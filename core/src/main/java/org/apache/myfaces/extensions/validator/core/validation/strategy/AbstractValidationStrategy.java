@@ -34,7 +34,6 @@ import java.util.logging.Logger;
  * {@link javax.faces.convert.ConverterException}. Furthermore, this base implementation introduces a hook for the
  * initialization of validators and the interception of {@link ValidatorException}s.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})

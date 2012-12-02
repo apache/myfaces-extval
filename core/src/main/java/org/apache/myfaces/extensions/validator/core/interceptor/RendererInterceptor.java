@@ -35,7 +35,6 @@ import java.io.IOException;
  * It's the base mechanism of ExtVal which enables most of the concepts provided by the framework.
  * Furthermore, it allows to add custom concepts.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

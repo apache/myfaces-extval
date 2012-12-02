@@ -27,7 +27,6 @@ import java.util.List;
  * Allows to provide static configurations (mappings).
  * The config format depends on the implementation.
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

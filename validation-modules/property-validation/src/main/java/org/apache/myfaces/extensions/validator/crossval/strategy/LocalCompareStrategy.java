@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 /**
  * "[property_name]" ... local validation -> cross-component, but no cross-entity validation
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

@@ -35,7 +35,6 @@ import java.util.Collection;
  * this wrapper prevents such a server-side double validation.
  * it just delegates the client-side functionality.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.REUSE)

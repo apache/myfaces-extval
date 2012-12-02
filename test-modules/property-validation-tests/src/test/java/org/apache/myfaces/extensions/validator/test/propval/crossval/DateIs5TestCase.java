@@ -28,7 +28,6 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.convert.DateTimeConverter;
 
 /**
- * @author Rudy De Busscher
  */
 public class DateIs5TestCase extends AbstractPropertyValidationTestCase
 {

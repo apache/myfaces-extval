@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 public class TrinidadRendererInterceptor extends AbstractRendererInterceptor

@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @author Rudy De Busscher
  */
 public class DateIs1TestBean
 {

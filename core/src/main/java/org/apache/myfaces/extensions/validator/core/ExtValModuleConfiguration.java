@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * Marker interface for type-safe ExtVal configurations.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

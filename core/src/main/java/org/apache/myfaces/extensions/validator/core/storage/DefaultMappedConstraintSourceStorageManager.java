@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 /**
  * default storage-manager for mapped properties information
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(INTERNAL)

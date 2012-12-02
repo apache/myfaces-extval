@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.validator.test.propval.crossval;
 import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
 
 /**
- * @author Leonardo Uribe
  */
 public class CrossValTestBean
 {

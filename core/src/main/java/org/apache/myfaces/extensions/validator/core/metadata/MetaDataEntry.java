@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 /**
  * Data holder which stores the meta-data and some information where the meta-data was found.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * ({@link org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor})
  * to stop the execution of the subsequent interceptors.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

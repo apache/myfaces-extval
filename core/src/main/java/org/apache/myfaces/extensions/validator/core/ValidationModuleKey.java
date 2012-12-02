@@ -33,7 +33,6 @@ import static java.lang.annotation.ElementType.TYPE;
 /**
  * marker annotation for module keys
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

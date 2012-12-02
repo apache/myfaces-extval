@@ -28,7 +28,6 @@ import javax.faces.component.UIComponent;
 /**
  * replacement for BeanValidator which gets added due to f:validateBean
  *
- * @author Gerhard Petracek
  * @since 2.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

@@ -30,7 +30,6 @@ import javax.faces.validator.ValidatorException;
 /**
  * Allows to intercept {@link javax.faces.validator.ValidatorException}.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrderSupport

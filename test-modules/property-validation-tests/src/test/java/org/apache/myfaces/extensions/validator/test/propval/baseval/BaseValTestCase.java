@@ -29,7 +29,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Leonardo Uribe
  */
 public class BaseValTestCase extends AbstractPropertyValidationTestCase
 {

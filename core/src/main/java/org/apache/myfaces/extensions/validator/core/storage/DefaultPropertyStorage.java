@@ -31,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

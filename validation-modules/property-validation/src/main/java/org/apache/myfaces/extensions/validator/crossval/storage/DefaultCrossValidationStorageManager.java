@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.core.storage.AbstractRequestScope
 /**
  * default storage-manager for cross-validation entries
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

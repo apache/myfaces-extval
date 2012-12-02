@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.core.property.PropertyInformation
  * Allows filtering e.g. {@link org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry MetaDataEntries}.
  * So it's possible to add/remove entries which should or shouldn't be used.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

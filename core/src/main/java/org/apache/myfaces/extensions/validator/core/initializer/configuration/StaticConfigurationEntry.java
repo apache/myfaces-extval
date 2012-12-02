@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 /**
  * Configuration entry for easier handling of key/value pairs.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

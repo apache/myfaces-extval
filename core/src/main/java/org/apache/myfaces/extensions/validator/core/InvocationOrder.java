@@ -50,7 +50,6 @@ import static java.lang.annotation.ElementType.TYPE;
  * if a name-mapper has priority 100, it's ok that an exception-interceptor also has priority 100.
  * but a 2nd name-mapper shouldn't have priority 100
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

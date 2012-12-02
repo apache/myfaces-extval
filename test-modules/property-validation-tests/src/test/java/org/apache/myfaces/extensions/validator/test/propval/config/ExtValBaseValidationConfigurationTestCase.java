@@ -30,7 +30,6 @@ import org.apache.myfaces.test.runners.TestPerClassLoaderRunner;
 import org.junit.runner.RunWith;
 
 /**
- * @author Rudy De Busscher
  *         since v4
  */
 @RunWith(value = TestPerClassLoaderRunner.class)

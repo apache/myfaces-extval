@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  *
  * Optionally, a parameter has a {@link ParameterKey} and one or more {@link ParameterValue} annotation/s.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.validator.test.propval.crossval;
 
 /**
- * @author Gerhard Petracek
  */
 public class LocalPropertyCrossValTestCase extends ELCrossValTestCase
 {

@@ -34,7 +34,6 @@ import java.lang.annotation.Annotation;
 /**
  * "[local_property.property1.property2]"
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

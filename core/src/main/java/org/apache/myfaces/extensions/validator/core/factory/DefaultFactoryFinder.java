@@ -44,7 +44,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 //dynamic approach to create the factories during the first request, when a faces-context is available

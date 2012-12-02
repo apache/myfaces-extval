@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * without braking backward compatibility, it's possible to use these properties in custom artifacts.
  * rendering interception is an internal concept. so properties,... of it won't get into the api.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

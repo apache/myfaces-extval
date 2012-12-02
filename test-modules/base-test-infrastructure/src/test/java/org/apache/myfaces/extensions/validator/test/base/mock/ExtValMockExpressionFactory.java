@@ -26,7 +26,6 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 
 /**
- * @author Gerhard Petracek
  */
 public class ExtValMockExpressionFactory extends MockExpressionFactory
 {

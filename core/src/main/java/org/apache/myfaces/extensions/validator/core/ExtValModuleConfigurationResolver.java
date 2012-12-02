@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * Allows the retrieval of a custom configuration object.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})

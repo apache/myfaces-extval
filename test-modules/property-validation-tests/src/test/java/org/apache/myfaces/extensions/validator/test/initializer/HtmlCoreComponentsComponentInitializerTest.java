@@ -32,7 +32,6 @@ import javax.faces.component.html.HtmlInputText;
  * Although this is mainly a test for AbstractHtmlCoreComponentsComponentInitializer, it is in the property validation modules test
  * since we need a few classes that are available here to make a meaningful test.
  *
- * @author Rudy De Busscher
  */
 public class HtmlCoreComponentsComponentInitializerTest extends AbstractPropertyValidationTestCase
 {

@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.test.propval.AbstractPropertyVali
 import org.junit.Test;
 
 /**
- * @author Leonardo Uribe
  */
 public class CrossValTestCase extends AbstractPropertyValidationTestCase
 {

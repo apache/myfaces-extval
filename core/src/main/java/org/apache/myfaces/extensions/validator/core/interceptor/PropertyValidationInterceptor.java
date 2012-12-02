@@ -34,7 +34,6 @@ import java.util.Map;
  * to intercept the validation of the constraint which hosts the interceptor as
  * {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter}.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrderSupport

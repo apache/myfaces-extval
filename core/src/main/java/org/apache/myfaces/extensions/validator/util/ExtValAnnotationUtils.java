@@ -39,7 +39,6 @@ import org.apache.myfaces.extensions.validator.internal.Priority;
 /**
  * Contains helper methods which are dealing with general tasks liked to annotation
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.REUSE)

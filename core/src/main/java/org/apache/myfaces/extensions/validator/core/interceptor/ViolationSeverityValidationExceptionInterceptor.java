@@ -33,7 +33,6 @@ import java.lang.annotation.Annotation;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(90)

@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * centralized in order that these information arn't spread over the complete code base
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

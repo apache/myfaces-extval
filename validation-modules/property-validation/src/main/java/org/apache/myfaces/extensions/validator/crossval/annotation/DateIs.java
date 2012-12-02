@@ -32,7 +32,6 @@ import java.lang.annotation.Documented;
 import java.text.DateFormat;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @Target({METHOD, FIELD})

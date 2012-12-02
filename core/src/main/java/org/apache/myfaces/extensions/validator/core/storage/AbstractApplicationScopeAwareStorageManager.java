@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Generic storage manager implementation which stores the storage implementations in the JSF application scope.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(REUSE)

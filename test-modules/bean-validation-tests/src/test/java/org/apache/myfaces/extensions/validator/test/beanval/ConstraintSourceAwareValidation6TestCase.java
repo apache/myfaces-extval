@@ -35,7 +35,6 @@ import org.junit.Test;
 /**
  * EXTVAL-83
  *
- * @author Gerhard Petracek
  */
 public class ConstraintSourceAwareValidation6TestCase extends
         BaseBeanValPropertyValidationTestCase<ConstraintSourceAware6Bean>

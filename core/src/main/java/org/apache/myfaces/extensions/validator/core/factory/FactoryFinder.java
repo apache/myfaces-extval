@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * Structure for the object that is able to locate the different factories within the ExtVal Framework.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

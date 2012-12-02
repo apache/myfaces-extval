@@ -31,7 +31,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @SkipValidationSupport

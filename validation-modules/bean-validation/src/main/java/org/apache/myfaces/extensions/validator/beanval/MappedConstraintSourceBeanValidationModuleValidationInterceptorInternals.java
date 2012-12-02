@@ -36,7 +36,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

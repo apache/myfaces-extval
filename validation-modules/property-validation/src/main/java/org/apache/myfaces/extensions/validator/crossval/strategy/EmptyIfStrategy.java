@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.EmptyIfType;
 import org.apache.myfaces.extensions.validator.crossval.annotation.MessageTarget;
 
 /**
- * @author Rudy De Busscher
  */
 public class EmptyIfStrategy extends AbstractCompareStrategy<EmptyIf>
 {

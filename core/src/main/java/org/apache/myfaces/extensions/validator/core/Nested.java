@@ -30,7 +30,6 @@ import static java.lang.annotation.ElementType.TYPE;
 /**
  * marker annotation e.g. to mark sub-name-mappers
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Target(TYPE)

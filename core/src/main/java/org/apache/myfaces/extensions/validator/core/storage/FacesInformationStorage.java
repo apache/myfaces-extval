@@ -27,7 +27,6 @@ import javax.faces.event.PhaseId;
  * storage for additional information about the current faces request
  * for now it just contains information about the current phase of the lifecycle
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

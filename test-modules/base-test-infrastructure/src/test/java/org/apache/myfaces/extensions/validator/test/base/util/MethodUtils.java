@@ -22,7 +22,6 @@ import javax.faces.context.FacesContext;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  */
 //TODO
 public class MethodUtils

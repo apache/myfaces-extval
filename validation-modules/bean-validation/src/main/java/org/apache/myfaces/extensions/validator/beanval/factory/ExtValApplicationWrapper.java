@@ -29,7 +29,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 /**
- * @author Gerhard Petracek
  * @since r4
  */
 class ExtValApplicationWrapper extends ApplicationWrapper

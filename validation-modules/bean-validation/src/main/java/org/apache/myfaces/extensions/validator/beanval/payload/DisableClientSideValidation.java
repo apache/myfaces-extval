@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.validation.Payload;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -31,7 +31,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
 /**
- * @author Rudy De Busscher
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)

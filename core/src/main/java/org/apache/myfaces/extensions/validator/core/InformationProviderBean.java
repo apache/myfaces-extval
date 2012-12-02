@@ -33,7 +33,6 @@ import java.util.logging.Logger;
  * <p/>
  * the static api should only be used
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API, UsageCategory.CUSTOMIZABLE})

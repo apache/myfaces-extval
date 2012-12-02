@@ -31,7 +31,6 @@ import static org.apache.myfaces.extensions.validator.util.ExtValAnnotationUtils
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @ToDo(value = Priority.MEDIUM, description = "use meta-data storage - but a special impl.")

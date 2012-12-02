@@ -26,7 +26,6 @@ import java.util.Map;
 /**
  * The interface for all factories which create meta-data extractors.
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

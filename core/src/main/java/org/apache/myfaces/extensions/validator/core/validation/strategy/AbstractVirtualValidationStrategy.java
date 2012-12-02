@@ -30,7 +30,6 @@ import javax.faces.component.UIComponent;
  * So the ValidationStrategy is only used to have the component initialization and is not used to do the actual
  * validation.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.REUSE)

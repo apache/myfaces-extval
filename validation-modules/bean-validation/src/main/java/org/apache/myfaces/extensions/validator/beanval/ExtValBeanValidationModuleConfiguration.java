@@ -32,7 +32,6 @@ import java.util.logging.Logger;
  * if a method returns null ExtVal uses a different approach to find an implementation e.g. via a naming convention
  * -> all other methods aren't allowed to return null if there is no additional rule.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

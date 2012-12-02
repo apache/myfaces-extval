@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
 import javax.persistence.Id;
 
 /**
- * @author Rudy De Busscher
  */
 public class DataBean
 {

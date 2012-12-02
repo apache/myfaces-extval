@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.beanval.metadata.transformer.Stri
 import javax.validation.constraints.Size;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Nested

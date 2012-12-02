@@ -30,8 +30,6 @@ import javax.faces.lifecycle.Lifecycle;
  * Wrapper around a Lifecycle that initialise the ExtVal PhaseListeners before an execution of any
  * phase (except the render view). Solution for the issue EXTVAL-123.
  *
- * @author Rudy De Busscher
- * @author Gerard Petracek
  * @since x.x.5
  */
 @UsageInformation(value = UsageCategory.INTERNAL)

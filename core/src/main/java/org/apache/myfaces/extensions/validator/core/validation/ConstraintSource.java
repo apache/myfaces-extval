@@ -34,7 +34,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * If needed, this annotation can be replaced by a customer defined one if one likes to have independence of ExtVal in
  * model classes, see constraintSourceAnnotation in ExtValCoreConfiguration.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @Target({TYPE, FIELD, METHOD})

@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import javax.faces.application.FacesMessage;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.INTERNAL)

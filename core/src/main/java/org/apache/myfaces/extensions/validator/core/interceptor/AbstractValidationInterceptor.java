@@ -54,7 +54,6 @@ import java.util.logging.Level;
  * - calling before and after Validation interceptors <br/>
  * - etc ...
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.REUSE)

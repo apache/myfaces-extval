@@ -28,7 +28,6 @@ import java.util.HashMap;
 /**
  * Generic storage manager implementation which stores the storage implementations in the JSF request scope.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(REUSE)

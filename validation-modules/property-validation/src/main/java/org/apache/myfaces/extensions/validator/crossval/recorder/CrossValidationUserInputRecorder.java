@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

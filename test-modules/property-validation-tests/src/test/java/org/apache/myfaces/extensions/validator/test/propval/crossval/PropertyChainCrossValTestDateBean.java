@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.Equals;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
  */
 public class PropertyChainCrossValTestDateBean
 {

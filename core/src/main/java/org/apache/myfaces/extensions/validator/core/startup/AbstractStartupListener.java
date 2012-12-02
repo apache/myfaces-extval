@@ -42,7 +42,6 @@ import java.util.logging.Level;
  * e.g. register artifacts via api. It is done before the first Restore view of the application. PhaseListeners are
  * deregistered so that they don't have any additional impact on the application.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.REUSE)

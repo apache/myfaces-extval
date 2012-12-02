@@ -28,7 +28,6 @@ import javax.faces.context.FacesContext;
 /**
  * solution for trinidad table renderer issue (in connection with double call prevention proxies)
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @Deprecated

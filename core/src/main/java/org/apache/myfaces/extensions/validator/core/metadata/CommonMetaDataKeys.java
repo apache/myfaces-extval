@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * helper for frequent meta-data keys
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 /*

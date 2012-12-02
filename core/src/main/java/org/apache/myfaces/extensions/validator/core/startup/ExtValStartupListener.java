@@ -71,7 +71,6 @@ import org.apache.myfaces.extensions.validator.util.JsfUtils;
 import org.apache.myfaces.extensions.validator.ExtValInformation;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

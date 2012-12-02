@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.core.mapper.NameMapper;
 /**
  * Interface for factories which are using {@link NameMapper}s for creating instances.
  *
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)

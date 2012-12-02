@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since 2.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

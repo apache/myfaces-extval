@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  */
 //TODO improve
 public class ExtValMockValueExpression extends MockValueExpression

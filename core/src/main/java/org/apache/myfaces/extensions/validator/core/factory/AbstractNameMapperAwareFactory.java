@@ -36,7 +36,6 @@ import java.util.Comparator;
  * Default implementation of a NameMapperAwareFactory where the concrete implementation is responsible for the storage
  * of the list of nameMappers.
  *
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)

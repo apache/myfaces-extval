@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 /**
  * Default implementation which maps ExtVal ValidationStrategies to MetaDataTransformers.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(300)

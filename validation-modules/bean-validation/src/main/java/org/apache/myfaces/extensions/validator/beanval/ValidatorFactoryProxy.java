@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since r5
  */
 //see EXTVAL-130

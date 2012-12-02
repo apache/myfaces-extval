@@ -31,7 +31,6 @@ import org.junit.runner.RunWith;
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

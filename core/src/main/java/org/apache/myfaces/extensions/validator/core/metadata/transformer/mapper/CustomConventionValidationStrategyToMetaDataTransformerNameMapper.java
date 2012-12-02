@@ -32,7 +32,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * The bean provides the default name (convention).
  * It's possible to provide a custom full qualified name. (= customizable convention)
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(200)

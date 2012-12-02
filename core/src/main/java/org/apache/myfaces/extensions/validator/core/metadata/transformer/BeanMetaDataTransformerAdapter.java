@@ -32,7 +32,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  *
  * @see org.apache.myfaces.extensions.validator.core.validation.strategy.BeanValidationStrategyAdapter
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.HIGH, description = "see EXTVAL-116")
