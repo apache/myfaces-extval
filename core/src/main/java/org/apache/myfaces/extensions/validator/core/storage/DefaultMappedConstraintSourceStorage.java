@@ -30,7 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(INTERNAL)

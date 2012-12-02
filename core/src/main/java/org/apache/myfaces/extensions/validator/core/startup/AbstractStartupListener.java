@@ -41,7 +41,6 @@ import java.util.logging.Level;
  * Startup listeners can be used to execute e.g. setup-logic just once before the first request gets processed.
  * After a listener was executed it gets deactivated.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.REUSE)

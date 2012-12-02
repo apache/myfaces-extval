@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
  */
 public class MockMessageResolverFactory extends DefaultMessageResolverFactory
 {

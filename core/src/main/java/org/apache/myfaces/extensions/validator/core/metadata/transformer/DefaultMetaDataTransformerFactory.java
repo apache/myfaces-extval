@@ -48,7 +48,6 @@ import java.util.logging.Logger;
 /**
  * Factory which creates the MetaDataTransformer for a given ValidationStrategy
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 /*

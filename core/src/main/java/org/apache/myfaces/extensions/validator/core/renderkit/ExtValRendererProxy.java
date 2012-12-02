@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 /**
  * to avoid multiple calls of renderer methods within renderer interceptors (e.g. for encode, decode,...)
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

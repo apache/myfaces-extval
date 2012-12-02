@@ -32,7 +32,6 @@ import static java.lang.annotation.ElementType.METHOD;
  * {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter}
  * if there are multiple parameters of the same type.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Target({FIELD, METHOD})

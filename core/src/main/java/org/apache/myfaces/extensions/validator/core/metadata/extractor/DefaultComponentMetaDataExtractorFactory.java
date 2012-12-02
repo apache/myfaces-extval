@@ -44,7 +44,6 @@ import java.util.logging.Logger;
  *   <li>default implementation</li>
  * </ol>
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

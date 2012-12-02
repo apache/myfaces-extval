@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * Factory which is responsible to provide factories which are used by the framework.
  * An implementation should provide the possibility to use custom factory implementations.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

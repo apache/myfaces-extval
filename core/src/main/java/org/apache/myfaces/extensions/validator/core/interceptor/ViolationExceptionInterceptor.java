@@ -34,7 +34,6 @@ import javax.faces.context.FacesContext;
  * This validation-exception interceptor sets the valid property of the uiComponent to false,
  * if it is a blocking severity.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

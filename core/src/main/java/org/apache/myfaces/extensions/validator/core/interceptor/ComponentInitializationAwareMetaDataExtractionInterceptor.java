@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.util.JsfUtils;
  * This is an abstract base class that can be used to define a MetaDataExtractionInterceptor that should only be
  * invoked when the MetaDataExtraction happens in the Render Response Phase.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrderSupport

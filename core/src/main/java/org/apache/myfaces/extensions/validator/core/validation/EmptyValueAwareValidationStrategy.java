@@ -32,7 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * If a {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy} is NOT annotated
  * with this marker, it doesn't have to care about empty values.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Target(TYPE)

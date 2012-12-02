@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 /**
  * extensible project stage implementation
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

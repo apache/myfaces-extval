@@ -26,8 +26,6 @@ import org.junit.Test;
 /**
  * EXTVAL-83
  *
- * @author Gerhard Petracek
- * @author Rudy De Busscher
  */
 public class ConstraintSourceAwareValidation1TestCase extends
         AbstractConstraintSourceTestCase<ConstraintSourceAware1Bean>

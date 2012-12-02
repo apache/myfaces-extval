@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.util.WebXmlUtils;
 /**
  * centralized in order that these information aren't spread over the complete code base
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

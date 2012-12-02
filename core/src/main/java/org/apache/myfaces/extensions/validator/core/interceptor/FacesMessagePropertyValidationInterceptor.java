@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(900)

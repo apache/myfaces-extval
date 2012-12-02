@@ -30,8 +30,6 @@ import java.util.Iterator;
  * ExtVal PhaseListeners are 'executed' (initialised) before any code of the JSF implementation is executed.
  * Solution for the issue EXTVAL-123.
  *
- * @author Rudy De Busscher
- * @author Gerard Petracek
  * @since x.x.5
  */
 @UsageInformation(value = UsageCategory.INTERNAL)

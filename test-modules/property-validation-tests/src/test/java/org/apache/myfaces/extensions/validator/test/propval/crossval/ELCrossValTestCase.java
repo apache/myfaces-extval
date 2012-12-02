@@ -29,7 +29,6 @@ import org.junit.Test;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
  */
 public class ELCrossValTestCase extends AbstractPropertyValidationTestCase
 {

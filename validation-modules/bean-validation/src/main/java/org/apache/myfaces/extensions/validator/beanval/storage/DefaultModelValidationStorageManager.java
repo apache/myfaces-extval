@@ -26,7 +26,6 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 /**
  * default storage-manager for model-validation entries
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

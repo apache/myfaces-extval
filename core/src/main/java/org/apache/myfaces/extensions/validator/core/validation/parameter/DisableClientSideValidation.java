@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * A special {@link ValidationParameter} to indicate that the found meta-data shouldn't be used for
  * component initialization.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

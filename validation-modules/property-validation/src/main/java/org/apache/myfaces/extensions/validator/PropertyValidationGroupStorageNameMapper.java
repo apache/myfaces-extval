@@ -28,7 +28,6 @@ import static org.apache.myfaces.extensions.validator.internal.UsageCategory.INT
 /**
  * name mapper for group implementations via validation parameters
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

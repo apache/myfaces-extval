@@ -30,7 +30,6 @@ import javax.faces.context.FacesContext;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.INTERNAL)

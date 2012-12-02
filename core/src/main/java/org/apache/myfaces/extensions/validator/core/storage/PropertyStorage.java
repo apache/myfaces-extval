@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

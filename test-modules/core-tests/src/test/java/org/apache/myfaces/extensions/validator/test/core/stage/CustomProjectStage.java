@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.core.ProjectStageName;
 /**
  * custom project stage
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

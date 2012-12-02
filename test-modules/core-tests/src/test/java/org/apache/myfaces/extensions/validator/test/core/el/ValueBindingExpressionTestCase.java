@@ -24,7 +24,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 public class ValueBindingExpressionTestCase extends AbstractExValCoreTestCase

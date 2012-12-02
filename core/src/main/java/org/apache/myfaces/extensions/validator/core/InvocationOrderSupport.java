@@ -32,7 +32,6 @@ import static java.lang.annotation.ElementType.TYPE;
  * it marks interfaces - instances of classes implementing these interfaces will be sorted
  * @see InvocationOrderComparator
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

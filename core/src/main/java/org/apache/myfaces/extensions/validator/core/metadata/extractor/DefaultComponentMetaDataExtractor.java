@@ -42,7 +42,6 @@ import org.apache.myfaces.extensions.validator.util.ProxyUtils;
  * It extracts the meta-data of the field and the property.
  * (Also the annotations of super classes and interfaces.)
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

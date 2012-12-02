@@ -35,7 +35,6 @@ import javax.faces.validator.LengthValidator;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.MEDIUM, description = "skipValidationSupport for client-side validation")

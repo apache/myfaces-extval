@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 /**
  * to support a custom proxy
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

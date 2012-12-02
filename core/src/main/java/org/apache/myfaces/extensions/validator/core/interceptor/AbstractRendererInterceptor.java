@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 /**
  * Empty base implementation which allows concrete implementations to override just the needed methods.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

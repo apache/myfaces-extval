@@ -33,7 +33,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {@link org.apache.myfaces.extensions.validator.core.validation.ConstraintSource}
  * is used for mapped constraint sources.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @Target({FIELD, METHOD})

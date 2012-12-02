@@ -33,7 +33,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 /**
  * Contains helper methods that deal with the mapped constraint source mechanism.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

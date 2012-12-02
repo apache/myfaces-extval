@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 
 /**
- * @author Gerhard Petracek
  */
 @UsageInformation(UsageCategory.INTERNAL)
 class DefaultProjectName implements ProjectStageName

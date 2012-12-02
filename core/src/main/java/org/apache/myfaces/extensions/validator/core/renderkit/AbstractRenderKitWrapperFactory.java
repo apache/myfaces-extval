@@ -30,7 +30,6 @@ import java.util.logging.Logger;
  * Base for all RenderKitWrapperFactories to force a specific behaviour. Subclasses need to specify the logic to create
  * the wrappers.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

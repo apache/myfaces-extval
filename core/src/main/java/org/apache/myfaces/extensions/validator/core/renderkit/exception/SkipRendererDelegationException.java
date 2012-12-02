@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * ({@link org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor})
  * to skip the invocation of the intercepted renderer method.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

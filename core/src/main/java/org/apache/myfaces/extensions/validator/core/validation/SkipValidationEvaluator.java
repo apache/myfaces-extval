@@ -29,7 +29,6 @@ import javax.faces.component.UIComponent;
 /**
  * Evaluator which checks if the validation process should be skipped for the given component.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

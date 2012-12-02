@@ -38,7 +38,6 @@ import java.util.logging.Logger;
  * referencing validation targets - possible formats:
  * "#{[bean_name].[property_name]}" ... cross-entity validation with value binding
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

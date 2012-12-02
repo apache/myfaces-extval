@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.util.ClassUtils;
  * Default MessageResolver which uses the default convention for the message bundle.
  * It's possible to provide a custom message bundle via web.xml
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})

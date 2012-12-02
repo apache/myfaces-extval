@@ -28,7 +28,6 @@ import java.util.List;
  * <p/>
  * it allows to manage model-validation-entries for the current request
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -32,7 +32,6 @@ import javax.faces.component.UIComponent;
  * if there is no validation strategy (e.g. required by jsr 303).
  * So it is only used for the component initialization process (and not for the actual validation).
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.REUSE)

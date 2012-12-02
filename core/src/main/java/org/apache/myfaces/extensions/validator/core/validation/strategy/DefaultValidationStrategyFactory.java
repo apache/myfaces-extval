@@ -48,7 +48,6 @@ import java.util.logging.Logger;
 /**
  * Factory which creates the ValidationStrategy for a given Meta-Data Key
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})

@@ -37,7 +37,6 @@ import java.util.logging.Level;
  * Subclasses just have to provide the package to look at.
  * An implementation can also provide a custom name which is e.g. configured via web.xml.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.CUSTOMIZABLE})

@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.core.storage.mapper.DefaultProper
 /**
  * default storage-manager for property information
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

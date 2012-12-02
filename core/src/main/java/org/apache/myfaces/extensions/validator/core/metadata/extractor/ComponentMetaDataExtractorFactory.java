@@ -27,7 +27,6 @@ import java.util.Map;
  * The interface for all factories which create
  * {@link org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor MetaDataExtractors}.
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

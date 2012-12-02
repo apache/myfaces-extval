@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
  * {@link org.apache.myfaces.extensions.validator.core.validation.strategy.ValidationStrategy}.
  * NameMappers have to be stateless.
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrderSupport

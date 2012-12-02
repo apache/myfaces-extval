@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @ToDo(value = Priority.LOW, description = "optional parameter to deactivate sorting")

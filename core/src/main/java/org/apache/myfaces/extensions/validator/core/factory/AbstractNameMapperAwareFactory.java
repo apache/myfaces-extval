@@ -41,7 +41,6 @@ import java.util.Comparator;
  * {@link #register(org.apache.myfaces.extensions.validator.core.mapper.NameMapper)},
  * {@link #deregister(Class)} and {@link #deny(Class)}).
  *
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)

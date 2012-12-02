@@ -35,7 +35,6 @@ import java.beans.Introspector;
  * the validation strategy is stateful: none/prototype
  * don't use the session or a conversation scope
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrder(500)

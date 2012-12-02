@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * It allows to manage validation-groups for the current request.
  * Since JSF allows very dynamic pages, we can use the groups just for one request.
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

@@ -36,7 +36,6 @@ package org.apache.myfaces.extensions.validator.internal;
  * if it isn't marked as API it might change in future releases.
  * however, we try to keep it as stable as possible and reasonable.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 public enum UsageCategory

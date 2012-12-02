@@ -33,7 +33,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import javax.faces.validator.ValidatorException;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @SkipValidationSupport

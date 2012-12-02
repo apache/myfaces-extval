@@ -23,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * in some cases we have to store null values to avoid re-evaluation
  *
- * @author Gerhard Petracek
  */
 public class NullValueAwareConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V>
 {

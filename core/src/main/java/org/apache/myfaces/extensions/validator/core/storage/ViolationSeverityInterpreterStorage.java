@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.core.validation.parameter.Violati
  * Interface for a {@link ViolationSeverityInterpreter} storage.
  * Used by add-ons to change the interpreter for the current request.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

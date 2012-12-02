@@ -33,7 +33,6 @@ import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import static org.apache.myfaces.extensions.validator.util.ConstraintSourceUtils.resolveMappedConstraintSourceFor;
 
 /**
- * @author Rudy De Busscher
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

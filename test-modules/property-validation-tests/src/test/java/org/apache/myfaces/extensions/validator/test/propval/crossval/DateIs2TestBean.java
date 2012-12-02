@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.DateIsType;
 import java.util.Date;
 
 /**
- * @author Rudy De Busscher
  */
 public class DateIs2TestBean
 {

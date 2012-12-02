@@ -32,7 +32,6 @@ import javax.faces.event.PhaseId;
  * component initialization (if needed)
  * example: client-side validation - some functionality shouldn't be processed during rendering
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

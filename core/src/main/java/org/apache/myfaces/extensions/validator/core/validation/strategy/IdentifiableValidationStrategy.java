@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageInformation;
  * interface allows to detect the type of current constraint.
  * It's needed for constraint mappings which don't follow the original approach of ExtVal (e.g. bv)
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

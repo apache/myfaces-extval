@@ -28,7 +28,6 @@ import javax.faces.application.FacesMessage;
 /**
  * mechanism to change the default behavior of extval
  * 
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

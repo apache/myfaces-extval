@@ -29,7 +29,6 @@ import java.util.ArrayList;
 /**
  * Default implementation of the {@link StaticConfiguration} interface for property-file based configs.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.INTERNAL, UsageCategory.REUSE})

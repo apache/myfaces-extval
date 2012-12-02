@@ -28,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
  */
 public class ELCrossValReverseMessageTestCase extends ELCrossValTestCase
 {

@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @ToDo(value = Priority.LOW, description = "refactor")

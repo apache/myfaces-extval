@@ -42,7 +42,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * alternative approach for ExtValRenderKitFactory
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

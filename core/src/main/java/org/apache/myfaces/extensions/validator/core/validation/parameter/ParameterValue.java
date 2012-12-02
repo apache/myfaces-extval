@@ -31,7 +31,6 @@ import static java.lang.annotation.ElementType.METHOD;
  * Marker for values within a
  * {@link org.apache.myfaces.extensions.validator.core.validation.parameter.ValidationParameter} implementation.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @Target({FIELD, METHOD})

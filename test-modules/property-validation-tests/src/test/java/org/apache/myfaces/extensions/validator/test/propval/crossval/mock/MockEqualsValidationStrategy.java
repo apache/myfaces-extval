@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.validator.test.base.util.MethodUtils;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
  */
 public class MockEqualsValidationStrategy extends EqualsStrategy
 {

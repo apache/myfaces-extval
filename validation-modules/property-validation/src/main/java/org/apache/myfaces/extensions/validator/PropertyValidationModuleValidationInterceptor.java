@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterc
  * the skip validation support was refactored to an independent mechanism
  * see SkipValidationEvaluator
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

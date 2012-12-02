@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 /**
  * It's an alternative Mapper - if there is a proxy around the validation strategy.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @ToDo(value = Priority.HIGH, description = "see EXTVAL-116")

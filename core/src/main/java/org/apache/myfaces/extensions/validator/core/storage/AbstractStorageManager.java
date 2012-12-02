@@ -35,7 +35,6 @@ import java.util.logging.Logger;
  * manage storages ({@see AbstractStorageManager#create} and {@see AbstractStorageManager#reset})
  * in the context of a specific scope (e.g. the application scope of JSF).
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(REUSE)

@@ -34,7 +34,6 @@ import org.junit.Test;
 
 /**
  * 
- * @author Rudy De Busscher
  * since v4
  *
  */

@@ -29,7 +29,6 @@ import javax.faces.application.FacesMessage;
  * (or to convert a simple {@link javax.faces.application.FacesMessage} to a
  * {@link javax.faces.application.FacesMessage} which is aware of a label.
  *
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @UsageInformation(UsageCategory.API)

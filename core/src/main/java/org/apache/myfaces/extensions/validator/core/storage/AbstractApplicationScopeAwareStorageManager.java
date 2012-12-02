@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * {@inheritDoc}
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(REUSE)

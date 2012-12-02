@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * Names of factories known by the
  * {@link org.apache.myfaces.extensions.validator.core.factory.FactoryFinder}
  * 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation({UsageCategory.API})

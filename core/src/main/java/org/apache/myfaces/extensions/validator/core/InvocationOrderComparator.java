@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

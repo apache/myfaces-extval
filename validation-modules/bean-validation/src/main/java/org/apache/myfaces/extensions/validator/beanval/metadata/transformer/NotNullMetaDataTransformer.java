@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

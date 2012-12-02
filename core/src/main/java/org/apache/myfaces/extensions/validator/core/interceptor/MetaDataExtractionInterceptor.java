@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.core.InvocationOrderSupport;
  * Allows to post-process the result of the meta-data extraction process (see
  * {@link org.apache.myfaces.extensions.validator.core.metadata.extractor.MetaDataExtractor})
  *
- * @author Gerhard Petracek
  * @since 1.x.2
  */
 @InvocationOrderSupport

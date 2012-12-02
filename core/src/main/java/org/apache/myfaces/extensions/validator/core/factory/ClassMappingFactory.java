@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.validator.internal.UsageCategory;
  * @param <P> source type
  * @param <R> target type
 
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

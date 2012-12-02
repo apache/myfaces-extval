@@ -26,7 +26,6 @@ import java.util.List;
 /**
  * normally it should be in the storage package - due to backward compatibility it isn't the case
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

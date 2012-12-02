@@ -32,7 +32,6 @@ import java.util.MissingResourceException;
 import java.util.logging.Level;
 
 /**
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @SkipValidationSupport

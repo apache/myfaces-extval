@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 /**
  * it's an internal annotation to provide some information concerning usage-categories
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  * @see org.apache.myfaces.extensions.validator.internal.UsageCategory
  */

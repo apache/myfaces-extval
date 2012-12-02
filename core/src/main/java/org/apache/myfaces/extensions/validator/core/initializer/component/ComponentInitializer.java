@@ -41,7 +41,6 @@ import java.util.Map;
  * {@link org.apache.myfaces.extensions.validator.core.initializer.component.ComponentInitializer}
  * per JSF component lib.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @InvocationOrderSupport

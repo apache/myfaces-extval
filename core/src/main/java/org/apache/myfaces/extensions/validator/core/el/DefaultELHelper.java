@@ -44,7 +44,6 @@ import java.util.logging.Logger;
  *
  * this el-helper supports jsp and facelets (tested with 1.1.14)
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 /*

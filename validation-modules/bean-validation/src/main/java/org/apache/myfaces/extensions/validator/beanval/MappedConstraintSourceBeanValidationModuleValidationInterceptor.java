@@ -30,7 +30,6 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

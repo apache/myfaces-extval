@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 /**
  * central mechanism which is responsible to create a wrapper for a renderer - starting point of extval.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.INTERNAL)

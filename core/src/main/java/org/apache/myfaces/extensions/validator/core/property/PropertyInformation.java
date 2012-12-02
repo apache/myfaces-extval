@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
  * (e.g. {@link org.apache.myfaces.extensions.validator.core.property.PropertyDetails})
  * MetaDataEntry's are considered as a special kind of information and separate methods are created for them.
  *
- * @author Gerhard Petracek
  * @since 1.x.1
  */
 @UsageInformation(UsageCategory.API)

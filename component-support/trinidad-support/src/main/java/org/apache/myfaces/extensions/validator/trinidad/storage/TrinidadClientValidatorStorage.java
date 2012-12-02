@@ -28,7 +28,6 @@ import javax.faces.component.UIComponent;
  * so client-side validation is supported. some app-servers show a different behaviour.
  * that's the reason for storing these components and remove the injected validators after the rendering phase.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

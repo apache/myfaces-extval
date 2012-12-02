@@ -37,7 +37,6 @@ import java.util.Map;
 /**
  * extracts and adds the extval bv meta-data (e.g. validation groups) to the ExtValBeanValidationContext
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @InvocationOrder(200)

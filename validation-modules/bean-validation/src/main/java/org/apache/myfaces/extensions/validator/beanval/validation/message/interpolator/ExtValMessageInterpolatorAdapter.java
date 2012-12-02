@@ -27,7 +27,6 @@ import javax.validation.MessageInterpolator;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.INTERNAL)

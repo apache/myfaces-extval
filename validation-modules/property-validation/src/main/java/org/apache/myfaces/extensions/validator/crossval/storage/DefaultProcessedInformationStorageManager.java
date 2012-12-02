@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.validator.util.CrossValidationUtils;
 /**
  * default storage-manager for processed information entries
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(INTERNAL)

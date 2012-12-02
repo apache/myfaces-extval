@@ -25,7 +25,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Rudy De Busscher
  */
 public class NotNullValidationTestCase extends BaseBeanValPropertyValidationTestCase<ConstraintSourceAware1MetaDataBean>
 {

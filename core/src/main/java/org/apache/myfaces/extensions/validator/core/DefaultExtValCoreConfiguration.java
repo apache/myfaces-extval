@@ -40,7 +40,6 @@ import java.lang.annotation.Annotation;
  * Default ExtVal Core Module Configuration that retrieves most of the values from the Web.xml initialization
  * parameters.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @UsageInformation(UsageCategory.INTERNAL)

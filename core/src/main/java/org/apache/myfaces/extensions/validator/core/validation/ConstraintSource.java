@@ -36,7 +36,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * model classes - see
  * {@link org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration#constraintSourceAnnotation()}.
  *
- * @author Gerhard Petracek
  * @since r4
  */
 @Target({TYPE, FIELD, METHOD})

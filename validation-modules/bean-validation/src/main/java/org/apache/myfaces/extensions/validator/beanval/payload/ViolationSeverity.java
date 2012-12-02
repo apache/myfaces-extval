@@ -25,7 +25,6 @@ import javax.validation.Payload;
 import javax.faces.application.FacesMessage;
 
 /**
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)

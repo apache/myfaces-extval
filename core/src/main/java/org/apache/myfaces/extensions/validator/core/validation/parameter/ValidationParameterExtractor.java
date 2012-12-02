@@ -28,7 +28,6 @@ import java.lang.annotation.Annotation;
 /**
  * Allows the extraction of {@link ValidationParameter}s.
  *
- * @author Gerhard Petracek
  * @since x.x.3
  */
 @UsageInformation(UsageCategory.API)
