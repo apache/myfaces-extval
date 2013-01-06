@@ -68,7 +68,7 @@ class ExtValBeanValidationMetaDataInternals
     }
 
     void extractExtValBeanValidationMetaData(PropertyDetails propertyDetails,
-                                             boolean processModelValidation,
+                                             boolean processMetaDataForValidation,
                                              String[] key,
                                              Object firstBean,
                                              List<Class> foundGroupsForPropertyValidation,
@@ -77,7 +77,7 @@ class ExtValBeanValidationMetaDataInternals
                                              List<Class> restrictedGroupsForModelValidation,
                                              String activeViewId)
     {
-        inspectFirstBean(processModelValidation,
+        inspectFirstBean(processMetaDataForValidation,
                 firstBean,
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
@@ -85,7 +85,7 @@ class ExtValBeanValidationMetaDataInternals
                 restrictedGroupsForModelValidation,
                 activeViewId);
 
-        inspectFirstProperty(processModelValidation,
+        inspectFirstProperty(processMetaDataForValidation,
                 key,
                 firstBean,
                 foundGroupsForPropertyValidation,
@@ -96,7 +96,7 @@ class ExtValBeanValidationMetaDataInternals
                 key.length == 2);
 
         inspectBaseOfProperty(propertyDetails,
-                processModelValidation,
+                processMetaDataForValidation,
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
@@ -104,7 +104,7 @@ class ExtValBeanValidationMetaDataInternals
                 activeViewId);
 
         inspectLastProperty(propertyDetails,
-                processModelValidation,
+                processMetaDataForValidation,
                 foundGroupsForPropertyValidation,
                 restrictedGroupsForPropertyValidation,
                 modelValidationEntryList,
@@ -134,7 +134,7 @@ class ExtValBeanValidationMetaDataInternals
                 modelValidationEntryList, restrictedGroupsForModelValidation);
     }
 
-    private void inspectFirstBean(boolean processModelValidation,
+    private void inspectFirstBean(boolean processMetaDataForValidation,
                                   Object firstBean,
                                   List<Class> foundGroupsForPropertyValidation,
                                   List<Class> restrictedGroupsForPropertyValidation,
@@ -148,10 +148,10 @@ class ExtValBeanValidationMetaDataInternals
                 modelValidationEntryList,
                 restrictedGroupsForModelValidation,
                 activeViewId,
-                processModelValidation);
+                processMetaDataForValidation);
     }
 
-    private void inspectFirstProperty(boolean processModelValidation,
+    private void inspectFirstProperty(boolean processMetaDataForValidation,
                                       String[] key,
                                       Object firstBean,
                                       List<Class> foundGroupsForPropertyValidation,
@@ -169,12 +169,12 @@ class ExtValBeanValidationMetaDataInternals
                 modelValidationEntryList,
                 restrictedGroupsForModelValidation,
                 activeViewId,
-                processModelValidation,
+                processMetaDataForValidation,
                 isLastProperty);
     }
 
     private void inspectBaseOfProperty(PropertyDetails propertyDetails,
-                                       boolean processModelValidation,
+                                       boolean processMetaDataForValidation,
                                        List<Class> foundGroupsForPropertyValidation,
                                        List<Class> restrictedGroupsForPropertyValidation,
                                        List<ModelValidationEntry> modelValidationEntryList,
@@ -187,11 +187,11 @@ class ExtValBeanValidationMetaDataInternals
                 modelValidationEntryList,
                 restrictedGroupsForModelValidation,
                 activeViewId,
-                processModelValidation);
+                processMetaDataForValidation);
     }
 
     private void inspectLastProperty(PropertyDetails propertyDetails,
-                                     boolean processModelValidation,
+                                     boolean processMetaDataForValidation,
                                      List<Class> foundGroupsForPropertyValidation,
                                      List<Class> restrictedGroupsForPropertyValidation,
                                      List<ModelValidationEntry> modelValidationEntryList,
@@ -207,7 +207,7 @@ class ExtValBeanValidationMetaDataInternals
                 modelValidationEntryList,
                 restrictedGroupsForModelValidation,
                 activeViewId,
-                processModelValidation,
+                processMetaDataForValidation,
                 true);
     }
 
@@ -217,7 +217,7 @@ class ExtValBeanValidationMetaDataInternals
                               List<ModelValidationEntry> modelValidationEntryList,
                               List<Class> restrictedGroupsForModelValidation,
                               String activeViewId,
-                              boolean processModelValidation)
+                              boolean processMetaDataForValidation)
     {
         Class classToInspect = ProxyUtils.getUnproxiedClass(objectToInspect.getClass());
 
@@ -231,7 +231,7 @@ class ExtValBeanValidationMetaDataInternals
                     modelValidationEntryList,
                     restrictedGroupsForModelValidation,
                     activeViewId,
-                    processModelValidation);
+                    processMetaDataForValidation);
 
             processInterfaces(classToInspect, objectToInspect,
                     foundGroupsForPropertyValidation,
@@ -239,7 +239,7 @@ class ExtValBeanValidationMetaDataInternals
                     modelValidationEntryList,
                     restrictedGroupsForModelValidation,
                     activeViewId,
-                    processModelValidation);
+                    processMetaDataForValidation);
 
             classToInspect = classToInspect.getSuperclass();
         }
@@ -253,7 +253,7 @@ class ExtValBeanValidationMetaDataInternals
                                             List<ModelValidationEntry> modelValidationEntryList,
                                             List<Class> restrictedGroupsForModelValidation,
                                             String activeViewId,
-                                            boolean processModelValidation,
+                                            boolean processMetaDataForValidation,
                                             boolean isLastProperty)
     {
         PropertyInformation propertyInformation = new DefaultGroupControllerScanningExtractor()
@@ -270,7 +270,7 @@ class ExtValBeanValidationMetaDataInternals
                         modelValidationEntryList,
                         restrictedGroupsForModelValidation,
                         activeViewId,
-                        processModelValidation);
+                        processMetaDataForValidation);
             }
             else if (metaDataEntry.getValue() instanceof BeanValidation.List)
             {
@@ -283,7 +283,7 @@ class ExtValBeanValidationMetaDataInternals
                             modelValidationEntryList,
                             restrictedGroupsForModelValidation,
                             activeViewId,
-                            processModelValidation);
+                            processMetaDataForValidation);
                 }
             }
         }
@@ -392,7 +392,7 @@ class ExtValBeanValidationMetaDataInternals
             List<ModelValidationEntry> modelValidationEntryList,
             List<Class> restrictedGroupsForModelValidation,
             String activeViewId,
-            boolean processModelValidation)
+            boolean processMetaDataForValidation)
     {
         if (classToInspect.isAnnotationPresent(BeanValidation.class))
         {
@@ -403,7 +403,7 @@ class ExtValBeanValidationMetaDataInternals
                     modelValidationEntryList,
                     restrictedGroupsForModelValidation,
                     activeViewId,
-                    processModelValidation);
+                    processMetaDataForValidation);
         }
         else if (classToInspect.isAnnotationPresent(BeanValidation.List.class))
         {
@@ -417,7 +417,7 @@ class ExtValBeanValidationMetaDataInternals
                         modelValidationEntryList,
                         restrictedGroupsForModelValidation,
                         activeViewId,
-                        processModelValidation);
+                        processMetaDataForValidation);
             }
         }
     }
@@ -429,7 +429,7 @@ class ExtValBeanValidationMetaDataInternals
                                    List<ModelValidationEntry> modelValidationEntryList,
                                    List<Class> restrictedGroupsForModelValidation,
                                    String activeViewId,
-                                   boolean processModelValidation)
+                                   boolean processMetaDataForValidation)
     {
         for (Class currentInterface : currentClass.getInterfaces())
         {
@@ -441,7 +441,7 @@ class ExtValBeanValidationMetaDataInternals
                     modelValidationEntryList,
                     restrictedGroupsForModelValidation,
                     activeViewId,
-                    processModelValidation);
+                    processMetaDataForValidation);
 
             processInterfaces(currentInterface, metaDataSourceObject,
                     foundGroupsForPropertyValidation,
@@ -449,7 +449,7 @@ class ExtValBeanValidationMetaDataInternals
                     modelValidationEntryList,
                     restrictedGroupsForModelValidation,
                     activeViewId,
-                    processModelValidation);
+                    processMetaDataForValidation);
         }
     }
 
@@ -460,7 +460,7 @@ class ExtValBeanValidationMetaDataInternals
                                       List<ModelValidationEntry> modelValidationEntryList,
                                       List<Class> restrictedGroupsForModelValidation,
                                       String activeViewId,
-                                      boolean processModelValidation)
+                                      boolean processMetaDataForValidation)
     {
         for (String currentViewId : beanValidation.viewIds())
         {
@@ -472,7 +472,7 @@ class ExtValBeanValidationMetaDataInternals
                         restrictedGroupsForPropertyValidation,
                         modelValidationEntryList,
                         restrictedGroupsForModelValidation,
-                        processModelValidation);
+                        processMetaDataForValidation);
                 break;
             }
         }
@@ -490,18 +490,24 @@ class ExtValBeanValidationMetaDataInternals
                                  List<Class> restrictedGroupsForPropertyValidation,
                                  List<ModelValidationEntry> modelValidationEntryList,
                                  List<Class> restrictedGroupsForModelValidation,
-                                 boolean processModelValidation)
+                                 boolean processMetaDataForValidation)
     {
-        if (processModelValidation && isModelValidation(beanValidation))
+        if (processMetaDataForValidation /*processModelValidation*/ && isModelValidation(beanValidation))
         {
             addModelValidationEntry(
-                    beanValidation, metaDataSourceObject,
-                    modelValidationEntryList, restrictedGroupsForModelValidation);
+                    beanValidation,
+                    metaDataSourceObject,
+                    modelValidationEntryList,
+                    restrictedGroupsForModelValidation,
+                    processMetaDataForValidation);
         }
         else if (!isModelValidation(beanValidation))
         {
             processGroups(
-                    beanValidation, foundGroupsForPropertyValidation, restrictedGroupsForPropertyValidation);
+                    beanValidation,
+                    foundGroupsForPropertyValidation,
+                    restrictedGroupsForPropertyValidation,
+                    processMetaDataForValidation);
         }
     }
 
@@ -535,11 +541,12 @@ class ExtValBeanValidationMetaDataInternals
     private void addModelValidationEntry(BeanValidation beanValidation,
                                          Object metaDataSourceObject,
                                          List<ModelValidationEntry> modelValidationEntryList,
-                                         List<Class> restrictedGroupsForModelValidation)
+                                         List<Class> restrictedGroupsForModelValidation,
+                                         boolean processMetaDataForValidation)
     {
         ModelValidationEntry modelValidationEntry = new ModelValidationEntry();
 
-        List<Class> groupClassList = createGroupClassList(beanValidation);
+        List<Class> groupClassList = createGroupClassList(beanValidation, processMetaDataForValidation);
 
         modelValidationEntry.setGroups(groupClassList);
         modelValidationEntry.setDisplayMessageInline(beanValidation.modelValidation().displayInline());
@@ -582,9 +589,10 @@ class ExtValBeanValidationMetaDataInternals
 
     private void processGroups(BeanValidation beanValidation,
                                List<Class> foundGroupsForPropertyValidation,
-                               List<Class> restrictedGroupsForPropertyValidation)
+                               List<Class> restrictedGroupsForPropertyValidation,
+                               boolean processMetaDataForValidation)
     {
-        List<Class> groupClassList = createGroupClassList(beanValidation);
+        List<Class> groupClassList = createGroupClassList(beanValidation, processMetaDataForValidation);
 
         foundGroupsForPropertyValidation.addAll(groupClassList);
 
@@ -698,8 +706,22 @@ class ExtValBeanValidationMetaDataInternals
         }
     }
 
-    private List<Class> createGroupClassList(BeanValidation beanValidation)
+    /**
+     * @param beanValidation meta-data for bv
+     * @param processMetaDataForValidation 'false' if the process was triggered for component initialization,
+     *                                     'true' otherwise.
+     *                                     (a transformation of group-sequences is only needed
+     *                                     for component initialization. otherwise, the real sequence would be bypassed
+     *                                     (since the validation-order isn't guaranteed).)
+     * @return list of groups to validate
+     */
+    private List<Class> createGroupClassList(BeanValidation beanValidation, boolean processMetaDataForValidation)
     {
+        if (processMetaDataForValidation)
+        {
+            return Arrays.asList(beanValidation.useGroups());
+        }
+
         List<Class> groupClassList = new ArrayList<Class>();
 
         GroupSequence groupSequence;
