@@ -111,7 +111,7 @@ public class BeanValidationUtils
     }
 
     public static void addMetaDataToContext(
-            UIComponent component, PropertyDetails propertyDetails, boolean processModelValidation)
+            UIComponent component, PropertyDetails propertyDetails, boolean processMetaDataForValidation)
     {
         String[] key = propertyDetails.getKey().split("\\.");
 
@@ -125,7 +125,7 @@ public class BeanValidationUtils
         String activeViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
 
         bvmi.extractExtValBeanValidationMetaData(propertyDetails,
-                processModelValidation,
+                processMetaDataForValidation,
                 key,
                 firstBean,
                 foundGroupsForPropertyValidation,
