@@ -43,6 +43,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.validation.ConstraintViolation;
+import javax.validation.GroupSequence;
 import javax.validation.Payload;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -538,7 +539,9 @@ class ExtValBeanValidationMetaDataInternals
     {
         ModelValidationEntry modelValidationEntry = new ModelValidationEntry();
 
-        modelValidationEntry.setGroups(Arrays.asList(beanValidation.useGroups()));
+        List<Class> groupClassList = createGroupClassList(beanValidation);
+
+        modelValidationEntry.setGroups(groupClassList);
         modelValidationEntry.setDisplayMessageInline(beanValidation.modelValidation().displayInline());
         modelValidationEntry.setCustomMessage(beanValidation.modelValidation().message());
         modelValidationEntry.setMetaDataSourceObject(metaDataSourceObject);
@@ -581,7 +584,9 @@ class ExtValBeanValidationMetaDataInternals
                                List<Class> foundGroupsForPropertyValidation,
                                List<Class> restrictedGroupsForPropertyValidation)
     {
-        foundGroupsForPropertyValidation.addAll(Arrays.asList(beanValidation.useGroups()));
+        List<Class> groupClassList = createGroupClassList(beanValidation);
+
+        foundGroupsForPropertyValidation.addAll(groupClassList);
 
         if (beanValidation.restrictGroups().length > 0)
         {
@@ -691,5 +696,26 @@ class ExtValBeanValidationMetaDataInternals
             ExtValUtils.tryToAddViolationMessageForComponentId(
                     facesMessageHolder.getClientId(), facesMessageHolder.getFacesMessage());
         }
+    }
+
+    private List<Class> createGroupClassList(BeanValidation beanValidation)
+    {
+        List<Class> groupClassList = new ArrayList<Class>();
+
+        GroupSequence groupSequence;
+        for (Class<?> groupClass : beanValidation.useGroups())
+        {
+            groupSequence = groupClass.getAnnotation(GroupSequence.class);
+
+            if (groupSequence != null)
+            {
+                groupClassList.addAll(Arrays.asList(groupSequence.value()));
+            }
+            else
+            {
+                groupClassList.add(groupClass);
+            }
+        }
+        return groupClassList;
     }
 }
