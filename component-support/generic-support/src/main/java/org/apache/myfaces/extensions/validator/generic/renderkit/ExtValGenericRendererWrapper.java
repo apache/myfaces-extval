@@ -59,7 +59,8 @@ public final class ExtValGenericRendererWrapper extends ExtValRendererWrapper im
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable
     {
-        if (method.getName().equals("getConvertedValue") && args[1] instanceof UIComponent)
+        if (method.getName().equals("getConvertedValue") && args[1] instanceof UIComponent &&
+            method.getParameterTypes().length == 3)
         {
             return getConvertedValue((FacesContext)args[0], (UIComponent)args[1], args[2]);
         }
