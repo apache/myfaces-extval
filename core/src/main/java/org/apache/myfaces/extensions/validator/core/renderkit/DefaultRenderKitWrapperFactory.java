@@ -30,7 +30,6 @@ import javax.faces.render.RenderKit;
 @UsageInformation(UsageCategory.INTERNAL)
 public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
-    private RenderKit renderKit;
     private static final String GENERIC_RENDER_KIT_WRAPPER_FACTORY =
             "org.apache.myfaces.extensions.validator.generic.renderkit.GenericRenderKitWrapperFactory";
     private static Boolean useGenericRenderKitWrapperFactory = null;
@@ -53,10 +52,6 @@ public class DefaultRenderKitWrapperFactory extends AbstractRenderKitWrapperFact
             return renderKitWrapperFactory.createWrapper(renderKit);
         }
 
-        if(this.renderKit == null)
-        {
-            this.renderKit = new ExtValRenderKit(renderKit);
-        }
-        return this.renderKit;
+        return new ExtValRenderKit(renderKit);
     }
 }

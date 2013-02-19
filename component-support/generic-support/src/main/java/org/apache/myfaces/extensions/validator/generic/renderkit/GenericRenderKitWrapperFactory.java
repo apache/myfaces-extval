@@ -19,12 +19,10 @@
 package org.apache.myfaces.extensions.validator.generic.renderkit;
 
 import org.apache.myfaces.extensions.validator.core.renderkit.AbstractRenderKitWrapperFactory;
-import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
+import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 
 import javax.faces.render.RenderKit;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @since 1.x.1
@@ -32,19 +30,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @UsageInformation(UsageCategory.INTERNAL)
 public class GenericRenderKitWrapperFactory extends AbstractRenderKitWrapperFactory
 {
-    private Map<Class<? extends RenderKit>, RenderKit> renderKitCache =
-            new ConcurrentHashMap<Class<? extends RenderKit>, RenderKit>();
-
     protected RenderKit createWrapper(RenderKit renderKit)
     {
         logger.finest("extval renderkit wrapper created for " + renderKit.getClass().getName() + " via cglib");
 
-        if(!this.renderKitCache.containsKey(renderKit.getClass()))
-        {
-            RenderKit wrappedRenderKit = ExtValGenericRenderKit.newInstance(renderKit);
-            this.renderKitCache.put(renderKit.getClass(), wrappedRenderKit);
-        }
-
-        return this.renderKitCache.get(renderKit.getClass());
+        return ExtValGenericRenderKit.newInstance(renderKit);
     }
 }

@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.validator.core.factory.ClassMappingFactory;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
 
 import javax.faces.render.RenderKit;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -36,6 +38,9 @@ import java.util.logging.Logger;
 public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFactory<RenderKit, RenderKit>
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
+
+    private Map<Class<? extends RenderKit>, RenderKit> renderKitCache =
+            new ConcurrentHashMap<Class<? extends RenderKit>, RenderKit>();
 
     protected AbstractRenderKitWrapperFactory wrapped;
     private boolean deactivated = false;
@@ -94,12 +99,17 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
      */
     public final RenderKit create(RenderKit renderKit)
     {
-        if(isDeactivated())
+        if(isDeactivated() || renderKit == null)
         {
             return null;
         }
 
-        RenderKit result = null;
+        RenderKit result = this.renderKitCache.get(renderKit.getClass());
+
+        if (result != null)
+        {
+            return result;
+        }
 
         if(this.wrapped != null)
         {
@@ -108,7 +118,12 @@ public abstract class AbstractRenderKitWrapperFactory implements ClassMappingFac
 
         if(result == null)
         {
-            return createWrapper(renderKit);
+            result = createWrapper(renderKit);
+        }
+
+        if(result != null)
+        {
+            renderKitCache.put(renderKit.getClass(), result);
         }
 
         return result;
