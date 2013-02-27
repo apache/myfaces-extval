@@ -158,6 +158,12 @@ interface WebXmlParameter
     //there is nothing like DEACTIVATE_DEFAULT_VALIDATION_INTERCEPTOR
     //use ExtValContext.getContext().denyRendererInterceptor(...) within an extval-StartupListener
 
+    /**
+     * @since r7
+     */
+    static final String DEACTIVATE_ACTION_BASED_GROUP_VALIDATION = WebXmlUtils
+        .getInitParameter("DEACTIVATE_ACTION_BASED_GROUP_VALIDATION");
+
     /*
      * spec parameters
      */

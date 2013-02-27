@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.validator.beanval.factory;
 
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
+
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.ApplicationWrapper;
@@ -33,6 +35,9 @@ import javax.faces.el.ValueBinding;
  */
 class ExtValApplicationWrapper extends ApplicationWrapper
 {
+    private static final boolean DEACTIVATE_ACTION_BASED_GROUP_VALIDATION =
+            ExtValCoreConfiguration.get().deactivateActionBasedGroupValidation();
+
     private Application wrapped;
 
     public ExtValApplicationWrapper(Application wrapped)
@@ -101,6 +106,11 @@ class ExtValApplicationWrapper extends ApplicationWrapper
 
     private UIComponent customizedComponent(UIComponent result)
     {
+        if (DEACTIVATE_ACTION_BASED_GROUP_VALIDATION)
+        {
+            return result;
+        }
+
         //don't check with instanceof
         //if it isn't javax.faces.component.UIViewRoot itself, we need to proxy it
         //due to the overhead we should wait for users who request such a proxy

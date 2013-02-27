@@ -504,4 +504,14 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
     {
         return "true".equalsIgnoreCase(WebXmlParameter.ACTIVATE_MARKUP_META_DATA);
     }
+
+    /**
+     * {@inheritDoc}
+     * Value taken from the Web.xml initialization parameter DEACTIVATE_ACTION_BASED_GROUP_VALIDATION.
+     */
+    @Override
+    public boolean deactivateActionBasedGroupValidation()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_ACTION_BASED_GROUP_VALIDATION);
+    }
 }
