@@ -6,13 +6,6 @@ import org.apache.myfaces.extensions.validator.crossval.annotation.RequiredIf;
 
 import javax.persistence.Id;
 
-/**
- * Created by IntelliJ IDEA.
- * User: RDUL064
- * Date: 7-okt-2010
- * Time: 21:55:03
- * To change this template use File | Settings | File Templates.
- */
 public class DataBean
 {
     @Id
