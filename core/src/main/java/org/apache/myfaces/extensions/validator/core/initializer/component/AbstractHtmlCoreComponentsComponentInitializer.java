@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.initializer.component;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
@@ -233,8 +232,7 @@ public abstract class AbstractHtmlCoreComponentsComponentInitializer implements 
     {
         if (this.forceComponentInitialization == null)
         {
-            this.forceComponentInitialization = !ExtValContext.getContext()
-                .getModuleConfiguration(ExtValCoreConfiguration.class).activateMarkupMetaData();
+            this.forceComponentInitialization = !ExtValCoreConfiguration.get().activateMarkupMetaData();
         }
     }
 }
