@@ -25,33 +25,33 @@
     <artifactId>examples-hello_bean-validation</artifactId>
 
     <name>MyFaces Extensions-Validator examples hello bean-validation</name>
-    <version>2.0.7</version>
+    <version>2.0.8-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.validator.examples</groupId>
         <artifactId>examples-project</artifactId>
-        <version>2.0.7</version>
+        <version>2.0.8-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator</groupId>
             <artifactId>myfaces-extval-core</artifactId>
-            <version>2.0.7</version>
+            <version>2.0.8-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
             <artifactId>myfaces-extval-property-validation</artifactId>
-            <version>2.0.7</version>
+            <version>2.0.8-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
             <artifactId>myfaces-extval-bean-validation</artifactId>
-            <version>2.0.7</version>
+            <version>2.0.8-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
