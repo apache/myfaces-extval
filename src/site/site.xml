@@ -72,7 +72,7 @@
       <item name="Javadoc"      href="http://myfaces.apache.org/extensions/validator20/javadoc.html"/>
     </menu>
 
-    <menu ref="reports"/>
+    <menu ref="reports" inherit="bottom"/>
 
     <menu name="Foundation" inherit="bottom">
       <item name="ASF"            href="http://www.apache.org/" />
