@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtracti
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.RendererInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ViewRootInterceptor;
 import org.apache.myfaces.extensions.validator.core.metadata.MetaDataEntry;
 import org.apache.myfaces.extensions.validator.core.recorder.ProcessedInformationRecorder;
 import org.apache.myfaces.extensions.validator.core.validation.SkipValidationEvaluator;
@@ -469,6 +470,18 @@ public class ExtValContext
     public Object getGlobalProperty(String name)
     {
         return this.globalProperties.get(name);
+    }
+
+    public void addViewRootInterceptor(ViewRootInterceptor viewRootInterceptor)
+    {
+        this.invocationOrderAwareContextHelper.lazyInitViewRootInterceptors();
+        this.invocationOrderAwareContextHelper.addViewRootInterceptor(viewRootInterceptor);
+    }
+
+    public List<ViewRootInterceptor> getViewRootInterceptors()
+    {
+        this.invocationOrderAwareContextHelper.lazyInitViewRootInterceptors();
+        return this.invocationOrderAwareContextHelper.getViewRootInterceptors();
     }
 
     /**

@@ -16,13 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.factory;
+package org.apache.myfaces.extensions.validator.core.interceptor;
 
-import org.apache.myfaces.extensions.validator.beanval.ExtValBeanValidationContext;
-import org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation;
-import org.apache.myfaces.extensions.validator.beanval.group.SkipValidation;
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
+import org.apache.myfaces.extensions.validator.core.validation.SkipConstraintValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
 import org.apache.myfaces.extensions.validator.util.ProxyUtils;
 import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
@@ -30,29 +29,21 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 import javax.el.MethodExpression;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import java.lang.reflect.Method;
 
-/**
- * Custom {@link javax.faces.component.UIViewRoot} which intercepts {@link #queueEvent} to support
- * {@link org.apache.myfaces.extensions.validator.beanval.annotation.BeanValidation} for action(-listener) methods.
- * Currently we just can support action-listeners and action-methods without parameters.
- */
-public class ExtValViewRoot extends UIViewRoot
+public class ExtValViewRootInterceptor implements ViewRootInterceptor
 {
-    @Override
-    public void queueEvent(FacesEvent event)
+    public void afterQueueEvent(FacesEvent event)
     {
-        super.queueEvent(event);
-
         UIComponent uiComponent = event.getComponent();
         if(event instanceof ActionEvent && uiComponent instanceof ActionSource2)
         {
             tryToProcessActionMethod((ActionSource2)event.getComponent());
         }
+
     }
 
     private void tryToProcessActionMethod(ActionSource2 commandComponent)
@@ -117,53 +108,14 @@ public class ExtValViewRoot extends UIViewRoot
             return;
         }
 
-        BeanValidation beanValidation = actionMethod.getAnnotation(BeanValidation.class);
+        SkipConstraintValidation skipConstraintValidation =
+                actionMethod.getAnnotation(SkipConstraintValidation.class);
 
-        if(beanValidation == null)
+        if(skipConstraintValidation == null)
         {
             return;
         }
 
-        ExtValBeanValidationContext extValBeanValidationContext = ExtValBeanValidationContext.getCurrentInstance();
-
-        String viewId = facesContext.getViewRoot().getViewId();
-
-        //TODO log invalid expressions
-        for (String condition : beanValidation.conditions())
-        {
-            if (elHelper.isELTermWellFormed(condition) &&
-                    elHelper.isELTermValid(facesContext, condition))
-            {
-                if (Boolean.FALSE.equals(elHelper.getValueOfExpression(
-                        facesContext, new ValueBindingExpression(condition))))
-                {
-                    return;
-                }
-            }
-        }
-
-        boolean skippedValidation = false;
-
-        for (Class currentGroupClass : beanValidation.useGroups())
-        {
-            if(SkipValidation.class.isAssignableFrom(currentGroupClass))
-            {
-                skippedValidation = true;
-                break;
-            }
-            extValBeanValidationContext.addGroup(currentGroupClass, viewId, null);
-        }
-
-        for (Class currentGroupClass : beanValidation.restrictGroups())
-        {
-            extValBeanValidationContext.restrictGroup(currentGroupClass, viewId, null);
-        }
-
-        if(skippedValidation)
-        {
-            extValBeanValidationContext.resetGroups(viewId);
-            extValBeanValidationContext.addGroup(SkipValidation.class, viewId, null);
-            extValBeanValidationContext.lockGroups(viewId);
-        }
+        facesContext.getExternalContext().getRequestMap().put(PropertyInformationKeys.SKIP_VALIDATION, Boolean.TRUE);
     }
 }

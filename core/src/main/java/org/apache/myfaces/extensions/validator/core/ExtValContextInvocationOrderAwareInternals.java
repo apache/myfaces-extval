@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.core.initializer.component.Compon
 import org.apache.myfaces.extensions.validator.core.interceptor.MetaDataExtractionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.PropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ViewRootInterceptor;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.util.ClassUtils;
@@ -48,6 +49,7 @@ class ExtValContextInvocationOrderAwareInternals
     private List<PropertyValidationInterceptor> propertyValidationInterceptors = null;
     private Map<Class, List<PropertyValidationInterceptor>> moduleSpecificPropertyValidationInterceptors = null;
     private List<ComponentInitializer> componentInitializers = null;
+    private List<ViewRootInterceptor> viewRootInterceptors = null;
 
     private ExtValContextInternals contextHelper;
 
@@ -492,5 +494,59 @@ class ExtValContextInvocationOrderAwareInternals
         metaDataExtractionInterceptorList.clear();
         metaDataExtractionInterceptorList.addAll(metaDataExtractionInterceptorListToSort);
         return metaDataExtractionInterceptorList;
+    }
+
+    private void sortViewRootInterceptors()
+    {
+        List<ViewRootInterceptor> viewRootInterceptorsToSort =
+                new ArrayList<ViewRootInterceptor>(this.viewRootInterceptors);
+
+        Collections.sort(viewRootInterceptorsToSort, new InvocationOrderComparator<ViewRootInterceptor>());
+
+        this.viewRootInterceptors.clear();
+        this.viewRootInterceptors.addAll(viewRootInterceptorsToSort);
+    }
+
+    void lazyInitViewRootInterceptors()
+    {
+        if (viewRootInterceptors != null)
+        {
+            return;
+        }
+
+        viewRootInterceptors =
+                new CopyOnWriteArrayList<ViewRootInterceptor>();
+
+        List<String> viewRootInterceptorClassNames = new ArrayList<String>();
+
+        viewRootInterceptorClassNames
+                .add(ExtValCoreConfiguration.get().customViewRootInterceptorClassName());
+        viewRootInterceptorClassNames
+                .add(this.contextHelper.getInformationProviderBean().get(
+                        CustomInformation.VIEW_ROOT_INTERCEPTOR));
+
+        ViewRootInterceptor viewRootInterceptor;
+        for (String viewRootInterceptorClassName : viewRootInterceptorClassNames)
+        {
+            viewRootInterceptor =
+                    (ViewRootInterceptor)
+                            ClassUtils.tryToInstantiateClassForName(viewRootInterceptorClassName);
+
+            if (viewRootInterceptor != null)
+            {
+                addViewRootInterceptor(viewRootInterceptor);
+            }
+        }
+    }
+
+    List<ViewRootInterceptor> getViewRootInterceptors()
+    {
+        return this.viewRootInterceptors;
+    }
+
+    public void addViewRootInterceptor(ViewRootInterceptor viewRootInterceptor)
+    {
+        this.viewRootInterceptors.add(viewRootInterceptor);
+        sortViewRootInterceptors();
     }
 }

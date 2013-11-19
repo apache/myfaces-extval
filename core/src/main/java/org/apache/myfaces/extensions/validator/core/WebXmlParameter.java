@@ -164,6 +164,15 @@ interface WebXmlParameter
     static final String DEACTIVATE_ACTION_BASED_GROUP_VALIDATION = WebXmlUtils
         .getInitParameter("DEACTIVATE_ACTION_BASED_GROUP_VALIDATION");
 
+    /**
+     * @since r8
+     */
+    static final String DEACTIVATE_VIEW_ROOT_INTERCEPTOR = WebXmlUtils
+        .getInitParameter("DEACTIVATE_VIEW_ROOT_INTERCEPTOR");
+
+    static final String CUSTOM_VIEW_ROOT_INTERCEPTOR_CLASS_NAME = WebXmlUtils
+        .getInitParameter("CUSTOM_VIEW_ROOT_INTERCEPTOR_CLASS_NAME");
+
     /*
      * spec parameters
      */

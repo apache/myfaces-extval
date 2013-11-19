@@ -16,8 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.validator.beanval.factory;
+package org.apache.myfaces.extensions.validator.core.factory;
 
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 
 import javax.el.ValueExpression;
@@ -35,12 +36,12 @@ import javax.faces.el.ValueBinding;
  */
 class ExtValApplicationWrapper extends ApplicationWrapper
 {
-    private static final boolean DEACTIVATE_ACTION_BASED_GROUP_VALIDATION =
-            ExtValCoreConfiguration.get().deactivateActionBasedGroupValidation();
+    private static final boolean DEACTIVATE_VIEW_ROOT_INTERCEPTOR =
+            ExtValCoreConfiguration.get().deactivateViewRootInterceptor();
 
     private Application wrapped;
 
-    public ExtValApplicationWrapper(Application wrapped)
+    ExtValApplicationWrapper(Application wrapped)
     {
         this.wrapped = wrapped;
     }
@@ -106,7 +107,7 @@ class ExtValApplicationWrapper extends ApplicationWrapper
 
     private UIComponent customizedComponent(UIComponent result)
     {
-        if (DEACTIVATE_ACTION_BASED_GROUP_VALIDATION)
+        if (DEACTIVATE_VIEW_ROOT_INTERCEPTOR)
         {
             return result;
         }
@@ -116,7 +117,7 @@ class ExtValApplicationWrapper extends ApplicationWrapper
         //due to the overhead we should wait for users who request such a proxy
         if(result != null && result.getClass().getName().equals(UIViewRoot.class.getName()))
         {
-            return new ExtValViewRoot();
+            return new ExtValViewRoot(ExtValContext.getContext().getViewRootInterceptors());
         }
         return result;
     }

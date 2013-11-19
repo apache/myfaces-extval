@@ -24,6 +24,7 @@
     <factory>
         <lifecycle-factory>org.apache.myfaces.extensions.validator.core.startup.ExtValLifecycleFactoryWrapper</lifecycle-factory>
         <render-kit-factory>org.apache.myfaces.extensions.validator.core.renderkit.ExtValRenderKitFactory</render-kit-factory>
+        <application-factory>org.apache.myfaces.extensions.validator.core.factory.ExtValApplicationFactory</application-factory>
     </factory>
 
     <lifecycle>

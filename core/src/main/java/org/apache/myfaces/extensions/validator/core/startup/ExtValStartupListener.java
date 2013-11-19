@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.validator.core.interceptor.HtmlCoreComponen
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationSeverityValidationExceptionInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.FacesMessagePropertyValidationInterceptor;
 import org.apache.myfaces.extensions.validator.core.interceptor.ViolationExceptionInterceptor;
+import org.apache.myfaces.extensions.validator.core.interceptor.ExtValViewRootInterceptor;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.CustomInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
@@ -100,6 +101,7 @@ public class ExtValStartupListener extends AbstractStartupListener
         initValidationExceptionInterceptors();
         initViolationSeverityInterpreter();
         initPropertyValidationInterceptors();
+        initViewRootInterceptors();
         initPhaseListeners();
         initViolationSeverityKey();
         initDisableClientSideValidationKey();
@@ -199,6 +201,11 @@ public class ExtValStartupListener extends AbstractStartupListener
     private void initPropertyValidationInterceptors()
     {
         ExtValContext.getContext().addPropertyValidationInterceptor(new FacesMessagePropertyValidationInterceptor());
+    }
+
+    private void initViewRootInterceptors()
+    {
+        ExtValContext.getContext().addViewRootInterceptor(new ExtValViewRootInterceptor());
     }
 
     private void initPhaseListeners()

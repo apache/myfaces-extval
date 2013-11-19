@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
+import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.internal.UsageCategory;
 import org.apache.myfaces.extensions.validator.internal.UsageInformation;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
@@ -141,6 +142,12 @@ public abstract class AbstractValidationInterceptor extends AbstractRendererInte
     public void beforeGetConvertedValue(FacesContext facesContext, UIComponent uiComponent, Object o, Renderer wrapped)
             throws ConverterException, SkipBeforeInterceptorsException, SkipRendererDelegationException
     {
+        if (Boolean.TRUE.equals(facesContext.getExternalContext().getRequestMap()
+                .get(PropertyInformationKeys.SKIP_VALIDATION)))
+        {
+            return;
+        }
+
         Object convertedObject;
 
         try

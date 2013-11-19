@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.validator.beanval.BeanValidationModuleValid
 import org.apache.myfaces.extensions.validator.beanval.HtmlCoreComponentsComponentInitializer;
 import org.apache.myfaces.extensions.validator.beanval.MappedConstraintSourceBeanValidationModuleValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.ValidatorFactoryProxy;
+import org.apache.myfaces.extensions.validator.beanval.interceptor.BeanValidationViewRootInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.payload.ViolationSeverity;
 import org.apache.myfaces.extensions.validator.beanval.payload.DisableClientSideValidation;
 import org.apache.myfaces.extensions.validator.beanval.interceptor.ExtValBeanValidationMetaDataExtractionInterceptor;
@@ -33,6 +34,7 @@ import org.apache.myfaces.extensions.validator.beanval.storage.ModelValidationSt
 import org.apache.myfaces.extensions.validator.beanval.storage.mapper.BeanValidationGroupStorageNameMapper;
 import org.apache.myfaces.extensions.validator.beanval.storage.mapper.ModelValidationStorageNameMapper;
 import org.apache.myfaces.extensions.validator.core.ExtValContext;
+import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 import org.apache.myfaces.extensions.validator.core.factory.AbstractNameMapperAwareFactory;
 import org.apache.myfaces.extensions.validator.core.factory.FactoryNames;
 import org.apache.myfaces.extensions.validator.core.startup.AbstractStartupListener;
@@ -57,6 +59,7 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     protected void init()
     {
         registerValidatorFactory();
+        registerViewRootInterceptors();
         registerBeanValidationInterceptors();
         registerMetaDataTransformerNameMapper();
         registerGroupStorageNameMapper();
@@ -72,6 +75,15 @@ public class BeanValidationStartupListener extends AbstractStartupListener
     {
         ExtValContext.getContext()
                 .addGlobalProperty(ValidatorFactory.class.getName(), new ValidatorFactoryProxy(), false);
+    }
+
+    protected void registerViewRootInterceptors()
+    {
+        if (!ExtValCoreConfiguration.get().deactivateActionBasedGroupValidation())
+        {
+            ExtValContext.getContext()
+                    .addViewRootInterceptor(new BeanValidationViewRootInterceptor());
+        }
     }
 
     protected void registerBeanValidationInterceptors()

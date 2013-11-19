@@ -644,13 +644,20 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
      * @since r7
      */
 
+    public abstract boolean deactivateActionBasedGroupValidation();
+
+    /**
+     * @since r8
+     */
+
     /**
      * Per default ExtVal creates a custom {@link javax.faces.component.UIViewRoot} implementation to allow
-     * group-validation triggered via action-methods. It's possible to restore the default behaviour by
-     * deactivating this feature. Currently it's only used by the bean-validation module, however, the concept of groups
-     * is part of the core and therefore this (optional) configuration is part of the core as well.
+     * group-validation,... triggered via action-methods. It's possible to restore the default behaviour by
+     * deactivating this feature.
      *
      * @return true to deactivate the whole feature, false otherwise
      */
-    public abstract boolean deactivateActionBasedGroupValidation();
+    public abstract boolean deactivateViewRootInterceptor();
+
+    public abstract String customViewRootInterceptorClassName();
 }
