@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.validator.core.factory;
 
-import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.ExtValCoreConfiguration;
 
 import javax.el.ValueExpression;
@@ -117,7 +116,7 @@ class ExtValApplicationWrapper extends ApplicationWrapper
         //due to the overhead we should wait for users who request such a proxy
         if(result != null && result.getClass().getName().equals(UIViewRoot.class.getName()))
         {
-            return new ExtValViewRoot(ExtValContext.getContext().getViewRootInterceptors());
+            return new ExtValViewRoot();
         }
         return result;
     }

@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.validator.core.factory;
 
+import org.apache.myfaces.extensions.validator.core.ExtValContext;
 import org.apache.myfaces.extensions.validator.core.interceptor.ViewRootInterceptor;
 
 import javax.faces.component.UIViewRoot;
@@ -28,9 +29,9 @@ public class ExtValViewRoot extends UIViewRoot
 {
     private List<ViewRootInterceptor> viewRootInterceptors;
 
-    public ExtValViewRoot(List<ViewRootInterceptor> viewRootInterceptors)
+    public ExtValViewRoot()
     {
-        this.viewRootInterceptors = viewRootInterceptors;
+        this.viewRootInterceptors = ExtValContext.getContext().getViewRootInterceptors();
     }
 
     @Override
