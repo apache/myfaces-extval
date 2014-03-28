@@ -72,9 +72,12 @@ public class DefaultProxyHelper implements ProxyHelper
 
     public boolean isProxiedClass(Class currentClass)
     {
-        return currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
-            currentClass.getName().contains("$$FastClassByCGLIB$$") ||
-            currentClass.getName().contains("_$$_javassist");
+        if (currentClass == null || currentClass.getSuperclass() == null)
+        {
+            return false;
+        }
+        return currentClass.getName().startsWith(currentClass.getSuperclass().getName()) &&
+                currentClass.getName().contains("$$");
     }
 
     public boolean isProxiedObject(Object proxiedObject)
