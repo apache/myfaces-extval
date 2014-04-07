@@ -27,6 +27,8 @@ import javax.faces.application.Application;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
@@ -117,6 +119,19 @@ class ExtValApplicationWrapper extends ApplicationWrapper
         if(result != null && result.getClass().getName().equals(UIViewRoot.class.getName()))
         {
             return new ExtValViewRoot();
+        }
+        return result;
+    }
+
+    @Override
+    public Behavior createBehavior(String behaviorId) throws FacesException
+    {
+        Behavior result = wrapped.createBehavior(behaviorId);
+
+        if (result != null && result.getClass().equals(AjaxBehavior.class)) //don't use instanceof
+        {
+            return new ExtValAjaxBehavior();
+
         }
         return result;
     }

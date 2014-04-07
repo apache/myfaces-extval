@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.validator.core.interceptor;
 
 import org.apache.myfaces.extensions.validator.core.el.ELHelper;
 import org.apache.myfaces.extensions.validator.core.el.ValueBindingExpression;
+import org.apache.myfaces.extensions.validator.core.factory.ExtValAjaxBehavior;
 import org.apache.myfaces.extensions.validator.core.property.PropertyInformationKeys;
 import org.apache.myfaces.extensions.validator.core.validation.SkipConstraintValidation;
 import org.apache.myfaces.extensions.validator.util.ExtValUtils;
@@ -28,11 +29,15 @@ import org.apache.myfaces.extensions.validator.util.ReflectionUtils;
 
 import javax.el.MethodExpression;
 import javax.faces.component.ActionSource2;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.FacesEvent;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class ExtValViewRootInterceptor implements ViewRootInterceptor
 {
@@ -43,10 +48,14 @@ public class ExtValViewRootInterceptor implements ViewRootInterceptor
         {
             tryToProcessActionMethod((ActionSource2)event.getComponent());
         }
-
+        if (event instanceof AjaxBehaviorEvent && uiComponent instanceof EditableValueHolder &&
+                ((AjaxBehaviorEvent)event).getBehavior() instanceof AjaxBehavior)
+        {
+            tryToProcessAjaxListener(((AjaxBehavior)((AjaxBehaviorEvent)event).getBehavior()));
+        }
     }
 
-    private void tryToProcessActionMethod(ActionSource2 commandComponent)
+    protected void tryToProcessActionMethod(ActionSource2 commandComponent)
     {
         MethodExpression actionExpression = commandComponent.getActionExpression();
 
@@ -71,12 +80,45 @@ public class ExtValViewRootInterceptor implements ViewRootInterceptor
             return;
         }
 
-        processBypassValidation(facesContext, valueBindingExpression, elHelper);
+        processBypassValidation(facesContext, valueBindingExpression, elHelper, ActionEvent.class);
     }
 
-    private void processBypassValidation(FacesContext facesContext,
-                                         ValueBindingExpression valueBindingExpression,
-                                         ELHelper elHelper)
+    protected void tryToProcessAjaxListener(AjaxBehavior ajaxBehavior)
+    {
+        if (!(ajaxBehavior instanceof ExtValAjaxBehavior))
+        {
+            return;
+        }
+
+        List<MethodExpression> listenerExpressions = ((ExtValAjaxBehavior)ajaxBehavior).getListenerExpressions();
+
+        ELHelper elHelper = ExtValUtils.getELHelper();
+
+        for (MethodExpression listenerExpression : listenerExpressions)
+        {
+            String actionString = listenerExpression.getExpressionString();
+            if(!elHelper.isELTermWellFormed(actionString))
+            {
+                continue;
+            }
+
+            ValueBindingExpression valueBindingExpression = new ValueBindingExpression(actionString);
+
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (!ExtValUtils.getELHelper().isELTermValid(
+                    facesContext, valueBindingExpression.getBaseExpression().getExpressionString()))
+            {
+                continue;
+            }
+
+            processBypassValidation(facesContext, valueBindingExpression, elHelper, AjaxBehaviorEvent.class);
+        }
+    }
+
+    protected void processBypassValidation(FacesContext facesContext,
+                                           ValueBindingExpression valueBindingExpression,
+                                           ELHelper elHelper,
+                                           Class... parameterTypes)
     {
         Object base = elHelper.getValueOfExpression(facesContext, valueBindingExpression.getBaseExpression());
 
@@ -95,11 +137,10 @@ public class ExtValViewRootInterceptor implements ViewRootInterceptor
 
         Method actionMethod = ReflectionUtils.tryToGetMethod(ProxyUtils.getUnproxiedClass(base.getClass()), methodName);
 
-        //check for an action-listener
         if (actionMethod == null)
         {
             actionMethod = ReflectionUtils.tryToGetMethod(ProxyUtils.getUnproxiedClass(base.getClass()),
-                    methodName, ActionEvent.class);
+                    methodName, parameterTypes);
         }
 
         if (actionMethod == null)
