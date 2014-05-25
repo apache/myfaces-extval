@@ -173,6 +173,9 @@ interface WebXmlParameter
     static final String CUSTOM_VIEW_ROOT_INTERCEPTOR_CLASS_NAME = WebXmlUtils
         .getInitParameter("CUSTOM_VIEW_ROOT_INTERCEPTOR_CLASS_NAME");
 
+    static final String DEACTIVATE_ACTION_BASED_GROUP_VALIDATION_VIA_AJAX = WebXmlUtils
+            .getInitParameter("DEACTIVATE_ACTION_BASED_GROUP_VALIDATION_VIA_AJAX");
+
     /*
      * spec parameters
      */

@@ -526,4 +526,10 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
     {
         return WebXmlParameter.CUSTOM_VIEW_ROOT_INTERCEPTOR_CLASS_NAME;
     }
+
+    @Override
+    public boolean deactivateActionBasedGroupValidationViaAjax()
+    {
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_ACTION_BASED_GROUP_VALIDATION_VIA_AJAX);
+    }
 }
