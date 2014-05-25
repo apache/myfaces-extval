@@ -661,5 +661,5 @@ public abstract class ExtValCoreConfiguration implements ExtValModuleConfigurati
 
     public abstract String customViewRootInterceptorClassName();
 
-    public abstract boolean deactivateActionBasedGroupValidationViaAjax();
+    public abstract boolean deactivateAjaxActionBasedGroupValidation();
 }

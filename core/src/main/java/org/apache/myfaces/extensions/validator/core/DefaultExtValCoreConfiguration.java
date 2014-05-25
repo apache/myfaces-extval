@@ -528,8 +528,8 @@ public class DefaultExtValCoreConfiguration extends ExtValCoreConfiguration
     }
 
     @Override
-    public boolean deactivateActionBasedGroupValidationViaAjax()
+    public boolean deactivateAjaxActionBasedGroupValidation()
     {
-        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_ACTION_BASED_GROUP_VALIDATION_VIA_AJAX);
+        return "true".equalsIgnoreCase(WebXmlParameter.DEACTIVATE_AJAX_ACTION_BASED_GROUP_VALIDATION);
     }
 }

@@ -40,8 +40,8 @@ class ExtValApplicationWrapper extends ApplicationWrapper
     private static final boolean DEACTIVATE_VIEW_ROOT_INTERCEPTOR =
             ExtValCoreConfiguration.get().deactivateViewRootInterceptor();
 
-    private static final boolean DEACTIVATE_ACTION_BASED_GROUP_VALIDATION_VIA_AJAX =
-            ExtValCoreConfiguration.get().deactivateActionBasedGroupValidationViaAjax();
+    private static final boolean DEACTIVATE_AJAX_ACTION_BASED_GROUP_VALIDATION =
+            ExtValCoreConfiguration.get().deactivateAjaxActionBasedGroupValidation();
 
     private Application wrapped;
 
@@ -131,7 +131,7 @@ class ExtValApplicationWrapper extends ApplicationWrapper
     {
         Behavior result = wrapped.createBehavior(behaviorId);
 
-        if (DEACTIVATE_ACTION_BASED_GROUP_VALIDATION_VIA_AJAX)
+        if (DEACTIVATE_AJAX_ACTION_BASED_GROUP_VALIDATION)
         {
             return result;
         }
