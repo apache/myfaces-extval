@@ -496,26 +496,24 @@ class ExtValContextInvocationOrderAwareInternals
         return metaDataExtractionInterceptorList;
     }
 
-    private void sortViewRootInterceptors()
-    {
-        List<ViewRootInterceptor> viewRootInterceptorsToSort =
-                new ArrayList<ViewRootInterceptor>(this.viewRootInterceptors);
-
-        Collections.sort(viewRootInterceptorsToSort, new InvocationOrderComparator<ViewRootInterceptor>());
-
-        this.viewRootInterceptors.clear();
-        this.viewRootInterceptors.addAll(viewRootInterceptorsToSort);
-    }
-
     void lazyInitViewRootInterceptors()
     {
-        if (viewRootInterceptors != null)
+        if (this.viewRootInterceptors != null)
         {
             return;
         }
 
-        viewRootInterceptors =
-                new CopyOnWriteArrayList<ViewRootInterceptor>();
+        initViewRootInterceptors();
+    }
+
+    private synchronized void initViewRootInterceptors()
+    {
+        if (this.viewRootInterceptors != null)
+        {
+            return;
+        }
+
+        this.viewRootInterceptors = new CopyOnWriteArrayList<ViewRootInterceptor>();
 
         List<String> viewRootInterceptorClassNames = new ArrayList<String>();
 
@@ -548,5 +546,16 @@ class ExtValContextInvocationOrderAwareInternals
     {
         this.viewRootInterceptors.add(viewRootInterceptor);
         sortViewRootInterceptors();
+    }
+
+    private void sortViewRootInterceptors()
+    {
+        List<ViewRootInterceptor> viewRootInterceptorsToSort =
+                new ArrayList<ViewRootInterceptor>(this.viewRootInterceptors);
+
+        Collections.sort(viewRootInterceptorsToSort, new InvocationOrderComparator<ViewRootInterceptor>());
+
+        this.viewRootInterceptors.clear();
+        this.viewRootInterceptors.addAll(viewRootInterceptorsToSort);
     }
 }
